@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% set type_names = {'foreign': '外資', 'sitc': '投信', 'dealer': '自營商', 'total': '三大法人'} %}
+{% set current_type_name = type_names.get(inst_type, '外資') %}
+
+{% block title %}{{ current_type_name }}買賣超排行{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">{{ current_type_name }}買賣超排行</h4>
+
+    <!-- Mobile segment tabs (hidden on desktop, shown on mobile) -->
+    <div class="mobile-segment" style="display:none;">
+        <a class="seg-btn {% if inst_type == 'foreign' %}active{% endif %}" href="/institutional?type=foreign">外資</a>
+        <a class="seg-btn {% if inst_type == 'sitc' %}active{% endif %}" href="/institutional?type=sitc">投信</a>
+        <a class="seg-btn {% if inst_type == 'dealer' %}active{% endif %}" href="/institutional?type=dealer">自營商</a>
+        <a class="seg-btn {% if inst_type == 'total' %}active{% endif %}" href="/institutional?type=total">合計</a>
+    </div>
+
+    <!-- 篩選列 -->
+    <div class="filter-bar">
+        <form method="GET" action="/institutional" class="d-flex align-items-center gap-3 flex-wrap">
+            <input type="hidden" name="type" value="{{ inst_type }}">
+
+            <!-- 日期 -->
+            <div class="filter-group">
+                <label>日期</label>
+                <select name="date" class="form-select form-select-sm" onchange="this.form.submit()">
+                    {% for d in available_dates %}
+                    <option value="{{ d }}" {% if d == date %}selected{% endif %}>{{ d }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- 累積天數 -->
+            <div class="filter-group">
+                <label>累積天數</label>
+                <div class="btn-group" role="group">
+                    {% for n in [1, 5, 10, 30] %}
+                    <a href="/institutional?type={{ inst_type }}&days={{ n }}&market={{ market }}&date={{ date }}"
+                       class="btn btn-sm {{ 'btn-primary' if days == n else 'btn-outline-primary' }}">
+                        {{ n }}日
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- 市場 -->
+            <div class="filter-group">
+                <label>市場</label>
+                <select name="market" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="all" {% if market == 'all' %}selected{% endif %}>全部</option>
+                    <option value="twse" {% if market == 'twse' %}selected{% endif %}>上市</option>
+                    <option value="tpex" {% if market == 'tpex' %}selected{% endif %}>上櫃</option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <!-- Export -->
+    <div style="text-align:right; margin-bottom:8px;">
+        <a href="/api/export/institutional?type={{ inst_type }}&days={{ days }}&market={{ market }}&date={{ date }}" class="btn-export">
+            📥 匯出 CSV
+        </a>
+    </div>
+
+    <!-- 雙欄：買超 / 賣超 -->
+    <div class="row g-3 mt-2">
+        <!-- 買超 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <strong>買超 Top {{ buy_rows|length }}</strong>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm data-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>代號</th>
+                                <th>名稱</th>
+                                <th class="text-end">買超(張)</th>
+                                <th class="text-end">收盤價</th>
+                                <th class="text-end">漲跌%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in buy_rows %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td class="stock-id"><a href="/stock?id={{ row.stock_id }}">{{ row.stock_id }}</a></td>
+                                <td>{{ row.name }}</td>
+                                <td class="text-end text-danger fw-bold">{{ "{:,}".format(row.total_amount) }}</td>
+                                <td class="text-end">{{ "%.2f"|format(row.close_price or 0) }}</td>
+                                <td class="text-end {{ 'text-danger' if (row.change_pct or 0) > 0 else 'text-success' if (row.change_pct or 0) < 0 else '' }}">
+                                    {{ "%+.2f"|format(row.change_pct or 0) }}%
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 賣超 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <strong>賣超 Top {{ sell_rows|length }}</strong>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm data-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>代號</th>
+                                <th>名稱</th>
+                                <th class="text-end">賣超(張)</th>
+                                <th class="text-end">收盤價</th>
+                                <th class="text-end">漲跌%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in sell_rows %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td class="stock-id"><a href="/stock?id={{ row.stock_id }}">{{ row.stock_id }}</a></td>
+                                <td>{{ row.name }}</td>
+                                <td class="text-end text-success fw-bold">{{ "{:,}".format(row.total_amount) }}</td>
+                                <td class="text-end">{{ "%.2f"|format(row.close_price or 0) }}</td>
+                                <td class="text-end {{ 'text-danger' if (row.change_pct or 0) > 0 else 'text-success' if (row.change_pct or 0) < 0 else '' }}">
+                                    {{ "%+.2f"|format(row.change_pct or 0) }}%
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

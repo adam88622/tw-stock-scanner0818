@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ sector }} — 產業族群{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">
+        <a href="/sectors" style="color:#818cf8;font-size:14px;margin-right:8px;">產業族群</a> /
+        {{ sector }}
+        {% if date %}<span style="font-size:14px;color:#64748b;margin-left:12px;">{{ date }}</span>{% endif %}
+    </h4>
+
+    <div class="result-summary">
+        共 <strong>{{ stocks|length }}</strong> 檔
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-sm data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>代號</th>
+                    <th>名稱</th>
+                    <th class="text-end">收盤價</th>
+                    <th class="text-end">漲跌%</th>
+                    <th class="text-end">成交量(張)</th>
+                    <th class="text-end">外資買賣超</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in stocks %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="stock-id"><a href="/stock?id={{ row.stock_id }}">{{ row.stock_id }}</a></td>
+                    <td>{{ row.name }}</td>
+                    <td class="text-end">{{ "%.2f"|format(row.close_price) }}</td>
+                    <td class="text-end {{ 'text-danger' if row.change_pct > 0 else 'text-success' if row.change_pct < 0 else '' }}">
+                        {{ "%+.2f"|format(row.change_pct) }}%
+                    </td>
+                    <td class="text-end">{{ "{:,}".format(row.volume or 0) }}</td>
+                    <td class="text-end {{ 'text-danger' if row.foreign_buy > 0 else 'text-success' if row.foreign_buy < 0 else '' }}">
+                        {{ "{:,}".format(row.foreign_buy) }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

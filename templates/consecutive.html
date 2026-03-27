@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% set type_names = {'foreign': '外資', 'sitc': '投信', 'dealer': '自營商'} %}
+{% set current_type_name = type_names.get(inst_type, '外資') %}
+{% set dir_name = '連買' if direction == 'buy' else '連賣' %}
+
+{% block title %}{{ current_type_name }}{{ dir_name }}超{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">{{ current_type_name }}連續買賣超</h4>
+
+    <!-- Mobile segment tabs -->
+    <div class="mobile-segment" style="display:none;">
+        <a class="seg-btn {% if inst_type == 'foreign' %}active{% endif %}" href="/consecutive?type=foreign&dir={{ direction }}&days={{ min_days }}">外資</a>
+        <a class="seg-btn {% if inst_type == 'sitc' %}active{% endif %}" href="/consecutive?type=sitc&dir={{ direction }}&days={{ min_days }}">投信</a>
+        <a class="seg-btn {% if inst_type == 'dealer' %}active{% endif %}" href="/consecutive?type=dealer&dir={{ direction }}&days={{ min_days }}">自營商</a>
+        <span style="margin:0 4px;color:#334155;">|</span>
+        <a class="seg-btn {% if direction == 'buy' %}active{% endif %}" href="/consecutive?type={{ inst_type }}&dir=buy&days={{ min_days }}">連買</a>
+        <a class="seg-btn {% if direction == 'sell' %}active{% endif %}" href="/consecutive?type={{ inst_type }}&dir=sell&days={{ min_days }}">連賣</a>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+        <form method="GET" action="/consecutive" class="d-flex align-items-center gap-3 flex-wrap">
+            <!-- 法人類型 -->
+            <div class="filter-group">
+                <label>法人類型</label>
+                <select name="type" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="foreign" {% if inst_type == 'foreign' %}selected{% endif %}>外資</option>
+                    <option value="sitc" {% if inst_type == 'sitc' %}selected{% endif %}>投信</option>
+                    <option value="dealer" {% if inst_type == 'dealer' %}selected{% endif %}>自營商</option>
+                </select>
+            </div>
+
+            <!-- 方向 -->
+            <div class="filter-group">
+                <label>方向</label>
+                <div class="btn-group" role="group">
+                    <a href="/consecutive?type={{ inst_type }}&dir=buy&days={{ min_days }}"
+                       class="btn btn-sm {{ 'btn-primary' if direction == 'buy' else 'btn-outline-primary' }}">
+                        連買
+                    </a>
+                    <a href="/consecutive?type={{ inst_type }}&dir=sell&days={{ min_days }}"
+                       class="btn btn-sm {{ 'btn-primary' if direction == 'sell' else 'btn-outline-primary' }}">
+                        連賣
+                    </a>
+                </div>
+            </div>
+
+            <!-- 最少天數 -->
+            <div class="filter-group">
+                <label>最少天數</label>
+                <div class="btn-group" role="group">
+                    {% for n in [3, 5, 7, 10] %}
+                    <a href="/consecutive?type={{ inst_type }}&dir={{ direction }}&days={{ n }}"
+                       class="btn btn-sm {{ 'btn-primary' if min_days == n else 'btn-outline-primary' }}">
+                        {{ n }}天
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {% if date %}
+    <div class="result-summary">
+        資料日期：{{ date }} | {{ current_type_name }}{{ dir_name }}超 >= {{ min_days }} 天，共 {{ results|length }} 檔
+    </div>
+    {% endif %}
+
+    <div class="table-responsive">
+        <table class="table table-hover table-sm data-table mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>代號</th>
+                    <th>名稱</th>
+                    <th class="text-end">收盤價</th>
+                    <th class="text-end">漲跌%</th>
+                    <th class="text-end">連續天數</th>
+                    <th class="text-end">累計張數</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                <tr class="{{ 'row-buy-tint' if direction == 'buy' else 'row-sell-tint' }}">
+                    <td>{{ loop.index }}</td>
+                    <td class="stock-id"><a href="/stock?id={{ row.stock_id }}">{{ row.stock_id }}</a></td>
+                    <td>{{ row.name }}</td>
+                    <td class="text-end">{{ "%.2f"|format(row.close_price or 0) }}</td>
+                    <td class="text-end {{ 'text-danger' if (row.change_pct or 0) > 0 else 'text-success' if (row.change_pct or 0) < 0 else '' }}">
+                        {{ "%+.2f"|format(row.change_pct or 0) }}%
+                    </td>
+                    <td class="text-end fw-bold">{{ row.consecutive_days }}</td>
+                    <td class="text-end {{ 'text-danger' if row.total_volume > 0 else 'text-success' }} fw-bold">
+                        {{ "{:,}".format(row.total_volume) }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not results %}
+                <tr><td colspan="7" class="text-center" style="padding:24px;color:#64748b;">無符合條件的股票</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

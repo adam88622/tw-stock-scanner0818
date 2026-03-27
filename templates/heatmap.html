@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+{% block title %}S&P 500 熱力圖{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">S&P 500 熱力圖 <span id="heatmap-update-time" style="font-size:14px;color:#9ca3af;margin-left:16px;"></span></h4>
+    <div id="heatmap-loading" style="color:#64748b;padding:40px;text-align:center;font-size:18px;">載入中...</div>
+    <div id="heatmap-container"></div>
+</div>
+
+<style>
+#heatmap-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.sector-group {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.sector-header {
+    background: #162032;
+    padding: 8px 14px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #f59e0b;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.sector-header .sector-avg {
+    font-size: 14px;
+    font-weight: 700;
+}
+.sector-grid {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 6px;
+    gap: 4px;
+}
+.hm-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    padding: 8px 4px;
+    min-height: 68px;
+    cursor: default;
+    transition: opacity 0.15s;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+.hm-cell:hover {
+    opacity: 0.85;
+    border-color: rgba(255,255,255,0.2);
+}
+.hm-ticker {
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    line-height: 1.2;
+}
+.hm-pct {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+.hm-name {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    // Hardcoded S&P 500 sector mapping with approximate market cap weights
+    const SP500_SECTORS = {
+        "Technology": {
+            stocks: {
+                "AAPL": {name: "Apple", weight: 100},
+                "MSFT": {name: "Microsoft", weight: 95},
+                "NVDA": {name: "NVIDIA", weight: 90},
+                "AVGO": {name: "Broadcom", weight: 45},
+                "ORCL": {name: "Oracle", weight: 30},
+                "CRM": {name: "Salesforce", weight: 25},
+                "AMD": {name: "AMD", weight: 24},
+                "ADBE": {name: "Adobe", weight: 22},
+                "CSCO": {name: "Cisco", weight: 20},
+                "INTC": {name: "Intel", weight: 12},
+                "QCOM": {name: "Qualcomm", weight: 18},
+                "TXN": {name: "Texas Inst.", weight: 16},
+                "INTU": {name: "Intuit", weight: 16},
+                "IBM": {name: "IBM", weight: 15},
+                "AMAT": {name: "Applied Mat.", weight: 14},
+                "NOW": {name: "ServiceNow", weight: 16},
+                "MU": {name: "Micron", weight: 11},
+                "PANW": {name: "Palo Alto", weight: 11},
+            }
+        },
+        "Communication": {
+            stocks: {
+                "META": {name: "Meta", weight: 70},
+                "GOOGL": {name: "Alphabet", weight: 80},
+                "NFLX": {name: "Netflix", weight: 30},
+                "DIS": {name: "Disney", weight: 18},
+                "CMCSA": {name: "Comcast", weight: 14},
+                "T": {name: "AT&T", weight: 14},
+                "VZ": {name: "Verizon", weight: 14},
+                "TMUS": {name: "T-Mobile", weight: 18},
+            }
+        },
+        "Consumer Cyclical": {
+            stocks: {
+                "AMZN": {name: "Amazon", weight: 75},
+                "TSLA": {name: "Tesla", weight: 55},
+                "HD": {name: "Home Depot", weight: 30},
+                "MCD": {name: "McDonald's", weight: 20},
+                "NKE": {name: "Nike", weight: 12},
+                "SBUX": {name: "Starbucks", weight: 11},
+                "LOW": {name: "Lowe's", weight: 13},
+                "TJX": {name: "TJX", weight: 12},
+                "BKNG": {name: "Booking", weight: 16},
+            }
+        },
+        "Healthcare": {
+            stocks: {
+                "LLY": {name: "Eli Lilly", weight: 55},
+                "UNH": {name: "UnitedHealth", weight: 45},
+                "JNJ": {name: "J&J", weight: 35},
+                "ABBV": {name: "AbbVie", weight: 30},
+                "MRK": {name: "Merck", weight: 25},
+                "PFE": {name: "Pfizer", weight: 14},
+                "TMO": {name: "Thermo Fisher", weight: 20},
+                "ABT": {name: "Abbott", weight: 18},
+                "AMGN": {name: "Amgen", weight: 14},
+                "ISRG": {name: "Intuitive Surg.", weight: 16},
+            }
+        },
+        "Financials": {
+            stocks: {
+                "BRK-B": {name: "Berkshire", weight: 55},
+                "JPM": {name: "JPMorgan", weight: 50},
+                "V": {name: "Visa", weight: 40},
+                "MA": {name: "Mastercard", weight: 35},
+                "BAC": {name: "Bank of America", weight: 25},
+                "WFC": {name: "Wells Fargo", weight: 18},
+                "GS": {name: "Goldman Sachs", weight: 16},
+                "MS": {name: "Morgan Stanley", weight: 14},
+                "AXP": {name: "AmEx", weight: 15},
+                "SPGI": {name: "S&P Global", weight: 14},
+                "BLK": {name: "BlackRock", weight: 13},
+                "C": {name: "Citigroup", weight: 11},
+            }
+        },
+        "Consumer Defensive": {
+            stocks: {
+                "WMT": {name: "Walmart", weight: 40},
+                "PG": {name: "P&G", weight: 30},
+                "COST": {name: "Costco", weight: 30},
+                "KO": {name: "Coca-Cola", weight: 22},
+                "PEP": {name: "PepsiCo", weight: 20},
+                "PM": {name: "Philip Morris", weight: 16},
+                "CL": {name: "Colgate", weight: 8},
+            }
+        },
+        "Industrials": {
+            stocks: {
+                "GE": {name: "GE Aerospace", weight: 20},
+                "CAT": {name: "Caterpillar", weight: 16},
+                "RTX": {name: "RTX", weight: 14},
+                "UNP": {name: "Union Pacific", weight: 13},
+                "HON": {name: "Honeywell", weight: 13},
+                "DE": {name: "Deere", weight: 11},
+                "BA": {name: "Boeing", weight: 12},
+                "LMT": {name: "Lockheed", weight: 11},
+                "UPS": {name: "UPS", weight: 10},
+            }
+        },
+        "Energy": {
+            stocks: {
+                "XOM": {name: "Exxon", weight: 30},
+                "CVX": {name: "Chevron", weight: 22},
+                "COP": {name: "ConocoPhillips", weight: 12},
+                "SLB": {name: "Schlumberger", weight: 8},
+                "EOG": {name: "EOG", weight: 7},
+            }
+        },
+    };
+
+    // Color function: green for positive, red for negative
+    function pctToColor(pct) {
+        if (pct === null || pct === undefined) return '#334155';
+        const abs = Math.min(Math.abs(pct), 6); // cap at 6% for color intensity
+        const intensity = abs / 6;
+        if (pct > 0) {
+            // Green: from #1a3a2a at 0% to #16a34a at 6%
+            const r = Math.round(26 - intensity * 10);
+            const g = Math.round(58 + intensity * 105);
+            const b = Math.round(42 - intensity * 2);
+            return `rgb(${r},${g},${b})`;
+        } else if (pct < 0) {
+            // Red: from #3a1a1a at 0% to #dc2626 at -6%
+            const r = Math.round(58 + intensity * 162);
+            const g = Math.round(26 + intensity * 12);
+            const b = Math.round(26 + intensity * 12);
+            return `rgb(${r},${g},${b})`;
+        }
+        return '#334155';
+    }
+
+    function render(perfData) {
+        const container = document.getElementById('heatmap-container');
+        document.getElementById('heatmap-loading').style.display = 'none';
+        let html = '';
+
+        for (const [sectorName, sectorDef] of Object.entries(SP500_SECTORS)) {
+            const stocks = sectorDef.stocks;
+            let sectorPcts = [];
+            let cells = [];
+
+            // Collect data
+            for (const [ticker, info] of Object.entries(stocks)) {
+                const pct = perfData[ticker] !== undefined ? perfData[ticker] : null;
+                if (pct !== null) sectorPcts.push(pct);
+                cells.push({ticker, name: info.name, weight: info.weight, pct});
+            }
+
+            // Sort by weight descending
+            cells.sort((a, b) => b.weight - a.weight);
+
+            // Sector average
+            const sectorAvg = sectorPcts.length > 0
+                ? sectorPcts.reduce((a, b) => a + b, 0) / sectorPcts.length
+                : 0;
+            const avgCls = sectorAvg > 0 ? 'val-up' : sectorAvg < 0 ? 'val-dn' : '';
+
+            // Calculate total weight for sizing
+            const totalWeight = cells.reduce((s, c) => s + c.weight, 0);
+
+            html += `<div class="sector-group">`;
+            html += `<div class="sector-header">
+                <span>${sectorName}</span>
+                <span class="sector-avg ${avgCls}">${sectorAvg >= 0 ? '+' : ''}${sectorAvg.toFixed(2)}%</span>
+            </div>`;
+            html += `<div class="sector-grid">`;
+
+            cells.forEach(c => {
+                const color = pctToColor(c.pct);
+                // Width proportional to weight, minimum 80px
+                const widthPct = Math.max(8, (c.weight / totalWeight) * 100);
+                const pctStr = c.pct !== null ? `${c.pct >= 0 ? '+' : ''}${c.pct.toFixed(2)}%` : 'N/A';
+
+                html += `<div class="hm-cell" style="background:${color};flex:${c.weight} 1 80px;max-width:${Math.min(widthPct * 1.5, 30)}%;">
+                    <span class="hm-ticker">${c.ticker}</span>
+                    <span class="hm-pct">${pctStr}</span>
+                    <span class="hm-name">${c.name}</span>
+                </div>`;
+            });
+
+            html += `</div></div>`;
+        }
+
+        container.innerHTML = html;
+    }
+
+    function loadHeatmap() {
+        fetch('/api/heatmap')
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('heatmap-loading').textContent = 'Error: ' + data.error;
+                    return;
+                }
+                let perfData = {};
+                if (data.nodes) {
+                    if (Array.isArray(data.nodes)) {
+                        data.nodes.forEach(n => {
+                            if (n.t && n.c !== undefined) perfData[n.t] = n.c;
+                        });
+                    } else {
+                        perfData = data.nodes;
+                    }
+                } else {
+                    perfData = data;
+                }
+                render(perfData);
+                const now = new Date();
+                const timeEl = document.getElementById('heatmap-update-time');
+                if (isUSMarketOpen()) {
+                    timeEl.textContent = '盤中即時 更新: ' + now.toLocaleTimeString('zh-TW') + ' (每5分鐘自動更新)';
+                    timeEl.style.color = '#22c55e';
+                } else {
+                    timeEl.textContent = '收盤資料 更新: ' + now.toLocaleString('zh-TW', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+                    timeEl.style.color = '#9ca3af';
+                }
+            })
+            .catch(err => {
+                document.getElementById('heatmap-loading').textContent = '載入失敗: ' + err.message;
+            });
+    }
+
+    // 判斷美股是否開盤（台灣時間，含冬夏令）
+    function isUSMarketOpen() {
+        const now = new Date();
+        const day = now.getDay();
+        if (day === 0 || day === 6) return false; // 週末
+
+        // 判斷是否夏令時（美國：3月第2個週日 ~ 11月第1個週日）
+        const year = now.getFullYear();
+        // 3月第2個週日
+        const mar1 = new Date(year, 2, 1);
+        const dstStart = new Date(year, 2, 8 + (7 - mar1.getDay()) % 7);
+        // 11月第1個週日
+        const nov1 = new Date(year, 10, 1);
+        const dstEnd = new Date(year, 10, 1 + (7 - nov1.getDay()) % 7);
+
+        const isDST = (now >= dstStart && now < dstEnd);
+
+        const hhmm = now.getHours() * 100 + now.getMinutes();
+
+        if (isDST) {
+            // 夏令：台灣 21:30 ~ 隔日 04:00
+            return hhmm >= 2130 || hhmm < 400;
+        } else {
+            // 冬令：台灣 22:30 ~ 隔日 05:00
+            return hhmm >= 2230 || hhmm < 500;
+        }
+    }
+
+    // 初次載入
+    loadHeatmap();
+
+    // 盤中自動刷新：每 5 分鐘（只在美股開盤時段）
+    setInterval(function() {
+        if (isUSMarketOpen()) {
+            loadHeatmap();
+        }
+    }, 300000); // 5 分鐘
+})();
+</script>
+{% endblock %}

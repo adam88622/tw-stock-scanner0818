@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}產業族群{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">產業族群總覽
+        {% if date %}<span style="font-size:14px;color:#64748b;margin-left:12px;">{{ date }}</span>{% endif %}
+    </h4>
+
+    {% if not sectors %}
+    <div style="text-align:center;padding:60px 20px;color:#64748b;">
+        <p style="font-size:18px;">尚無產業分類資料</p>
+        <p style="font-size:14px;">請先執行產業分類更新</p>
+    </div>
+    {% else %}
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;">
+        {% for s in sectors %}
+        <a href="/sector/{{ s.sector }}" class="sector-card" style="text-decoration:none;">
+            <div style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:16px;transition:border-color 0.15s;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                    <span style="font-size:16px;font-weight:700;color:#e2e8f0;">{{ s.sector }}</span>
+                    <span style="font-size:15px;font-weight:700;{{ 'color:#ef4444;' if s.avg_change > 0 else 'color:#22c55e;' if s.avg_change < 0 else 'color:#94a3b8;' }}">
+                        {{ "%+.2f"|format(s.avg_change) }}%
+                    </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                    <span style="font-size:12px;color:#94a3b8;">{{ s.stock_count }} 檔</span>
+                </div>
+                <!-- Up/Down bar -->
+                {% set total = (s.up_count or 0) + (s.dn_count or 0) %}
+                {% if total > 0 %}
+                <div style="display:flex;height:6px;border-radius:3px;overflow:hidden;background:#334155;">
+                    <div style="width:{{ (s.up_count / total * 100)|round }}%;background:#ef4444;"></div>
+                    <div style="width:{{ (s.dn_count / total * 100)|round }}%;background:#22c55e;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:4px;">
+                    <span style="font-size:11px;color:#ef4444;">{{ s.up_count or 0 }} 漲</span>
+                    <span style="font-size:11px;color:#22c55e;">{{ s.dn_count or 0 }} 跌</span>
+                </div>
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.sector-card:hover div {
+    border-color: #818cf8 !important;
+}
+</style>
+{% endblock %}

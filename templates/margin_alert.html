@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}融資使用率警示{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">融資使用率警示</h4>
+
+    <!-- Mobile segment tabs -->
+    <div class="mobile-segment" style="display:none;">
+        <a class="seg-btn {% if sort_by == 'use_rate' %}active{% endif %}" href="/margin-alert?sort=use_rate">使用率</a>
+        <a class="seg-btn {% if sort_by == 'margin_change' %}active{% endif %}" href="/margin-alert?sort=margin_change">融資增減</a>
+        <a class="seg-btn {% if sort_by == 'short_balance' %}active{% endif %}" href="/margin-alert?sort=short_balance">融券餘額</a>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+        <form method="GET" action="/margin-alert" class="d-flex align-items-center gap-3 flex-wrap">
+            <div class="filter-group">
+                <label>排序</label>
+                <div class="btn-group" role="group">
+                    <a href="/margin-alert?sort=use_rate"
+                       class="btn btn-sm {{ 'btn-primary' if sort_by == 'use_rate' else 'btn-outline-primary' }}">
+                        融資使用率
+                    </a>
+                    <a href="/margin-alert?sort=margin_change"
+                       class="btn btn-sm {{ 'btn-primary' if sort_by == 'margin_change' else 'btn-outline-primary' }}">
+                        融資增減
+                    </a>
+                    <a href="/margin-alert?sort=short_balance"
+                       class="btn btn-sm {{ 'btn-primary' if sort_by == 'short_balance' else 'btn-outline-primary' }}">
+                        融券餘額
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {% if date %}
+    <div class="result-summary">
+        資料日期：{{ date }} | 顯示前 {{ results|length }} 檔
+    </div>
+    {% endif %}
+
+    {% if message %}
+    <div class="alert alert-warning m-3">{{ message }}</div>
+    {% endif %}
+
+    <div class="table-responsive">
+        <table class="table table-hover table-sm data-table mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>代號</th>
+                    <th>名稱</th>
+                    <th class="text-end">收盤價</th>
+                    <th class="text-end">融資餘額(張)</th>
+                    <th class="text-end">融資增減</th>
+                    <th class="text-end">融資使用率%</th>
+                    <th class="text-end">融券餘額</th>
+                    <th class="text-end">融券增減</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="stock-id"><a href="/stock?id={{ row.stock_id }}">{{ row.stock_id }}</a></td>
+                    <td>{{ row.name }}</td>
+                    <td class="text-end">{{ "%.2f"|format(row.close_price or 0) }}</td>
+                    <td class="text-end">{{ "{:,}".format(row.margin_balance) }}</td>
+                    <td class="text-end {{ 'text-danger' if row.margin_change > 0 else 'text-success' if row.margin_change < 0 else '' }} fw-bold">
+                        {{ "%+,d"|format(row.margin_change) }}
+                    </td>
+                    <td class="text-end fw-bold {{ 'text-danger' if row.use_rate >= 60 else 'text-warning-custom' if row.use_rate >= 40 else '' }}">
+                        {{ "%.1f"|format(row.use_rate) }}%
+                    </td>
+                    <td class="text-end">{{ "{:,}".format(row.short_balance) }}</td>
+                    <td class="text-end {{ 'text-danger' if row.short_change > 0 else 'text-success' if row.short_change < 0 else '' }}">
+                        {{ "%+,d"|format(row.short_change) }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not results %}
+                <tr><td colspan="9" class="text-center" style="padding:24px;color:#64748b;">無資料（可能非交易日或 TWSE 尚未公布）</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

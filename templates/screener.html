@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}條件篩選器{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">條件篩選器</h4>
+
+    <!-- Filter Panel -->
+    <div class="filter-card" style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:20px;margin-bottom:20px;">
+        <form method="GET" action="/screener">
+            <!-- Row 1 -->
+            <div class="d-flex flex-wrap gap-3" style="margin-bottom:12px;">
+                <div class="filter-group">
+                    <label>市場</label>
+                    <select name="market" class="form-select form-select-sm">
+                        <option value="all" {% if f_market == 'all' %}selected{% endif %}>全部</option>
+                        <option value="twse" {% if f_market == 'twse' %}selected{% endif %}>上市</option>
+                        <option value="tpex" {% if f_market == 'tpex' %}selected{% endif %}>上櫃</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>最低價格</label>
+                    <input type="number" name="min_price" step="0.01" class="form-control form-control-sm"
+                           value="{{ f_min_price if f_min_price is not none else '' }}" placeholder="不限"
+                           style="width:100px;">
+                </div>
+                <div class="filter-group">
+                    <label>最高價格</label>
+                    <input type="number" name="max_price" step="0.01" class="form-control form-control-sm"
+                           value="{{ f_max_price if f_max_price is not none else '' }}" placeholder="不限"
+                           style="width:100px;">
+                </div>
+                <div class="filter-group">
+                    <label>成交量 >=（張）</label>
+                    <input type="number" name="min_vol" class="form-control form-control-sm"
+                           value="{{ f_min_vol if f_min_vol else '' }}" placeholder="例: 1000"
+                           style="width:120px;">
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="d-flex flex-wrap gap-3" style="margin-bottom:12px;">
+                <div class="filter-group">
+                    <label>最低漲跌幅 %</label>
+                    <input type="number" name="min_change" step="0.01" class="form-control form-control-sm"
+                           value="{{ f_min_change if f_min_change is not none else '' }}" placeholder="例: -5"
+                           style="width:100px;">
+                </div>
+                <div class="filter-group">
+                    <label>最高漲跌幅 %</label>
+                    <input type="number" name="max_change" step="0.01" class="form-control form-control-sm"
+                           value="{{ f_max_change if f_max_change is not none else '' }}" placeholder="例: 10"
+                           style="width:100px;">
+                </div>
+                <div class="filter-group">
+                    <label>外資</label>
+                    <select name="foreign" class="form-select form-select-sm">
+                        <option value="" {% if not f_foreign %}selected{% endif %}>不限</option>
+                        <option value="buy" {% if f_foreign == 'buy' %}selected{% endif %}>買超</option>
+                        <option value="sell" {% if f_foreign == 'sell' %}selected{% endif %}>賣超</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>投信</label>
+                    <select name="sitc" class="form-select form-select-sm">
+                        <option value="" {% if not f_sitc %}selected{% endif %}>不限</option>
+                        <option value="buy" {% if f_sitc == 'buy' %}selected{% endif %}>買超</option>
+                        <option value="sell" {% if f_sitc == 'sell' %}selected{% endif %}>賣超</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="d-flex flex-wrap gap-3 align-items-center">
+                <div class="filter-group">
+                    <label>突破天數</label>
+                    <select name="break_days" class="form-select form-select-sm">
+                        <option value="" {% if not f_break %}selected{% endif %}>不限</option>
+                        <option value="5" {% if f_break == 5 %}selected{% endif %}>5日</option>
+                        <option value="10" {% if f_break == 10 %}selected{% endif %}>10日</option>
+                        <option value="20" {% if f_break == 20 %}selected{% endif %}>20日</option>
+                        <option value="60" {% if f_break == 60 %}selected{% endif %}>60日</option>
+                        <option value="120" {% if f_break == 120 %}selected{% endif %}>120日</option>
+                        <option value="240" {% if f_break == 240 %}selected{% endif %}>240日</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>外資連買天數</label>
+                    <input type="number" name="consec_foreign" class="form-control form-control-sm"
+                           value="{{ f_consec if f_consec else '' }}" placeholder="例: 3"
+                           style="width:100px;">
+                </div>
+                <div class="filter-group" style="padding-top:20px;">
+                    <button type="submit" class="btn btn-primary btn-sm" style="padding:6px 24px;">篩選</button>
+                    <a href="/screener" class="btn btn-outline-secondary btn-sm" style="margin-left:8px;">清除</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {% if has_filter %}
+    <!-- Result Summary -->
+    <div class="d-flex justify-content-between align-items-center" style="margin-bottom:12px;">
+        <div class="result-summary">
+            共 <strong>{{ results|length }}</strong> 檔符合條件
+            {% if date %}<span style="color:#64748b;margin-left:8px;">（{{ date }}）</span>{% endif %}
+        </div>
+        <a href="/api/export/screener?{{ request.query_string.decode() }}" class="btn btn-outline-secondary btn-sm">
+            匯出 CSV
+        </a>
+    </div>
+
+    <!-- Results Table -->
+    <div class="table-responsive">
+        <table class="table table-hover table-sm data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>代號</th>
+                    <th>名稱</th>
+                    <th>市場</th>
+                    <th class="text-end">收盤價</th>
+                    <th class="text-end">漲跌%</th>
+                    <th class="text-end">成交量(張)</th>
+                    <th class="text-end">外資</th>
+                    <th class="text-end">投信</th>
+                    <th>突破天數</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="stock-id"><a href="/stock?id={{ row.stock_id }}">{{ row.stock_id }}</a></td>
+                    <td>{{ row.name }}</td>
+                    <td><span class="badge {{ 'bg-primary' if row.market == 'twse' else 'bg-success' }}">{{ '上市' if row.market == 'twse' else '上櫃' }}</span></td>
+                    <td class="text-end">{{ "%.2f"|format(row.close_price) }}</td>
+                    <td class="text-end {{ 'text-danger' if row.change_pct > 0 else 'text-success' if row.change_pct < 0 else '' }}">
+                        {{ "%+.2f"|format(row.change_pct) }}%
+                    </td>
+                    <td class="text-end">{{ "{:,}".format(row.volume or 0) }}</td>
+                    <td class="text-end {{ 'text-danger' if row.foreign_buy > 0 else 'text-success' if row.foreign_buy < 0 else '' }}">
+                        {{ "{:,}".format(row.foreign_buy) }}
+                    </td>
+                    <td class="text-end {{ 'text-danger' if row.sitc_buy > 0 else 'text-success' if row.sitc_buy < 0 else '' }}">
+                        {{ "{:,}".format(row.sitc_buy) }}
+                    </td>
+                    <td>
+                        {% if row.break_5 %}<span class="break-tag break-5">5日</span>{% endif %}
+                        {% if row.break_10 %}<span class="break-tag break-10">10日</span>{% endif %}
+                        {% if row.break_20 %}<span class="break-tag break-20">20日</span>{% endif %}
+                        {% if row.break_60 %}<span class="break-tag break-60">60日</span>{% endif %}
+                        {% if row.break_120 %}<span class="break-tag break-120">120日</span>{% endif %}
+                        {% if row.break_240 %}<span class="break-tag break-240">240日</span>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% elif not has_filter %}
+    <div style="text-align:center;padding:60px 20px;color:#64748b;">
+        <p style="font-size:18px;">請設定篩選條件後點擊「篩選」</p>
+        <p style="font-size:14px;">可組合多個條件，例如：成交量 > 1000 張 + 外資買超 + 20日突破</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

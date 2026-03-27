@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% block title %}歷史回測{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">歷史回測 — N日高點突破策略</h4>
+
+    <!-- Filter Panel -->
+    <div class="card mb-3">
+        <div class="card-header"><strong>回測參數</strong></div>
+        <div class="card-body">
+            <form method="GET" action="/backtest" class="d-flex flex-wrap gap-3 align-items-end">
+                <div>
+                    <label style="font-size:13px;color:var(--text-secondary);">突破天數</label>
+                    <select name="break" class="form-select form-select-sm" style="width:120px;background:var(--input-bg);color:var(--text-primary);border-color:var(--border-color);">
+                        {% for d in [5, 10, 20, 60, 120, 240] %}
+                        <option value="{{ d }}" {{ 'selected' if break_days == d }}>{{ d }} 日</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size:13px;color:var(--text-secondary);">持有天數</label>
+                    <input type="number" name="hold" value="{{ hold_days }}" min="1" max="60"
+                           class="form-control form-control-sm" style="width:100px;background:var(--input-bg);color:var(--text-primary);border-color:var(--border-color);">
+                </div>
+                <div>
+                    <label style="font-size:13px;color:var(--text-secondary);">起始日</label>
+                    <input type="date" name="start" value="{{ start_date }}"
+                           class="form-control form-control-sm" style="width:160px;background:var(--input-bg);color:var(--text-primary);border-color:var(--border-color);">
+                </div>
+                <div>
+                    <label style="font-size:13px;color:var(--text-secondary);">結束日</label>
+                    <input type="date" name="end" value="{{ end_date }}"
+                           class="form-control form-control-sm" style="width:160px;background:var(--input-bg);color:var(--text-primary);border-color:var(--border-color);">
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-sm" style="background:var(--link-color);color:#fff;padding:6px 20px;">
+                        執行回測
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-3 mb-3">
+        <div class="col-md-3 col-6">
+            <div class="card">
+                <div class="card-body text-center p-3">
+                    <div style="font-size:13px;color:var(--text-secondary);">總交易數</div>
+                    <div class="fs-4 fw-bold" style="color:var(--text-primary);">{{ total_count }} 筆</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card">
+                <div class="card-body text-center p-3">
+                    <div style="font-size:13px;color:var(--text-secondary);">平均報酬</div>
+                    <div class="fs-4 fw-bold {{ 'text-danger' if avg_return > 0 else 'text-success' if avg_return < 0 else '' }}">
+                        {{ "%+.2f"|format(avg_return) }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card">
+                <div class="card-body text-center p-3">
+                    <div style="font-size:13px;color:var(--text-secondary);">勝率</div>
+                    <div class="fs-4 fw-bold {{ 'text-danger' if win_rate > 50 else 'text-success' if win_rate < 50 else '' }}">
+                        {{ win_rate }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card">
+                <div class="card-body text-center p-3">
+                    <div style="font-size:13px;color:var(--text-secondary);">獲利筆數</div>
+                    <div class="fs-4 fw-bold" style="color:var(--text-primary);">{{ win_count }} / {{ total_count }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Performance Chart -->
+    {% if monthly_data %}
+    <div class="card mb-3">
+        <div class="card-header"><strong>月度績效</strong></div>
+        <div class="card-body p-2">
+            <div id="monthly-chart"></div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recent Trades Table -->
+    {% if results %}
+    <div class="card mb-3">
+        <div class="card-header"><strong>交易紀錄（最近 {{ results|length }} 筆）</strong></div>
+        <div class="card-body p-2">
+            <div class="table-responsive">
+                <table class="table table-hover table-sm data-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>訊號日</th>
+                            <th>代號</th>
+                            <th>名稱</th>
+                            <th class="text-end">進場價</th>
+                            <th>出場日</th>
+                            <th class="text-end">出場價</th>
+                            <th class="text-end">報酬%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in results|reverse %}
+                        <tr>
+                            <td>{{ r.signal_date }}</td>
+                            <td><a href="/stock?id={{ r.stock_id }}">{{ r.stock_id }}</a></td>
+                            <td>{{ r.name }}</td>
+                            <td class="text-end">{{ "%.2f"|format(r.entry_price) }}</td>
+                            <td>{{ r.exit_date }}</td>
+                            <td class="text-end">{{ "%.2f"|format(r.exit_price) }}</td>
+                            <td class="text-end fw-bold {{ 'text-danger' if r.return_pct > 0 else 'text-success' if r.return_pct < 0 else '' }}">
+                                {{ "%+.2f"|format(r.return_pct) }}%
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if not results and total_count == 0 %}
+    <div class="card mb-3">
+        <div class="card-body text-center p-4" style="color:var(--text-secondary);">
+            此期間內無符合條件的突破訊號，請嘗試調整參數。
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    const monthlyData = {{ monthly_json|safe }};
+    if (!monthlyData || monthlyData.length === 0) return;
+
+    const gridColor = '#1e293b';
+    const textColor = '#64748b';
+
+    function renderMonthlyChart() {
+        const containerEl = document.getElementById('monthly-chart');
+        if (!containerEl) return;
+
+        const W = containerEl.clientWidth || 900;
+        const H = 280;
+        const padTop = 30, padBot = 40, padLeft = 60, padRight = 20;
+        const chartW = W - padLeft - padRight;
+        const chartH = H - padTop - padBot;
+        const n = monthlyData.length;
+        const stepW = chartW / n;
+        const barW = Math.max(10, Math.floor(stepW * 0.6));
+
+        let vMin = 0, vMax = 0;
+        monthlyData.forEach(d => {
+            if (d.avg_return < vMin) vMin = d.avg_return;
+            if (d.avg_return > vMax) vMax = d.avg_return;
+        });
+        const vRange = vMax - vMin || 1;
+        vMin -= vRange * 0.15;
+        vMax += vRange * 0.15;
+
+        function xPos(i) { return padLeft + stepW * i + stepW / 2; }
+        function yPos(v) { return padTop + chartH - ((v - vMin) / (vMax - vMin)) * chartH; }
+
+        let svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;">`;
+
+        // Grid
+        for (let i = 0; i <= 4; i++) {
+            const y = padTop + (chartH / 4) * i;
+            const val = vMax - ((vMax - vMin) / 4) * i;
+            svg += `<line x1="${padLeft}" y1="${y}" x2="${W - padRight}" y2="${y}" stroke="${gridColor}" stroke-width="0.5"/>`;
+            svg += `<text x="${padLeft - 5}" y="${y + 4}" text-anchor="end" fill="${textColor}" font-size="10">${val.toFixed(1)}%</text>`;
+        }
+
+        // Zero line
+        const zeroY = yPos(0);
+        if (zeroY >= padTop && zeroY <= padTop + chartH) {
+            svg += `<line x1="${padLeft}" y1="${zeroY}" x2="${W - padRight}" y2="${zeroY}" stroke="#475569" stroke-width="1"/>`;
+        }
+
+        // Bars
+        monthlyData.forEach((d, i) => {
+            const x = xPos(i);
+            const v = d.avg_return;
+            const by = yPos(v);
+            const barTop = Math.min(by, zeroY);
+            const barH = Math.max(Math.abs(by - zeroY), 1);
+            const color = v >= 0 ? '#ef4444' : '#22c55e';
+            svg += `<rect x="${x - barW/2}" y="${barTop}" width="${barW}" height="${barH}" fill="${color}" opacity="0.85" rx="2"/>`;
+            // Value label
+            const labelY = v >= 0 ? barTop - 5 : barTop + barH + 12;
+            svg += `<text x="${x}" y="${labelY}" text-anchor="middle" fill="${color}" font-size="10" font-weight="bold">${v.toFixed(1)}%</text>`;
+        });
+
+        // Month labels + count + win rate
+        monthlyData.forEach((d, i) => {
+            const x = xPos(i);
+            svg += `<text x="${x}" y="${H - 20}" text-anchor="middle" fill="${textColor}" font-size="10">${d.month.slice(2)}</text>`;
+            svg += `<text x="${x}" y="${H - 6}" text-anchor="middle" fill="${textColor}" font-size="9">${d.count}筆 ${d.win_rate}%</text>`;
+        });
+
+        svg += '</svg>';
+        containerEl.innerHTML = svg;
+    }
+
+    renderMonthlyChart();
+
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(renderMonthlyChart, 200);
+    });
+})();
+</script>
+{% endblock %}

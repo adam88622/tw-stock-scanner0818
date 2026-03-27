@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+{% block title %}市場體溫{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">市場體溫 — AE 體制偵測</h4>
+
+    <!-- 體溫儀表板 -->
+    <div class="regime-dashboard">
+        <div class="regime-gauge">
+            <div class="regime-temp-value {{ 'danger' if regime == 'abnormal' else 'safe' }}">
+                {{ temperature }}°
+            </div>
+            <div class="regime-status {{ regime }}">
+                {% if regime == 'abnormal' %}
+                    🔴 異常體制 — 建議減碼觀望
+                {% else %}
+                    🟢 正常體制 — 可正常操作
+                {% endif %}
+            </div>
+            <div class="regime-detail">
+                <span>重建誤差: {{ "%.4f"|format(current_error) }}</span>
+                <span>閾值 τ: {{ "%.4f"|format(tau) }}</span>
+                <span>資料日期: {{ latest_date }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 體溫解讀 -->
+    <div class="regime-legend">
+        <div class="legend-item safe">
+            <span class="legend-dot safe"></span>
+            <strong>0° ~ 50°</strong> 正常 — 市場波動在預期範圍內
+        </div>
+        <div class="legend-item warning">
+            <span class="legend-dot warning"></span>
+            <strong>50° ~ 80°</strong> 偏熱 — 波動加劇，注意風控
+        </div>
+        <div class="legend-item danger">
+            <span class="legend-dot danger"></span>
+            <strong>80° ~ 100°</strong> 發燒 — 強烈建議降低倉位
+        </div>
+    </div>
+
+    <!-- 圖表：重建誤差歷史 -->
+    <div class="chart-card">
+        <h5>重建誤差歷史（近 {{ history|length }} 個交易日）</h5>
+        <div style="position:relative; height:280px;">
+            <canvas id="regimeChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 原理說明 -->
+    <div class="chart-card" style="margin-bottom:20px;">
+        <h5>這是什麼？</h5>
+        <p style="color:#94a3b8; line-height:1.8; margin:8px 0;">
+            市場體溫是一個基於<strong style="color:#818cf8;">Autoencoder（Autoencoder）</strong>的市場狀態偵測指標。
+            核心思想很簡單：先讓 AI 學會「正常市場長什麼樣」，然後每天拿新數據去比對——如果 AI 還原得很差（重建誤差高），
+            代表今天的市場跟平常不一樣，可能有風險。
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
+            <div style="background:#0f172a; border-radius:8px; padding:16px;">
+                <h6 style="color:#818cf8; margin-bottom:8px; font-size:14px;">模型原理</h6>
+                <ul style="color:#94a3b8; font-size:13px; line-height:1.8; padding-left:16px; margin:0;">
+                    <li>輸入：SPY 的 17 維技術指標（OHLCV + SMA + EMA + RSI + MACD + 布林通道）</li>
+                    <li>訓練：僅使用 VIX &lt; 75 百分位的「穩定期」資料</li>
+                    <li>架構：淺層Autoencoder 17→64→32→64→17</li>
+                    <li>判定：重建誤差超過閾值 τ（訓練集第 95 百分位）= 異常</li>
+                </ul>
+            </div>
+            <div style="background:#0f172a; border-radius:8px; padding:16px;">
+                <h6 style="color:#818cf8; margin-bottom:8px; font-size:14px;">怎麼看這個指標</h6>
+                <ul style="color:#94a3b8; font-size:13px; line-height:1.8; padding-left:16px; margin:0;">
+                    <li><strong style="color:#22c55e;">體溫低（&lt;50°）</strong>：市場正常，可照常操作突破策略</li>
+                    <li><strong style="color:#f59e0b;">體溫中（50°~80°）</strong>：波動加劇，追高要小心，建議減碼</li>
+                    <li><strong style="color:#ef4444;">體溫高（&gt;80°）</strong>：市場異常（如崩盤、黑天鵝），不宜追突破</li>
+                    <li>紅色虛線是閾值 τ，超過 = 異常；粉紅色圓點 = 異常日</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 資料來源 -->
+    <div class="chart-card" style="margin-bottom:20px;">
+        <h5>資料來源與參考文獻</h5>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px;">
+            <div>
+                <h6 style="color:#818cf8; margin-bottom:8px; font-size:14px;">資料來源</h6>
+                <table class="table table-sm data-table" style="font-size:13px;">
+                    <tbody>
+                        <tr><td>市場數據</td><td>SPY (S&P 500 ETF) — Yahoo Finance</td></tr>
+                        <tr><td>波動率指標</td><td>CBOE VIX — Yahoo Finance</td></tr>
+                        <tr><td>更新頻率</td><td>每日收盤後（美東時間 16:00）</td></tr>
+                        <tr><td>歷史範圍</td><td>2018-01-01 至今</td></tr>
+                        <tr><td>模型訓練期</td><td>2018-2024（穩定期樣本 1,505 天）</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h6 style="color:#818cf8; margin-bottom:8px; font-size:14px;">學術參考</h6>
+                <ul style="color:#94a3b8; font-size:12px; line-height:1.9; padding-left:16px; margin:0;">
+                    <li>
+                        <strong>核心方法</strong>：Al Ridhawi et al. (2026)
+                        <em>Adaptive Regime-Aware Stock Price Prediction Using Autoencoder-Gated Dual Node Transformers</em>
+                        — Autoencoder體制偵測組件貢獻 36% 改善
+                        <br><span style="color:#64748b;">arXiv:2603.19136</span>
+                    </li>
+                    <li>
+                        <strong>RAG 干擾效應</strong>：Agrawal et al. (2026)
+                        <em>FinTradeBench: A Financial Reasoning Benchmark for LLMs</em>
+                        — 驗證純技術指標優於 RAG 處理交易數據
+                        <br><span style="color:#64748b;">arXiv:2603.19225</span>
+                    </li>
+                    <li>
+                        <strong>匿名化驗證</strong>：Jeon & Lee (2026)
+                        <em>Can Blindfolded LLMs Still Trade?</em>
+                        — 證實圖結構與體制偵測的關鍵價值
+                        <br><span style="color:#64748b;">arXiv:2603.17692</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <p style="color:#64748b; font-size:11px; margin-top:12px; border-top:1px solid #334155; padding-top:8px;">
+            免責聲明：本指標僅供研究參考，不構成投資建議。模型基於歷史數據訓練，過去表現不代表未來結果。
+            回測績效（Sharpe 1.18, MaxDD 17%）含有倖存者偏誤與過擬合風險。
+        </p>
+    </div>
+
+    <!-- 模型管理 -->
+    <div class="chart-card" style="margin-bottom:20px;">
+        <h5>模型管理 — 滾動重訓練</h5>
+        <p style="color:#94a3b8; font-size:13px; margin:8px 0 16px;">
+            市場會變，模型也要跟著更新。點擊下方按鈕用最近 2 年的資料重新訓練 Autoencoder，自動更新閾值 τ。
+        </p>
+        <div style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:300px;">
+                <table class="table table-sm data-table" style="font-size:13px;">
+                    <tbody>
+                        {% if model_info %}
+                        <tr>
+                            <td>模型狀態</td>
+                            <td>
+                                {% if model_info.model_exists %}
+                                    <span class="badge bg-success">已載入</span>
+                                {% else %}
+                                    <span class="badge bg-danger">未找到</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% if model_info.last_trained %}
+                        <tr><td>上次訓練時間</td><td>{{ model_info.last_trained }}</td></tr>
+                        {% endif %}
+                        {% if model_info.tau %}
+                        <tr><td>當前閾值 τ</td><td>{{ "%.6f"|format(model_info.tau) }}</td></tr>
+                        {% endif %}
+                        {% endif %}
+                        <tr><td>訓練窗口</td><td>最近 2 年（滾動）</td></tr>
+                        <tr><td>訓練資料</td><td>SPY 日頻 OHLCV + VIX（僅穩定期）</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align:center;">
+                <button id="retrainBtn" onclick="retrainModel()"
+                        style="background:linear-gradient(135deg,#818cf8,#6366f1); color:#fff; border:none;
+                               padding:12px 32px; border-radius:8px; font-size:14px; font-weight:600;
+                               cursor:pointer; transition:all 0.2s;">
+                    🔄 滾動重訓練（最近 2 年）
+                </button>
+                <div id="retrainStatus" style="color:#94a3b8; font-size:12px; margin-top:8px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 體制統計表 -->
+    <div class="regime-stats">
+        <h5>近期體制統計</h5>
+        <table class="table table-hover table-sm data-table">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>重建誤差</th>
+                    <th>體制</th>
+                    <th>體溫</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in history[-20:]|reverse %}
+                <tr>
+                    <td>{{ item.date }}</td>
+                    <td class="text-end">{{ "%.4f"|format(item.error) }}</td>
+                    <td>
+                        {% if item.regime == 'abnormal' %}
+                            <span class="badge bg-danger">異常</span>
+                        {% else %}
+                            <span class="badge bg-success">正常</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        {% set temp = [100, (item.error / tau * 50)]|min %}
+                        {{ "%.1f"|format(temp) }}°
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+const historyData = {{ history_json|safe }};
+const tau = {{ tau }};
+
+const ctx = document.getElementById('regimeChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: historyData.map(d => d.date),
+        datasets: [
+            {
+                label: '重建誤差',
+                data: historyData.map(d => Math.min(d.error, tau * 8)),
+                borderColor: '#818cf8',
+                backgroundColor: historyData.map(d => d.error >= tau ? 'rgba(239,68,68,0.3)' : 'rgba(34,197,94,0.1)'),
+                fill: true,
+                tension: 0.3,
+                pointRadius: historyData.map(d => d.error >= tau ? 4 : 1),
+                pointBackgroundColor: historyData.map(d => d.error >= tau ? '#ef4444' : '#818cf8'),
+                borderWidth: 1.5,
+            },
+            {
+                label: '閾值 τ',
+                data: historyData.map(() => tau),
+                borderColor: '#ef4444',
+                borderDash: [6, 3],
+                borderWidth: 1.5,
+                pointRadius: 0,
+                fill: false,
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: { color: '#94a3b8', font: { size: 13 } }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(ctx) {
+                        if (ctx.datasetIndex === 0) {
+                            const regime = ctx.raw >= tau ? '🔴 異常' : '🟢 正常';
+                            return `誤差: ${ctx.raw.toFixed(4)} ${regime}`;
+                        }
+                        return `τ: ${ctx.raw.toFixed(4)}`;
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                ticks: { color: '#64748b', maxTicksLimit: 15, font: { size: 11 } },
+                grid: { color: 'rgba(148,163,184,0.1)' }
+            },
+            y: {
+                max: tau * 8,
+                ticks: { color: '#64748b', font: { size: 11 } },
+                grid: { color: 'rgba(148,163,184,0.1)' }
+            }
+        }
+    }
+});
+
+// 滾動重訓練
+function retrainModel() {
+    const btn = document.getElementById('retrainBtn');
+    const status = document.getElementById('retrainStatus');
+    btn.disabled = true;
+    btn.textContent = '⏳ 訓練中...（約 30 秒）';
+    btn.style.opacity = '0.6';
+    status.textContent = '正在下載最新資料並重新訓練模型...';
+
+    fetch('/api/regime/retrain', { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+            if (data.error) {
+                status.innerHTML = `<span style="color:#ef4444;">❌ 失敗：${data.error}</span>`;
+            } else {
+                status.innerHTML =
+                    `<span style="color:#22c55e;">✅ 訓練完成！</span><br>` +
+                    `τ: ${data.old_tau.toFixed(6)} → ${data.new_tau.toFixed(6)}<br>` +
+                    `訓練樣本: ${data.train_samples} 天 (${data.train_start} ~ ${data.train_end})<br>` +
+                    `<a href="/regime" style="color:#818cf8;">重新整理頁面查看新結果 →</a>`;
+            }
+            btn.textContent = '🔄 滾動重訓練（最近 2 年）';
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        })
+        .catch(err => {
+            status.innerHTML = `<span style="color:#ef4444;">❌ 網路錯誤：${err}</span>`;
+            btn.textContent = '🔄 滾動重訓練（最近 2 年）';
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        });
+}
+</script>
+{% endblock %}

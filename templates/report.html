@@ -1,0 +1,828 @@
+{% extends "base.html" %}
+{% block title %}盤前報告{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">{{ date or '' }} 盤前籌碼整理</h4>
+
+    {% if not date %}
+    <div class="alert alert-warning">尚無資料，請先執行 python run_daily.py 抓取資料</div>
+    {% else %}
+    <div class="report-grid">
+        <!-- Left Column: Tables (60%) -->
+        <div class="report-left">
+
+            <!-- Table 1: 國際股市漲跌幅統計 -->
+            <div class="report-card">
+                <div class="report-card-header">國際股市漲跌幅統計</div>
+                <div class="report-card-body">
+                    <table class="report-table" id="global-quotes-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left;">國際股市</th>
+                                <th>收盤價</th>
+                                <th>漲跌幅</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 外資夜盤 -->
+            {% if night_session %}
+            <div class="report-card">
+                <div class="report-card-header">外資夜盤 (台指期)</div>
+                <div class="report-card-body" style="display:flex;align-items:center;gap:20px;padding:14px 18px;flex-wrap:wrap;">
+                    <div>
+                        <span style="font-size:13px;color:#94a3b8;">日盤收盤</span>
+                        <span style="font-size:20px;font-weight:800;color:#e2e8f0;margin-left:6px;">{{ '%.0f'|format(night_session.day_close) }}</span>
+                    </div>
+                    <span style="font-size:20px;color:#475569;">→</span>
+                    <div>
+                        <span style="font-size:13px;color:#94a3b8;">夜盤收盤</span>
+                        <span style="font-size:20px;font-weight:800;color:#e2e8f0;margin-left:6px;">{{ '%.0f'|format(night_session.night_close) }}</span>
+                    </div>
+                    <div style="padding:6px 14px;border-radius:8px;
+                        {{ 'background:rgba(239,68,68,.15);' if night_session.spread >= 0 else 'background:rgba(34,197,94,.15);' }}">
+                        <span style="font-size:18px;font-weight:800;
+                            {{ 'color:#ef4444;' if night_session.spread >= 0 else 'color:#22c55e;' }}">
+                            {{ '%+.0f'|format(night_session.spread) }}
+                        </span>
+                        <span style="font-size:14px;font-weight:700;margin-left:4px;
+                            {{ 'color:#ef4444;' if night_session.pct >= 0 else 'color:#22c55e;' }}">
+                            ({{ '%+.2f'|format(night_session.pct) }}%)
+                        </span>
+                    </div>
+                    <span style="font-size:12px;color:#64748b;">{{ night_session.date }}</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Table 2: 三大法人買賣超明細 (集中市場) -->
+            <div class="report-card">
+                <div class="report-card-header">三大法人買賣超明細 (集中市場)</div>
+                <div class="report-card-body">
+                    <table class="report-table" id="inst-detail-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left;">法人</th>
+                                <th>買進(億)</th>
+                                <th>賣出(億)</th>
+                                <th>淨買賣(億)</th>
+                                <th>前日淨額(億)</th>
+                                <th>增減(億)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Table 2b: DB-based 上市三大法人 (stock-level aggregate) -->
+            <div class="report-card">
+                <div class="report-card-header">三大法人個股合計買賣超 (集中市場)</div>
+                <div class="report-card-body">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left;">集中市場</th>
+                                <th>淨買賣(張)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set tw = twse_inst %}
+                            <tr class="{{ 'bg-up' if tw.foreign_net > 0 else 'bg-dn' if tw.foreign_net < 0 else '' }}">
+                                <td style="text-align:left;">外資</td>
+                                <td class="{{ 'val-up' if tw.foreign_net > 0 else 'val-dn' if tw.foreign_net < 0 else '' }}">
+                                    {{ '{:+,}'.format(tw.foreign_net) }}
+                                </td>
+                            </tr>
+                            <tr class="{{ 'bg-up' if tw.sitc_net > 0 else 'bg-dn' if tw.sitc_net < 0 else '' }}">
+                                <td style="text-align:left;">投信</td>
+                                <td class="{{ 'val-up' if tw.sitc_net > 0 else 'val-dn' if tw.sitc_net < 0 else '' }}">
+                                    {{ '{:+,}'.format(tw.sitc_net) }}
+                                </td>
+                            </tr>
+                            <tr class="{{ 'bg-up' if tw.dealer_net > 0 else 'bg-dn' if tw.dealer_net < 0 else '' }}">
+                                <td style="text-align:left;">自營商</td>
+                                <td class="{{ 'val-up' if tw.dealer_net > 0 else 'val-dn' if tw.dealer_net < 0 else '' }}">
+                                    {{ '{:+,}'.format(tw.dealer_net) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Table 3: 上櫃股票三大法人買賣超 -->
+            <div class="report-card">
+                <div class="report-card-header">三大法人個股合計買賣超 (櫃買市場)</div>
+                <div class="report-card-body">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left;">櫃買市場</th>
+                                <th>淨買賣(張)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set tp = tpex_inst %}
+                            <tr class="{{ 'bg-up' if tp.foreign_net > 0 else 'bg-dn' if tp.foreign_net < 0 else '' }}">
+                                <td style="text-align:left;">外資</td>
+                                <td class="{{ 'val-up' if tp.foreign_net > 0 else 'val-dn' if tp.foreign_net < 0 else '' }}">
+                                    {{ '{:+,}'.format(tp.foreign_net) }}
+                                </td>
+                            </tr>
+                            <tr class="{{ 'bg-up' if tp.sitc_net > 0 else 'bg-dn' if tp.sitc_net < 0 else '' }}">
+                                <td style="text-align:left;">投信</td>
+                                <td class="{{ 'val-up' if tp.sitc_net > 0 else 'val-dn' if tp.sitc_net < 0 else '' }}">
+                                    {{ '{:+,}'.format(tp.sitc_net) }}
+                                </td>
+                            </tr>
+                            <tr class="{{ 'bg-up' if tp.dealer_net > 0 else 'bg-dn' if tp.dealer_net < 0 else '' }}">
+                                <td style="text-align:left;">自營商</td>
+                                <td class="{{ 'val-up' if tp.dealer_net > 0 else 'val-dn' if tp.dealer_net < 0 else '' }}">
+                                    {{ '{:+,}'.format(tp.dealer_net) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 信用交易增減 -->
+            {% if margin_summary %}
+            <div class="report-card">
+                <div class="report-card-header">信用交易增減</div>
+                <div class="report-card-body">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left;">項目</th>
+                                <th>前日餘額</th>
+                                <th>今日餘額</th>
+                                <th>增減</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if margin_summary.margin_buy_today is defined %}
+                            {% set mc = margin_summary.margin_buy_change %}
+                            <tr class="{{ 'bg-up' if mc > 0 else 'bg-dn' if mc < 0 else '' }}">
+                                <td style="text-align:left;">融資(張)</td>
+                                <td>{{ '{:,}'.format(margin_summary.margin_buy_prev) }}</td>
+                                <td>{{ '{:,}'.format(margin_summary.margin_buy_today) }}</td>
+                                <td class="{{ 'val-up' if mc > 0 else 'val-dn' if mc < 0 else '' }}">
+                                    {{ '{:+,}'.format(mc) }}
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% if margin_summary.short_sell_today is defined %}
+                            {% set sc = margin_summary.short_sell_change %}
+                            <tr class="{{ 'bg-up' if sc > 0 else 'bg-dn' if sc < 0 else '' }}">
+                                <td style="text-align:left;">融券(張)</td>
+                                <td>{{ '{:,}'.format(margin_summary.short_sell_prev) }}</td>
+                                <td>{{ '{:,}'.format(margin_summary.short_sell_today) }}</td>
+                                <td class="{{ 'val-up' if sc > 0 else 'val-dn' if sc < 0 else '' }}">
+                                    {{ '{:+,}'.format(sc) }}
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% if margin_summary.margin_amount_today is defined %}
+                            {% set ac = margin_summary.margin_amount_change %}
+                            <tr class="{{ 'bg-up' if ac > 0 else 'bg-dn' if ac < 0 else '' }}">
+                                <td style="text-align:left;">融資金額(億)</td>
+                                <td>{{ '{:,.1f}'.format(margin_summary.margin_amount_prev / 100000) }}</td>
+                                <td>{{ '{:,.1f}'.format(margin_summary.margin_amount_today / 100000) }}</td>
+                                <td class="{{ 'val-up' if ac > 0 else 'val-dn' if ac < 0 else '' }}">
+                                    {{ '{:+,.1f}'.format(ac / 100000) }}
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Table 4: 外資&自營商期貨部位變化 -->
+            <div class="report-card">
+                <div class="report-card-header">外資 & 自營商期貨部位變化 (台指期)</div>
+                <div class="report-card-body">
+                    <table class="report-table" id="futures-position-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left;">留倉部位</th>
+                                <th>多單</th>
+                                <th>空單</th>
+                                <th>淨額</th>
+                                <th>變化</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 台積電 ADR -->
+            {% if tsm_adr %}
+            <div class="report-card">
+                <div class="report-card-header">台積電 ADR (TSM)</div>
+                <div class="report-card-body" style="display:flex;align-items:center;gap:16px;padding:12px 16px;">
+                    <span style="font-size:28px;font-weight:900;color:#e2e8f0;">TSM</span>
+                    <span style="font-size:24px;font-weight:800;color:{{ 'var(--val-up)' if tsm_adr.pct >= 0 else 'var(--val-dn)' }};">
+                        ${{ tsm_adr.price }}
+                    </span>
+                    <span style="font-size:16px;font-weight:700;padding:4px 10px;border-radius:6px;
+                        {{ 'background:rgba(239,68,68,.15);color:#ef4444;' if tsm_adr.pct >= 0 else 'background:rgba(34,197,94,.15);color:#22c55e;' }}">
+                        {{ '%+.2f'|format(tsm_adr.pct) }}%
+                    </span>
+                    <span style="font-size:12px;color:#64748b;">（換算台幣約 {{ '%.0f'|format(tsm_adr.price * 32.5) }} 元）</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 外資操作異常股：漲停+外資賣超 -->
+            {% if limit_up_sell %}
+            <div class="report-card">
+                <div class="report-card-header" style="color:#ef4444;">漲停股 + 外資賣超（反向操作）</div>
+                <div class="report-card-body">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left;">代號</th>
+                                <th style="text-align:left;">名稱</th>
+                                <th>收盤</th>
+                                <th>漲跌%</th>
+                                <th>外資當日</th>
+                                <th>外資5日累計</th>
+                                <th>成交量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in limit_up_sell %}
+                            <tr>
+                                <td style="text-align:left;"><a href="/stock?id={{ r.stock_id }}">{{ r.stock_id }}</a></td>
+                                <td style="text-align:left;">{{ r.name }}</td>
+                                <td>{{ '%.2f'|format(r.close_price) }}</td>
+                                <td class="val-up">{{ '%+.2f'|format(r.change_pct) }}%</td>
+                                <td class="val-dn">{{ '{:,}'.format(r.foreign_buy) }}</td>
+                                <td class="{{ 'val-up' if (r.foreign_5d or 0) > 0 else 'val-dn' }}">{{ '{:+,}'.format(r.foreign_5d or 0) }}</td>
+                                <td>{{ '{:,}'.format(r.volume or 0) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 外資操作異常股：跌停+外資買超 -->
+            {% if limit_dn_buy %}
+            <div class="report-card">
+                <div class="report-card-header" style="color:#22c55e;">跌停股 + 外資買超（逆勢佈局）</div>
+                <div class="report-card-body">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left;">代號</th>
+                                <th style="text-align:left;">名稱</th>
+                                <th>收盤</th>
+                                <th>漲跌%</th>
+                                <th>外資當日</th>
+                                <th>外資5日累計</th>
+                                <th>成交量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in limit_dn_buy %}
+                            <tr>
+                                <td style="text-align:left;"><a href="/stock?id={{ r.stock_id }}">{{ r.stock_id }}</a></td>
+                                <td style="text-align:left;">{{ r.name }}</td>
+                                <td>{{ '%.2f'|format(r.close_price) }}</td>
+                                <td class="val-dn">{{ '%+.2f'|format(r.change_pct) }}%</td>
+                                <td class="val-up">+{{ '{:,}'.format(r.foreign_buy) }}</td>
+                                <td class="{{ 'val-up' if (r.foreign_5d or 0) > 0 else 'val-dn' }}">{{ '{:+,}'.format(r.foreign_5d or 0) }}</td>
+                                <td>{{ '{:,}'.format(r.volume or 0) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Right Column: Charts (40%) -->
+        <div class="report-right">
+
+            <!-- Chart 1: 外資買賣超趨勢 -->
+            <div class="report-card">
+                <div class="report-card-header">外資買賣超趨勢 (近20日)</div>
+                <div class="report-card-body">
+                    <div id="foreign-trend-chart"></div>
+                </div>
+            </div>
+
+            <!-- Chart 2: 投信買賣超趨勢 -->
+            <div class="report-card">
+                <div class="report-card-header">投信買賣超趨勢 (近20日)</div>
+                <div class="report-card-body">
+                    <div id="sitc-trend-chart"></div>
+                </div>
+            </div>
+
+            <!-- Chart 3: 外資期貨未平倉淨額 -->
+            <div class="report-card">
+                <div class="report-card-header">外資期貨未平倉淨額 (近20日)</div>
+                <div class="report-card-body">
+                    <div id="futures-oi-chart"></div>
+                </div>
+            </div>
+
+            <!-- Chart 4: Put/Call Ratio -->
+            <div class="report-card">
+                <div class="report-card-header">Put/Call Ratio (近20日)</div>
+                <div class="report-card-body">
+                    <div id="pc-ratio-chart"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+/* Report page layout */
+.report-grid {
+    display: flex;
+    gap: 16px;
+}
+.report-left {
+    flex: 0 0 60%;
+    max-width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.report-right {
+    flex: 0 0 40%;
+    max-width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Report cards */
+.report-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.report-card-header {
+    background: #162032;
+    padding: 10px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #f59e0b;
+    border-bottom: 1px solid #334155;
+}
+.report-card-body {
+    padding: 0;
+}
+
+/* Report tables */
+.report-table {
+    width: 100%;
+    font-size: 15px;
+    border-collapse: collapse;
+}
+.report-table th {
+    background: #334155;
+    color: #94a3b8;
+    padding: 8px 12px;
+    text-align: center;
+    border: 1px solid #475569;
+    font-weight: 600;
+    font-size: 14px;
+}
+.report-table td {
+    padding: 7px 12px;
+    text-align: right;
+    border: 1px solid #334155;
+    color: #e2e8f0;
+    font-size: 15px;
+}
+.report-table .section-header {
+    background: #1e293b;
+    color: #f59e0b;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Value colors */
+.val-up { color: #ef4444; font-weight: 600; }
+.val-dn { color: #22c55e; font-weight: 600; }
+.bg-up { background: rgba(239,68,68,0.12); }
+.bg-dn { background: rgba(34,197,94,0.12); }
+
+/* RWD */
+@media (max-width: 1024px) {
+    .report-grid {
+        flex-direction: column;
+    }
+    .report-left, .report-right {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    const quotesData = {{ quotes_json|safe }};
+    const foreignTrend = {{ foreign_trend_json|safe }};
+    const sitcTrend = {{ sitc_trend_json|safe }};
+    const futuresData = {{ futures_json|safe }};
+    const pcData = {{ pc_json|safe }};
+    const instDetail = {{ inst_detail_json|safe }};
+    const instDetailPrev = {{ inst_detail_prev_json|safe }};
+
+    const gridColor = '#1e293b';
+    const textColor = '#64748b';
+    const maColor = '#f59e0b';  // amber for MA line
+
+    // ===== Helper: compute 5-day moving average =====
+    function calcMA(values, period) {
+        const result = [];
+        for (let i = 0; i < values.length; i++) {
+            if (i < period - 1) {
+                result.push(null);
+            } else {
+                let sum = 0;
+                for (let j = i - period + 1; j <= i; j++) sum += values[j];
+                result.push(sum / period);
+            }
+        }
+        return result;
+    }
+
+    // ===== Populate Global Quotes Table =====
+    (function() {
+        const tbody = document.querySelector('#global-quotes-table tbody');
+        if (!tbody || !quotesData.length) return;
+        let html = '';
+        quotesData.forEach(q => {
+            const cls = q.pct > 0 ? 'val-up' : q.pct < 0 ? 'val-dn' : '';
+            const bgCls = q.pct > 0 ? 'bg-up' : q.pct < 0 ? 'bg-dn' : '';
+            const sign = q.pct > 0 ? '+' : '';
+            html += `<tr class="${bgCls}">
+                <td style="text-align:left;">${q.label}</td>
+                <td>${q.price.toLocaleString()}</td>
+                <td class="${cls}">${sign}${q.pct.toFixed(2)}%</td>
+            </tr>`;
+        });
+        tbody.innerHTML = html;
+    })();
+
+    // ===== Populate Institutional Detail Table =====
+    (function() {
+        const tbody = document.querySelector('#inst-detail-table tbody');
+        if (!tbody || !instDetail.length) return;
+
+        // Build prev lookup
+        const prevMap = {};
+        if (instDetailPrev && instDetailPrev.length) {
+            instDetailPrev.forEach(r => { prevMap[r.name] = r; });
+        }
+
+        let html = '';
+        instDetail.forEach(r => {
+            const buyBillion = r.buy / 100000000;
+            const sellBillion = r.sell / 100000000;
+            const netBillion = r.net / 100000000;
+            const prev = prevMap[r.name];
+            const prevNet = prev ? prev.net / 100000000 : 0;
+            const change = prev ? netBillion - prevNet : 0;
+
+            const netCls = netBillion > 0 ? 'val-up' : netBillion < 0 ? 'val-dn' : '';
+            const bgCls = netBillion > 0 ? 'bg-up' : netBillion < 0 ? 'bg-dn' : '';
+            const chgCls = change > 0 ? 'val-up' : change < 0 ? 'val-dn' : '';
+
+            html += `<tr class="${bgCls}">
+                <td style="text-align:left;">${r.name}</td>
+                <td class="val-up">${buyBillion.toFixed(1)}</td>
+                <td class="val-dn">${sellBillion.toFixed(1)}</td>
+                <td class="${netCls}">${netBillion >= 0 ? '+' : ''}${netBillion.toFixed(1)}</td>
+                <td>${prev ? (prevNet >= 0 ? '+' : '') + prevNet.toFixed(1) : '-'}</td>
+                <td class="${chgCls}">${prev ? (change >= 0 ? '+' : '') + change.toFixed(1) : '-'}</td>
+            </tr>`;
+        });
+        tbody.innerHTML = html;
+    })();
+
+    // ===== Populate Futures Position Table =====
+    (function() {
+        const tbody = document.querySelector('#futures-position-table tbody');
+        if (!tbody || !futuresData.length) return;
+
+        const latest = futuresData[futuresData.length - 1];
+        const prev = futuresData.length >= 2 ? futuresData[futuresData.length - 2] : null;
+
+        const foreignNet = latest.foreign_net || 0;
+        const dealerNet = latest.dealer_net || 0;
+        const foreignChange = prev ? foreignNet - (prev.foreign_net || 0) : 0;
+        const dealerChange = prev ? dealerNet - (prev.dealer_net || 0) : 0;
+
+        function valCell(v) {
+            const cls = v > 0 ? 'val-up' : v < 0 ? 'val-dn' : '';
+            const sign = v > 0 ? '+' : '';
+            return `<td class="${cls}">${sign}${v.toLocaleString()}</td>`;
+        }
+
+        let html = '';
+        const fBg = foreignNet > 0 ? 'bg-up' : foreignNet < 0 ? 'bg-dn' : '';
+        html += `<tr class="${fBg}">
+            <td style="text-align:left;">外資</td>
+            ${valCell(Math.max(foreignNet, 0))}
+            ${valCell(Math.min(foreignNet, 0))}
+            ${valCell(foreignNet)}
+            ${valCell(foreignChange)}
+        </tr>`;
+
+        const dBg = dealerNet > 0 ? 'bg-up' : dealerNet < 0 ? 'bg-dn' : '';
+        html += `<tr class="${dBg}">
+            <td style="text-align:left;">自營商</td>
+            ${valCell(Math.max(dealerNet, 0))}
+            ${valCell(Math.min(dealerNet, 0))}
+            ${valCell(dealerNet)}
+            ${valCell(dealerChange)}
+        </tr>`;
+
+        tbody.innerHTML = html;
+    })();
+
+    // ===== Compact Bar Chart with MA overlay =====
+    function makeReportBarChart(el, data, valueKey, posColor, negColor, showMA) {
+        if (!el || !data || data.length === 0) {
+            if (el) el.innerHTML = '<div style="color:#64748b;padding:20px;text-align:center;">暫無資料</div>';
+            return;
+        }
+        const W = el.clientWidth || 350;
+        const H = 200;
+        const padTop = 15, padBot = 28, padLeft = 60, padRight = 10;
+        const chartW = W - padLeft - padRight;
+        const chartH = H - padTop - padBot;
+        const n = data.length;
+
+        const values = data.map(d => d[valueKey] || 0);
+
+        // Compute MA
+        const ma5 = showMA ? calcMA(values, 5) : null;
+
+        let vMin = Math.min(0, ...values);
+        let vMax = Math.max(0, ...values);
+        if (ma5) {
+            const maVals = ma5.filter(v => v !== null);
+            if (maVals.length) {
+                vMin = Math.min(vMin, ...maVals);
+                vMax = Math.max(vMax, ...maVals);
+            }
+        }
+        const vRange = vMax - vMin || 1;
+        vMin -= vRange * 0.08;
+        vMax += vRange * 0.08;
+
+        const stepW = chartW / n;
+        const barW = Math.max(3, Math.floor(stepW * 0.7));
+
+        function xPos(i) { return padLeft + stepW * i + stepW / 2; }
+        function yPos(v) { return padTop + chartH - ((v - vMin) / (vMax - vMin)) * chartH; }
+
+        let svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;">`;
+
+        // Grid
+        for (let i = 0; i <= 4; i++) {
+            const y = padTop + (chartH / 4) * i;
+            const val = vMax - ((vMax - vMin) / 4) * i;
+            svg += `<line x1="${padLeft}" y1="${y}" x2="${W - padRight}" y2="${y}" stroke="${gridColor}" stroke-width="0.5"/>`;
+            svg += `<text x="${padLeft - 4}" y="${y + 3}" text-anchor="end" fill="${textColor}" font-size="9">${Math.round(val).toLocaleString()}</text>`;
+        }
+
+        // Zero line
+        const zeroY = yPos(0);
+        if (zeroY >= padTop && zeroY <= padTop + chartH) {
+            svg += `<line x1="${padLeft}" y1="${zeroY}" x2="${W - padRight}" y2="${zeroY}" stroke="#475569" stroke-width="1"/>`;
+        }
+
+        // Bars
+        data.forEach((d, i) => {
+            const v = d[valueKey] || 0;
+            const color = v >= 0 ? posColor : negColor;
+            const by = yPos(v);
+            const barX = xPos(i) - barW / 2;
+            const barTop = Math.min(by, zeroY);
+            const barH = Math.max(Math.abs(by - zeroY), 1);
+            svg += `<rect x="${barX}" y="${barTop}" width="${barW}" height="${barH}" fill="${color}" opacity="0.85"/>`;
+        });
+
+        // MA line overlay
+        if (ma5) {
+            let maPath = '';
+            let started = false;
+            ma5.forEach((v, i) => {
+                if (v !== null) {
+                    if (!started) {
+                        maPath += `M${xPos(i)},${yPos(v)}`;
+                        started = true;
+                    } else {
+                        maPath += ` L${xPos(i)},${yPos(v)}`;
+                    }
+                }
+            });
+            if (maPath) {
+                svg += `<path d="${maPath}" fill="none" stroke="${maColor}" stroke-width="2" stroke-dasharray="4,2" opacity="0.9"/>`;
+                // Label
+                const lastMA = ma5.filter(v => v !== null);
+                if (lastMA.length) {
+                    const lastVal = lastMA[lastMA.length - 1];
+                    const lastIdx = ma5.lastIndexOf(lastVal);
+                    svg += `<text x="${xPos(lastIdx) + 4}" y="${yPos(lastVal) - 4}" fill="${maColor}" font-size="9" font-weight="bold">MA5</text>`;
+                }
+            }
+        }
+
+        // Date labels
+        const dateStep = Math.max(1, Math.floor(n / 6));
+        data.forEach((d, i) => {
+            if (i % dateStep === 0 || i === n - 1) {
+                svg += `<text x="${xPos(i)}" y="${H - 4}" text-anchor="middle" fill="${textColor}" font-size="9">${d.date.slice(5)}</text>`;
+            }
+        });
+
+        svg += '</svg>';
+        el.innerHTML = svg;
+    }
+
+    // ===== Compact Line Chart with MA overlay =====
+    function makeReportLineChart(el, data, valueKey, color, refLines, showMA) {
+        if (!el || !data || data.length === 0) {
+            if (el) el.innerHTML = '<div style="color:#64748b;padding:20px;text-align:center;">暫無資料</div>';
+            return;
+        }
+        const W = el.clientWidth || 350;
+        const H = 200;
+        const padTop = 15, padBot = 28, padLeft = 60, padRight = 30;
+        const chartW = W - padLeft - padRight;
+        const chartH = H - padTop - padBot;
+        const n = data.length;
+
+        const values = data.map(d => d[valueKey] || 0);
+        const ma5 = showMA ? calcMA(values, 5) : null;
+
+        let vMin = Math.min(...values);
+        let vMax = Math.max(...values);
+
+        if (refLines) {
+            refLines.forEach(rl => {
+                if (rl.value < vMin) vMin = rl.value;
+                if (rl.value > vMax) vMax = rl.value;
+            });
+        }
+        if (ma5) {
+            const maVals = ma5.filter(v => v !== null);
+            if (maVals.length) {
+                vMin = Math.min(vMin, ...maVals);
+                vMax = Math.max(vMax, ...maVals);
+            }
+        }
+
+        const vRange = vMax - vMin || 0.1;
+        vMin -= vRange * 0.08;
+        vMax += vRange * 0.08;
+
+        function xPos(i) { return padLeft + (chartW / (n - 1 || 1)) * i; }
+        function yPos(v) { return padTop + chartH - ((v - vMin) / (vMax - vMin)) * chartH; }
+
+        let svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;">`;
+
+        // Grid
+        for (let i = 0; i <= 4; i++) {
+            const y = padTop + (chartH / 4) * i;
+            const val = vMax - ((vMax - vMin) / 4) * i;
+            svg += `<line x1="${padLeft}" y1="${y}" x2="${W - padRight}" y2="${y}" stroke="${gridColor}" stroke-width="0.5"/>`;
+            svg += `<text x="${padLeft - 4}" y="${y + 3}" text-anchor="end" fill="${textColor}" font-size="9">${val.toFixed(2)}</text>`;
+        }
+
+        // Reference lines
+        if (refLines) {
+            refLines.forEach(rl => {
+                const ry = yPos(rl.value);
+                if (ry >= padTop && ry <= padTop + chartH) {
+                    svg += `<line x1="${padLeft}" y1="${ry}" x2="${W - padRight}" y2="${ry}" stroke="${rl.color || '#475569'}" stroke-width="1" stroke-dasharray="4,3" opacity="0.7"/>`;
+                    svg += `<text x="${W - padRight + 2}" y="${ry + 3}" fill="${rl.color || '#475569'}" font-size="9">${rl.label || rl.value}</text>`;
+                }
+            });
+        }
+
+        // Area fill
+        let areaPath = `M${xPos(0)},${yPos(values[0])}`;
+        for (let i = 1; i < n; i++) areaPath += ` L${xPos(i)},${yPos(values[i])}`;
+        areaPath += ` L${xPos(n - 1)},${padTop + chartH} L${xPos(0)},${padTop + chartH} Z`;
+        svg += `<path d="${areaPath}" fill="${color}" opacity="0.1"/>`;
+
+        // Line
+        let linePath = `M${xPos(0)},${yPos(values[0])}`;
+        for (let i = 1; i < n; i++) linePath += ` L${xPos(i)},${yPos(values[i])}`;
+        svg += `<path d="${linePath}" fill="none" stroke="${color}" stroke-width="2"/>`;
+
+        // MA line
+        if (ma5) {
+            let maPath = '';
+            let started = false;
+            ma5.forEach((v, i) => {
+                if (v !== null) {
+                    if (!started) {
+                        maPath += `M${xPos(i)},${yPos(v)}`;
+                        started = true;
+                    } else {
+                        maPath += ` L${xPos(i)},${yPos(v)}`;
+                    }
+                }
+            });
+            if (maPath) {
+                svg += `<path d="${maPath}" fill="none" stroke="${maColor}" stroke-width="2" stroke-dasharray="4,2" opacity="0.9"/>`;
+                const lastMA = ma5.filter(v => v !== null);
+                if (lastMA.length) {
+                    const lastVal = lastMA[lastMA.length - 1];
+                    const lastIdx = ma5.lastIndexOf(lastVal);
+                    svg += `<text x="${xPos(lastIdx) - 24}" y="${yPos(lastVal) - 4}" fill="${maColor}" font-size="9" font-weight="bold">MA5</text>`;
+                }
+            }
+        }
+
+        // Last dot + value
+        const lastVal = values[n - 1];
+        svg += `<circle cx="${xPos(n - 1)}" cy="${yPos(lastVal)}" r="3" fill="${color}"/>`;
+        svg += `<text x="${xPos(n - 1) - 5}" y="${yPos(lastVal) - 6}" fill="${color}" font-size="10" font-weight="bold" text-anchor="end">${lastVal.toFixed(2)}</text>`;
+
+        // Date labels
+        const dateStep = Math.max(1, Math.floor(n / 6));
+        data.forEach((d, i) => {
+            if (i % dateStep === 0 || i === n - 1) {
+                svg += `<text x="${xPos(i)}" y="${H - 4}" text-anchor="middle" fill="${textColor}" font-size="9">${d.date.slice(5)}</text>`;
+            }
+        });
+
+        svg += '</svg>';
+        el.innerHTML = svg;
+    }
+
+    // ===== Render Charts (all with 5-day MA) =====
+    function renderAllCharts() {
+        // Chart 1: Foreign buy/sell trend + MA5
+        makeReportBarChart(
+            document.getElementById('foreign-trend-chart'),
+            foreignTrend, 'net', '#ef4444', '#22c55e', true
+        );
+
+        // Chart 2: SITC buy/sell trend + MA5
+        makeReportBarChart(
+            document.getElementById('sitc-trend-chart'),
+            sitcTrend, 'net', '#ef4444', '#22c55e', true
+        );
+
+        // Chart 3: Futures OI (foreign net) + MA5
+        makeReportBarChart(
+            document.getElementById('futures-oi-chart'),
+            futuresData, 'foreign_net', '#ef4444', '#22c55e', true
+        );
+
+        // Chart 4: Put/Call Ratio + MA5
+        makeReportLineChart(
+            document.getElementById('pc-ratio-chart'),
+            pcData, 'pc_ratio', '#f97316',
+            [
+                { value: 0.8, color: '#22c55e', label: '0.8' },
+                { value: 1.2, color: '#ef4444', label: '1.2' },
+            ],
+            true
+        );
+    }
+
+    renderAllCharts();
+
+    // Resize handler
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(renderAllCharts, 200);
+    });
+})();
+</script>
+{% endblock %}

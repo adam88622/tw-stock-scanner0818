@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}券商分點進出{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">券商分點進出</h4>
+
+    <!-- 篩選列 -->
+    <div class="filter-bar">
+        <form method="GET" action="/broker" class="d-flex align-items-center gap-3 flex-wrap">
+            <!-- 股票代號 -->
+            <div class="filter-group">
+                <label>股票代號</label>
+                <div class="input-group input-group-sm" style="width: 180px;">
+                    <input type="text" name="stock" class="form-control form-control-sm"
+                           value="{{ stock_id }}" placeholder="例: 2330" maxlength="6">
+                    <button type="submit" class="btn btn-sm btn-primary">查詢</button>
+                </div>
+            </div>
+
+            <!-- 日期 -->
+            <div class="filter-group">
+                <label>日期</label>
+                <select name="date" class="form-select form-select-sm" onchange="this.form.submit()">
+                    {% for d in available_dates %}
+                    <option value="{{ d }}" {% if d == date %}selected{% endif %}>{{ d }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+
+    {% if stock_id %}
+    <div class="mt-2 mb-2">
+        <span class="fw-bold fs-5">{{ stock_id }}</span>
+        {% if stock_name %}
+        <span class="text-muted ms-1">{{ stock_name }}</span>
+        {% endif %}
+        <span class="text-muted ms-2">{{ date }}</span>
+    </div>
+    {% endif %}
+
+    {% if stock_id and buy_rows|length == 0 and sell_rows|length == 0 %}
+    <div class="alert alert-info m-3">{{ stock_id }} 在 {{ date }} 無券商分點資料</div>
+    {% endif %}
+
+    {% if stock_id and (buy_rows|length > 0 or sell_rows|length > 0) %}
+    <div style="text-align:right; margin-bottom:8px;">
+        <a href="/api/export/broker?stock={{ stock_id }}&date={{ date }}" class="btn-export">
+            📥 匯出 CSV
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- 雙欄：買超 / 賣超 -->
+    <div class="row g-3 mt-2">
+        <!-- 買超券商 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <strong>買超券商 Top {{ buy_rows|length }}</strong>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm data-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>券商</th>
+                                <th class="text-end">買進</th>
+                                <th class="text-end">賣出</th>
+                                <th class="text-end">買超</th>
+                                <th class="text-end">佔成交%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in buy_rows %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ row.broker_name }}</td>
+                                <td class="text-end">{{ "{:,}".format(row.buy_volume) }}</td>
+                                <td class="text-end">{{ "{:,}".format(row.sell_volume) }}</td>
+                                <td class="text-end text-danger fw-bold">{{ "{:,}".format(row.net_volume) }}</td>
+                                <td class="text-end">{{ "%.2f"|format(row.pct) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 賣超券商 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <strong>賣超券商 Top {{ sell_rows|length }}</strong>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm data-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>券商</th>
+                                <th class="text-end">買進</th>
+                                <th class="text-end">賣出</th>
+                                <th class="text-end">賣超</th>
+                                <th class="text-end">佔成交%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in sell_rows %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ row.broker_name }}</td>
+                                <td class="text-end">{{ "{:,}".format(row.buy_volume) }}</td>
+                                <td class="text-end">{{ "{:,}".format(row.sell_volume) }}</td>
+                                <td class="text-end text-success fw-bold">{{ "{:,}".format(row.net_volume) }}</td>
+                                <td class="text-end">{{ "%.2f"|format(row.pct) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

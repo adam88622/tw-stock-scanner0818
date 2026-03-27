@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}N日高點突破{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">N 日高點突破掃描</h4>
+
+    <!-- 市場體溫狀態條 -->
+    {% if regime_info %}
+    <div class="regime-bar {{ regime_info.regime }}">
+        <span class="temp">{{ regime_info.temperature }}°</span>
+        <span>市場體溫：{% if regime_info.regime == 'abnormal' %}🔴 異常 — 追突破須謹慎{% else %}🟢 正常 — 可正常操作{% endif %}</span>
+        <a href="/regime" style="margin-left:auto; font-size:12px; opacity:0.7;">詳細 →</a>
+    </div>
+    {% endif %}
+
+    <!-- Mobile segment tabs (hidden on desktop, shown on mobile) -->
+    <div class="mobile-segment" style="display:none;">
+        <button class="seg-btn active" data-days="5,10,20,60,120,240">全部</button>
+        <button class="seg-btn" data-days="5">5日</button>
+        <button class="seg-btn" data-days="10">10日</button>
+        <button class="seg-btn" data-days="20">20日</button>
+        <button class="seg-btn" data-days="60">60日</button>
+        <button class="seg-btn" data-days="120">120日</button>
+    </div>
+
+    <!-- 篩選列 -->
+    <div class="filter-bar">
+        <form method="GET" action="/breakout" class="d-flex align-items-center gap-3 flex-wrap">
+            <!-- 日期 -->
+            <div class="filter-group">
+                <label>日期</label>
+                <select name="date" class="form-select form-select-sm" onchange="this.form.submit()">
+                    {% for d in available_dates %}
+                    <option value="{{ d }}" {% if d == date %}selected{% endif %}>{{ d }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- 市場 -->
+            <div class="filter-group">
+                <label>市場</label>
+                <select name="market" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="all" {% if market == 'all' %}selected{% endif %}>全部</option>
+                    <option value="twse" {% if market == 'twse' %}selected{% endif %}>上市</option>
+                    <option value="tpex" {% if market == 'tpex' %}selected{% endif %}>上櫃</option>
+                </select>
+            </div>
+
+            <!-- 突破天數篩選 -->
+            <div class="filter-group">
+                <label>突破天數</label>
+                <div class="d-flex gap-2">
+                    {% for n in [5, 10, 20, 60, 120, 240] %}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="days" value="{{ n }}"
+                               id="day{{ n }}" onchange="updateDaysFilter()"
+                               {% if n in filter_days %}checked{% endif %}>
+                        <label class="form-check-label" for="day{{ n }}">{{ n }}日</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 統計 -->
+    <div class="result-summary" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+        <span>共 <strong>{{ rows|length }}</strong> 檔突破</span>
+        <a href="/api/export/breakout?date={{ date }}&market={{ market }}" class="btn-export">
+            📥 匯出 CSV
+        </a>
+    </div>
+
+    <!-- 資料表格 -->
+    <div class="table-responsive">
+        <table class="table table-hover table-sm data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>代號</th>
+                    <th>名稱</th>
+                    <th>市場</th>
+                    <th class="text-end">收盤價</th>
+                    <th class="text-end">漲跌%</th>
+                    <th class="text-end">成交量(張)</th>
+                    <th>突破天數</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="stock-id"><a href="/stock?id={{ row.stock_id }}">{{ row.stock_id }}</a></td>
+                    <td>{{ row.name }}</td>
+                    <td><span class="badge {{ 'bg-primary' if row.market == 'twse' else 'bg-success' }}">{{ '上市' if row.market == 'twse' else '上櫃' }}</span></td>
+                    <td class="text-end">{{ "%.2f"|format(row.close_price) }}</td>
+                    <td class="text-end {{ 'text-danger' if row.change_pct > 0 else 'text-success' if row.change_pct < 0 else '' }}">
+                        {{ "%+.2f"|format(row.change_pct) }}%
+                    </td>
+                    <td class="text-end">{{ "{:,}".format(row.volume or 0) }}</td>
+                    <td>
+                        {% if row.break_5 %}<span class="break-tag break-5">5日</span>{% endif %}
+                        {% if row.break_10 %}<span class="break-tag break-10">10日</span>{% endif %}
+                        {% if row.break_20 %}<span class="break-tag break-20">20日</span>{% endif %}
+                        {% if row.break_60 %}<span class="break-tag break-60">60日</span>{% endif %}
+                        {% if row.break_120 %}<span class="break-tag break-120">120日</span>{% endif %}
+                        {% if row.break_240 %}<span class="break-tag break-240">240日</span>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Mobile segment tab switching for breakout page
+(function() {
+    var segBtns = document.querySelectorAll('.mobile-segment .seg-btn');
+    if (!segBtns.length) return;
+
+    // Highlight the active segment based on current filter
+    var urlParams = new URLSearchParams(window.location.search);
+    var currentDays = urlParams.get('days') || '5,10,20,60,120,240';
+    segBtns.forEach(function(btn) {
+        if (btn.getAttribute('data-days') === currentDays) {
+            segBtns.forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+        }
+    });
+
+    segBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            segBtns.forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            var days = btn.getAttribute('data-days');
+            var params = new URLSearchParams(window.location.search);
+            params.set('days', days);
+            window.location.search = params.toString();
+        });
+    });
+})();
+
+function updateDaysFilter() {
+    const checks = document.querySelectorAll('input[name="days"]:checked');
+    const days = Array.from(checks).map(c => c.value).join(',');
+    const form = document.querySelector('form');
+    // 移除舊的 days input，用一個隱藏 input
+    document.querySelectorAll('input[name="days"]').forEach(el => {
+        el.name = '_days';
+    });
+    const hidden = document.createElement('input');
+    hidden.type = 'hidden';
+    hidden.name = 'days';
+    hidden.value = days;
+    form.appendChild(hidden);
+    form.submit();
+}
+</script>
+{% endblock %}

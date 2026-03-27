@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}我的自選股{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">我的自選股</h4>
+
+    <!-- Add stock input -->
+    <div class="filter-bar" style="display:flex; align-items:center; gap:10px;">
+        <label style="font-size:14px; color:#94a3b8; white-space:nowrap;">新增股票</label>
+        <input type="text" id="watchlist-add-input" placeholder="輸入股票代號，例: 2330"
+               style="padding:8px 14px; border-radius:6px; border:1px solid #334155; background:#0f172a; color:#e2e8f0; font-size:14px; width:200px;">
+        <button id="watchlist-add-btn" class="btn btn-sm btn-primary">加入</button>
+    </div>
+
+    {% if items|length == 0 %}
+    <div class="alert alert-warning m-3">自選股清單為空，請新增股票代號</div>
+    {% else %}
+    <div class="result-summary">
+        共 <strong>{{ items|length }}</strong> 檔自選股
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-sm data-table">
+            <thead>
+                <tr>
+                    <th>代號</th>
+                    <th>名稱</th>
+                    <th>市場</th>
+                    <th class="text-end">收盤價</th>
+                    <th class="text-end">漲跌%</th>
+                    <th class="text-end">成交量(張)</th>
+                    <th>加入時間</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in items %}
+                <tr id="watchlist-row-{{ row.stock_id }}">
+                    <td class="stock-id"><a href="/stock?id={{ row.stock_id }}">{{ row.stock_id }}</a></td>
+                    <td>{{ row.name }}</td>
+                    <td><span class="badge {{ 'bg-primary' if row.market == 'twse' else 'bg-success' }}">{{ '上市' if row.market == 'twse' else '上櫃' }}</span></td>
+                    <td class="text-end">{{ "%.2f"|format(row.close_price or 0) }}</td>
+                    <td class="text-end {{ 'text-danger' if (row.change_pct or 0) > 0 else 'text-success' if (row.change_pct or 0) < 0 else '' }}">
+                        {{ "%+.2f"|format(row.change_pct or 0) }}%
+                    </td>
+                    <td class="text-end">{{ "{:,}".format(row.volume or 0) }}</td>
+                    <td style="font-size:12px; color:#64748b;">{{ row.added_at }}</td>
+                    <td>
+                        <button class="btn-export watchlist-remove-btn" data-id="{{ row.stock_id }}">移除</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    // Add stock
+    var addBtn = document.getElementById('watchlist-add-btn');
+    var addInput = document.getElementById('watchlist-add-input');
+    if (addBtn && addInput) {
+        function doAdd() {
+            var val = addInput.value.trim();
+            if (!val) return;
+            fetch('/api/watchlist/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({stock_id: val})
+            }).then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (d.ok) {
+                    window.location.reload();
+                }
+            });
+        }
+        addBtn.addEventListener('click', doAdd);
+        addInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') doAdd();
+        });
+    }
+
+    // Remove stock
+    document.querySelectorAll('.watchlist-remove-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var stockId = btn.getAttribute('data-id');
+            fetch('/api/watchlist/remove', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({stock_id: stockId})
+            }).then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (d.ok) {
+                    var row = document.getElementById('watchlist-row-' + stockId);
+                    if (row) row.remove();
+                }
+            });
+        });
+    });
+})();
+</script>
+{% endblock %}
