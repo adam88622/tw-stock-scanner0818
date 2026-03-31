@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Alpha Go Everywhere — ML 與國際股票報酬 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:15px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:18px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:13px;opacity:.8;line-height:1.5}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ P1 封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Review of Asset Pricing Studies (A-Tier1) &middot; 2025</div>
+    <div class="cover-title">Alpha Go Everywhere<br><em>ML 與國際股票報酬</em></div>
+    <div class="cover-subtitle">Machine Learning and International Stock Returns &mdash; Choi, Jiang &amp; Zhang</div>
+    <div class="cover-tags">
+      <span class="ctag hl">Neural Networks</span>
+      <span class="ctag hl">International Equities</span>
+      <span class="ctag">Cross-Section Prediction</span>
+      <span class="ctag">Out-of-Sample</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>33</em></div><div class="cstat-label">國際市場</div></div>
+    <div class="cstat"><div class="cstat-num"><em>9</em></div><div class="cstat-label">ML 模型類別</div></div>
+    <div class="cstat"><div class="cstat-num">NN &gt; <em>LM</em></div><div class="cstat-label">核心結論</div></div>
+    <div class="cstat"><div class="cstat-num">A-<em>Tier1</em></div><div class="cstat-label">期刊等級</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026-03-26</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ P2 論文核心發現 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">論文核心發現</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">33<em> 市場</em></div><div class="kpi-lbl">國際股市覆蓋</div></div>
+    <div class="kpi"><div class="kpi-val">NN &gt; LM</div><div class="kpi-lbl">預測力排序</div></div>
+    <div class="kpi gold"><div class="kpi-val">Local &gt; Global</div><div class="kpi-lbl">市場別 vs 統一模型</div></div>
+    <div class="kpi green"><div class="kpi-val">R<sup>2</sup> &amp; SR</div><div class="kpi-lbl">優於線性基準</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">1</span>
+      <span><strong>市場別神經網路優於全球統一模型。</strong>將 NN 分別在 33 個國際市場各自訓練，其樣本外 R&sup2; 與 Sharpe ratio 顯著高於僅以美國歷史資料訓練的全球模型。此發現意味著各市場的報酬結構具有在地特殊性，統一模型無法完整捕捉。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">2</span>
+      <span><strong>NN 全面優於線性模型（OLS / LASSO / Ridge / Elastic Net）。</strong>在預測個股報酬排序與建構多空投組獲利能力方面，神經網路（NN1-NN5，1-5 隱藏層）均顯著超越傳統線性方法。即使在傳統因子（規模、帳面市值比、動量）預測力薄弱的市場，NN 策略仍能產生獲利。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">3</span>
+      <span><strong>決策樹模型在小樣本市場過度擬合。</strong>Random Forest 與 GBRT 在觀測值較少的國際市場中表現不佳，甚至劣於線性模型，顯示樹模型對樣本量敏感度高，不宜直接移植美國實證結論。</span>
+    </div>
+  </div>
+
+  <h2 class="ch">額外發現：外國變數增強效果</h2>
+  <p>在市場別 NN 模型中加入以<strong>美國公司特徵</strong>建構的「外國變數」（foreign variables），可進一步提升國際市場的報酬預測力。此結果支持「市場部分整合」（partially integrated）假說：各國市場非完全獨立，美國市場資訊對其他市場仍具邊際預測價值。</p>
+
+  <blockquote>
+    核心結論：ML 應用於國際股市時，<strong>市場別訓練 + 神經網路 + 外國變數</strong>為最佳組合，可同時最大化預測精度與投組獲利。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>論文核心發現</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ P3 方法論 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">方法論</h1>
+
+  <h2 class="ch">ML 模型架構</h2>
+  <table>
+    <thead>
+      <tr><th>類別</th><th>模型</th><th>說明</th><th>國際市場表現</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>線性</td><td>OLS</td><td>普通最小平方法</td><td>基準模型</td></tr>
+      <tr><td>線性</td><td>OLS + Huber Loss</td><td>穩健迴歸，降低極端值影響</td><td>略優於 OLS</td></tr>
+      <tr><td>正則化線性</td><td>LASSO (L1)</td><td>稀疏特徵選擇</td><td>中等</td></tr>
+      <tr><td>正則化線性</td><td>Ridge (L2)</td><td>收縮估計</td><td>中等</td></tr>
+      <tr><td>正則化線性</td><td>Elastic Net</td><td>L1 + L2 混合</td><td>中等</td></tr>
+      <tr><td>樹模型</td><td>Random Forest</td><td>Bagging 集成</td><td class="neg">小樣本市場過擬合</td></tr>
+      <tr><td>樹模型</td><td>GBRT + Huber</td><td>梯度提升迴歸樹</td><td class="neg">小樣本市場過擬合</td></tr>
+      <tr><td>神經網路</td><td>NN1 &ndash; NN5</td><td>1-5 隱藏層，ReLU 啟動</td><td class="pos hi">最佳</td></tr>
+    </tbody>
+  </table>
+  <span class="src">模型分類依據 Gu, Kelly &amp; Xiu (2020) 框架</span>
+
+  <h2 class="ch">特徵工程與資料需求</h2>
+  <p>本研究使用涵蓋<strong>報酬動量、規模、交易量與會計資訊</strong>等類別的公司層級特徵作為預測變數。特徵設計參照 Gu, Kelly &amp; Xiu (2020) 以及 Green, Hand &amp; Zhang (2017) 之美國市場文獻，並針對國際資料可得性進行調整。</p>
+
+  <div class="mini-table">
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>特徵類別</th><th>代表變數</th></tr></thead>
+        <tbody>
+          <tr><td>報酬動量</td><td>r(2,1), r(12,2), r(12,7)</td></tr>
+          <tr><td>規模</td><td>市值、流通市值</td></tr>
+          <tr><td>價值</td><td>帳面市值比 (B/M)</td></tr>
+          <tr><td>流動性</td><td>交易量、換手率</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>特徵類別</th><th>代表變數</th></tr></thead>
+        <tbody>
+          <tr><td>獲利能力</td><td>ROE, ROA, 毛利率</td></tr>
+          <tr><td>投資</td><td>資產成長率</td></tr>
+          <tr><td>波動性</td><td>特質波動率, beta</td></tr>
+          <tr><td>外國變數</td><td>美國公司特徵構建</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="ch">投組建構流程</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">Step 1</div><div class="tl-spec">訓練</div><div class="tl-tech">以歷史資料訓練 ML 模型（滾動窗口）</div></div>
+    <div class="tl-item active"><div class="tl-year">Step 2</div><div class="tl-spec">預測</div><div class="tl-tech">對每月個股產生預期報酬排序</div></div>
+    <div class="tl-item next"><div class="tl-year">Step 3</div><div class="tl-spec">分組</div><div class="tl-tech">依預測報酬分為十分位組</div></div>
+    <div class="tl-item"><div class="tl-year">Step 4</div><div class="tl-spec">多空</div><div class="tl-tech">做多 Top、放空 Bottom，月度再平衡</div></div>
+  </div>
+
+  <p>投組建構採用<strong>十分位排序</strong>（decile sorts），計算多空投組（top minus bottom decile）的價值加權報酬，並以月頻率再平衡。此設計與 Gu, Kelly &amp; Xiu (2020) 之美國市場框架一致，便於跨國比較。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>方法論</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ P4 可複製性評估 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">可複製性評估</h1>
+
+  <h2 class="ch">資料來源</h2>
+  <table>
+    <thead>
+      <tr><th>資料集</th><th>用途</th><th>可替代性</th><th>備註</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Compustat Global</td><td>國際公司財報 + 股價</td><td class="neg">付費，難以免費取代</td><td>核心資料來源，涵蓋 33 市場</td></tr>
+      <tr><td>CRSP</td><td>美國股票資料（訓練用）</td><td class="neg">學術授權</td><td>用於建構美國基準模型</td></tr>
+      <tr><td>Kenneth French Library</td><td>因子報酬資料</td><td class="pos">免費公開</td><td>用於風險調整 alpha 計算</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">yfinance 替代方案</h2>
+  <p>對於<strong>非學術機構</strong>的複製嘗試，可透過 <code>yfinance</code> 取得國際 ETF 與個股資料作為部分替代。以下為可行的替代路徑：</p>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>可行的替代方案</h4>
+      <div class="risk-item"><strong>國際市場 ETF：</strong>EWJ（日本）、EWG（德國）、EWU（英國）、EWA（澳洲）等 iShares 系列覆蓋多數市場</div>
+      <div class="risk-item"><strong>個股資料：</strong>yfinance 可取得主要交易所上市個股的日/月報酬、市值、交易量</div>
+      <div class="risk-item"><strong>會計資料：</strong>部分可透過 yfinance 的 <code>.financials</code> 與 <code>.balance_sheet</code> 取得</div>
+      <div class="risk-item"><strong>因子資料：</strong>Kenneth French Data Library 完全免費，可直接下載國際因子</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>主要限制</h4>
+      <div class="risk-item"><strong>Compustat Global 不可替代：</strong>完整的國際公司層級會計資料（資產成長率、ROE 等歷史序列）無免費替代</div>
+      <div class="risk-item"><strong>歷史深度不足：</strong>yfinance 對多數非美國個股的歷史僅回溯至 2000 年左右，無法覆蓋原論文完整樣本期</div>
+      <div class="risk-item"><strong>生存者偏差：</strong>yfinance 僅含現存股票，無法建構含下市公司的完整橫截面</div>
+      <div class="risk-item"><strong>小市場覆蓋不全：</strong>部分新興市場（如以色列、紐西蘭）個股覆蓋率低</div>
+    </div>
+  </div>
+
+  <h2 class="ch">33 個國際市場列表</h2>
+  <p>論文覆蓋之市場涵蓋已開發與新興經濟體，包括：<strong>澳洲、奧地利、比利時、巴西、加拿大、中國、丹麥、芬蘭、法國、德國、希臘、香港、印度、印尼、以色列、義大利、日本、南韓、馬來西亞、墨西哥、荷蘭、紐西蘭、挪威、菲律賓、波蘭、葡萄牙、新加坡、南非、西班牙、瑞典、瑞士、台灣、泰國、土耳其、英國</strong>等主要市場（具體數量視資料可得性微調為 33 個）。資料來源為 S&amp;P Compustat Global 資料庫。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>可複製性評估</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 同主題文獻比較 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">同主題文獻比較：ML 與國際股票報酬</h1>
+
+  <table>
+    <thead><tr><th>論文</th><th>來源</th><th>核心方法</th><th>獨特觀點</th><th>資料取得</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Choi et al. (本文)</strong></td><td class="pos">RAPS (A-Tier1)</td><td>33 市場各別 NN</td><td>市場別模型 > 全球統一模型</td><td>WebFetch (OUP)</td></tr>
+      <tr><td><strong>Gu, Kelly &amp; Xiu (2020)</strong></td><td class="pos">RFS (A+)</td><td>美國市場 NN</td><td>僅美國市場，94 特徵</td><td>WebFetch 摘要</td></tr>
+      <tr><td><strong>Liu et al. (2026) 跨市場二部圖</strong><br>arXiv:2603.10559</td><td>arXiv</td><td>美中二部圖</td><td>跨市場溢出效應比市場內預測更重要</td><td>WebFetch 全文</td></tr>
+    </tbody>
+  </table>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">1</span><span><strong>市場內 vs 跨市場。</strong>Choi 主張每個市場應獨立建模；Liu 的二部圖研究則認為跨市場資訊傳遞是更大的 alpha 來源。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">2</span><span><strong>資料可及性。</strong>Choi 需要 Compustat Global（付費），Liu 的 ETF 方法可用免費 yfinance 資料近似。</span></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>同主題文獻比較</span>
+    <span>&copy; 2026 GiS</span>
+  </div>
+</div>
+
+<!-- ══════════════ P5 參考文獻 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參考文獻</h1>
+
+  <h2 class="ch">主論文</h2>
+  <blockquote>
+    <strong>Choi, D., Jiang, W., &amp; Zhang, C.</strong> (2025). Alpha Go Everywhere: Machine Learning and International Stock Returns. <em>Review of Asset Pricing Studies</em>, 15(3-4), 288&ndash;331.<br>
+    <span style="font-size:14px;color:#065f46;">DOI: 10.1093/rapstu/raaf005 &nbsp;|&nbsp; <strong>RAPS A-Tier1</strong> &nbsp;|&nbsp; JEL: C52, G10, G12, G15</span>
+  </blockquote>
+
+  <h2 class="ch">核心方法論文獻</h2>
+  <table>
+    <thead>
+      <tr><th>作者</th><th>年份</th><th>標題</th><th>期刊</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Gu, S., Kelly, B. &amp; Xiu, D.</td><td>2020</td><td>Empirical Asset Pricing via Machine Learning</td><td><em>Review of Financial Studies</em>, 33(5), 2223&ndash;2273</td></tr>
+      <tr><td>Green, J., Hand, J. &amp; Zhang, X.F.</td><td>2017</td><td>The Characteristics that Provide Independent Information about Average U.S. Monthly Stock Returns</td><td><em>Review of Financial Studies</em>, 30(12), 4389&ndash;4436</td></tr>
+      <tr><td>Tobek, O. &amp; Hronec, M.</td><td>2021</td><td>Does It Pay to Follow Anomalies Research? Machine Learning Approach with International Evidence</td><td><em>Journal of Financial Markets</em>, 56, 100588</td></tr>
+      <tr><td>Leippold, M., Wang, Q. &amp; Zhou, W.</td><td>2022</td><td>Machine Learning in the Chinese Stock Market</td><td><em>Journal of Financial Economics</em>, 145(2), 64&ndash;82</td></tr>
+      <tr><td>Freyberger, J., Neuhierl, A. &amp; Weber, M.</td><td>2020</td><td>Dissecting Characteristics Nonparametrically</td><td><em>Review of Financial Studies</em>, 33(5), 2326&ndash;2377</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">資料來源</h2>
+  <table>
+    <thead>
+      <tr><th>資料庫</th><th>提供者</th><th>用途</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Compustat Global</td><td>S&amp;P Capital IQ</td><td>33 市場公司財報與股價資料</td></tr>
+      <tr><td>CRSP</td><td>CRSP / Wharton Research Data Services</td><td>美國股票歷史報酬（模型訓練基準）</td></tr>
+      <tr><td>Kenneth French Data Library</td><td>Dartmouth / Kenneth French</td><td>國際因子報酬（Fama-French 因子）</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">論文存取</h2>
+  <ul>
+    <li><strong>SSRN 工作論文：</strong>https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3489679</li>
+    <li><strong>Oxford Academic（正式出版）：</strong>https://academic.oup.com/raps/article-abstract/15/3-4/288/8172522</li>
+    <li><strong>作者主頁：</strong>https://sites.google.com/site/darwinchoi/research</li>
+    <li><strong>ABFER 會議論文：</strong>https://abfer.org/media/abfer-events-2023/annual-conference/papers-investment/AC23P3084</li>
+  </ul>
+
+  <hr>
+  <p style="font-size:14px;color:#6b7a9a;text-align:center;margin-top:24px;">
+    本報告為 GiS Genesis International Capital 內部研究用途，基於公開學術文獻整理。<br>
+    論文原始資料與結論之智慧財產權歸屬原作者 Choi, Jiang &amp; Zhang。<br>
+    <strong>Review of Asset Pricing Studies</strong> 為 Society for Financial Studies 旗下 A-Tier1 等級期刊。
+<br><br><strong>資料取得方式：</strong>
+<br>1. 主論文（Choi et al.）：透過 WebFetch 取得 Oxford Academic (OUP) 摘要頁、SSRN 摘要頁，交叉驗證。未進行全文深度研究。
+<br>2. 對照文獻：透過 WebFetch 取得 arXiv 摘要頁完整摘要。
+<br>3. 數值結果引用自論文摘要及公開學術平台摘要，非獨立復現驗證。
+  </p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參考文獻</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+</body>
+</html>

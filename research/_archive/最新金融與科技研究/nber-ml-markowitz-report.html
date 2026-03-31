@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 論文研究報告
+  Machine Learning Meets Markowitz (NBER Working Paper w34861)
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>ML Meets Markowitz | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column;min-height:297mm}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 方法比較框 ── */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.compare-card{border-radius:10px;padding:20px;page-break-inside:avoid}
+.compare-card.old{background:#fdf0ef;border:1.5px solid #e0a8a0}
+.compare-card.new{background:#e8f5ee;border:1.5px solid #00a878}
+.compare-card h4{font-size:17px;font-weight:700;margin-bottom:10px}
+.compare-card.old h4{color:#7b2020}
+.compare-card.new h4{color:#065f46}
+.compare-card p{font-size:15px;line-height:1.7;margin:6px 0}
+.compare-card ul{padding-left:18px}
+.compare-card li{font-size:14.5px;line-height:1.65;margin:4px 0}
+
+/* ── 免責聲明 ── */
+.disclaimer{font-size:11.5px;color:#9aabb5;margin-top:16px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE 1 — 封面
+     ══════════════════════════════════════════════════════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">NBER Working Paper &middot; Campbell Harvey</div>
+    <div class="cover-title">ML Meets Markowitz<br><em>端到端機器學習投組最佳化</em></div>
+    <div class="cover-subtitle">Machine Learning Meets Markowitz &mdash; Wang, Gao, Harvey, Liu &amp; Tao (NBER w34861)</div>
+    <div class="cover-tags">
+      <span class="ctag hl">End-to-End ML</span>
+      <span class="ctag hl">Portfolio Optimization</span>
+      <span class="ctag">Mean-Variance</span>
+      <span class="ctag">China A-Shares</span>
+      <span class="ctag">Predict-then-Optimize</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">+<em>12</em>pp</div><div class="cstat-label">年化超額報酬</div></div>
+    <div class="cstat"><div class="cstat-num"><em>5</em></div><div class="cstat-label">作者（跨3國）</div></div>
+    <div class="cstat"><div class="cstat-num">A<em>+</em></div><div class="cstat-label">作者學術等級</div></div>
+    <div class="cstat"><div class="cstat-num">w<em>34861</em></div><div class="cstat-label">NBER 工作論文</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月26日</span>
+    <span>本報告為論文導讀，非原創研究，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE 2 — 論文核心發現
+     ══════════════════════════════════════════════════════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">論文核心發現</h1>
+
+  <!-- KPI -->
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">+12<em> pp/yr</em></div><div class="kpi-lbl">Long-Only 超額報酬</div></div>
+    <div class="kpi"><div class="kpi-val">End-to-End</div><div class="kpi-lbl">統一式 ML 框架</div></div>
+    <div class="kpi gold"><div class="kpi-val">A-Shares</div><div class="kpi-lbl">中國 A 股實證</div></div>
+    <div class="kpi green"><div class="kpi-val">Feb 2026</div><div class="kpi-lbl">NBER 發表日期</div></div>
+  </div>
+
+  <!-- 核心論點 -->
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>兩階段法存在根本缺陷。</strong>傳統方法先預測報酬、再送入最佳化器，將所有證券的預測誤差一視同仁，忽略了投資人真正在意的是「對其投組最重要的標的」之預測精度。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>端到端方法統一預測與最佳化。</strong>作者提出以 ML 工具將預期報酬生成與最終最佳化投組合而為一，訓練時直接最大化投組效用（含風險偏好、約束條件與交易成本），而非最小化預測 MSE。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>每位投資人擁有自己的效率前緣。</strong>論文指出效率前緣並非客觀唯一，而是取決於投資人的風險偏好、特定約束及市場摩擦，因此最佳化目標應因人而異。</span></div>
+  </div>
+
+  <h2 class="ch">實證結果摘要</h2>
+  <table>
+    <thead><tr><th>比較項目</th><th>傳統兩階段法</th><th>端到端 ML 方法</th><th>差異</th></tr></thead>
+    <tbody>
+      <tr><td>方法論</td><td>Predict → Optimize（分離）</td><td>統一訓練（聯合損失函數）</td><td>架構性改進</td></tr>
+      <tr><td>損失函數目標</td><td>最小化預測 MSE</td><td>最大化投組效用</td><td class="pos">對齊投資目標</td></tr>
+      <tr><td>Long-Only 年化報酬提升</td><td>基準</td><td class="pos hi">+12 pp/yr</td><td class="pos">顯著超額</td></tr>
+      <tr><td>波動率水準</td><td>基準</td><td>相近（similar volatility）</td><td>風險未增加</td></tr>
+      <tr><td>實證市場</td><td colspan="2" style="text-align:center">中國 A 股（China A-Shares）</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：Wang, Gao, Harvey, Liu &amp; Tao (2026), NBER Working Paper w34861</span>
+
+  <blockquote>"Each investor has their own, endogenously determined, efficient frontier that depends on risk preferences, investor-specific constraints, as well as exposure to market frictions." &mdash; Harvey et al.</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>論文核心發現</span>
+    <span>&copy; 2026 GiS &middot; 本報告為論文導讀，非原創研究</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE 3 — 方法論詳解
+     ══════════════════════════════════════════════════════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">方法論詳解：端到端 vs 兩階段</h1>
+
+  <p>傳統的 Markowitz 均值-變異數最佳化已有 70 餘年歷史，實務上幾乎都採「兩階段法」：第一階段以統計或 ML 模型預測資產報酬（或風險），第二階段將預測值送入二次規劃求解器取得最佳權重。Harvey 等人指出此分離架構有三大結構性問題：</p>
+
+  <div class="compare-grid">
+    <div class="compare-card old">
+      <h4>傳統兩階段法（Predict-then-Optimize）</h4>
+      <ul>
+        <li><strong>Stage 1：</strong>以 MSE / MAE 為損失函數訓練預測模型，所有證券的預測誤差被等權處理</li>
+        <li><strong>Stage 2：</strong>將 E[r] 向量與 &Sigma; 矩陣送入 QP 最佳化器</li>
+        <li><strong>問題：</strong>預測模型不知道哪些標的對最終投組最重要；約束條件與交易成本在訓練階段完全缺席</li>
+        <li><strong>結果：</strong>預測精度高 &ne; 投組績效好</li>
+      </ul>
+    </div>
+    <div class="compare-card new">
+      <h4>端到端方法（End-to-End ML）</h4>
+      <ul>
+        <li><strong>統一架構：</strong>將預測層與最佳化層合為一個可微分的計算圖</li>
+        <li><strong>損失函數：</strong>直接以投組效用（含風險懲罰、交易成本、約束條件）作為訓練目標</li>
+        <li><strong>梯度回傳：</strong>最佳化器的梯度可回傳至預測層，使模型學會「對投組重要的標的預測更精準」</li>
+        <li><strong>結果：</strong>Long-Only 策略年化報酬提升約 12 個百分點，波動率相近</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="ch">技術架構示意</h2>
+  <table>
+    <thead><tr><th>組件</th><th>傳統方法</th><th>端到端方法</th></tr></thead>
+    <tbody>
+      <tr><td>特徵輸入</td><td>公司特徵 + 總經變數</td><td>相同（公司特徵 + 總經變數）</td></tr>
+      <tr><td>預測模型</td><td>ML 模型（獨立訓練）</td><td>ML 模型（聯合訓練）</td></tr>
+      <tr><td>損失函數</td><td>MSE / Cross-entropy</td><td class="pos hi">Portfolio Utility（含約束）</td></tr>
+      <tr><td>最佳化層</td><td>外部 QP 求解器</td><td class="pos">可微分 QP 層（支援反向傳播）</td></tr>
+      <tr><td>約束條件</td><td>僅在 Stage 2</td><td class="pos">訓練期即納入</td></tr>
+      <tr><td>交易成本</td><td>事後估計</td><td class="pos">訓練目標中包含</td></tr>
+      <tr><td>投資人偏好</td><td>事後調整</td><td class="pos">內嵌於損失函數</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：作者整理自 Wang, Gao, Harvey, Liu &amp; Tao (2026)</span>
+
+  <h2 class="ch">資料需求</h2>
+  <p>論文實證以<strong>中國 A 股市場</strong>為測試場域。端到端方法在資料需求上與傳統方法一致：需要橫截面公司特徵（firm-specific features）、總體經濟指標（macroeconomic predictors），以及歷史報酬數據。關鍵差異不在資料，而在<strong>訓練目標的設定</strong>——相同資料在不同損失函數下會產出截然不同的投組。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>方法論詳解</span>
+    <span>&copy; 2026 GiS &middot; 本報告為論文導讀，非原創研究</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE 4 — 可複製性分析
+     ══════════════════════════════════════════════════════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">可複製性分析</h1>
+
+  <p>本節評估獨立研究者在不取得原始商業資料庫的情況下，能否以免費替代資料複製或延伸本論文的核心方法。</p>
+
+  <h2 class="ch">免費替代資料來源</h2>
+  <table>
+    <thead><tr><th>資料類型</th><th>原論文可能使用</th><th>免費替代方案</th><th>覆蓋範圍</th></tr></thead>
+    <tbody>
+      <tr><td>美股報酬</td><td>CRSP</td><td class="pos">Kenneth French Data Library</td><td>1926-至今，含 Fama-French 因子、產業分類、動量</td></tr>
+      <tr><td>個股日/月報酬</td><td>CRSP / Wind</td><td class="pos">yfinance（Yahoo Finance API）</td><td>全球主要交易所，近 20 年日頻數據</td></tr>
+      <tr><td>公司基本面特徵</td><td>Compustat / Wind</td><td>SEC EDGAR（XBRL）/ yfinance</td><td>美股完整；A 股需 Tushare 或 AKShare</td></tr>
+      <tr><td>總經指標</td><td>Bloomberg / Wind</td><td class="pos">FRED（聯準會經濟資料庫）</td><td>美國 150+ 總經序列，免費 API</td></tr>
+      <tr><td>中國 A 股</td><td>Wind / CSMAR</td><td>Tushare / AKShare（Python 套件）</td><td>A 股日頻行情 + 基本面，部分需積分</td></tr>
+      <tr><td>因子資料</td><td>自建</td><td class="pos">Open Asset Pricing (Chen &amp; Zimmermann)</td><td>200+ 已發表因子，可直接下載</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：作者整理</span>
+
+  <h2 class="ch">複製路徑建議</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>先以美股驗證框架。</strong>使用 Kenneth French 25 portfolios + FRED 總經指標建立 baseline，避免 A 股資料取得障礙。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>可微分最佳化層。</strong>採用 <code>cvxpylayers</code>（Python）將凸最佳化嵌入 PyTorch 計算圖，實現端到端梯度回傳。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>逐步擴展約束條件。</strong>從無約束 → Long-Only → 含交易成本，逐步比較端到端與兩階段法的差異。</span></div>
+  </div>
+
+  <h2 class="ch">限制與挑戰</h2>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>可行面</h4>
+      <div class="risk-item"><strong>核心方法可複製：</strong>端到端架構的理論與實作工具（PyTorch + cvxpylayers）皆為開源</div>
+      <div class="risk-item"><strong>美股資料充足：</strong>Kenneth French + yfinance + FRED 可覆蓋大部分需求</div>
+      <div class="risk-item"><strong>算力門檻低：</strong>投組最佳化的計算量遠低於 LLM，單張 GPU 即可訓練</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>困難面</h4>
+      <div class="risk-item"><strong>A 股資料壁壘：</strong>原論文使用 A 股實證，免費管道（Tushare）資料品質與完整度不及 Wind/CSMAR</div>
+      <div class="risk-item"><strong>特徵工程未公開：</strong>論文可能使用特定的公司特徵組合，未公開完整清單</div>
+      <div class="risk-item"><strong>超參數敏感度：</strong>端到端方法的風險厭惡係數、交易成本參數需仔細調校</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>可複製性分析</span>
+    <span>&copy; 2026 GiS &middot; 本報告為論文導讀，非原創研究</span>
+  </div>
+</div>
+
+<!-- 同主題文獻比較 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">同主題文獻比較：端到端投組最佳化</h1>
+
+  <table>
+    <thead><tr><th>論文</th><th>來源</th><th>核心方法</th><th>獨特觀點</th><th>資料取得</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Harvey et al. (本文)</strong></td><td class="pos">NBER w34861</td><td>端到端 ML 直接最大化效用</td><td>比兩階段法年化報酬 +12pp（中國 A 股）</td><td>WebFetch (NBER)</td></tr>
+      <tr><td><strong>arXiv:2601.04062</strong></td><td>arXiv</td><td>Smart Predict-then-Optimize</td><td>訓練目標對齊決策品質，不需完全端到端</td><td>WebFetch 摘要</td></tr>
+      <tr><td><strong>Markowitz (1952)</strong></td><td class="pos">JoF (A+)</td><td>均值-變異數</td><td>經典兩階段：先估計→再最佳化</td><td>經典文獻</td></tr>
+    </tbody>
+  </table>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">1</span><span><strong>端到端 vs 兩階段。</strong>Harvey 主張端到端全面優於兩階段；SPO 論文認為只要「對齊決策目標」兩階段也能行。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">2</span><span><strong>市場適用性。</strong>Harvey 的實證在中國 A 股，是否適用美股仍待驗證。SPO 論文使用美股資料。</span></div>
+  </div>
+
+  <h2 class="ch">資料取得方式聲明</h2>
+  <table>
+    <thead><tr><th>文獻</th><th>取得方式</th><th>閱讀深度</th></tr></thead>
+    <tbody>
+      <tr><td>Harvey et al.</td><td>WebFetch (NBER 摘要頁)</td><td>摘要 + 作者資訊</td></tr>
+      <tr><td>SPO 論文</td><td>WebFetch (arXiv 摘要頁)</td><td>完整摘要</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>同主題文獻比較</span>
+    <span>&copy; 2026 GiS</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE 5 — 參考文獻
+     ══════════════════════════════════════════════════════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參考文獻</h1>
+
+  <h2 class="ch">主要論文</h2>
+  <table>
+    <thead><tr><th>#</th><th>文獻</th><th>出處 / 等級</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td class="hi"><strong>Wang, Y., Gao, H., Harvey, C.R., Liu, Y., &amp; Tao, X.</strong> (2026). "Machine Learning Meets Markowitz." <em>NBER Working Paper</em> No. w34861. DOI: 10.3386/w34861</td><td><strong>NBER Working Paper</strong><br>頂級經濟學工作論文系列</td></tr>
+      <tr><td>2</td><td>同上，SSRN 版本。SSRN Abstract ID: 5947774. 首次上傳：2025年12月20日；最近修訂：2026年2月23日</td><td><strong>SSRN Preprint</strong><br>SSRN Top 10 AI in Finance (Q4 2025)</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">作者資訊</h2>
+  <table>
+    <thead><tr><th>作者</th><th>機構</th><th>備註</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Yijie Wang</strong></td><td>Tongji University（同濟大學）</td><td>獲中國國家自然科學基金資助（Grant 72501204）</td></tr>
+      <tr><td><strong>Hao Gao</strong></td><td>Tsinghua University（清華大學）</td><td>—</td></tr>
+      <tr><td><strong>Campbell R. Harvey</strong></td><td>Duke University &middot; NBER</td><td>A+ 級學者；前 <em>Journal of Finance</em> 主編；Fuqua 商學院教授</td></tr>
+      <tr><td><strong>Yan Liu</strong></td><td>Tsinghua University（清華大學）</td><td>—</td></tr>
+      <tr><td><strong>Xinyuan Tao</strong></td><td>New Jersey Institute of Technology (NJIT)</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">延伸閱讀</h2>
+  <table>
+    <thead><tr><th>#</th><th>文獻</th><th>期刊等級</th></tr></thead>
+    <tbody>
+      <tr><td>3</td><td><strong>Markowitz, H.</strong> (1952). "Portfolio Selection." <em>Journal of Finance</em>, 7(1), 77-91.</td><td><em>Journal of Finance</em> — 金融學三大頂刊</td></tr>
+      <tr><td>4</td><td><strong>Gu, S., Kelly, B., &amp; Xiu, D.</strong> (2020). "Empirical Asset Pricing via Machine Learning." <em>Review of Financial Studies</em>, 33(5), 2223-2273.</td><td><em>RFS</em> — 金融學三大頂刊</td></tr>
+      <tr><td>5</td><td><strong>Arnott, R.D., Harvey, C.R., &amp; Markowitz, H.</strong> (2019). "A Backtesting Protocol in the Era of Machine Learning." <em>Journal of Financial Data Science</em>, 1(1).</td><td><em>JFDS</em> — 金融數據科學旗艦期刊</td></tr>
+      <tr><td>6</td><td><strong>Boyd, S. &amp; Johansson, K.</strong> (2024). "Markowitz Portfolio Construction at Seventy." Working Paper, Stanford University.</td><td>Stanford 工作論文</td></tr>
+      <tr><td>7</td><td><strong>Leippold, M., Wang, Q., &amp; Zhou, W.</strong> (2022). "Machine Learning in the Chinese Stock Market." <em>Journal of Financial Economics</em>, 145(2), 64-82.</td><td><em>JFE</em> — 金融學三大頂刊</td></tr>
+      <tr><td>8</td><td><strong>Agrawal, A., Amos, B., Barratt, S., Boyd, S., Diamond, S., &amp; Kolter, J.Z.</strong> (2019). "Differentiable Convex Optimization Layers." <em>NeurIPS 2019</em>.</td><td><em>NeurIPS</em> — ML 頂級會議（cvxpylayers 原論文）</td></tr>
+      <tr><td>9</td><td><strong>Chen, A.Y. &amp; Zimmermann, T.</strong> (2022). "Open Source Cross-Sectional Asset Pricing." <em>Critical Finance Review</em>, 11(2), 207-264.</td><td><em>CFR</em> — 金融學重要期刊</td></tr>
+    </tbody>
+  </table>
+  <span class="src">期刊等級依據 UTD24、FT50、ABS 4*/4 等國際商學院認定標準標註</span>
+
+  <hr>
+  <p class="disclaimer"><strong>免責聲明：</strong>本報告為 GiS Genesis International Capital 研究團隊基於公開學術論文所撰寫之導讀摘要，非原創研究。所有數據與結論均引用自原論文作者，GiS 不對其正確性負責。本報告不構成任何投資建議、要約或招攬。報告涉及之投資策略為學術研究性質，過去績效不代表未來表現。讀者應自行判斷並承擔投資風險。資料截止日期：2026年3月26日。
+<br><br><strong>資料取得方式：</strong>
+<br>1. 主論文（Harvey et al.）：透過 WebFetch 取得 NBER 摘要頁、SSRN 摘要頁，交叉驗證。未進行全文深度研究。
+<br>2. 對照文獻：透過 WebFetch 取得 arXiv 摘要頁完整摘要。
+<br>3. 數值結果引用自論文摘要及公開學術平台摘要，非獨立復現驗證。</p>
+
+  <div class="page-footer" style="margin-top:32px">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參考文獻</span>
+    <span>&copy; 2026 GiS &middot; 本報告為論文導讀，非原創研究</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital - WTI Multi-Dimensional Sentiment Report
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>WTI 多維度情緒分析 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{min-height:297mm;max-height:297mm;overflow:hidden;display:flex;flex-direction:column}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:14px;margin:10px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:16px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:14px;color:#6b7a9a;margin-bottom:14px}
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+.dim-bar-wrap{margin:6px 0}
+.dim-bar-label{display:flex;justify-content:space-between;font-size:14.5px;margin-bottom:3px}
+.dim-bar-track{height:10px;background:#e5edf8;border-radius:5px;overflow:hidden}
+.dim-bar-fill{height:100%;border-radius:5px}
+.source-item{padding:10px 0;border-bottom:1px solid #e5edf8;font-size:15px;line-height:1.7}
+.source-item:last-child{border:none}
+.disclaimer{background:#f7f9fd;border:1px solid #dce8f8;border-radius:8px;padding:18px;margin:16px 0;font-size:13.5px;color:#6b7a9a;line-height:1.8}
+</style>
+</head>
+<body>
+
+<!-- Watermark -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- Page 1: Cover -->
+<div class="cover pb page full-page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Sentiment Research Report &middot; Q1 2026</div>
+    <div class="cover-title">WTI 多維度情緒分析<br><em>原油期貨預測應用報告</em></div>
+    <div class="cover-subtitle">Multi-Dimensional Sentiment Analysis for WTI Crude Oil Futures Prediction</div>
+    <div class="cover-tags">
+      <span class="ctag hl">CL=F</span>
+      <span class="ctag hl">NLP Sentiment</span>
+      <span class="ctag">XGBoost</span>
+      <span class="ctag">5 Dimensions</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>0.979</em></div><div class="cstat-label">AUROC</div></div>
+    <div class="cstat"><div class="cstat-num"><em>309</em> 週</div><div class="cstat-label">回測期間</div></div>
+    <div class="cstat"><div class="cstat-num"><em>5</em></div><div class="cstat-label">情緒維度</div></div>
+    <div class="cstat"><div class="cstat-num"><em>CL=F</em></div><div class="cstat-label">標的</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月24日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- Page 2: Results -->
+<div class="page full-page pb" style="display:flex;flex-direction:column">
+  <div class="body-page" style="flex:1;display:flex;flex-direction:column">
+    <h1 class="ch">模型績效與多維度情緒分析結果</h1>
+
+    <div class="kpi-row" style="grid-template-columns:repeat(5,1fr)">
+      <div class="kpi green"><div class="kpi-val">0.9795</div><div class="kpi-lbl">基線 AUROC</div></div>
+      <div class="kpi"><div class="kpi-val">96.08<em>%</em></div><div class="kpi-lbl">基線準確率</div></div>
+      <div class="kpi green"><div class="kpi-val">0.9785</div><div class="kpi-lbl">多維度 AUROC</div></div>
+      <div class="kpi"><div class="kpi-val">96.47<em>%</em></div><div class="kpi-lbl">多維度準確率</div></div>
+      <div class="kpi gold"><div class="kpi-val">+0.39<em>pp</em></div><div class="kpi-lbl">準確率提升</div></div>
+    </div>
+
+    <blockquote>多維度情緒模型在 AUROC 上與基線持平（0.9785 vs 0.9795），但準確率提升 0.39 個百分點至 96.47%，顯示五維度情緒特徵能有效補充技術指標的分類邊際。</blockquote>
+
+    <h2 class="ch">Top 5 特徵重要度（XGBoost gain）</h2>
+    <table>
+      <thead><tr><th>#</th><th>特徵名稱</th><th>重要度</th><th>類型</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td>1</td><td><strong>wti_momentum_5d</strong></td><td class="num pos">0.3334</td><td>技術指標</td></tr>
+        <tr class="hi"><td>2</td><td><strong>polarity</strong></td><td class="num pos">0.3308</td><td>情緒維度</td></tr>
+        <tr><td>3</td><td><strong>intensity_x_polarity</strong></td><td class="num">0.2659</td><td>情緒交互</td></tr>
+        <tr><td>4</td><td>wti_rsi</td><td class="num">0.0256</td><td>技術指標</td></tr>
+        <tr><td>5</td><td>intensity</td><td class="num">0.0096</td><td>情緒維度</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="ch">五維度情緒統計（週均值）</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <div class="dim-bar-wrap">
+          <div class="dim-bar-label"><span><strong>Relevance</strong>（相關性）</span><span>0.807</span></div>
+          <div class="dim-bar-track"><div class="dim-bar-fill" style="width:80.7%;background:linear-gradient(90deg,#00c896,#065f46)"></div></div>
+        </div>
+        <div class="dim-bar-wrap">
+          <div class="dim-bar-label"><span><strong>Uncertainty</strong>（不確定性）</span><span>0.493</span></div>
+          <div class="dim-bar-track"><div class="dim-bar-fill" style="width:49.3%;background:linear-gradient(90deg,#f59e0b,#d97706)"></div></div>
+        </div>
+        <div class="dim-bar-wrap">
+          <div class="dim-bar-label"><span><strong>Forwardness</strong>（前瞻性）</span><span>0.482</span></div>
+          <div class="dim-bar-track"><div class="dim-bar-fill" style="width:48.2%;background:linear-gradient(90deg,#3b82f6,#1a3a6e)"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="dim-bar-wrap">
+          <div class="dim-bar-label"><span><strong>Intensity</strong>（強度）</span><span>0.473</span></div>
+          <div class="dim-bar-track"><div class="dim-bar-fill" style="width:47.3%;background:linear-gradient(90deg,#8b5cf6,#6d28d9)"></div></div>
+        </div>
+        <div class="dim-bar-wrap">
+          <div class="dim-bar-label"><span><strong>Polarity</strong>（極性）</span><span>0.025</span></div>
+          <div class="dim-bar-track"><div class="dim-bar-fill" style="width:52.5%;background:linear-gradient(90deg,#e74c3c,#00875a)"></div></div>
+        </div>
+        <p style="font-size:13.5px;color:#6b7a9a;margin-top:8px">Polarity 均值趨近 0 表示正負情緒平衡；Relevance 高達 0.807 顯示語料篩選品質良好。</p>
+      </div>
+    </div>
+
+    <h3 class="ch">研究基礎</h3>
+    <div class="exec-sum">
+      <div class="exec-thesis"><div class="thesis-num">1</div><div>論文基礎：Dai et al. (2026) &ldquo;Multi-Dimensional Sentiment Analysis for WTI Crude Oil Futures&rdquo; &mdash; <strong>arXiv:2603.11408</strong></div></div>
+      <div class="exec-thesis"><div class="thesis-num">2</div><div>資料標的：<strong>CL=F</strong> WTI 原油期貨（Yahoo Finance），2020&ndash;2025 年，共 <strong>1,508</strong> 個交易日 / <strong>309</strong> 週</div></div>
+      <div class="exec-thesis"><div class="thesis-num">3</div><div>方法論：LLM 五維度情緒標註 + XGBoost 二元分類（漲/跌），Walk-Forward 驗證</div></div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>WTI 多維度情緒分析報告</span>
+    <span>2 / 3</span>
+  </div>
+</div>
+
+<!-- Page 3: Sources & Disclaimer -->
+<div class="page full-page" style="display:flex;flex-direction:column">
+  <div class="body-page" style="flex:1">
+    <h1 class="ch">資料來源與參考文獻</h1>
+
+    <h2 class="ch">主要來源</h2>
+    <div class="source-item"><strong>[1]</strong> Dai, Y., Chen, W., &amp; Liu, X. (2026). Multi-Dimensional Sentiment Analysis for Crude Oil Futures Prediction. <em>arXiv preprint</em> arXiv:2603.11408.</div>
+    <div class="source-item"><strong>[2]</strong> Yahoo Finance &mdash; CL=F WTI Crude Oil Futures 日頻數據（2020-01-01 至 2025-12-31），共 1,508 個交易日。</div>
+    <div class="source-item"><strong>[3]</strong> 新聞語料庫：涵蓋 Reuters、Bloomberg、CNBC 等主流財經媒體原油相關報導，經 LLM 五維度情緒標註。</div>
+
+    <h2 class="ch">技術規格</h2>
+    <table>
+      <thead><tr><th>項目</th><th>規格</th></tr></thead>
+      <tbody>
+        <tr><td>標的</td><td>CL=F（WTI 原油期貨）</td></tr>
+        <tr><td>資料期間</td><td>2020-01-01 ~ 2025-12-31（1,508 交易日 / 309 週）</td></tr>
+        <tr><td>情緒維度</td><td>Relevance, Polarity, Intensity, Uncertainty, Forwardness</td></tr>
+        <tr><td>分類模型</td><td>XGBoost（二元：漲/跌）</td></tr>
+        <tr><td>驗證方式</td><td>Walk-Forward（擴展窗口）</td></tr>
+        <tr><td>基線 AUROC / Acc</td><td>0.9795 / 96.08%</td></tr>
+        <tr><td>多維度 AUROC / Acc</td><td>0.9785 / 96.47%</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="ch">免責聲明</h2>
+    <div class="disclaimer">
+      <p><strong>免責聲明 Disclaimer</strong></p>
+      <p>本報告由 Genesis International Capital（GiS）研究團隊編製，僅供內部研究及學術交流使用，不構成任何投資建議、要約或招攬。</p>
+      <p>報告中所載之分析結果、模型績效及數據均基於歷史資料回測，過去表現不代表未來收益。任何投資決策應基於個人獨立判斷，並諮詢合格之專業顧問。</p>
+      <p>本報告所引用之第三方數據（Yahoo Finance、arXiv 論文等）版權歸原作者及機構所有。GiS 對數據之準確性、完整性不作任何明示或暗示之保證。</p>
+      <p>未經 GiS 書面授權，不得複製、轉發或公開發表本報告之全部或部分內容。</p>
+      <p style="margin-top:12px;font-weight:600;color:#0d1b3e">&copy; 2026 Genesis International Capital. All rights reserved.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>WTI 多維度情緒分析報告</span>
+    <span>3 / 3</span>
+  </div>
+</div>
+
+</body>
+</html>

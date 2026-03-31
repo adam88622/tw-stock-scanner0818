@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 學術論文研究報告
+  Artificial Intelligence Asset Pricing Models
+  Kelly, Kuznetsov, Malamud, Xu (NBER W33351 / SSRN 5089371)
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>AI 資產定價模型研究報告 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 數學公式 ── */
+.formula{background:#f0f4fa;border:1px solid #d0ddf0;border-radius:8px;padding:16px 20px;margin:12px 0;font-family:'Courier New',monospace;font-size:15px;line-height:1.8;overflow-x:auto}
+.formula-label{font-size:13px;color:#6b7a9a;margin-bottom:6px;font-family:'PingFang TC','Microsoft JhengHei',sans-serif}
+
+/* ── 架構圖 ── */
+.arch-box{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
+.arch-card{background:#fff;border:1.5px solid #d0ddf0;border-radius:8px;padding:16px;text-align:center;page-break-inside:avoid}
+.arch-card.highlight{border-color:#00c896;background:#eefaf4}
+.arch-icon{font-size:32px;margin-bottom:8px}
+.arch-title{font-size:16px;font-weight:700;color:#0d1b3e;margin-bottom:6px}
+.arch-desc{font-size:14px;color:#6b7a9a;line-height:1.6}
+
+/* ── 流程箭頭 ── */
+.flow-row{display:flex;align-items:center;justify-content:center;gap:0;margin:16px 0}
+.flow-step{background:#0d1b3e;color:#fff;padding:12px 18px;border-radius:8px;font-size:14px;font-weight:600;text-align:center;min-width:120px}
+.flow-step.green{background:#065f46}
+.flow-step.gold{background:#78350f}
+.flow-arrow{font-size:24px;color:#00c896;padding:0 8px;font-weight:900}
+
+/* ── 引用區 ── */
+.cite-list{list-style:none;padding-left:0;margin:12px 0}
+.cite-list li{padding:10px 0;border-bottom:1px solid #e5edf8;font-size:15px;line-height:1.7}
+.cite-list li:last-child{border:none}
+.cite-tag{display:inline-block;background:#0d1b3e;color:#fff;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:700;margin-right:8px;letter-spacing:.5px}
+.cite-tag.primary{background:#065f46}
+.cite-tag.related{background:#1a3a6e}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE 1 — 封面
+     ══════════════════════════════════════════════════════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">NBER Working Paper &middot; Bryan Kelly (Yale/AQR)</div>
+    <div class="cover-title">AI 資產定價模型<br><em>Transformer 與隨機折現因子</em></div>
+    <div class="cover-subtitle">Artificial Intelligence Asset Pricing Models &mdash; Kelly, Kuznetsov, Malamud &amp; Xu (2025)</div>
+    <div class="cover-tags">
+      <span class="ctag hl">Transformer</span>
+      <span class="ctag hl">SDF</span>
+      <span class="ctag">Cross-Asset Attention</span>
+      <span class="ctag">Factor Models</span>
+      <span class="ctag">Machine Learning</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">W<em>33351</em></div><div class="cstat-label">NBER 編號</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4</em></div><div class="cstat-label">作者人數</div></div>
+    <div class="cstat"><div class="cstat-num"><em>A+</em></div><div class="cstat-label">學者等級</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2025</em></div><div class="cstat-label">發表年份</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月26日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE 2 — 論文核心發現
+     ══════════════════════════════════════════════════════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">論文核心發現</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">AIPM</div><div class="kpi-lbl">模型名稱</div></div>
+    <div class="kpi"><div class="kpi-val">SDF</div><div class="kpi-lbl">定價框架</div></div>
+    <div class="kpi gold"><div class="kpi-val">Attention</div><div class="kpi-lbl">核心機制</div></div>
+    <div class="kpi green"><div class="kpi-val">Linear<em> TF</em></div><div class="kpi-lbl">可解釋簡化版</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">1</span><span><strong>Transformer 嵌入 SDF 框架。</strong>本文首度將 Transformer 網路&mdash;&mdash;當代人工智慧的核心統計技術&mdash;&mdash;植入隨機折現因子（Stochastic Discount Factor）架構，建構出「人工智慧定價模型」（AIPM）。模型透過 self-attention 機制在橫截面資產間共享條件定價資訊，捕捉傳統線性因子模型無法處理的非線性交互效應。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">2</span><span><strong>跨資產資訊共享大幅降低定價誤差。</strong>AIPM 的核心創新在於 cross-asset attention：每檔資產的定價不僅取決於自身特徵，更透過 attention 權重吸收其他資產的條件資訊。實證結果顯示，相較於先前的機器學習資產定價方法（如深度神經網路、條件因子模型），AIPM 取得顯著的定價誤差縮減。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">3</span><span><strong>線性 Transformer 提供可解釋性。</strong>作者進一步提出線性 Transformer 替代版本（Linear Transformer Surrogate），將 softmax attention 替換為線性核函數，使模型可被拆解為直觀的定價成分。此簡化版本在保持大部分效能的前提下，允許研究者精確辨識效能提升的來源&mdash;&mdash;究竟來自非線性、跨資產共享、還是特徵交互。</span></div>
+  </div>
+
+  <h2 class="ch">與既有方法之比較</h2>
+  <table>
+    <thead><tr><th>模型類別</th><th>代表方法</th><th>跨資產共享</th><th>非線性</th><th>可解釋性</th></tr></thead>
+    <tbody>
+      <tr><td>傳統因子模型</td><td>Fama-French 3/5 Factor</td><td class="num neg">無</td><td class="num neg">無</td><td class="num pos">高</td></tr>
+      <tr><td>條件因子模型</td><td>IPCA (Kelly et al. 2019)</td><td class="num neg">有限</td><td class="num neg">無</td><td class="num pos">高</td></tr>
+      <tr><td>深度學習因子</td><td>GKX DNN (Gu et al. 2020)</td><td class="num neg">無</td><td class="num pos">有</td><td class="num neg">低</td></tr>
+      <tr><td class="hi">AIPM（本文）</td><td class="hi">Transformer + SDF</td><td class="num pos hi">完整 Attention</td><td class="num pos hi">有</td><td class="num pos hi">中（線性版高）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：Kelly, Kuznetsov, Malamud &amp; Xu (2025), NBER Working Paper #33351</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>論文核心發現</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE 3 — 方法論
+     ══════════════════════════════════════════════════════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">方法論：SDF-Transformer 架構</h1>
+
+  <h2 class="ch">隨機折現因子（SDF）框架</h2>
+  <p>資產定價的核心等式為無套利條件 <strong>E[M<sub>t+1</sub> R<sub>i,t+1</sub>] = 1</strong>，其中 M<sub>t+1</sub> 為隨機折現因子，R<sub>i,t+1</sub> 為資產 i 的超額報酬。AIPM 將 M<sub>t+1</sub> 參數化為 Transformer 網路的輸出：</p>
+
+  <div class="formula">
+    <div class="formula-label">SDF 參數化</div>
+    M<sub>t+1</sub> = 1 &minus; <strong>g</strong><sub>&theta;</sub>(X<sub>t</sub>)' f<sub>t+1</sub><br><br>
+    其中 X<sub>t</sub> &isin; R<sup>N&times;P</sup> 為 N 檔資產 &times; P 個特徵的條件資訊矩陣，<br>
+    <strong>g</strong><sub>&theta;</sub>(&middot;) 為 Transformer 網路，輸出各資產的因子載荷（factor loadings），<br>
+    f<sub>t+1</sub> 為潛在因子（latent factors）。
+  </div>
+
+  <h2 class="ch">Transformer Attention 機制</h2>
+  <p>Transformer 的 self-attention 層使每檔資產的表達（representation）能夠聚合整個橫截面的資訊：</p>
+
+  <div class="formula">
+    <div class="formula-label">Self-Attention</div>
+    Attention(Q, K, V) = softmax(QK' / &radic;d<sub>k</sub>) V<br><br>
+    Q = X W<sub>Q</sub>, &ensp; K = X W<sub>K</sub>, &ensp; V = X W<sub>V</sub><br><br>
+    每檔資產 i 的 Query 與所有資產 j 的 Key 計算相似度，<br>
+    attention 權重決定「資產 i 應從資產 j 借用多少定價資訊」。
+  </div>
+
+  <h3 class="ch">模型架構流程</h3>
+  <div class="flow-row">
+    <div class="flow-step">資產特徵<br>X<sub>t</sub> &isin; R<sup>N&times;P</sup></div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step green">Transformer<br>Encoder</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">因子載荷<br>&beta;<sub>i,t</sub></div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step gold">SDF<br>M<sub>t+1</sub></div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step green">定價誤差<br>最小化</div>
+  </div>
+
+  <h2 class="ch">線性 Transformer 簡化版</h2>
+  <p>為了解構效能來源，作者將 softmax attention 替換為線性核函數 &phi;(x) = elu(x) + 1，得到：</p>
+  <div class="formula">
+    <div class="formula-label">Linear Attention</div>
+    LinearAttn(Q, K, V) = &phi;(Q) (&phi;(K)' V) / &phi;(Q) &phi;(K)' <strong>1</strong><br><br>
+    此形式可重新整理為加權平均，允許逐項分解各資產對定價的貢獻，<br>
+    實現「哪些資產驅動了 attention 權重」的可解釋分析。
+  </div>
+
+  <h3 class="ch">特徵需求</h3>
+  <table>
+    <thead><tr><th>特徵類別</th><th>範例變數</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>公司基本面</td><td>B/M, ROE, 資產成長率, 投資率</td><td>橫截面報酬預測的經典變數</td></tr>
+      <tr><td>技術面/動量</td><td>過去 1/6/12 月報酬, 波動率, 換手率</td><td>時間序列動量與流動性代理變數</td></tr>
+      <tr><td>總體經濟</td><td>期限利差, 信用利差, VIX, 通膨</td><td>SDF 的條件狀態變數</td></tr>
+      <tr><td>市場微結構</td><td>Amihud 非流動性, 買賣價差</td><td>交易摩擦與流動性風險</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：Kelly, Kuznetsov, Malamud &amp; Xu (2025); 特徵選擇參考 Green, Hand &amp; Zhang (2017) 及 Jensen et al. (2023)</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>方法論</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE 4 — 可複製性評估
+     ══════════════════════════════════════════════════════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">可複製性評估</h1>
+
+  <p>以下針對實務複製 AIPM 的技術可行性、資料需求與主要限制進行評估，供量化研究團隊參考。</p>
+
+  <h2 class="ch">技術實作需求</h2>
+  <div class="arch-box">
+    <div class="arch-card highlight">
+      <div class="arch-icon">&#x1F9E0;</div>
+      <div class="arch-title">PyTorch Transformer</div>
+      <div class="arch-desc">使用 <code>torch.nn.TransformerEncoder</code> 建構多頭自注意力層，搭配自定義 SDF 損失函數進行端對端訓練。</div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon">&#x1F4CA;</div>
+      <div class="arch-title">Kenneth French Data</div>
+      <div class="arch-desc">Fama-French 因子資料庫提供基礎因子報酬與投資組合分類，作為 benchmark 比較基準。</div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon">&#x2699;</div>
+      <div class="arch-title">CRSP / Compustat</div>
+      <div class="arch-desc">美國個股月頻報酬、公司基本面數據。此為付費資料庫，為複製的主要資料門檻。</div>
+    </div>
+  </div>
+
+  <h2 class="ch">實作步驟估計</h2>
+  <table>
+    <thead><tr><th>步驟</th><th>工作內容</th><th>預估時間</th><th>難度</th></tr></thead>
+    <tbody>
+      <tr><td>1. 資料管線</td><td>CRSP/Compustat 合併、特徵工程（~100 個特徵）、缺失值處理</td><td class="num">2&ndash;3 週</td><td class="num">中</td></tr>
+      <tr><td>2. 模型架構</td><td>Transformer Encoder + SDF 損失函數、multi-head attention 設計</td><td class="num">1&ndash;2 週</td><td class="num hi">高</td></tr>
+      <tr><td>3. 訓練流程</td><td>滾動窗口訓練、超參數調校（層數、head 數、dropout）</td><td class="num">2&ndash;3 週</td><td class="num hi">高</td></tr>
+      <tr><td>4. 線性版本</td><td>實作線性 attention 核、分解分析</td><td class="num">1 週</td><td class="num">中</td></tr>
+      <tr><td>5. 評估框架</td><td>定價誤差、Sharpe ratio、OOS R&sup2;、與 benchmark 比較</td><td class="num">1&ndash;2 週</td><td class="num">中</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">優勢與限制</h2>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>可複製優勢</h4>
+      <div class="risk-item"><strong>開源框架成熟：</strong>PyTorch Transformer 模組穩定，社群資源豐富，降低實作門檻。</div>
+      <div class="risk-item"><strong>公開因子資料：</strong>Kenneth French 因子資料庫免費公開，可用於初步驗證與 benchmark。</div>
+      <div class="risk-item"><strong>線性版本可驗證：</strong>線性 Transformer 簡化版可作為 debug 與驗證中繼站，降低全模型的除錯難度。</div>
+      <div class="risk-item"><strong>模組化架構：</strong>SDF 損失與 Transformer 編碼器可獨立開發測試，支援漸進式複製。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>主要限制</h4>
+      <div class="risk-item"><strong>資料取得成本：</strong>CRSP/Compustat 為付費資料庫，學術機構外取得成本高昂。</div>
+      <div class="risk-item"><strong>計算資源需求：</strong>Transformer 訓練需 GPU，滾動窗口 + 大橫截面使訓練時間顯著增長。</div>
+      <div class="risk-item"><strong>超參數敏感度：</strong>attention 層數、head 數、學習率等超參數組合空間大，需大量實驗。</div>
+      <div class="risk-item"><strong>具體實作細節未公開：</strong>論文可能未完整揭露所有工程細節（如資料前處理、正則化策略）。</div>
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>複製建議：</strong>建議先以 Kenneth French 25 portfolios 作為小規模驗證（無需 CRSP 授權），確認 SDF 損失函數與 Transformer 架構正確後，再擴展至個股層級。線性 Transformer 版本可作為第一階段目標。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>可複製性評估</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 同主題文獻比較 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">同主題文獻比較：AI/深度學習資產定價</h1>
+
+  <table>
+    <thead><tr><th>論文</th><th>來源</th><th>核心方法</th><th>獨特觀點</th><th>資料取得</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Kelly et al. (本文)</strong></td><td class="pos">NBER w33351</td><td>Transformer + SDF</td><td>跨資產 attention 共享資訊，大幅降低定價誤差</td><td>WebFetch (NBER+SSRN)</td></tr>
+      <tr><td><strong>Lai (2025)</strong><br>arXiv:2508.19006</td><td>arXiv</td><td>RNN + 多種 attention</td><td>Causal mask 防資料洩漏；Sortino 2.0（COVID 期間）；質疑 Transformer 有洩漏風險</td><td>WebFetch 完整摘要</td></tr>
+      <tr><td><strong>Wang et al. (2025)</strong><br>arXiv:2505.06864</td><td>arXiv</td><td>LSTM + 新聞嵌入 + 對抗網路</td><td>非結構化文本 > 總經變量；Sharpe 2.80；定價誤差比 FF5 降 74%</td><td>WebFetch 完整摘要</td></tr>
+      <tr><td><strong>Gu, Kelly &amp; Xiu (2020)</strong></td><td class="pos">RFS (A+)</td><td>前饋 NN</td><td>基準框架，94 特徵，R²=0.4%</td><td>WebFetch 摘要</td></tr>
+    </tbody>
+  </table>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">1</span><span><strong>Transformer vs RNN。</strong>Kelly 用 Transformer 做因子結構；Lai 質疑 Transformer 有資料洩漏風險，主張 RNN + causal mask 更安全。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">2</span><span><strong>結構化 vs 非結構化資料。</strong>Kelly 和 Gu 僅用數值特徵；Wang 引入 250 萬篇新聞的語言模型嵌入，證明文本資訊 > 總經變量。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">3</span><span><strong>績效聲稱的可信度。</strong>Wang 聲稱 Sharpe 2.80 和 CAPM 改善 471%，數字極高，需注意是否存在過擬合或回測偏誤。已發表期刊（Kelly/Gu）的數字通常更保守。</span></div>
+  </div>
+
+  <h2 class="ch">資料取得方式聲明</h2>
+  <table>
+    <thead><tr><th>文獻</th><th>取得方式</th><th>閱讀深度</th><th>審查狀態</th></tr></thead>
+    <tbody>
+      <tr><td>Kelly et al. (NBER)</td><td>WebFetch (NBER + SSRN)</td><td>摘要 + 結構資訊</td><td>NBER 工作論文（未正式審查）</td></tr>
+      <tr><td>Lai (2025)</td><td>WebFetch (arXiv 摘要頁)</td><td>完整摘要</td><td>未經同行審查</td></tr>
+      <tr><td>Wang et al. (2025)</td><td>WebFetch (arXiv 摘要頁)</td><td>完整摘要</td><td>未經同行審查</td></tr>
+      <tr><td>Gu, Kelly &amp; Xiu (2020)</td><td>已發表文獻引用</td><td>廣為引用的基準</td><td>RFS (A+) 已發表</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>同主題文獻比較</span>
+    <span>&copy; 2026 GiS</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE 5 — 參考文獻
+     ══════════════════════════════════════════════════════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參考文獻</h1>
+
+  <h2 class="ch">本文出處</h2>
+  <ul class="cite-list">
+    <li>
+      <span class="cite-tag primary">本文</span>
+      <strong>Kelly, B. T., Kuznetsov, B., Malamud, S., &amp; Xu, T. A.</strong> (2025). Artificial Intelligence Asset Pricing Models. <em>NBER Working Paper</em> No. 33351. DOI: 10.3386/w33351. SSRN: 5089371.
+    </li>
+  </ul>
+
+  <h2 class="ch">Bryan Kelly 核心論文</h2>
+  <ul class="cite-list">
+    <li>
+      <span class="cite-tag related">A+ 期刊</span>
+      <strong>Kelly, B. T., Pruitt, S., &amp; Su, Y.</strong> (2019). Characteristics Are Covariances: A Unified Model of Risk and Return. <em>Journal of Financial Economics</em>, 134(3), 611&ndash;636.
+      <br><span class="src">提出 IPCA（Instrumented PCA）框架，為條件因子模型的里程碑。AIPM 在此基礎上引入 Transformer 取代線性映射。</span>
+    </li>
+    <li>
+      <span class="cite-tag related">A+ 期刊</span>
+      <strong>Kelly, B. T., Pruitt, S., &amp; Vorsatz, B. W.</strong> (2022). Market Expectations in the Cross-Section of Present Values. <em>Journal of Financial Economics</em>, 145(2A), 475&ndash;511.
+      <br><span class="src">以現值分解框架結合機器學習，分離現金流預期與折現率預期對橫截面報酬的貢獻。</span>
+    </li>
+  </ul>
+
+  <h2 class="ch">機器學習與資產定價</h2>
+  <ul class="cite-list">
+    <li>
+      <span class="cite-tag related">A+ 期刊</span>
+      <strong>Gu, S., Kelly, B. T., &amp; Xiu, D.</strong> (2020). Empirical Asset Pricing via Machine Learning. <em>Review of Financial Studies</em>, 33(5), 2223&ndash;2273.
+      <br><span class="src">系統性比較各類機器學習方法在資產定價中的表現，建立 DNN/RF/GBRT 等方法的 benchmark。AIPM 在此基礎上引入 Transformer 架構。</span>
+    </li>
+    <li>
+      <span class="cite-tag related">A+ 期刊</span>
+      <strong>Gu, S., Kelly, B. T., &amp; Xiu, D.</strong> (2021). Autoencoder Asset Pricing Models. <em>Journal of Econometrics</em>, 222(1), 429&ndash;450.
+      <br><span class="src">使用條件自編碼器（conditional autoencoder）學習潛在因子結構，為深度學習因子模型的早期代表。</span>
+    </li>
+    <li>
+      <span class="cite-tag related">方法論</span>
+      <strong>Chen, L., Pelger, M., &amp; Zhu, J.</strong> (2024). Deep Learning in Asset Pricing. <em>Management Science</em>, 70(2), 714&ndash;750.
+      <br><span class="src">提出 GAN-SDF 框架，以生成對抗網路估計 SDF，為深度學習直接建構 SDF 的重要參考。</span>
+    </li>
+  </ul>
+
+  <h2 class="ch">Transformer 架構原始文獻</h2>
+  <ul class="cite-list">
+    <li>
+      <span class="cite-tag">基礎</span>
+      <strong>Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, L., &amp; Polosukhin, I.</strong> (2017). Attention Is All You Need. <em>Advances in Neural Information Processing Systems</em>, 30.
+      <br><span class="src">Transformer 架構原始論文，提出 scaled dot-product attention 與 multi-head attention 機制。</span>
+    </li>
+    <li>
+      <span class="cite-tag">基礎</span>
+      <strong>Katharopoulos, A., Vyas, A., Pappas, N., &amp; Fleuret, F.</strong> (2020). Transformers Are RNNs: Fast Autoregressive Transformers with Linear Attention. <em>ICML 2020</em>.
+      <br><span class="src">線性 attention 的理論基礎，AIPM 線性 Transformer 簡化版的核心參考。</span>
+    </li>
+  </ul>
+
+  <h2 class="ch">資料來源</h2>
+  <ul class="cite-list">
+    <li>
+      <span class="cite-tag">資料</span>
+      <strong>Kenneth French Data Library.</strong> https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html
+      <br><span class="src">Fama-French 因子、產業分類投資組合、排序投資組合等公開數據。</span>
+    </li>
+    <li>
+      <span class="cite-tag">資料</span>
+      <strong>CRSP / Compustat Merged Database.</strong> Wharton Research Data Services (WRDS).
+      <br><span class="src">美國上市公司股票報酬與財務報表數據，為實證資產定價研究的標準資料來源。</span>
+    </li>
+  </ul>
+
+  <hr>
+  <p style="font-size:13px;color:#9aabb5;text-align:center;margin-top:20px">
+    本報告基於 Kelly, Kuznetsov, Malamud &amp; Xu (2025) 公開發表之 NBER Working Paper #33351 / SSRN #5089371 撰寫。<br>
+    所有學術觀點歸屬原作者，本報告僅為研究摘要與可行性評估，不構成任何投資建議。
+<br><br><strong>資料取得方式：</strong>
+<br>1. 主論文（Kelly et al.）：透過 WebFetch 取得 NBER 摘要頁、SSRN 摘要頁，交叉驗證。未進行全文深度研究。
+<br>2. 對照文獻（Lai 2025, Wang et al. 2025）：透過 WebFetch 取得 arXiv 摘要頁完整摘要。
+<br>3. 數值結果引用自論文摘要及公開學術平台摘要，非獨立復現驗證。
+  </p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參考文獻</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+</body>
+</html>

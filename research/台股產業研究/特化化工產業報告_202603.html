@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>特化化工產業報告 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}.wm-gis em{color:#059669;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#052e16 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(5,150,105,.15) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}.cover-logo-sq em{color:#059669;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#34d399;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:34px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}.cover-title em{color:#34d399;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8)}.ctag.hl{border-color:rgba(52,211,153,.4);color:#34d399}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}.cstat-num em{color:#34d399;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5)}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.body-page{padding:36px 42px;position:relative;z-index:1}.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #059669;padding:10px 16px;background:linear-gradient(90deg,#ecfdf5,transparent);margin:28px 0 16px}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:22px 0 12px}
+h3.ch{font-size:15px;font-weight:700;color:#065f46;padding-left:10px;border-left:3px solid #059669;margin:16px 0 8px}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:13px;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}th{padding:10px 10px;text-align:left;font-weight:600;font-size:12px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}tbody tr:nth-child(even){background:#fff}
+td{padding:8px 10px;border-bottom:1px solid #e5edf8;line-height:1.5}td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}td.pos{color:#00875a;font-weight:600}td.neg{color:#c0392b;font-weight:600}td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}.co-card-head.teal{background:#065f46}.co-card-head.blue{background:#1a3a6e}.co-card-head.slate{background:#2d3748}.co-card-head.indigo{background:#312e81}.co-card-head.emerald{background:#047857}
+.co-name{font-size:18px;font-weight:800;color:#fff}.co-ticker{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700}.badge.buy{background:#059669;color:#fff}.badge.neutral{background:#6b7280;color:#fff}.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 14px;border-right:1px solid #e0e8f4;text-align:center}.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:3px}.co-metric-val.up{color:#00875a}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:12px 16px}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#059669)}.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:4px}.kpi-val em{font-size:11px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.7}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#ecfdf5);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #a7f3d0}
+.exec-thesis{font-size:13.5px;font-weight:700;color:#0d1b3e;padding:8px 0;border-bottom:1px solid #a7f3d0;display:flex;gap:10px;align-items:flex-start;line-height:1.6}.exec-thesis:last-child{border:none}
+.thesis-num{font-size:18px;font-weight:900;color:#059669;line-height:1;flex-shrink:0}
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0;font-size:11.5px}.mini-t th{padding:7px 6px;font-size:10.5px}.mini-t td{padding:5px 6px;font-size:11px}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.risk-card{border-radius:8px;padding:14px}.risk-card.up{background:#ecfdf5;border:1.5px solid #059669}.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13px;font-weight:700;margin-bottom:6px}.risk-card.up h4{color:#065f46}.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.5}.risk-item:last-child{border:none}
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.pick-card{border-radius:8px;padding:16px;border:1.5px solid #a7f3d0;background:#fff}
+.pick-rank{font-size:12px;font-weight:700;color:#059669;letter-spacing:1px;margin-bottom:5px}
+.pick-name{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:2px}.pick-ticker{font-size:11px;color:#6b7a9a;margin-bottom:8px}
+.pick-why{font-size:12px;color:#2d3748;line-height:1.6;margin-bottom:8px}
+.pick-catalyst{font-size:11.5px;color:#065f46;background:#ecfdf5;padding:6px 8px;border-radius:5px}
+p{margin:6px 0 10px;line-height:1.7}ul,ol{padding-left:18px;margin:6px 0 10px}li{margin:3px 0;line-height:1.6}strong{color:#0d1b3e}
+blockquote{border-left:3px solid #059669;background:#ecfdf5;padding:8px 12px;margin:10px 0;color:#1a3a6e;font-size:12.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:20px 0}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:16px;margin:12px 0;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13px;font-weight:700;color:#0d1b3e;margin-bottom:3px}.chart-sub{font-size:11px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 42px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}.footer-logo em{color:#059669;font-style:normal}
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ══════ 封面 ══════ -->
+<div class="cover page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div><div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">AI量化交易與相關應用產品開發</div></div></div>
+    <div class="cover-eyebrow">Industry Research Report &middot; Q1 2026</div>
+    <div class="cover-title">半導體特化族群<br><em>先進製程的隱形冠軍</em></div>
+    <div class="cover-subtitle">Specialty Chemicals — The Hidden Champions of Advanced Process</div>
+    <div class="cover-tags"><span class="ctag hl">新應材 4749</span><span class="ctag hl">三福化 4755</span><span class="ctag hl">達興材 5234</span><span class="ctag">勝一 1773</span><span class="ctag">長興 1717</span><span class="ctag">國精化 4722</span></div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>68</em>%</div><div class="cstat-label">TSMC 2030 在地化目標</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>28</em>%</div><div class="cstat-label">先進封裝材料 CAGR</div></div>
+    <div class="cstat"><div class="cstat-num"><em>44</em>%</div><div class="cstat-label">新應材 2026F 毛利率</div></div>
+    <div class="cstat"><div class="cstat-num"><em>43</em>%</div><div class="cstat-label">三福化半導體營收 CAGR</div></div>
+  </div>
+  <div class="cover-bottom"><span>報告日期：2026年3月25日</span><span>僅供研究參考，不構成投資建議</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════ 執行摘要 ══════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">65→68%</div><div class="kpi-lbl">TSMC 在地採購率目標</div></div>
+    <div class="kpi"><div class="kpi-val">+28%</div><div class="kpi-lbl">先進封裝材料 CAGR</div></div>
+    <div class="kpi green"><div class="kpi-val">44.7%</div><div class="kpi-lbl">新應材 2026F 毛利率</div></div>
+    <div class="kpi gold"><div class="kpi-val">+43%</div><div class="kpi-lbl">三福化半導體 CAGR</div></div>
+  </div>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>TSMC 在地化政策是台灣特化最大結構性利多。</strong>TSMC 間接材料在地採購率從 48%(2018) 升至 65%(2024)，目標 68%(2030)。這代表每年數十億美元的市場從日系化學巨頭轉向台灣本土供應商。新應材 N2 Rinse 提前量產、三福化 CoWoS Stripper 直供 AP7/AP8 即為最佳例證。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>先進封裝材料 CAGR 28%，是特化族群最快成長市場。</strong>CoWoS/WMCM/SoIC/CoPoS 帶動 Stripper、PSPI、MUF、LMC 等新材料需求爆發。三福化 CoWoS Stripper YoY +46%，達興材 PSPI 打入先進封裝，長興 MUF 進入 WMCM。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>認證壁壘創造長期護城河。</strong>半導體特化產品認證週期 1-3 年，一旦打入客戶極難被替換。新應材從 2018 年轉型至今累積投資 >40 億，已建立 N2/N3 完整產品線。毛利率從 29%(2023) 飆升至 44%(2026F)，反映技術壁壘的價值。</span></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-wrap"><div class="chart-title">台灣特化公司半導體營收佔比提升</div><div class="chart-sub">來源：公司法說會</div><div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:220px"></canvas></div></div>
+    <div class="chart-wrap"><div class="chart-title">GiS 2026F EPS 預估比較</div><div class="chart-sub">來源：GiS 估算</div><div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:220px"></canvas></div></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>執行摘要</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════ 新應材 4749 ══════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">新應材 Advanced Echem</div><div class="co-ticker">4749.TWO &middot; N2 Rinse 先進製程最大受惠者</div></div>
+      <div class="co-badge"><span class="badge buy">&#9673; GiS 買進</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$1,200</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+33%</div><div class="co-metric-label">2026E 營收成長</div></div>
+      <div class="co-metric"><div class="co-metric-val up">44.5%</div><div class="co-metric-label">2026E 毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val up">15.5 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">22.0 元</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">GiS 財務模型</h3>
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>GiS 預估</th><th>FY24A</th><th>FY25A</th><th>FY26F</th><th>FY27F</th></tr></thead>
+            <tbody>
+              <tr><td>營收（百萬）</td><td class="num">3,322</td><td class="num">4,262</td><td class="num pos">5,700</td><td class="num pos">7,500</td></tr>
+              <tr><td>毛利率</td><td class="num">36.3%</td><td class="num pos">43.1%</td><td class="num pos">44.5%</td><td class="num pos">46.0%</td></tr>
+              <tr><td>營益率</td><td class="num">17.7%</td><td class="num pos">24.9%</td><td class="num pos">27.5%</td><td class="num pos">30.5%</td></tr>
+              <tr><td>EPS</td><td class="num">8.50</td><td class="num pos">11.30</td><td class="num pos hi">15.5</td><td class="num pos hi">22.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>模型假設</th><th>依據</th></tr></thead>
+            <tbody>
+              <tr><td>2026F 營收 57 億</td><td>N2 Rinse 提前量產、半導體材料佔 91%</td></tr>
+              <tr><td>2026F GM 44.5%</td><td>FY25 已達 43.1%，N2 產品 ASP 更高</td></tr>
+              <tr><td>目標價 NT$1,200</td><td>55x 2027F EPS（認證壁壘 + CAGR 40%+）</td></tr>
+            </tbody>
+          </table>
+          <table style="margin-top:6px">
+            <thead><tr><th>券商</th><th>評等</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td>CTBC</td><td class="pos">買進</td><td class="num">NT$1,300</td></tr>
+              <tr><td>元大</td><td class="pos">買進</td><td class="num">NT$1,280</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <blockquote><strong>GiS 邏輯：</strong>N2 Rinse 提前量產是最強催化劑。半導體材料佔營收從 FY24 的 85% 升至 FY27E 93%。毛利率從 29%(FY23)→44.5%(FY26F) 的躍升反映認證壁壘價值。DUV 光阻 2027 年量產將打開第二成長曲線。55x 2027F PE 偏高但反映 CAGR 40%+ 與護城河。保守/樂觀：NT$880(40x)/NT$1,540(70x)。</blockquote>
+      <ul>
+        <li><strong>催化劑：</strong>N2 Rinse 放量、DUV 光阻 2027 驗證完成、高雄 P3 擴廠 2027 年底</li>
+        <li><strong>風險：</strong>客戶集中度高（TSMC 為主）、桃園廠擴建延遲、日系競爭者反擊</li>
+      </ul>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>新應材 4749</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════ 三福化 + 達興材 ══════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head emerald">
+      <div><div class="co-name">三福化 San Fu</div><div class="co-ticker">4755.TW &middot; CoWoS Stripper + IC-TMAH 雙引擎</div></div>
+      <div class="co-badge"><span class="badge buy">&#9673; GiS 買進</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$185</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+9%</div><div class="co-metric-label">2026E 營收成長</div></div>
+      <div class="co-metric"><div class="co-metric-val up">25%</div><div class="co-metric-label">2026E 毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val up">6.80 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">8.30 元</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <p><strong>GiS 觀點：</strong>基於公司財報（FY25 營收 48.4 億、EPS 3.70、GM 21.7%）。CoWoS Stripper 直供 TSMC AP7/AP8，2025 年 YoY +46%。IC 級 TMAH 2Q26 起出貨 8 吋廠，12 吋驗證中。PHBA 為台灣唯一製造商（AI 伺服器 LCP 材料）。半導體營收 CAGR 43%（2025-2027）。GiS 目標價 NT$185 = 22x 2027F EPS。保守/樂觀：NT$149(18x)/NT$225(27x)。</p>
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head indigo">
+      <div><div class="co-name">達興材料 Daxin</div><div class="co-ticker">5234.TW &middot; PSPI 先進封裝材料 + 國際化工代工</div></div>
+      <div class="co-badge"><span class="badge buy">&#9673; GiS 買進</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$460</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+16%</div><div class="co-metric-label">2026E 營收成長</div></div>
+      <div class="co-metric"><div class="co-metric-val up">45.9%</div><div class="co-metric-label">2026E 毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val up">10.70 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">15.0 元</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <p><strong>GiS 觀點：</strong>FY25 營收 46.3 億、EPS 7.37、GM 40.6%。半導體材料營收從 FY24 9% 飆升至 FY26E 27%。PSPI 為先進封裝介電層材料，日系供應商（旭化成）產能不足為切入契機。與 4 家國際化工巨頭合作在地化生產（代工模式）。台中半導體廠 10 條產線可擴至 4 層樓。GiS 目標價 NT$460 = 31x 2027F EPS。保守/樂觀：NT$338(22x)/NT$600(40x)。</p>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>三福化 / 達興材</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════ 勝一 + 長興 + 國精化 ══════ -->
+<!-- ══════ 勝一 + 長興（含 mini-table） ══════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">勝一化工</div><div class="co-ticker">1773.TW &middot; 電子級溶劑 &middot; N2/N3 清洗材料</div></div>
+      <div class="co-badge"><span class="badge ow">&#9673; GiS 增加持股</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$170</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+8%</div><div class="co-metric-label">2026E Rev YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">34%</div><div class="co-metric-label">2026E GM</div></div>
+      <div class="co-metric"><div class="co-metric-val up">7.56</div><div class="co-metric-label">2026E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">8.83</div><div class="co-metric-label">2027F EPS</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>GiS 預估</th><th>FY24A</th><th>FY25A</th><th>FY26F</th><th>FY27F</th></tr></thead>
+            <tbody>
+              <tr><td>營收（億）</td><td class="num">110.6</td><td class="num">115.0</td><td class="num pos">124.7</td><td class="num pos">145.8</td></tr>
+              <tr><td>毛利率</td><td class="num">32.6%</td><td class="num">33.9%</td><td class="num pos">34.1%</td><td class="num pos">34.4%</td></tr>
+              <tr><td>EPS</td><td class="num">7.21</td><td class="num neg">6.66</td><td class="num pos">7.56</td><td class="num pos">8.83</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值推導</th><th>數值</th></tr></thead>
+            <tbody>
+              <tr><td>採用方法</td><td>Forward PE 22x 2026F</td></tr>
+              <tr><td>基準 EPS</td><td class="num">NT$7.56</td></tr>
+              <tr><td><strong>目標價</strong></td><td class="num pos hi">NT$170</td></tr>
+              <tr><td>保守 / 樂觀</td><td class="num">NT$121(16x) / NT$212(28x)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>模型假設：</strong>電子級溶劑佔比從 64%→73%（持續提升）。N2 清洗溶劑已導入，N3 主力產品 2026 進入。電子級 IPA 新廠 1Q26 完工貢獻。PM 廠 1Q27。22x PE 為歷史 16-28x 中位。</p>
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div><div class="co-name">長興材料</div><div class="co-ticker">1717.TW &middot; MUF/LMC 先進封裝 + 乾膜光阻全球 #1</div></div>
+      <div class="co-badge"><span class="badge buy">&#9673; GiS 買進</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$70</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+7%</div><div class="co-metric-label">2026E Rev YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">21.6%</div><div class="co-metric-label">2026E GM</div></div>
+      <div class="co-metric"><div class="co-metric-val up">2.00</div><div class="co-metric-label">2026E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">2.59</div><div class="co-metric-label">2027F EPS</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>GiS 預估</th><th>FY24A</th><th>FY25E</th><th>FY26F</th><th>FY27F</th></tr></thead>
+            <tbody>
+              <tr><td>營收（億）</td><td class="num">441.9</td><td class="num neg">406.9</td><td class="num pos">436.6</td><td class="num pos">467.3</td></tr>
+              <tr><td>毛利率</td><td class="num">20.0%</td><td class="num">20.4%</td><td class="num pos">21.6%</td><td class="num pos">22.7%</td></tr>
+              <tr><td>EPS</td><td class="num">1.56</td><td class="num neg">1.43</td><td class="num pos">2.00</td><td class="num pos">2.59</td></tr>
+              <tr><td>半導體封裝佔比</td><td class="num">0%</td><td class="num">0.3%</td><td class="num pos">4-5%</td><td class="num pos">8-10%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值推導</th><th>數值</th></tr></thead>
+            <tbody>
+              <tr><td>採用方法</td><td>Blended（傳統27x + 轉型35x）</td></tr>
+              <tr><td>傳統業務（95%）</td><td class="num">27x × 1.90 = NT$51</td></tr>
+              <tr><td>封裝材料（5%）</td><td class="num">35x × 0.10 = NT$4</td></tr>
+              <tr><td>子公司 7795</td><td class="num">貢獻 ~NT$15</td></tr>
+              <tr><td><strong>目標價</strong></td><td class="num pos hi">NT$70</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>模型假設：</strong>MUF 為 WMCM 2-in-1 創新材料取代日系 Namics。LMC 進入 Apple M5 封裝。封裝材料佔比 FY25 0.3%→FY27 8-10% 為估值重估關鍵。子公司長廣精機（7795）真空壓合設備全球近壟斷。</p>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>勝一 / 長興</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════ 國精化（含 mini-table） ══════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">國精化</div><div class="co-ticker">4722.TW &middot; PSMA 電子樹脂 &middot; 5G/AI 高頻 PCB</div></div>
+      <div class="co-badge"><span class="badge ow">&#9673; GiS 增加持股</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$95</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">10x</div><div class="co-metric-label">PSMA 產能擴增</div></div>
+      <div class="co-metric"><div class="co-metric-val">40%+</div><div class="co-metric-label">PSMA 毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val up">~8-10</div><div class="co-metric-label">2026E EPS（含 PSMA）</div></div>
+      <div class="co-metric"><div class="co-metric-val">12-18 億</div><div class="co-metric-label">PSMA 滿載營收</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>PSMA 模型</th><th>保守</th><th>基礎</th><th>樂觀</th></tr></thead>
+            <tbody>
+              <tr><td>產能利用率</td><td class="num">50%</td><td class="num">70%</td><td class="num">100%</td></tr>
+              <tr><td>年營收（億）</td><td class="num">6</td><td class="num">10</td><td class="num pos">18</td></tr>
+              <tr><td>毛利率</td><td class="num">40%</td><td class="num">42%</td><td class="num">45%</td></tr>
+              <tr><td>稅後淨利（億）</td><td class="num">1.8</td><td class="num">3.0</td><td class="num pos">5.4</td></tr>
+              <tr><td>PSMA EPS 貢獻</td><td class="num">2.6</td><td class="num">4.4</td><td class="num pos">7.9</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值推導</th><th>數值</th></tr></thead>
+            <tbody>
+              <tr><td>傳統化工 EPS</td><td class="num">~3.5（穩定）</td></tr>
+              <tr><td>PSMA EPS（基礎）</td><td class="num pos">+4.4</td></tr>
+              <tr><td>合計 2026F EPS</td><td class="num pos">~8</td></tr>
+              <tr><td>PE 倍數（電子材料部分）</td><td class="num">15x</td></tr>
+              <tr><td><strong>目標價</strong></td><td class="num pos hi">NT$95</td></tr>
+              <tr><td>公式</td><td>傳統 10x×3.5 + PSMA 15x×4.4</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>模型假設：</strong>PSMA 產能從 300 噸擴至 3,000 噸（2025 年底完成）。每噸售價 NT$40-60 萬。已進入日系及台系電子大廠量產驗證。PI 配向膜也開始出貨。電子材料佔營收從 ~7% 快速提升中。<strong>關鍵風險：</strong>客戶驗證進度為最大變數——若 PSMA 放量延遲，EPS 貢獻將大幅低於預期。</p>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>國精化</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════ 台特化 + 永光 ══════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">半導體特氣與光阻</h1>
+
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">台特化</div><div class="co-ticker">4772.TWO &middot; 半導體特殊氣體 &middot; 毛利率逼近台積電</div></div>
+      <div class="co-badge"><span class="badge buy">&#9673; GiS 買進</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$155</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+290%</div><div class="co-metric-label">Jan-Feb'26 YoY（爆發）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">~50%</div><div class="co-metric-label">毛利率（類台積電）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">4.20 元</div><div class="co-metric-label">FY2025 EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">~8 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <p><strong>GiS 觀點：</strong>FY2025 營收 19.9 億、EPS 4.20（+26% YoY）。Jan'26 營收 2.88 億（+309% YoY!!），Feb'26 2.89 億（+273%），累計 YTD +290%——爆發式成長確認。半導體特殊氣體（NF3、WF6、C4F6 等）認證壁壘極高，「瓦斯行經營精神」造就類台積電毛利率（~50%）。受惠 TSMC N2/N3 產能擴張 + 在地化政策。GiS 2026F Rev 35 億（+76%）、EPS ~8（基於月營收外推 + 季節性調整）。目標價 NT$155 = 20x 2026F EPS。保守/樂觀：NT$120(15x)/NT$200(25x)。</p>
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">永光化學</div><div class="co-ticker">1711.TW &middot; 光阻 / PSPI &middot; 轉型尚未完成</div></div>
+      <div class="co-badge"><span class="badge neutral">&#9673; GiS 中立</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$18</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val neg">-6.2%</div><div class="co-metric-label">Jan-Feb'26 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val neg">-0.21 元</div><div class="co-metric-label">FY2025 EPS（虧損）</div></div>
+      <div class="co-metric"><div class="co-metric-val">75.7 億</div><div class="co-metric-label">FY2025 營收</div></div>
+      <div class="co-metric"><div class="co-metric-val">PSPI</div><div class="co-metric-label">轉型方向</div></div>
+    </div>
+    <div class="co-body">
+      <p><strong>GiS 觀點：</strong>FY2025 EPS -0.21（轉虧），FY2024 EPS 僅 0.44。傳統化工本業低迷，PSPI（感光性聚醯亞胺）為轉型方向但尚在驗證階段。Jan-Feb'26 營收 12.1 億（YoY -6.2%），復甦尚未啟動。GiS 給予中立——PSPI 題材有想像空間但獲利證明遙遠。以 P/B ~0.9x 估值，目標價 NT$18。需等待 PSPI 通過主要客戶認證並開始貢獻營收後再重新評估。</p>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>台特化 / 永光</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">投資建議彙整</h1>
+  <table>
+    <thead><tr><th>公司</th><th>GiS 評等</th><th>目標價</th><th>2026F EPS</th><th>2027F EPS</th><th>核心產品</th></tr></thead>
+    <tbody>
+      <tr><td><strong>新應材</strong></td><td class="pos hi">買進</td><td class="num hi">NT$1,200</td><td class="num pos">15.5</td><td class="num pos hi">22.0</td><td>N2 Rinse / DUV PR</td></tr>
+      <tr><td><strong>達興材</strong></td><td class="pos">買進</td><td class="num">NT$460</td><td class="num pos">10.70</td><td class="num pos">15.0</td><td>PSPI / 代工模式</td></tr>
+      <tr><td><strong>三福化</strong></td><td class="pos">買進</td><td class="num">NT$185</td><td class="num pos">6.80</td><td class="num pos">8.30</td><td>CoWoS Stripper / TMAH</td></tr>
+      <tr><td><strong>長興</strong></td><td class="pos">買進</td><td class="num">NT$70</td><td class="num">2.00</td><td class="num pos">2.59</td><td>MUF / LMC 封裝</td></tr>
+      <tr><td><strong>勝一</strong></td><td>增加持股</td><td class="num">NT$170</td><td class="num">7.56</td><td class="num">8.83</td><td>電子級溶劑</td></tr>
+      <tr><td><strong>國精化</strong></td><td>增加持股</td><td class="num">NT$95</td><td class="num">8-10</td><td class="num">—</td><td>PSMA 電子樹脂</td></tr>
+      <tr><td><strong>台特化</strong></td><td class="pos">買進</td><td class="num">NT$155</td><td class="num pos">~8</td><td class="num">—</td><td>半導體特氣（NF3 等）</td></tr>
+      <tr><td><strong>永光</strong></td><td>中立</td><td class="num">NT$18</td><td class="num neg">虧損中</td><td class="num">—</td><td>光阻 / PSPI（轉型中）</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>⚠ 估值方法：</strong>特化族群採 Forward PE 估值（非正常化），因認證壁壘高，一旦打入客戶即享有長期穩定收入，非典型景氣循環。PE 倍數依據產品技術壁壘高低：新應材 55x（N2 唯一供應商）> 達興材 31x（PSPI 取代日系）> 三福化 22x（CoWoS Stripper）> 勝一 22x（電子溶劑穩健成長）。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資建議</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family="'PingFang TC','Heiti TC',Arial,sans-serif";Chart.defaults.font.size=12;Chart.defaults.color='#4a5568';
+  new Chart(document.getElementById('chart1'),{type:'bar',data:{labels:['新應材','三福化','達興材','勝一','長興'],datasets:[{label:'FY2024',data:[85,24,9,64,0.3],backgroundColor:'#1a3a6e',borderRadius:5,barPercentage:.7,categoryPercentage:.75},{label:'FY2026F',data:[91,32,27,73,5],backgroundColor:'#059669',borderRadius:5,barPercentage:.7,categoryPercentage:.75}]},options:{responsive:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:14,padding:10,font:{size:11}}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'}}}}});
+  new Chart(document.getElementById('chart2'),{type:'bar',data:{labels:['新應材','達興材','三福化','勝一','長興','國精化'],datasets:[{label:'GiS 2026F EPS',data:[15.5,10.7,6.8,7.56,2.0,9],backgroundColor:['#0d1b3e','#312e81','#065f46','#065f46','#1a3a6e','#2d3748'],borderRadius:5,barPercentage:.55}]},options:{responsive:false,animation:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>'NT$'+v}}}}});
+});
+</script>
+</body>
+</html>

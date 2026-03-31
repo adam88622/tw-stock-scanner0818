@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>矽晶圓族群研究報告 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#d97706;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#3d1f00 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(217,119,6,.15) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#d97706;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#d97706;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#d97706;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8)}.ctag.hl{border-color:rgba(217,119,6,.4);color:#d97706}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}.cstat-num em{color:#d97706;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5)}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#3d1f00 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#d97706;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#d97706;margin-bottom:28px}
+.body-page{padding:36px 42px;position:relative;z-index:1}.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #d97706;padding:10px 16px;background:linear-gradient(90deg,#fef3e0,transparent);margin:28px 0 16px}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:22px 0 12px}
+h3.ch{font-size:15px;font-weight:700;color:#7c4a0e;padding-left:10px;border-left:3px solid #d97706;margin:16px 0 8px}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:13px;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 10px;text-align:left;font-weight:600;font-size:12px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}tbody tr:nth-child(even){background:#fff}
+td{padding:8px 10px;border-bottom:1px solid #e5edf8;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}td.pos{color:#00875a;font-weight:600}td.neg{color:#c0392b;font-weight:600}td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}.co-card-head.teal{background:#065f46}.co-card-head.blue{background:#1a3a6e}.co-card-head.slate{background:#2d3748}.co-card-head.indigo{background:#312e81}.co-card-head.amber{background:#78350f}
+.co-name{font-size:18px;font-weight:800;color:#fff}.co-ticker{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700}.badge.buy{background:#d97706;color:#fff}.badge.neutral{background:#6b7280;color:#fff}.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 14px;border-right:1px solid #e0e8f4;text-align:center}.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:3px}.co-metric-val.up{color:#00875a}.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:12px 16px}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:4px}.kpi-val em{font-size:11px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.7}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#fef5e7);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #e5d5b0}
+.exec-thesis{font-size:13.5px;font-weight:700;color:#0d1b3e;padding:8px 0;border-bottom:1px solid #e5d5b0;display:flex;gap:10px;align-items:flex-start;line-height:1.6}.exec-thesis:last-child{border:none}
+.thesis-num{font-size:18px;font-weight:900;color:#d97706;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:16px 12px;border-right:1px solid #dce8f8;text-align:center}.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}.tl-item.next{background:#78350f;color:#fff}
+.tl-year{font-size:12px;font-weight:800;margin-bottom:6px}.tl-spec{font-size:15px;font-weight:900;color:#d97706;margin-bottom:3px}.tl-tech{font-size:10px;opacity:.8;line-height:1.4}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.risk-card{border-radius:8px;padding:14px}.risk-card.up{background:#fef5e7;border:1.5px solid #d97706}.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13px;font-weight:700;margin-bottom:6px}.risk-card.up h4{color:#78350f}.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.5}.risk-item:last-child{border:none}
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.pick-card{border-radius:8px;padding:16px;border:1.5px solid #e5d5b0;background:#fff}
+.pick-rank{font-size:12px;font-weight:700;color:#b45309;letter-spacing:1px;margin-bottom:5px}
+.pick-name{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:2px}.pick-ticker{font-size:11px;color:#6b7a9a;margin-bottom:8px}
+.pick-why{font-size:12px;color:#2d3748;line-height:1.6;margin-bottom:8px}
+.pick-catalyst{font-size:11.5px;color:#78350f;background:#fef5e7;padding:6px 8px;border-radius:5px}
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0;font-size:11.5px}.mini-t th{padding:7px 6px;font-size:10.5px}.mini-t td{padding:5px 6px;font-size:11px}
+p{margin:6px 0 10px;line-height:1.7}ul,ol{padding-left:18px;margin:6px 0 10px}li{margin:3px 0;line-height:1.6}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #d97706;background:#fef5e7;padding:8px 12px;margin:10px 0;color:#1a3a6e;font-size:12.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:20px 0}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:16px;margin:12px 0;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13px;font-weight:700;color:#0d1b3e;margin-bottom:3px}.chart-sub{font-size:11px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 42px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}.footer-logo em{color:#d97706;font-style:normal}
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ══════ 封面 ══════ -->
+<div class="cover page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div><div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">AI量化交易與相關應用產品開發</div></div></div>
+    <div class="cover-eyebrow">Industry Research Report &middot; Q1 2026</div>
+    <div class="cover-title">矽晶圓族群<br><em>谷底已過，2027 多頭可期</em></div>
+    <div class="cover-subtitle">Silicon Wafer — Valley Confirmed, Bull Market Ahead in 2027</div>
+    <div class="cover-tags"><span class="ctag hl">環球晶 6488</span><span class="ctag hl">台勝科 3532</span><span class="ctag">合晶 6182</span><span class="ctag">中美晶 5483</span></div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>104</em>%</div><div class="cstat-label">2027F 供需比</div></div>
+    <div class="cstat"><div class="cstat-num"><em>17</em>%</div><div class="cstat-label">環球晶全球市佔</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>43</em>%</div><div class="cstat-label">伺服器晶圓需求 YoY</div></div>
+    <div class="cstat"><div class="cstat-num"><em>90</em>%+</div><div class="cstat-label">12吋先進 UTR</div></div>
+  </div>
+  <div class="cover-bottom"><span>報告日期：2026年3月25日</span><span>僅供研究參考，不構成投資建議</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════ 執行摘要 ══════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+  <div class="kpi-row">
+    <div class="kpi gold"><div class="kpi-val">119→104%</div><div class="kpi-lbl">供需比 2025→2027F</div></div>
+    <div class="kpi"><div class="kpi-val">90%+</div><div class="kpi-lbl">12吋先進 UTR</div></div>
+    <div class="kpi gold"><div class="kpi-val">+43%</div><div class="kpi-lbl">Server 晶圓需求 YoY</div></div>
+    <div class="kpi green"><div class="kpi-val">25.7%</div><div class="kpi-lbl">環球晶 4Q25 GM 超預期</div></div>
+  </div>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>供需收斂，ASP 4Q25 觸底。</strong>供需比從 119%(2025) 收斂至 104%(2027F)。AI 伺服器晶圓需求年增 43%，12 吋先進製程 UTR 達 90%+。環球晶 4Q25 毛利率 25.7% 超預期（vs 預估 21.8%），確認谷底。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>環球晶全球擴產進入收割期。</strong>美國德州 P1 於 2Q26 量產、義大利 Fab300 於 2H26 貢獻、日本 MJL 4Q25 轉盈。LTA 覆蓋率 80%，折舊高峰 2027 年後營運槓桿大幅釋放。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>HBM + CoWoS 推動特殊晶圓需求。</strong>台勝科 HBM Carrier Wafer 新產品線、12 吋滿載。N2 製程監控晶圓需求較 N5 增加 4 倍。合晶 12 吋新廠 2026 年量產。</span></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-wrap"><div class="chart-title">12 吋供需比趨勢</div><div class="chart-sub">來源：元大投顧、SEMI</div><div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:220px"></canvas></div></div>
+    <div class="chart-wrap"><div class="chart-title">台灣矽晶圓營收比較（億元）</div><div class="chart-sub">來源：公司公告</div><div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:220px"></canvas></div></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>執行摘要</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════ 產業總覽 ══════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、產業總覽</h1>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2024</div><div class="tl-spec">供給過剩</div><div class="tl-tech">供需比 122%<br>ASP 下滑</div></div>
+    <div class="tl-item active"><div class="tl-year">2025 ← 谷底</div><div class="tl-spec">觸底確認</div><div class="tl-tech">供需比 119%<br>4Q25 GM 反彈</div></div>
+    <div class="tl-item next"><div class="tl-year">2026F</div><div class="tl-spec">溫和復甦</div><div class="tl-tech">供需比 112%<br>ASP 持平→回升</div></div>
+    <div class="tl-item"><div class="tl-year">2027F</div><div class="tl-spec">多頭啟動</div><div class="tl-tech">供需比 104%<br>ASP 全面上漲</div></div>
+  </div>
+  <h2 class="ch">全球市佔率</h2>
+  <table>
+    <thead><tr><th>公司</th><th>國家</th><th>12吋市佔</th><th>產能特色</th></tr></thead>
+    <tbody>
+      <tr><td><strong>信越化學</strong></td><td>日本</td><td class="num hi">32%</td><td>技術最強，300mm 良率最高</td></tr>
+      <tr><td><strong>SUMCO</strong></td><td>日本</td><td class="num">24%</td><td>記憶體/HBM 晶圓專長</td></tr>
+      <tr><td><strong>環球晶</strong></td><td>台灣</td><td class="num pos">17%</td><td>全球佈局最廣（9 國 17 廠）</td></tr>
+      <tr><td>Siltronic</td><td>德國</td><td class="num">12%</td><td>新加坡 FabNext</td></tr>
+      <tr><td>SK Siltron</td><td>韓國</td><td class="num">9%</td><td>SiC via CSS</td></tr>
+    </tbody>
+  </table>
+  <h2 class="ch">終端需求結構（2026F）</h2>
+  <table>
+    <thead><tr><th>應用</th><th>佔比</th><th>YoY</th><th>驅動因素</th></tr></thead>
+    <tbody>
+      <tr><td><strong>伺服器/AI</strong></td><td class="num">18%</td><td class="num pos hi">+43%</td><td>HBM、CoWoS、AI 加速器</td></tr>
+      <tr><td>智慧手機</td><td class="num">21%</td><td class="num pos">+6%</td><td>AI 手機換機</td></tr>
+      <tr><td>車用</td><td class="num">16%</td><td class="num pos">+4%</td><td>EV/ADAS</td></tr>
+      <tr><td>工業</td><td class="num">13%</td><td class="num pos">+5%</td><td>IoT</td></tr>
+      <tr><td>PC</td><td class="num">14%</td><td class="num neg">-3%</td><td>需求疲弱</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 觀察：</strong>AI 伺服器晶圓面積 = 一般伺服器的 3.8 倍。N2 製程每 10 萬片生產晶圓需 2.6-2.7 萬片監控晶圓（N5 僅 6 千片）。再生晶圓佔比從 20-25% 升至 25-30%。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 &middot; 產業總覽</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════ 環球晶 6488 ══════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">環球晶圓 GlobalWafers</div><div class="co-ticker">6488.TWO &middot; 全球 #3 矽晶圓 &middot; 9 國 17 廠</div></div>
+      <div class="co-badge"><span class="badge buy">&#9673; GiS 買進</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$522（正常化 PE）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+11%</div><div class="co-metric-label">2026E 營收成長</div></div>
+      <div class="co-metric"><div class="co-metric-val up">26%</div><div class="co-metric-label">2026E 毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val up">19.0 元</div><div class="co-metric-label">2026E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">29.0 元</div><div class="co-metric-label">正常化 EPS（4yr avg）</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">GiS 財務模型（正常化 PE）</h3>
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>GiS 預估</th><th>FY24A</th><th>FY25A</th><th>FY26F</th><th>FY27F</th></tr></thead>
+            <tbody>
+              <tr><td>營收（億）</td><td class="num">626</td><td class="num neg">606</td><td class="num pos">670</td><td class="num pos">780</td></tr>
+              <tr><td>毛利率</td><td class="num">31.6%</td><td class="num neg">24.1%</td><td class="num pos">26%</td><td class="num pos">30%</td></tr>
+              <tr><td>EPS</td><td class="num">21.06</td><td class="num neg">15.30</td><td class="num pos">19.0</td><td class="num pos">27.0</td></tr>
+              <tr><td>正常化 EPS</td><td class="num" colspan="4">(35.3+45.4+21.1+15.3)÷4 = NT$29.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值法</th><th>倍數</th><th>EPS</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td><strong>正常化PE（採用）</strong></td><td class="num hi">18x</td><td class="num">29.0</td><td class="num pos hi">NT$522</td></tr>
+              <tr><td>Forward PE</td><td class="num">21x</td><td class="num">27.0</td><td class="num">NT$567</td></tr>
+              <tr><td>P/B</td><td class="num">2.5x</td><td class="num">206</td><td class="num">NT$515</td></tr>
+            </tbody>
+          </table>
+          <table style="margin-top:6px">
+            <thead><tr><th>券商</th><th>評等</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td>永豐</td><td class="pos">買進</td><td class="num">NT$586</td></tr>
+              <tr><td>元大</td><td class="pos">買進</td><td class="num">NT$550</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <blockquote><strong>GiS 估值邏輯：</strong>矽晶圓為景氣循環股，採正常化 PE 避免谷底高估。4yr 平均 EPS NT$29 × 18x = NT$522。4Q25 GM 25.7% 超預期（vs 預估 21.8%）確認谷底。德州 P1 2Q26 量產 + 義大利 Fab300 2H26 貢獻 + 日本 MJL 轉盈。LTA 80% 保護 ASP。保守/樂觀：NT$406(14x)/NT$638(22x)。</blockquote>
+      <ul>
+        <li><strong>催化劑：</strong>ASP H2'26 回升、德州 P2 宣布、SiC 12 吋量產、SOI 300mm 營收</li>
+        <li><strong>風險：</strong>日圓貶值壓縮競爭對手成本、關稅不確定性、折舊延長至 2028</li>
+      </ul>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>環球晶 6488</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════ 台勝科+合晶+中美晶 ══════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">其他矽晶圓個股</h1>
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">台勝科</div><div class="co-ticker">3532.TW &middot; 台塑×SUMCO &middot; 12 吋記憶體晶圓</div></div>
+      <div class="co-badge"><span class="badge buy">&#9673; GiS 買進</span><span style="color:rgba(255,255,255,.7);font-size:10px">NT$115（正常化 PE）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+6%</div><div class="co-metric-label">2026E Rev YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">17%</div><div class="co-metric-label">2026E GM</div></div>
+      <div class="co-metric"><div class="co-metric-val up">2.50</div><div class="co-metric-label">2026E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">6.51</div><div class="co-metric-label">正常化 EPS</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>GiS 預估</th><th>FY24A</th><th>FY25A</th><th>FY26F</th><th>FY27F</th></tr></thead>
+            <tbody>
+              <tr><td>營收（億）</td><td class="num">124.2</td><td class="num">123.3</td><td class="num pos">130</td><td class="num pos">150</td></tr>
+              <tr><td>毛利率</td><td class="num">21.4%</td><td class="num neg">14.8%</td><td class="num pos">17%</td><td class="num pos">22%</td></tr>
+              <tr><td>EPS</td><td class="num">3.35</td><td class="num neg">1.57</td><td class="num pos">2.50</td><td class="num pos">4.50</td></tr>
+              <tr><td>正常化 EPS</td><td class="num" colspan="4">(12.43+8.92+3.35+1.57)÷4 = NT$6.57</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值法</th><th>倍數</th><th>EPS</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td><strong>正常化PE（採用）</strong></td><td class="num hi">18x</td><td class="num">6.51</td><td class="num pos hi">NT$115</td></tr>
+              <tr><td>保守</td><td class="num">14x</td><td class="num">6.51</td><td class="num">NT$91</td></tr>
+              <tr><td>樂觀</td><td class="num">22x</td><td class="num">6.51</td><td class="num pos">NT$143</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>GiS 觀點：</strong>12 吋滿載（>32 萬片/月），HBM Carrier Wafer + CoWoS 矽中介層新品。Jan'26 +22% YoY 確認復甦。SUMCO 技術移轉 HBM 拋光為核心差異化。</p>
+    </div>
+  </div>
+  <div class="co-card">
+    <div class="co-card-head indigo">
+      <div><div class="co-name">合晶科技</div><div class="co-ticker">6182.TWO &middot; 6/8/12 吋磊晶圓</div></div>
+      <div class="co-badge"><span class="badge ow">&#9673; GiS 增加持股</span><span style="color:rgba(255,255,255,.7);font-size:10px">NT$65</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+5%</div><div class="co-metric-label">2026E Rev YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val up">29%</div><div class="co-metric-label">2026E GM（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">0.80</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">2.50</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>公司季報</th><th>Q1'25</th><th>Q2'25</th><th>Q3'25</th><th>Q4'25</th><th>FY25</th></tr></thead>
+            <tbody>
+              <tr><td>營收（百萬）</td><td class="num">2,304</td><td class="num">2,525</td><td class="num">2,557</td><td class="num">2,432</td><td class="num">9,817</td></tr>
+              <tr><td>毛利率</td><td class="num">20.8%</td><td class="num pos">24.2%</td><td class="num">23.4%</td><td class="num pos">28.8%</td><td class="num">24.3%</td></tr>
+              <tr><td>EPS</td><td class="num">0.05</td><td class="num neg">-0.15</td><td class="num">0.04</td><td class="num">0.00</td><td class="num neg">-0.06</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值法</th><th>倍數</th><th>EPS</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Forward PE（採用）</strong></td><td class="num hi">25x</td><td class="num">2.50</td><td class="num pos hi">NT$63</td></tr>
+              <tr><td>P/B（交叉驗證）</td><td class="num">1.2x</td><td class="num">BVPS ~55</td><td class="num">NT$66</td></tr>
+              <tr><td>樂觀</td><td class="num">30x</td><td class="num">2.50</td><td class="num pos">NT$75</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>GiS 觀點（修正）：</strong>FY25 全年 EPS 僅 -0.06 元（接近零），但毛利率從 Q1 20.8% 大幅改善至 Q4 28.8%。營收 98.2 億接近百億目標。二林+鄭州 12 吋新廠各規劃 20 萬片/月，2026 同步量產。Jan'26 8.5 億（+19% YoY）。GiS 下修目標價至 NT$65（取 Forward 25x 2027F EPS 2.50 與 P/B 1.2x 均值）。定位為產能擴張期虧損→獲利轉折標的。</p>
+    </div>
+  </div>
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">中美矽晶</div><div class="co-ticker">5483.TWO &middot; SAS 集團控股</div></div>
+      <div class="co-badge"><span class="badge neutral">&#9673; GiS 中立</span><span style="color:rgba(255,255,255,.7);font-size:10px">NT$155</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">+5%</div><div class="co-metric-label">2026E Rev YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">25%</div><div class="co-metric-label">FY25 GM</div></div>
+      <div class="co-metric"><div class="co-metric-val">8.00</div><div class="co-metric-label">2026E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">10.50</div><div class="co-metric-label">2027F EPS</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>GiS 預估</th><th>FY24A</th><th>FY25A</th><th>FY26F</th><th>FY27F</th></tr></thead>
+            <tbody>
+              <tr><td>營收（億）</td><td class="num">—</td><td class="num">782</td><td class="num pos">820</td><td class="num pos">—</td></tr>
+              <tr><td>毛利率</td><td class="num">—</td><td class="num">25%</td><td class="num">25%</td><td class="num">—</td></tr>
+              <tr><td>EPS</td><td class="num">—</td><td class="num">6.71</td><td class="num">8.00</td><td class="num pos">10.50</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值法</th><th>倍數</th><th>EPS</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Forward PE（採用）</strong></td><td class="num hi">15x</td><td class="num">10.50</td><td class="num pos hi">NT$155</td></tr>
+              <tr><td>保守</td><td class="num">12x</td><td class="num">10.50</td><td class="num">NT$126</td></tr>
+              <tr><td>樂觀</td><td class="num">18x</td><td class="num">10.50</td><td class="num pos">NT$189</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>GiS 觀點：</strong>控股公司折價是主要估值障礙。FY25 EPS 6.71，子公司貢獻佔比 17.5%。SAS 重組為 SUN+SGE 雙引擎。ADCVD 關稅優勢（2.57% vs 20%+）。控股折價不改善前難重估。</p>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>台勝科 / 合晶 / 中美晶</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════ 第三代半導體：嘉晶 + 漢磊 ══════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">第三代半導體：嘉晶 + 漢磊集團</h1>
+  <p>嘉晶（3016）與漢磊（3707）為母子公司關係，共同構成台灣最完整的 SiC/GaN 垂直整合供應鏈。嘉晶負責磊晶（Epitaxy），漢磊負責晶圓代工（Foundry）。2025 年為產業低谷，2026 年 8 吋 SiC 量產啟動，預計迎來雙位數成長。</p>
+
+  <div class="co-card">
+    <div class="co-card-head amber">
+      <div><div class="co-name">嘉晶 Episil</div><div class="co-ticker">3016.TW &middot; SiC/GaN 磊晶 &middot; TSMC GaN 轉單受惠</div></div>
+      <div class="co-badge"><span class="badge ow">&#9673; GiS 增加持股</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$38</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">雙位數</div><div class="co-metric-label">2026E 營收成長</div></div>
+      <div class="co-metric"><div class="co-metric-val neg">~6%</div><div class="co-metric-label">1H25 毛利率（谷底）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">~1.30 元</div><div class="co-metric-label">2026E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">8 吋 SiC</div><div class="co-metric-label">2026H1 小量產</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>GiS 預估</th><th>FY24A</th><th>FY25A</th><th>FY26F</th><th>FY27F</th></tr></thead>
+            <tbody>
+              <tr><td>EPS</td><td class="num">—</td><td class="num neg">-0.14</td><td class="num pos">~1.30</td><td class="num">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值法</th><th>倍數</th><th>EPS</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Forward PE（採用）</strong></td><td class="num hi">30x</td><td class="num">1.30</td><td class="num pos hi">NT$38</td></tr>
+              <tr><td>保守</td><td class="num">20x</td><td class="num">1.30</td><td class="num">NT$26</td></tr>
+              <tr><td>樂觀</td><td class="num">40x</td><td class="num">1.30</td><td class="num pos">NT$52</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>GiS 觀點：</strong>1H25 EPS -0.14（谷底），多項催化劑醞釀中：TSMC 退出 GaN 業務轉由力積電代工、8 吋 SiC 磊晶 2026H1 小量產、矽磊晶代工 H2 需求轉強。高倍數反映 SiC 題材溢價，定位為長期佈局標的。</p>
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">漢磊 Han Lei</div><div class="co-ticker">3707.TW &middot; SiC 晶圓代工 &middot; 6→8 吋升級中</div></div>
+      <div class="co-badge"><span class="badge neutral">&#9673; GiS 中立</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$55</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">雙位數</div><div class="co-metric-label">2026E 營收成長</div></div>
+      <div class="co-metric"><div class="co-metric-val">6 吋主力</div><div class="co-metric-label">SiC 製程</div></div>
+      <div class="co-metric"><div class="co-metric-val">8 吋 4Q26</div><div class="co-metric-label">與世界先進合作</div></div>
+      <div class="co-metric"><div class="co-metric-val neg">競爭激烈</div><div class="co-metric-label">中國 SiC 價格戰</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>GiS 預估</th><th>FY24A</th><th>FY25A</th><th>FY26F</th><th>FY27F</th></tr></thead>
+            <tbody>
+              <tr><td>製程</td><td class="num" colspan="2">SiC 6 吋主力</td><td class="num" colspan="2">8 吋 4Q26 量產</td></tr>
+              <tr><td>EPS</td><td class="num">—</td><td class="num neg">獲利低迷</td><td class="num">—</td><td class="num">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值法</th><th>倍數</th><th>基準</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td><strong>P/B（採用）</strong></td><td class="num hi">1.2x</td><td class="num">淨值</td><td class="num pos hi">NT$55</td></tr>
+              <tr><td>保守</td><td class="num">1.0x</td><td class="num">淨值</td><td class="num">NT$46</td></tr>
+              <tr><td>樂觀</td><td class="num">1.5x</td><td class="num">淨值</td><td class="num pos">NT$69</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>GiS 觀點：</strong>SiC 6 吋代工為現有主力，面臨中國激烈價格競爭。與世界先進合作的 8 吋 SiC 是關鍵突破（4Q26 量產），但貢獻要到 2027 年。技術方向正確但獲利能見度低，以 P/B 1.2x 估值。</p>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>嘉晶 / 漢磊</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">投資建議彙整</h1>
+  <table>
+    <thead><tr><th>公司</th><th>GiS 評等</th><th>目標價</th><th>估值法</th><th>2026F EPS</th><th>2027F EPS</th></tr></thead>
+    <tbody>
+      <tr><td><strong>環球晶</strong></td><td class="pos hi">買進</td><td class="num hi">NT$522</td><td>18x 正常化</td><td class="num pos">19.0</td><td class="num pos">27.0</td></tr>
+      <tr><td><strong>台勝科</strong></td><td class="pos">買進</td><td class="num">NT$115</td><td>18x 正常化</td><td class="num">2.50</td><td class="num pos">4.50</td></tr>
+      <tr><td><strong>合晶</strong></td><td>增加持股</td><td class="num">NT$65</td><td>25x Fwd + P/B</td><td class="num">0.80</td><td class="num">2.50</td></tr>
+      <tr><td><strong>中美晶</strong></td><td>中立</td><td class="num">NT$155</td><td>15x Fwd</td><td class="num">8.00</td><td class="num">10.50</td></tr>
+      <tr><td><strong>嘉晶</strong></td><td>增加持股</td><td class="num">NT$38</td><td>30x Fwd（SiC 溢價）</td><td class="num">~1.30</td><td class="num">—</td></tr>
+      <tr><td><strong>漢磊</strong></td><td>中立</td><td class="num">NT$55</td><td>P/B 1.2x</td><td class="num">—</td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>⚠ 估值方法：</strong>環球晶、台勝科採<strong>正常化 PE</strong>（4 年平均 EPS × 18x），避免景氣循環谷底使用 Forward PE 過度樂觀的風險。合晶因處成長拐點用 Forward PE；中美晶因控股折價用較低倍數。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資建議</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family="'PingFang TC','Heiti TC',Arial,sans-serif";Chart.defaults.font.size=12;Chart.defaults.color='#4a5568';
+  new Chart(document.getElementById('chart1'),{type:'bar',data:{labels:['2024','2025','2026F','2027F'],datasets:[{label:'供需比(%)',data:[122,119,112,104],backgroundColor:['#c0392b','#e67e22','#d97706','#00a878'],borderRadius:5,barPercentage:.6}]},options:{responsive:false,animation:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},min:95,max:130,ticks:{callback:v=>v+'%'}}}}});
+  new Chart(document.getElementById('chart2'),{type:'bar',data:{labels:['環球晶','台勝科','合晶','中美晶'],datasets:[{label:'FY2025A',data:[606,123,93,782],backgroundColor:'#1a3a6e',borderRadius:5,barPercentage:.7,categoryPercentage:.75},{label:'GiS 2026F',data:[670,130,105,820],backgroundColor:'#d97706',borderRadius:5,barPercentage:.7,categoryPercentage:.75}]},options:{responsive:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:14,padding:12}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'億'}}}}});
+});
+</script>
+</body>
+</html>

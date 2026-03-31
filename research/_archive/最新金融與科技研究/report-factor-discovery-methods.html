@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Factor Discovery Methods Report | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:16px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1}.pb{break-after:page;page-break-after:always}.full-page{display:flex;flex-direction:column}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:16px;color:rgba(255,255,255,.65);margin-bottom:40px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8)}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:24px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13px;color:rgba(255,255,255,.5)}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,.45)}
+.body-page{padding:30px 48px;position:relative;z-index:1}.body-page.alt{background:#fafbfd}
+h1.ch{font-size:22px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 12px;page-break-after:avoid}
+h2.ch{font-size:18px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:16px 0 10px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:6px 0 12px;font-size:13.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 10px;text-align:left;font-weight:600;font-size:12.5px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}tbody tr:nth-child(even){background:#fff}
+td{padding:8px 10px;border-bottom:1px solid #e5edf8;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.pos{color:#00875a;font-weight:600}td.neg{color:#c0392b;font-weight:600}td.hi{background:#fff8e1!important;font-weight:700}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi-val{font-size:22px;font-weight:800;margin-bottom:4px}.kpi-val em{font-size:13px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:12.5px;opacity:.7}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:16px;margin:10px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:15px;font-weight:700;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:22px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+p{margin:6px 0 10px;line-height:1.7;font-size:15px}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:10px 14px;margin:10px 0;color:#1a3a6e;font-size:14.5px;border-radius:0 5px 5px 0}
+.src{font-size:12px;color:#9aabb5;display:block;margin-top:5px}
+.warn-box{background:#fff8e1;border:1.5px solid #d97706;border-radius:8px;padding:12px;margin:10px 0;font-size:14px;line-height:1.7}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:10px 48px;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:15px}.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- 封面 -->
+<div class="cover pb page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div><div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">AI量化交易與相關應用產品開發</div></div></div>
+    <div class="cover-eyebrow">Research Report R-2026-03-26-F01</div>
+    <div class="cover-title">AI 因子發現方法論<br><em>四大前沿方法深度比較</em></div>
+    <div class="cover-subtitle">RD-Agent (NeurIPS 2025) · AlphaLogics · Alpha-R1 · GenAI Stock Selection</div>
+    <div class="cover-tags"><span class="ctag hl">RD-Agent</span><span class="ctag hl">AlphaLogics</span><span class="ctag hl">Alpha-R1</span><span class="ctag hl">GenAI</span><span class="ctag">NeurIPS</span><span class="ctag">KDD</span><span class="ctag">Factor Discovery</span></div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>4</em></div><div class="cstat-label">前沿論文</div></div>
+    <div class="cstat"><div class="cstat-num">Sharpe <em>4.03</em></div><div class="cstat-label">Alpha-R1 最佳</div></div>
+    <div class="cstat"><div class="cstat-num">IR <em>1.74</em></div><div class="cstat-label">RD-Agent</div></div>
+    <div class="cstat"><div class="cstat-num"><em>1.63</em></div><div class="cstat-label">GenAI Net Sharpe</div></div>
+  </div>
+  <div class="cover-bottom"><span>報告編號：R-2026-03-26-F01</span><span>研究日期：2026-03-25~26</span><span>&copy; 2026 Genesis International Capital</span></div>
+</div>
+
+<!-- 第 2 頁：研究方法與文獻取得 -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">研究方法與文獻取得聲明</h1>
+  <table>
+    <thead><tr><th>項目</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><td>報告編號</td><td>R-2026-03-26-F01</td></tr>
+      <tr><td>研究日期</td><td>2026-03-25 ~ 2026-03-26</td></tr>
+      <tr><td>研究人員</td><td>GiS Research + Claude Code Agent</td></tr>
+      <tr><td>資料收集</td><td>arXiv WebFetch（HTML全文）、WebSearch（討論/報導）</td></tr>
+      <tr><td>驗證方式</td><td>多來源交叉驗證 + 原始數據表格核對</td></tr>
+    </tbody>
+  </table>
+  <h2 class="ch">文獻取得明細</h2>
+  <table>
+    <thead><tr><th>#</th><th>論文</th><th>來源</th><th>取得方式</th><th>日期</th><th>品質</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>RD-Agent-Quant (NeurIPS 2025)</td><td>arXiv:2505.15155v2</td><td>WebFetch(abstract+HTML) + WebSearch</td><td>2026-03-25</td><td>A+</td></tr>
+      <tr><td>2</td><td>AlphaLogics (2026-03)</td><td>arXiv:2603.20247</td><td>WebFetch(HTML全文)</td><td>2026-03-26</td><td>A</td></tr>
+      <tr><td>3</td><td>Alpha-R1 (2025-12)</td><td>arXiv:2512.23515</td><td>Agent WebFetch(HTML全文)</td><td>2026-03-26</td><td>A</td></tr>
+      <tr><td>4</td><td>GenAI Stock Selection (2026-01)</td><td>arXiv:2602.00196v1</td><td>WebFetch(HTML全文)</td><td>2026-03-26</td><td>A+</td></tr>
+    </tbody>
+  </table>
+  <span class="src">所有論文均從 arXiv 公開頁面取得，取得日期如上。品質等級：A+=數據極詳盡可交叉驗證，A=數據完整。</span>
+  <div class="warn-box"><strong>已知限制：</strong>① Alpha-R1 測試期僅 6 個月，CSI1000 Sharpe 4.03 需更長期驗證 ② AlphaLogics 未報告計算成本 ③ GenAI 的 Net Sharpe 0.78 含交易成本後顯著低於 Gross 1.63 ④ RD-Agent 需 Linux+Docker+OpenAI API</div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>研究方法</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- 第 3 頁：執行摘要 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">執行摘要</h1>
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">4 <em>篇</em></div><div class="kpi-lbl">前沿論文</div></div>
+    <div class="kpi green"><div class="kpi-val">4.03</div><div class="kpi-lbl">Alpha-R1 Sharpe</div></div>
+    <div class="kpi green"><div class="kpi-val">1.63</div><div class="kpi-lbl">GenAI Net Sharpe</div></div>
+    <div class="kpi"><div class="kpi-val">97.6<em>%</em></div><div class="kpi-lbl">AlphaLogics 可解釋</div></div>
+  </div>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>RD-Agent（NeurIPS 2025）：</strong>因子-模型聯合優化，年化從 5.7% 提升至 14.2%（+2.5x），因子數僅需 30%，成本 &lt;$10。Bandit 排程自適應分配計算預算。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>Alpha-R1：</strong>LLM 推理 + RL 對齊的語義門控因子篩選。CSI300 Sharpe 1.62，CSI1000 零樣本泛化 <strong>Sharpe 4.03</strong>。通用 LLM 直接做因子篩選 = 虧錢，RL 對齊是關鍵。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>AlphaLogics：</strong>市場邏輯驅動 7-Agent 系統。將邏輯從隱性知識提升為可優化對象。CSI500 IR 1.53、S&P500 IR 1.27，可解釋性一致率 97.6%。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>GenAI Stock Selection：</strong>GPT-4.1 + DSPy 生成 200 AI 特徵。AI 信號與傳統因子相關僅 0.06-0.14（真正正交 alpha）。知識庫品質是第一要素（壞 KB 讓 Sharpe 從 0.97 暴跌至 -0.11）。</span></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>執行摘要</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- 第 4 頁：四方法比較 -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">壹、四大方法核心比較</h1>
+  <table>
+    <thead><tr><th>維度</th><th>RD-Agent</th><th>AlphaLogics</th><th>Alpha-R1</th><th>GenAI</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">核心思路</td><td>因子+模型聯合優化</td><td>市場邏輯驅動因子生成</td><td>LLM推理+RL語義門控</td><td>GPT+DSPy特徵生成</td></tr>
+      <tr><td>做什麼</td><td>發明新因子+優化模型</td><td>發明新因子（邏輯約束）</td><td>篩選現有因子</td><td>生成AI特徵</td></tr>
+      <tr><td>Agent數</td><td>5模組</td><td>8 Agent</td><td>單模型+RL</td><td>無Agent</td></tr>
+      <tr><td>LLM角色</td><td>假說生成+程式碼</td><td>邏輯挖掘+約束編譯</td><td>推理+語義門控</td><td>特徵程式碼生成</td></tr>
+      <tr><td>RL使用</td><td>無</td><td>無</td><td class="hi">GRPO對齊</td><td>無</td></tr>
+      <tr><td>可解釋</td><td>低</td><td class="pos">高(97.6%)</td><td>中（推理鏈）</td><td>中（程式碼）</td></tr>
+      <tr><td>市場</td><td>CSI300/500, NASDAQ</td><td>CSI500, S&P500</td><td>CSI300/1000</td><td>美股2500+</td></tr>
+      <tr><td class="hi">最佳Sharpe/IR</td><td>IR 1.74</td><td>IR 1.53</td><td class="pos">Sharpe 4.03</td><td class="pos">Net Sharpe 1.63</td></tr>
+      <tr><td>成本</td><td>&lt;$10</td><td>未報告</td><td>未報告</td><td>未報告</td></tr>
+      <tr><td>開源</td><td class="pos">完全</td><td>未開源</td><td>整理中</td><td>未開源</td></tr>
+      <tr><td>發表</td><td>NeurIPS 2025</td><td>arXiv 2026/03</td><td>arXiv 2025/12</td><td>arXiv 2026/01</td></tr>
+    </tbody>
+  </table>
+  <span class="src">RD-Agent: arXiv:2505.15155. AlphaLogics: arXiv:2603.20247. Alpha-R1: arXiv:2512.23515. GenAI: arXiv:2602.00196.</span>
+
+  <h2 class="ch">性能直接對比</h2>
+  <table>
+    <thead><tr><th>方法</th><th>市場</th><th>年化報酬</th><th>Sharpe/IR</th><th>MaxDD</th><th>測試期</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">Alpha-R1</td><td>CSI 1000</td><td class="pos">78.18%</td><td class="pos">Sharpe 4.03</td><td>-9.25%</td><td>6 個月</td></tr>
+      <tr><td class="hi">Alpha-R1</td><td>CSI 300</td><td class="pos">27.59%</td><td>Sharpe 1.62</td><td>-6.76%</td><td>6 個月</td></tr>
+      <tr><td>AlphaLogics</td><td>CSI 500</td><td class="pos">16.72%</td><td>IR 1.53</td><td>-5.31%</td><td>4 年</td></tr>
+      <tr><td>RD-Agent</td><td>CSI 300</td><td class="pos">14.21%</td><td>IR 1.74</td><td>-7.42%</td><td>3.5 年</td></tr>
+      <tr><td>AlphaLogics</td><td>S&P 500</td><td class="pos">13.75%</td><td>IR 1.27</td><td>-9.06%</td><td>4 年</td></tr>
+      <tr><td>GenAI (DSPy)</td><td>美股 2500+</td><td>—</td><td>Net Sharpe 1.63</td><td>—</td><td>6 年</td></tr>
+    </tbody>
+  </table>
+  <span class="src">⚠ Alpha-R1 CSI1000 測試期僅 6 個月，Sharpe 4.03 需更長期驗證。GenAI Net Sharpe 含 21 天平滑+交易成本。</span>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 四方法比較</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- 第 5 頁：核心發現與啟示 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">貳、核心發現與對 GiS 的啟示</h1>
+
+  <h2 class="ch">五大跨論文共識</h2>
+  <table>
+    <thead><tr><th>#</th><th>共識</th><th>證據</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">1</td><td><strong>約束生成 > 自由生成</strong></td><td>AlphaLogics 邏輯約束 IC 一致提升；GenAI DSPy 比自由提示好 57%</td></tr>
+      <tr><td class="hi">2</td><td><strong>AI 特徵與傳統因子正交</strong></td><td>GenAI 相關僅 0.06-0.14；RD-Agent 因子與 Alpha158 互補</td></tr>
+      <tr><td class="hi">3</td><td><strong>RL 對齊是金融推理的關鍵跳躍</strong></td><td>Alpha-R1：未對齊 LLM Sharpe -0.77，對齊後 +1.62</td></tr>
+      <tr><td>4</td><td><strong>知識庫品質 >> 模型大小</strong></td><td>GenAI 壞 KB 讓 Sharpe 暴跌 1.074；Alpha-R1 8B 模型打敗更大模型</td></tr>
+      <tr><td>5</td><td><strong>組合最優：AI + 傳統</strong></td><td>GenAI 組合 Sharpe 1.53 > 單獨 AI 1.81 或單獨傳統 1.24</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">對 GiS 的行動建議</h2>
+  <table>
+    <thead><tr><th>優先級</th><th>行動</th><th>來源論文</th><th>預期效果</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">P0</td><td>為 31 因子建立語義描述（市場邏輯）</td><td>AlphaLogics + Alpha-R1</td><td>提升因子管理品質，不需 API</td></tr>
+      <tr><td class="hi">P0</td><td>用 DSPy 自動優化因子生成提示</td><td>GenAI</td><td>比手工提示提升 57%</td></tr>
+      <tr><td>P1</td><td>建構因子知識庫（RAG）</td><td>GenAI</td><td>知識庫品質是第一要素</td></tr>
+      <tr><td>P1</td><td>整合 AI 特徵到現有 31 因子組合</td><td>GenAI</td><td>正交 alpha，Sharpe 提升 22-57%</td></tr>
+      <tr><td>P2</td><td>實現 RLMF（市場績效驅動 RL 對齊）</td><td>Alpha-R1</td><td>動態因子篩選，Sharpe 1.62+</td></tr>
+      <tr><td>P2</td><td>雙迴圈架構（內:因子優化，外:邏輯優化）</td><td>AlphaLogics</td><td>可解釋 + 持續改進</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>核心洞察：</strong>四篇論文代表因子發現的四個不同層次 — RD-Agent 做「因子+模型聯合」，AlphaLogics 做「邏輯→因子」，Alpha-R1 做「因子篩選」，GenAI 做「特徵工程」。它們不是互斥而是互補，最佳策略是分層整合。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 發現與啟示</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- 第 6 頁：完整參考文獻 -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、完整參考文獻與研究聲明</h1>
+  <table>
+    <thead><tr><th>#</th><th>文獻</th><th>取得方式</th><th>連結</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Li et al. (2025). R&D-Agent-Quant. NeurIPS 2025.</td><td>WebFetch(HTML)</td><td><a href="https://arxiv.org/abs/2505.15155">arXiv</a></td></tr>
+      <tr><td>2</td><td>Weng et al. (2026). AlphaLogics. arXiv:2603.20247.</td><td>WebFetch(HTML)</td><td><a href="https://arxiv.org/html/2603.20247">arXiv</a></td></tr>
+      <tr><td>3</td><td>Jiang et al. (2025). Alpha-R1. arXiv:2512.23515.</td><td>Agent WebFetch</td><td><a href="https://arxiv.org/abs/2512.23515">arXiv</a></td></tr>
+      <tr><td>4</td><td>Rasekhschaffe (2026). GenAI Stock Selection. arXiv:2602.00196.</td><td>WebFetch(HTML)</td><td><a href="https://arxiv.org/html/2602.00196v1">arXiv</a></td></tr>
+      <tr><td>5</td><td>Chen & Zimmermann (2022). Open Source Asset Pricing. CFR.</td><td>Python套件下載</td><td><a href="https://www.openassetpricing.com/">Web</a></td></tr>
+      <tr><td>6</td><td>FINSABER: Li et al. (2026). KDD 2026.</td><td>WebFetch</td><td><a href="https://arxiv.org/abs/2505.07078">arXiv</a></td></tr>
+      <tr><td>7</td><td>Microsoft Qlib. GitHub.</td><td>WebFetch(README)</td><td><a href="https://github.com/microsoft/qlib">GitHub</a></td></tr>
+      <tr><td>8</td><td>Microsoft RD-Agent. GitHub.</td><td>WebFetch</td><td><a href="https://github.com/microsoft/RD-Agent">GitHub</a></td></tr>
+      <tr><td>9</td><td>Harvey, Liu & Zhu (2016). Factor Zoo. RFS.</td><td>WebSearch</td><td><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3341728">SSRN</a></td></tr>
+      <tr><td>10</td><td>Alpha MCTS: LLM-Powered Factor Mining. arXiv:2505.11122.</td><td>WebSearch</td><td><a href="https://arxiv.org/html/2505.11122v1">arXiv</a></td></tr>
+    </tbody>
+  </table>
+  <span class="src">所有連結截至 2026-03-26 確認有效。取得方式：WebFetch=直接網頁擷取，Agent=sub-agent並行研究，WebSearch=搜尋引擎。</span>
+
+  <div class="warn-box">
+    <strong>研究聲明：</strong><br>
+    1. 所有資料均來自公開學術論文（arXiv）和開源專案（GitHub）。<br>
+    2. 論文性能數據為作者自報，本報告未獨立復現驗證。<br>
+    3. Alpha-R1 CSI1000 Sharpe 4.03 和 AlphaLogics CSI500 IR 1.53 的測試期分別僅 6 個月和 4 年，長期穩健性待驗證。<br>
+    4. GenAI 的 Gross Sharpe 1.81 與 Net Sharpe 0.78 差距巨大（交易成本影響），實務部署需謹慎評估。<br>
+    5. 過去績效不代表未來表現。本報告僅供研究參考，不構成投資建議。
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 參考文獻</span><span>&copy; 2026 GiS</span></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 光通訊產業研究報告
+  轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="光通訊產業研究報告.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///Users/chenhongshuo/claude/光通/光通訊產業研究報告.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>光通訊產業研究報告 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#06b6d4;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 頁面容器 ── */
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+
+/* ── Canvas ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#041520 0%,#0a2540 40%,#0e3d4a 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(6,182,212,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(8,145,178,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#06b6d4;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#06b6d4;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#06b6d4;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(6,182,212,.4);color:#06b6d4}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#06b6d4;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#041520 0%,#0a2540 60%,#0e3d4a 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#06b6d4;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#06b6d4;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:36px 42px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #06b6d4;padding:10px 16px;background:linear-gradient(90deg,#eef5fa,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0e7490;padding-left:10px;border-left:3px solid #06b6d4;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 公司卡片 ── */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#0e7490}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#06b6d4;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:14px 16px}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.cyan{background:linear-gradient(135deg,#0e7490,#0891b2)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef8fa);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #b8e0ec}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#0891b2;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#0e7490;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#06b6d4;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5fa;border:1.5px solid #0891b2}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#0e7490}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 首選股卡 ── */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#0891b2;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#0e7490;background:#e8f5fa;padding:8px 10px;border-radius:5px}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0;font-size:11.5px}
+.mini-t th{padding:8px 6px;font-size:11px}
+.mini-t td{padding:6px 6px;font-size:11.5px}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #06b6d4;background:#eef8fa;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 42px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#06b6d4;font-style:normal}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Industry Research Report &middot; Q1 2026</div>
+    <div class="cover-title">光通訊產業<br><em>AI 驅動高速傳輸新紀元</em></div>
+    <div class="cover-subtitle">Optical Communication &mdash; AI-Driven High-Speed Transmission Revolution</div>
+    <div class="cover-tags">
+      <span class="ctag hl">聯亞 3081</span>
+      <span class="ctag hl">全新 2455</span>
+      <span class="ctag hl">環宇-KY 4991</span>
+      <span class="ctag hl">穩懋 3105</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>4,000</em>萬顆</div><div class="cstat-label">800G模組出貨 2026F</div></div>
+    <div class="cstat"><div class="cstat-num"><em>1.6T</em>量產</div><div class="cstat-label">啟動 2H26 (Rubin)</div></div>
+    <div class="cstat"><div class="cstat-num">SiPh &gt;<em>50</em>%</div><div class="cstat-label">矽光子滲透率</div></div>
+    <div class="cstat"><div class="cstat-num">CW Laser</div><div class="cstat-label">缺口持續至2027</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月25日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi cyan"><div class="kpi-val">4,000<em> 萬顆</em></div><div class="kpi-lbl">800G Shipments 2026F</div></div>
+    <div class="kpi"><div class="kpi-val">1.6T<em> 2H26</em></div><div class="kpi-lbl">Rubin 量產啟動</div></div>
+    <div class="kpi gold"><div class="kpi-val">&gt;50<em> %</em></div><div class="kpi-lbl">SiPh 滲透率</div></div>
+    <div class="kpi cyan"><div class="kpi-val">缺口至<em> 2027</em></div><div class="kpi-lbl">高速雷射供需缺口</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">&#9312;</span><span><strong>AI資料中心頻寬從400G&rarr;800G&rarr;1.6T升級，矽光子（SiPh）成為主流，驅動磊晶片需求爆發。</strong>聯亞 SiPh 營收佔比從 13%(2022)飆升至 92%(2027E)，為全球純度最高 SiPh 磊晶供應商。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&#9313;</span><span><strong>CW Laser 取代 EML 成為 1.6T 主流光源，全球高速雷射供需缺口持續至 2027 年底。</strong>環宇為 800G PD 全球市佔 70% 龍頭，正切入 CW Laser 第二曲線，月產百萬顆目標明確。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&#9314;</span><span><strong>穩懋從手機 PA 紅海轉型至光通訊/衛星藍海，毛利率從 24%(2025)跳升至 32%(2026F)，結構性轉型帶動重新評價。</strong>GaAs Driver IC for 800G/1.6T 爆量，折舊費用年減 10-20%，UTR 從 50% 回升至 60%+。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">800G / 1.6T 模組出貨量預估（百萬顆）</div>
+      <div class="chart-sub">來源：各券商報告、GiS 研究部</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">台灣光通訊供應鏈營收成長率（YoY %）</div>
+      <div class="chart-sub">來源：公司財報、GiS 估計</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節一封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業總覽與<br>技術演進</div>
+  <div class="sec-desc">AI 資料中心頻寬需求從 400G 加速升級至 800G 與 1.6T，矽光子（SiPh）技術成為光通訊主流架構。本章分析速率演進路線圖、光源技術比較及台灣供應鏈定位。</div>
+</div>
+
+<!-- ══════════════ 產業總覽 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、產業總覽 &mdash; AI 驅動光通訊升級</h1>
+  <p>AI 大模型訓練與推論對資料中心互連頻寬提出爆發性需求。NVIDIA GPU 架構每一代即驅動光模組速率翻倍，從 Hopper（400G）到 Blackwell（800G）再到 Rubin（1.6T），光通訊正進入有史以來最快升級週期。矽光子（SiPh）技術以其低功耗、高密度、低成本優勢，迅速取代傳統 InP 光模組，滲透率已突破 50%。</p>
+
+  <h2 class="ch">速率演進時間軸</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2023-2024</div><div class="tl-spec">400G</div><div class="tl-tech">Hopper 世代<br>EML 為主流光源</div></div>
+    <div class="tl-item active"><div class="tl-year">2025-2026 &larr; 現在</div><div class="tl-spec">800G</div><div class="tl-tech">Blackwell 世代<br>SiPh + EML/CW Laser</div></div>
+    <div class="tl-item next"><div class="tl-year">2H26-2027</div><div class="tl-spec">1.6T</div><div class="tl-tech">Rubin 世代<br>CW Laser 成為主流</div></div>
+    <div class="tl-item"><div class="tl-year">2028+</div><div class="tl-spec">3.2T / CPO</div><div class="tl-tech">下一代架構<br>Co-Packaged Optics</div></div>
+  </div>
+
+  <h2 class="ch">光源技術比較</h2>
+  <table>
+    <thead><tr><th>項目</th><th>EML（電吸收調變雷射）</th><th>CW Laser（連續波雷射）</th><th>VCSEL（垂直腔面射型）</th></tr></thead>
+    <tbody>
+      <tr><td><strong>適用速率</strong></td><td>400G / 800G</td><td class="pos hi">800G / 1.6T / 3.2T</td><td>100G-400G（短距）</td></tr>
+      <tr><td><strong>調變方式</strong></td><td>直接調變</td><td>外部調變（SiPh MZM）</td><td>直接調變</td></tr>
+      <tr><td><strong>傳輸距離</strong></td><td>2km</td><td class="pos">2-10km</td><td>&lt;100m</td></tr>
+      <tr><td><strong>功耗</strong></td><td>中</td><td class="pos">低</td><td>最低</td></tr>
+      <tr><td><strong>SiPh 整合性</strong></td><td class="neg">低（獨立封裝）</td><td class="pos hi">極高（直接耦合）</td><td class="neg">不適用</td></tr>
+      <tr><td><strong>1.6T 主導地位</strong></td><td class="neg">將被取代</td><td class="pos hi">主流光源</td><td>僅限短距</td></tr>
+      <tr><td><strong>台灣供應商</strong></td><td>聯亞、全新</td><td>聯亞、環宇</td><td>穩懋（代工）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：各券商報告、LightCounting、GiS 研究部</span>
+
+  <h2 class="ch">NVIDIA GPU 頻寬路線圖</h2>
+  <table>
+    <thead><tr><th>GPU 平台</th><th>發佈年</th><th>互連速率</th><th>光模組需求</th><th>光源技術</th></tr></thead>
+    <tbody>
+      <tr><td>Hopper (H100)</td><td class="num">2023</td><td>400G</td><td>DR4 / FR4</td><td>EML</td></tr>
+      <tr><td class="hi"><strong>Blackwell (B200)</strong></td><td class="num hi">2025</td><td class="hi">800G</td><td class="hi">DR8 / LR8</td><td class="hi">EML + CW Laser</td></tr>
+      <tr><td class="hi"><strong>Rubin (R100)</strong></td><td class="num hi">2H26</td><td class="pos hi">1.6T</td><td class="pos hi">DR16</td><td class="pos hi">CW Laser 主導</td></tr>
+      <tr><td>Next-Gen</td><td class="num">2028+</td><td>3.2T</td><td>CPO</td><td>CW Laser + CPO</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 產業總覽</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 供應鏈地圖 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">台灣光通訊供應鏈地圖</h1>
+  <p>台灣在全球光通訊供應鏈中扮演關鍵的「磊晶 &rarr; 晶粒 &rarr; 封測」角色，尤其在 III-V 族化合物半導體（InP、GaAs）領域具有全球領先地位。隨著 SiPh 架構成為主流，台灣磊晶廠（聯亞、全新）與晶圓代工廠（穩懋、環宇）正處於需求爆發的甜蜜點。</p>
+
+  <table>
+    <thead><tr><th>供應鏈環節</th><th>產品</th><th>台灣代表廠商</th><th>全球地位</th><th>毛利率</th></tr></thead>
+    <tbody>
+      <tr><td class="hi"><strong>磊晶（SiPh）</strong></td><td>SiPh CW Laser 磊晶片</td><td class="pos hi">聯亞 3081</td><td class="pos">全球純度最高</td><td class="num pos">48%</td></tr>
+      <tr><td class="hi"><strong>磊晶（InP）</strong></td><td>InP PD / EML 磊晶片</td><td class="pos hi">全新 2455</td><td class="pos">全球 PD 市佔 >50%</td><td class="num">41%</td></tr>
+      <tr><td class="hi"><strong>晶粒製造</strong></td><td>PD 晶粒、CW Laser 晶粒</td><td class="pos hi">環宇-KY 4991</td><td class="pos">800G PD 市佔 70%</td><td class="num pos">50%</td></tr>
+      <tr><td class="hi"><strong>III-V 代工</strong></td><td>GaAs Driver IC、VCSEL</td><td class="pos hi">穩懋 3105</td><td class="pos">全球最大 III-V 代工</td><td class="num">32%</td></tr>
+      <tr><td><strong>光模組</strong></td><td>800G/1.6T 光收發模組</td><td>華星光 4979、聯鈞 3450</td><td>Tier-2</td><td class="num">20-25%</td></tr>
+      <tr><td><strong>IC 設計</strong></td><td>TIA、CDR、DSP</td><td>博通（美）、Marvell（美）</td><td>海外主導</td><td class="num">55-65%</td></tr>
+      <tr><td><strong>光纖 / 連接器</strong></td><td>MPO、光纖跳線</td><td>上詮 3363、波若威 3163</td><td>利基型</td><td class="num">30-40%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：各公司法說會、券商報告、GiS 研究部</span>
+
+  <blockquote><strong>關鍵洞察：</strong>在 SiPh 架構下，光源（CW Laser）從模組廠外移至獨立元件，使得磊晶廠與晶粒廠的議價能力大幅提升。聯亞、全新、環宇三家公司恰好覆蓋 SiPh 供應鏈最核心的「磊晶 + 晶粒」環節，享有高毛利率與供不應求的定價權。</blockquote>
+
+  <h2 class="ch">SiPh 架構 vs 傳統架構</h2>
+  <div class="mini-table">
+    <div class="mini-t">
+      <table>
+        <thead><tr><th colspan="2">傳統 EML 架構（400G/800G）</th></tr></thead>
+        <tbody>
+          <tr><td>光源</td><td>EML 直接調變</td></tr>
+          <tr><td>整合度</td><td>低（獨立封裝）</td></tr>
+          <tr><td>功耗</td><td>較高（~15W per 800G）</td></tr>
+          <tr><td>成本</td><td>高（EML 良率低）</td></tr>
+          <tr><td>未來性</td><td class="neg">1.6T 瓶頸</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mini-t">
+      <table>
+        <thead><tr><th colspan="2">SiPh + CW Laser 架構（800G/1.6T+）</th></tr></thead>
+        <tbody>
+          <tr><td>光源</td><td class="pos">CW Laser + MZM 外部調變</td></tr>
+          <tr><td>整合度</td><td class="pos">高（矽光子平台整合）</td></tr>
+          <tr><td>功耗</td><td class="pos">低（~10W per 800G）</td></tr>
+          <tr><td>成本</td><td class="pos">低（矽基量產）</td></tr>
+          <tr><td>未來性</td><td class="pos">可擴展至 3.2T / CPO</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 供應鏈地圖</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節二封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">台灣供應鏈<br>個股分析</div>
+  <div class="sec-desc">深入剖析四家台灣光通訊核心供應鏈公司：聯亞（SiPh 磊晶）、全新（InP 磊晶）、環宇-KY（PD/CW Laser 晶粒）、穩懋（III-V 代工），分析營收展望、獲利預估與估值。</div>
+</div>
+
+<!-- ══════════════ 聯亞 3081 ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">聯亞</div><div class="co-ticker">3081.TW &middot; SiPh 磊晶 &middot; 全球純度最高</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; GiS 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$1,500</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">NT$1,500</div><div class="co-metric-label">GiS 目標價</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+104%</div><div class="co-metric-label">2026F Rev YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">48%</div><div class="co-metric-label">2026F GM</div></div>
+      <div class="co-metric"><div class="co-metric-val up">12.5</div><div class="co-metric-label">2026F EPS</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">投資論點 &mdash; SiPh 磊晶最高純度，營收 CAGR +84%</h3>
+      <p>聯亞為全球 SiPh CW Laser 磊晶純度最高的供應商，SiPh 營收佔比從 2022 年 13% 飆升至 2027E 的 92%。CW Laser 需求隨 1.6T 升級爆發性成長，聯亞享有最高能見度與定價權。</p>
+    </div>
+  </div>
+
+  <div class="mini-table">
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>GiS 預估</th><th>FY2025A</th><th>FY2026F</th><th>FY2027F</th></tr></thead>
+        <tbody>
+          <tr><td>營收</td><td class="num">2,203M</td><td class="num pos">4,500M (+104%)</td><td class="num pos">7,500M (+67%)</td></tr>
+          <tr><td>GM / OPM</td><td class="num">42.7% / 22%</td><td class="num pos">48% / 32%</td><td class="num pos">50% / 37%</td></tr>
+          <tr><td>EPS</td><td class="num">4.63</td><td class="num pos hi">12.5</td><td class="num pos hi">23.0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mini-t">
+      <table>
+        <thead><tr><th colspan="2">月營收 &middot; 模型假設</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Jan'26 / Feb'26</td><td class="num pos hi">271M (+123%) / 290M (+91%)</td></tr>
+          <tr><td>SiPh 佔營收</td><td class="num">70% &rarr; 86% &rarr; 92%</td></tr>
+          <tr><td>MOCVD / E-Beam</td><td class="num">capex 7.07 億 / 產能 +150%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p><strong>GiS 目標價 NT$1,500</strong>（65x 2027F EPS）。保守 NT$1,150（50x）/ 樂觀 NT$1,840（80x）。券商：GS NT$1,830 | KGI NT$1,080 | 元大 NT$1,350。</p>
+  <p><strong>催化劑：</strong>1.6T CW Laser 需求爆發（2H26 Rubin 量產）；3-4 家 CSP 新規格導入。<strong>風險：</strong>IDM 自製磊晶替代；客戶集中度高。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; 聯亞 3081</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 全新 2455 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">全新</div><div class="co-ticker">2455.TW &middot; InP 磊晶龍頭 &middot; PD 全球市佔 &gt;50%</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; GiS 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$285</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">NT$285</div><div class="co-metric-label">GiS 目標價</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+33%</div><div class="co-metric-label">2026F Rev YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">41%</div><div class="co-metric-label">2026F GM</div></div>
+      <div class="co-metric"><div class="co-metric-val up">5.80</div><div class="co-metric-label">2026F EPS</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">投資論點 &mdash; InP 磊晶龍頭，光電營收佔比加速攀升</h3>
+      <p>全新為全球 InP 磊晶龍頭，PD 磊晶全球市佔超過 50%。光電營收佔比從 2025 年 25% 快速攀升至 2027E 的 49%，產品組合優化驅動毛利率從 36% 提升至 44%。</p>
+    </div>
+  </div>
+
+  <div class="mini-table">
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>GiS 預估</th><th>FY2025A</th><th>FY2026F</th><th>FY2027F</th></tr></thead>
+        <tbody>
+          <tr><td>營收</td><td class="num">3,380M</td><td class="num pos">4,500M (+33%)</td><td class="num pos">5,800M (+29%)</td></tr>
+          <tr><td>GM / OPM</td><td class="num">36.1% / 18%</td><td class="num pos">41% / 25%</td><td class="num pos">44% / 30%</td></tr>
+          <tr><td>EPS</td><td class="num">2.97</td><td class="num pos hi">5.80</td><td class="num pos hi">8.20</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mini-t">
+      <table>
+        <thead><tr><th colspan="2">月營收 &middot; 模型假設</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Jan'26 / Feb'26</td><td class="num pos hi">340M (+30%) / 308M (+16%)</td></tr>
+          <tr><td>光電營收佔比</td><td class="num">25% &rarr; 41% &rarr; 49%</td></tr>
+          <tr><td>MOCVD / InP 需求</td><td class="num">60→64 台 / 2026 年倍增</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p><strong>GiS 目標價 NT$285</strong>（35x 2027F EPS）。保守 NT$221（27x）/ 樂觀 NT$370（45x）。券商：元大 NT$295 | GS NT$267 | CTBC NT$272。</p>
+  <p><strong>催化劑：</strong>InP epiwafer 需求倍增；WiFi 7 PA count +50%。<strong>風險：</strong>MOCVD 交期長擴產不及；下游模組廠殺價壓力。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; 全新 2455</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 環宇-KY 4991 ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head indigo">
+      <div><div class="co-name">環宇-KY</div><div class="co-ticker">4991.TW &middot; 800G PD 壟斷 &middot; CW Laser 第二曲線</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; GiS 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$400</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">NT$400</div><div class="co-metric-label">GiS 目標價</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+46%</div><div class="co-metric-label">2026F Rev YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">50%</div><div class="co-metric-label">2026F GM</div></div>
+      <div class="co-metric"><div class="co-metric-val up">6.00</div><div class="co-metric-label">2026F EPS</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">投資論點 &mdash; 800G PD 全球市佔 70%，美國唯一 III-V 純晶圓代工</h3>
+      <p>環宇-KY 為全球 800G PD 晶粒龍頭（市佔 70%），且為美國唯一 III-V 族純晶圓代工廠。正積極切入 CW Laser 晶粒製造（月產百萬顆目標），將成為第二成長曲線。</p>
+    </div>
+  </div>
+
+  <div class="mini-table">
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>GiS 預估</th><th>FY2025A</th><th>FY2026F</th><th>FY2027F</th></tr></thead>
+        <tbody>
+          <tr><td>營收</td><td class="num">2,195M</td><td class="num pos">3,200M (+46%)</td><td class="num pos">4,200M (+31%)</td></tr>
+          <tr><td>GM / OPM</td><td class="num">47.1% / 8%</td><td class="num pos">50% / 25%</td><td class="num pos">52% / 30%</td></tr>
+          <tr><td>EPS</td><td class="num">~0.07</td><td class="num pos hi">6.00</td><td class="num pos hi">11.0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mini-t">
+      <table>
+        <thead><tr><th colspan="2">月營收 &middot; 模型假設</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Jan'26</td><td class="num pos hi">221M (+156% YoY!)</td></tr>
+          <tr><td>AOC 佔營收</td><td class="num">69% &rarr; 82% &rarr; 89%</td></tr>
+          <tr><td>CW Laser / 子公司</td><td class="num pos">月產百萬顆 / 2026 年處分</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p><strong>GiS 目標價 NT$400</strong>（36x 2027F EPS）。保守 NT$286（26x）/ 樂觀 NT$528（48x）。券商：統一 NT$450 | 康和 NT$385 | 元大 NT$285。</p>
+  <p><strong>催化劑：</strong>CW Laser 驗證量產；1.6T PD Design-Win。<strong>風險：</strong>CW Laser 良率不如預期；客戶集中於中國模組廠。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; 環宇-KY 4991</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 穩懋 3105 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">穩懋</div><div class="co-ticker">3105.TW &middot; 全球最大 III-V 代工 &middot; 結構性轉型</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; GiS 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$324</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">NT$324</div><div class="co-metric-label">GiS 目標價</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+23%</div><div class="co-metric-label">2026F Rev YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">32%</div><div class="co-metric-label">2026F GM</div></div>
+      <div class="co-metric"><div class="co-metric-val up">6.20</div><div class="co-metric-label">2026F EPS</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">投資論點 &mdash; 從手機 PA 紅海轉型光通訊/衛星藍海</h3>
+      <p>穩懋為全球最大 III-V 族晶圓代工廠，正從手機 PA 紅海轉型至光通訊（GaAs Driver IC for 800G/1.6T）與衛星（V/W Band）藍海。毛利率從 2025 年 24% 跳升至 2026F 的 32%，折舊年減 10-20%，UTR 從 50% 回升至 60%+。</p>
+    </div>
+  </div>
+
+  <div class="mini-table">
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>GiS 預估</th><th>FY2025A</th><th>FY2026F</th><th>FY2027F</th></tr></thead>
+        <tbody>
+          <tr><td>營收</td><td class="num">16,638M</td><td class="num pos">20,500M (+23%)</td><td class="num pos">23,500M (+15%)</td></tr>
+          <tr><td>GM / OPM</td><td class="num">24.2% / 8%</td><td class="num pos">32% / 15%</td><td class="num pos">34% / 18%</td></tr>
+          <tr><td>EPS</td><td class="num">4.00</td><td class="num pos hi">6.20</td><td class="num pos hi">8.80</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mini-t">
+      <table>
+        <thead><tr><th colspan="2">月營收 &middot; 模型假設</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">Jan'26 / Feb'26</td><td class="num pos hi">14.67 億 (+25%) / 14.74 億 (+26%)</td></tr>
+          <tr><td>光通訊佔比 / GaAs Driver</td><td class="num">15-20%→25-30% / 1.6T 爆發</td></tr>
+          <tr><td>折舊 / UTR</td><td class="num pos">年減 10-20% / 50%→60%+</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p><strong>GiS 目標價 NT$324</strong>（37x 2027F EPS）。保守 NT$264（30x）/ 樂觀 NT$396（45x）。券商：CTBC NT$324 | 玉山 NT$320。</p>
+  <p><strong>催化劑：</strong>GaAs Driver IC 800G/1.6T 爆量；VCSEL 日廠退出搶市佔。<strong>風險：</strong>手機 PA 疲弱拖累營收；GaN on Si 競爭替代。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; 穩懋 3105</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 投資總結 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">投資總結</h1>
+
+  <h2 class="ch">四家公司綜合比較</h2>
+  <table>
+    <thead><tr><th>公司</th><th>代號</th><th>GiS 評等</th><th>目標價</th><th>2026F EPS</th><th>2027F EPS</th><th>2026F Rev YoY</th><th>2026F GM</th><th>估值倍數</th></tr></thead>
+    <tbody>
+      <tr><td class="hi"><strong>聯亞</strong></td><td>3081</td><td class="pos">Buy</td><td class="num hi">NT$1,500</td><td class="num pos">12.5</td><td class="num pos">23.0</td><td class="num pos hi">+104%</td><td class="num">48%</td><td class="num">65x '27E</td></tr>
+      <tr><td><strong>全新</strong></td><td>2455</td><td class="pos">Buy</td><td class="num">NT$285</td><td class="num pos">5.80</td><td class="num pos">8.20</td><td class="num pos">+33%</td><td class="num">41%</td><td class="num">35x '27E</td></tr>
+      <tr><td class="hi"><strong>環宇-KY</strong></td><td>4991</td><td class="pos">Buy</td><td class="num hi">NT$400</td><td class="num pos">6.00</td><td class="num pos">11.0</td><td class="num pos hi">+46%</td><td class="num">50%</td><td class="num">36x '27E</td></tr>
+      <tr><td><strong>穩懋</strong></td><td>3105</td><td class="pos">Buy</td><td class="num">NT$324</td><td class="num pos">6.20</td><td class="num pos">8.80</td><td class="num pos">+23%</td><td class="num">32%</td><td class="num">37x '27E</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">首選標的</h2>
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #1</div>
+      <div class="pick-name">聯亞</div>
+      <div class="pick-ticker">3081.TW &middot; GiS 目標 NT$1,500</div>
+      <div class="pick-why"><strong>SiPh 磊晶最高純度。</strong>營收 CAGR +84%（2025-27E），SiPh 佔營收從 70% 飆升至 92%。全球僅此一家能提供最高品質 CW Laser 磊晶片，受惠 1.6T 升級週期最為直接。</div>
+      <div class="pick-catalyst"><strong>近期催化劑：</strong>1.6T CW Laser 需求 2H26 爆發；3-4 家 CSP 新規格導入</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #2</div>
+      <div class="pick-name">環宇-KY</div>
+      <div class="pick-ticker">4991.TW &middot; GiS 目標 NT$400</div>
+      <div class="pick-why"><strong>800G PD 壟斷 + CW Laser 第二曲線。</strong>800G PD 全球市佔 70%，美國唯一 III-V 純晶圓代工廠。CW Laser 月產百萬顆目標明確，子公司處分後 EPS 將大幅跳升。</div>
+      <div class="pick-catalyst"><strong>近期催化劑：</strong>CW Laser 通過驗證量產；虧損子公司處分 2026 完成</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資總結（一）</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 風險矩陣 + 免責聲明 ══════════════ -->
+<div class="full-page page body-page">
+  <h2 class="ch">風險矩陣</h2>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行風險（Upside）</h4>
+      <div class="risk-item">1.6T 需求提前至 1H26，模組出貨超預期</div>
+      <div class="risk-item">CSP 資本支出超預期，光模組需求上修</div>
+      <div class="risk-item">CW Laser 供需缺口擴大，磊晶廠享有超額定價權</div>
+      <div class="risk-item">CPO 技術提前導入，帶動新一輪升級需求</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（Downside）</h4>
+      <div class="risk-item">AI 資本支出放緩，800G/1.6T 需求低於預期</div>
+      <div class="risk-item">IDM 大廠（Coherent、Lumentum）自製磊晶</div>
+      <div class="risk-item">中國光模組廠殺價競爭，壓縮供應鏈利潤</div>
+      <div class="risk-item">替代技術（銅纜、LPO）延緩光模組升級</div>
+    </div>
+  </div>
+
+  <blockquote><strong>免責聲明：</strong>本報告由 Genesis International Capital（GiS）研究部撰寫，僅供研究參考，不構成任何投資建議或要約。投資人應自行判斷並承擔投資風險。報告中所有預估數據均基於公開資訊與合理假設，實際結果可能與預估有重大差異。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>風險分析 &middot; 免責聲明</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  Chart.register({
+    id: 'labelPlugin',
+    afterDatasetsDraw(chart) {
+      const ctx = chart.ctx;
+      const isH = chart.options.indexAxis === 'y';
+      chart.data.datasets.forEach((ds, i) => {
+        const meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach((bar, idx) => {
+          const v = ds.data[idx];
+          if (!v && v !== 0) return;
+          ctx.save();
+          ctx.font = 'bold 11.5px PingFang TC, Arial';
+          ctx.textAlign = 'center';
+          if (isH) {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'middle';
+            ctx.fillText(v, bar.x + 6, bar.y);
+          } else {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'bottom';
+            ctx.fillText(String(v), bar.x, bar.y - 3);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+  // Chart 1: 800G / 1.6T module shipments (stacked bar)
+  new Chart(getEl('chart1'), {
+    type: 'bar',
+    data: {
+      labels: ['2024', '2025E', '2026F'],
+      datasets: [
+        { label: '800G 模組（百萬顆）', data: [4.68, 21.3, 40.2], backgroundColor: '#0891b2', borderRadius: 5, barPercentage: 0.6, categoryPercentage: 0.7 },
+        { label: '1.6T 模組（百萬顆）', data: [0, 1.98, 13.2], backgroundColor: '#0d1b3e', borderRadius: 5, barPercentage: 0.6, categoryPercentage: 0.7 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 12, font: {size: 11} } } },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, grid: { color: '#eef2f8' }, ticks: { callback: v => v + 'M' } }
+      }
+    }
+  });
+
+  // Chart 2: Revenue growth YoY for 4 companies (grouped bar)
+  new Chart(getEl('chart2'), {
+    type: 'bar',
+    data: {
+      labels: ['聯亞 3081', '全新 2455', '環宇 4991', '穩懋 3105'],
+      datasets: [
+        { label: '2025A YoY%', data: [48, 12, 22, 8], backgroundColor: '#6b7a9a', borderRadius: 5, barPercentage: 0.7, categoryPercentage: 0.75 },
+        { label: '2026F YoY%', data: [104, 33, 46, 23], backgroundColor: '#0891b2', borderRadius: 5, barPercentage: 0.7, categoryPercentage: 0.75 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 12, font: {size: 11} } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%' } }
+      }
+    }
+  });
+
+}); // end window.load
+</script>
+</body>
+</html>

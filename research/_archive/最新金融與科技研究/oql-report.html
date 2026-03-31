@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>OQL 選擇權策略助手 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.full-page{display:flex;flex-direction:column;height:297mm}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── OQL code block ── */
+.oql-block{background:#0d1b3e;color:#00c896;border-radius:8px;padding:18px 22px;margin:12px 0;font-family:'Consolas','Monaco','Courier New',monospace;font-size:15px;line-height:1.8;white-space:pre;overflow-x:auto}
+.oql-block .kw{color:#7dd3fc;font-weight:700}
+.oql-block .val{color:#fbbf24}
+.oql-block .op{color:#f472b6}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 免責 ── */
+.disclaimer{background:#fdf0ef;border:1px solid #e5c4c0;border-radius:8px;padding:14px 18px;margin:14px 0;font-size:14px;color:#7b2020;line-height:1.7}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 第 1 頁：封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Options Strategy Research · 2026</div>
+    <div class="cover-title">OQL 選擇權策略助手<br><em>結構化策略生成應用報告</em></div>
+    <div class="cover-subtitle">基於學術研究的 Option Query Language 確定性執行引擎實作</div>
+    <div class="cover-tags">
+      <span class="ctag hl">OQL</span>
+      <span class="ctag hl">Options</span>
+      <span class="ctag">Black-Scholes</span>
+      <span class="ctag">SPY</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>15</em></div><div class="cstat-label">策略生成</div></div>
+    <div class="cstat"><div class="cstat-num"><em>3</em></div><div class="cstat-label">策略類型</div></div>
+    <div class="cstat"><div class="cstat-num">$<em>655</em></div><div class="cstat-label">SPY 現價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>30</em></div><div class="cstat-label">DTE 天數</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月24日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 2 頁：執行摘要 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">15<em> 個</em></div><div class="kpi-lbl">策略生成</div></div>
+    <div class="kpi"><div class="kpi-val">3</div><div class="kpi-lbl">策略類型</div></div>
+    <div class="kpi"><div class="kpi-val">238</div><div class="kpi-lbl">合約掃描</div></div>
+    <div class="kpi gold"><div class="kpi-val">30<em> 天</em></div><div class="kpi-lbl">DTE</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">①</span>
+      <span><strong>論文發現。</strong>Luo et al. (2026) 提出 OQL 中介語言，將 LLM 的概率性限制在語意解析層，確保金融執行層完全確定性。OQL 將尾部風險從 SQL 方法的 46.1% 降至 18.6%。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">②</span>
+      <span><strong>實測驗證。</strong>我們建構了 OQL 的確定性執行引擎（符號層），對 SPY 選擇權鏈（127 Calls + 111 Puts）掃描生成 15 個可執行策略，含 Greeks、盈虧計算、風險報酬比。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">③</span>
+      <span><strong>應用定位。</strong>作為選擇權策略篩選工具，不做自動交易。使用者指定參數（標的、DTE、最大虧損），引擎自動找出符合條件的策略組合。</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 3 頁：方法論 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">壹、方法論</h1>
+
+  <h2 class="ch">OQL 查詢範例</h2>
+  <div class="oql-block"><span class="kw">SELECT</span> <span class="val">IRON_CONDOR</span> <span class="kw">FROM</span> <span class="val">SPY</span>
+<span class="kw">WHERE</span> Dte <span class="op">~</span> <span class="val">30</span>
+  <span class="kw">AND</span> SC.Delta <span class="op">&lt;</span> <span class="val">0.20</span>
+<span class="kw">HAVING</span> net_theta <span class="op">&gt;</span> <span class="val">0</span> <span class="kw">AND</span> max_loss <span class="op">&lt;</span> <span class="val">500</span>
+<span class="kw">LIMIT</span> <span class="val">5</span></div>
+
+  <h2 class="ch">支援的策略類型</h2>
+  <table>
+    <thead><tr><th>策略</th><th>腿數</th><th>方向</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>Bull Call Spread</td><td class="num">2</td><td>看多</td><td>低K買Call + 高K賣Call</td></tr>
+      <tr><td>Iron Condor</td><td class="num">4</td><td>中性</td><td>四腿賣方策略，賺時間價值</td></tr>
+      <tr><td>Straddle</td><td class="num">2</td><td>波動</td><td>ATM 買Call+Put，賭大波動</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">Greeks 計算</h2>
+  <p>Black-Scholes 模型自行實作。IV 從 yfinance 取得，Delta / Gamma / Theta / Vega 由 BS 公式推導。無外部定價函式庫依賴，確保計算過程完全透明可審計。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹、方法論</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 4 頁：實測結果 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">貳、實測結果 — SPY 選擇權掃描</h1>
+  <p><strong>SPY $655.38</strong> &nbsp;|&nbsp; DTE 30 天 &nbsp;|&nbsp; 2026-03-24 &nbsp;|&nbsp; 127 Calls + 111 Puts</p>
+
+  <h2 class="ch">Iron Condor（最佳 5 組）</h2>
+  <table>
+    <thead><tr><th>LP / SP / SC / LC</th><th>Credit</th><th>Max Profit</th><th>Max Loss</th><th>R:R</th><th>Theta</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>500 / 505 / 677.5 / 680</td><td class="num">$1.02</td><td class="num pos">$102.5</td><td class="num neg">$397.5</td><td class="num">0.26</td><td class="num">-0.0201</td></tr>
+      <tr><td>505 / 510 / 677.5 / 680</td><td class="num">$1.03</td><td class="num pos">$103.5</td><td class="num neg">$396.5</td><td class="num">0.26</td><td class="num">-0.0206</td></tr>
+      <tr><td>510 / 515 / 677.5 / 680</td><td class="num">$1.05</td><td class="num pos">$105.0</td><td class="num neg">$395.0</td><td class="num">0.27</td><td class="num">-0.0211</td></tr>
+      <tr><td>500 / 505 / 680 / 682.5</td><td class="num">$0.98</td><td class="num pos">$98.0</td><td class="num neg">$402.0</td><td class="num">0.24</td><td class="num">-0.0195</td></tr>
+      <tr><td>515 / 520 / 677.5 / 680</td><td class="num">$1.07</td><td class="num pos">$107.0</td><td class="num neg">$393.0</td><td class="num">0.27</td><td class="num">-0.0218</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">Straddle（ATM 最佳 3 組）</h2>
+  <table>
+    <thead><tr><th>Strike</th><th>Cost</th><th>Breakeven</th><th>BE%</th><th>Delta</th><th>Vega</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>655</td><td class="num">$34.34</td><td>620.65 ~ 689.35</td><td class="num">5.2%</td><td class="num">0.084</td><td class="num">1.49</td></tr>
+      <tr><td>656</td><td class="num">$34.07</td><td>621.92 ~ 690.08</td><td class="num">5.2%</td><td class="num">0.065</td><td class="num">1.49</td></tr>
+      <tr><td>654</td><td class="num">$34.61</td><td>619.39 ~ 688.61</td><td class="num">5.3%</td><td class="num">0.103</td><td class="num">1.49</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">Bull Call Spread（代表性 2 組）</h2>
+  <table>
+    <thead><tr><th>Long / Short</th><th>Debit</th><th>Max Profit</th><th>R:R</th><th>備註</th></tr></thead>
+    <tbody>
+      <tr><td>790 / 865</td><td class="num">$0.00</td><td class="num pos">$7,499</td><td class="num">14,999</td><td>深 OTM，理論值</td></tr>
+      <tr><td>760 / 865</td><td class="num">$0.02</td><td class="num pos">$10,498</td><td class="num">5,249</td><td>次佳組合</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳、實測結果</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 5 頁：來源與定位 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參、研究來源與應用定位</h1>
+
+  <h2 class="ch">論文來源</h2>
+  <table>
+    <thead><tr><th>論文</th><th>核心貢獻</th><th>關鍵數據</th><th>我們的實作</th></tr></thead>
+    <tbody>
+      <tr><td>Luo et al. (arXiv: 2603.16434)</td><td>OQL 中介語言</td><td>尾部風險降 60%</td><td>建構確定性執行引擎</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">資料來源</h2>
+  <table>
+    <thead><tr><th>項目</th><th>來源</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>SPY 選擇權鏈</td><td>Yahoo Finance</td><td>即時報價，127 Calls + 111 Puts</td></tr>
+      <tr><td>隱含波動率 (IV)</td><td>yfinance</td><td>Python 套件直接取得</td></tr>
+      <tr><td>Greeks 計算</td><td>Black-Scholes 自算</td><td>無外部定價庫依賴</td></tr>
+      <tr><td>費用</td><td>全免費</td><td>無付費 API</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">應用定位</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <span><strong>確定性引擎。</strong>不依賴 LLM，參數化篩選確保結果可重現、無幻覺。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <span><strong>與其他工具互補。</strong>晴雨表判斷環境 &rarr; 體溫正常時用 Bull Spread 做多；異常時用 Iron Condor 收租或 Straddle 賭波動。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <span><strong>專案位置：</strong>d:\claude\src\oql-options\，獨立專案，可直接部署。</span>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>免責聲明：</strong>方法源自 Luo et al. (2026, arXiv:2603.16434)。選擇權交易具高風險，本報告所有策略僅為篩選結果展示，不構成任何投資建議。實際交易前請諮詢專業顧問並自行評估風險。
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參、研究來源與應用定位</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+</body>
+</html>

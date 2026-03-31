@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Diffusion Model 合成市場資料 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 免責頁 ── */
+.disclaimer-box{background:#f7f9fd;border:1.5px solid #d0ddf0;border-radius:10px;padding:28px 32px;margin:20px 0}
+.disclaimer-box h3{font-size:18px;font-weight:700;color:#0d1b3e;margin-bottom:14px}
+.disclaimer-box p{font-size:14px;color:#4a5568;line-height:1.8;margin:6px 0}
+
+/* ── 流程圖 ── */
+.flow-row{display:flex;align-items:center;justify-content:center;gap:0;margin:18px 0}
+.flow-step{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 20px;text-align:center;min-width:120px}
+.flow-step.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.flow-step .fs-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.flow-step .fs-desc{font-size:12px;opacity:.7}
+.flow-arrow{font-size:22px;color:#00c896;padding:0 6px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ P.1 封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Cross-Domain: Computer Vision → Finance</div>
+    <div class="cover-title">Diffusion Model 合成市場資料<br><em>生成式 AI 金融資料應用報告</em></div>
+    <div class="cover-subtitle">Synthetic Market Data Generation via Denoising Diffusion Probabilistic Models</div>
+    <div class="cover-tags">
+      <span class="ctag hl">DDPM</span>
+      <span class="ctag hl">Synthetic Data</span>
+      <span class="ctag">Time Series</span>
+      <span class="ctag">Risk Management</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>1,000</em></div><div class="cstat-label">合成序列數</div></div>
+    <div class="cstat"><div class="cstat-num"><em>0.0001</em></div><div class="cstat-label">Mean Diff</div></div>
+    <div class="cstat"><div class="cstat-num"><em>13.4</em>s</div><div class="cstat-label">生成耗時</div></div>
+    <div class="cstat"><div class="cstat-num"><em>DDPM</em></div><div class="cstat-label">模型架構</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月26日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ P.2 方法論與實驗結果 ══════════════ -->
+<div class="page pb full-page" style="min-height:297mm">
+  <div class="body-page" style="flex:1">
+
+    <h1 class="ch">研究摘要</h1>
+    <p>本報告探討 <strong>Denoising Diffusion Probabilistic Model（DDPM）</strong>在金融時間序列合成中的應用。擴散模型源自電腦視覺領域，透過正向加噪與反向去噪過程學習資料分布，已在影像生成領域取得突破性進展。本研究將此技術遷移至金融場景，生成具有真實統計特性的合成市場報酬序列。</p>
+
+    <blockquote>核心假設：DDPM 能夠捕捉金融報酬序列的高階統計特性（偏態、峰態、自相關），產出可用於風險模擬與策略回測的合成資料。</blockquote>
+
+    <h2 class="ch">DDPM 生成流程</h2>
+    <div class="flow-row">
+      <div class="flow-step"><div class="fs-title">真實報酬</div><div class="fs-desc">Historical Returns</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step green"><div class="fs-title">正向加噪</div><div class="fs-desc">T=1000 steps</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="fs-title">U-Net 去噪</div><div class="fs-desc">學習 ε_θ</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step green"><div class="fs-title">合成序列</div><div class="fs-desc">1,000 samples</div></div>
+    </div>
+
+    <h2 class="ch">實驗參數</h2>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">1,000</div><div class="kpi-lbl">Diffusion Steps</div></div>
+      <div class="kpi green"><div class="kpi-val">1,000</div><div class="kpi-lbl">合成序列數</div></div>
+      <div class="kpi"><div class="kpi-val">13.4<em>s</em></div><div class="kpi-lbl">生成耗時</div></div>
+      <div class="kpi gold"><div class="kpi-val">0.0001</div><div class="kpi-lbl">Mean Diff</div></div>
+    </div>
+
+    <h2 class="ch">真實 vs. 合成 — 統計量比較</h2>
+    <table>
+      <thead>
+        <tr><th>統計量</th><th>真實資料</th><th>合成資料</th><th>差異</th><th>判定</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Mean</td><td class="num">0.0005</td><td class="num">0.0004</td><td class="num">0.0001</td><td style="color:#00875a;font-weight:600">Pass</td></tr>
+        <tr><td>Std</td><td class="num">0.0101</td><td class="num">0.0095</td><td class="num">0.0006</td><td style="color:#00875a;font-weight:600">Pass</td></tr>
+        <tr><td>Skewness</td><td class="num">-0.196</td><td class="num">-0.165</td><td class="num">0.031</td><td style="color:#00875a;font-weight:600">Pass</td></tr>
+        <tr><td>Kurtosis</td><td class="num">0.016</td><td class="num">-0.119</td><td class="num">0.135</td><td style="color:#d97706;font-weight:600">Acceptable</td></tr>
+        <tr><td>Autocorrelation (lag-1)</td><td class="num">-0.060</td><td class="num">-0.057</td><td class="num">0.003</td><td style="color:#00875a;font-weight:600">Pass</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="ch">分析摘要</h3>
+    <div class="exec-sum">
+      <div class="exec-thesis"><div class="thesis-num">1</div><div>均值與標準差高度吻合，mean diff 僅 0.0001，合成報酬分布的中心位置與離散程度精準複製原始資料。</div></div>
+      <div class="exec-thesis"><div class="thesis-num">2</div><div>偏態保留負偏特性（-0.196 → -0.165），模型正確捕捉金融報酬的左尾風險結構。</div></div>
+      <div class="exec-thesis"><div class="thesis-num">3</div><div>峰態差異 0.135 為最大偏移項，合成資料略趨常態分布，尾部極端事件頻率稍低於真實市場。</div></div>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>Diffusion Model 合成市場資料報告</span>
+    <span>2 / 3</span>
+  </div>
+</div>
+
+<!-- ══════════════ P.3 應用場景、風險與免責 ══════════════ -->
+<div class="page full-page" style="min-height:297mm">
+  <div class="body-page" style="flex:1">
+
+    <h1 class="ch">應用場景與限制</h1>
+
+    <h2 class="ch">潛在應用</h2>
+    <div class="risk-matrix">
+      <div class="risk-card up">
+        <h4>風險模擬增強</h4>
+        <div class="risk-item">以合成序列擴充歷史情境，提升 VaR / CVaR 尾部估計穩定性</div>
+        <div class="risk-item">產生 1,000+ 條路徑進行壓力測試，突破歷史資料長度限制</div>
+      </div>
+      <div class="risk-card up">
+        <h4>策略回測強化</h4>
+        <div class="risk-item">在合成市場環境中驗證交易策略，降低過擬合風險</div>
+        <div class="risk-item">生成不同波動率 regime 的合成資料，測試策略穩健性</div>
+      </div>
+    </div>
+
+    <h2 class="ch">已知限制與風險</h2>
+    <div class="risk-matrix">
+      <div class="risk-card dn">
+        <h4>模型層面</h4>
+        <div class="risk-item">峰態偏移（0.135）顯示極端尾部事件生成能力不足</div>
+        <div class="risk-item">單變量模型無法捕捉跨資產相關結構</div>
+        <div class="risk-item">訓練資料的 regime 偏誤將直接傳遞至合成序列</div>
+      </div>
+      <div class="risk-card dn">
+        <h4>實務層面</h4>
+        <div class="risk-item">合成資料不可取代真實市場資料進行合規報告</div>
+        <div class="risk-item">生成耗時 13.4s，即時交易場景需進一步加速</div>
+        <div class="risk-item">需定期以新市場資料重新訓練以避免分布漂移</div>
+      </div>
+    </div>
+
+    <h2 class="ch">參考文獻</h2>
+    <p>Takahashi, S. &amp; Mizuno, T. (2024). <em>Generating Realistic Financial Time Series with Diffusion Models.</em> arXiv:2410.18897.</p>
+    <span class="src">https://arxiv.org/abs/2410.18897</span>
+
+    <hr>
+
+    <div class="disclaimer-box">
+      <h3>免責聲明 Disclaimer</h3>
+      <p>本報告由 Genesis International Capital（GiS）研究部門編製，僅供內部研究與教育用途，不構成任何形式的投資建議、買賣推薦或交易策略保證。</p>
+      <p>報告中所引用之模型結果、統計數據與合成資料均來自實驗環境，其表現不代表未來市場實際結果。合成資料的使用者應自行評估其適用性與風險。</p>
+      <p>任何依據本報告內容所做之投資決策，概由決策者自行承擔全部風險與責任。GiS 及其關聯方對因使用本報告而產生的任何直接或間接損失不承擔任何法律責任。</p>
+      <p style="margin-top:12px;font-weight:600;color:#0d1b3e">&copy; 2026 Genesis International Capital. All rights reserved.</p>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>Diffusion Model 合成市場資料報告</span>
+    <span>3 / 3</span>
+  </div>
+</div>
+
+</body>
+</html>

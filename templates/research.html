@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+{% block title %}產業研究{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">產業研究報告</h4>
+
+    {% if not categories %}
+    <div style="color:var(--text-muted);padding:40px;text-align:center;">
+        尚無報告。將 HTML 報告放入 <code>research/分類名/</code> 資料夾即可。
+    </div>
+    {% else %}
+    <!-- 分類篩選 -->
+    <div class="research-filter">
+        <button class="research-filter-btn active" data-cat="all">全部 ({{ total_count }})</button>
+        {% for cat, reports in categories.items() %}
+        <button class="research-filter-btn" data-cat="{{ cat }}">{{ cat }} ({{ reports|length }})</button>
+        {% endfor %}
+    </div>
+
+    {% for cat, reports in categories.items() %}
+    {% set dates_seen = [] %}
+    <div class="research-category" data-category="{{ cat }}">
+        <h5 class="research-cat-title">{{ cat }} <span style="font-size:13px;color:var(--text-muted);">({{ reports|length }})</span></h5>
+        <div class="research-list">
+            {% for r in reports %}
+            {% if r.date not in dates_seen %}
+            {% if dates_seen.append(r.date) %}{% endif %}
+            <div class="research-date-divider">{{ r.date }}</div>
+            {% endif %}
+            <div class="research-row" onclick="openReport('{% if r.category %}{{ r.category }}/{% endif %}{{ r.filename }}', '{{ r.title }}')">
+                <div class="research-row-left">
+                    <div class="research-row-title">{{ r.title }}</div>
+                    {% if r.summary %}
+                    <div class="research-row-summary">{{ r.summary }}</div>
+                    {% endif %}
+                    <div class="research-row-meta">
+                        <span class="research-tag">{{ r.category }}</span>
+                    </div>
+                </div>
+                <div class="research-row-arrow">›</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+
+<!-- 彈出式報告視窗 -->
+<div id="research-overlay" class="research-overlay" onclick="closeReport()"></div>
+<div id="research-modal" class="research-modal">
+    <div class="research-modal-header">
+        <span id="research-modal-title"></span>
+        <button onclick="closeReport()" style="background:none;border:none;color:var(--text-secondary);font-size:24px;cursor:pointer;">&times;</button>
+    </div>
+    <iframe id="research-iframe" class="research-iframe"></iframe>
+</div>
+
+<style>
+.research-category { margin-bottom: 32px; }
+.research-cat-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f59e0b;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+}
+.research-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.research-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.research-row:hover {
+    border-color: var(--link-color);
+    background: var(--hover-bg);
+}
+.research-row-left { flex: 1; min-width: 0; }
+.research-row-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.research-row-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.research-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(99,102,241,0.15);
+    color: var(--link-color);
+    font-weight: 600;
+}
+.research-row-date {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+.research-row-summary {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.research-date-divider {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f59e0b;
+    padding: 10px 18px 4px;
+    background: var(--bg-primary);
+    border-left: 3px solid #f59e0b;
+    margin-top: 8px;
+}
+.research-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+.research-filter-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s;
+}
+.research-filter-btn:hover {
+    border-color: var(--link-color);
+}
+.research-filter-btn.active {
+    background: var(--link-color);
+    color: #fff;
+    border-color: var(--link-color);
+}
+.research-row-arrow {
+    font-size: 24px;
+    color: var(--text-muted);
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+
+/* 彈出視窗 */
+.research-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+}
+.research-modal {
+    display: none;
+    position: fixed;
+    top: 3%;
+    left: 3%;
+    right: 3%;
+    bottom: 3%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    z-index: 2001;
+    flex-direction: column;
+    overflow: hidden;
+}
+.research-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-heading);
+}
+.research-iframe {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #fff;
+}
+.research-modal.active,
+.research-overlay.active {
+    display: flex;
+}
+.research-iframe {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+@media (max-width: 768px) {
+    .research-row { padding: 12px 14px; }
+    .research-row-title { font-size: 14px; }
+    .research-modal { top: 0; left: 0; right: 0; bottom: 0; border-radius: 0; }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function openReport(filepath, title) {
+    document.getElementById('research-modal-title').textContent = title;
+    // 用 / 分割路徑，分別 encode 每段
+    var parts = filepath.split('/');
+    var encoded = parts.map(function(p) { return encodeURIComponent(p); }).join('/');
+    document.getElementById('research-iframe').src = '/api/research/' + encoded;
+    document.getElementById('research-overlay').classList.add('active');
+    document.getElementById('research-modal').classList.add('active');
+}
+
+function closeReport() {
+    document.getElementById('research-overlay').classList.remove('active');
+    document.getElementById('research-modal').classList.remove('active');
+    document.getElementById('research-iframe').src = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeReport();
+});
+
+document.addEventListener('contextmenu', function(e) {
+    if (document.getElementById('research-modal').classList.contains('active')) {
+        e.preventDefault();
+    }
+});
+
+// 分類篩選
+document.querySelectorAll('.research-filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.research-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var cat = btn.getAttribute('data-cat');
+        document.querySelectorAll('.research-category').forEach(function(el) {
+            if (cat === 'all') {
+                el.style.display = '';
+            } else {
+                el.style.display = el.getAttribute('data-category') === cat ? '' : 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

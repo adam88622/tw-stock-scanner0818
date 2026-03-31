@@ -193,6 +193,89 @@ def index():
     return redirect_to_breakout()
 
 
+# ===== 產業研究 =====
+RESEARCH_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'research')
+
+@app.route('/research')
+def research_list():
+    """列出所有研究報告，按分類資料夾分組"""
+    import re as _re
+    def _extract_title(fpath):
+        """從 HTML <title> 抓取報告標題"""
+        try:
+            with open(fpath, 'r', encoding='utf-8', errors='ignore') as fh:
+                head = fh.read(3000)
+            m = _re.search(r'<title[^>]*>([^<]+)</title>', head)
+            if m:
+                t = m.group(1).strip()
+                t = _re.sub(r'\s*\|\s*GiS.*$', '', t)
+                if t:
+                    return t
+        except Exception:
+            pass
+        return None
+
+    def _extract_summary(fpath, max_len=80):
+        """從 HTML 抓第一段有意義的文字當摘要"""
+        try:
+            with open(fpath, 'r', encoding='utf-8', errors='ignore') as fh:
+                content = fh.read(10000)
+            # 找 <p> 或 <div> 裡第一段有意義的文字
+            for tag in ['p', 'h2', 'h3', 'li']:
+                matches = _re.findall(rf'<{tag}[^>]*>([^<]+)</{tag}>', content)
+                for m in matches:
+                    text = m.strip()
+                    # 跳過太短、純英文標題、或 boilerplate
+                    if len(text) > 15 and text not in ('GiS', 'Report', 'Table of Contents'):
+                        if len(text) > max_len:
+                            text = text[:max_len] + '...'
+                        return text
+        except Exception:
+            pass
+        return ''
+
+    categories = {}
+    if os.path.isdir(RESEARCH_DIR):
+        for item in sorted(os.listdir(RESEARCH_DIR)):
+            item_path = os.path.join(RESEARCH_DIR, item)
+            if os.path.isdir(item_path) and not item.startswith('_'):
+                reports = []
+                for f in sorted(os.listdir(item_path)):
+                    if f.endswith('.html'):
+                        fpath = os.path.join(item_path, f)
+                        mtime = os.path.getmtime(fpath)
+                        date_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d')
+                        title = _extract_title(fpath) or f.replace('.html', '').replace('-', ' ').replace('_', ' ')
+                        summary = _extract_summary(fpath)
+                        reports.append({'filename': f, 'title': title, 'category': item, 'date': date_str, 'summary': summary})
+                if reports:
+                    # 按日期排序，最新的在前
+                    reports.sort(key=lambda x: x['date'], reverse=True)
+                    categories[item] = reports
+            elif item.endswith('.html'):
+                fpath = os.path.join(RESEARCH_DIR, item)
+                mtime = os.path.getmtime(fpath)
+                date_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d')
+                title = _extract_title(fpath) or item.replace('.html', '').replace('-', ' ').replace('_', ' ')
+                summary = _extract_summary(fpath)
+                categories.setdefault('其他', []).append({'filename': item, 'title': title, 'category': '', 'date': date_str, 'summary': summary})
+    total_count = sum(len(v) for v in categories.values())
+    return render_template('research.html', categories=categories, total_count=total_count)
+
+@app.route('/api/research/<path:filepath>')
+def api_research(filepath):
+    """動態載入研究報告內容"""
+    import re
+    # 安全檢查：只允許英數中文、底線、連字號、點、斜線
+    if re.search(r'\.\.', filepath) or not re.match(r'^[\w\-\./\u4e00-\u9fff]+\.html$', filepath):
+        return 'Invalid', 400
+    full_path = os.path.join(RESEARCH_DIR, filepath)
+    if not os.path.isfile(full_path):
+        return 'Not found', 404
+    with open(full_path, 'r', encoding='utf-8') as f:
+        return f.read()
+
+
 @app.route('/breakout')
 def breakout():
     conn = get_conn()
@@ -1497,6 +1580,61 @@ def api_watchlist_remove():
         conn.close()
 
 
+@app.route('/api/stock-realtime')
+def api_stock_realtime():
+    """盤中即時報價（單一個股），用 mis.twse.com.tw"""
+    stock_id = request.args.get('id', '').strip()
+    if not stock_id:
+        return jsonify({'error': 'missing id'}), 400
+
+    conn = get_conn()
+    try:
+        stock = conn.execute("SELECT stock_id, name, market FROM stocks WHERE stock_id=?", (stock_id,)).fetchone()
+        if not stock:
+            return jsonify({'error': 'not found'}), 404
+    finally:
+        conn.close()
+
+    from scrapers.realtime import MIS_URL, _parse_float, _parse_int
+    prefix = 'tse' if stock['market'] == 'twse' else 'otc'
+    query = f'{prefix}_{stock_id}.tw'
+
+    try:
+        resp = http_requests.get(MIS_URL, params={'ex_ch': query},
+                                 headers={'User-Agent': 'Mozilla/5.0'}, timeout=10)
+        data = resp.json()
+        items = data.get('msgArray', [])
+        if not items:
+            return jsonify({'error': 'no data'}), 404
+
+        item = items[0]
+        z = _parse_float(item.get('z'))       # 最新成交價
+        y = _parse_float(item.get('y'))       # 昨收
+        o = _parse_float(item.get('o'))       # 開盤
+        h = _parse_float(item.get('h'))       # 最高
+        l = _parse_float(item.get('l'))       # 最低
+        v = _parse_int(item.get('v'))         # 成交量(張)
+        t = item.get('t', '')                 # 時間
+
+        pct = round((z - y) / y * 100, 2) if z and y and y > 0 else 0
+        change = round(z - y, 2) if z and y else 0
+
+        return jsonify({
+            'stock_id': stock_id,
+            'price': z,
+            'change': change,
+            'change_pct': pct,
+            'open': o,
+            'high': h,
+            'low': l,
+            'volume': v,
+            'time': t,
+            'yesterday': y,
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/api/stock-preview')
 def api_stock_preview():
     stock_id = request.args.get('id', '').strip()
@@ -2122,6 +2260,244 @@ def backtest():
             end_date=end_date)
     finally:
         conn.close()
+
+
+@app.route('/weekly')
+def weekly():
+    """研究週報頁面 — 自動彙整量化研究與科技研究週報。"""
+    import glob, re
+
+    base_src = os.path.join(os.path.dirname(__file__), '..', 'src')
+    if not os.path.isdir(base_src):
+        base_src = r'D:\claude\src'
+
+    fin_lab = os.path.join(base_src, 'fin-lab')
+    tech_research = os.path.join(base_src, 'tech-research')
+
+    # ── 1. 量化研究週報（fin-lab/output/weekly-briefing-*.html）
+    fin_briefings = []
+    output_dir = os.path.join(fin_lab, 'output')
+    if os.path.isdir(output_dir):
+        for f in sorted(glob.glob(os.path.join(output_dir, 'weekly-briefing-*.html')), reverse=True):
+            fname = os.path.basename(f)
+            m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
+            date_str = m.group(1) if m else ''
+            fin_briefings.append({
+                'filename': fname,
+                'date': date_str,
+                'type': 'fin',
+                'title': f'量化研究週報 {date_str}',
+            })
+
+    # ── 1b. 金融科技分類報告（fin-lab/output/category-reports/*.html）
+    cat_reports_dir = os.path.join(fin_lab, 'output', 'category-reports')
+    cat_reports = {}  # {category: [reports]}
+
+    # 檔名→分類 映射
+    _CAT_MAP = {
+        # 風險管理
+        'regime-detector': '風險管理', 'garch-report': '風險管理', 'te-report': '風險管理',
+        'entropy-report': '風險管理', 'km-report': '風險管理', 'risk-management_report': '風險管理',
+        # 因子研究
+        'blind-signal': '因子與策略', 'disagreement': '因子與策略', 'jf-ml-returns': '因子與策略',
+        'raps-alpha-global': '因子與策略', 'nber-ai-pricing': '因子與策略',
+        'nber-ml-markowitz': '因子與策略', 'report-factor': '因子與策略',
+        'stat-arb_report': '因子與策略', 'fin-lab-reallife': '因子與策略',
+        'finance-lab-briefing': '因子與策略',
+        # 選擇權與波動率
+        'oql-report': '選擇權與波動率', 'spx-vix': '選擇權與波動率', 'pinn-report': '選擇權與波動率',
+        'options-volatility_report': '選擇權與波動率', 'tda-report': '選擇權與波動率',
+        'quantum-report': '選擇權與波動率', 'diffusion-report': '選擇權與波動率',
+        'report-regime-rl': '選擇權與波動率',
+        # 情緒與 NLP
+        'llm-screener': '情緒與 NLP', 'wti-report': '情緒與 NLP',
+        'sentiment-nlp_report': '情緒與 NLP',
+        # 總經與資產配置
+        'rate-cycle': '總經與資產配置', 'mideast-war': '總經與資產配置',
+        'FI-01': '總經與資產配置', 'FX-01': '總經與資產配置',
+        'cross-market': '總經與資產配置', 'portfolio-optimization_report': '總經與資產配置',
+        # 特殊主題
+        'CQ-01': '特殊主題', 'ED-01': '特殊主題', 'ES-01': '特殊主題',
+        'HF-01': '特殊主題', 'XA-01': '特殊主題', 'alternative-data_report': '特殊主題',
+        'checkpoint': '特殊主題',
+    }
+
+    if os.path.isdir(cat_reports_dir):
+        for f in sorted(glob.glob(os.path.join(cat_reports_dir, '*.html'))):
+            fname = os.path.basename(f)
+            title = fname.replace('.html', '').replace('-', ' ').replace('_', ' ')
+            try:
+                with open(f, 'r', encoding='utf-8', errors='ignore') as fh:
+                    head = fh.read(3000)
+                import re as _re
+                m = _re.search(r'<title[^>]*>([^<]+)</title>', head)
+                if m:
+                    t = m.group(1).strip()
+                    t = _re.sub(r'\s*\|\s*GiS.*$', '', t)
+                    if t:
+                        title = t
+            except Exception:
+                pass
+            mtime = os.path.getmtime(f)
+            date_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d')
+
+            # 分類
+            cat = '其他'
+            for prefix, c in _CAT_MAP.items():
+                if fname.startswith(prefix) or prefix in fname:
+                    cat = c
+                    break
+
+            cat_reports.setdefault(cat, []).append({
+                'filename': fname,
+                'date': date_str,
+                'title': title,
+            })
+
+    # ── 2. 科技研究報告（tech-research/research-*/research-*.html）
+    tech_reports = []
+    if os.path.isdir(tech_research):
+        for batch_dir in sorted(glob.glob(os.path.join(tech_research, 'research-*')), reverse=True):
+            batch_name = os.path.basename(batch_dir)
+            m = re.search(r'(\d{4}-\d{2}-\d{2})', batch_name)
+            date_str = m.group(1) if m else ''
+            for html_file in glob.glob(os.path.join(batch_dir, '*.html')):
+                fname = os.path.basename(html_file)
+                tech_reports.append({
+                    'filename': f'{batch_name}/{fname}',
+                    'date': date_str,
+                    'type': 'tech',
+                    'title': f'科技研究精選 {date_str}',
+                })
+
+    # ── 3. fin-lab 專案總覽
+    projects = []
+    categories = {}
+    if os.path.isdir(fin_lab):
+        for cat_dir in sorted(glob.glob(os.path.join(fin_lab, '*'))):
+            cat_name = os.path.basename(cat_dir)
+            if cat_name.startswith(('_', '.')) or cat_name in ('scripts', 'factor_data', 'qlib_data', '_meta', 'output'):
+                continue
+            if not os.path.isdir(cat_dir):
+                continue
+            for proj_dir in sorted(glob.glob(os.path.join(cat_dir, '[A-Z]*'))):
+                proj_name = os.path.basename(proj_dir)
+                has_py = len(glob.glob(os.path.join(proj_dir, '**', '*.py'), recursive=True)) > 0
+                has_pdf = len(glob.glob(os.path.join(proj_dir, '**', '*.pdf'), recursive=True)) > 0
+                has_json = len(glob.glob(os.path.join(proj_dir, '**', '*.json'), recursive=True)) > 0
+                has_csv = len(glob.glob(os.path.join(proj_dir, '**', '*.csv'), recursive=True)) > 0
+                code = proj_name.split('-')[0] if '-' in proj_name else proj_name[:5]
+                display_name = '-'.join(proj_name.split('-')[1:]) if '-' in proj_name else proj_name
+                proj = {
+                    'code': code,
+                    'name': display_name,
+                    'category': cat_name,
+                    'has_code': has_py,
+                    'has_report': has_pdf,
+                    'has_data': has_json or has_csv,
+                }
+                projects.append(proj)
+                categories.setdefault(cat_name, []).append(proj)
+
+    stats = {
+        'total': len(projects),
+        'with_code': sum(1 for p in projects if p['has_code']),
+        'with_report': sum(1 for p in projects if p['has_report']),
+        'categories': len(categories),
+    }
+
+    return render_template('weekly.html',
+        fin_briefings=fin_briefings,
+        cat_reports=cat_reports,
+        tech_reports=tech_reports,
+        projects=projects,
+        categories=categories,
+        stats=stats)
+
+
+@app.route('/api/weekly/<path:filepath>')
+def api_weekly_report(filepath):
+    """動態載入週報 HTML 內容。"""
+    import re
+    base_src = os.path.join(os.path.dirname(__file__), '..', 'src')
+    if not os.path.isdir(base_src):
+        base_src = r'D:\claude\src'
+
+    # 安全檢查
+    if '..' in filepath:
+        return 'Invalid', 400
+
+    # fin-lab 週報
+    if filepath.startswith('fin/'):
+        fname = filepath[4:]
+        if not re.match(r'^weekly-briefing-\d{4}-\d{2}-\d{2}\.html$', fname):
+            return 'Invalid', 400
+        full_path = os.path.join(base_src, 'fin-lab', 'output', fname)
+    # 金融科技分類報告
+    elif filepath.startswith('cat/'):
+        fname = filepath[4:]
+        if not re.match(r'^[\w\-\.]+\.html$', fname):
+            return 'Invalid', 400
+        full_path = os.path.join(base_src, 'fin-lab', 'output', 'category-reports', fname)
+    # 科技研究報告
+    elif filepath.startswith('tech/'):
+        relpath = filepath[5:]
+        if not re.match(r'^research-\d{4}-\d{2}-\d{2}/[\w\-\.]+\.html$', relpath):
+            return 'Invalid', 400
+        full_path = os.path.join(base_src, 'tech-research', relpath)
+    else:
+        return 'Invalid', 400
+
+    if not os.path.isfile(full_path):
+        return 'Not found', 404
+    with open(full_path, 'r', encoding='utf-8') as f:
+        return f.read()
+
+
+# ===== 盤中即時報價背景更新 =====
+_realtime_thread_started = False
+
+def _realtime_background_loop():
+    """背景每 5 分鐘抓全部股票即時報價（僅盤中 9:00~13:35）"""
+    import time as _t
+    from scrapers.realtime import fetch_realtime_prices, is_trading_hours
+    from scanners.breakout import scan_breakouts
+
+    logger.info("[即時報價] 背景執行緒啟動")
+    while True:
+        try:
+            if is_trading_hours():
+                conn = get_conn()
+                try:
+                    count = fetch_realtime_prices(conn)
+                    if count > 0:
+                        today = datetime.now().strftime('%Y-%m-%d')
+                        scan_breakouts(conn, today)
+                        conn.commit()
+                        logger.info(f"[即時報價] 更新 {count} 筆，已重算突破")
+                except Exception as e:
+                    logger.error(f"[即時報價] 錯誤: {e}")
+                finally:
+                    conn.close()
+        except Exception as e:
+            logger.error(f"[即時報價] 外層錯誤: {e}")
+
+        _t.sleep(300)  # 5 分鐘
+
+
+def start_realtime_thread():
+    global _realtime_thread_started
+    if _realtime_thread_started:
+        return
+    _realtime_thread_started = True
+    t = threading.Thread(target=_realtime_background_loop, daemon=True)
+    t.start()
+    logger.info("[即時報價] 背景執行緒已啟動（每 5 分鐘更新）")
+
+
+# Flask 啟動時自動開始（避免 debug reloader 重複啟動）
+if os.environ.get('WERKZEUG_RUN_MAIN') == 'true' or not app.debug:
+    start_realtime_thread()
 
 
 if __name__ == '__main__':

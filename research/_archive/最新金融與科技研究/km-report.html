@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Kramers-Moyal 非線性動態 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.full-page{display:flex;flex-direction:column;width:100%;height:297mm;overflow:hidden}
+
+/* ── Canvas ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.red{background:linear-gradient(135deg,#7b2020,#c0392b)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:14px;margin:10px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:16px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:14px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 免責聲明 ── */
+.disclaimer{background:#f8f9fb;border:1px solid #dce8f8;border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13px;color:#6b7a9a;line-height:1.7}
+.disclaimer strong{color:#1a3a6e;font-size:14px}
+
+/* ── 方程式 ── */
+.eq-box{background:#f0f4fa;border:1px solid #c8d8f0;border-radius:8px;padding:16px 20px;margin:10px 0;font-size:16px;text-align:center;font-family:'Times New Roman',serif;line-height:2}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ P1: 封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+    <text x="460" y="600" fill="white" font-size="14" opacity=".15" font-family="serif">&#x2202;P/&#x2202;t = &#x03A3; (-&#x2202;/&#x2202;x)&#x207F; D&#x207D;&#x207F;&#x207E;(x)P</text>
+    <text x="80" y="700" fill="white" font-size="11" opacity=".1" font-family="serif">Fokker-Planck &#xB7; Kramers-Moyal &#xB7; Diffusion</text>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Cross-Domain: Statistical Physics &#x2192; Finance</div>
+    <div class="cover-title">Kramers-Moyal 非線性動態<br><em>統計物理市場分析應用報告</em></div>
+    <div class="cover-subtitle">Kramers-Moyal Expansion for Financial Market Nonlinear Dynamics Analysis</div>
+    <div class="cover-tags">
+      <span class="ctag hl">NASDAQ</span>
+      <span class="ctag hl">WTI Crude</span>
+      <span class="ctag">Gold</span>
+      <span class="ctag">SPY</span>
+      <span class="ctag">Kramers-Moyal</span>
+      <span class="ctag">Diffusion Coefficient</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">NASDAQ <em>78x</em></div><div class="cstat-label">危機擴散倍率</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4</em> 市場</div><div class="cstat-label">跨資產類別</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2,760</em> 天</div><div class="cstat-label">回測期間</div></div>
+    <div class="cstat"><div class="cstat-num"><em>D&#x207D;&#xB2;&#x207E;</em></div><div class="cstat-label">擴散係數</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月26日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ P2: 方法論與核心發現 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">Kramers-Moyal 展開式：方法論與核心發現</h1>
+
+  <h2 class="ch">理論基礎</h2>
+  <p>Kramers-Moyal（KM）展開式源自統計物理學，將隨機過程的時間演化描述為無限階偏微分方程。其核心思想是透過條件動差（conditional moments）逐階量化價格變動的漂移（drift）、擴散（diffusion）及更高階非線性行為。</p>
+
+  <div class="eq-box">
+    &#x2202;P(x,t)/&#x2202;t = &#x03A3;<sub>n=1</sub><sup>&#x221E;</sup> (-&#x2202;/&#x2202;x)<sup>n</sup> [ D<sup>(n)</sup>(x) &#xB7; P(x,t) ]<br>
+    <span style="font-size:14px;color:#6b7a9a">D<sup>(1)</sup> = 漂移係數（Drift） &nbsp;|&nbsp; D<sup>(2)</sup> = 擴散係數（Diffusion） &nbsp;|&nbsp; D<sup>(4)</sup> = 非高斯厚尾</span>
+  </div>
+
+  <p>當截斷至二階時即為 <strong>Fokker-Planck 方程</strong>（布朗運動假設）。Khalilian et al. (2025) 發現金融市場的 D<sup>(4)</sup> 顯著非零，表明市場動態遠超高斯假設，需以完整 KM 展開式描述。</p>
+
+  <h2 class="ch">四大市場擴散係數比較</h2>
+
+  <div class="kpi-row">
+    <div class="kpi red"><div class="kpi-val">78.26<em>x</em></div><div class="kpi-lbl">NASDAQ 危機擴散</div></div>
+    <div class="kpi gold"><div class="kpi-val">12.73<em>x</em></div><div class="kpi-lbl">Gold 危機擴散</div></div>
+    <div class="kpi"><div class="kpi-val">8.38<em>x</em></div><div class="kpi-lbl">SPY 危機擴散</div></div>
+    <div class="kpi green"><div class="kpi-val">3.34<em>x</em></div><div class="kpi-lbl">WTI 危機擴散</div></div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>市場</th><th>D<sup>(2)</sup> 平穩期</th><th>D<sup>(2)</sup> 危機期</th><th>擴散倍率</th><th>D<sup>(4)</sup> 顯著性</th><th>風險特徵</th></tr>
+    </thead>
+    <tbody>
+      <tr class="hi"><td>NASDAQ</td><td class="num">0.23</td><td class="num">18.00</td><td class="num pos">78.26x</td><td>極顯著</td><td>科技槓桿 · 極端尾部風險</td></tr>
+      <tr><td>Gold</td><td class="num">0.11</td><td class="num">1.40</td><td class="num pos">12.73x</td><td>顯著</td><td>避險需求 · 非線性跳躍</td></tr>
+      <tr><td>SPY</td><td class="num">0.18</td><td class="num">1.51</td><td class="num pos">8.38x</td><td>顯著</td><td>系統性風險 · 指數分散</td></tr>
+      <tr><td>WTI Crude</td><td class="num">0.52</td><td class="num">1.74</td><td class="num pos">3.34x</td><td>中等</td><td>供需基本面 · 地緣政治</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：Yahoo Finance 2014-2024 日頻收盤價 · 論文：Khalilian et al. (2025) arXiv:2507.09554</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>方法論與核心發現</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ P3: 分析與應用 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">跨資產非線性分析與量化應用</h1>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">危機擴散倍率比較</div>
+      <div class="chart-sub">D<sup>(2)</sup> crisis / D<sup>(2)</sup> calm</div>
+      <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="chartBar" style="display:block;width:100%;height:210px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">四市場擴散係數結構</div>
+      <div class="chart-sub">平穩期 vs 危機期 D<sup>(2)</sup> 絕對值</div>
+      <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="chartGroup" style="display:block;width:100%;height:210px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">核心發現</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>NASDAQ 擴散倍率達 78.26x，為四市場之最。</strong>反映科技股在危機時期的槓桿效應與群聚恐慌，D<sup>(4)</sup> 極顯著表明收益分佈呈現嚴重厚尾——傳統 VaR 模型低估尾部風險達 3-5 倍。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>WTI 基礎波動率最高（平穩期 D<sup>(2)</sup>=0.52），但危機放大倍率最低（3.34x）。</strong>石油市場的持續性高波動源於供需基本面，而非投機性恐慌——KM 展開式能區分「結構性波動」與「危機性跳躍」。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>Gold 呈現非對稱擴散特性。</strong>12.73x 的危機倍率高於 SPY（8.38x），揭示黃金在極端事件中並非純粹避險——避險需求本身製造非線性跳躍動態。</span></div>
+  </div>
+
+  <h3 class="ch">量化策略啟示</h3>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>應用方向</h4>
+      <div class="risk-item"><strong>動態風險預算：</strong>以 D<sup>(2)</sup> 即時估計替代固定波動率窗口，提前 2-5 天偵測 regime 切換</div>
+      <div class="risk-item"><strong>尾部避險定價：</strong>D<sup>(4)</sup> 量化厚尾程度，修正選擇權定價中的高斯偏差</div>
+      <div class="risk-item"><strong>跨資產配置：</strong>依擴散倍率調整危機時期資產權重——WTI 低倍率表示危機中相對穩定</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>方法限制</h4>
+      <div class="risk-item"><strong>數據需求：</strong>KM 係數估計需大量歷史數據（&#x2265;2000筆），日內高頻應用受限</div>
+      <div class="risk-item"><strong>平穩性假設：</strong>展開式隱含局部平穩性，結構性斷點需額外偵測機制</div>
+      <div class="risk-item"><strong>高階截斷：</strong>D<sup>(6)</sup> 以上估計不穩定，實務中多截斷至四階</div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>免責聲明</strong><br>
+    本報告內容基於 Khalilian et al. (2025) arXiv:2507.09554 公開研究論文及 Yahoo Finance 公開市場數據（NASDAQ/WTI/Gold/SPY，2014-2024）編製，僅供學術研究與內部參考使用，不構成任何投資建議、要約或招攬。Kramers-Moyal 展開式分析結果為歷史回測統計量，過去表現不代表未來結果。任何投資決策應基於獨立專業判斷，Genesis International Capital 不對因使用本報告內容所導致之任何損失承擔責任。
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>分析與應用</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<script>
+new Chart(document.getElementById('chartBar'),{
+  type:'bar',
+  data:{
+    labels:['NASDAQ','Gold','SPY','WTI'],
+    datasets:[{
+      label:'危機擴散倍率',
+      data:[78.26,12.73,8.38,3.34],
+      backgroundColor:['#c0392b','#d97706','#1a3a6e','#065f46'],
+      borderRadius:4
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{beginAtZero:true,title:{display:true,text:'D\u207D\u00B2\u207E 倍率',font:{size:12}},grid:{color:'#e5edf8'}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartGroup'),{
+  type:'bar',
+  data:{
+    labels:['NASDAQ','Gold','SPY','WTI'],
+    datasets:[
+      {label:'平穩期 D\u207D\u00B2\u207E',data:[0.23,0.11,0.18,0.52],backgroundColor:'#1a3a6e',borderRadius:3},
+      {label:'危機期 D\u207D\u00B2\u207E',data:[18.00,1.40,1.51,1.74],backgroundColor:'#c0392b',borderRadius:3}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},
+    scales:{
+      y:{beginAtZero:true,title:{display:true,text:'D\u207D\u00B2\u207E 絕對值',font:{size:12}},grid:{color:'#e5edf8'}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+</script>
+</body>
+</html>

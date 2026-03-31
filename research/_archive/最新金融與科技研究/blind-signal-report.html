@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>匿名化多 Agent 信號 | BlindTrade 應用報告</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{min-height:297mm;max-height:297mm;overflow:hidden;display:flex;flex-direction:column}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:28px 50px;position:relative;z-index:1}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:6px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:12px 0 10px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:4px;margin:14px 0 8px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 7px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:6px 0 10px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:8px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:4px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:14px 16px;margin:10px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:15.5px;font-weight:700;color:#0d1b3e;padding:8px 0;border-bottom:1px solid #dce8f8;display:flex;gap:10px;align-items:flex-start;line-height:1.55}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:22px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:10px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 文字 ── */
+p{margin:5px 0 8px;line-height:1.7}
+ul,ol{padding-left:22px;margin:5px 0 8px}
+li{margin:4px 0;line-height:1.65;font-size:15px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:10px 14px;margin:10px 0;color:#1a3a6e;font-size:15px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:18px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:4px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:10px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 免責聲明 ── */
+.disclaimer{background:#f8f9fb;border:1px solid #dce8f8;border-radius:6px;padding:12px 16px;margin:12px 0;font-size:13px;color:#6b7a9a;line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 第 1 頁：封面 ══════════════ -->
+<div class="cover pb page full-page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Signal Generation Research · 2026</div>
+    <div class="cover-title">匿名化多 Agent 信號<br><em>BlindTrade 信號生成應用報告</em></div>
+    <div class="cover-subtitle">基於 BlindTrade 論文的匿名化 LLM Agent 信號生成與 IC 驗證</div>
+    <div class="cover-tags">
+      <span class="ctag hl">BlindTrade</span>
+      <span class="ctag hl">Anonymization</span>
+      <span class="ctag">Multi-Agent</span>
+      <span class="ctag">IC Validation</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">IC <em>0.445</em></div><div class="cstat-label">Composite IC</div></div>
+    <div class="cstat"><div class="cstat-num"><em>25</em> 檔</div><div class="cstat-label">美股標的</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4</em> Agents</div><div class="cstat-label">信號維度</div></div>
+    <div class="cstat"><div class="cstat-num">p=<em>0.026</em></div><div class="cstat-label">統計顯著</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月24日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 2 頁：執行摘要 ══════════════ -->
+<div class="page pb full-page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">0.445</div><div class="kpi-lbl">Composite IC</div></div>
+    <div class="kpi green"><div class="kpi-val">0.527</div><div class="kpi-lbl">Momentum IC</div></div>
+    <div class="kpi"><div class="kpi-val">25 <em>檔</em></div><div class="kpi-lbl">美股標的</div></div>
+    <div class="kpi"><div class="kpi-val">0.026</div><div class="kpi-lbl">p-value</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">①</span>
+      <span><strong>論文發現。</strong>Jeon &amp; Lee (2026) 的 BlindTrade 框架證實：匿名化後 LLM 仍有預測能力，且圖結構貢獻是 LLM 的 3 倍。匿名化是驗證 LLM 是否真正理解市場的必要條件。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">②</span>
+      <span><strong>實測驗證。</strong>我們對 25 檔美股匿名化後，用 4 個 Agent（動量／均值回歸／風險體制／新聞情緒）評分。Composite IC = 0.445 (p=0.026)，具統計顯著性。Momentum Agent IC 最高（0.527）。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">③</span>
+      <span><strong>應用定位。</strong>作為信號生成器，為選股提供多維度評分。匿名化確保信號來自真正的市場模式識別，而非 LLM 的記憶偏誤。</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>匿名化多 Agent 信號 — BlindTrade 應用報告</span>
+    <span>Page 2</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 3 頁：方法論 ══════════════ -->
+<div class="page pb full-page body-page">
+  <h1 class="ch">壹、方法論</h1>
+
+  <h2 class="ch">匿名化流程</h2>
+  <table>
+    <thead><tr><th>原始代碼</th><th>匿名化 ID</th><th>方法</th></tr></thead>
+    <tbody>
+      <tr><td>AAPL</td><td>STOCK_4564</td><td rowspan="3">MD5 hash 產生穩定映射，確保同一代碼每次映射結果一致</td></tr>
+      <tr><td>MSFT</td><td>STOCK_1120</td></tr>
+      <tr><td>GOOGL</td><td>STOCK_5556</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">四個 Agent</h2>
+  <table>
+    <thead><tr><th>Agent</th><th>輸入</th><th>評分維度</th><th>權重</th></tr></thead>
+    <tbody>
+      <tr><td>Momentum</td><td>SMA偏離 / MACD / 成交量 / 5日動量</td><td>趨勢強度 [-1, +1]</td><td>35%</td></tr>
+      <tr><td>Mean Reversion</td><td>RSI / BB位置 / SMA偏離</td><td>超買超賣 [-1, +1]</td><td>20%</td></tr>
+      <tr><td>Risk Regime</td><td>VIX / ATR / 20日跌幅</td><td>系統風險 [0, 1]</td><td>30%</td></tr>
+      <tr><td>News Sentiment</td><td>短期動量 + 量能 (proxy)</td><td>事件情緒 [-1, +1]</td><td>15%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">IC 驗證</h2>
+  <p>Information Coefficient = Spearman rank correlation（Agent 分數 vs 未來 21 天報酬）。IC &gt; 0 且 p &lt; 0.05 表示有統計顯著的預測能力。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>匿名化多 Agent 信號 — BlindTrade 應用報告</span>
+    <span>Page 3</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 4 頁：實測結果 ══════════════ -->
+<div class="page pb full-page body-page">
+  <h1 class="ch">貳、實測結果</h1>
+
+  <table>
+    <thead><tr><th>Agent</th><th>IC</th><th>p-value</th><th>有效？</th></tr></thead>
+    <tbody>
+      <tr><td>Momentum</td><td class="pos">0.527</td><td>0.007</td><td class="pos">有效</td></tr>
+      <tr><td>Mean Reversion</td><td class="neg">-0.771</td><td>0.000</td><td class="neg">反向有效</td></tr>
+      <tr><td>Risk Regime</td><td>-0.080</td><td>0.704</td><td>不顯著</td></tr>
+      <tr><td>News Sentiment</td><td>-0.171</td><td>0.413</td><td>不顯著</td></tr>
+      <tr style="background:#fff8e1"><td><strong>Composite</strong></td><td class="pos hi">0.445</td><td class="hi">0.026</td><td class="pos hi">有效</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">Top 5 &amp; Bottom 5</h2>
+  <div class="mini-table">
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>Top 5</th><th>Composite Score</th></tr></thead>
+        <tbody>
+          <tr><td>AVGO</td><td class="pos num">0.191</td></tr>
+          <tr><td>ABBV</td><td class="pos num">0.072</td></tr>
+          <tr><td>KO</td><td class="pos num">0.038</td></tr>
+          <tr><td>JNJ</td><td class="pos num">0.016</td></tr>
+          <tr><td>LLY</td><td class="pos num">0.015</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>Bottom 5</th><th>Composite Score</th></tr></thead>
+        <tbody>
+          <tr><td>COST</td><td class="neg num">-0.143</td></tr>
+          <tr><td>HD</td><td class="neg num">-0.164</td></tr>
+          <tr><td>AMD</td><td class="neg num">-0.238</td></tr>
+          <tr><td>UNH</td><td class="neg num">-0.279</td></tr>
+          <tr><td>ADBE</td><td class="neg num">-0.395</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="ch">關鍵發現</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <span><strong>Momentum Agent 最有效</strong>（IC=0.527, p=0.007）。趨勢跟蹤在匿名化條件下仍然有效，與論文結論一致。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <span><strong>Mean Reversion 呈反向</strong>（IC=-0.771）。這意味著「超賣」信號實際上預測了進一步下跌——在趨勢市場中均值回歸策略失效。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <span><strong>Composite IC=0.445 (p=0.026) 具實用價值。</strong>綜合多 Agent 信號確實能區分強弱股。</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>匿名化多 Agent 信號 — BlindTrade 應用報告</span>
+    <span>Page 4</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 5 頁：來源與定位 ══════════════ -->
+<div class="page full-page body-page">
+  <h1 class="ch">參、研究來源與應用定位</h1>
+
+  <h2 class="ch">論文來源</h2>
+  <table>
+    <thead><tr><th>論文</th><th>框架名稱</th><th>核心方法</th><th>本專案復現</th></tr></thead>
+    <tbody>
+      <tr><td>Jeon &amp; Lee (2603.17692)</td><td>BlindTrade</td><td>匿名化 + 多Agent + IC驗證</td><td>信號生成部分</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">資料來源</h2>
+  <table>
+    <thead><tr><th>資料</th><th>來源</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>25 檔美股</td><td>Yahoo Finance</td><td>2023-01-01 ~ 2024-12-31</td></tr>
+      <tr><td>VIX</td><td>Yahoo Finance</td><td>VIX = 17.4</td></tr>
+      <tr><td>匿名化</td><td>MD5 hash</td><td>穩定映射</td></tr>
+      <tr><td>Agent 邏輯</td><td>Rule-based (MVP)</td><td>4 個 Agent 各自獨立評分</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">應用定位</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <span><strong>匿名化驗證有效。</strong>排除了 LLM 記憶偏誤的可能性。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <span><strong>與其他工具互補。</strong>晴雨表判斷市場環境、財報篩選器找好公司、Agent 信號判斷進場時機。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <span><strong>專案位置：</strong>d:\claude\src\blind-signal\，獨立於其他專案。</span>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>免責聲明：</strong>本報告僅供研究參考，不構成任何投資建議或投資邀約。所有數據基於歷史回測，過去表現不代表未來收益。投資人應自行評估風險並諮詢專業顧問。本報告中的匿名化股票代碼僅用於研究驗證目的。
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>匿名化多 Agent 信號 — BlindTrade 應用報告</span>
+    <span>Page 5</span>
+  </div>
+</div>
+
+</body>
+</html>

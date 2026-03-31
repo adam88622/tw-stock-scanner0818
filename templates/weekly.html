@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+{% block title %}研究週報{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">研究週報</h4>
+
+    <!-- Tab 切換 -->
+    <div class="weekly-tabs">
+        <button class="weekly-tab active" data-tab="briefings">週報簡報</button>
+        <button class="weekly-tab" data-tab="catalog">專案總覽 ({{ stats.total }})</button>
+    </div>
+
+    <!-- ═══ Tab 1：週報簡報 ═══ -->
+    <div id="tab-briefings" class="weekly-tab-panel active">
+
+        <!-- 量化研究 -->
+        <div class="weekly-section">
+            <h5 class="weekly-section-title">
+                <span class="weekly-badge fin">FIN</span> 量化研究週報
+            </h5>
+            {% if fin_briefings %}
+            <div class="weekly-list">
+                {% for b in fin_briefings %}
+                <div class="weekly-row" onclick="openWeekly('fin/{{ b.filename }}', '{{ b.title }}')">
+                    <div class="weekly-row-left">
+                        <div class="weekly-row-title">{{ b.title }}</div>
+                        <div class="weekly-row-meta">
+                            <span class="weekly-tag fin">量化研究</span>
+                            <span class="weekly-row-date">{{ b.date }}</span>
+                        </div>
+                    </div>
+                    <div class="weekly-row-arrow">›</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="weekly-empty">尚無量化研究週報。產出至 <code>src/fin-lab/output/weekly-briefing-*.html</code> 即自動顯示。</div>
+            {% endif %}
+        </div>
+
+        <!-- 金融科技分類報告 -->
+        {% set cat_colors = {
+            '風險管理': '#ef4444',
+            '因子與策略': '#818cf8',
+            '選擇權與波動率': '#f59e0b',
+            '情緒與 NLP': '#22c55e',
+            '總經與資產配置': '#3b82f6',
+            '特殊主題': '#a78bfa',
+            '其他': '#64748b'
+        } %}
+        {% for cat_name, reports in cat_reports.items() | sort %}
+        <div class="weekly-section">
+            <h5 class="weekly-section-title">
+                <span class="weekly-badge" style="background:{{ cat_colors.get(cat_name, '#64748b') }}22;color:{{ cat_colors.get(cat_name, '#64748b') }};">{{ cat_name }}</span>
+                {{ cat_name }} ({{ reports|length }})
+            </h5>
+            <div class="weekly-list">
+                {% for r in reports %}
+                <div class="weekly-row" onclick="openWeekly('cat/{{ r.filename }}', '{{ r.title }}')">
+                    <div class="weekly-row-left">
+                        <div class="weekly-row-title">{{ r.title }}</div>
+                        <div class="weekly-row-meta">
+                            <span class="weekly-tag" style="background:{{ cat_colors.get(cat_name, '#64748b') }}22;color:{{ cat_colors.get(cat_name, '#64748b') }};">{{ cat_name }}</span>
+                            <span class="weekly-row-date">{{ r.date }}</span>
+                        </div>
+                    </div>
+                    <div class="weekly-row-arrow">›</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- 科技研究 -->
+        <div class="weekly-section">
+            <h5 class="weekly-section-title">
+                <span class="weekly-badge tech">TECH</span> 科技研究精選
+            </h5>
+            {% if tech_reports %}
+            <div class="weekly-list">
+                {% for r in tech_reports %}
+                <div class="weekly-row" onclick="openWeekly('tech/{{ r.filename }}', '{{ r.title }}')">
+                    <div class="weekly-row-left">
+                        <div class="weekly-row-title">{{ r.title }}</div>
+                        <div class="weekly-row-meta">
+                            <span class="weekly-tag tech">科技研究</span>
+                            <span class="weekly-row-date">{{ r.date }}</span>
+                        </div>
+                    </div>
+                    <div class="weekly-row-arrow">›</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="weekly-empty">尚無科技研究報告。產出至 <code>src/tech-research/research-*/</code> 即自動顯示。</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ═══ Tab 2：專案總覽 ═══ -->
+    <div id="tab-catalog" class="weekly-tab-panel">
+        <!-- 統計卡片 -->
+        <div class="row" style="margin-bottom:20px;">
+            <div class="col-md-4" style="margin-bottom:10px;">
+                <div class="chart-card" style="text-align:center;padding:20px;">
+                    <div style="font-size:36px;font-weight:800;color:#818cf8;">{{ stats.total }}</div>
+                    <div style="color:#94a3b8;font-size:13px;">總專案數</div>
+                </div>
+            </div>
+            <div class="col-md-4" style="margin-bottom:10px;">
+                <div class="chart-card" style="text-align:center;padding:20px;">
+                    <div style="font-size:36px;font-weight:800;color:#22c55e;">{{ stats.with_code }}</div>
+                    <div style="color:#94a3b8;font-size:13px;">有程式碼</div>
+                </div>
+            </div>
+            <div class="col-md-4" style="margin-bottom:10px;">
+                <div class="chart-card" style="text-align:center;padding:20px;">
+                    <div style="font-size:36px;font-weight:800;color:#f59e0b;">{{ stats.categories }}</div>
+                    <div style="color:#94a3b8;font-size:13px;">研究分類</div>
+                </div>
+            </div>
+        </div>
+
+        {% for cat_name, cat_projects in categories.items() | sort %}
+        <div class="chart-card" style="margin-bottom:16px;">
+            <h5 style="margin-bottom:12px;">
+                <span style="color:#818cf8;">{{ cat_name }}</span>
+                <span style="color:#64748b;font-size:13px;margin-left:8px;">{{ cat_projects|length }} 個專案</span>
+            </h5>
+            <table class="table table-hover table-sm data-table" style="font-size:13px;">
+                <thead>
+                    <tr>
+                        <th style="width:80px;">編號</th>
+                        <th>專案</th>
+                        <th style="width:60px;">程式碼</th>
+                        <th style="width:60px;">報告</th>
+                        <th style="width:60px;">數據</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in cat_projects %}
+                    <tr>
+                        <td><strong style="color:#818cf8;">{{ p.code }}</strong></td>
+                        <td>{{ p.name }}</td>
+                        <td style="text-align:center;">
+                            {% if p.has_code %}<span style="color:#22c55e;">py</span>
+                            {% else %}<span style="color:#475569;">-</span>{% endif %}
+                        </td>
+                        <td style="text-align:center;">
+                            {% if p.has_report %}<span style="color:#f59e0b;">PDF</span>
+                            {% else %}<span style="color:#475569;">-</span>{% endif %}
+                        </td>
+                        <td style="text-align:center;">
+                            {% if p.has_data %}<span style="color:#3b82f6;">JSON</span>
+                            {% else %}<span style="color:#475569;">-</span>{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+
+        <div style="margin-top:20px;padding:16px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;font-size:12px;color:#94a3b8;">
+            <strong style="color:#f59e0b;">研究聲明：</strong>
+            所有研究成果僅供學術參考，不構成投資建議。數據來源包含 yfinance、FRED、arXiv、SSRN、NBER。
+            回測結果不代表未來表現。
+        </div>
+    </div>
+</div>
+
+<!-- 彈出式報告視窗 -->
+<div id="weekly-overlay" class="weekly-overlay" onclick="closeWeekly()"></div>
+<div id="weekly-modal" class="weekly-modal">
+    <div class="weekly-modal-header">
+        <span id="weekly-modal-title"></span>
+        <button onclick="closeWeekly()" style="background:none;border:none;color:var(--text-secondary);font-size:24px;cursor:pointer;">&times;</button>
+    </div>
+    <iframe id="weekly-iframe" class="weekly-iframe"></iframe>
+</div>
+
+<style>
+/* Tab 切換 */
+.weekly-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-light);
+    padding-bottom: 0;
+}
+.weekly-tab {
+    padding: 10px 24px;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.15s;
+}
+.weekly-tab:hover { color: var(--text-primary); }
+.weekly-tab.active {
+    color: var(--link-color);
+    border-bottom-color: var(--link-color);
+}
+.weekly-tab-panel { display: none; }
+.weekly-tab-panel.active { display: block; }
+
+/* 報告列表 */
+.weekly-section { margin-bottom: 28px; }
+.weekly-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.weekly-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+.weekly-badge.fin { background: linear-gradient(135deg, #065f46, #00a878); }
+.weekly-badge.tech { background: linear-gradient(135deg, #1e3a5f, #3b82f6); }
+
+.weekly-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.weekly-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.weekly-row:hover {
+    border-color: var(--link-color);
+    background: var(--hover-bg);
+}
+.weekly-row-left { flex: 1; min-width: 0; }
+.weekly-row-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+.weekly-row-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.weekly-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+.weekly-tag.fin {
+    background: rgba(0, 168, 120, 0.15);
+    color: #00a878;
+}
+.weekly-tag.tech {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+}
+.weekly-row-date {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+.weekly-row-arrow {
+    font-size: 24px;
+    color: var(--text-muted);
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+.weekly-empty {
+    color: var(--text-muted);
+    padding: 30px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* 彈出視窗 */
+.weekly-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+}
+.weekly-modal {
+    display: none;
+    position: fixed;
+    top: 3%;
+    left: 3%;
+    right: 3%;
+    bottom: 3%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    z-index: 2001;
+    flex-direction: column;
+    overflow: hidden;
+}
+.weekly-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-heading);
+}
+.weekly-iframe {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #fff;
+}
+.weekly-modal.active,
+.weekly-overlay.active {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .weekly-row { padding: 12px 14px; }
+    .weekly-row-title { font-size: 14px; }
+    .weekly-modal { top: 0; left: 0; right: 0; bottom: 0; border-radius: 0; }
+    .weekly-tabs { overflow-x: auto; }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+/* Tab 切換 */
+document.querySelectorAll('.weekly-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+        document.querySelectorAll('.weekly-tab').forEach(function(t) { t.classList.remove('active'); });
+        document.querySelectorAll('.weekly-tab-panel').forEach(function(p) { p.classList.remove('active'); });
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.getAttribute('data-tab')).classList.add('active');
+    });
+});
+
+/* 報告彈窗 */
+function openWeekly(filepath, title) {
+    document.getElementById('weekly-modal-title').textContent = title;
+    var parts = filepath.split('/');
+    var encoded = parts.map(function(p) { return encodeURIComponent(p); }).join('/');
+    document.getElementById('weekly-iframe').src = '/api/weekly/' + encoded;
+    document.getElementById('weekly-overlay').classList.add('active');
+    document.getElementById('weekly-modal').classList.add('active');
+}
+
+function closeWeekly() {
+    document.getElementById('weekly-overlay').classList.remove('active');
+    document.getElementById('weekly-modal').classList.remove('active');
+    document.getElementById('weekly-iframe').src = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeWeekly();
+});
+</script>
+{% endblock %}

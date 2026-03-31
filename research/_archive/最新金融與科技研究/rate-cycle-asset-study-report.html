@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>升息循環資產輪動與投資機會研究</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* 浮水印 */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* 換頁 */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.full-page{display:flex;flex-direction:column}
+
+/* Canvas */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* 封面 */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#1a3a5c 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* 章節封面 */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#1a3a5c 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:13px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:52px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:16px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* 正文頁 */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* 標題 */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* 表格 */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* 圖表 */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:14px;margin:10px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:16px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:14px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* KPI 列 */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* 論點摘要 */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* 時間軸 */
+.timeline{display:grid;border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:15px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:18px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:13px;opacity:.8;line-height:1.5}
+
+/* 風險矩陣 */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* 投資建議卡 */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:14.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:21px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:14px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:15px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:14.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+
+/* 熱力圖 */
+.heatmap-table td{text-align:center;font-weight:600;font-size:14px;padding:8px 6px}
+.heatmap-table .ht-low{background:#e8f5ee;color:#065f46}
+.heatmap-table .ht-mid{background:#fff8e1;color:#78350f}
+.heatmap-table .ht-high{background:#fdf0ef;color:#c0392b}
+
+/* 文字 */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* 頁腳 */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+</style>
+</head>
+<body>
+<div class="wm">  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>  <div class="wm-name">Genesis International Capital</div></div>
+
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Industry Research Report &middot; Q1 2026</div>
+    <div class="cover-title">升息循環<em>資產輪動</em>與投資機會研究</div>
+    <div class="cover-subtitle">Rate Cycle Asset Rotation &amp; Investment Opportunity Study</div>
+    <div class="cover-tags">
+      <span class="ctag hl">利率循環</span>
+<span class="ctag hl">Stagflation</span>
+<span class="ctag hl">通膨升息</span>
+<span class="ctag">資產輪動</span>
+<span class="ctag">殖利率曲線</span>
+<span class="ctag">產業輪動</span>
+
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>5</em></div><div class="cstat-label">升息循環 (1994-2024)</div></div>
+<div class="cstat"><div class="cstat-num"><em>525 bps</em></div><div class="cstat-label">最大單輪升幅</div></div>
+<div class="cstat"><div class="cstat-num"><em>19</em></div><div class="cstat-label">高原期顯著資產（D 階段）</div></div>
+<div class="cstat"><div class="cstat-num"><em>6</em></div><div class="cstat-label">通膨升息交易機會</div></div>
+
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026-03-30</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<div class="full-page pb page body-page">
+  <h1 class="ch">執行摘要</h1>
+  <div class="kpi-row"><div class="kpi "><div class="kpi-val">20月</div><div class="kpi-lbl">平均升息持續期</div></div>
+<div class="kpi green"><div class="kpi-val">+32.6%</div><div class="kpi-lbl">升息期最佳：能源 (Energy)</div></div>
+<div class="kpi gold"><div class="kpi-val">4.25%</div><div class="kpi-lbl">當前 FFR（Stagflation 象限）</div></div>
+<div class="kpi "><div class="kpi-val">12月</div><div class="kpi-lbl">利率→銀行/黃金 Granger 滯後</div></div>
+</div>
+  <div class="exec-sum"><div class="exec-thesis"><span class="thesis-num">①</span><span><strong>個別資產在特定階段具統計顯著正報酬</strong>——t 檢定發現高原期 (D) 有 19 項資產報酬顯著異於零（p&lt;0.05），但成長/價值因子與利率敏感/非敏感產業的跨組差異均<u>未達顯著水準</u>，美林時鐘框架僅部分成立。五輪循環樣本量有限（n=3~5），結論應視為方向性參考而非定量依據。</span></div>
+<div class="exec-thesis"><span class="thesis-num">②</span><span><strong>殖利率曲線反轉仍為衰退領先指標</strong>——五輪循環中 2s10s 曲線反轉平均領先衰退 12-18 個月。2022-23 反轉為史上最長（超過 2 年、最深 -108 bps），至今仍需密切追蹤。</span></div>
+<div class="exec-thesis"><span class="thesis-num">③</span><span><strong>若通膨再起迫使升息，能源、農產品與黃金為歷史最強資產</strong>——升息期能源平均 +32.6%、黃金 +22.9%、玉米在升息前期 (B) 跨循環方向一致。銀行在升息期表現分歧（勝率 67%），需等高原期 (D) 才穩定轉正。Granger 因果檢定僅銀行與黃金通過（lag=12 月），其餘資產與利率的統計因果關係不顯著。</span></div>
+</div>
+  <p style="margin-top:16px;color:#6b7a9a;font-size:14px">本研究涵蓋 1994-2024 年五輪完整升息循環，分析逾 30 種可交易資產在不同利率階段的報酬特徵與統計顯著性。受限於樣本量（僅 5 輪循環），統計檢定力偏低，所有結論均應作為方向性參考搭配即時數據使用，而非作為獨立投資依據。</p>
+  <div class="page-footer">  <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>  <span>執行摘要</span>  <span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div pb page">
+  <div class="sec-num">01</div>
+  <div class="sec-eyebrow">CHAPTER ONE</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">美林時鐘與利率循環框架</div>
+  <div class="sec-desc">方法論概述與研究範圍</div>
+</div>
+
+<div class="full-page pb page body-page">
+  
+<h1 class="ch">壹、美林時鐘與利率循環框架</h1>
+<h2 class="ch">方法論概述</h2>
+<p>本研究以美林投資時鐘（Merrill Lynch Investment Clock）為核心框架，將經濟週期劃分為四象限：</p>
+<ul>
+  <li><strong>復甦期（Recovery）</strong>：經濟成長加速、通膨下行 → 最佳資產：股票</li>
+  <li><strong>過熱期（Overheat）</strong>：經濟成長高峰、通膨上行 → 最佳資產：商品</li>
+  <li><strong>滯脹期（Stagflation）</strong>：經濟減速、通膨仍高 → 最佳資產：現金</li>
+  <li><strong>衰退期（Reflation）</strong>：經濟衰退、通膨回落 → 最佳資產：債券</li>
+</ul>
+<h2 class="ch">利率循環三階段</h2>
+<p>每輪升息循環細分為三個階段進行資產報酬分析：</p>
+
+<table>
+  <thead><tr><th>階段</th><th>定義</th><th>典型市場特徵</th><th>主導資產</th></tr></thead>
+  <tbody><tr><td>升息期 (Hiking)</td><td>首次升息至末次升息</td><td>利率攀升、市場波動加大</td><td>能源、金融股</td></tr>
+<tr><td>利率高原期 (Peak Hold)</td><td>末次升息至首次降息</td><td>利率維持高位、經濟降溫</td><td>價值股、防禦型</td></tr>
+<tr><td>降息期 (Easing)</td><td>首次降息後 12 個月</td><td>流動性寬鬆、風險偏好回升</td><td>科技、成長股、債券</td></tr>
+</tbody>
+</table>
+<span class="src">資料來源：GiS 研究團隊整理</span>
+
+<h2 class="ch">研究範圍</h2>
+<p>涵蓋 1994 年至 2024 年五輪完整升息循環，橫跨股票指數、債券 ETF、外匯、商品、產業 ETF 及個股等超過 30 種資產。
+使用 FRED 聯準會數據與 Yahoo Finance 市場數據，並以 Kruskal-Wallis 及 t-test 檢定資產報酬在不同階段是否具統計顯著差異。</p>
+
+  <div class="page-footer">  <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>  <span>壹、美林時鐘與利率循環框架</span>  <span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div pb page">
+  <div class="sec-num">02</div>
+  <div class="sec-eyebrow">CHAPTER TWO</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">五輪升息循環概覽</div>
+  <div class="sec-desc">1994-2024 年 Fed Funds Rate 走勢與各循環特性</div>
+</div>
+
+<div class="full-page pb page body-page">
+  
+<h1 class="ch">貳、五輪升息循環概覽</h1>
+<h2 class="ch">升息循環時間軸</h2>
+<div class="timeline" style="grid-template-columns:repeat(5,1fr)">
+<div class="tl-item">
+  <div class="tl-year">1994-95 預防型</div>
+  <div class="tl-spec">3.00% → 6.00%</div>
+  <div class="tl-tech">7 次升息<br>12 個月</div>
+</div>
+<div class="tl-item">
+  <div class="tl-year">1999-00 過熱型</div>
+  <div class="tl-spec">4.75% → 6.50%</div>
+  <div class="tl-tech">6 次升息<br>11 個月</div>
+</div>
+<div class="tl-item">
+  <div class="tl-year">2004-06 漸進型</div>
+  <div class="tl-spec">1.00% → 5.25%</div>
+  <div class="tl-tech">17 次升息<br>24 個月</div>
+</div>
+<div class="tl-item">
+  <div class="tl-year">2015-18 正常化型</div>
+  <div class="tl-spec">0.25% → 2.50%</div>
+  <div class="tl-tech">9 次升息<br>36 個月</div>
+</div>
+<div class="tl-item active">
+  <div class="tl-year">2022-23 抗通膨型</div>
+  <div class="tl-spec">0.25% → 5.50%</div>
+  <div class="tl-tech">11 次升息<br>16 個月</div>
+</div></div>
+<h2 class="ch">各循環特性比較</h2>
+
+<table>
+  <thead><tr><th>循環</th><th>類型</th><th>利率範圍</th><th>總升幅</th><th>升息次數</th><th>升息期</th><th>高原期</th></tr></thead>
+  <tbody><tr><td>1994-95 預防型</td><td>預防型</td><td>3.00% → 6.00%</td><td class="num">+300 %</td><td>7</td><td>12 月</td><td>5 月</td></tr>
+<tr><td>1999-00 過熱型</td><td>過熱型</td><td>4.75% → 6.50%</td><td class="num">+175 %</td><td>6</td><td>11 月</td><td>8 月</td></tr>
+<tr><td>2004-06 漸進型</td><td>長週期漸進型</td><td>1.00% → 5.25%</td><td class="num">+425 %</td><td>17</td><td>24 月</td><td>15 月</td></tr>
+<tr><td>2015-18 正常化型</td><td>正常化型</td><td>0.25% → 2.50%</td><td class="num">+225 %</td><td>9</td><td>36 月</td><td>7 月</td></tr>
+<tr><td>2022-23 抗通膨型</td><td>緊急抗通膨型</td><td>0.25% → 5.50%</td><td class="num">+525 %</td><td>11</td><td>16 月</td><td>14 月</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 高原期 = 最後一次升息至首次降息之間的持續期間</span>
+<span class="src">資料來源：FRED / FOMC 會議紀錄</span>
+
+
+  <div class="page-footer">  <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>  <span>貳、五輪升息循環概覽</span>  <span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<div class="full-page pb page body-page alt">
+  
+<h1 class="ch">貳、聯邦基金利率走勢</h1>
+<div class="chart-wrap"><div class="chart-title">聯邦基金利率（FFR）走勢與升息循環</div><div class="chart-sub">1994-2024 年五輪升息循環關鍵節點</div><div class="chart-container" style="height:300px;width:100%;position:relative"><canvas id="chart_ffr_timeline" style="display:block;width:100%;height:300px"></canvas></div><span class="src">資料來源：FRED / FOMC；圖說：綠線為 FFR，各節點對應升息起訖與高原期結束。</span></div>
+
+  <div class="page-footer">  <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>  <span>貳、利率走勢圖</span>  <span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div pb page">
+  <div class="sec-num">03</div>
+  <div class="sec-eyebrow">CHAPTER THREE</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">各階段資產報酬分析</div>
+  <div class="sec-desc">升息期、高原期、降息期的報酬差異</div>
+</div>
+
+<div class="full-page pb page body-page">
+  
+<h1 class="ch">參、各階段資產報酬分析</h1>
+<h2 class="ch">各階段平均報酬率</h2>
+
+<table>
+  <thead><tr><th>資產</th><th>升息期 C (%)</th><th>高原期 D (%)</th><th>降息預期 E (%)</th></tr></thead>
+  <tbody><tr><td>標普 500 (S&P 500)</td><td class="num pos">8.8%</td><td class="num pos">13.1%</td><td class="num neg">-0.1%</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td class="num pos">22.6%</td><td class="num pos">16.8%</td><td class="num neg">-2.9%</td></tr>
+<tr><td>羅素 2000 (Russell 2000)</td><td class="num pos">8.2%</td><td class="num pos">9.9%</td><td class="num">-0.0%</td></tr>
+<tr><td>銀行 (Banks)</td><td class="num neg">-0.6%</td><td class="num pos">15.3%</td><td class="num pos">3.6%</td></tr>
+<tr><td>不動產 (REITs)</td><td class="num pos">14.7%</td><td class="num pos">11.5%</td><td class="num pos">5.9%</td></tr>
+<tr><td>公用事業 (Utilities)</td><td class="num pos">19.9%</td><td class="num pos">15.0%</td><td class="num pos">4.9%</td></tr>
+<tr><td>科技 (Technology)</td><td class="num pos">24.7%</td><td class="num pos">19.2%</td><td class="num neg">-9.1%</td></tr>
+<tr><td>能源 (Energy)</td><td class="num pos">32.6%</td><td class="num pos">13.4%</td><td class="num neg">-0.4%</td></tr>
+<tr><td>醫療 (Healthcare)</td><td class="num pos">7.6%</td><td class="num pos">8.8%</td><td class="num neg">-0.9%</td></tr>
+<tr><td>黃金 (Gold)</td><td class="num pos">22.9%</td><td class="num pos">6.9%</td><td class="num pos">7.4%</td></tr>
+<tr><td>西德州原油 (WTI)</td><td class="num pos">38.1%</td><td class="num pos">6.1%</td><td class="num neg">-4.8%</td></tr>
+<tr><td>美元指數 (DXY)</td><td class="num neg">-0.5%</td><td class="num neg">-0.6%</td><td class="num neg">-2.4%</td></tr>
+<tr><td>長天期公債 (TLT)</td><td class="num neg">-1.1%</td><td class="num pos">1.7%</td><td class="num pos">8.5%</td></tr>
+<tr><td>玉米 (Corn)</td><td class="num neg">-11.3%</td><td class="num pos">15.8%</td><td class="num pos">2.5%</td></tr>
+<tr><td>小麥 (Wheat)</td><td class="num neg">-4.6%</td><td class="num pos">9.1%</td><td class="num pos">16.1%</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 報酬率為跨循環平均累積報酬率。科技與能源在升息期表現最強；黃金與公債在高原/降息期防禦性突出。</span>
+<span class="src">資料來源：Yahoo Finance / FRED，GiS 計算</span>
+
+<div class="chart-wrap"><div class="chart-title">各階段各資產平均報酬</div><div class="chart-sub">Grouped Bar Chart — 升息期 / 高原期 / 降息期</div><div class="chart-container" style="height:320px;width:100%;position:relative"><canvas id="chart_phase_returns" style="display:block;width:100%;height:320px"></canvas></div><span class="src">資料來源：Yahoo Finance / FRED；GiS 計算。報酬率為年化幾何平均。</span></div>
+
+  <div class="page-footer">  <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>  <span>參、各階段資產報酬分析</span>  <span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div pb page">
+  <div class="sec-num">04</div>
+  <div class="sec-eyebrow">CHAPTER FOUR</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業輪動分析</div>
+  <div class="sec-desc">利率敏感 vs 非敏感產業，成長/價值因子</div>
+</div>
+
+<div class="full-page pb page body-page">
+  
+<h1 class="ch">肆、產業輪動：利率敏感 vs 非敏感</h1>
+<h2 class="ch">利率敏感產業</h2>
+
+<table>
+  <thead><tr><th>利率敏感產業</th><th>升息期 C (%)</th><th>高原期 D (%)</th><th>降息預期 E (%)</th></tr></thead>
+  <tbody><tr><td>銀行 (Banks)</td><td class="num neg">-0.6%</td><td class="num pos">15.3%</td><td class="num pos">3.6%</td></tr>
+<tr><td>保險 (Insurance)</td><td class="num pos">11.2%</td><td class="num pos">18.6%</td><td class="num pos">3.3%</td></tr>
+<tr><td>不動產 (REITs)</td><td class="num pos">14.7%</td><td class="num pos">11.5%</td><td class="num pos">5.9%</td></tr>
+<tr><td>公用事業 (Utilities)</td><td class="num pos">19.9%</td><td class="num pos">15.0%</td><td class="num pos">4.9%</td></tr>
+<tr><td>金融 (Financials)</td><td class="num pos">8.9%</td><td class="num pos">19.2%</td><td class="num pos">0.1%</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 銀行在升息期表現分歧（勝率 67%），公用事業反而受惠（+19.9%），與直覺相反——因為升息初期經濟仍強勁。</span>
+<span class="src">資料來源：Yahoo Finance，GiS 計算；報酬為跨循環平均累積報酬率</span>
+
+<h2 class="ch">利率非敏感產業</h2>
+
+<table>
+  <thead><tr><th>利率非敏感產業</th><th>升息期 C (%)</th><th>高原期 D (%)</th><th>降息預期 E (%)</th></tr></thead>
+  <tbody><tr><td>醫療 (Healthcare)</td><td class="num pos">7.6%</td><td class="num pos">8.8%</td><td class="num neg">-0.9%</td></tr>
+<tr><td>必需消費 (Consumer Staples)</td><td class="num pos">5.1%</td><td class="num pos">9.7%</td><td class="num pos">6.8%</td></tr>
+<tr><td>科技 (Technology)</td><td class="num pos">24.7%</td><td class="num pos">19.2%</td><td class="num neg">-9.1%</td></tr>
+<tr><td>能源 (Energy)</td><td class="num pos">32.6%</td><td class="num pos">13.4%</td><td class="num neg">-0.4%</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 科技與能源在升息期表現最強，因為升息通常伴隨經濟擴張。醫療為全階段防禦型，勝率最穩定。</span>
+<span class="src">資料來源：Yahoo Finance，GiS 計算；報酬為跨循環平均累積報酬率</span>
+
+<h2 class="ch">成長 vs 價值因子輪動</h2>
+<div class="chart-wrap"><div class="chart-title">成長 vs 價值：各循環升息期報酬比較</div><div class="chart-sub">S&amp;P 500 Growth (IVW) vs S&amp;P 500 Value (IVE)</div><div class="chart-container" style="height:280px;width:100%;position:relative"><canvas id="chart_growth_value" style="display:block;width:100%;height:280px"></canvas></div><span class="src">資料來源：Yahoo Finance；GiS 計算。各循環升息期累積報酬。</span></div>
+
+  <div class="page-footer">  <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>  <span>肆、產業輪動</span>  <span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div pb page">
+  <div class="sec-num">05</div>
+  <div class="sec-eyebrow">CHAPTER FIVE</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">殖利率曲線演變</div>
+  <div class="sec-desc">2s10s 利差走勢與反轉事件</div>
+</div>
+
+<div class="full-page pb page body-page alt">
+  
+<h1 class="ch">伍、殖利率曲線演變</h1>
+<h2 class="ch">各階段利差概覽</h2>
+
+<table>
+  <thead><tr><th>循環</th><th>階段</th><th>平均利差</th><th>起始利差</th><th>結束利差</th><th>利差變化</th><th>方向</th></tr></thead>
+  <tbody><tr><td>1</td><td>B</td><td class="num">1.56 %</td><td>1.71 %</td><td>1.53 %</td><td class="num">-0.18 %</td><td>flattening</td></tr>
+<tr><td>1</td><td>C</td><td class="num">1.02 %</td><td>1.52 %</td><td>0.33 %</td><td class="num">-1.19 %</td><td>flattening</td></tr>
+<tr><td>1</td><td>D</td><td class="num">0.40 %</td><td>0.28 %</td><td>0.41 %</td><td class="num">0.13 %</td><td>steepening</td></tr>
+<tr><td>1</td><td>E</td><td class="num">0.47 %</td><td>0.42 %</td><td>0.41 %</td><td class="num">-0.01 %</td><td>flattening</td></tr>
+<tr><td>2</td><td>B</td><td class="num">0.20 %</td><td>0.09 %</td><td>0.25 %</td><td class="num">0.16 %</td><td>steepening</td></tr>
+<tr><td>2</td><td>C</td><td class="num">0.06 %</td><td>0.28 %</td><td>-0.46 %</td><td class="num">-0.74 %</td><td>flattening</td></tr>
+<tr><td>2</td><td>D</td><td class="num">-0.34 %</td><td>-0.42 %</td><td>-0.18 %</td><td class="num">0.24 %</td><td>steepening</td></tr>
+<tr><td>2</td><td>E</td><td class="num">-0.15 %</td><td>-0.15 %</td><td>0.05 %</td><td class="num">0.20 %</td><td>steepening</td></tr>
+<tr><td>3</td><td>B</td><td class="num">2.24 %</td><td>2.43 %</td><td>1.87 %</td><td class="num">-0.56 %</td><td>flattening</td></tr>
+<tr><td>3</td><td>C</td><td class="num">0.62 %</td><td>1.92 %</td><td>0.01 %</td><td class="num">-1.91 %</td><td>flattening</td></tr>
+<tr><td>3</td><td>D</td><td class="num">-0.05 %</td><td>-0.01 %</td><td>0.11 %</td><td class="num">0.12 %</td><td>steepening</td></tr>
+<tr><td>3</td><td>E</td><td class="num">0.29 %</td><td>0.14 %</td><td>0.40 %</td><td class="num">0.26 %</td><td>steepening</td></tr>
+<tr><td>4</td><td>B</td><td class="num">1.48 %</td><td>1.61 %</td><td>1.30 %</td><td class="num">-0.31 %</td><td>flattening</td></tr>
+<tr><td>4</td><td>C</td><td class="num">0.78 %</td><td>1.28 %</td><td>0.14 %</td><td class="num">-1.14 %</td><td>flattening</td></tr>
+<tr><td>4</td><td>D</td><td class="num">0.17 %</td><td>0.12 %</td><td>0.24 %</td><td class="num">0.12 %</td><td>steepening</td></tr>
+<tr><td>4</td><td>E</td><td class="num">0.22 %</td><td>0.24 %</td><td>0.21 %</td><td class="num">-0.03 %</td><td>flattening</td></tr>
+<tr><td>5</td><td>B</td><td class="num">0.84 %</td><td>1.11 %</td><td>0.30 %</td><td class="num">-0.81 %</td><td>flattening</td></tr>
+<tr><td>5</td><td>C</td><td class="num">-0.41 %</td><td>0.24 %</td><td>-0.96 %</td><td class="num">-1.20 %</td><td>flattening</td></tr>
+<tr><td>5</td><td>D</td><td class="num">-0.42 %</td><td>-0.90 %</td><td>-0.47 %</td><td class="num">0.43 %</td><td>steepening</td></tr>
+<tr><td>5</td><td>E</td><td class="num">-0.17 %</td><td>-0.47 %</td><td>0.06 %</td><td class="num">0.53 %</td><td>steepening</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 利差 = 10Y - 2Y 殖利率（單位：百分點，1.56% = 156 bps），負值代表曲線反轉</span>
+<span class="src">資料來源：FRED（DGS2, DGS10）</span>
+
+<div class="chart-wrap"><div class="chart-title">各循環各階段 2s10s 平均利差</div><div class="chart-sub">正值為正常曲線，負值為反轉</div><div class="chart-container" style="height:300px;width:100%;position:relative"><canvas id="chart_2s10s" style="display:block;width:100%;height:300px"></canvas></div><span class="src">資料來源：FRED（DGS2, DGS10）；GiS 計算。</span></div>
+<h2 class="ch">殖利率曲線反轉事件</h2>
+
+<table>
+  <thead><tr><th>反轉起始</th><th>反轉結束</th><th>持續期間</th><th>最深利差</th><th>後續衰退</th></tr></thead>
+  <tbody><tr><td>1998-05-26</td><td>1998-05-27</td><td>1 天</td><td class="num">-0.0 %</td><td>否</td></tr>
+<tr><td>1998-06-09</td><td>1998-07-10</td><td>31 天</td><td class="num">-0.1 %</td><td>否</td></tr>
+<tr><td>1998-07-21</td><td>1998-07-28</td><td>7 天</td><td class="num">-0.0 %</td><td>否</td></tr>
+<tr><td>2000-02-02</td><td>2000-12-29</td><td>331 天</td><td class="num">-0.5 %</td><td>是</td></tr>
+<tr><td>2005-12-27</td><td>2006-01-03</td><td>7 天</td><td class="num">-0.0 %</td><td>是</td></tr>
+<tr><td>2006-01-31</td><td>2006-03-08</td><td>36 天</td><td class="num">-0.2 %</td><td>是</td></tr>
+<tr><td>2006-03-21</td><td>2006-03-30</td><td>9 天</td><td class="num">-0.1 %</td><td>是</td></tr>
+<tr><td>2006-06-08</td><td>2006-07-27</td><td>49 天</td><td class="num">-0.1 %</td><td>是</td></tr>
+<tr><td>2006-08-02</td><td>2006-08-08</td><td>6 天</td><td class="num">-0.0 %</td><td>是</td></tr>
+<tr><td>2006-08-14</td><td>2007-03-21</td><td>219 天</td><td class="num">-0.19 %</td><td>是</td></tr>
+<tr><td>2019-05-23</td><td>2019-10-11</td><td>141 天</td><td class="num">-0.05 %</td><td>是 (COVID)</td></tr>
+<tr style="background:#fff8e1"><td>2022-07-05</td><td>2024-09-05</td><td>793 天</td><td class="num hi">-1.08 %</td><td>待觀察</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 利差 &lt; 0 即為殖利率曲線反轉（單位：百分點），通常為衰退領先指標。2022-23 反轉為史上最長最深。</span>
+<span class="src">資料來源：FRED（DGS2, DGS10）</span>
+
+<h2 class="ch">殖利率曲線快照</h2>
+
+<table>
+  <thead><tr><th>階段</th><th>2Y 殖利率</th><th>10Y 殖利率</th><th>30Y 殖利率</th></tr></thead>
+  <tbody><tr><td>B</td><td class="num pos">1.86%</td><td class="num pos">4.22%</td><td class="num pos">5.13%</td></tr>
+<tr><td>C</td><td class="num pos">3.45%</td><td class="num pos">3.83%</td><td class="num pos">3.91%</td></tr>
+<tr><td>D</td><td class="num pos">4.83%</td><td class="num pos">4.63%</td><td class="num pos">4.76%</td></tr>
+<tr><td>E</td><td class="num pos">4.71%</td><td class="num pos">4.79%</td><td class="num pos">5.00%</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 各階段中位數殖利率水準，反映不同利率環境下的曲線形態</span>
+<span class="src">資料來源：FRED</span>
+
+
+  <div class="page-footer">  <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>  <span>伍、殖利率曲線演變</span>  <span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div pb page">
+  <div class="sec-num">06</div>
+  <div class="sec-eyebrow">CHAPTER SIX</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">統計檢定結果</div>
+  <div class="sec-desc">t-test 與 Kruskal-Wallis 非參數檢定</div>
+</div>
+
+<div class="full-page pb page body-page">
+  
+<h1 class="ch">陸、統計檢定結果</h1>
+<h2 class="ch">報酬率 vs 零：單樣本 t 檢定</h2>
+
+<table>
+  <thead><tr><th>階段</th><th>資產</th><th>平均報酬</th><th>t 統計量</th><th>p 值</th><th>Cohen's d</th><th>顯著性</th><th>樣本數</th></tr></thead>
+  <tbody><tr><td>B</td><td>美元指數 (DXY)</td><td class="num pos">0.0465</td><td class="num pos">3.458</td><td class="num pos">0.0259</td><td class="num pos">1.547</td><td>**</td><td>5</td></tr>
+<tr><td>B</td><td>JNJ</td><td class="num pos">0.1034</td><td class="num pos">7.971</td><td class="num pos">0.0013</td><td class="num pos">3.565</td><td>***</td><td>5</td></tr>
+<tr><td>B</td><td>PLD</td><td class="num pos">0.0869</td><td class="num pos">4.000</td><td class="num pos">0.0280</td><td class="num pos">2.000</td><td>**</td><td>4</td></tr>
+<tr><td>C</td><td>HD</td><td class="num pos">0.1934</td><td class="num pos">3.061</td><td class="num pos">0.0376</td><td class="num pos">1.369</td><td>**</td><td>5</td></tr>
+<tr><td>C</td><td>標普價值 (S&P 500 Value)</td><td class="num pos">0.1940</td><td class="num pos">5.253</td><td class="num pos">0.0344</td><td class="num pos">3.033</td><td>**</td><td>3</td></tr>
+<tr><td>C</td><td>SO</td><td class="num pos">0.1039</td><td class="num pos">3.147</td><td class="num pos">0.0346</td><td class="num pos">1.407</td><td>**</td><td>5</td></tr>
+<tr><td>C</td><td>cpi</td><td class="num pos">0.0500</td><td class="num pos">6.002</td><td class="num pos">0.0039</td><td class="num pos">2.684</td><td>***</td><td>5</td></tr>
+<tr><td>C</td><td>2 年期公債殖利率</td><td class="num pos">0.9768</td><td class="num pos">3.916</td><td class="num pos">0.0173</td><td class="num pos">1.751</td><td>**</td><td>5</td></tr>
+<tr><td>D</td><td>AIG</td><td class="num pos">0.1925</td><td class="num pos">4.654</td><td class="num pos">0.0096</td><td class="num pos">2.081</td><td>***</td><td>5</td></tr>
+<tr><td>D</td><td>BAC</td><td class="num pos">0.1633</td><td class="num pos">3.609</td><td class="num pos">0.0226</td><td class="num pos">1.614</td><td>**</td><td>5</td></tr>
+<tr><td>D</td><td>BRK-B</td><td class="num pos">0.1397</td><td class="num pos">6.235</td><td class="num pos">0.0083</td><td class="num pos">3.118</td><td>***</td><td>4</td></tr>
+<tr><td>D</td><td>必需消費 (Consumer Staples)</td><td class="num pos">0.0974</td><td class="num pos">3.385</td><td class="num pos">0.0429</td><td class="num pos">1.693</td><td>**</td><td>4</td></tr>
+<tr><td>D</td><td>金融 (Financials)</td><td class="num pos">0.1918</td><td class="num pos">23.426</td><td class="num pos">0.0002</td><td class="num pos">11.713</td><td>***</td><td>4</td></tr>
+<tr><td>D</td><td>保險 (Insurance)</td><td class="num pos">0.1861</td><td class="num pos">17.586</td><td class="num pos">0.0032</td><td class="num pos">10.153</td><td>***</td><td>3</td></tr>
+<tr><td>D</td><td>KO</td><td class="num pos">0.1125</td><td class="num pos">2.943</td><td class="num pos">0.0423</td><td class="num pos">1.316</td><td>**</td><td>5</td></tr>
+<tr><td>D</td><td>投資級債 (LQD)</td><td class="num pos">0.0614</td><td class="num pos">14.946</td><td class="num pos">0.0044</td><td class="num pos">8.629</td><td>***</td><td>3</td></tr>
+<tr><td>D</td><td>MET</td><td class="num pos">0.2508</td><td class="num pos">4.371</td><td class="num pos">0.0222</td><td class="num pos">2.185</td><td>**</td><td>4</td></tr>
+<tr><td>D</td><td>那斯達克 100 (Nasdaq 100)</td><td class="num pos">0.1681</td><td class="num pos">3.131</td><td class="num pos">0.0352</td><td class="num pos">1.400</td><td>**</td><td>5</td></tr>
+<tr><td>D</td><td>PG</td><td class="num pos">0.1046</td><td class="num pos">3.984</td><td class="num pos">0.0163</td><td class="num pos">1.782</td><td>**</td><td>5</td></tr>
+<tr><td>D</td><td>標普 500 (S&P 500)</td><td class="num pos">0.1315</td><td class="num pos">3.054</td><td class="num pos">0.0379</td><td class="num pos">1.366</td><td>**</td><td>5</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ *** p&lt;0.01, ** p&lt;0.05, * p&lt;0.1；僅列出顯著結果</span>
+<span class="src">資料來源：GiS 統計檢定（單樣本 t-test vs 0）</span>
+
+<div class="chart-wrap"><div class="chart-title">各階段顯著資產數量</div><div class="chart-sub">t-test vs 0 在 p&lt;0.05 水準下顯著的資產數</div><div class="chart-container" style="height:250px;width:100%;position:relative"><canvas id="chart_stat_sig" style="display:block;width:100%;height:250px"></canvas></div></div>
+<h2 class="ch">相鄰階段報酬差異檢定</h2>
+
+<table>
+  <thead><tr><th>資產</th><th>階段對</th><th>平均差異</th><th>t 統計量</th><th>p 值</th><th>顯著性</th></tr></thead>
+  <tbody><tr><td>標普 500 (S&P 500)</td><td>D → E</td><td class="num pos">0.1329</td><td class="num pos">2.472</td><td class="num pos">0.0409</td><td>**</td></tr>
+<tr><td>標普成長 (S&P 500 Growth)</td><td>D → E</td><td class="num pos">0.2351</td><td class="num pos">2.979</td><td class="num pos">0.0247</td><td>**</td></tr>
+<tr><td>標普價值 (S&P 500 Value)</td><td>B → C</td><td class="num neg">-0.1916</td><td class="num neg">-4.259</td><td class="num pos">0.0166</td><td>**</td></tr>
+<tr><td>標普價值 (S&P 500 Value)</td><td>D → E</td><td class="num pos">0.1391</td><td class="num pos">3.022</td><td class="num pos">0.0268</td><td>**</td></tr>
+<tr><td>金融 (Financials)</td><td>D → E</td><td class="num pos">0.1904</td><td class="num pos">4.273</td><td class="num pos">0.0205</td><td>**</td></tr>
+<tr><td>長天期公債 (TLT)</td><td>D → E</td><td class="num neg">-0.0671</td><td class="num neg">-4.015</td><td class="num pos">0.0346</td><td>**</td></tr>
+<tr><td>歐元/美元</td><td>B → C</td><td class="num neg">-0.0741</td><td class="num neg">-4.032</td><td class="num pos">0.0188</td><td>**</td></tr>
+<tr><td>新興市場貨幣 (CEW)</td><td>B → C</td><td class="num neg">-0.1542</td><td class="num neg">-6.940</td><td class="num pos">0.0307</td><td>**</td></tr>
+<tr><td>銅 (Copper)</td><td>D → E</td><td class="num pos">0.1268</td><td class="num pos">2.826</td><td class="num pos">0.0432</td><td>**</td></tr>
+<tr><td>BAC</td><td>D → E</td><td class="num pos">0.1650</td><td class="num pos">3.076</td><td class="num pos">0.0186</td><td>**</td></tr>
+<tr><td>AIG</td><td>D → E</td><td class="num pos">0.1565</td><td class="num pos">2.444</td><td class="num pos">0.0411</td><td>**</td></tr>
+<tr><td>聯邦基金利率</td><td>D → E</td><td class="num pos">0.0881</td><td class="num pos">6.129</td><td class="num pos">0.0006</td><td>***</td></tr>
+<tr><td>2 年期公債殖利率</td><td>C → D</td><td class="num pos">1.0639</td><td class="num pos">4.246</td><td class="num pos">0.0127</td><td>**</td></tr>
+<tr><td>2 年期公債殖利率</td><td>D → E</td><td class="num pos">0.1005</td><td class="num pos">3.513</td><td class="num pos">0.0091</td><td>***</td></tr>
+<tr><td>10 年期公債殖利率</td><td>C → D</td><td class="num pos">0.3422</td><td class="num pos">2.764</td><td class="num pos">0.0448</td><td>**</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 比較相鄰階段報酬率差異是否顯著</span>
+<span class="src">資料來源：GiS 統計檢定（配對 t-test）</span>
+
+<h2 class="ch">成長 vs 價值因子檢定</h2>
+
+<table>
+  <thead><tr><th>階段</th><th>成長平均</th><th>價值平均</th><th>差異</th><th>t 統計量</th><th>p 值</th><th>顯著性</th></tr></thead>
+  <tbody><tr><td>B</td><td class="num neg">-0.0192</td><td class="num pos">0.0024</td><td class="num neg">-0.0216</td><td class="num neg">-0.422</td><td class="num pos">0.7144</td><td></td></tr>
+<tr><td>C</td><td class="num pos">0.1352</td><td class="num pos">0.1940</td><td class="num neg">-0.0588</td><td class="num neg">-0.631</td><td class="num pos">0.5925</td><td></td></tr>
+<tr><td>D</td><td class="num pos">0.1869</td><td class="num pos">0.1517</td><td class="num pos">0.0352</td><td class="num pos">0.688</td><td class="num pos">0.5409</td><td></td></tr>
+<tr><td>E</td><td class="num neg">-0.0482</td><td class="num pos">0.0127</td><td class="num neg">-0.0609</td><td class="num neg">-1.163</td><td class="num pos">0.3289</td><td></td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 成長/價值因子在不同利率階段的報酬差異</span>
+<span class="src">資料來源：GiS 統計檢定</span>
+
+<h2 class="ch">利率敏感 vs 非敏感產業檢定</h2>
+
+<table>
+  <thead><tr><th>階段</th><th>敏感平均</th><th>非敏感平均</th><th>差異</th><th>t 統計量</th><th>p 值</th><th>顯著性</th></tr></thead>
+  <tbody><tr><td>B</td><td class="num pos">0.0234</td><td class="num pos">0.0624</td><td class="num neg">-0.0390</td><td class="num neg">-1.612</td><td class="num pos">0.2054</td><td></td></tr>
+<tr><td>C</td><td class="num pos">0.0888</td><td class="num pos">0.1751</td><td class="num neg">-0.0862</td><td class="num neg">-1.699</td><td class="num pos">0.1879</td><td></td></tr>
+<tr><td>D</td><td class="num pos">0.1639</td><td class="num pos">0.1281</td><td class="num pos">0.0358</td><td class="num pos">0.679</td><td class="num pos">0.5458</td><td></td></tr>
+<tr><td>E</td><td class="num pos">0.0293</td><td class="num neg">-0.0092</td><td class="num pos">0.0385</td><td class="num pos">0.882</td><td class="num pos">0.4429</td><td></td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 利率敏感產業 vs 非敏感產業在不同階段的報酬差異</span>
+<span class="src">資料來源：GiS 統計檢定</span>
+
+<h2 class="ch">Kruskal-Wallis 檢定：跨循環一致性</h2>
+
+<table>
+  <thead><tr><th>階段</th><th>資產</th><th>循環數</th><th>平均報酬</th><th>CV</th><th>勝率</th><th>方向一致</th><th>整體一致</th></tr></thead>
+  <tbody><tr><td>B</td><td>玉米 (Corn)</td><td>3</td><td class="num pos">0.2031</td><td class="num pos">0.98</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>B</td><td>美元指數 (DXY)</td><td>5</td><td class="num pos">0.0465</td><td class="num pos">0.65</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>B</td><td>新興市場貨幣 (CEW)</td><td>2</td><td class="num neg">-0.0739</td><td class="num pos">0.23</td><td class="num">0%</td><td>✓</td><td>✓</td></tr>
+<tr><td>B</td><td>歐元/美元</td><td>3</td><td class="num neg">-0.0451</td><td class="num pos">0.57</td><td class="num">0%</td><td>✓</td><td>✓</td></tr>
+<tr><td>B</td><td>高收益債 (HYG)</td><td>2</td><td class="num neg">-0.0724</td><td class="num pos">0.11</td><td class="num">0%</td><td>✓</td><td>✓</td></tr>
+<tr><td>B</td><td>保險 (Insurance)</td><td>2</td><td class="num pos">0.0227</td><td class="num pos">1.06</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>B</td><td>JNJ</td><td>5</td><td class="num pos">0.1034</td><td class="num pos">0.28</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>B</td><td>PLD</td><td>4</td><td class="num pos">0.0869</td><td class="num pos">0.50</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>B</td><td>公用事業 (Utilities)</td><td>4</td><td class="num pos">0.0286</td><td class="num pos">1.11</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>B</td><td>cpi</td><td>5</td><td class="num pos">0.0184</td><td class="num pos">1.03</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>B</td><td>聯邦基金利率</td><td>5</td><td class="num pos">0.4974</td><td class="num pos">1.32</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>AAPL</td><td>5</td><td class="num pos">0.9745</td><td class="num pos">1.05</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>新興市場貨幣 (CEW)</td><td>2</td><td class="num pos">0.0803</td><td class="num pos">0.33</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>歐元/美元</td><td>3</td><td class="num pos">0.0290</td><td class="num pos">0.65</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>能源 (Energy)</td><td>4</td><td class="num pos">0.3255</td><td class="num pos">1.11</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>黃金 (Gold)</td><td>3</td><td class="num pos">0.2291</td><td class="num pos">1.04</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>HD</td><td>5</td><td class="num pos">0.1934</td><td class="num pos">0.73</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>醫療 (Healthcare)</td><td>4</td><td class="num pos">0.0764</td><td class="num pos">1.35</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>工業 (Industrials)</td><td>4</td><td class="num pos">0.1664</td><td class="num pos">0.64</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>NVDA</td><td>4</td><td class="num pos">2.2791</td><td class="num pos">0.67</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>那斯達克 100 (Nasdaq 100)</td><td>5</td><td class="num pos">0.2255</td><td class="num pos">1.08</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>標普 500 (S&P 500)</td><td>5</td><td class="num pos">0.0884</td><td class="num pos">0.89</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>標普成長 (S&P 500 Growth)</td><td>3</td><td class="num pos">0.1352</td><td class="num pos">1.29</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>標普價值 (S&P 500 Value)</td><td>3</td><td class="num pos">0.1940</td><td class="num pos">0.33</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+<tr><td>C</td><td>SO</td><td>5</td><td class="num pos">0.1039</td><td class="num pos">0.71</td><td class="num pos">100%</td><td>✓</td><td>✓</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ CV（變異係數）越低代表各輪循環報酬越穩定。勝率 = 正報酬循環數/總循環數。方向一致 = 全部循環同方向。</span>
+<span class="src">資料來源：GiS 計算；CV = |標準差/平均值|，CV &lt; 1.5 且方向一致視為跨循環穩定</span>
+
+<blockquote><strong>方法論說明與局限：</strong>統計檢定使用雙尾檢定，α=0.05。Cohen's d 衡量效果大小：小 (0.2)、中 (0.5)、大 (0.8)。<br><br>
+<strong>重要局限：</strong>(1) 樣本量僅 3~5 輪循環，統計力偏低，極端 Cohen's d（如 &gt;5）反映的是小樣本變異而非真實效果量；(2) 本章對數十種資產 × 多階段進行多重假設檢定，未做 Bonferroni 或 FDR 校正，在 α=0.05 下可能存在假陽性；(3) 成長/價值因子與利率敏感/非敏感產業的跨組比較<u>均未達統計顯著</u>（p&gt;0.18），顯示美林時鐘的資產輪動規則在本樣本中無法被統計驗證；(4) 部分標的（NVDA、TSLA、BTC）在早期循環不存在，存在<strong>存活者偏差</strong>風險。</blockquote>
+
+  <div class="page-footer">  <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>  <span>陸、統計檢定結果</span>  <span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div pb page">
+  <div class="sec-num">07</div>
+  <div class="sec-eyebrow">CHAPTER SEVEN</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">跨資產傳導機制</div>
+  <div class="sec-desc">相關矩陣與領先-滯後分析</div>
+</div>
+
+<div class="full-page pb page body-page alt">
+  
+<h1 class="ch">柒、跨資產傳導機制</h1>
+<h2 class="ch">資產報酬相關矩陣（熱力圖）</h2>
+<p style="font-size:14px;color:#6b7a9a">以下為升息期 (C)之資產報酬相關矩陣</p><table class="heatmap-table"><thead><tr><th></th><th style="font-size:11px">S&amp;P 500</th><th style="font-size:11px">Nasdaq 100</th><th style="font-size:11px">Gold</th><th style="font-size:11px">WTI</th><th style="font-size:11px">TLT</th><th style="font-size:11px">DXY</th><th style="font-size:11px">Banks</th><th style="font-size:11px">REITs</th><th style="font-size:11px">VIX</th></tr></thead><tbody><tr><td style="font-weight:600;font-size:13px;white-space:nowrap">S&amp;P 500</td><td style="background:#00875a;color:#fff">1.00</td><td style="background:#00875a;color:#fff">0.86</td><td style="background:#fff8e1;color:#1a1a2e">0.01</td><td style="background:#81c784;color:#1a1a2e">0.18</td><td style="background:#fff8e1;color:#1a1a2e">-0.08</td><td style="background:#fff8e1;color:#1a1a2e">-0.08</td><td style="background:#00875a;color:#fff">0.71</td><td style="background:#00875a;color:#fff">0.65</td><td style="background:#c0392b;color:#fff">-0.72</td></tr><tr><td style="font-weight:600;font-size:13px;white-space:nowrap">Nasdaq 100</td><td style="background:#00875a;color:#fff">0.86</td><td style="background:#00875a;color:#fff">1.00</td><td style="background:#fff8e1;color:#1a1a2e">-0.00</td><td style="background:#fff8e1;color:#1a1a2e">0.08</td><td style="background:#fff8e1;color:#1a1a2e">-0.04</td><td style="background:#fff8e1;color:#1a1a2e">-0.03</td><td style="background:#00875a;color:#fff">0.57</td><td style="background:#00875a;color:#fff">0.55</td><td style="background:#c0392b;color:#fff">-0.61</td></tr><tr><td style="font-weight:600;font-size:13px;white-space:nowrap">Gold</td><td style="background:#fff8e1;color:#1a1a2e">0.01</td><td style="background:#fff8e1;color:#1a1a2e">-0.00</td><td style="background:#00875a;color:#fff">1.00</td><td style="background:#81c784;color:#1a1a2e">0.13</td><td style="background:#81c784;color:#1a1a2e">0.23</td><td style="background:#c0392b;color:#fff">-0.51</td><td style="background:#e67e22;color:#1a1a2e">-0.16</td><td style="background:#fff8e1;color:#1a1a2e">0.07</td><td style="background:#fff8e1;color:#1a1a2e">0.04</td></tr><tr><td style="font-weight:600;font-size:13px;white-space:nowrap">WTI</td><td style="background:#81c784;color:#1a1a2e">0.18</td><td style="background:#fff8e1;color:#1a1a2e">0.08</td><td style="background:#81c784;color:#1a1a2e">0.13</td><td style="background:#00875a;color:#fff">1.00</td><td style="background:#e67e22;color:#1a1a2e">-0.13</td><td style="background:#e67e22;color:#1a1a2e">-0.16</td><td style="background:#81c784;color:#1a1a2e">0.19</td><td style="background:#fff8e1;color:#1a1a2e">0.08</td><td style="background:#e67e22;color:#1a1a2e">-0.17</td></tr><tr><td style="font-weight:600;font-size:13px;white-space:nowrap">TLT</td><td style="background:#fff8e1;color:#1a1a2e">-0.08</td><td style="background:#fff8e1;color:#1a1a2e">-0.04</td><td style="background:#81c784;color:#1a1a2e">0.23</td><td style="background:#e67e22;color:#1a1a2e">-0.13</td><td style="background:#00875a;color:#fff">1.00</td><td style="background:#e67e22;color:#1a1a2e">-0.20</td><td style="background:#e67e22;color:#1a1a2e">-0.25</td><td style="background:#81c784;color:#1a1a2e">0.16</td><td style="background:#81c784;color:#1a1a2e">0.10</td></tr><tr><td style="font-weight:600;font-size:13px;white-space:nowrap">DXY</td><td style="background:#fff8e1;color:#1a1a2e">-0.08</td><td style="background:#fff8e1;color:#1a1a2e">-0.03</td><td style="background:#c0392b;color:#fff">-0.51</td><td style="background:#e67e22;color:#1a1a2e">-0.16</td><td style="background:#e67e22;color:#1a1a2e">-0.20</td><td style="background:#00875a;color:#fff">1.00</td><td style="background:#fff8e1;color:#1a1a2e">-0.08</td><td style="background:#e67e22;color:#1a1a2e">-0.16</td><td style="background:#fff8e1;color:#1a1a2e">0.03</td></tr><tr><td style="font-weight:600;font-size:13px;white-space:nowrap">Banks</td><td style="background:#00875a;color:#fff">0.71</td><td style="background:#00875a;color:#fff">0.57</td><td style="background:#e67e22;color:#1a1a2e">-0.16</td><td style="background:#81c784;color:#1a1a2e">0.19</td><td style="background:#e67e22;color:#1a1a2e">-0.25</td><td style="background:#fff8e1;color:#1a1a2e">-0.08</td><td style="background:#00875a;color:#fff">1.00</td><td style="background:#81c784;color:#1a1a2e">0.44</td><td style="background:#c0392b;color:#fff">-0.55</td></tr><tr><td style="font-weight:600;font-size:13px;white-space:nowrap">REITs</td><td style="background:#00875a;color:#fff">0.65</td><td style="background:#00875a;color:#fff">0.55</td><td style="background:#fff8e1;color:#1a1a2e">0.07</td><td style="background:#fff8e1;color:#1a1a2e">0.08</td><td style="background:#81c784;color:#1a1a2e">0.16</td><td style="background:#e67e22;color:#1a1a2e">-0.16</td><td style="background:#81c784;color:#1a1a2e">0.44</td><td style="background:#00875a;color:#fff">1.00</td><td style="background:#e67e22;color:#1a1a2e">-0.44</td></tr><tr><td style="font-weight:600;font-size:13px;white-space:nowrap">VIX</td><td style="background:#c0392b;color:#fff">-0.72</td><td style="background:#c0392b;color:#fff">-0.61</td><td style="background:#fff8e1;color:#1a1a2e">0.04</td><td style="background:#e67e22;color:#1a1a2e">-0.17</td><td style="background:#81c784;color:#1a1a2e">0.10</td><td style="background:#fff8e1;color:#1a1a2e">0.03</td><td style="background:#c0392b;color:#fff">-0.55</td><td style="background:#e67e22;color:#1a1a2e">-0.44</td><td style="background:#00875a;color:#fff">1.00</td></tr></tbody></table><span class="src">資料來源：Yahoo Finance / FRED；GiS 計算。顏色深淺表示相關係數大小。</span>
+<h2 class="ch">領先-滯後關係（Top 10）</h2>
+
+<table>
+  <thead><tr><th>目標</th><th>預測因子</th><th>最佳領先期</th><th>最大相關係數</th><th>p 值</th></tr></thead>
+  <tbody><tr><td>Nasdaq 100</td><td>Technology</td><td class="num">0 月</td><td class="num pos">0.966</td><td class="num">0.0000</td></tr>
+<tr><td>S&P 500</td><td>S&P 500 Growth</td><td class="num">0 月</td><td class="num pos">0.961</td><td class="num">0.0000</td></tr>
+<tr><td>TLT</td><td>ust_30y</td><td class="num">0 月</td><td class="num neg">-0.960</td><td class="num">0.0000</td></tr>
+<tr><td>S&P 500</td><td>S&P 500 Value</td><td class="num">0 月</td><td class="num pos">0.948</td><td class="num">0.0000</td></tr>
+<tr><td>Nasdaq 100</td><td>S&P 500 Growth</td><td class="num">0 月</td><td class="num pos">0.915</td><td class="num">0.0000</td></tr>
+<tr><td>TLT</td><td>ust_10y</td><td class="num">0 月</td><td class="num neg">-0.903</td><td class="num">0.0000</td></tr>
+<tr><td>S&P 500</td><td>Industrials</td><td class="num">0 月</td><td class="num pos">0.895</td><td class="num">0.0000</td></tr>
+<tr><td>S&P 500</td><td>Consumer Discretionary</td><td class="num">0 月</td><td class="num pos">0.879</td><td class="num">0.0000</td></tr>
+<tr><td>S&P 500</td><td>Technology</td><td class="num">0 月</td><td class="num pos">0.853</td><td class="num">0.0000</td></tr>
+<tr><td>S&P 500</td><td>Russell 2000</td><td class="num">0 月</td><td class="num pos">0.833</td><td class="num">0.0000</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 按相關係數絕對值排序，取前 10 組配對。<strong style="color:#c0392b">注意：Top 10 配對全為 lag=0（同期相關），未發現有效領先指標。</strong>多數高相關源自成分重疊（如 Nasdaq 100 ⊂ Technology），不具預測價值。</span>
+<span class="src">資料來源：GiS 跨資產領先-滯後分析</span>
+
+<div class="chart-wrap"><div class="chart-title">領先-滯後關係：Top 相關配對</div><div class="chart-sub">按最大相關係數絕對值排序</div><div class="chart-container" style="height:280px;width:100%;position:relative"><canvas id="chart_lead_corr" style="display:block;width:100%;height:280px"></canvas></div></div>
+<h2 class="ch">Granger 因果檢定</h2>
+
+<table>
+  <thead><tr><th>資產</th><th>最佳滯後期</th><th>F 統計量</th><th>p 值</th><th>顯著性</th></tr></thead>
+  <tbody><tr><td>Banks</td><td class="num pos">12</td><td class="num pos">3.985</td><td class="num">0.0000</td><td>***</td></tr>
+<tr><td>Gold</td><td class="num pos">12</td><td class="num pos">2.377</td><td class="num pos">0.0063</td><td>***</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ H0：利率變動不 Granger-cause 該資產報酬。*** p&lt;0.01, ** p&lt;0.05, * p&lt;0.1</span>
+<span class="src">資料來源：GiS Granger 因果檢定</span>
+
+<blockquote><strong>方法論局限：</strong>領先-滯後分析僅捕捉到同期共線性，未發現跨資產領先訊號。Granger 因果檢定在數十項資產中僅銀行與黃金通過（lag=12），顯示利率對多數資產的「因果傳導」在統計上難以與雜訊區分。本章結論應謹慎解讀——利率確實影響資產定價，但以月頻率資料、5 輪循環樣本量進行的傳導分析，統計力不足以捕捉細緻的滯後結構。</blockquote>
+
+  <div class="page-footer">  <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>  <span>柒、跨資產傳導機制</span>  <span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div pb page">
+  <div class="sec-num">08</div>
+  <div class="sec-eyebrow">CHAPTER EIGHT</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">通膨升息情境<br>投資機會研判</div>
+  <div class="sec-desc">指標追蹤、交易機會、觸發條件與風險矩陣</div>
+</div>
+
+<div class="full-page pb page body-page">
+  
+<h1 class="ch">捌、投資機會研判</h1>
+
+<div class="exec-sum" style="margin:16px 0">
+  <div class="exec-thesis"><span class="thesis-num">◎</span>
+    <span><strong>當前情境研判：Stagflation — 通膨黏著 + 經濟放緩，升息風險升溫</strong></span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:10px">
+    <div style="font-size:14px;color:#4a5568;line-height:1.8">
+      <strong style="color:#0d1b3e">宏觀現況</strong><br>
+      Fed Funds Rate: 4.25%（維持不動）<br>
+      CPI YoY: 3.5%（高於 2% 目標）<br>
+      PMI: 49.0（製造業收縮）<br>
+      GDP Growth: 2.0%（趨緩）
+    </div>
+    <div style="font-size:14px;color:#4a5568;line-height:1.8">
+      <strong style="color:#0d1b3e">情境假設</strong><br>
+      若通膨因供給衝擊（中東衝突→化肥中斷→糧價飆升）再起，Fed 可能被迫重啟升息<br>
+      預計升息起點: 2026-06<br>
+      <strong style="color:#c0392b">核心問題：不降息甚至升息時，該怎麼辦？</strong>
+    </div>
+  </div>
+</div>
+
+<h2 class="ch">Stagflation 情境：優先關注指標</h2>
+<table>
+  <thead><tr><th>指標類別</th><th>具體指標</th><th>觀察重點</th><th>數據來源</th></tr></thead>
+  <tbody>
+  <tr><td style="font-weight:700;color:#c0392b">通膨先行</td><td>CPI YoY、Core PCE</td><td>Core PCE 連續 3 月 &gt; 3% 為升息訊號</td><td>BLS / BEA</td></tr>
+  <tr><td style="font-weight:700;color:#c0392b">通膨先行</td><td>5Y5Y 通膨預期</td><td>突破 2.5% 代表長期通膨預期脫錨</td><td>FRED (T5YIE)</td></tr>
+  <tr><td style="font-weight:700;color:#c0392b">通膨先行</td><td>Urea / 糧價期貨</td><td>化肥→糧價→CPI 食品分項，領先 CPI 3-6 月</td><td>CME / IFPRI</td></tr>
+  <tr><td style="font-weight:700;color:#d97706">利率定價</td><td>Fed Funds Futures</td><td>市場定價下次會議升息機率 &gt; 50%</td><td>CME FedWatch</td></tr>
+  <tr><td style="font-weight:700;color:#d97706">利率定價</td><td>2s10s 殖利率利差</td><td>再次反轉 → 衰退風險升高</td><td>FRED (DGS2, DGS10)</td></tr>
+  <tr><td style="font-weight:700;color:#d97706">利率定價</td><td>2Y Treasury Yield</td><td>升破 5% 代表市場定價更多升息</td><td>FRED (DGS2)</td></tr>
+  <tr><td style="font-weight:700;color:#1a3a6e">實體經濟</td><td>ISM PMI + 新訂單</td><td>PMI &lt; 48 + 通膨仍高 = 典型 Stagflation</td><td>ISM</td></tr>
+  <tr><td style="font-weight:700;color:#1a3a6e">實體經濟</td><td>非農就業 + 時薪</td><td>就業強勁 + 時薪加速 → Fed 鷹派底氣</td><td>BLS</td></tr>
+  </tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 通膨先行指標應每月追蹤，利率定價指標可每日追蹤</span>
+<h2 class="ch">升息期 (B→C) 歷史最佳可交易資產</h2>
+<p style="font-size:14px;color:#6b7a9a">以下僅列<strong>可交易</strong>資產（已移除利率指標本身），聚焦升息前 (B) 與升息期 (C) 兩個與當前情境最相關的階段。</p>
+
+<table>
+  <thead><tr><th>階段</th><th>資產</th><th>平均報酬</th><th>勝率</th><th>夏普</th><th>方向</th><th>可交易工具</th></tr></thead>
+  <tbody>
+<tr><td>B</td><td>Urea（化肥）</td><td class="num pos">58.1%</td><td class="num pos">100%</td><td class="num pos">2.64</td><td>做多</td><td>OCI / Nutrien (NTR) / CF Industries (CF)</td></tr>
+<tr><td>B</td><td>玉米 (Corn)</td><td class="num pos">20.3%</td><td class="num pos">100%</td><td class="num pos">1.84</td><td>做多</td><td>CORN ETF / ZC 期貨</td></tr>
+<tr><td>B</td><td>JNJ</td><td class="num pos">10.3%</td><td class="num pos">100%</td><td class="num pos">1.11</td><td>做多</td><td>JNJ 股票</td></tr>
+<tr><td>B</td><td>PLD</td><td class="num pos">8.7%</td><td class="num pos">100%</td><td class="num pos">—</td><td>做多</td><td>PLD 股票</td></tr>
+<tr><td>C</td><td>能源 (Energy)</td><td class="num pos">32.6%</td><td class="num pos">100%</td><td class="num pos">—</td><td>做多</td><td>XLE / XOM / CVX</td></tr>
+<tr><td>C</td><td>黃金 (Gold)</td><td class="num pos">22.9%</td><td class="num pos">100%</td><td class="num pos">—</td><td>做多</td><td>GLD / GDX / XAUUSD</td></tr>
+<tr><td>C</td><td>科技 (Technology)</td><td class="num pos">24.7%</td><td class="num pos">100%</td><td class="num pos">—</td><td>做多</td><td>QQQ / XLK（升息初期仍受惠經濟擴張）</td></tr>
+<tr><td>C</td><td>公用事業 (Utilities)</td><td class="num pos">19.9%</td><td class="num pos">100%</td><td class="num pos">—</td><td>做多</td><td>XLU / SO / DUK</td></tr>
+<tr><td>C</td><td>HD</td><td class="num pos">19.3%</td><td class="num pos">100%</td><td class="num pos">1.37</td><td>做多</td><td>HD 股票</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 報酬為跨循環平均累積報酬（非年化）。勝率 = 跨循環正報酬比例。夏普「—」表示原始數據未提供該值。</span>
+<span class="src" style="color:#c0392b;font-weight:500">▸ 注意：NVDA/AAPL 在早期循環不存在，勝率 100% 建立在僅 3~4 輪有效數據上，存在存活者偏差。</span>
+<span class="src">資料來源：GiS 歷史回測統計（已排除不可交易之利率指標）</span>
+
+<h2 class="ch">通膨升息情境：首選交易機會</h2>
+<p style="font-size:14px;color:#6b7a9a;margin-bottom:12px">以下建議基於「<strong>通膨再起 → Fed 被迫升息</strong>」情境，按升息循環歷史規律與當前 Stagflation 象限篩選。分為三層：<strong>通膨直接受益</strong>（商品）、<strong>Stagflation 防禦</strong>（現金流穩定）、<strong>應避開</strong>（利率敏感長 duration）。</p>
+
+<div class="picks-grid">
+<div class="pick-card" style="border-color:#00a878;border-width:2px">
+  <div class="pick-rank" style="color:#c0392b">第一層：通膨直接受益</div>
+  <div class="pick-name">能源 (XLE / XOM / CVX)</div>
+  <div class="pick-ticker">升息期勝率：100%　平均報酬：+32.6%　信心度：高</div>
+  <div class="pick-why">五輪升息循環中表現最強的可交易資產類別。升息通常伴隨通膨→能源為通膨源頭，直接受益。Granger 因果雖不顯著，但方向一致性最高。</div>
+  <div class="pick-catalyst">觸發條件：WTI 站穩 $85 + OPEC 減產延長 + 中東供給風險</div>
+</div>
+<div class="pick-card" style="border-color:#00a878;border-width:2px">
+  <div class="pick-rank" style="color:#c0392b">第一層：通膨直接受益</div>
+  <div class="pick-name">黃金 (GLD / GDX / XAUUSD)</div>
+  <div class="pick-ticker">升息期勝率：100%　平均報酬：+22.9%　信心度：高</div>
+  <div class="pick-why">Granger 因果檢定通過（p=0.006, lag=12）。利率上升期間黃金仍漲，因為通膨預期上升速度 &gt; 名目利率，實質利率走低。升息前 + 升息期全為正報酬。</div>
+  <div class="pick-catalyst">觸發條件：實質利率（10Y TIPS）下行 + 央行持續增持 + 地緣避險需求</div>
+</div>
+<div class="pick-card" style="border-color:#00a878;border-width:2px">
+  <div class="pick-rank" style="color:#c0392b">第一層：通膨直接受益</div>
+  <div class="pick-name">農產品（玉米 ZC / 小麥 ZW / Urea 化肥）</div>
+  <div class="pick-ticker">升息前期勝率：100%（玉米 B 階段）　信心度：中</div>
+  <div class="pick-why">你的 2026 情境假設（中東→化肥→糧價）的直接交易標的。Urea 升息前平均 +58%，玉米跨循環方向一致。農產品為通膨傳導鏈上游。</div>
+  <div class="pick-catalyst">觸發條件：化肥供給中斷確認 + La Nina 氣候事件 + USDA 報告下修產量</div>
+</div>
+<div class="pick-card">
+  <div class="pick-rank" style="color:#d97706">第二層：Stagflation 防禦</div>
+  <div class="pick-name">JNJ / PG / KO（防禦型消費）</div>
+  <div class="pick-ticker">JNJ 升息前勝率：100%（t-test p=0.001）　信心度：中高</div>
+  <div class="pick-why">JNJ 是全報告中 t-test 最顯著的個股（p=0.0013, Cohen's d=3.57）。必需消費在全階段穩定正報酬，Stagflation 象限下現金流穩定性溢價最高。</div>
+  <div class="pick-catalyst">觸發條件：PMI 連續 &lt; 49 + 消費者信心下滑 → 資金轉向防禦</div>
+</div>
+<div class="pick-card">
+  <div class="pick-rank" style="color:#d97706">第二層：Stagflation 防禦</div>
+  <div class="pick-name">公用事業 (XLU / SO / DUK)</div>
+  <div class="pick-ticker">升息期勝率：100%　平均報酬：+19.9%　信心度：中</div>
+  <div class="pick-why">與直覺相反——升息初期經濟仍強勁，公用事業作為防禦型配置反而受惠。SO 在升息期 t-test 顯著（p=0.035）。但若利率升幅過大（如 2022 年），高股息資產會承壓。</div>
+  <div class="pick-catalyst">觸發條件：升息初期 + 經濟未明顯衰退時配置，若 FFR 升破 5.5% 需重新評估</div>
+</div>
+<div class="pick-card" style="border-color:#c0392b;border-width:2px;background:#fdf0ef">
+  <div class="pick-rank" style="color:#c0392b">應避開 / 做空考量</div>
+  <div class="pick-name">長天期公債 (TLT) / 長 Duration 成長股</div>
+  <div class="pick-ticker">TLT 升息期平均報酬：-1.1%　降息期才轉正 +8.5%</div>
+  <div class="pick-why">升息期公債必然承壓。高估值成長股（高 duration equity）在升息末期 (E) 大幅回撤（科技 -9.1%）。若不降息反升息，這是最大風險暴露。</div>
+  <div class="pick-catalyst">避開條件：2Y yield 突破 5% + Fed 點陣圖上調 → 減持長 duration 部位</div>
+</div>
+</div>
+<h2 class="ch">分階段觸發條件 Checklist</h2>
+<p style="font-size:14px;color:#6b7a9a">根據通膨→升息情境，按時間序列列出各階段的觀察指標與對應動作。</p>
+
+<table>
+  <thead><tr><th>階段</th><th>觸發訊號</th><th>動作</th><th>對應標的</th></tr></thead>
+  <tbody>
+<tr><td style="font-weight:700;background:#fff8e1">現在<br>(Stagflation 觀望期)</td><td>CPI &gt; 3%、PMI &lt; 49、Fed 按兵不動</td><td>建立農產品 + 黃金部位；防禦型配置 JNJ/PG</td><td>GLD, CORN, CF, JNJ, PG</td></tr>
+<tr><td style="font-weight:700;background:#fff8e1">升息前<br>(B 階段確認)</td><td>Fed Funds Futures 定價升息 &gt; 50%<br>Core PCE 連續 3 月 &gt; 3%<br>5Y5Y 通膨預期 &gt; 2.5%</td><td>加碼能源 + 化肥；開始減持 TLT / 長 duration</td><td>XLE, XOM, NTR, CF</td></tr>
+<tr><td style="font-weight:700">升息期<br>(C 階段)</td><td>首次升息確認（FOMC 聲明）</td><td>維持能源 + 黃金；觀察銀行股（勝率僅 67%，等高原期再加碼）；科技若仍強可持有但設停損</td><td>XLE, GLD, XLU, HD</td></tr>
+<tr><td style="font-weight:700">高原期<br>(D 階段)</td><td>最後一次升息 + Fed 暗示暫停</td><td>銀行 / 金融轉正的最佳時點（歷史 +15~19%）；加碼投資級債 LQD</td><td>BAC, JPM, MET, LQD, BRK-B</td></tr>
+<tr><td style="font-weight:700;background:#fdf0ef">風險情境<br>(Stagflation 惡化)</td><td>PMI &lt; 45 + CPI &gt; 4% + 就業惡化<br>2s10s 再次深度反轉</td><td>全面防禦：增加現金比重、黃金、短天期國庫券<br>減持所有股票部位</td><td>SHV (短期國庫券), GLD, 現金</td></tr>
+</tbody>
+</table>
+<span class="src" style="color:#1a3a6e;font-weight:500">▸ 每個觸發條件都可透過 FRED / CME FedWatch / ISM 即時追蹤</span>
+
+<h2 class="ch">風險矩陣</h2>
+<div class="risk-matrix">
+<div class="risk-card up"><h4>上行風險（通膨情境利多）</h4>
+<div class="risk-item"><strong>通膨超預期飆升</strong>：中東衝突擴大→原油破 $100，能源股與商品報酬可能超越歷史平均</div>
+<div class="risk-item"><strong>Fed 升息幅度溫和</strong>：僅升 1-2 碼即暫停，類似 2015-18 正常化模式，股市仍有空間</div>
+<div class="risk-item"><strong>美元走強</strong>：升息帶動美元走強（DXY 歷史升息期小幅走弱但非每輪如此），持有美元資產本身有匯率優勢</div>
+</div>
+<div class="risk-card dn"><h4>下行風險（通膨情境利空）</h4>
+<div class="risk-item"><strong>Stagflation 深化</strong>：PMI 跌破 45 + 通膨仍高 → 所有風險資產承壓，僅現金與黃金安全</div>
+<div class="risk-item"><strong>升息力度超預期</strong>：類似 2022 年暴力升息 525 bps → 科技股、REITs、長債全面重挫，即使能源也可能因衰退預期回落</div>
+<div class="risk-item"><strong>歷史樣本不代表未來</strong>：本報告僅基於 5 輪循環，每輪宏觀背景差異極大（QE 前後、全球化 vs 脫鉤）。2026 的結構性變化（AI、財政赤字、去美元化）可能使歷史規律失效</div>
+<div class="risk-item"><strong>流動性風險</strong>：農產品期貨、Urea 相關股票流動性較低，大額部位進出成本高</div>
+</div>
+</div>
+<blockquote><strong>重要聲明：</strong>以上投資機會基於歷史統計規律研判（僅 5 輪循環、n=3~5），不構成投資建議。所有統計結論均需搭配即時宏觀數據驗證。在 Stagflation 象限下，<strong>保持彈性、控制部位規模、嚴設停損</strong>比追求最大報酬更重要。</blockquote>
+
+  <div class="page-footer">  <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>  <span>捌、投資機會研判</span>  <span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div pb page">
+  <div class="sec-num">A</div>
+  <div class="sec-eyebrow">APPENDIX</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">附錄</div>
+  <div class="sec-desc">統計檢定明細與數據來源</div>
+</div>
+
+<div class="full-page pb page body-page alt">
+  
+<h1 class="ch">附錄：統計檢定明細</h1>
+<h2 class="ch">A. 各循環各資產報酬明細</h2>
+
+<table>
+  <thead><tr><th>資產</th><th>循環</th><th>階段</th><th>累積報酬</th><th>年化報酬</th></tr></thead>
+  <tbody><tr><td>標普 500 (S&P 500)</td><td>1994-95 預防型</td><td>B</td><td class="num pos">0.0717</td><td class="num pos">0.1486</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>1994-95 預防型</td><td>C</td><td class="num pos">0.0013</td><td class="num pos">0.0013</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>1994-95 預防型</td><td>D</td><td class="num pos">0.0686</td><td class="num pos">0.4755</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>1994-95 預防型</td><td>E</td><td class="num pos">0.0825</td><td class="num pos">0.3729</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>1999-00 過熱型</td><td>B</td><td class="num pos">0.0970</td><td class="num pos">0.2052</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>1999-00 過熱型</td><td>C</td><td class="num pos">0.0680</td><td class="num pos">0.0779</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>1999-00 過熱型</td><td>D</td><td class="num neg">-0.0078</td><td class="num neg">-0.0206</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>1999-00 過熱型</td><td>E</td><td class="num neg">-0.1065</td><td class="num neg">-0.3582</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2004-06 漸進型</td><td>B</td><td class="num pos">0.0239</td><td class="num pos">0.0488</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2004-06 漸進型</td><td>C</td><td class="num pos">0.1157</td><td class="num pos">0.0564</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2004-06 漸進型</td><td>D</td><td class="num pos">0.2068</td><td class="num pos">0.2182</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2004-06 漸進型</td><td>E</td><td class="num neg">-0.0355</td><td class="num neg">-0.1328</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2015-18 正常化型</td><td>B</td><td class="num neg">-0.0252</td><td class="num neg">-0.0491</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2015-18 正常化型</td><td>C</td><td class="num pos">0.2093</td><td class="num pos">0.0653</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2015-18 正常化型</td><td>D</td><td class="num pos">0.1928</td><td class="num pos">0.6566</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2015-18 正常化型</td><td>E</td><td class="num pos">0.0229</td><td class="num pos">0.0931</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2022-23 抗通膨型</td><td>B</td><td class="num neg">-0.0472</td><td class="num neg">-0.0929</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2022-23 抗通膨型</td><td>C</td><td class="num pos">0.0479</td><td class="num pos">0.0351</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2022-23 抗通膨型</td><td>D</td><td class="num pos">0.1971</td><td class="num pos">0.2243</td></tr>
+<tr><td>標普 500 (S&P 500)</td><td>2022-23 抗通膨型</td><td>E</td><td class="num pos">0.0295</td><td class="num pos">0.1212</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>1994-95 預防型</td><td>B</td><td class="num pos">0.1387</td><td class="num pos">0.2966</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>1994-95 預防型</td><td>C</td><td class="num pos">0.0241</td><td class="num pos">0.0244</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>1994-95 預防型</td><td>D</td><td class="num pos">0.0747</td><td class="num pos">0.5253</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>1994-95 預防型</td><td>E</td><td class="num pos">0.2220</td><td class="num pos">1.2302</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>1999-00 過熱型</td><td>B</td><td class="num pos">0.2590</td><td class="num pos">0.5910</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>1999-00 過熱型</td><td>C</td><td class="num pos">0.5878</td><td class="num pos">0.6942</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>1999-00 過熱型</td><td>D</td><td class="num pos">0.0057</td><td class="num pos">0.0151</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>1999-00 過熱型</td><td>E</td><td class="num neg">-0.3844</td><td class="num neg">-0.8520</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2004-06 漸進型</td><td>B</td><td class="num pos">0.0242</td><td class="num pos">0.0495</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2004-06 漸進型</td><td>C</td><td class="num pos">0.0454</td><td class="num pos">0.0225</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2004-06 漸進型</td><td>D</td><td class="num pos">0.2331</td><td class="num pos">0.2461</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2004-06 漸進型</td><td>E</td><td class="num pos">0.0199</td><td class="num pos">0.0807</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2015-18 正常化型</td><td>B</td><td class="num pos">0.0317</td><td class="num pos">0.0634</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2015-18 正常化型</td><td>C</td><td class="num pos">0.3598</td><td class="num pos">0.1077</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2015-18 正常化型</td><td>D</td><td class="num pos">0.2556</td><td class="num pos">0.9191</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2015-18 正常化型</td><td>E</td><td class="num pos">0.0220</td><td class="num pos">0.0894</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2022-23 抗通膨型</td><td>B</td><td class="num neg">-0.1326</td><td class="num neg">-0.2493</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2022-23 抗通膨型</td><td>C</td><td class="num pos">0.1105</td><td class="num pos">0.0803</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2022-23 抗通膨型</td><td>D</td><td class="num pos">0.2713</td><td class="num pos">0.3100</td></tr>
+<tr><td>那斯達克 100 (Nasdaq 100)</td><td>2022-23 抗通膨型</td><td>E</td><td class="num neg">-0.0236</td><td class="num neg">-0.0899</td></tr>
+</tbody>
+</table>
+<span class="src">資料來源：GiS 計算</span>
+
+<p style="color:#9aabb5;font-size:13px;margin-top:24px">
+  本研究使用 Python 進行數據處理與統計分析。數據來源：FRED（聯準會經濟數據庫）、Yahoo Finance。
+  所有報酬率均為價格報酬（不含股息），以各階段首末交易日收盤價計算。
+  統計檢定在 scipy.stats 套件下進行，顯著水準設定為 α=0.05。
+</p>
+
+  <div class="page-footer">  <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>  <span>附錄</span>  <span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+  
+  (function() {
+    var el = document.getElementById('chart_ffr_timeline');
+    if (!el) return;
+    new Chart(el, {
+      type: 'line',
+      data: {"labels": ["1994-02", "1995-02", "1995-07", "1999-06", "2000-05", "2001-01", "2004-06", "2006-06", "2007-09", "2015-12", "2018-12", "2019-07", "2022-03", "2023-07", "2024-09"], "datasets": [{"label": "聯邦基金利率 (%)", "data": [3.0, 6.0, 6.0, 4.75, 6.5, 6.5, 1.0, 5.25, 5.25, 0.25, 2.5, 2.5, 0.25, 5.5, 5.5], "borderColor": "#00a878", "backgroundColor": "rgba(0,168,120,0.1)", "fill": true, "tension": 0.3, "pointRadius": 4, "pointBackgroundColor": "#0d1b3e", "borderWidth": 2}]},
+      options: {"responsive": true, "maintainAspectRatio": false, "plugins": {"legend": {"display": true, "position": "top"}, "title": {"display": false}}, "scales": {"y": {"title": {"display": true, "text": "利率 (%)"}, "beginAtZero": true}, "x": {"title": {"display": true, "text": "日期"}}}}
+    });
+  })();
+
+
+  (function() {
+    var el = document.getElementById('chart_phase_returns');
+    if (!el) return;
+    new Chart(el, {
+      type: 'bar',
+      data: {"labels": ["標普 500 (S&P 500)", "那斯達克 100 (Nasdaq 100)", "羅素 2000 (Russell 2000)", "銀行 (Banks)", "不動產 (REITs)", "公用事業 (Utilities)", "科技 (Technology)", "能源 (Energy)", "醫療 (Healthcare)", "黃金 (Gold)"], "datasets": [{"label": "升息期", "data": [8.8, 22.6, 8.2, -0.6, 14.7, 19.9, 24.7, 32.6, 7.6, 22.9], "backgroundColor": "#0d1b3e", "borderRadius": 3}, {"label": "高原期", "data": [13.1, 16.8, 9.9, 15.3, 11.5, 15.0, 19.2, 13.4, 8.8, 6.9], "backgroundColor": "#00a878", "borderRadius": 3}, {"label": "降息預期", "data": [-0.1, -2.9, -0.0, 3.6, 5.9, 4.9, -9.1, -0.4, -0.9, 7.4], "backgroundColor": "#d97706", "borderRadius": 3}]},
+      options: {"responsive": true, "maintainAspectRatio": false, "plugins": {"legend": {"display": true, "position": "top"}}, "scales": {"y": {"title": {"display": true, "text": "平均報酬率 (%)"}}, "x": {"ticks": {"maxRotation": 45}}}}
+    });
+  })();
+
+
+  (function() {
+    var el = document.getElementById('chart_growth_value');
+    if (!el) return;
+    new Chart(el, {
+      type: 'line',
+      data: {"labels": ["1994-95 預防型", "1999-00 過熱型", "2004-06 漸進型", "2015-18 正常化型", "2022-23 抗通膨型"], "datasets": [{"label": "標普成長 (IVW)", "data": [null, null, 6.3, 33.4, 0.8], "borderColor": "#00a878", "backgroundColor": "rgba(0,168,120,0.1)", "fill": false, "tension": 0.3, "pointRadius": 5, "borderWidth": 2}, {"label": "標普價值 (IVE)", "data": [null, null, 24.8, 21.1, 12.3], "borderColor": "#d97706", "backgroundColor": "rgba(217,119,6,0.1)", "fill": false, "tension": 0.3, "pointRadius": 5, "borderWidth": 2}]},
+      options: {"responsive": true, "maintainAspectRatio": false, "plugins": {"legend": {"display": true, "position": "top"}}, "scales": {"y": {"title": {"display": true, "text": "累積報酬 (%)"}}}}
+    });
+  })();
+
+
+  (function() {
+    var el = document.getElementById('chart_2s10s');
+    if (!el) return;
+    new Chart(el, {
+      type: 'bar',
+      data: {"labels": ["1_B", "1_C", "1_D", "1_E", "2_B", "2_C", "2_D", "2_E", "3_B", "3_C", "3_D", "3_E", "4_B", "4_C", "4_D", "4_E", "5_B", "5_C", "5_D", "5_E"], "datasets": [{"label": "各階段平均利差 (bps)", "data": [1.56, 1.02, 0.4, 0.47, 0.2, 0.06, -0.34, -0.15, 2.24, 0.62, -0.05, 0.29, 1.48, 0.78, 0.17, 0.22, 0.84, -0.41, -0.42, -0.17], "backgroundColor": ["#1a3a6e", "#1a3a6e", "#1a3a6e", "#1a3a6e", "#1a3a6e", "#1a3a6e", "#c0392b", "#c0392b", "#1a3a6e", "#1a3a6e", "#c0392b", "#1a3a6e", "#1a3a6e", "#1a3a6e", "#1a3a6e", "#1a3a6e", "#1a3a6e", "#c0392b", "#c0392b", "#c0392b"], "borderRadius": 3}]},
+      options: {"responsive": true, "maintainAspectRatio": false, "plugins": {"legend": {"display": true, "position": "top"}}, "scales": {"y": {"title": {"display": true, "text": "利差 (bps)"}}, "x": {"ticks": {"maxRotation": 45}}}}
+    });
+  })();
+
+
+  (function() {
+    var el = document.getElementById('chart_stat_sig');
+    if (!el) return;
+    new Chart(el, {
+      type: 'bar',
+      data: {"labels": ["B", "C", "D", "E"], "datasets": [{"label": "顯著資產數量", "data": [3, 5, 19, 11], "backgroundColor": "#00a878", "borderRadius": 4}]},
+      options: {"responsive": true, "maintainAspectRatio": false, "plugins": {"legend": {"display": false}}, "scales": {"y": {"title": {"display": true, "text": "顯著資產數"}, "beginAtZero": true}}}
+    });
+  })();
+
+
+  (function() {
+    var el = document.getElementById('chart_lead_corr');
+    if (!el) return;
+    new Chart(el, {
+      type: 'bar',
+      data: {"labels": ["Nasdaq 100←Technology", "S&P 500←S&P 500 Growth", "TLT←ust_30y", "S&P 500←S&P 500 Value", "Nasdaq 100←S&P 500 Growth", "TLT←ust_10y", "S&P 500←Industrials", "S&P 500←Consumer Discretionary"], "datasets": [{"label": "最大相關係數", "data": [0.966, 0.961, -0.96, 0.948, 0.915, -0.903, 0.895, 0.879], "backgroundColor": ["#00a878", "#00a878", "#c0392b", "#00a878", "#00a878", "#c0392b", "#00a878", "#00a878"], "borderRadius": 3}]},
+      options: {"responsive": true, "maintainAspectRatio": false, "indexAxis": "y", "plugins": {"legend": {"display": false}}, "scales": {"x": {"title": {"display": true, "text": "相關係數"}, "min": -1, "max": 1}}}
+    });
+  })();
+
+
+  (function() {
+    var el = document.getElementById('chart_win_rates');
+    if (!el) return;
+    new Chart(el, {
+      type: 'bar',
+      data: {"labels": ["能源 (XLE)", "黃金 (GLD)", "Urea / 化肥", "玉米 (Corn)", "公用事業 (XLU)", "JNJ", "HD", "PLD"], "datasets": [{"label": "升息前+升息期勝率 (%)", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "backgroundColor": ["#c0392b","#d97706","#00a878","#00a878","#1a3a6e","#1a3a6e","#1a3a6e","#1a3a6e"], "borderRadius": 3}]},
+      options: {"responsive": true, "maintainAspectRatio": false, "indexAxis": "y", "plugins": {"legend": {"display": false}}, "scales": {"x": {"title": {"display": true, "text": "勝率 (%)"}, "min": 0, "max": 100}}}
+    });
+  })();
+
+});
+</script>
+
+</body>
+</html>

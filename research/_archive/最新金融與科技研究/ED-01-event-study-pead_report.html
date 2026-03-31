@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Event-Driven Strategy Report | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:16px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1}.pb{break-after:page;page-break-after:always}.full-page{display:flex;flex-direction:column}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:16px;color:rgba(255,255,255,.65);margin-bottom:40px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8)}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:24px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13px;color:rgba(255,255,255,.5)}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,.45)}
+.body-page{padding:30px 48px;position:relative;z-index:1}.body-page.alt{background:#fafbfd}
+h1.ch{font-size:22px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 12px;page-break-after:avoid}
+h2.ch{font-size:18px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:16px 0 10px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:6px 0 12px;font-size:13.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 10px;text-align:left;font-weight:600;font-size:12.5px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}tbody tr:nth-child(even){background:#fff}
+td{padding:8px 10px;border-bottom:1px solid #e5edf8;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.pos{color:#00875a;font-weight:600}td.neg{color:#c0392b;font-weight:600}td.hi{background:#fff8e1!important;font-weight:700}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi-val{font-size:22px;font-weight:800;margin-bottom:4px}.kpi-val em{font-size:13px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:12.5px;opacity:.7}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:16px;margin:10px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:15px;font-weight:700;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:22px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+p{margin:6px 0 10px;line-height:1.7;font-size:15px}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:10px 14px;margin:10px 0;color:#1a3a6e;font-size:14.5px;border-radius:0 5px 5px 0}
+.src{font-size:12px;color:#9aabb5;display:block;margin-top:5px}
+.warn-box{background:#fff8e1;border:1.5px solid #d97706;border-radius:8px;padding:12px;margin:10px 0;font-size:14px;line-height:1.7}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:10px 48px;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:15px}.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- Page 1: Cover -->
+<div class="cover pb page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div><div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">AI量化交易與相關應用產品開發</div></div></div>
+    <div class="cover-eyebrow">Research Report R-2026-03-26-EV01</div>
+    <div class="cover-title">事件驅動策略<br><em>PEAD 盈餘公告後漂移</em></div>
+    <div class="cover-subtitle">Post-Earnings Announcement Drift Proxy Strategy (2022-2024)</div>
+    <div class="cover-tags"><span class="ctag hl">PEAD</span><span class="ctag hl">Earnings Drift</span><span class="ctag hl">Event-Driven</span><span class="ctag">20 Stocks</span><span class="ctag">Long/Short</span><span class="ctag">Price Proxy</span></div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>20</em></div><div class="cstat-label">Stocks</div></div>
+    <div class="cstat"><div class="cstat-num"><em>760</em></div><div class="cstat-label">Events Each Dir</div></div>
+    <div class="cstat"><div class="cstat-num"><em>PEAD</em></div><div class="cstat-label">Proxy Method</div></div>
+    <div class="cstat"><div class="cstat-num"><em>0.738</em></div><div class="cstat-label">EW Benchmark Sharpe</div></div>
+  </div>
+  <div class="cover-bottom"><span>報告編號：R-2026-03-26-EV01</span><span>研究日期：2026-03-26</span><span>&copy; 2026 Genesis International Capital</span></div>
+</div>
+
+<!-- Page 2: 研究方法 -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">研究方法與資料取得聲明</h1>
+  <table>
+    <thead><tr><th>項目</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><td>報告編號</td><td>R-2026-03-26-EV01</td></tr>
+      <tr><td>研究日期</td><td>2026-03-26</td></tr>
+      <tr><td>研究人員</td><td>GiS Research + Claude Code Agent</td></tr>
+      <tr><td>資料收集</td><td>WebSearch（學術文獻）、yfinance（20 stocks price data）</td></tr>
+      <tr><td>資料範圍</td><td>20 隻美股（大型科技+金融+消費）2022-2024 日頻價格</td></tr>
+      <tr><td>驗證方式</td><td>PEAD 代理策略回測 + Equal Weight 基準比較</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：yfinance API，20 stocks daily prices，取得日期 2026-03-26。</span>
+
+  <h2 class="ch">PEAD 代理方法說明</h2>
+  <table>
+    <thead><tr><th>項目</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>已知限制</td><td class="neg">yfinance 無法取得實際盈餘公告日期（earnings dates unavailable）</td></tr>
+      <tr><td>代理方法</td><td>使用月度 top/bottom 價格漲幅作為「盈餘驚喜」的代理變數</td></tr>
+      <tr><td>Long 訊號</td><td>月度漲幅 Top 5 股票（代理正面驚喜）</td></tr>
+      <tr><td>Short 訊號</td><td>月度漲幅 Bottom 5 股票（代理負面驚喜）</td></tr>
+      <tr><td>事件數量</td><td>~760 events each direction（20 stocks x ~38 months）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">PEAD proxy 方法。實際 PEAD 需要真實盈餘公告日期和分析師預期數據。</span>
+
+  <div class="warn-box"><strong>重要限制：</strong>由於 yfinance 無法提供實際盈餘公告日期，本研究使用月度價格動量作為 PEAD 的代理變數。月度 top/bottom 並非等同於盈餘驚喜，因此結果僅為 PEAD 概念驗證，不代表真實 PEAD 策略績效。正確實作需要 actual earnings dates + analyst consensus estimates。</div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>研究方法</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- Page 3: 實作結果 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">實作結果：事件驅動策略績效</h1>
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-val">0.042</div><div class="kpi-lbl">PEAD L/S Sharpe</div></div>
+    <div class="kpi"><div class="kpi-val">-2.44<em>%</em></div><div class="kpi-lbl">PEAD CAGR</div></div>
+    <div class="kpi green"><div class="kpi-val">0.738</div><div class="kpi-lbl">EW Benchmark Sharpe</div></div>
+    <div class="kpi green"><div class="kpi-val">13.61<em>%</em></div><div class="kpi-lbl">EW Benchmark CAGR</div></div>
+  </div>
+
+  <h2 class="ch">策略績效總表</h2>
+  <table>
+    <thead><tr><th>Strategy</th><th>Sharpe</th><th>CAGR</th><th>MaxDD</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">PEAD L/S Top5/Bot5</td><td>0.042</td><td class="neg">-2.44%</td><td class="neg">-33.41%</td></tr>
+      <tr><td class="hi">Equal Weight (Benchmark)</td><td class="pos">0.738</td><td class="pos">13.61%</td><td>-22.44%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">回測期間：2022-2024。20 stocks universe。PEAD L/S = Long Top5 + Short Bottom5 monthly rebalance。資料來源：yfinance。</span>
+
+  <h2 class="ch">關鍵發現與失敗分析</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>PEAD Proxy 策略失敗：</strong>Sharpe 僅 0.042，CAGR -2.44%，MaxDD -33.41%。月度 top/bottom price momentum 不等於 earnings surprise，訊號品質極低。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>Equal Weight 大幅勝出：</strong>簡單等權持有 20 檔股票的 Sharpe 0.738、CAGR 13.61%，遠優於 PEAD proxy 策略。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>根本原因：</strong>PEAD 的 alpha 來自「盈餘驚喜」後的價格漂移，而非一般的價格動量。月度漲跌幅包含太多噪音（市場 beta、sector rotation），無法有效代理 earnings surprise。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>改進方向：</strong>需要 actual earnings dates（如 earnings whispers API）+ analyst consensus estimates（如 IBES）才能正確實作 PEAD 策略。</span></div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>實作結果</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- Page 4: References + Disclaimer -->
+<div class="full-page page body-page">
+  <h1 class="ch">參考文獻與研究聲明</h1>
+  <table>
+    <thead><tr><th>#</th><th>文獻</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Ball, R. &amp; Brown, P. (1968). An Empirical Evaluation of Accounting Income Numbers. <em>Journal of Accounting Research</em>, 6(2), 159-178.</td><td>首次記錄盈餘公告後價格漂移現象（PEAD 原始論文）</td></tr>
+      <tr><td>2</td><td>Bernard, V.L. &amp; Thomas, J.K. (1989). Post-Earnings-Announcement Drift: Delayed Price Response or Risk Premium? <em>Journal of Accounting Research</em>, 27, 1-36.</td><td>確認 PEAD 為市場異常而非風險溢酬</td></tr>
+      <tr><td>3</td><td>Jegadeesh, N. &amp; Livnat, J. (2006). Revenue Surprises and Stock Returns. <em>Journal of Accounting and Economics</em>, 41(1-2), 147-171.</td><td>營收驚喜對 PEAD 的增量預測力</td></tr>
+    </tbody>
+  </table>
+  <span class="src">所有文獻均為公開學術文獻。PEAD 為金融學最穩健的市場異常之一（Ball &amp; Brown 1968 以來持續被驗證）。</span>
+
+  <div class="warn-box">
+    <strong>研究聲明：</strong><br>
+    1. 所有資料均來自公開市場數據（yfinance）和學術文獻。<br>
+    2. 本研究的 PEAD 策略使用價格動量代理（proxy），非真正的 PEAD 實作。<br>
+    3. 月度 top/bottom 選股不等同於盈餘驚喜排序，結果不代表真實 PEAD 策略績效。<br>
+    4. 正確 PEAD 實作需要：(a) 實際盈餘公告日期 (b) 分析師一致預期 (c) 標準化意外盈餘（SUE）。<br>
+    5. Equal Weight benchmark 績效受 2022-2024 美股牛市影響，有時期偏差。<br>
+    6. 過去績效不代表未來表現。本報告僅供研究參考，不構成投資建議。
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參考文獻</span><span>&copy; 2026 GiS</span></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 低軌道衛星產業研究報告
+  轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="低軌道衛星產業研究報告.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///Users/chenhongshuo/claude/低軌道衛星/低軌道衛星產業研究報告.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>低軌道衛星產業研究報告 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 頁面容器 ── */
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+
+/* ── Canvas ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:36px 42px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 公司卡片 ── */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:14px 16px}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 首選股卡 ── */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0;font-size:11.5px}
+.mini-t th{padding:8px 6px;font-size:11px}
+.mini-t td{padding:6px 6px;font-size:11.5px}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 42px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Industry Research Report · Q1 2026</div>
+    <div class="cover-title">低軌道衛星產業<br><em>太空經濟新紀元</em></div>
+    <div class="cover-subtitle">LEO Satellite Industry — The New Era of Space Economy</div>
+    <div class="cover-tags">
+      <span class="ctag hl">昇達科 3491</span>
+      <span class="ctag hl">華通 2313</span>
+      <span class="ctag hl">啟碁 6285</span>
+      <span class="ctag">台光電 2383</span>
+      <span class="ctag">同欣電 6271</span>
+      <span class="ctag">中磊 5388</span>
+      <span class="ctag">燿華 2367</span>
+      <span class="ctag">敬鵬 2355</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>9,000</em>+</div><div class="cstat-label">Starlink 在軌衛星</div></div>
+    <div class="cstat"><div class="cstat-num">$<em>15</em>B+</div><div class="cstat-label">SpaceX 營收預估</div></div>
+    <div class="cstat"><div class="cstat-num"><em>6,000</em></div><div class="cstat-label">2026年發射量預估</div></div>
+    <div class="cstat"><div class="cstat-num">$<em>1.5</em>T</div><div class="cstat-label">SpaceX IPO估值</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月25日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">9,000+<em> 顆</em></div><div class="kpi-lbl">Starlink 在軌衛星</div></div>
+    <div class="kpi"><div class="kpi-val">$11.2<em> 億美元</em></div><div class="kpi-lbl">2026F LEO PCB市場</div></div>
+    <div class="kpi gold"><div class="kpi-val">20<em> ms</em></div><div class="kpi-lbl">LEO 延遲（vs GEO 600ms）</div></div>
+    <div class="kpi green"><div class="kpi-val">2.4<em> 億支</em></div><div class="kpi-lbl">2026 D2C手機數量</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>SpaceX IPO 前台灣供應鏈行情可期。</strong>SpaceX 估值達 1.5 兆美元，2026 年中啟動 IPO 規劃，台灣衛星供應鏈（PCB、射頻元件、地面站設備）將持續獲得資金青睞。然而需警惕 IPO 後的資金排擠效應。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>台灣真正受惠者集中於 PCB 與射頻元件。</strong>SpaceX 自製率 >90%，台灣供應鏈上升空間有限；Amazon Kuiper 外包率 >50%，台灣受惠較大，但需觀察 Amazon 火箭發展進度。華通全球衛星 PCB 市佔 >60%，昇達科為射頻波導管關鍵供應商。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>衛星壽命僅 3-5 年，創造持續性汰換需求。</strong>LEO 衛星短壽命特性反而有利供應鏈，每 3-5 年即需更換，搭配 SpaceX Gen2 升級與 Amazon 新星座計畫，2026-2028 年將進入高密度發射期，年發射量預計達 5,000-6,000 顆。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">全球 LEO 衛星年發射量趨勢</div>
+      <div class="chart-sub">來源：台新投信、各公司法說會</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">LEO 衛星 PCB 市場規模（百萬美元）</div>
+      <div class="chart-sub">來源：富邦投顧</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節一封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業總覽與<br>競爭格局</div>
+  <div class="sec-desc">低軌道衛星產業正處於爆發期，SpaceX 主導市場超過 90%，Amazon Kuiper 加速追趕，中國國網／千帆計畫快速崛起。本章分析全球競爭格局、技術演進與發射成本革命。</div>
+</div>
+
+<!-- ══════════════ 產業總覽 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、產業總覽與競爭格局</h1>
+  <p>低軌道衛星（LEO, Low Earth Orbit）運行於距地面約 500 公里的軌道，延遲僅 20ms（對比 GEO 36,000 公里、延遲 600ms+），且壽命僅 3-5 年，這些特性使其成為自動駕駛與 6G 通訊的關鍵基礎建設，同時也為供應鏈創造了持續性的汰換需求。</p>
+
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2020-2023</div><div class="tl-spec">萌芽期</div><div class="tl-tech">Starlink 初期佈署<br>年發射 ~1,000 顆</div></div>
+    <div class="tl-item active"><div class="tl-year">2024-2026 ← 現在</div><div class="tl-spec">爆發期</div><div class="tl-tech">年發射 4,500-6,000 顆<br>SpaceX Gen2 + Kuiper</div></div>
+    <div class="tl-item next"><div class="tl-year">2027-2028</div><div class="tl-spec">高密度期</div><div class="tl-tech">Starship 量產<br>D2C 全面商用</div></div>
+    <div class="tl-item"><div class="tl-year">2029+</div><div class="tl-spec">成熟期</div><div class="tl-tech">百萬顆衛星願景<br>太空 AI 資料中心</div></div>
+  </div>
+
+  <h2 class="ch">全球主要 LEO 計畫一覽</h2>
+  <table>
+    <thead><tr><th>營運商</th><th>計畫名稱</th><th>目標衛星數</th><th>2026 狀態</th><th>台灣受惠程度</th></tr></thead>
+    <tbody>
+      <tr><td><strong>SpaceX</strong></td><td>Starlink Gen2</td><td class="num">30,000+</td><td>9,000+ 在軌</td><td class="pos">中（自製率 >90%）</td></tr>
+      <tr><td><strong>Amazon</strong></td><td>Project Kuiper</td><td class="num">3,236</td><td>182 顆已發射</td><td class="pos hi">高（外包率 >50%）</td></tr>
+      <tr><td><strong>中國</strong></td><td>國網／千帆</td><td class="num">~40,000</td><td>240+ 在軌</td><td class="neg">無（紅色供應鏈）</td></tr>
+      <tr><td><strong>歐盟</strong></td><td>IRIS2 / OneWeb</td><td class="num">290+</td><td>有限政府服務</td><td>低</td></tr>
+      <tr><td><strong>加拿大</strong></td><td>Telesat Lightspeed</td><td class="num">198</td><td>製造中</td><td>中</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：台新投信、各公司公開資料、FCC</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 產業總覽</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ D2C 與技術趨勢 ══════════════ -->
+<div class="full-page page body-page">
+  <h2 class="ch">發射成本革命</h2>
+  <table>
+    <thead><tr><th>發射載具</th><th>成本（USD/kg）</th><th>可回收性</th><th>備註</th></tr></thead>
+    <tbody>
+      <tr><td>傳統航太</td><td class="num neg">$30,000</td><td>不可回收</td><td>舊時代標準</td></tr>
+      <tr><td>Rocket Lab Electron</td><td class="num">$25,000</td><td>部分回收</td><td>精準軌道定位</td></tr>
+      <tr><td><strong>SpaceX Falcon 9</strong></td><td class="num pos hi">$3,000</td><td class="pos">10 次+ 回收</td><td>當前業界標準</td></tr>
+      <tr><td>中國 朱雀/藍箭</td><td class="num">&lt;$2,000（目標）</td><td>開發中</td><td>甲烷引擎</td></tr>
+      <tr><td><strong>SpaceX Starship</strong></td><td class="num pos hi">&lt;$100（目標）</td><td class="pos">完全回收</td><td>遊戲規則改變者</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：台新投信產業報告 2026/02</span>
+  <h1 class="ch">Direct-to-Cell（D2C）與技術趨勢</h1>
+  <p>D2C 技術使手機無需改裝即可直接與衛星通訊，2026 年全球 D2C 相容手機估計達 2.4 億支，聯發科正開發專用 D2C 晶片。</p>
+
+  <h2 class="ch">D2C 應用層級</h2>
+  <table>
+    <thead><tr><th>層級</th><th>服務內容</th><th>代表業者</th><th>技術說明</th></tr></thead>
+    <tbody>
+      <tr><td class="hi"><strong>頂層</strong></td><td class="pos">原生寬頻 VoLTE</td><td>AST SpaceMobile (ASTS)</td><td>免改機、Google/AT&T 投資</td></tr>
+      <tr><td><strong>中層</strong></td><td>簡訊/數據</td><td>SpaceX + T-Mobile (1.9GHz)</td><td>基本通訊能力</td></tr>
+      <tr><td><strong>基礎層</strong></td><td>SOS 緊急通訊</td><td>Apple (Globalstar)、華為 (北斗)</td><td>低頻寬、需無遮蔽天空</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>SpaceX IPO 時間表：</strong>SpaceX 已確認 2026 年中啟動 IPO 規劃，估值達 1.5 兆美元。在 IPO 前，台灣衛星供應鏈股價預計持續獲得支撐。收購 xAI 後，SpaceX 將 AI + 衛星 + 太空 + 火箭整合為單一平台。</blockquote>
+
+  <h2 class="ch">台灣供應鏈機會矩陣</h2>
+  <table>
+    <thead><tr><th>供應鏈環節</th><th>產品</th><th>台灣代表廠商</th><th>毛利率</th></tr></thead>
+    <tbody>
+      <tr><td><strong>太空段（衛星本體）</strong></td><td>波導管、射頻元件</td><td>昇達科 3491</td><td class="num pos">60-70%</td></tr>
+      <tr><td><strong>太空段（基板）</strong></td><td>HDI PCB、低損耗 CCL</td><td>華通 2313、台光電 2383</td><td class="num">20-30%</td></tr>
+      <tr><td><strong>太空段（PCB）</strong></td><td>多層板、軟硬結合板</td><td>燿華 2367、敬鵬 2355</td><td class="num">15-25%</td></tr>
+      <tr><td><strong>地面段（接收站）</strong></td><td>相位陣列天線、用戶終端</td><td>啟碁 6285</td><td class="num">12-15%</td></tr>
+      <tr><td><strong>地面段（模組）</strong></td><td>陶瓷基板、RF 模組</td><td>同欣電 6271</td><td class="num">28-31%</td></tr>
+      <tr><td><strong>地面段（CPE）</strong></td><td>寬頻 CPE、Wi-Fi 7</td><td>中磊 5388</td><td class="num">13-15%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：台新投信、各券商報告彙整</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; D2C 與技術趨勢</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節二封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">台灣供應鏈<br>個股分析</div>
+  <div class="sec-desc">深入剖析八家台灣低軌道衛星供應鏈公司，涵蓋射頻元件、PCB、地面站設備、材料與通訊設備五大領域，分析各公司營收展望、獲利預估與投資價值。</div>
+</div>
+
+<!-- ══════════════ 昇達科 3491 ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">昇達科</div><div class="co-ticker">3491.TWO &middot; 射頻波導管 &middot; LEO 衛星純度最高</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; GiS 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$1,400</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+96%</div><div class="co-metric-label">2026E 營收成長（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">62%</div><div class="co-metric-label">2026E 毛利率（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">19.85 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">35.0 元</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">GiS 財務模型（基於公司財報與法說會）</h3>
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>公司季報</th><th>Q1'25</th><th>Q2'25</th><th>Q3'25</th><th>Q4'25</th><th>FY25A</th></tr></thead>
+            <tbody>
+              <tr><td>營收（百萬）</td><td class="num">620</td><td class="num">514</td><td class="num">484</td><td class="num pos">834</td><td class="num">2,452</td></tr>
+              <tr><td>毛利率</td><td class="num">50.6%</td><td class="num">43.4%</td><td class="num">47.3%</td><td class="num pos">58.6%</td><td class="num">51.2%</td></tr>
+              <tr><td>EPS（元）</td><td class="num">2.22</td><td class="num">1.07</td><td class="num">1.33</td><td class="num pos">3.27</td><td class="num">7.89</td></tr>
+              <tr style="background:#eef5f0!important"><td><strong>GiS 2026/27F</strong></td><td colspan="3" class="num pos">2026F：營收 4,800M / GM 62% / EPS 19.85</td><td colspan="2" class="num pos">2027F：營收 7,200M / GM 65% / EPS 35.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>模型假設</th><th>依據</th></tr></thead>
+            <tbody>
+              <tr><td>2026F 營收 48 億</td><td>Jan-Feb 月均 3.46 億 +H2 加速，管理層稱「高成長元年」</td></tr>
+              <tr><td>2026F 毛利率 62%</td><td>Q4'25 實績 58.6%，指引 60%+，LEO 佔比升至 80%</td></tr>
+              <tr><td>目標價 NT$1,400</td><td>40x 2027F EPS（純 LEO play，參考歷史 PE 50x+）</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <blockquote><strong>GiS 評價邏輯：</strong>40x 2027F PE。Jan 營收 3.69 億（+113%）驗證成長。保守/樂觀：NT$1,000（30x）/ NT$1,750（50x）。券商：GS NT$2,007 | 凱基 NT$1,100。</blockquote>
+
+      <h3 class="ch">關鍵催化劑</h3>
+      <ul>
+        <li><strong>在手訂單 18 億元：</strong>未出貨 LEO 訂單達 NT$1.8B，6 個月內交付。</li>
+        <li><strong>客戶多元化：</strong>Starlink 3,000+ 衛星 + Blue Origin 5,408 顆 + AST 60-80 顆。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>昇達科 3491</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 華通 2313 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">華通</div><div class="co-ticker">2313.TW &middot; 全球 LEO 衛星 PCB 龍頭 &middot; 市佔 >60%</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; GiS 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$265</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+18.4%</div><div class="co-metric-label">2026E 營收成長（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">21.0%</div><div class="co-metric-label">2026E 毛利率（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">8.31 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">12.0 元</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">GiS 財務模型（基於公司財報與法說會）</h3>
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>公司季報</th><th>Q1'25</th><th>Q2'25</th><th>Q3'25</th><th>Q4'25</th><th>FY25A</th></tr></thead>
+            <tbody>
+              <tr><td>營收（百萬）</td><td class="num">16,730</td><td class="num">18,200</td><td class="num pos">20,049</td><td class="num pos">21,016</td><td class="num">75,996</td></tr>
+              <tr><td>毛利率</td><td class="num">17.2%</td><td class="num">18.2%</td><td class="num pos">20.0%</td><td class="num">18.7%</td><td class="num">18.5%</td></tr>
+              <tr><td>EPS（元）</td><td class="num">~0.98</td><td class="num">~1.33</td><td class="num">~1.81</td><td class="num">~1.90</td><td class="num">5.51</td></tr>
+              <tr style="background:#eef5f0!important"><td><strong>GiS 2026/27F</strong></td><td colspan="3" class="num pos">2026F：營收 900億 / GM 21% / EPS 8.31</td><td colspan="2" class="num pos">2027F：營收 1,080億 / GM 23% / EPS 12.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>模型假設</th><th>依據</th></tr></thead>
+            <tbody>
+              <tr><td>2026F 營收 900 億</td><td>Jan +40% YoY；泰國廠 600-800K sqft；AI 伺服器倍增</td></tr>
+              <tr><td>2026F 毛利率 21%</td><td>Q4'25 已達 20%+，衛星+AI 高毛利產品佔比提升</td></tr>
+              <tr><td>目標價 NT$265</td><td>22x 2027F EPS（全球衛星 PCB 龍頭溢價）</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <blockquote><strong>GiS 評價邏輯：</strong>22x 2027F PE，全球 LEO PCB 龍頭。Jan 營收 74 億（+40%）。保守/樂觀：NT$210（18x）/ NT$330（28x）。券商：國泰 NT$270 | 富邦 NT$250。</blockquote>
+
+      <h3 class="ch">關鍵催化劑</h3>
+      <ul>
+        <li><strong>全球 #1 衛星 PCB：</strong>天板市佔 >90%，泰國廠從 40 MSF 擴至 60-80 MSF。</li>
+        <li><strong>第二客戶量產：</strong>Amazon Kuiper 2026 年 9 次發射，新增 1,650 顆衛星。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>華通 2313</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 啟碁 6285 ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div><div class="co-name">啟碁</div><div class="co-ticker">6285.TW &middot; 衛星地面站設備 &middot; 獨家供應商</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; GiS 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$225</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+13.4%</div><div class="co-metric-label">2026E 營收成長（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">13.2%</div><div class="co-metric-label">2026E 毛利率（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">9.21 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">12.5 元</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>公司季報</th><th>Q1'25</th><th>Q2'25</th><th>Q3'25</th><th>Q4'25</th><th>FY25A</th></tr></thead>
+            <tbody>
+              <tr><td>營收（百萬）</td><td class="num">28,366</td><td class="num">27,491</td><td class="num">27,378</td><td class="num">27,015</td><td class="num">110,251</td></tr>
+              <tr><td>毛利率</td><td class="num">12.2%</td><td class="num">11.6%</td><td class="num">12.1%</td><td class="num pos">14.1%</td><td class="num">12.5%</td></tr>
+              <tr><td>EPS（元）</td><td class="num">1.92</td><td class="num">1.03</td><td class="num">1.39</td><td class="num pos">2.07</td><td class="num">6.41</td></tr>
+              <tr style="background:#eef5f0!important"><td><strong>GiS 2026/27F</strong></td><td colspan="3" class="num pos">2026F：營收 1,239億 / GM 12.9% / EPS 9.76</td><td colspan="2" class="num pos">2027F：營收 1,419億 / GM 13.6% / EPS 12.20</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>券商</th><th>評等</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td>宏遠投顧</td><td class="pos">買進</td><td class="num hi">NT$235</td></tr>
+              <tr><td>永豐投顧</td><td class="pos">買進</td><td class="num">NT$198</td></tr>
+              <tr><td>兆豐投顧</td><td class="pos">買進</td><td class="num">NT$170</td></tr>
+              <tr><td>CTBC</td><td class="pos">買進</td><td class="num">NT$145</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3 class="ch">關鍵催化劑</h3>
+      <ul>
+        <li><strong>LEO 地面站獨家供應商：</strong>為最大美國 LEO 客戶之用戶終端地面接收站獨家供應商，訂單 YoY +30-50%。</li>
+        <li><strong>800G Switch 2H26 量產：</strong>高階核心交換器 2026 年營收貢獻 4-5%，2027 年升至雙位數。</li>
+        <li><strong>OCS（光學電路交換器）：</strong>數位液晶切換架構，節能 90-95%，2027 年量產。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>啟碁 6285</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 台光電 2383 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head indigo">
+      <div><div class="co-name">台光電</div><div class="co-ticker">2383.TW &middot; 高頻 CCL 材料 &middot; AI+LEO 雙引擎</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; GiS 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$2,875</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+46.4%</div><div class="co-metric-label">2026E 營收成長（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">31.5%</div><div class="co-metric-label">2026E 毛利率（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">70.8 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">115 元</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>公司季報</th><th>Q1'25</th><th>Q2'25</th><th>Q3'25</th><th>Q4'25</th><th>FY25A</th></tr></thead>
+            <tbody>
+              <tr><td>營收（百萬）</td><td class="num">21,680</td><td class="num">22,508</td><td class="num pos">25,146</td><td class="num">24,927</td><td class="num">94,261</td></tr>
+              <tr><td>毛利率</td><td class="num">30.4%</td><td class="num">30.3%</td><td class="num pos">30.1%</td><td class="num">28.6%</td><td class="num">29.8%</td></tr>
+              <tr><td>EPS（元）</td><td class="num">10.01</td><td class="num">10.02</td><td class="num pos">11.19</td><td class="num">10.63</td><td class="num">41.67</td></tr>
+              <tr style="background:#eef5f0!important"><td><strong>GiS 2026/27F</strong></td><td colspan="3" class="num pos">2026F：營收 1,351億 / GM 31.3% / EPS 65.80</td><td colspan="2" class="num pos">2027F：營收 2,027億 / GM 33.9% / EPS 112.65</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>券商</th><th>評等</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td>凱基投顧</td><td class="pos">增加持股</td><td class="num hi">NT$2,985</td></tr>
+              <tr><td>Macquarie</td><td class="pos">Outperform</td><td class="num hi">NT$2,840</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3 class="ch">關鍵催化劑</h3>
+      <ul>
+        <li><strong>AI 伺服器 CCL 需求爆發：</strong>M6+ 產品已佔出貨量 40%；終端應用：伺服器/交換器/LEO 各 45%/45%/10%。</li>
+        <li><strong>2Q26 全線漲價 10%+：</strong>反映原物料成本，毛利率持續擴張。</li>
+        <li><strong>產能大幅擴張：</strong>月產能從 2025 年 585 萬片增至 2027 年 945 萬片（+62%），觀音、中國、馬來西亞多廠佈局。</li>
+        <li><strong>LEO 衛星為新增長亮點：</strong>已接獲 LEO 衛星訂單，成為 AI 之外的第二成長動能。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>台光電 2383</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 燿華 2367 完整分析 ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">燿華</div><div class="co-ticker">2367.TWO &middot; HDI PCB &middot; LEO 營收佔比 PCB 類最高（30%）</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; 買進（GiS 首次評等）</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">目標價 NT$72（12個月）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">30%</div><div class="co-metric-label">2026E LEO 營收佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val up">19.0%</div><div class="co-metric-label">2026E 毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val up">2.20 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">3.00 元</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <!-- GiS 評價模型 -->
+      <h3 class="ch">GiS 評價模型與目標價推導</h3>
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>公司季報</th><th>Q1'25</th><th>Q2'25</th><th>Q3'25</th><th>Q4'25</th><th>FY25A</th></tr></thead>
+            <tbody>
+              <tr><td>營收（百萬）</td><td class="num">4,337</td><td class="num">4,308</td><td class="num neg">3,892</td><td class="num neg">3,708</td><td class="num">16,246</td></tr>
+              <tr><td>毛利率</td><td class="num">20.8%</td><td class="num">18.6%</td><td class="num neg">9.9%</td><td class="num neg">8.9%</td><td class="num neg">14.8%</td></tr>
+              <tr><td>EPS（元）</td><td class="num">0.61</td><td class="num">0.08</td><td class="num">0.02</td><td class="num neg">-0.03</td><td class="num neg">0.68</td></tr>
+              <tr style="background:#eef5f0!important"><td><strong>GiS 2026/27F</strong></td><td colspan="3" class="num pos">2026F：營收 19,500M / GM 19% / EPS 2.20</td><td colspan="2" class="num pos">2027F：營收 23,000M / GM 23% / EPS 3.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值方法</th><th>PE 倍數</th><th>基礎 EPS</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td><strong>基礎情境</strong></td><td class="num">24x</td><td class="num">2027F 3.00</td><td class="num pos hi">NT$72</td></tr>
+              <tr><td>保守情境</td><td class="num">20x</td><td class="num">2027F 2.80</td><td class="num">NT$56</td></tr>
+              <tr><td>樂觀情境</td><td class="num">27x</td><td class="num">2027F 3.50</td><td class="num pos">NT$95</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <blockquote><strong>評價邏輯：</strong>LEO 佔比 30% 為 PCB 族群第二高。2025 年為谷底（FY25A EPS 0.68，GM 僅 14.8%，H2 毛利率驟降至 9-10%），2026-27 年泰國廠+LEO+AI 三引擎啟動。24x 2027F PE（介於華通 19x 與昇達科 32x 之間），目標價 NT$72，較現價 NT$74.3 有 -3% 空間。保守/樂觀：NT$56（20x）/ NT$95（27x）。</blockquote>
+
+      <h3 class="ch">關鍵催化劑</h3>
+      <ul>
+        <li><strong>泰國廠 2026/04 量產：</strong>2026/03 客戶認證完成，4 月正式量產。目標年底 200K sqft 產能，定位為 LEO 衛星 + Server + 車用主要生產基地。</li>
+        <li><strong>第二 LEO 客戶倍數成長：</strong>第二大客戶 3Q25 加入、4Q25 明顯放量，2026 年有倍數成長機會，帶動 LEO 佔比從 15% 跳升至 30%。</li>
+        <li><strong>AI 伺服器 + ARVR 新進入：</strong>AI 伺服器 2026 年營收佔比 3-5%，2027 年 10%+。AR/VR 眼鏡與台灣及美系大客戶合作，2026 年營收開始貢獻。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>燿華 2367 &middot; GiS 首次評等</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 同欣電 + 中磊 + 敬鵬 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">其他供應鏈個股</h1>
+
+  <!-- 同欣電 -->
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">同欣電</div><div class="co-ticker">6271.TW &middot; 陶瓷基板 / RF 模組 &middot; 光通訊模組新星</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; GiS 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$210</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+5.7%</div><div class="co-metric-label">2026E 營收成長（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">29.5%</div><div class="co-metric-label">2026E 毛利率（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">8.13 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">10.5 元</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>公司季報</th><th>Q1'25</th><th>Q2'25</th><th>Q3'25</th><th>Q4'25</th><th>FY25A</th></tr></thead>
+            <tbody>
+              <tr><td>營收（百萬）</td><td class="num">2,909</td><td class="num">2,967</td><td class="num">2,850</td><td class="num">2,818</td><td class="num">11,543</td></tr>
+              <tr><td>毛利率</td><td class="num">27.7%</td><td class="num">26.6%</td><td class="num">27.3%</td><td class="num pos">28.9%</td><td class="num">27.6%</td></tr>
+              <tr><td>EPS（元）</td><td class="num">2.79</td><td class="num neg">0.34</td><td class="num">2.28</td><td class="num">2.23</td><td class="num">7.64</td></tr>
+              <tr style="background:#eef5f0!important"><td><strong>GiS 2026/27F</strong></td><td colspan="3" class="num pos">2026F：營收 122億 / GM 29.5% / EPS 8.13</td><td colspan="2" class="num pos">2027F：營收 140億 / GM 31% / EPS 10.5</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值法</th><th>倍數</th><th>EPS</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Forward PE（採用）</strong></td><td class="num hi">20x</td><td class="num">10.5</td><td class="num pos hi">NT$210</td></tr>
+              <tr><td>保守</td><td class="num">16x</td><td class="num">10.5</td><td class="num">NT$168</td></tr>
+              <tr><td>樂觀</td><td class="num">25x</td><td class="num">10.5</td><td class="num pos">NT$263</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>GiS 觀點：</strong>成長優先序：RF 模組 > 陶瓷基板 > CIS > 混合 IC。800G 光通訊模組 2025/12 量產是關鍵催化劑，1.6T 產品 H2'26 有望貢獻。H1 持平、H2 加速為基本假設。</p>
+    </div>
+  </div>
+
+  <!-- 中磊 -->
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div><div class="co-name">中磊</div><div class="co-ticker">5388.TW &middot; 寬頻 CPE / DAA &middot; 衛星間接受惠</div></div>
+      <div class="co-badge">
+        <span class="badge ow">&#9673; GiS 增加持股</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$110</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+20.4%</div><div class="co-metric-label">2026E 營收成長（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val">14.5%</div><div class="co-metric-label">2026E 毛利率（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">7.10 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">8.50 元</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>公司季報</th><th>Q1'25</th><th>Q2'25</th><th>Q3'25</th><th>Q4'25</th><th>FY25A</th></tr></thead>
+            <tbody>
+              <tr><td>營收（百萬）</td><td class="num">11,354</td><td class="num">12,215</td><td class="num pos">14,747</td><td class="num pos">15,683</td><td class="num">53,999</td></tr>
+              <tr><td>毛利率</td><td class="num">19.1%</td><td class="num">16.6%</td><td class="num neg">14.2%</td><td class="num neg">14.0%</td><td class="num">15.7%</td></tr>
+              <tr><td>EPS（元）</td><td class="num">~1.02</td><td class="num">~1.13</td><td class="num">~1.00</td><td class="num">~0.89</td><td class="num">4.04</td></tr>
+              <tr style="background:#eef5f0!important"><td><strong>GiS 2026/27F</strong></td><td colspan="3" class="num pos">2026F：營收 650億 / GM 14.5% / EPS 7.10</td><td colspan="2" class="num pos">2027F：營收 730億 / GM 15% / EPS 8.50</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值法</th><th>倍數</th><th>EPS</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Forward PE（採用）</strong></td><td class="num hi">13x</td><td class="num">8.50</td><td class="num pos hi">NT$110</td></tr>
+              <tr><td>保守</td><td class="num">10x</td><td class="num">8.50</td><td class="num">NT$85</td></tr>
+              <tr><td>樂觀</td><td class="num">16x</td><td class="num">8.50</td><td class="num pos">NT$136</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>GiS 觀點：</strong>兩年庫存調整週期已結束，復甦動能明確。Wi-Fi 7 + 5G FWA + DOCSIS 4.0 為主要驅動力。LEO 衛星為間接受惠（寬頻覆蓋拓展帶動 CPE 需求）。定位為谷底復甦標的。</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>同欣電 / 中磊</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 敬鵬 + 風險 ══════════════ -->
+<div class="full-page page body-page">
+  <!-- 敬鵬 -->
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">敬鵬</div><div class="co-ticker">2355.TW &middot; 全球前五大車用 PCB &middot; LEO 早期佈局</div></div>
+      <div class="co-badge">
+        <span class="badge neutral">&#9673; GiS 中立</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$42</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">+2.8%</div><div class="co-metric-label">2026E 營收成長（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val">11.5%</div><div class="co-metric-label">2026E 毛利率（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val">1.61 元</div><div class="co-metric-label">2026E EPS（GiS）</div></div>
+      <div class="co-metric"><div class="co-metric-val">2.50 元</div><div class="co-metric-label">2027F EPS（GiS）</div></div>
+    </div>
+    <div class="co-body">
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>公司季報</th><th>Q1'25</th><th>Q2'25</th><th>Q3'25</th><th>Q4'25</th><th>FY25A</th></tr></thead>
+            <tbody>
+              <tr><td>營收（百萬）</td><td class="num">3,840</td><td class="num">4,091</td><td class="num">3,859</td><td class="num">3,991</td><td class="num">15,781</td></tr>
+              <tr><td>毛利率</td><td class="num">12.6%</td><td class="num">10.8%</td><td class="num neg">8.6%</td><td class="num pos">14.0%</td><td class="num">11.5%</td></tr>
+              <tr><td>EPS（元）</td><td class="num">0.52</td><td class="num">0.25</td><td class="num">0.19</td><td class="num pos">0.64</td><td class="num">1.60</td></tr>
+              <tr style="background:#eef5f0!important"><td><strong>GiS 2026/27F</strong></td><td colspan="3" class="num pos">2026F：營收 165億 / GM 11.5% / EPS 1.61</td><td colspan="2" class="num pos">2027F：營收 190億 / GM 13% / EPS 2.50</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>估值法</th><th>倍數</th><th>EPS</th><th>目標價</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Forward PE（採用）</strong></td><td class="num hi">18x</td><td class="num">2.50</td><td class="num pos hi">NT$42</td></tr>
+              <tr><td>保守</td><td class="num">14x</td><td class="num">2.50</td><td class="num">NT$35</td></tr>
+              <tr><td>樂觀</td><td class="num">22x</td><td class="num">2.50</td><td class="num pos">NT$55</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>GiS 觀點：</strong>車用佔比 75%+ 在全球車市低迷期拖累明顯。LEO 衛星仍處概念階段，泰國新廠要到 H1 2027 才完工。定位為長期轉型標的而非短期交易。</p>
+    </div>
+  </div>
+
+  <h1 class="ch">產業風險分析</h1>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑</h4>
+      <div class="risk-item"><strong>SpaceX IPO 資金行情：</strong>2026 年中 IPO 前台灣衛星概念股可望持續獲資金青睞</div>
+      <div class="risk-item"><strong>Starship 量產突破：</strong>若 Starship 成功量產，發射成本降至 &lt;$100/kg，將催生百萬顆衛星規模</div>
+      <div class="risk-item"><strong>Amazon Kuiper 加速部署：</strong>2026/07 前目標部署 1,618 顆，外包率高台灣最受惠</div>
+      <div class="risk-item"><strong>D2C 全面商用：</strong>2.4 億支手機 + 3GPP NTN 標準推進，開啟全新應用場景</div>
+      <div class="risk-item"><strong>地緣政治驅動主權衛星：</strong>「Starlink 震撼」後各國加速佈署自主衛星星座</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險</h4>
+      <div class="risk-item"><strong>SpaceX IPO 資金排擠：</strong>若 OpenAI + SpaceX 同時 IPO，預估吸納 $250-400 億資金，可能壓縮科技股估值</div>
+      <div class="risk-item"><strong>SpaceX 自製率持續提高：</strong>SpaceX 自製率已 >90%，進一步內製化將壓縮台灣廠商空間</div>
+      <div class="risk-item"><strong>太空垃圾與監管風險：</strong>衛星碰撞風險增加，各國可能加強發射監管</div>
+      <div class="risk-item"><strong>中國供應鏈崛起：</strong>藍箭/朱雀火箭技術快速追趕，目標成本 &lt;$2,000/kg</div>
+      <div class="risk-item"><strong>Amazon 火箭技術瓶頸：</strong>Blue Origin 技術先進但運營緩慢，可能延遲 Kuiper 部署節奏</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>風險分析</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 投資建議 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">投資建議彙整</h1>
+
+  <table>
+    <thead><tr><th>公司</th><th>代號</th><th>GiS 評等</th><th>GiS 目標價</th><th>GiS 2026F EPS</th><th>GiS 2027F EPS</th><th>LEO 純度</th></tr></thead>
+    <tbody>
+      <tr><td><strong>昇達科</strong></td><td>3491</td><td class="pos hi">買進</td><td class="num hi">$1,400</td><td class="num pos">19.85</td><td class="num pos hi">35.0</td><td class="pos">極高 (80%)</td></tr>
+      <tr><td><strong>華通</strong></td><td>2313</td><td class="pos hi">買進</td><td class="num hi">$265</td><td class="num pos">8.31</td><td class="num pos hi">12.0</td><td class="pos">高 (~20%)</td></tr>
+      <tr><td><strong>台光電</strong></td><td>2383</td><td class="pos">買進</td><td class="num hi">$2,875</td><td class="num pos">70.8</td><td class="num pos hi">115.0</td><td>中 (AI+LEO)</td></tr>
+      <tr><td><strong>啟碁</strong></td><td>6285</td><td class="pos">買進</td><td class="num">$225</td><td class="num pos">9.21</td><td class="num pos">12.5</td><td>中 (~10%)</td></tr>
+      <tr><td><strong>燿華</strong></td><td>2367</td><td class="pos hi">買進</td><td class="num hi">$72</td><td class="num pos">2.20</td><td class="num pos">3.00</td><td class="pos">高 (30%)</td></tr>
+      <tr><td><strong>同欣電</strong></td><td>6271</td><td class="pos">買進</td><td class="num">$210</td><td class="num pos">8.13</td><td class="num pos">10.5</td><td>低 (間接)</td></tr>
+      <tr><td><strong>中磊</strong></td><td>5388</td><td>增加持股</td><td class="num">$110</td><td class="num">7.10</td><td class="num">8.50</td><td>低 (間接)</td></tr>
+      <tr><td><strong>敬鵬</strong></td><td>2355</td><td>中立</td><td class="num">$42</td><td class="num">1.61</td><td class="num">2.50</td><td>早期佈局</td></tr>
+    </tbody>
+  </table>
+
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #1 &middot; LEO 衛星純度最高</div>
+      <div class="pick-name">昇達科</div>
+      <div class="pick-ticker">3491.TWO &middot; 射頻波導管</div>
+      <div class="pick-why">LEO 衛星營收佔比 80%，毛利率 63%+ 冠絕供應鏈。在手訂單 18 億元提供短期能見度，多客戶佈局（SpaceX + Blue Origin + AST）降低集中度風險。GS 目標價 NT$2,007。</div>
+      <div class="pick-catalyst">催化劑：SpaceX Gen2 加速、Blue Origin 2027 量產、越南廠擴建</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #2 &middot; 全球 PCB 龍頭</div>
+      <div class="pick-name">華通</div>
+      <div class="pick-ticker">2313.TW &middot; 衛星 PCB 市佔 >60%</div>
+      <div class="pick-why">全球衛星 PCB 龍頭地位穩固（天板市佔 >90%），搭載 LEO 衛星 + 800G 光模組 + AI 伺服器三大成長引擎。泰國廠產能倍增，衛星營收佔比持續提升帶動毛利率改善。國泰目標價 NT$270。</div>
+      <div class="pick-catalyst">催化劑：第二客戶 Kuiper 放量、800G PCB 2H26 貢獻、泰國擴廠</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資建議（一）</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 投資建議（續） ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資建議彙整（續）</h1>
+
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #3 &middot; 地面站獨家供應</div>
+      <div class="pick-name">啟碁</div>
+      <div class="pick-ticker">6285.TW &middot; 衛星地面站設備</div>
+      <div class="pick-why">為最大 LEO 客戶之地面站用戶終端獨家供應商，訂單 YoY +30-50%。800G Switch + OCS 提供 2027 年後新成長動能。宏遠目標價 NT$235。</div>
+      <div class="pick-catalyst">催化劑：地面站訂單持續高成長、800G Switch 2H26 量產</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">SPECIAL SITUATION &middot; AI+LEO 雙引擎</div>
+      <div class="pick-name">台光電</div>
+      <div class="pick-ticker">2383.TW &middot; 高頻 CCL</div>
+      <div class="pick-why">AI 伺服器 CCL 需求為主要驅動力（59% EPS CAGR），LEO 衛星為額外催化劑。2Q26 全線漲價 10%+ 帶動毛利率持續擴張。估值偏高但成長確定性最強。</div>
+      <div class="pick-catalyst">催化劑：AI ASIC 新品、2Q26 漲價、產能倍增至 2027</div>
+    </div>
+  </div>
+
+  <blockquote><strong>核心結論：</strong>SpaceX IPO 前台灣衛星供應鏈行情可期，但需注意 IPO 後資金排擠效應。台灣真正受惠者集中於 PCB（華通）與射頻元件（昇達科），地面段設備（啟碁）亦有明確訂單成長。Amazon Kuiper 外包率高是台灣最大增量來源，惟需觀察火箭發展進度。</blockquote>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:16px">本報告涵蓋公司：昇達科 3491、華通 2313、啟碁 6285、台光電 2383、同欣電 6271、中磊 5388、燿華 2367、敬鵬 2355。資料截止日期：2026 年 3 月 25 日。資料來源：台新投信、Goldman Sachs、凱基投顧、富邦投顧、國泰證期、宏遠投顧、CTBC、永豐投顧、兆豐投顧、元富證券、Macquarie。僅供研究參考，不構成投資建議。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資建議（二）</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  Chart.register({
+    id: 'labelPlugin',
+    afterDatasetsDraw(chart) {
+      const ctx = chart.ctx;
+      const isH = chart.options.indexAxis === 'y';
+      chart.data.datasets.forEach((ds, i) => {
+        const meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach((bar, idx) => {
+          const v = ds.data[idx];
+          if (!v && v !== 0) return;
+          ctx.save();
+          ctx.font = 'bold 11.5px PingFang TC, Arial';
+          ctx.textAlign = 'center';
+          if (isH) {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'middle';
+            ctx.fillText(v, bar.x + 6, bar.y);
+          } else {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'bottom';
+            ctx.fillText(String(v), bar.x, bar.y - 3);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+  // 圖表一：LEO 衛星年發射量趨勢
+  new Chart(getEl('chart1'), {
+    type: 'bar',
+    data: {
+      labels: ['2022', '2023', '2024', '2025E', '2026F', '2027F'],
+      datasets: [
+        { label: 'SpaceX', data: [1800, 2500, 3200, 3207, 4662, 5500], backgroundColor: '#1a3a6e', borderRadius: 5, barPercentage: 0.7, categoryPercentage: 0.75 },
+        { label: 'Amazon Kuiper', data: [0, 0, 0, 182, 1650, 2000], backgroundColor: '#00a878', borderRadius: 5, barPercentage: 0.7, categoryPercentage: 0.75 },
+        { label: '其他', data: [200, 300, 500, 600, 700, 800], backgroundColor: '#e67e22', borderRadius: 5, barPercentage: 0.7, categoryPercentage: 0.75 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 12, font: {size: 11} } } },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, grid: { color: '#eef2f8' }, ticks: { callback: v => v.toLocaleString() + '顆' } }
+      }
+    }
+  });
+
+  // 圖表二：LEO PCB 市場規模
+  new Chart(getEl('chart2'), {
+    type: 'bar',
+    data: {
+      labels: ['2024', '2025E', '2026F', '2027F', '2028F'],
+      datasets: [
+        { label: 'LEO PCB 市場（$M）', data: [549, 781, 1124, 1473, 1855], backgroundColor: ['#6b7a9a','#1a3a6e','#00a878','#00c896','#065f46'], borderRadius: 5, barPercentage: 0.6, categoryPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => '$' + v + 'M' } }
+      }
+    }
+  });
+
+}); // end window.load
+</script>
+</body>
+</html>

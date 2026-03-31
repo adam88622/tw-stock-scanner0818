@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>LLM 財報篩選器 — 應用報告 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column;min-height:297mm;max-height:297mm;overflow:hidden}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:28px 46px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:22px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:6px 14px;background:linear-gradient(90deg,#eef5f0,transparent);margin:10px 0 10px;page-break-after:avoid}
+h2.ch{font-size:18px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:4px;margin:12px 0 8px;page-break-after:avoid}
+h3.ch{font-size:16px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:10px 0 6px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:6px 0 10px;font-size:14px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:6px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:10px 14px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:3px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:12px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:14px;margin:8px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:8px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:15px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:18px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:13px;opacity:.8;line-height:1.5}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:10px 46px;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 免責聲明 ── */
+.disclaimer{background:#f0f2f5;border:1px solid #d0d5dd;border-radius:6px;padding:14px 18px;margin:18px 0 10px;font-size:13.5px;color:#6b7a9a;line-height:1.7}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 第 1 頁：封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Financial Screening Application · 2026</div>
+    <div class="cover-title">LLM 財報篩選器<br><em>基本面評分指標應用報告</em></div>
+    <div class="cover-subtitle">基於 FinTradeBench 論文發現的結構化 LLM 財報分析應用</div>
+    <div class="cover-tags">
+      <span class="ctag hl">FinTradeBench</span>
+      <span class="ctag hl">LLM</span>
+      <span class="ctag">基本面分析</span>
+      <span class="ctag">選股篩選</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>16</em> 項</div><div class="cstat-label">預計算財務指標</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>37</em>%</div><div class="cstat-label">RAG 基本面提升</div></div>
+    <div class="cstat"><div class="cstat-num">-<em>20</em>%</div><div class="cstat-label">干擾效應</div></div>
+    <div class="cstat"><div class="cstat-num">$<em>0.01</em></div><div class="cstat-label">成本 / 50 檔</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月23日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 2 頁：執行摘要 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green">
+      <div class="kpi-val">+37%</div>
+      <div class="kpi-lbl">RAG 基本面提升</div>
+    </div>
+    <div class="kpi gold">
+      <div class="kpi-val">-20%</div>
+      <div class="kpi-lbl">交易訊號退化</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-val">-56.5%</div>
+      <div class="kpi-lbl">指標 F1 暴跌</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-val">14B &gt; 70B</div>
+      <div class="kpi-lbl">架構勝過規模</div>
+    </div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">1</span>
+      <div><strong>論文發現。</strong>Agrawal et al. (2026) 的 FinTradeBench 基準測試揭示 LLM 的能力邊界：對文本型基本面分析提升 37%，但對數值型交易訊號反而下降 16-20%（干擾效應）。</div>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">2</span>
+      <div><strong>實測驗證可行。</strong>我們擷取 15 檔美股真實財報，預計算 16 項指標後由 Claude 評分。結果合理：NVDA 92 分（A）居首，TSLA 35 分（F）墊底，平均 74.5 分，等級分佈 A:3 / B:5 / C:6 / F:1。</div>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">3</span>
+      <div><strong>定位為篩選器。</strong>不做交易決策，作為選股第一層篩選——快速從數百檔股票中找出基本面值得關注的標的，供後續深入研究。</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>LLM 財報篩選器 — 應用報告</span>
+    <span>2 / 6</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 3 頁：實測結果 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">實測結果 — 15 檔美股篩選</h1>
+
+  <p style="font-size:14px;margin:4px 0 8px;">資料日期 2026-03-23 | 來源 Yahoo Finance | 評分模型 Claude | 15 檔美股 | 平均 74.5 分</p>
+
+  <table style="font-size:13px;">
+    <thead>
+      <tr><th>#</th><th>Ticker</th><th>Score</th><th>Grade</th><th>ROA</th><th>ROE</th><th>P/E</th><th>Reason</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>NVDA</td><td class="pos">92</td><td>A</td><td>58.1%</td><td>76.3%</td><td>35.3</td><td>AI 浪潮核心，毛利率 71%</td></tr>
+      <tr><td>2</td><td>MSFT</td><td class="pos">88</td><td>A</td><td>16.5%</td><td>29.7%</td><td>23.9</td><td>雲端+AI，淨利率 36%</td></tr>
+      <tr><td>3</td><td>GOOGL</td><td class="pos">86</td><td>A</td><td>22.2%</td><td>31.8%</td><td>27.8</td><td>搜尋壟斷，財務最健康</td></tr>
+      <tr><td>4</td><td>AAPL</td><td>83</td><td>B</td><td>31.2%</td><td>151.9%</td><td>31.4</td><td>品牌護城河，成長趨緩</td></tr>
+      <tr><td>5</td><td>META</td><td>82</td><td>B</td><td>16.5%</td><td>27.8%</td><td>25.3</td><td>毛利率 82%，廣告復甦</td></tr>
+      <tr><td>6</td><td>MA</td><td>81</td><td>B</td><td>27.6%</td><td>193.5%</td><td>30.0</td><td>支付雙寡頭，輕資產</td></tr>
+      <tr><td>7</td><td>V</td><td>80</td><td>B</td><td>20.1%</td><td>52.9%</td><td>28.3</td><td>淨利率 50%，壟斷支付</td></tr>
+      <tr><td>8</td><td>JNJ</td><td>76</td><td>B</td><td>13.5%</td><td>32.9%</td><td>21.3</td><td>防禦型龍頭，殖利率 2.2%</td></tr>
+      <tr><td>9</td><td>KO</td><td>74</td><td>C</td><td>12.5%</td><td>40.7%</td><td>24.6</td><td>品牌無敵，零成長</td></tr>
+      <tr><td>10</td><td>PG</td><td>73</td><td>C</td><td>12.8%</td><td>30.7%</td><td>21.4</td><td>日用品龍頭，適合存股</td></tr>
+      <tr><td>11</td><td>AMZN</td><td>72</td><td>C</td><td>9.5%</td><td>18.9%</td><td>28.6</td><td>雲端高成長，淨利率低</td></tr>
+      <tr><td>12</td><td>JPM</td><td>71</td><td>C</td><td>1.3%</td><td>15.7%</td><td>14.3</td><td>估值最低，銀行特殊結構</td></tr>
+      <tr><td>13</td><td>UNH</td><td>65</td><td>C</td><td>3.9%</td><td>12.8%</td><td>20.8</td><td>營收成長但淨利率低</td></tr>
+      <tr><td>14</td><td>HD</td><td>60</td><td>C</td><td>N/A</td><td>N/A</td><td>22.5</td><td>數據缺失，高槓桿</td></tr>
+      <tr><td>15</td><td>TSLA</td><td class="neg">35</td><td>F</td><td>2.8%</td><td>4.6%</td><td class="neg hi">343.9</td><td>營收衰退，P/E 脫離現實</td></tr>
+    </tbody>
+  </table>
+
+  <div class="kpi-row">
+    <div class="kpi green">
+      <div class="kpi-val">3 <em>檔</em></div>
+      <div class="kpi-lbl">A 級</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-val">5 <em>檔</em></div>
+      <div class="kpi-lbl">B 級</div>
+    </div>
+    <div class="kpi gold">
+      <div class="kpi-val">6 <em>檔</em></div>
+      <div class="kpi-lbl">C 級</div>
+    </div>
+    <div class="kpi" style="background:linear-gradient(135deg,#7b2020,#c0392b)">
+      <div class="kpi-val">1 <em>檔</em></div>
+      <div class="kpi-lbl">F 級</div>
+    </div>
+  </div>
+
+  <h3 class="ch">關鍵觀察</h3>
+  <ul style="font-size:14px;margin:4px 0;">
+    <li><strong>科技三高：</strong>前 3 名（NVDA/MSFT/GOOGL）高 ROA＋高成長＋高毛利</li>
+    <li><strong>支付雙寡頭：</strong>MA、V 淨利率 46-50%，輕資產獲利效率極高</li>
+    <li><strong>防禦存股：</strong>JNJ/KO/PG 殖利率 2-3%，風險低成長也低</li>
+    <li><strong>TSLA 警示：</strong>P/E 344、營收衰退 -2.9%、EPS 崩跌 -62%，基本面最弱</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>LLM 財報篩選器 — 應用報告</span>
+    <span>3 / 6</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 4 頁：論文發現（原第 3 頁）══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">壹、論文核心發現</h1>
+
+  <p>FinTradeBench（arXiv:2603.19225）是首個要求 LLM 同時對基本面與交易訊號進行聯合推理的基準測試。該基準包含 1,400 道問題，涵蓋 NASDAQ-100 成分股十年歷史數據（2015–2025）。</p>
+
+  <h2 class="ch">RAG 的不對稱效應</h2>
+  <table>
+    <thead>
+      <tr><th>問題類型</th><th>RAG 效果</th><th>具體數據</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>F-type（基本面）</td><td class="pos">顯著提升</td><td>中階模型提升高達 37%</td></tr>
+      <tr><td>T-type（交易訊號）</td><td class="neg">系統性退化</td><td>下降 16–20%</td></tr>
+      <tr><td>FT-type（混合）</td><td class="pos">推理型模型獲益最大</td><td>DeepSeek-R1 提升 39–55%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">干擾效應（The Distraction Effect）</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">1</span>
+      <div><strong>Golden Indicator F1 下降 56.5%</strong>——LLM 吸收了檢索文件但無法提取關鍵金融指標，資訊量增加反而稀釋了分析精度。</div>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">2</span>
+      <div><strong>推理深度下降 10.8%</strong>——資訊過載壓制分析推理能力，模型傾向產出淺層摘要而非深入推理。</div>
+    </div>
+  </div>
+
+  <h2 class="ch">架構比規模重要</h2>
+  <table>
+    <thead>
+      <tr><th>模型</th><th>參數量</th><th>RAG 下表現</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>R1-Distill-Qwen-14B</td><td>14B</td><td class="pos">超越所有 LLaMA</td></tr>
+      <tr><td>Qwen 系列</td><td>各規模</td><td class="pos">普遍從 RAG 獲益</td></tr>
+      <tr><td>LLaMA 系列</td><td>到 70B</td><td class="neg">RAG 下持續退化</td></tr>
+    </tbody>
+  </table>
+
+  <span class="src">資料來源：Agrawal et al. (2026) FinTradeBench, arXiv:2603.19225</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>LLM 財報篩選器 — 應用報告</span>
+    <span>4 / 6</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 5 頁：應用設計（原第 4 頁）══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">貳、應用設計——LLM 財報篩選器</h1>
+
+  <p>基於論文發現，我們設計的核心原則：<strong>讓 LLM 只做文本分析，數字由 Python 預先算好。</strong></p>
+
+  <h2 class="ch">16 項預計算財務指標</h2>
+  <div class="mini-table">
+    <div class="mini-t">
+      <table>
+        <thead>
+          <tr><th>類別</th><th>指標</th><th>計算方式</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>獲利</td><td>ROA</td><td>淨利 / 總資產</td></tr>
+          <tr><td>獲利</td><td>ROE</td><td>淨利 / 股東權益</td></tr>
+          <tr><td>獲利</td><td>毛利率</td><td>毛利 / 營收</td></tr>
+          <tr><td>獲利</td><td>營業利益率</td><td>營業利益 / 營收</td></tr>
+          <tr><td>獲利</td><td>淨利率</td><td>淨利 / 營收</td></tr>
+          <tr><td>成長</td><td>營收 YoY</td><td>(本期營收-去年) / 去年</td></tr>
+          <tr><td>成長</td><td>EPS YoY</td><td>(本期EPS-去年) / 去年</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mini-t">
+      <table>
+        <thead>
+          <tr><th>類別</th><th>指標</th><th>計算方式</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>健全</td><td>負債比</td><td>總負債 / 總資產</td></tr>
+          <tr><td>健全</td><td>流動比率</td><td>流動資產 / 流動負債</td></tr>
+          <tr><td>健全</td><td>利息保障</td><td>EBIT / 利息費用</td></tr>
+          <tr><td>現金</td><td>自由現金流</td><td>營業CF - 資本支出</td></tr>
+          <tr><td>現金</td><td>OCF/NI</td><td>營業CF / 淨利</td></tr>
+          <tr><td>估值</td><td>P/E</td><td>股價 / EPS</td></tr>
+          <tr><td>估值</td><td>P/B</td><td>股價 / 每股淨值</td></tr>
+          <tr><td>估值</td><td>P/S</td><td>市值 / 營收</td></tr>
+          <tr><td>估值</td><td>殖利率</td><td>每股股息 / 股價</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="ch">流程架構</h2>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-spec">Step 1</div>
+      <div class="tl-year">yfinance 擷取</div>
+      <div class="tl-tech">財報數據下載</div>
+    </div>
+    <div class="tl-item active">
+      <div class="tl-spec">Step 2</div>
+      <div class="tl-year">Python 預計算</div>
+      <div class="tl-tech">16 項財務指標</div>
+    </div>
+    <div class="tl-item next">
+      <div class="tl-spec">Step 3</div>
+      <div class="tl-year">LLM 評分</div>
+      <div class="tl-tech">結構化模板 → GPT-4o-mini</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-spec">Step 4</div>
+      <div class="tl-year">篩選輸出</div>
+      <div class="tl-tech">排序 + 過濾</div>
+    </div>
+  </div>
+
+  <h3 class="ch">為什麼這樣設計</h3>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行因素</h4>
+      <div class="risk-item">LLM 對文本分析提升 37%（論文驗證）</div>
+      <div class="risk-item">預計算避免 LLM 數值幻覺</div>
+      <div class="risk-item">成本極低（$0.01 / 50 檔）</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險</h4>
+      <div class="risk-item">LLM 評分有主觀性（不同模型結果不同）</div>
+      <div class="risk-item">財報數據有時間延遲（季報）</div>
+      <div class="risk-item">不適合高頻或短線決策</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>LLM 財報篩選器 — 應用報告</span>
+    <span>5 / 6</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 6 頁：來源與定位（原第 5 頁）══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參、研究來源與應用定位</h1>
+
+  <h2 class="ch">論文來源</h2>
+  <table>
+    <thead>
+      <tr><th>作者</th><th>論文</th><th>核心發現</th><th>我們的應用</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Agrawal et al.</td><td>FinTradeBench (2603.19225)</td><td>RAG 對基本面 +37%，對交易訊號 -20%</td><td>只讓 LLM 做基本面文本分析</td></tr>
+      <tr><td>Al Ridhawi et al.</td><td>AE Regime (2603.19136)</td><td>體制偵測貢獻 36%</td><td>已完成：AE 晴雨表（獨立專案）</td></tr>
+      <tr><td>Jeon &amp; Lee</td><td>BlindTrade (2603.17692)</td><td>圖結構 &gt; LLM 3 倍</td><td>確認 LLM 限於文本分析的定位</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">資料來源</h2>
+  <table>
+    <thead>
+      <tr><th>來源</th><th>用途</th><th>成本</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>yfinance</td><td>財報 API 數據擷取</td><td>免費</td></tr>
+      <tr><td>OpenAI GPT-4o-mini</td><td>LLM 文本評分</td><td>極低（$0.01 / 50 檔）</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">應用定位</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <div><strong>第一層篩選。</strong>不做交易決策，只從數百檔中快速找出基本面值得關注的標的。</div>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <div><strong>與晴雨表互補。</strong>AE 晴雨表判斷「市場安不安全」，財報篩選器判斷「哪些股票值得看」。兩者結合：市場安全時，從篩選器推薦的股票中找機會。</div>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">&#10003;</span>
+      <div><strong>可整合至台股掃描器。</strong>未來作為新頁面加入側邊欄，與突破掃描、法人買賣超並列。</div>
+    </div>
+  </div>
+
+  <blockquote>"LLM 擅長讀財報，不擅長算數字。讓對的工具做對的事。"</blockquote>
+
+  <div class="disclaimer">
+    <strong>免責聲明：</strong>本報告為學術研究成果之應用規劃，FinTradeBench 方法源自 Agrawal et al. (2026, arXiv:2603.19225)。僅供研究參考，不構成投資建議。
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>LLM 財報篩選器 — 應用報告</span>
+    <span>6 / 6</span>
+  </div>
+</div>
+
+</body>
+</html>

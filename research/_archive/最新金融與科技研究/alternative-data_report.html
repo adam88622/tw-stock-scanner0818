@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Alternative Data Report | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:16px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1}.pb{break-after:page;page-break-after:always}.full-page{display:flex;flex-direction:column}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:16px;color:rgba(255,255,255,.65);margin-bottom:40px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8)}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:24px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13px;color:rgba(255,255,255,.5)}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,.45)}
+.body-page{padding:30px 48px;position:relative;z-index:1}.body-page.alt{background:#fafbfd}
+h1.ch{font-size:22px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 12px;page-break-after:avoid}
+h2.ch{font-size:18px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:16px 0 10px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:6px 0 12px;font-size:13.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 10px;text-align:left;font-weight:600;font-size:12.5px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}tbody tr:nth-child(even){background:#fff}
+td{padding:8px 10px;border-bottom:1px solid #e5edf8;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.pos{color:#00875a;font-weight:600}td.neg{color:#c0392b;font-weight:600}td.hi{background:#fff8e1!important;font-weight:700}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi-val{font-size:22px;font-weight:800;margin-bottom:4px}.kpi-val em{font-size:13px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:12.5px;opacity:.7}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:16px;margin:10px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:15px;font-weight:700;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:22px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+p{margin:6px 0 10px;line-height:1.7;font-size:15px}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:10px 14px;margin:10px 0;color:#1a3a6e;font-size:14.5px;border-radius:0 5px 5px 0}
+.src{font-size:12px;color:#9aabb5;display:block;margin-top:5px}
+.warn-box{background:#fff8e1;border:1.5px solid #d97706;border-radius:8px;padding:12px;margin:10px 0;font-size:14px;line-height:1.7}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:10px 48px;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:15px}.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- 封面 -->
+<div class="cover pb page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div><div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">AI量化交易與相關應用產品開發</div></div></div>
+    <div class="cover-eyebrow">Research Report R-2026-03-26-AD01</div>
+    <div class="cover-title">另類資料<br><em>Wikipedia + Google Trends + 衛星數據</em></div>
+    <div class="cover-subtitle">Investor Attention, Search Trends, Satellite Imagery for Alpha Generation</div>
+    <div class="cover-tags"><span class="ctag hl">Wikipedia</span><span class="ctag hl">Google Trends</span><span class="ctag hl">Satellite Data</span><span class="ctag">Investor Attention</span><span class="ctag">Alternative Data</span><span class="ctag">Contrarian</span></div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">Sharpe <em>1.574</em></div><div class="cstat-label">Wiki Attention 最佳</div></div>
+    <div class="cstat"><div class="cstat-num"><em>262</em> <em style="font-size:13px">weeks</em></div><div class="cstat-label">Google Trends 期間</div></div>
+    <div class="cstat"><div class="cstat-num"><em>10</em></div><div class="cstat-label">標的股票數</div></div>
+    <div class="cstat"><div class="cstat-num"><em>Lit</em> Review</div><div class="cstat-label">衛星數據研究</div></div>
+  </div>
+  <div class="cover-bottom"><span>報告編號：R-2026-03-26-AD01</span><span>研究日期：2026-03-26</span><span>&copy; 2026 Genesis International Capital</span></div>
+</div>
+
+<!-- 第 2 頁：研究方法 -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">研究方法與資料取得聲明</h1>
+  <table>
+    <thead><tr><th>項目</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><td>報告編號</td><td>R-2026-03-26-AD01</td></tr>
+      <tr><td>研究日期</td><td>2026-03-26</td></tr>
+      <tr><td>研究人員</td><td>GiS Research + Claude Code Agent</td></tr>
+      <tr><td>資料收集</td><td>WebSearch + Wikipedia API + pytrends (Google Trends)</td></tr>
+      <tr><td>資料來源</td><td>免費公開數據：Wikipedia pageviews、Google Trends、衛星數據文獻回顧</td></tr>
+      <tr><td>驗證方式</td><td>策略回測 + 文獻交叉驗證</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：Wikipedia Pageviews API（免費）、Google Trends via pytrends（免費）、衛星數據為文獻回顧。</span>
+
+  <h2 class="ch">另類資料來源說明</h2>
+  <table>
+    <thead><tr><th>#</th><th>資料源</th><th>取得方式</th><th>頻率</th><th>成本</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Wikipedia Pageviews</td><td>Wikipedia REST API</td><td>Daily</td><td>免費</td></tr>
+      <tr><td>2</td><td>Google Trends</td><td>pytrends Python 套件</td><td>Weekly</td><td>免費</td></tr>
+      <tr><td>3</td><td>衛星影像數據</td><td>文獻回顧（非實作）</td><td>Daily/Weekly</td><td>高（商業授權）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">Wikipedia 與 Google Trends 為完全免費的另類資料來源，適合學術研究與策略原型開發。</span>
+
+  <div class="warn-box"><strong>已知限制：</strong>① Wikipedia/Google Trends 數據可能有噪音與季節性偏差 ② 衛星數據部分僅為文獻回顧，未進行實作驗證 ③ 另類資料策略容量有限，大規模部署可能面臨流動性約束 ④ 回測期間選擇影響策略績效評估</div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>研究方法</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- 第 3 頁：實作結果 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">實作結果</h1>
+
+  <h2 class="ch">Wikipedia 注意力策略績效</h2>
+  <table>
+    <thead><tr><th>Strategy</th><th>Sharpe</th><th>CAGR</th><th>Cum%</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">Wiki Attention Long Top-3</td><td class="pos">1.574</td><td class="pos">49.22%</td><td class="pos">615.6%</td></tr>
+      <tr><td>Wiki Low-Attention Contrarian</td><td class="pos">1.065</td><td class="pos">36.33%</td><td class="pos">359.0%</td></tr>
+      <tr><td>Equal Weight (Benchmark)</td><td class="pos">1.304</td><td class="pos">34.62%</td><td class="pos">342.1%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">回測期間：10 檔美股，以 Wikipedia 每週瀏覽量排序。Long Top-3 = 做多注意力最高 3 檔，Contrarian = 做多注意力最低 3 檔。</span>
+
+  <h2 class="ch">衛星數據文獻回顧</h2>
+  <table>
+    <thead><tr><th>研究</th><th>數據類型</th><th>發現</th><th>Alpha</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">Berkeley Haas 停車場研究</td><td>停車場衛星影像</td><td>零售商客流量預測營收</td><td class="pos">3-5 天內 4-5%</td></tr>
+      <tr><td>Nature 港口研究</td><td>港口船舶影像</td><td>全球貿易活動即時追蹤</td><td>宏觀指標領先</td></tr>
+      <tr><td>Oil Storage 研究</td><td>原油儲槽影像</td><td>浮頂罐陰影面積估算庫存</td><td>商品期貨信號</td></tr>
+    </tbody>
+  </table>
+  <span class="src">衛星數據研究為文獻回顧，Berkeley Haas 停車場研究顯示 3-5 天內可獲 4-5% 超額報酬。</span>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">1.574</div><div class="kpi-lbl">Wiki Top-3 Sharpe</div></div>
+    <div class="kpi green"><div class="kpi-val">615.6<em>%</em></div><div class="kpi-lbl">Wiki Top-3 累積</div></div>
+    <div class="kpi"><div class="kpi-val">1.065</div><div class="kpi-lbl">Contrarian Sharpe</div></div>
+    <div class="kpi"><div class="kpi-val">4-5<em>%</em></div><div class="kpi-lbl">衛星停車場 Alpha</div></div>
+  </div>
+
+  <blockquote><strong>核心結論：</strong>Wikipedia 注意力策略 Long Top-3 以 Sharpe 1.574 和 CAGR 49.22% 大幅超越等權基準，顯示投資人注意力是有效的另類 alpha 來源。衛星數據（停車場影像）在文獻中展現 3-5 天 4-5% 的短期預測力，但數據成本高昂，適合機構投資者。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>實作結果</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- 第 4 頁：參考文獻 + 免責聲明 -->
+<div class="full-page page body-page">
+  <h1 class="ch">參考文獻與研究聲明</h1>
+  <table>
+    <thead><tr><th>#</th><th>文獻</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Da, Z., Engelberg, J. & Gao, P. (2011). In Search of Attention. <em>Journal of Finance</em>, 66(5), 1461-1499. [A+]</td><td>Google 搜尋量與投資人注意力經典研究</td></tr>
+      <tr><td>2</td><td>Moat, H.S. et al. (2013). Quantifying Wikipedia Usage Patterns Before Stock Market Moves. <em>Scientific Reports</em>, 3, 1801.</td><td>Wikipedia 瀏覽量預測股市變動</td></tr>
+      <tr><td>3</td><td>Barber, B.M. & Odean, T. (2008). All That Glitters: The Effect of Attention and News on the Buying Behavior of Individual and Institutional Investors. <em>Review of Financial Studies</em>, 21(2), 785-818. [A+]</td><td>注意力驅動交易行為</td></tr>
+      <tr><td>4</td><td>Katona, Z. & Patatoukas, P.N. (2022). From Backfilling to Nowcasting: Real-Time Estimates Using Google Trends. <em>Management Science</em>.</td><td>Google Trends 即時經濟估計</td></tr>
+    </tbody>
+  </table>
+  <span class="src">Da-Engelberg-Gao (2011) 發表於 Journal of Finance [A+]，Barber-Odean (2008) 發表於 RFS [A+]，為投資人注意力領域奠基之作。</span>
+
+  <div class="warn-box">
+    <strong>研究聲明：</strong><br>
+    1. Wikipedia 與 Google Trends 數據均為免費公開資料。<br>
+    2. 策略績效基於歷史回測，實際交易可能因流動性、滑價等因素而不同。<br>
+    3. 衛星數據部分僅為文獻回顧，未進行獨立實作驗證。<br>
+    4. 另類資料策略容量有限，Alpha 可能隨採用者增加而衰減。<br>
+    5. 過去績效不代表未來表現。本報告僅供研究參考，不構成投資建議。
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參考文獻</span><span>&copy; 2026 GiS</span></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>SPX-VIX 最優傳輸 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 免責聲明 ── */
+.disclaimer{background:#f7f9fd;border:1px solid #dce8f8;border-radius:8px;padding:18px 22px;margin:14px 0;font-size:13.5px;color:#6b7a9a;line-height:1.8}
+.disclaimer strong{color:#1a3a6e;font-size:14px}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 第 1 頁：封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Quantitative Research Report · 2026-03-24</div>
+    <div class="cover-title">SPX-VIX 最優傳輸<br><em>聯合風險計算應用報告</em></div>
+    <div class="cover-subtitle">Optimal Transport between SPX &amp; VIX — Joint Risk Computation</div>
+    <div class="cover-tags">
+      <span class="ctag hl">Optimal Transport</span>
+      <span class="ctag hl">Sinkhorn</span>
+      <span class="ctag">SPX</span>
+      <span class="ctag">VIX</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>-0.692</em></div><div class="cstat-label">相關係數</div></div>
+    <div class="cstat"><div class="cstat-num"><em>1.9</em>x</div><div class="cstat-label">不對稱比</div></div>
+    <div class="cstat"><div class="cstat-num"><em>1256</em></div><div class="cstat-label">交易天數</div></div>
+    <div class="cstat"><div class="cstat-num"><em>Sinkhorn</em></div><div class="cstat-label">演算法</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月24日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 2 頁：結果 ══════════════ -->
+<div class="page pb full-page" style="min-height:297mm">
+  <div class="body-page" style="flex:1">
+    <h1 class="ch">SPX-VIX 最優傳輸分析結果</h1>
+
+    <!-- 聯合統計 KPI -->
+    <h2 class="ch">聯合統計量</h2>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">-0.692</div><div class="kpi-lbl">SPX-VIX 相關</div></div>
+      <div class="kpi green"><div class="kpi-val">-0.407</div><div class="kpi-lbl">上漲日相關</div></div>
+      <div class="kpi"><div class="kpi-val">-0.613</div><div class="kpi-lbl">下跌日相關</div></div>
+      <div class="kpi gold"><div class="kpi-val">21%</div><div class="kpi-lbl">SPX 波動率</div></div>
+    </div>
+    <p>VIX 均值為 <strong>21.4</strong>，與 SPX 呈現顯著負相關（&rho; = -0.692）。下跌日相關性（-0.613）較上漲日（-0.407）更為緊密，反映恐慌拋售時波動率急升的非對稱結構。</p>
+
+    <!-- 不對稱性 -->
+    <h2 class="ch">漲跌不對稱性</h2>
+    <table>
+      <thead>
+        <tr><th>條件</th><th>VIX 平均變化</th><th>觸發天數</th><th>方向</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>SPX 下跌 &gt; 1%</td><td class="num pos hi">+12.07%</td><td class="num">174 天</td><td>VIX 急升</td></tr>
+        <tr><td>SPX 上漲 &gt; 1%</td><td class="num neg">-6.44%</td><td class="num">219 天</td><td>VIX 回落</td></tr>
+      </tbody>
+    </table>
+    <div class="kpi-row" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kpi green"><div class="kpi-val">1.9<em>x</em></div><div class="kpi-lbl">不對稱比</div></div>
+      <div class="kpi"><div class="kpi-val">+12.07<em>%</em></div><div class="kpi-lbl">下跌日 VIX 漲幅</div></div>
+      <div class="kpi gold"><div class="kpi-val">-6.44<em>%</em></div><div class="kpi-lbl">上漲日 VIX 跌幅</div></div>
+    </div>
+    <p>不對稱比達 <strong>1.9x</strong>：SPX 下跌時 VIX 上升幅度約為 SPX 上漲時 VIX 下降幅度的 1.9 倍，此為波動率對沖策略的核心依據。</p>
+
+    <!-- Sinkhorn 最優傳輸 -->
+    <h2 class="ch">Sinkhorn 最優傳輸</h2>
+    <table>
+      <thead>
+        <tr><th>參數</th><th>數值</th><th>說明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Transport Cost</td><td class="num hi">0.004423</td><td>Wasserstein 距離近似值</td></tr>
+        <tr><td>Entropy</td><td class="num">4.9116</td><td>傳輸計畫的熵正則化項</td></tr>
+        <tr><td>Grid Size</td><td class="num">19 &times; 19</td><td>離散化聯合分佈格點</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 論文引用 -->
+    <h3 class="ch">參考論文</h3>
+    <blockquote>
+      Che et al. (2026). <em>Optimal Transport Methods for Joint Risk Measures in Equity-Volatility Markets.</em> arXiv:2603.10857
+    </blockquote>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>SPX-VIX 最優傳輸分析</span>
+    <span>2 / 3</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 3 頁：來源 + 免責 ══════════════ -->
+<div class="page full-page" style="min-height:297mm">
+  <div class="body-page" style="flex:1">
+    <h1 class="ch">資料來源與免責聲明</h1>
+
+    <h2 class="ch">資料來源</h2>
+    <table>
+      <thead>
+        <tr><th>項目</th><th>來源</th><th>說明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>SPX 日收盤價</td><td>S&amp;P Global / Yahoo Finance</td><td>1256 個交易日</td></tr>
+        <tr><td>VIX 收盤價</td><td>CBOE</td><td>同期間 VIX 指數</td></tr>
+        <tr><td>Sinkhorn 演算法</td><td>POT (Python Optimal Transport)</td><td>v0.9+, Sinkhorn solver</td></tr>
+        <tr><td>理論基礎</td><td>Che et al. (2026) arXiv:2603.10857</td><td>最優傳輸聯合風險計量方法</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="ch">方法論摘要</h2>
+    <p>本報告採用 <strong>Sinkhorn 最優傳輸</strong>演算法，將 SPX 日報酬率分佈與 VIX 變動率分佈之間的聯合結構以 19&times;19 離散格點表示。透過熵正則化（entropy = 4.9116）求解最優傳輸計畫，所得 transport cost（0.004423）反映兩分佈間的 Wasserstein 距離近似值。</p>
+    <p>漲跌不對稱性分析以 SPX 日報酬率 &plusmn;1% 為閾值，分別計算條件下 VIX 的平均反應幅度。不對稱比 1.9x 量化了市場恐慌時波動率非線性放大的程度。</p>
+
+    <hr>
+
+    <h2 class="ch">免責聲明</h2>
+    <div class="disclaimer">
+      <strong>重要聲明</strong><br><br>
+      本報告由 Genesis International Capital (GiS) 研究團隊編製，僅供專業投資人及內部研究參考之用。本報告所載之分析、數據及結論均基於公開資料與量化模型產出，不保證其準確性、完整性或即時性。<br><br>
+      本報告<strong>不構成任何投資建議、要約或邀約</strong>。讀者應根據自身風險承受能力及投資目標，獨立判斷並諮詢專業顧問後方可作出投資決策。GiS 對因使用本報告所產生之任何直接或間接損失概不負責。<br><br>
+      SPX 與 VIX 相關產品涉及衍生性金融商品，具有高度槓桿與波動風險，可能導致超出原始投資金額之損失。歷史數據及模型結果不代表未來表現。<br><br>
+      未經 GiS 書面同意，不得複製、轉載或散佈本報告之任何內容。<br><br>
+      <strong>&copy; 2026 Genesis International Capital. All rights reserved.</strong>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>SPX-VIX 最優傳輸分析</span>
+    <span>3 / 3</span>
+  </div>
+</div>
+
+</body>
+</html>

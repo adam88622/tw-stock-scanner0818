@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>股價驅動因子分歧 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1;min-height:297mm;display:flex;flex-direction:column}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 半衰期條 ── */
+.hl-bar-wrap{margin:14px 0}
+.hl-bar{display:flex;align-items:center;margin:8px 0;gap:12px}
+.hl-label{width:80px;font-size:14px;font-weight:600;color:#1a3a6e;text-align:right;flex-shrink:0}
+.hl-track{flex:1;height:28px;background:#e8edf5;border-radius:6px;position:relative;overflow:hidden}
+.hl-fill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-size:13px;font-weight:700;color:#fff}
+.hl-fill.short{background:linear-gradient(90deg,#00c896,#00a878)}
+.hl-fill.mid{background:linear-gradient(90deg,#d97706,#f59e0b)}
+.hl-fill.long{background:linear-gradient(90deg,#c0392b,#e74c3c)}
+
+/* ── 來源頁 ── */
+.source-item{padding:8px 0;border-bottom:1px solid #eef2f8;font-size:14.5px;line-height:1.65}
+.source-item:last-child{border:none}
+.source-tag{display:inline-block;background:#0d1b3e;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:3px;margin-right:8px;letter-spacing:.5px}
+.disclaimer{background:#f7f9fd;border:1px solid #dce8f8;border-radius:8px;padding:18px;margin:16px 0;font-size:13.5px;color:#6b7a9a;line-height:1.75}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 第 1 頁：封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Quantitative Research Report · Q1 2026</div>
+    <div class="cover-title">股價驅動因子分歧<br><em>估值假設分析應用報告</em></div>
+    <div class="cover-subtitle">Return Disagreement — Valuation Assumption Sensitivity Analysis</div>
+    <div class="cover-tags">
+      <span class="ctag hl">折現率敏感度</span>
+      <span class="ctag hl">均值回歸速度</span>
+      <span class="ctag">估值分歧度</span>
+      <span class="ctag">SPY 標普 500</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>0.230</em></div><div class="cstat-label">分歧度</div></div>
+    <div class="cstat"><div class="cstat-num"><em>25</em>年</div><div class="cstat-label">數據跨度</div></div>
+    <div class="cstat"><div class="cstat-num"><em>3</em></div><div class="cstat-label">假設情境</div></div>
+    <div class="cstat"><div class="cstat-num">$<em>580</em></div><div class="cstat-label">SPY 現價</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月24日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 2 頁：分析結果 ══════════════ -->
+<div class="body-page pb page">
+  <h1 class="ch">分析結果：折現率假設驅動估值分歧</h1>
+
+  <p>同一組 25 年 SPY 歷史數據，僅改變折現率 <em>r</em> 這一個假設，三位分析師得出天差地遠的結論——這正是<strong>股價驅動因子分歧</strong>的核心現象。</p>
+
+  <h2 class="ch">三位分析師的估值結論</h2>
+
+  <div class="kpi-row">
+    <div class="kpi green">
+      <div class="kpi-val">+54.9<em>%</em></div>
+      <div class="kpi-lbl">樂觀者 (r=6%)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-val">+39.8<em>%</em></div>
+      <div class="kpi-lbl">中立者 (r=8%)</div>
+    </div>
+    <div class="kpi gold">
+      <div class="kpi-val">+9.8<em>%</em></div>
+      <div class="kpi-lbl">悲觀者 (r=12%)</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-val">0.230</div>
+      <div class="kpi-lbl">分歧度指數</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>分析師</th><th>折現率 r</th><th>估值偏差</th><th>隱含判斷</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>樂觀者</td><td class="num">6%</td><td class="pos">高估 54.9%</td><td>市場大幅低估，強力買入</td></tr>
+      <tr><td>中立者</td><td class="num">8%</td><td class="pos">高估 39.8%</td><td>市場低估，建議加碼</td></tr>
+      <tr><td class="hi">悲觀者</td><td class="num hi">12%</td><td class="hi" style="color:#d97706;font-weight:700">僅高估 9.8%</td><td class="hi">接近合理價，持有觀望</td></tr>
+    </tbody>
+  </table>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">1</span><span>折現率從 6% 變到 12%，估值偏差從 54.9% 陡降至 9.8%——同一份數據，結論從「大幅低估」到「接近合理」。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">2</span><span>分歧度 0.230 意味著分析師之間的估值差距達 23 個百分點——單一假設即可翻轉投資決策。</span></div>
+  </div>
+
+  <h2 class="ch">持續性半衰期：均值回歸速度的影響</h2>
+
+  <p>報酬率自相關係數 &rho; 越高，偏離均值的時間越久。半衰期衡量「錯價修正一半所需年數」。</p>
+
+  <div class="hl-bar-wrap">
+    <div class="hl-bar">
+      <span class="hl-label">&rho; = 0.50</span>
+      <div class="hl-track"><div class="hl-fill short" style="width:12%">1.0 年</div></div>
+    </div>
+    <div class="hl-bar">
+      <span class="hl-label">&rho; = 0.80</span>
+      <div class="hl-track"><div class="hl-fill mid" style="width:32%">3.1 年</div></div>
+    </div>
+    <div class="hl-bar">
+      <span class="hl-label">&rho; = 0.95</span>
+      <div class="hl-track"><div class="hl-fill long" style="width:90%">13.5 年</div></div>
+    </div>
+  </div>
+
+  <blockquote>
+    若報酬率高度持續（&rho; = 0.95），分歧的影響可延續超過十年——長期投資者不能忽視假設選擇的後果。
+  </blockquote>
+
+  <h3 class="ch">學術依據</h3>
+  <p>Atkeson, A., Perri, F. &amp; Heathcote, J. (2026). <em>"The End of Privilege: A Reexamination of the Net Foreign Asset Position of the United States."</em> NBER Working Paper No. w34923.</p>
+  <span class="src">本頁分析基於 SPY 2001–2025 日頻收盤價，三組折現率假設 (6%, 8%, 12%) 之 Gordon Growth Model 估值。</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>股價驅動因子分歧 — 估值假設分析</span>
+    <span>2 / 3</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 3 頁：資料來源 + 免責聲明 ══════════════ -->
+<div class="body-page page">
+  <h1 class="ch">資料來源與免責聲明</h1>
+
+  <h2 class="ch">資料來源</h2>
+
+  <div class="source-item"><span class="source-tag">DATA</span>SPDR S&amp;P 500 ETF Trust (SPY) 日頻收盤價，2001年1月至2025年12月，共約 6,300 個交易日。資料來源：Yahoo Finance。</div>
+  <div class="source-item"><span class="source-tag">MODEL</span>Gordon Growth Model（股利折現模型），以三組折現率假設（r = 6%, 8%, 12%）進行敏感度分析。</div>
+  <div class="source-item"><span class="source-tag">METRIC</span>分歧度指數定義為三組估值偏差之標準差 / 均值，衡量假設變動對結論的影響幅度。</div>
+  <div class="source-item"><span class="source-tag">PAPER</span>Atkeson, A., Perri, F. &amp; Heathcote, J. (2026). <em>"The End of Privilege: A Reexamination of the Net Foreign Asset Position of the United States."</em> NBER Working Paper No. w34923.</div>
+  <div class="source-item"><span class="source-tag">THEORY</span>半衰期計算：t<sub>1/2</sub> = ln(2) / ln(1/&rho;)，其中 &rho; 為報酬率年度自相關係數。</div>
+
+  <hr>
+
+  <h2 class="ch">免責聲明</h2>
+
+  <div class="disclaimer">
+    <p><strong>重要聲明：</strong>本報告由 Genesis International Capital（GiS）研究團隊編製，僅供一般性研究參考之用，不構成任何形式的投資建議、買賣推薦或投資決策依據。</p>
+    <p>本報告所載資料、數據及分析結果均基於公開可得之資訊及合理假設，GiS 不對其準確性、完整性或時效性作出任何明示或暗示之保證。模型輸出結果對假設參數高度敏感，不同假設可能導致截然不同的結論——這正是本報告所探討的核心議題。</p>
+    <p>投資涉及風險，過往表現不代表未來結果。讀者在做出任何投資決策前，應自行進行充分研究或諮詢專業顧問。GiS 及其關聯方不對因使用本報告而產生的任何直接或間接損失承擔責任。</p>
+    <p>本報告版權歸 Genesis International Capital 所有，未經書面許可不得轉載或散佈。</p>
+  </div>
+
+  <hr>
+
+  <div style="text-align:center;margin:24px 0;color:#9aabb5;font-size:13px;">
+    <p>報告編號：GiS-QR-2026-0324-001&emsp;|&emsp;分類：量化研究&emsp;|&emsp;機密等級：一般</p>
+    <p>生成日期：2026年3月24日&emsp;|&emsp;分析引擎版本：return-disagreement v1.0</p>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>股價驅動因子分歧 — 估值假設分析</span>
+    <span>3 / 3</span>
+  </div>
+</div>
+
+</body>
+</html>

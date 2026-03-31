@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>PINN 選擇權定價報告 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.neg{color:#c0392b;font-weight:600}
+td.pos{color:#00875a;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.red{background:linear-gradient(135deg,#7b2020,#c0392b)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 圖表容器 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:14px;margin:10px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:16px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:14px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 警告框 ── */
+.warn-box{background:#fff3cd;border:2px solid #f59e0b;border-radius:8px;padding:16px 20px;margin:14px 0;page-break-inside:avoid}
+.warn-box h4{color:#92400e;font-size:16px;margin-bottom:8px}
+.warn-box p{color:#78350f;font-size:15px;margin:4px 0;line-height:1.65}
+
+/* ── 免責 ── */
+.disclaimer{background:#f8f9fa;border:1px solid #dee2e6;border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13.5px;color:#6c757d;line-height:1.7}
+.disclaimer strong{color:#495057}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ PAGE 1 — 封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Cross-Domain: Computational Physics &rarr; Finance</div>
+    <div class="cover-title">PINN 選擇權定價<br><em>物理資訊神經網路應用報告</em></div>
+    <div class="cover-subtitle">Physics-Informed Neural Networks for Black-Scholes Option Pricing</div>
+    <div class="cover-tags">
+      <span class="ctag hl">PINN</span>
+      <span class="ctag hl">Black-Scholes PDE</span>
+      <span class="ctag">Neural Network</span>
+      <span class="ctag">Options Pricing</span>
+      <span class="ctag">Cross-Domain</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>34</em>s</div><div class="cstat-label">訓練時間</div></div>
+    <div class="cstat"><div class="cstat-num">BS <em>PDE</em></div><div class="cstat-label">物理約束</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4</em>層</div><div class="cstat-label">神經網路</div></div>
+    <div class="cstat"><div class="cstat-num"><em>框架</em></div><div class="cstat-label">驗證階段</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月26日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 2 — 方法與結果 ══════════════ -->
+<div class="body-page pb page full-page">
+
+  <h1 class="ch">實驗方法與結果分析</h1>
+
+  <h2 class="ch">PINN 架構概述</h2>
+  <p>物理資訊神經網路（Physics-Informed Neural Network, PINN）將偏微分方程式嵌入損失函數，使神經網路在訓練過程中同時滿足數據擬合與物理約束。本實驗以 <strong>Black-Scholes PDE</strong> 作為物理約束，訓練一個 4 層全連接網路來預測歐式選擇權價格。</p>
+
+  <blockquote>
+    <strong>核心思想：</strong>Loss = L<sub>data</sub> + &lambda; &middot; L<sub>PDE</sub>，其中 L<sub>PDE</sub> 為 Black-Scholes 方程殘差，強制網路輸出滿足無套利定價條件。
+  </blockquote>
+
+  <h2 class="ch">模型參數</h2>
+  <table>
+    <thead><tr><th>參數</th><th>設定值</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>網路架構</td><td>4 層 &times; 128 neurons</td><td>全連接 + Tanh 激活</td></tr>
+      <tr><td>訓練輪次</td><td class="neg">2,000 epochs</td><td>遠低於收斂所需</td></tr>
+      <tr><td>學習率</td><td>1e-3 (Adam)</td><td>含 ReduceLROnPlateau</td></tr>
+      <tr><td>PDE 權重 &lambda;</td><td>1.0</td><td>數據 / 物理平衡</td></tr>
+      <tr><td>訓練時間</td><td>34 秒</td><td>GPU / CPU 混合</td></tr>
+      <tr><td>參考波動率 &sigma;</td><td>0.2</td><td>BS 模型假設</td></tr>
+      <tr><td>無風險利率 r</td><td>0.05</td><td>BS 模型假設</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">關鍵結果指標</h2>
+  <div class="kpi-row">
+    <div class="kpi red"><div class="kpi-val">12.76</div><div class="kpi-lbl">MAE（整體）</div></div>
+    <div class="kpi"><div class="kpi-val">2,000</div><div class="kpi-lbl">訓練 Epochs</div></div>
+    <div class="kpi gold"><div class="kpi-val">34<em>s</em></div><div class="kpi-lbl">訓練時間</div></div>
+    <div class="kpi green"><div class="kpi-val">4</div><div class="kpi-lbl">網路層數</div></div>
+  </div>
+
+  <h2 class="ch">ATM 比較：BS 解析解 vs PINN 預測</h2>
+  <table>
+    <thead><tr><th>指標</th><th>Black-Scholes 解析解</th><th>PINN 預測</th><th>差異</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">ATM 選擇權價格</td><td class="num">10.45</td><td class="num neg">&minus;9.12</td><td class="num neg">&minus;19.57</td></tr>
+      <tr><td>MAE（全樣本）</td><td class="num">&mdash;</td><td class="num neg">12.76</td><td class="num">&mdash;</td></tr>
+    </tbody>
+  </table>
+  <p><strong>分析：</strong>PINN 在 ATM 區域輸出<strong>負值（&minus;9.12）</strong>，與 BS 解析解 10.45 差距達 19.57。選擇權價格理論下限為 0，出現負值表示模型尚未學到基本定價邊界，訓練嚴重不足。</p>
+
+  <div class="warn-box">
+    <h4>&#9888; 誠實標註：精度嚴重不足</h4>
+    <p><strong>2,000 epochs 訓練量不足以使 PINN 收斂。</strong>根據文獻與實務經驗，PINN 求解 BS PDE 通常需要 <strong>10,000+ epochs</strong> 才能達到可接受精度（MAE &lt; 0.5）。目前結果僅能驗證框架正確性，<strong>不可用於任何實際定價或交易決策</strong>。</p>
+    <p>負值輸出進一步證實模型處於欠訓練狀態，需大幅增加訓練輪次並調整超參數。</p>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>PINN Options Pricing &mdash; Cross-Domain Report</span>
+    <span>2 / 3</span>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 3 — 文獻、結論與免責 ══════════════ -->
+<div class="body-page page full-page" style="background:#fafbfd">
+
+  <h1 class="ch">文獻參考與結論</h1>
+
+  <h2 class="ch">參考文獻</h2>
+  <table>
+    <thead><tr><th>論文</th><th>來源</th><th>相關性</th></tr></thead>
+    <tbody>
+      <tr><td>Srinivasan et al. (2025)</td><td>arXiv:2510.04322</td><td>PINN 應用於選擇權定價之理論框架與數值實驗</td></tr>
+      <tr><td>Raissi et al. (2019)</td><td>Journal of Computational Physics</td><td>PINN 原始論文，建立物理約束神經網路方法論</td></tr>
+      <tr><td>Black &amp; Scholes (1973)</td><td>Journal of Political Economy</td><td>BS 選擇權定價模型與 PDE 推導</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">結論與下一步</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <div class="thesis-num">1</div>
+      <div><strong>框架驗證成功：</strong>PINN 架構可正確嵌入 BS PDE 約束，損失函數包含數據項與物理殘差項，訓練流程無錯誤。整體框架設計合理，具備延伸至更複雜 PDE 的潛力。</div>
+    </div>
+    <div class="exec-thesis">
+      <div class="thesis-num">2</div>
+      <div><strong>精度尚不可用：</strong>MAE 12.76 且出現負值預測，距離實用標準（MAE &lt; 0.5）仍有顯著差距。需增加訓練至 10,000+ epochs，並考慮學習率排程、殘差點自適應抽樣等技巧。</div>
+    </div>
+    <div class="exec-thesis">
+      <div class="thesis-num">3</div>
+      <div><strong>跨域價值確認：</strong>計算物理的 PINN 方法論成功移植至金融定價領域，證明偏微分方程約束神經網路在量化金融中具有應用前景。</div>
+    </div>
+  </div>
+
+  <h3 class="ch">改善路線圖</h3>
+  <table>
+    <thead><tr><th>優先級</th><th>改善項目</th><th>預期效果</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">P0</td><td>增加訓練至 10,000&ndash;50,000 epochs</td><td>MAE 降至 &lt; 1.0</td></tr>
+      <tr><td>P1</td><td>加入邊界條件硬約束（如 max(S&minus;K, 0)）</td><td>消除負值輸出</td></tr>
+      <tr><td>P1</td><td>殘差點自適應抽樣（RAR）</td><td>加速收斂、提升效率</td></tr>
+      <tr><td>P2</td><td>擴展至美式選擇權 / 隨機波動率模型</td><td>提升實用性</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h2 class="ch">免責聲明</h2>
+  <div class="disclaimer">
+    <strong>研究用途聲明：</strong>本報告內容僅供學術研究與技術探索使用，不構成任何投資建議、交易策略推薦或金融商品推介。報告中所有數據、模型結果與分析均基於有限實驗條件，可能存在偏差與不確定性。<br><br>
+    <strong>模型限制聲明：</strong>本實驗 PINN 模型僅訓練 2,000 epochs，<strong>精度嚴重不足，不可用於實際定價或風險管理</strong>。MAE 12.76 與負值輸出（ATM: &minus;9.12）明確表明模型處於欠訓練狀態。任何基於本報告結果的決策，使用者須自行承擔全部風險。<br><br>
+    <strong>版權聲明：</strong>&copy; 2026 Genesis International Capital. All rights reserved. 未經書面授權，不得複製、轉載或用於商業用途。
+  </div>
+
+  <div class="page-footer" style="margin-top:auto">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>PINN Options Pricing &mdash; Cross-Domain Report</span>
+    <span>3 / 3</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>GARCH 預測調和報告 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column;min-height:297mm;max-height:297mm;overflow:hidden}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 免責 ── */
+.disclaimer{background:#f0f4fa;border:1px solid #c8d8f0;border-radius:8px;padding:14px 18px;margin:16px 0;font-size:13.5px;color:#6b7a9a;line-height:1.7}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 第 1 頁：封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Portfolio Risk Management · 2026</div>
+    <div class="cover-title">GARCH 預測調和<br><em>投組波動率預測應用報告</em></div>
+    <div class="cover-subtitle">基於學術研究成果的單變量與多變量 GARCH 預測調和實作</div>
+    <div class="cover-tags">
+      <span class="ctag hl">GARCH</span>
+      <span class="ctag hl">DCC</span>
+      <span class="ctag">Reconciliation</span>
+      <span class="ctag">SPY/TLT/GLD</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>3.687</em></div><div class="cstat-label">MSE</div></div>
+    <div class="cstat"><div class="cstat-num"><em>3</em> 資產</div><div class="cstat-label">SPY / TLT / GLD</div></div>
+    <div class="cstat"><div class="cstat-num"><em>1,259</em></div><div class="cstat-label">預測天數</div></div>
+    <div class="cstat"><div class="cstat-num">&lambda;=<em>0.55</em></div><div class="cstat-label">平均調和權重</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月24日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 2 頁：執行摘要 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <!-- 4格 KPI -->
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">3.687</div><div class="kpi-lbl">MSE（最佳）</div></div>
+    <div class="kpi"><div class="kpi-val">0.735</div><div class="kpi-lbl">MAE</div></div>
+    <div class="kpi gold"><div class="kpi-val">1.379</div><div class="kpi-lbl">QLIKE</div></div>
+    <div class="kpi"><div class="kpi-val">1,259</div><div class="kpi-lbl">預測天數</div></div>
+  </div>
+
+  <!-- 核心論點 -->
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">&#9312;</span><span><strong>論文發現。</strong>Caporin et al. (2026) 證明預測調和能改善投組波動率預測，且在模型設定錯誤時依然有效。共變異數估計品質比模型選擇更重要。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&#9313;</span><span><strong>實測驗證。</strong>我們用 SPY/TLT/GLD 三資產投組（60/30/10），1,259 天擴展窗口滾動預測。調和方法 MSE 最低（3.687），但 DM 檢定 p=0.74 不顯著——與論文發現一致：日報酬平方 proxy 的雜訊掩蓋了差異。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&#9314;</span><span><strong>應用定位。</strong>作為投組風險管理工具，不用在單變量和多變量之間二選一，調和自動整合兩者優勢。未來可搭配晴雨表做動態倉位管理。</span></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 3 頁：方法論 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">壹、方法論</h1>
+
+  <h2 class="ch">資料與投組設定</h2>
+  <table>
+    <thead><tr><th>代碼</th><th>資產</th><th>權重</th></tr></thead>
+    <tbody>
+      <tr><td>SPY</td><td>S&amp;P 500 ETF</td><td class="num">60%</td></tr>
+      <tr><td>TLT</td><td>美國長期公債 ETF</td><td class="num">30%</td></tr>
+      <tr><td>GLD</td><td>黃金 ETF</td><td class="num">10%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料期間：2018-01-01 ~ 2024-12-31，共 1,759 交易日，訓練窗口：擴展窗口（最小 500 天）</span>
+
+  <h2 class="ch">三種預測方法</h2>
+  <table>
+    <thead><tr><th>方法</th><th>說明</th><th>公式</th></tr></thead>
+    <tbody>
+      <tr><td>單變量 GARCH(1,1)</td><td>直接對投組報酬建模</td><td>&sigma;&sup2;<sub>p</sub> = &omega; + &alpha;&middot;r&sup2; + &beta;&middot;&sigma;&sup2;</td></tr>
+      <tr><td>多變量 DCC-GARCH</td><td>個別 GARCH + DCC 相關 &rarr; w'&Sigma;w</td><td>&Sigma; = DRD, R = DCC</td></tr>
+      <tr><td>調和（Shrinkage）</td><td>加權平均，&lambda; 自適應</td><td>&ytilde; = (1-&lambda;)&middot;uni + &lambda;&middot;multi</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">評估指標</h2>
+  <table>
+    <thead><tr><th>指標</th><th>特性</th></tr></thead>
+    <tbody>
+      <tr><td>MSE</td><td>對稱損失函數</td></tr>
+      <tr><td>MAE</td><td>對稱損失函數</td></tr>
+      <tr><td>QLIKE</td><td>非對稱損失函數（懲罰低估）</td></tr>
+      <tr><td>DM test</td><td>Diebold-Mariano 統計顯著性檢定</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 方法論</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 4 頁：實測結果 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">貳、實測結果</h1>
+
+  <table>
+    <thead><tr><th>方法</th><th>MSE</th><th>MAE</th><th>QLIKE</th><th>排名</th></tr></thead>
+    <tbody>
+      <tr><td>單變量 GARCH(1,1)</td><td class="num">3.721</td><td class="num hi">0.733（最佳）</td><td class="num">1.381</td><td class="num">3</td></tr>
+      <tr><td>多變量 DCC-GARCH</td><td class="num">3.691</td><td class="num">0.740</td><td class="num hi">1.372（最佳）</td><td class="num">2</td></tr>
+      <tr><td>調和（Reconciled）</td><td class="num hi">3.687（最佳）</td><td class="num">0.735</td><td class="num">1.379</td><td class="num pos">1</td></tr>
+    </tbody>
+  </table>
+  <span class="src">MSE 改善幅度：(3.721 - 3.687) / 3.721 = 0.9%</span>
+
+  <h2 class="ch">統計檢定</h2>
+  <table>
+    <thead><tr><th>比較對象</th><th>DM 統計量</th><th>p 值</th><th>結論</th></tr></thead>
+    <tbody>
+      <tr><td>Reconciled vs 單變量</td><td class="num">-0.330</td><td class="num">0.74</td><td>不顯著</td></tr>
+      <tr><td>Reconciled vs 多變量</td><td class="num">-0.033</td><td class="num">0.97</td><td>不顯著</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">關鍵發現</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">&check;</span><span><strong>調和 MSE 最低但統計不顯著。</strong>與論文結論一致：日報酬平方 proxy 的雜訊掩蓋了模型差異。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&check;</span><span><strong>&lambda;=0.55 表示調和略偏向多變量。</strong>多變量在 QLIKE 上較好（對低估更敏感），單變量在 MAE 上較好。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&check;</span><span><strong>三種方法差異極小。</strong>這正是論文的核心發現——proxy 品質決定一切，而非模型選擇。</span></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; 實測結果</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 5 頁：來源與定位 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參、研究來源與應用定位</h1>
+
+  <h2 class="ch">論文來源</h2>
+  <table>
+    <thead><tr><th>論文</th><th>主要發現</th><th>我們的應用</th></tr></thead>
+    <tbody>
+      <tr><td>Caporin et al. (arXiv: 2603.17463)</td><td>預測調和改善投組波動率預測</td><td>復現 Strategy C 調和方法</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">資料來源</h2>
+  <table>
+    <thead><tr><th>資產</th><th>來源</th><th>頻率</th></tr></thead>
+    <tbody>
+      <tr><td>SPY</td><td>Yahoo Finance</td><td>每日</td></tr>
+      <tr><td>TLT</td><td>Yahoo Finance</td><td>每日</td></tr>
+      <tr><td>GLD</td><td>Yahoo Finance</td><td>每日</td></tr>
+      <tr><td>GARCH 模型</td><td>arch 套件（Python）</td><td>GARCH(1,1)</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">應用定位</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">&check;</span><span><strong>不用二選一。</strong>單變量和多變量各有優勢，調和自動整合。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&check;</span><span><strong>與晴雨表互補。</strong>晴雨表判斷「市場安不安全」，GARCH 判斷「波動有多大」。合用可做動態倉位。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&check;</span><span><strong>專案位置。</strong>d:\claude\src\garch-reconciliation\，獨立於其他專案。</span></div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>免責聲明：</strong>本報告為學術研究成果之應用紀錄，預測調和方法源自 Caporin et al. (2026, arXiv:2603.17463)。本報告僅供研究參考，不構成任何投資建議。
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 &middot; 研究來源與應用定位</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+</body>
+</html>

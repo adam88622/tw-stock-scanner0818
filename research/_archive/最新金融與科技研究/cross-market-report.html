@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>中美跨市場預測 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 來源頁 ── */
+.disc{font-size:13.5px;color:#6b7a9a;line-height:1.8;margin:6px 0}
+.disc-title{font-size:15px;font-weight:700;color:#0d1b3e;margin:16px 0 6px}
+</style>
+</head>
+<body>
+
+<!-- 浮水印（固定不動） -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 第 1 頁：封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Cross-Market Research Report · Q1 2026</div>
+    <div class="cover-title">中美跨市場預測<br><em>二部圖信號生成應用報告</em></div>
+    <div class="cover-subtitle">Bipartite Graph Signal Generation for Cross-Market ETF Prediction</div>
+    <div class="cover-tags">
+      <span class="ctag hl">FXI</span>
+      <span class="ctag hl">EWH</span>
+      <span class="ctag">MCHI</span>
+      <span class="ctag">KWEB</span>
+      <span class="ctag">GXC</span>
+      <span class="ctag">EWT</span>
+      <span class="ctag">EWJ</span>
+      <span class="ctag">EWY</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">Avg IC <em>0.037</em></div><div class="cstat-label">平均資訊係數</div></div>
+    <div class="cstat"><div class="cstat-num"><em>10</em>x10 ETF</div><div class="cstat-label">跨市場標的</div></div>
+    <div class="cstat"><div class="cstat-num"><em>1508</em> 天</div><div class="cstat-label">回測區間</div></div>
+    <div class="cstat"><div class="cstat-num">Sharpe <em>0.39</em></div><div class="cstat-label">夏普比率</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月24日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 2 頁：結果表 ══════════════ -->
+<div class="page pb full-page" style="min-height:297mm;display:flex;flex-direction:column">
+  <div class="body-page" style="flex:1">
+    <h1 class="ch">跨市場 ETF 預測結果</h1>
+    <p>以美股因子透過二部圖信號傳遞預測亞太 ETF 次日報酬方向，回測期間 1508 個交易日。顯著標的（p &lt; 0.05）以綠色標示。</p>
+
+    <div class="kpi-row">
+      <div class="kpi green"><div class="kpi-val">0.037</div><div class="kpi-lbl">Avg IC</div></div>
+      <div class="kpi"><div class="kpi-val">10 x 10</div><div class="kpi-lbl">ETF 配對</div></div>
+      <div class="kpi gold"><div class="kpi-val">0.39</div><div class="kpi-lbl">Sharpe Ratio</div></div>
+      <div class="kpi"><div class="kpi-val">1508</div><div class="kpi-lbl">交易日</div></div>
+    </div>
+
+    <h2 class="ch">各 ETF 信號表現</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ETF</th>
+          <th>IC</th>
+          <th>p-value</th>
+          <th>Hit Rate</th>
+          <th>Sharpe</th>
+          <th>顯著性</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="hi">FXI</td><td class="num pos">0.059</td><td class="num pos">0.021</td><td class="num">51.9%</td><td class="num pos">0.78</td><td class="pos">&#10003; p &lt; 0.05</td></tr>
+        <tr><td>MCHI</td><td class="num">0.048</td><td class="num">0.065</td><td class="num">50.9%</td><td class="num">0.18</td><td class="num">&mdash;</td></tr>
+        <tr><td>KWEB</td><td class="num">0.002</td><td class="num">0.950</td><td class="num">49.1%</td><td class="num">0.04</td><td class="num">&mdash;</td></tr>
+        <tr><td>ASHR</td><td class="num">0.011</td><td class="num">0.659</td><td class="num">50.4%</td><td class="num">0.08</td><td class="num">&mdash;</td></tr>
+        <tr><td>GXC</td><td class="num">0.044</td><td class="num">0.087</td><td class="num">53.1%</td><td class="num">0.97</td><td class="num">&mdash;</td></tr>
+        <tr><td>CNYA</td><td class="num">0.017</td><td class="num">0.518</td><td class="num">48.3%</td><td class="num neg">-0.02</td><td class="num">&mdash;</td></tr>
+        <tr><td class="hi">EWH</td><td class="num pos">0.059</td><td class="num pos">0.021</td><td class="num">51.9%</td><td class="num pos">0.75</td><td class="pos">&#10003; p &lt; 0.05</td></tr>
+        <tr><td>EWT</td><td class="num">0.041</td><td class="num">0.113</td><td class="num">51.0%</td><td class="num">0.34</td><td class="num">&mdash;</td></tr>
+        <tr><td>EWJ</td><td class="num">0.046</td><td class="num">0.072</td><td class="num">51.3%</td><td class="num">0.37</td><td class="num">&mdash;</td></tr>
+        <tr><td>EWY</td><td class="num">0.041</td><td class="num">0.112</td><td class="num">50.3%</td><td class="num">0.42</td><td class="num">&mdash;</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="ch">關鍵發現</h3>
+    <div class="exec-sum">
+      <div class="exec-thesis"><div class="thesis-num">1</div><div>FXI（中國大盤 ETF）與 EWH（香港 ETF）均達統計顯著水準（p = 0.021），IC 值 0.059 為全組最高，Sharpe 分別為 0.78 與 0.75。</div></div>
+      <div class="exec-thesis"><div class="thesis-num">2</div><div>GXC 雖未達 0.05 顯著門檻，但 Hit Rate 53.1% 與 Sharpe 0.97 表現突出，值得進一步觀察。</div></div>
+      <div class="exec-thesis"><div class="thesis-num">3</div><div>KWEB 與 CNYA 信號效力最弱，IC 趨近於零，不建議單獨使用該信號進行交易。</div></div>
+    </div>
+
+    <p class="src">資料來源：Liu et al. (2026) "Bipartite Graph Signal Generation for Cross-Market Prediction", arXiv:2603.10559</p>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>中美跨市場預測報告</span>
+    <span>2 / 3</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 3 頁：來源 + 免責聲明 ══════════════ -->
+<div class="page full-page" style="min-height:297mm;display:flex;flex-direction:column">
+  <div class="body-page" style="flex:1">
+    <h1 class="ch">資料來源與免責聲明</h1>
+
+    <h2 class="ch">參考文獻</h2>
+    <ul>
+      <li>Liu et al. (2026). <strong>"Bipartite Graph Signal Generation for Cross-Market Prediction"</strong>. arXiv:2603.10559.</li>
+      <li>ETF 資料來源：Yahoo Finance、Bloomberg Terminal。回測區間 2020-01 至 2025-12，共計 1508 個交易日。</li>
+      <li>信號生成方法：基於美股因子之二部圖（Bipartite Graph）信號傳遞框架，對 10 檔亞太市場 ETF 進行次日報酬方向預測。</li>
+    </ul>
+
+    <h2 class="ch">方法說明</h2>
+    <p>本報告採用 Liu et al. (2026) 提出之二部圖信號生成框架，以美國市場因子作為信號源節點，透過圖神經網路之訊息傳遞機制，將預測信號傳遞至亞太市場 ETF 目標節點。IC（Information Coefficient）為預測信號與實際報酬之 Spearman 等級相關係數；Hit Rate 為方向預測準確率；Sharpe Ratio 基於信號多空組合之日報酬計算。</p>
+
+    <h2 class="ch">免責聲明</h2>
+    <div class="exec-sum">
+      <p class="disc"><strong>本報告由 Genesis International Capital（GiS）研究部門編製，僅供專業投資人參考之用。</strong></p>
+      <p class="disc">本報告所載之資訊、意見與預測係基於公開可得之資料與內部研究模型，GiS 不對其準確性、完整性或即時性作任何明示或暗示之保證。</p>
+      <p class="disc">本報告不構成對任何證券、金融商品或投資策略之買賣建議、要約或要約邀請。投資人應根據自身財務狀況、投資目標及風險承受能力，獨立進行投資決策，並自行承擔投資風險。</p>
+      <p class="disc">過往績效不代表未來表現。回測結果受模型假設、資料品質與市場條件影響，實際交易績效可能與回測結果存在重大差異。</p>
+      <p class="disc">未經 GiS 書面授權，不得以任何形式轉載、複製或散布本報告之全部或部分內容。</p>
+      <p class="disc">&copy; 2026 Genesis International Capital. All rights reserved.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>中美跨市場預測報告</span>
+    <span>3 / 3</span>
+  </div>
+</div>
+
+</body>
+</html>

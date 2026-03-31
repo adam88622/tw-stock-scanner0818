@@ -118,6 +118,22 @@
                     </a>
                 </li>
 
+
+
+                <li class="nav-section">產業研究</li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'research_list' %}active{% endif %}"
+                       href="/research">
+                        研究報告
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'weekly' %}active{% endif %}"
+                       href="/weekly">
+                        研究週報
+                    </a>
+                </li>
+
                 <li class="nav-section">市場體溫</li>
                 <li class="nav-item">
                     <a class="nav-link {% if request.endpoint == 'regime' %}active{% endif %}"

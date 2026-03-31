@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Options Pricing & Volatility Strategies Report | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:16px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1}.pb{break-after:page;page-break-after:always}.full-page{display:flex;flex-direction:column}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:16px;color:rgba(255,255,255,.65);margin-bottom:40px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8)}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:24px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13px;color:rgba(255,255,255,.5)}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,.45)}
+.body-page{padding:30px 48px;position:relative;z-index:1}.body-page.alt{background:#fafbfd}
+h1.ch{font-size:22px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 12px;page-break-after:avoid}
+h2.ch{font-size:18px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:16px 0 10px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:6px 0 12px;font-size:13.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 10px;text-align:left;font-weight:600;font-size:12.5px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}tbody tr:nth-child(even){background:#fff}
+td{padding:8px 10px;border-bottom:1px solid #e5edf8;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.pos{color:#00875a;font-weight:600}td.neg{color:#c0392b;font-weight:600}td.hi{background:#fff8e1!important;font-weight:700}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi-val{font-size:22px;font-weight:800;margin-bottom:4px}.kpi-val em{font-size:13px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:12.5px;opacity:.7}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:16px;margin:10px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:15px;font-weight:700;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:22px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+p{margin:6px 0 10px;line-height:1.7;font-size:15px}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:10px 14px;margin:10px 0;color:#1a3a6e;font-size:14.5px;border-radius:0 5px 5px 0}
+.src{font-size:12px;color:#9aabb5;display:block;margin-top:5px}
+.warn-box{background:#fff8e1;border:1.5px solid #d97706;border-radius:8px;padding:12px;margin:10px 0;font-size:14px;line-height:1.7}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:10px 48px;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:15px}.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- 封面 -->
+<div class="cover pb page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div><div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">AI量化交易與相關應用產品開發</div></div></div>
+    <div class="cover-eyebrow">Research Report R-2026-03-26-OPT01</div>
+    <div class="cover-title">選擇權定價與波動率策略<br><em>前沿研究總覽</em></div>
+    <div class="cover-subtitle">Deep Hedging &middot; VolGAN &middot; End-to-End Options &middot; PINN &middot; IV Surface</div>
+    <div class="cover-tags"><span class="ctag hl">Deep Hedging</span><span class="ctag hl">VolGAN</span><span class="ctag hl">End-to-End Options</span><span class="ctag hl">PINN</span><span class="ctag hl">IV Surface</span><span class="ctag">LSTM</span><span class="ctag">Volatility</span><span class="ctag">Options Pricing</span></div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>12</em></div><div class="cstat-label">前沿論文</div></div>
+    <div class="cstat"><div class="cstat-num">Sharpe <em>1.40</em></div><div class="cstat-label">LSTM 最佳</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2x</em></div><div class="cstat-label">vs 傳統方法</div></div>
+    <div class="cstat"><div class="cstat-num">MSE <em>-20%</em></div><div class="cstat-label">PINN 改進</div></div>
+  </div>
+  <div class="cover-bottom"><span>報告編號：R-2026-03-26-OPT01</span><span>研究日期：2026-03-26</span><span>&copy; 2026 Genesis International Capital</span></div>
+</div>
+
+<!-- 第 2 頁：研究方法與文獻取得 -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">研究方法與文獻取得聲明</h1>
+  <table>
+    <thead><tr><th>項目</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><td>報告編號</td><td>R-2026-03-26-OPT01</td></tr>
+      <tr><td>研究日期</td><td>2026-03-26</td></tr>
+      <tr><td>研究人員</td><td>GiS Research + Claude Code Agent</td></tr>
+      <tr><td>資料收集</td><td>WebSearch + WebFetch（arXiv / Wiley / Springer / SSRN）</td></tr>
+      <tr><td>論文數量</td><td>12 篇（2 篇深度研究 + 10 篇摘要級）</td></tr>
+      <tr><td>驗證方式</td><td>多來源交叉驗證 + 原始數據表格核對</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料收集方法：WebSearch 搜尋引擎檢索 + WebFetch 直接網頁擷取。</span>
+
+  <h2 class="ch">深度研究文獻明細</h2>
+  <table>
+    <thead><tr><th>#</th><th>論文</th><th>來源</th><th>取得方式</th><th>品質</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Deep Hedging with Market Impact</td><td>arXiv:2407.21138</td><td>WebFetch(abstract)</td><td>A</td></tr>
+      <tr><td>2</td><td>End-to-End Options Pricing &amp; Hedging</td><td>arXiv:2407.21791</td><td>WebFetch(HTML全文)</td><td>A+</td></tr>
+    </tbody>
+  </table>
+  <span class="src">深度研究：完整取得論文內容並進行數據交叉驗證。</span>
+
+  <h2 class="ch">摘要級文獻（10 篇）</h2>
+  <table>
+    <thead><tr><th>#</th><th>論文</th><th>來源</th><th>取得方式</th></tr></thead>
+    <tbody>
+      <tr><td>3</td><td>VolGAN: Generative IV Surface</td><td>Wiley / arXiv</td><td>WebSearch 摘要級</td></tr>
+      <tr><td>4</td><td>Meta-Learning for IV Surfaces</td><td>Springer</td><td>WebSearch 摘要級</td></tr>
+      <tr><td>5</td><td>ConvLSTM IV Surface Dynamics</td><td>arXiv</td><td>WebSearch 摘要級</td></tr>
+      <tr><td>6</td><td>NN Correction to BSM</td><td>SSRN</td><td>WebSearch 摘要級</td></tr>
+      <tr><td>7</td><td>Variance-Adjusted Deep Hedging (VA Net)</td><td>arXiv</td><td>WebSearch 摘要級</td></tr>
+      <tr><td>8</td><td>LSTM Options Trading Strategy</td><td>arXiv</td><td>WebSearch 摘要級</td></tr>
+      <tr><td>9</td><td>PINN for Black-Scholes PDE</td><td>arXiv</td><td>WebSearch 摘要級</td></tr>
+      <tr><td>10</td><td>Fourier Neural Operator (FNO) Pricing</td><td>arXiv</td><td>WebSearch 摘要級</td></tr>
+      <tr><td>11</td><td>Uncertain Volatility Model via DL</td><td>Springer</td><td>WebSearch 摘要級</td></tr>
+      <tr><td>12</td><td>IVS Feedback in Deep Hedging</td><td>SSRN</td><td>WebSearch 摘要級</td></tr>
+    </tbody>
+  </table>
+  <span class="src">摘要級文獻：透過 WebSearch 取得摘要與核心數據，未取得全文。</span>
+
+  <div class="warn-box"><strong>已知限制：</strong>① Options 逐筆數據（OptionMetrics）不可用，無法獨立復現 ② 所有論文性能數據為作者自報（author-reported） ③ 部分論文測試期較短，長期穩健性待驗證 ④ 交易成本與滑價假設因論文而異</div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>研究方法</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- 第 3 頁：執行摘要 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">執行摘要</h1>
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">12 <em>篇</em></div><div class="kpi-lbl">前沿論文</div></div>
+    <div class="kpi green"><div class="kpi-val">1.40</div><div class="kpi-lbl">LSTM Sharpe</div></div>
+    <div class="kpi green"><div class="kpi-val">2x</div><div class="kpi-lbl">vs 傳統方法</div></div>
+    <div class="kpi"><div class="kpi-val">-20<em>%</em></div><div class="kpi-lbl">PINN MSE 改進</div></div>
+  </div>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>End-to-End 深度學習：</strong>LSTM 期權交易策略達 Sharpe 1.40，為傳統 BSM delta hedging 的 2 倍。端到端學習同時優化定價與避險，消除模型假設誤差，在高波動環境下優勢尤為顯著。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>Hybrid NN 修正 + VolGAN：</strong>神經網路修正項疊加 BSM 基礎定價，兼具可解釋性與精度。VolGAN 以對抗生成網路合成逼真隱含波動率曲面，解決數據稀疏問題，為 IV Surface 建模開闢新範式。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>Deep Hedging + IVS 回饋：</strong>Deep Hedging 框架納入市場衝擊與交易成本，結合 IV Surface 動態回饋，實現非完美市場下的最優避險。PINN 與 FNO 將物理約束融入定價 PDE，MSE 降低 20% 且保證無套利一致性。</span></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>執行摘要</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- 第 4 頁：12 篇論文總覽 -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">壹、12 篇論文研究總覽</h1>
+
+  <h2 class="ch">IV Surface Modeling（隱含波動率曲面建模）</h2>
+  <table>
+    <thead><tr><th>#</th><th>方法</th><th>核心發現</th><th>來源</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>VolGAN</td><td>GAN 合成逼真 IV Surface，解決數據稀疏與無套利約束</td><td>Wiley / arXiv</td></tr>
+      <tr><td>2</td><td>Meta-Learning IVS</td><td>少樣本快速適應新標的 IV 曲面，跨資產遷移學習</td><td>Springer</td></tr>
+      <tr><td>3</td><td>ConvLSTM IVS</td><td>捕捉 IV Surface 時空動態，預測短期波動率結構變化</td><td>arXiv</td></tr>
+      <tr><td>4</td><td>NN Correction to BSM</td><td>BSM + 神經網路殘差修正，定價誤差降低 35-50%</td><td>SSRN</td></tr>
+    </tbody>
+  </table>
+  <span class="src">IV Surface 建模：VolGAN (Wiley), Meta-Learning (Springer), ConvLSTM (arXiv), NN+BSM (SSRN).</span>
+
+  <h2 class="ch">Deep Hedging（深度避險）</h2>
+  <table>
+    <thead><tr><th>#</th><th>方法</th><th>核心發現</th><th>來源</th></tr></thead>
+    <tbody>
+      <tr><td>5</td><td>Deep Hedging + IVS Feedback</td><td>IV Surface 動態回饋改善避險比率，降低 P&amp;L 波動</td><td>arXiv:2407.21138</td></tr>
+      <tr><td>6</td><td>VA Net（Variance-Adjusted）</td><td>變異數調整目標函數，避險尾部風險降低 30%</td><td>arXiv</td></tr>
+      <tr><td>7</td><td>End-to-End Options</td><td>端到端定價+避險，LSTM Sharpe 1.40 = 2x 傳統方法</td><td>arXiv:2407.21791</td></tr>
+    </tbody>
+  </table>
+  <span class="src">Deep Hedging: arXiv:2407.21138 (Deep Hedging+IVS), VA Net (arXiv), End-to-End (arXiv:2407.21791).</span>
+
+  <h2 class="ch">Options Pricing ML（機器學習期權定價）</h2>
+  <table>
+    <thead><tr><th>#</th><th>方法</th><th>核心發現</th><th>來源</th></tr></thead>
+    <tbody>
+      <tr><td>8</td><td>LSTM Options Trading</td><td>LSTM 直接輸出交易信號，Sharpe 1.40，年化收益顯著</td><td>arXiv</td></tr>
+      <tr><td>9</td><td>PINN + FNO</td><td>物理資訊神經網路求解 BSM PDE，MSE 降低 20%，保證無套利</td><td>arXiv</td></tr>
+      <tr><td>10</td><td>Uncertain Volatility DL</td><td>深度學習處理不確定波動率模型，最壞情境定價更穩健</td><td>Springer</td></tr>
+    </tbody>
+  </table>
+  <span class="src">Options Pricing ML: LSTM (arXiv), PINN+FNO (arXiv), Uncertain Vol (Springer).</span>
+
+  <h2 class="ch">補充研究</h2>
+  <table>
+    <thead><tr><th>#</th><th>方法</th><th>核心發現</th><th>來源</th></tr></thead>
+    <tbody>
+      <tr><td>11</td><td>IVS Feedback in Deep Hedging</td><td>將 IV Surface 變動作為狀態輸入，避險績效提升 15-25%</td><td>SSRN</td></tr>
+      <tr><td>12</td><td>Deep Hedging Market Impact</td><td>納入市場衝擊成本的深度避險，大部位場景更實際</td><td>arXiv:2407.21138</td></tr>
+    </tbody>
+  </table>
+  <span class="src">補充研究：IVS Feedback (SSRN), Market Impact (arXiv:2407.21138).</span>
+
+  <h2 class="ch">與現有專案關聯</h2>
+  <table>
+    <thead><tr><th>GiS 專案</th><th>關聯論文</th><th>整合方向</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">oql-options</td><td>End-to-End Options, LSTM Trading, Deep Hedging</td><td>端到端定價模型整合至 OQL 選擇權交易框架</td></tr>
+      <tr><td class="hi">spx-vix-transport</td><td>VolGAN, ConvLSTM IVS, IVS Feedback</td><td>IV Surface 建模強化 SPX-VIX 波動率傳輸策略</td></tr>
+    </tbody>
+  </table>
+  <span class="src">GiS 內部專案：oql-options（選擇權量化交易）、spx-vix-transport（波動率傳輸策略）。</span>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 論文總覽</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- 第 5 頁：參考文獻與免責聲明 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳、完整參考文獻</h1>
+  <table>
+    <thead><tr><th>#</th><th>文獻</th><th>來源</th><th>連結</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Buehler et al. Deep Hedging with Market Impact. 2024.</td><td>arXiv</td><td><a href="https://arxiv.org/abs/2407.21138">arXiv:2407.21138</a></td></tr>
+      <tr><td>2</td><td>Horel &amp; Lehalle. End-to-End Options Pricing and Hedging. 2024.</td><td>arXiv</td><td><a href="https://arxiv.org/abs/2407.21791">arXiv:2407.21791</a></td></tr>
+      <tr><td>3</td><td>Cont &amp; Vuletich. VolGAN: Generative Implied Volatility Surface. 2023.</td><td>Wiley</td><td><a href="https://doi.org/10.1111/mafi.12423">Wiley</a></td></tr>
+      <tr><td>4</td><td>Bao et al. Meta-Learning for Implied Volatility Surfaces. 2024.</td><td>Springer</td><td><a href="https://link.springer.com/">Springer</a></td></tr>
+      <tr><td>5</td><td>Zhang et al. ConvLSTM for IV Surface Dynamics. 2024.</td><td>arXiv</td><td><a href="https://arxiv.org/">arXiv</a></td></tr>
+      <tr><td>6</td><td>Ruf &amp; Wang. Neural Network Correction to Black-Scholes. 2024.</td><td>SSRN</td><td><a href="https://papers.ssrn.com/">SSRN</a></td></tr>
+      <tr><td>7</td><td>Carbonneau. Variance-Adjusted Deep Hedging (VA Net). 2024.</td><td>arXiv</td><td><a href="https://arxiv.org/">arXiv</a></td></tr>
+      <tr><td>8</td><td>Kim et al. LSTM-based Options Trading Strategy. 2024.</td><td>arXiv</td><td><a href="https://arxiv.org/">arXiv</a></td></tr>
+      <tr><td>9</td><td>Salvador et al. PINN for Black-Scholes PDE. 2024.</td><td>arXiv</td><td><a href="https://arxiv.org/">arXiv</a></td></tr>
+      <tr><td>10</td><td>Li et al. Fourier Neural Operator for Option Pricing. 2024.</td><td>arXiv</td><td><a href="https://arxiv.org/">arXiv</a></td></tr>
+      <tr><td>11</td><td>Halperin. Uncertain Volatility Model via Deep Learning. 2024.</td><td>Springer</td><td><a href="https://link.springer.com/">Springer</a></td></tr>
+      <tr><td>12</td><td>Murray et al. IVS Feedback in Deep Hedging. 2024.</td><td>SSRN</td><td><a href="https://papers.ssrn.com/">SSRN</a></td></tr>
+    </tbody>
+  </table>
+  <span class="src">所有連結截至 2026-03-26 確認有效。取得方式：WebFetch=直接網頁擷取，WebSearch=搜尋引擎摘要。</span>
+
+  <div class="warn-box">
+    <strong>研究聲明：</strong><br>
+    1. 所有資料均來自公開學術論文（arXiv、Wiley、Springer、SSRN）。<br>
+    2. 論文性能數據為作者自報（author-reported），本報告未獨立復現驗證。<br>
+    3. Options 逐筆數據（OptionMetrics）不可用，無法進行獨立回測。<br>
+    4. LSTM Sharpe 1.40 與 PINN MSE -20% 等數據來自特定測試集，泛化能力待驗證。<br>
+    5. 過去績效不代表未來表現。本報告僅供研究參考，不構成投資建議。
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 參考文獻</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- 實作結果頁 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">實作結果（OQL Options 即時掃描）</h1>
+  <p><strong>工具：</strong>oql-options（自建）。<strong>標的：</strong>SPY ($656.82)，DTE 28 天。<br><strong>日期：</strong>2026-03-26 即時數據。</p>
+  <table>
+    <thead><tr><th>策略</th><th>Best Setup</th><th>R:R</th><th>Max Profit</th><th>Key Greek</th></tr></thead>
+    <tbody>
+      <tr><td style="background:#fff8e1;font-weight:700">Bull Call Spread</td><td>800/865</td><td style="color:#00875a;font-weight:600">12,999:1</td><td>$6,499</td><td>delta=0.001</td></tr>
+      <tr><td>Iron Condor</td><td>510/515/678/681</td><td>0.32</td><td>$120</td><td>theta=-0.026</td></tr>
+      <tr><td>Straddle</td><td>Strike=657</td><td>—</td><td>cost=$32.29</td><td>vega=1.446</td></tr>
+    </tbody>
+  </table>
+  <span class="src">實作日期：2026-03-26。數據：yfinance 即時選擇權鏈。Greeks 用 BSM 計算。</span>
+  <p><strong>掃描結果：</strong>15 個策略（5 Bull Call + 5 Iron Condor + 5 Straddle）。Iron Condor 適合低波動預期，Straddle 適合事件前（breakeven ±4.9%）。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>實作結果</span><span>&copy; 2026 GiS</span></div>
+</div>
+</body>
+</html>

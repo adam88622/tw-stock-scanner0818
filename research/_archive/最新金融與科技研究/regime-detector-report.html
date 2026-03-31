@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — Autoencoder 市場體制偵測研究報告
+  產出日期：2026-03-23
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Autoencoder 市場體制偵測 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column}
+
+/* ── Canvas 強制填滿容器 ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:13px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:52px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:16px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 7px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 公司卡片 ── */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:14px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:21px;font-weight:800;color:#fff}
+.co-ticker{font-size:15px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:5px 16px;border-radius:20px;font-size:12.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:20px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:13.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:14px;margin:10px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:16px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:14px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.red{background:linear-gradient(135deg,#7b2020,#e74c3c)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:15px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:18px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:13px;opacity:.8;line-height:1.5}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 首選卡 ── */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:14.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:21px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:14px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:15px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:14.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<!-- 浮水印（固定不動） -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 第 1 頁：封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Quantitative Indicator Application · 2026</div>
+    <div class="cover-title">Autoencoder 市場體制偵測<br><em>晴雨表指標應用報告</em></div>
+    <div class="cover-subtitle">基於學術研究成果的市場體溫指標實作與整合</div>
+    <div class="cover-tags">
+      <span class="ctag hl">SPY</span>
+      <span class="ctag hl">Autoencoder</span>
+      <span class="ctag">Regime Detection</span>
+      <span class="ctag">Risk Management</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">Sharpe <em>1.18</em></div><div class="cstat-label">風險調整報酬</div></div>
+    <div class="cstat"><div class="cstat-num">MaxDD <em>17</em>%</div><div class="cstat-label">最大回撤</div></div>
+    <div class="cstat"><div class="cstat-num">CAGR <em>12.65</em>%</div><div class="cstat-label">年化複合成長率</div></div>
+    <div class="cstat"><div class="cstat-num">勝率 <em>56.4</em>%</div><div class="cstat-label">交易勝率</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月23日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 2 頁：執行摘要 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <!-- 4格 KPI -->
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">12.65<em> %</em></div><div class="kpi-lbl">CAGR</div></div>
+    <div class="kpi"><div class="kpi-val">1.18</div><div class="kpi-lbl">Sharpe Ratio</div></div>
+    <div class="kpi gold"><div class="kpi-val">17.01<em> %</em></div><div class="kpi-lbl">Max Drawdown</div></div>
+    <div class="kpi green"><div class="kpi-val">56.4<em> %</em></div><div class="kpi-lbl">勝率</div></div>
+  </div>
+
+  <!-- 核心論點 -->
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>學術驗證有效。</strong>Al Ridhawi et al. (2026) 論文證實 Autoencoder 體制偵測貢獻 36% 改善，成功識別 COVID-19 與 2022 熊市等異常時段。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>回測驗證可行。</strong>我們復現論文核心方法並回測 SPY 2018-2024，MaxDD 從 33% 降至 17%，Sharpe 從 ~0.7 提升至 1.18。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>應用為指標。</strong>考量後決定不當獨立策略，而是作為通用市場體溫計整合至台股掃描器，為所有交易決策提供風控參考。</span></div>
+  </div>
+
+  <!-- 雙圖並排 -->
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">策略 vs 基準權益曲線</div>
+      <div class="chart-sub">SPY 2018-04 ~ 2024-12</div>
+      <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:260px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">每年異常交易日佔比</div>
+      <div class="chart-sub">Autoencoder 偵測結果</div>
+      <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:260px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 3 頁：章節封面 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Methodology &amp; Architecture</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">方法論與模型架構</div>
+  <div class="sec-desc">基於 Autoencoder 重建誤差的市場體制偵測方法</div>
+</div>
+
+<!-- ══════════════ 第 4 頁：方法論 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">壹、方法論與模型架構</h1>
+
+  <!-- 時間軸 -->
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-spec">資料擷取</div><div class="tl-tech">Yahoo Finance<br>SPY + VIX 每日</div></div>
+    <div class="tl-item active"><div class="tl-spec">模型訓練</div><div class="tl-tech">PyTorch Autoencoder<br>20 epochs</div></div>
+    <div class="tl-item next"><div class="tl-spec">體制偵測</div><div class="tl-tech">重建誤差 vs 閾值<br>&tau; = 95th percentile</div></div>
+    <div class="tl-item"><div class="tl-spec">策略執行</div><div class="tl-tech">異常 &rarr; 現金<br>正常 &rarr; 持有</div></div>
+  </div>
+
+  <h2 class="ch">17 維輸入特徵（固定順序）</h2>
+  <p>模型輸入為 SPY 每日收盤後計算的 17 個技術指標，經 Expanding-Window Z-Score 標準化後餵入 Autoencoder。</p>
+
+  <table>
+    <thead><tr><th>#</th><th>特徵名稱</th><th>計算公式</th><th>意義</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Open</strong></td><td>當日開盤價</td><td>日內起點</td></tr>
+      <tr><td>2</td><td><strong>High</strong></td><td>當日最高價</td><td>日內多方力道</td></tr>
+      <tr><td>3</td><td><strong>Low</strong></td><td>當日最低價</td><td>日內空方力道</td></tr>
+      <tr><td>4</td><td><strong>Close</strong></td><td>當日收盤價</td><td>日內共識</td></tr>
+      <tr><td>5</td><td><strong>Volume</strong></td><td>當日成交量（股）</td><td>市場參與度</td></tr>
+      <tr><td>6</td><td><strong>SMA_5</strong></td><td>Close 的 5 日簡單移動平均</td><td>極短期趨勢</td></tr>
+      <tr><td>7</td><td><strong>SMA_10</strong></td><td>Close 的 10 日簡單移動平均</td><td>短期趨勢</td></tr>
+      <tr><td>8</td><td><strong>SMA_20</strong></td><td>Close 的 20 日簡單移動平均</td><td>中短期趨勢（月線）</td></tr>
+      <tr><td>9</td><td><strong>EMA_5</strong></td><td>Close 的 5 日指數移動平均<br><span style="font-size:11px;color:#6b7a9a">EMA<sub>t</sub> = &alpha; &times; C<sub>t</sub> + (1-&alpha;) &times; EMA<sub>t-1</sub>，&alpha;=2/(5+1)</span></td><td>短期加權趨勢</td></tr>
+      <tr><td>10</td><td><strong>EMA_10</strong></td><td>Close 的 10 日指數移動平均，&alpha;=2/11</td><td>中短期加權趨勢</td></tr>
+      <tr><td>11</td><td><strong>EMA_20</strong></td><td>Close 的 20 日指數移動平均，&alpha;=2/21</td><td>中期加權趨勢</td></tr>
+      <tr><td>12</td><td><strong>RSI_14</strong></td><td>14 日相對強弱指標（Wilder's Smoothing）<br><span style="font-size:11px;color:#6b7a9a">RSI = 100 - 100/(1+RS)，RS = EWM(gain, &alpha;=1/14) / EWM(loss, &alpha;=1/14)</span></td><td>超買/超賣（&gt;70 超買，&lt;30 超賣）</td></tr>
+      <tr><td>13</td><td><strong>MACD</strong></td><td>EMA(Close, 12) - EMA(Close, 26)</td><td>趨勢動能</td></tr>
+      <tr><td>14</td><td><strong>MACD_signal</strong></td><td>EMA(MACD, 9)</td><td>MACD 的平滑信號線</td></tr>
+      <tr><td>15</td><td><strong>MACD_hist</strong></td><td>MACD - MACD_signal</td><td>動能加速/減速</td></tr>
+      <tr><td>16</td><td><strong>BB_upper</strong></td><td>SMA(Close, 20) + 2 &times; StdDev(Close, 20)</td><td>布林通道上軌（壓力）</td></tr>
+      <tr><td>17</td><td><strong>BB_lower</strong></td><td>SMA(Close, 20) - 2 &times; StdDev(Close, 20)</td><td>布林通道下軌（支撐）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">標準化方法：Expanding-Window Z-Score（Z = (x - expanding_mean) / expanding_std，min_periods=60），避免前瞻偏誤</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 17 維輸入特徵</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 4b 頁：模型架構與訓練 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">壹（續）、Autoencoder 模型與訓練流程</h1>
+
+  <h2 class="ch">模型架構</h2>
+  <p>對稱自動編碼器，將 17 維輸入壓縮至 32 維潛在空間再還原，輸出與輸入的差異即為重建誤差。</p>
+
+  <table>
+    <thead><tr><th>層</th><th>結構</th><th>參數數量</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Encoder Layer 1</strong></td><td>Linear(17 &rarr; 64) + ReLU</td><td class="num">1,152</td></tr>
+      <tr><td><strong>Encoder Layer 2</strong></td><td>Linear(64 &rarr; 32) + ReLU</td><td class="num">2,080</td></tr>
+      <tr><td><strong>Decoder Layer 1</strong></td><td>Linear(32 &rarr; 64) + ReLU</td><td class="num">2,112</td></tr>
+      <tr><td><strong>Decoder Layer 2</strong></td><td>Linear(64 &rarr; 17)（無激活）</td><td class="num">1,105</td></tr>
+      <tr><td colspan="2"><strong>合計</strong></td><td class="num hi">6,449</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">訓練流程</h2>
+  <table>
+    <thead><tr><th>步驟</th><th>做法</th><th>參數</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1. 資料篩選</strong></td><td>僅保留 VIX &lt; 75th percentile 的交易日（穩定期）</td><td>約 75% 的資料，~1,505 天</td></tr>
+      <tr><td><strong>2. 損失函數</strong></td><td>MSE（Mean Squared Error）= &Sigma;(x<sub>i</sub> - x&#770;<sub>i</sub>)&sup2; / 17</td><td>逐樣本 17 維均方誤差</td></tr>
+      <tr><td><strong>3. 優化器</strong></td><td>Adam（Adaptive Moment Estimation）</td><td>lr = 0.001</td></tr>
+      <tr><td><strong>4. 批次訓練</strong></td><td>DataLoader 隨機打亂，分批餵入</td><td>batch_size = 32</td></tr>
+      <tr><td><strong>5. 訓練回合</strong></td><td>20 Epochs，Loss 從 1.63 收斂至 0.006</td><td>seed = 42（可重現）</td></tr>
+      <tr><td><strong>6. 計算閾值 &tau;</strong></td><td>在訓練子集上計算重建誤差，取 95th percentile</td><td class="hi">&tau; = 0.0258</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">體制判定邏輯</h2>
+  <table>
+    <thead><tr><th>判定</th><th>條件</th><th>對應體溫</th><th>操作建議</th></tr></thead>
+    <tbody>
+      <tr><td class="pos"><strong>正常 🟢</strong></td><td>重建誤差 &lt; &tau;（0.0258）</td><td>0° ~ 50°</td><td>正常操作，可追突破</td></tr>
+      <tr><td style="color:#d97706;font-weight:600"><strong>偏熱 🟡</strong></td><td>重建誤差 接近 &tau;</td><td>50° ~ 80°</td><td>注意風控，謹慎加碼</td></tr>
+      <tr><td class="neg"><strong>異常 🔴</strong></td><td>重建誤差 &ge; &tau;</td><td>80° ~ 100°</td><td>建議減碼或觀望</td></tr>
+    </tbody>
+  </table>
+  <span class="src">體溫公式：temperature = min(100, (reconstruction_error / &tau;) &times; 50)。超過 &tau; 的 2 倍即滿溫 100°。</span>
+
+  <!-- 全寬圖表 -->
+  <div class="chart-wrap">
+    <div class="chart-title">Training Loss 收斂曲線</div>
+    <div class="chart-sub">20 Epochs · MSE Loss · 訓練樣本 1,505 天</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chart3" style="display:block;width:100%;height:200px"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 模型架構與訓練</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 5 頁：回測結果 ══════════════ -->
+<div class="full-page pb page body-page">
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">AE Regime Detector</div><div class="co-ticker">SPY · 2018-2024 · 體制感知趨勢跟蹤</div></div>
+      <div class="co-badge">
+        <span class="badge buy">◉ 有效</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+12.65%</div><div class="co-metric-label">CAGR</div></div>
+      <div class="co-metric"><div class="co-metric-val">1.18</div><div class="co-metric-label">Sharpe</div></div>
+      <div class="co-metric"><div class="co-metric-val">17.01%</div><div class="co-metric-label">MaxDD</div></div>
+      <div class="co-metric"><div class="co-metric-val">56.4%</div><div class="co-metric-label">勝率</div></div>
+    </div>
+    <div class="co-body">
+      <!-- 雙欄表格 -->
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>策略績效</th><th>策略</th><th>基準</th></tr></thead>
+            <tbody>
+              <tr><td>年化報酬</td><td class="num pos">12.65%</td><td class="num">~14.8%</td></tr>
+              <tr><td>Sharpe Ratio</td><td class="num pos">1.18</td><td class="num">~0.72</td></tr>
+              <tr><td>Max Drawdown</td><td class="num pos">17%</td><td class="num neg">~33%</td></tr>
+              <tr><td>交易次數</td><td class="num">100 次</td><td class="num">&mdash;</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>年度</th><th>異常天數</th><th>佔比</th></tr></thead>
+            <tbody>
+              <tr><td>2018</td><td class="num hi">74 天</td><td class="num neg">42.8%</td></tr>
+              <tr><td>2020</td><td class="num hi">54 天</td><td class="num neg">21.3%</td></tr>
+              <tr><td>2022</td><td class="num">40 天</td><td class="num neg">15.9%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3 class="ch">關鍵發現</h3>
+      <ul>
+        <li><strong>COVID 迴避：</strong>重建誤差飆至 0.76，為閾值的 30 倍，成功於崩盤初期轉至現金部位。</li>
+        <li><strong>熊市保護：</strong>2022 年偵測到 40 天異常（15.9%），有效降低聯準會升息期間的回撤。</li>
+        <li><strong>低交易成本：</strong>月均僅 1.2 次交易切換，不會因過度交易侵蝕報酬。</li>
+      </ul>
+
+      <!-- 風險矩陣 -->
+      <div class="risk-matrix">
+        <div class="risk-card up">
+          <h4>上行催化劑</h4>
+          <div class="risk-item">多標的擴展 — 可應用至 QQQ、TLT、GLD 等，建構跨資產體制地圖</div>
+          <div class="risk-item">GARCH 整合 — 結合條件波動率模型，提升體制轉換精確度</div>
+          <div class="risk-item">LLM 增強 — 加入新聞情緒特徵，補充純技術面盲點</div>
+        </div>
+        <div class="risk-card dn">
+          <h4>下行風險</h4>
+          <div class="risk-item">牛市跑輸 — 異常信號在單邊上漲時可能錯殺行情，拖累絕對報酬</div>
+          <div class="risk-item">閃崩延遲 — 日頻偵測無法應對盤中極端事件（如 2010 Flash Crash）</div>
+          <div class="risk-item">過擬合風險 — 閾值基於歷史分布，市場結構性變化可能使閾值失效</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>回測結果</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 6 頁：系統整合 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">貳、系統整合與滾動更新</h1>
+
+  <table>
+    <thead><tr><th>模組</th><th>內容</th><th>更新頻率</th></tr></thead>
+    <tbody>
+      <tr><td>資料來源</td><td>Yahoo Finance API（SPY + VIX 每日收盤）</td><td>每日 16:30 EST</td></tr>
+      <tr><td>模型推論</td><td>PyTorch Autoencoder 計算當日重建誤差</td><td>每日</td></tr>
+      <tr><td>結果儲存</td><td>SQLite / JSON &mdash; regime_status, error_score, threshold</td><td>每日</td></tr>
+      <tr><td>模型重訓練</td><td>滾動 252 天窗口重新擬合，更新閾值</td><td>每季</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 時間軸 -->
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-spec">每日排程</div><div class="tl-tech">Cron / Scheduler<br>盤後觸發</div></div>
+    <div class="tl-item active"><div class="tl-spec">擷取最新資料</div><div class="tl-tech">Yahoo Finance<br>SPY + VIX</div></div>
+    <div class="tl-item next"><div class="tl-spec">模型推論</div><div class="tl-tech">Autoencoder<br>重建誤差計算</div></div>
+    <div class="tl-item"><div class="tl-spec">寫入 DB</div><div class="tl-tech">regime_status<br>error + threshold</div></div>
+  </div>
+
+  <h2 class="ch">台股掃描器整合</h2>
+  <table>
+    <thead><tr><th>整合點</th><th>功能</th><th>呈現方式</th></tr></thead>
+    <tbody>
+      <tr><td>市場體溫儀表板</td><td>即時顯示當前市場體制狀態</td><td>regime 頁面 &mdash; 溫度計 + 狀態燈號</td></tr>
+      <tr><td>突破頁狀態條</td><td>異常時在突破掃描頁顯示警告</td><td>breakout 頁面 &mdash; 頂部紅色橫幅</td></tr>
+      <tr><td>滾動重訓練</td><td>每季自動更新模型參數與閾值</td><td>背景排程 &mdash; 日誌通知</td></tr>
+      <tr><td>API 端點</td><td>/api/regime &mdash; 提供 JSON 格式體制狀態</td><td>RESTful API</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 即時狀態 KPI -->
+  <h2 class="ch">即時狀態（2026-03-20）</h2>
+  <div class="kpi-row">
+    <div class="kpi red"><div class="kpi-val">100&deg;</div><div class="kpi-lbl">市場體溫</div></div>
+    <div class="kpi red"><div class="kpi-val">異常</div><div class="kpi-lbl">體制狀態</div></div>
+    <div class="kpi"><div class="kpi-val">0.1004</div><div class="kpi-lbl">重建誤差</div></div>
+    <div class="kpi"><div class="kpi-val">0.0258</div><div class="kpi-lbl">異常閾值</div></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 系統整合與滾動更新</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 7 頁：研究來源與指標定位 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、研究來源與指標定位</h1>
+
+  <h2 class="ch">論文來源</h2>
+  <table>
+    <thead><tr><th>作者</th><th>論文</th><th>核心發現</th><th>我們的應用</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Al Ridhawi et al.</strong><br><span style="font-size:11px;color:#6b7a9a">arXiv:2603.19136</span></td>
+        <td>Adaptive Regime-Aware Stock Price Prediction Using AE-Gated Dual Node Transformers</td>
+        <td>Autoencoder 體制偵測貢獻 <strong>36%</strong> 改善（消融實驗最關鍵組件）</td>
+        <td class="pos">採用其 Autoencoder 重建誤差方法作為體溫指標核心</td>
+      </tr>
+      <tr>
+        <td><strong>Agrawal et al.</strong><br><span style="font-size:11px;color:#6b7a9a">arXiv:2603.19225</span></td>
+        <td>FinTradeBench: A Financial Reasoning Benchmark for LLMs</td>
+        <td>RAG 對交易訊號推理反而下降 16-20%（干擾效應）</td>
+        <td>決定不引入 LLM，僅用純技術指標 17 維輸入</td>
+      </tr>
+      <tr>
+        <td><strong>Jeon &amp; Lee</strong><br><span style="font-size:11px;color:#6b7a9a">arXiv:2603.17692</span></td>
+        <td>Can Blindfolded LLMs Still Trade?</td>
+        <td>圖結構貢獻是 LLM 的 3 倍；體制偵測在震盪市最有價值</td>
+        <td class="pos">確認體制偵測作為獨立指標的價值定位</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">資料來源</h2>
+  <table>
+    <thead><tr><th>資料</th><th>來源</th><th>內容</th><th>更新頻率</th></tr></thead>
+    <tbody>
+      <tr><td><strong>SPY</strong></td><td>Yahoo Finance API</td><td>S&amp;P 500 ETF 日頻 OHLCV（Open, High, Low, Close, Volume）</td><td>每日收盤</td></tr>
+      <tr><td><strong>^VIX</strong></td><td>Yahoo Finance API</td><td>CBOE 波動率指數，用於篩選穩定期訓練資料（VIX &lt; 75th percentile）</td><td>每日收盤</td></tr>
+      <tr><td><strong>模型權重</strong></td><td>本地 PyTorch</td><td>Autoencoder state_dict + 閾值 &tau;，儲存為 .pt 檔</td><td>每季滾動重訓練</td></tr>
+      <tr><td><strong>歷史範圍</strong></td><td colspan="2">訓練期 2018-01 至 2024-12（約 1,682 個交易日），推論期持續滾動至今</td><td>持續累積</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">定位決策：晴雨表作為指標</h2>
+
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">&#x2714;</span>
+      <span><strong>不當策略，當指標。</strong>回測顯示體制偵測能有效降低風險（MaxDD 33%→17%），但綁定 SMA 交叉策略會限制其價值。作為獨立指標，它可以服務於任何交易決策——N 日突破、法人跟單、選擇權賣方、手動選股。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">&#x2714;</span>
+      <span><strong>每日滾動，自動更新。</strong>整合至 run_daily.py 排程，每日收盤後自動擷取最新 SPY/VIX 資料、計算重建誤差、寫入 DB。網頁從 DB 讀取，毫秒級載入。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">&#x2714;</span>
+      <span><strong>整合至台股掃描器。</strong>側邊欄「AE 體制偵測」頁面顯示體溫儀表板（0°~100°）；突破掃描頁頂部即時顯示 🟢/🔴 狀態條，追突破前一眼判斷市場環境。</span>
+    </div>
+  </div>
+
+  <blockquote>&ldquo;核心價值不是多賺，而是少虧。晴雨表不告訴你買什麼，只告訴你現在市場在不在發燒。&rdquo;</blockquote>
+
+  <hr>
+  <p style="font-size:12px;color:#9aabb5;margin-top:12px">
+    <strong>聲明：</strong>本報告為學術研究成果之應用紀錄。Autoencoder 體制偵測方法源自 Al Ridhawi et al. (2026, arXiv:2603.19136)，
+    非本團隊原創研究。我們僅復現其核心方法並應用為市場指標。標的：SPY。資料截止：2026年3月23日。僅供研究參考，不構成投資建議。
+  </p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 研究來源與指標定位</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  // ── chart1：權益曲線 ──
+  var months = ['2018-04','2018-05','2018-06','2018-07','2018-08','2018-09','2018-10','2018-11','2018-12','2019-01','2019-02','2019-03','2019-04','2019-05','2019-06','2019-07','2019-08','2019-09','2019-10','2019-11','2019-12','2020-01','2020-02','2020-03','2020-04','2020-05','2020-06','2020-07','2020-08','2020-09','2020-10','2020-11','2020-12','2021-01','2021-02','2021-03','2021-04','2021-05','2021-06','2021-07','2021-08','2021-09','2021-10','2021-11','2021-12','2022-01','2022-02','2022-03','2022-04','2022-05','2022-06','2022-07','2022-08','2022-09','2022-10','2022-11','2022-12','2023-01','2023-02','2023-03','2023-04','2023-05','2023-06','2023-07','2023-08','2023-09','2023-10','2023-11','2023-12','2024-01','2024-02','2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12'];
+  var strategyData = [100000,99816,100051,100540,102800,103411,102379,100455,98927,103513,106869,107750,112152,109676,112063,113757,111917,113567,115258,119430,122900,125122,117757,117757,123587,129475,129876,133754,143090,136773,138566,143275,148583,147069,146682,148009,155840,151749,155338,157509,162196,159541,165580,167508,169603,166227,164626,167263,162922,162922,146019,150582,153330,153330,162058,171067,166266,173034,169653,175500,173343,176513,187951,194103,190820,186513,180835,189430,198078,200404,210863,217758,216196,220715,228502,227246,231605,227023,224997,227617,221470];
+  var benchmarkData = [100334,102773,103364,107193,110615,111272,103583,105504,96215,103918,107287,109229,113691,106441,113848,115569,113634,115845,118406,122692,126257,126206,116215,101703,114617,120078,122208,129405,138437,133253,129931,144064,149402,147879,151991,158891,167299,168397,172174,176377,181626,173161,185311,183822,192323,182180,176802,183448,167347,167725,153894,168066,161209,146306,158197,166991,157368,167264,163059,169104,171806,172599,183783,189799,186715,177858,173997,189890,198560,201722,212250,219190,210353,220992,228789,231559,236970,241947,239788,254088,248880];
+
+  // Show labels every 6 months
+  var displayLabels = months.map(function(m, i) { return i % 6 === 0 ? m : ''; });
+
+  new Chart(getEl('chart1'), {
+    type: 'line',
+    data: {
+      labels: displayLabels,
+      datasets: [
+        { label: '策略', data: strategyData, borderColor: '#1a3a6e', backgroundColor: 'rgba(26,58,110,.08)', tension: 0.2, pointRadius: 0, borderWidth: 2.5, fill: false },
+        { label: '基準 (Buy & Hold)', data: benchmarkData, borderColor: '#00c896', backgroundColor: 'transparent', tension: 0.2, pointRadius: 0, borderWidth: 2, borderDash: [6,3], fill: false }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 12 } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 10 } } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: function(v) { return (v/1000)+'k'; } } }
+      }
+    }
+  });
+
+  // ── chart2：每年異常佔比柱狀圖 ──
+  var anomalyData = [42.8, 3.2, 21.3, 0, 15.9, 0.4, 0];
+  var barColors = anomalyData.map(function(v) { return v > 10 ? '#e74c3c' : '#d0ddf0'; });
+
+  Chart.register({
+    id: 'barLabelPlugin',
+    afterDatasetsDraw: function(chart) {
+      if (chart.canvas.id !== 'chart2') return;
+      var ctx = chart.ctx;
+      var meta = chart.getDatasetMeta(0);
+      meta.data.forEach(function(bar, idx) {
+        var v = chart.data.datasets[0].data[idx];
+        if (!v) return;
+        ctx.save();
+        ctx.font = 'bold 12px PingFang TC, Microsoft JhengHei, Arial';
+        ctx.fillStyle = '#1a2a4a';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(v + '%', bar.x, bar.y - 3);
+        ctx.restore();
+      });
+    }
+  });
+
+  new Chart(getEl('chart2'), {
+    type: 'bar',
+    data: {
+      labels: ['2018','2019','2020','2021','2022','2023','2024'],
+      datasets: [{ label: '異常佔比 (%)', data: anomalyData, backgroundColor: barColors, borderRadius: 5, barPercentage: 0.65 }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: function(v) { return v + '%'; } }, max: 50 }
+      }
+    }
+  });
+
+  // ── chart3：Training Loss 曲線 ──
+  new Chart(getEl('chart3'), {
+    type: 'line',
+    data: {
+      labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'],
+      datasets: [{
+        label: 'Training Loss (MSE)',
+        data: [1.63,0.21,0.11,0.07,0.05,0.03,0.02,0.019,0.016,0.015,0.014,0.013,0.012,0.011,0.009,0.008,0.008,0.007,0.007,0.006],
+        borderColor: '#0d1b3e',
+        backgroundColor: 'rgba(13,27,62,.12)',
+        tension: 0.3,
+        pointRadius: 3,
+        borderWidth: 2.5,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 12 } } },
+      scales: {
+        x: { grid: { display: false }, title: { display: true, text: 'Epoch', font: { size: 12 } } },
+        y: { grid: { color: '#eef2f8' }, title: { display: true, text: 'Loss', font: { size: 12 } } }
+      }
+    }
+  });
+
+}); // end window.load
+</script>
+</body>
+</html>

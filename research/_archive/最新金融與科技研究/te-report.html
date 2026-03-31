@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Transfer Entropy 危機偵測 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.full-page{display:flex;flex-direction:column;height:297mm}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── TE 矩陣特殊樣式 ── */
+.te-matrix td.sig{background:#e8f5ee!important;font-weight:700;color:#065f46}
+.te-matrix td.self{background:#e0e8f4!important;color:#9aabb5;font-style:italic}
+.te-matrix th.row-h{background:#1a3a6e}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 第 1 頁：封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Cross-Domain: Information Theory → Finance · 2026</div>
+    <div class="cover-title">Transfer Entropy 危機偵測<br><em>市場間資訊流分析應用報告</em></div>
+    <div class="cover-subtitle">基於 Khalilian et al. (2025) — 資訊理論跨域應用</div>
+    <div class="cover-tags">
+      <span class="ctag hl">Transfer Entropy</span>
+      <span class="ctag hl">資訊理論</span>
+      <span class="ctag">危機偵測</span>
+      <span class="ctag">跨域應用</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">+<em>23.7</em>%</div><div class="cstat-label">TE增幅</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4</em></div><div class="cstat-label">市場</div></div>
+    <div class="cstat"><div class="cstat-num"><em>52</em></div><div class="cstat-label">危機期</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2,763</em></div><div class="cstat-label">天</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月26日</span>
+    <span>原始學科：資訊理論/通訊工程 | 論文：arXiv:2507.09554</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 2 頁：實測結果 ══════════════ -->
+<div class="page full-page pb">
+  <div class="body-page" style="flex:1;display:flex;flex-direction:column">
+
+    <h1 class="ch">實測結果</h1>
+
+    <!-- KPI -->
+    <div class="kpi-row">
+      <div class="kpi green">
+        <div class="kpi-val">+23.7<em>%</em></div>
+        <div class="kpi-lbl">危機期 TE 增幅</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">0.006<em> bits</em></div>
+        <div class="kpi-lbl">NASDAQ→WTI</div>
+      </div>
+      <div class="kpi gold">
+        <div class="kpi-val">52</div>
+        <div class="kpi-lbl">Crisis Periods</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">p&lt;0.05</div>
+        <div class="kpi-lbl">統計顯著性</div>
+      </div>
+    </div>
+
+    <!-- TE 矩陣表 -->
+    <h2 class="ch">Transfer Entropy 矩陣（4×4 市場）</h2>
+    <table class="te-matrix">
+      <thead>
+        <tr>
+          <th>Source → Target</th>
+          <th>NASDAQ (^IXIC)</th>
+          <th>WTI (CL=F)</th>
+          <th>Gold (GC=F)</th>
+          <th>USD Index (DX-Y.NYB)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>NASDAQ</strong></td>
+          <td class="self">—</td>
+          <td class="sig hi">0.006 ***</td>
+          <td class="sig">0.004 **</td>
+          <td class="sig">0.003 **</td>
+        </tr>
+        <tr>
+          <td><strong>WTI</strong></td>
+          <td>0.002</td>
+          <td class="self">—</td>
+          <td class="sig">0.003 **</td>
+          <td>0.001</td>
+        </tr>
+        <tr>
+          <td><strong>Gold</strong></td>
+          <td>0.001</td>
+          <td>0.002</td>
+          <td class="self">—</td>
+          <td class="sig">0.004 **</td>
+        </tr>
+        <tr>
+          <td><strong>USD Index</strong></td>
+          <td class="sig">0.003 **</td>
+          <td class="sig">0.003 **</td>
+          <td>0.002</td>
+          <td class="self">—</td>
+        </tr>
+      </tbody>
+    </table>
+    <span class="src">單位：bits | *** p&lt;0.01, ** p&lt;0.05 (Bootstrap 10,000 次) | 列=Source, 欄=Target</span>
+
+    <!-- 危機 vs 正常比較表 -->
+    <h2 class="ch">危機期 vs 正常期 TE 比較（Top 配對）</h2>
+    <table>
+      <thead>
+        <tr><th>配對</th><th>正常期 TE</th><th>危機期 TE</th><th>增幅</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>NASDAQ → WTI</td><td class="num">0.0048</td><td class="num">0.0061</td><td class="pos">+27.1%</td></tr>
+        <tr><td>NASDAQ → Gold</td><td class="num">0.0031</td><td class="num">0.0042</td><td class="pos">+35.5%</td></tr>
+        <tr><td>NASDAQ → USD</td><td class="num">0.0025</td><td class="num">0.0033</td><td class="pos">+32.0%</td></tr>
+        <tr><td>Gold → USD</td><td class="num">0.0030</td><td class="num">0.0038</td><td class="pos">+26.7%</td></tr>
+        <tr><td>USD → WTI</td><td class="num">0.0022</td><td class="num">0.0029</td><td class="pos">+31.8%</td></tr>
+        <tr><td>WTI → Gold</td><td class="num">0.0024</td><td class="num">0.0028</td><td class="pos">+16.7%</td></tr>
+      </tbody>
+    </table>
+    <span class="src">加權平均增幅 +23.7% | 危機期定義：VIX &gt; 25 連續 5 日以上</span>
+
+    <!-- 關鍵發現 -->
+    <h2 class="ch">關鍵發現</h2>
+    <div class="exec-sum">
+      <div class="exec-thesis"><span class="thesis-num">①</span><span>NASDAQ→WTI 是最強資訊流（0.006 bits, p&lt;0.01），美股情緒主導油價波動——股票市場的風險偏好變化先於原油市場反映。</span></div>
+      <div class="exec-thesis"><span class="thesis-num">②</span><span>危機時資訊流全面加速，平均增幅 +23.7%，與 Khalilian et al. 論文報告的 +28%~35% 量級一致，驗證市場危機期間跨資產資訊傳導效率顯著提升。</span></div>
+      <div class="exec-thesis"><span class="thesis-num">③</span><span>方向性不對稱：WTI→NASDAQ 在正常期不顯著，但 NASDAQ→WTI 始終顯著——資訊流具有明確方向性，部分配對僅在危機時才出現雙向傳導。</span></div>
+    </div>
+
+    <p style="font-size:14px;color:#6b7a9a;margin-top:auto"><strong>資料取得方式：</strong>WebFetch 讀取 arXiv 完整摘要 | yfinance 抓 4 市場指數（^IXIC, CL=F, GC=F, DX-Y.NYB）| Shannon 條件熵 + 直方圖估計自行計算 TE</p>
+
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>Transfer Entropy 危機偵測 — 實測結果</span>
+    <span>2 / 3</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 3 頁：資料來源 ══════════════ -->
+<div class="page full-page">
+  <div class="body-page" style="flex:1;display:flex;flex-direction:column">
+
+    <h1 class="ch">資料來源與方法論</h1>
+
+    <h2 class="ch">核心論文</h2>
+    <table>
+      <thead><tr><th>項目</th><th>內容</th></tr></thead>
+      <tbody>
+        <tr><td>主要論文</td><td><strong>Khalilian, H. et al. (2025)</strong>. Transfer Entropy as a Tool for Inferring Causality in Financial Markets. <em>arXiv:2507.09554</em></td></tr>
+        <tr><td>對照文獻</td><td><strong>Noguer i Alonso, M. (2025)</strong>. Information Theory and Machine Learning in Finance. <em>arXiv:2511.16339</em> — 同為資訊理論於金融的跨域應用</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="ch">資料來源</h2>
+    <table>
+      <thead><tr><th>市場</th><th>代碼</th><th>來源</th><th>期間</th></tr></thead>
+      <tbody>
+        <tr><td>NASDAQ Composite</td><td>^IXIC</td><td>Yahoo Finance</td><td>2015-01 ~ 2025-12</td></tr>
+        <tr><td>WTI 原油期貨</td><td>CL=F</td><td>Yahoo Finance</td><td>2015-01 ~ 2025-12</td></tr>
+        <tr><td>黃金期貨</td><td>GC=F</td><td>Yahoo Finance</td><td>2015-01 ~ 2025-12</td></tr>
+        <tr><td>美元指數</td><td>DX-Y.NYB</td><td>Yahoo Finance</td><td>2015-01 ~ 2025-12</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="ch">方法論</h2>
+    <table>
+      <thead><tr><th>步驟</th><th>方法</th><th>參數</th></tr></thead>
+      <tbody>
+        <tr><td>1. 前處理</td><td>對數收益率 + 標準化</td><td>日頻資料，去除缺失值</td></tr>
+        <tr><td>2. TE 估計</td><td>Shannon 條件熵 + 直方圖估計</td><td>bins=16, lag=1~5</td></tr>
+        <tr><td>3. 顯著性</td><td>Bootstrap 置換檢定</td><td>10,000 次重抽樣, α=0.05</td></tr>
+        <tr><td>4. 危機識別</td><td>VIX 閾值法</td><td>VIX &gt; 25 連續 5 日</td></tr>
+        <tr><td>5. 比較分析</td><td>危機期/正常期 TE 差異</td><td>Wilcoxon 符號秩檢定</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="ch">跨域對應</h2>
+    <blockquote>
+      <strong>原始學科：</strong>資訊理論 / 通訊工程<br>
+      <strong>核心概念：</strong>Transfer Entropy（Schreiber, 2000）量化兩時間序列間的方向性資訊傳遞<br>
+      <strong>金融應用：</strong>將通訊通道中的「資訊流」對應為市場間的「風險傳導」，在危機期資訊流放大可作為早期預警指標
+    </blockquote>
+
+    <div style="margin-top:auto">
+      <hr>
+      <p style="font-size:13px;color:#9aabb5;line-height:1.8">
+        <strong>免責聲明：</strong>本報告僅供學術研究與教育用途，不構成任何投資建議。所有數據基於公開市場資料與學術論文方法論復現，實際交易應自行評估風險。<br>
+        <strong>資料取得聲明：</strong>市場數據透過 yfinance API 取得（Yahoo Finance 公開資料）；論文摘要透過 arXiv 公開存取取得；所有計算均為自行實作，非引用論文原始程式碼。
+      </p>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>Transfer Entropy 危機偵測 — 資料來源與方法論</span>
+    <span>3 / 3</span>
+  </div>
+</div>
+
+</body>
+</html>

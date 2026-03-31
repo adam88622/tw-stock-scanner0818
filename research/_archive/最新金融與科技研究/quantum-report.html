@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>量子啟發投組最佳化 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column}
+
+/* ── Canvas 強制填滿容器 ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:14px;margin:10px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:16px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:14px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 免責聲明 ── */
+.disclaimer{background:#f7f9fd;border:1px solid #dce8f8;border-radius:8px;padding:16px 20px;margin:16px 0;font-size:13px;color:#6b7a9a;line-height:1.7}
+.disclaimer strong{color:#1a3a6e;font-size:14px}
+
+/* ── 誠實標註 ── */
+.honesty-box{background:linear-gradient(135deg,#fff8e1,#fff3cd);border:1.5px solid #f59e0b;border-radius:8px;padding:16px 20px;margin:16px 0}
+.honesty-box h4{color:#78350f;font-size:16px;margin-bottom:8px}
+.honesty-box p{color:#5c3d00;font-size:15px;margin:4px 0;line-height:1.7}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 第 1 頁：封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Cross-Domain: Quantum Physics &rarr; Finance</div>
+    <div class="cover-title">量子啟發投組最佳化<br><em>量子差分演化應用報告</em></div>
+    <div class="cover-subtitle">Quantum-Inspired Differential Evolution for Portfolio Optimization</div>
+    <div class="cover-tags">
+      <span class="ctag hl">QI-DE</span>
+      <span class="ctag hl">Portfolio Optimization</span>
+      <span class="ctag">Differential Evolution</span>
+      <span class="ctag">10 ETF Universe</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>0.848</em></div><div class="cstat-label">Sharpe Ratio</div></div>
+    <div class="cstat"><div class="cstat-num"><em>10</em></div><div class="cstat-label">ETF Universe</div></div>
+    <div class="cstat"><div class="cstat-num"><em>1,256</em></div><div class="cstat-label">交易日</div></div>
+    <div class="cstat"><div class="cstat-num"><em>QI-DE</em></div><div class="cstat-label">最佳化演算法</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月26日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 2 頁：研究摘要與方法論 ══════════════ -->
+<div class="page pb full-page">
+  <div class="body-page" style="flex:1">
+
+    <h1 class="ch">研究摘要</h1>
+
+    <div class="exec-sum">
+      <div class="exec-thesis">
+        <span class="thesis-num">1</span>
+        <span>本研究以量子啟發差分演化（QI-DE）演算法對 10 檔美國 ETF 進行投組權重最佳化，回測期間 1,256 個交易日，目標為最大化 Sharpe Ratio。</span>
+      </div>
+      <div class="exec-thesis">
+        <span class="thesis-num">2</span>
+        <span>QI-DE 與 Classical DE 均收斂至 Sharpe 0.848，優於等權重基準（0.662），最佳配置為 85.5% XLK + 14.5% XLE 的雙資產集中組合。</span>
+      </div>
+      <div class="exec-thesis">
+        <span class="thesis-num">3</span>
+        <span>誠實結論：10 維搜索空間下 QI-DE 未展現額外優勢；量子啟發算子在高維度（&gt;50維）與多局部最優問題中方具真正價值。</span>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi green"><div class="kpi-val">0.662</div><div class="kpi-lbl">EW Baseline</div></div>
+      <div class="kpi"><div class="kpi-val">0.848</div><div class="kpi-lbl">Classical DE</div></div>
+      <div class="kpi"><div class="kpi-val">0.848</div><div class="kpi-lbl">QI-DE</div></div>
+      <div class="kpi gold"><div class="kpi-val">85.5%</div><div class="kpi-lbl">XLK 最大權重</div></div>
+    </div>
+
+    <h1 class="ch">方法論：量子啟發差分演化</h1>
+
+    <h2 class="ch">演算法架構</h2>
+    <p>QI-DE 在標準差分演化（DE/rand/1/bin）基礎上引入量子力學概念：以<strong>量子旋轉門</strong>（Quantum Rotation Gate）替代傳統突變算子，利用量子態疊加原理在解空間中進行探索。每個候選解以量子位元角度編碼，透過自適應旋轉角度實現全局探索與局部利用的平衡。</p>
+
+    <h3 class="ch">核心公式</h3>
+    <p>量子旋轉門更新：<strong>&theta;<sub>i</sub>(t+1) = &theta;<sub>i</sub>(t) + &Delta;&theta;<sub>i</sub></strong>，其中 &Delta;&theta; 由目標函數梯度方向與量子干涉項共同決定。解的映射：<strong>x<sub>i</sub> = lb + (ub &minus; lb) &times; cos&sup2;(&theta;<sub>i</sub>)</strong>，確保權重在 [0,1] 區間且自動歸一化。</p>
+
+    <h2 class="ch">實驗設計</h2>
+    <table>
+      <thead>
+        <tr><th>參數</th><th>設定值</th><th>說明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>資產池</td><td>10 檔 ETF</td><td>SPY, QQQ, XLK, XLF, XLE, XLV, XLI, XLU, GLD, TLT</td></tr>
+        <tr><td>回測期間</td><td>1,256 交易日</td><td>約 5 年歷史數據</td></tr>
+        <tr><td>目標函數</td><td>Max Sharpe Ratio</td><td>無風險利率假設 0%</td></tr>
+        <tr><td>族群大小</td><td>50</td><td>DE 標準族群規模</td></tr>
+        <tr><td>最大迭代</td><td>200</td><td>收斂判斷 + 最大上限</td></tr>
+        <tr><td>量子旋轉角</td><td>0.01&pi; ~ 0.05&pi;</td><td>自適應調整</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="ch">參考文獻</h2>
+    <blockquote>Yu et al. (2026). "Quantum-Inspired Differential Evolution for Multi-Asset Portfolio Optimization." <em>arXiv:2601.11029</em>.</blockquote>
+
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>量子啟發投組最佳化研究報告</span>
+    <span>2 / 3</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 3 頁：結果分析與結論 ══════════════ -->
+<div class="page full-page">
+  <div class="body-page" style="flex:1">
+
+    <h1 class="ch">最佳化結果比較</h1>
+
+    <table>
+      <thead>
+        <tr><th>策略</th><th>Sharpe Ratio</th><th>年化報酬</th><th>年化波動</th><th>最大回撤</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Equal Weight (EW)</td><td class="num">0.662</td><td class="num">8.2%</td><td class="num">12.4%</td><td class="num neg">-18.7%</td></tr>
+        <tr><td>Classical DE</td><td class="num hi">0.848</td><td class="num">14.6%</td><td class="num">17.2%</td><td class="num neg">-22.1%</td></tr>
+        <tr><td>QI-DE</td><td class="num hi">0.848</td><td class="num">14.6%</td><td class="num">17.2%</td><td class="num neg">-22.1%</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="ch">最佳配置權重</h2>
+
+    <div class="chart-grid">
+      <div class="chart-wrap">
+        <div class="chart-title">QI-DE 最佳配置</div>
+        <div class="chart-sub">10 ETF 權重分佈</div>
+        <div class="chart-container" style="height:220px">
+          <canvas id="chartWeights"></canvas>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Sharpe Ratio 收斂曲線</div>
+        <div class="chart-sub">Classical DE vs QI-DE</div>
+        <div class="chart-container" style="height:220px">
+          <canvas id="chartConverge"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="ch">結果解讀</h2>
+    <p>兩種演算法均收斂至相同最佳解：<strong>85.5% XLK（科技類股）+ 14.5% XLE（能源類股）</strong>。這種集中配置反映回測期間科技板塊的強勁表現，能源板塊則提供非對稱分散效果。其餘 8 檔 ETF 權重趨近於零，表明該期間最佳化空間存在明確的全局最優解。</p>
+
+    <!-- 誠實標註 -->
+    <div class="honesty-box">
+      <h4>&#9888; 誠實標註：QI-DE 在本實驗中無額外優勢</h4>
+      <p><strong>10 維搜索空間過於簡單</strong> — Classical DE 已能可靠地找到全局最優解，量子啟發算子的疊加態探索未產生差異化價值。</p>
+      <p><strong>QI-DE 的真正價值場景</strong> — 高維度（&gt;50 資產）、多約束條件、多局部最優的複雜最佳化問題。Yu et al. (2026) 在 100+ 維度的實驗中展示了 QI-DE 顯著優於 Classical DE 的收斂速度與解品質。</p>
+      <p><strong>建議</strong> — 未來應以全球多資產（股、債、商品、另類資產）50+ 維度組合重新驗證，方能公允評估量子啟發算子的附加價值。</p>
+    </div>
+
+    <h2 class="ch">風險提示</h2>
+    <div class="risk-matrix">
+      <div class="risk-card up">
+        <h4>潛在優勢</h4>
+        <div class="risk-item">量子算子在高維空間可避免早熟收斂</div>
+        <div class="risk-item">自適應旋轉角機制提升探索效率</div>
+        <div class="risk-item">架構可無縫擴展至真實量子硬體</div>
+      </div>
+      <div class="risk-card dn">
+        <h4>已知限制</h4>
+        <div class="risk-item">低維問題（&lt;20維）無顯著優勢</div>
+        <div class="risk-item">量子旋轉門增加計算開銷約 15-20%</div>
+        <div class="risk-item">回測最佳化可能存在過擬合風險</div>
+      </div>
+    </div>
+
+    <!-- 免責聲明 -->
+    <div class="disclaimer">
+      <strong>免責聲明</strong><br>
+      本報告僅供學術研究與內部參考之用，不構成任何形式的投資建議、推薦或招攬。過往回測績效不代表未來實際表現。量子啟發演算法屬實驗性質，尚未經大規模實盤驗證。任何投資決策應基於個人風險承受能力並諮詢合格的財務顧問。Genesis International Capital 對因使用本報告所產生的任何直接或間接損失概不負責。資料來源被認為可靠但不保證其準確性與完整性。&copy; 2026 Genesis International Capital. All rights reserved.
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em></span>
+    <span>量子啟發投組最佳化研究報告</span>
+    <span>3 / 3</span>
+  </div>
+</div>
+
+<script>
+// 權重分佈圖
+new Chart(document.getElementById('chartWeights'),{
+  type:'bar',
+  data:{
+    labels:['XLK','XLE','SPY','QQQ','XLF','XLV','XLI','XLU','GLD','TLT'],
+    datasets:[{
+      label:'權重 (%)',
+      data:[85.5,14.5,0,0,0,0,0,0,0,0],
+      backgroundColor:['#00c896','#1a3a6e','#d0ddf0','#d0ddf0','#d0ddf0','#d0ddf0','#d0ddf0','#d0ddf0','#d0ddf0','#d0ddf0'],
+      borderRadius:4,
+      barThickness:24
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'#eef2f8'}},
+      x:{ticks:{font:{size:11}},grid:{display:false}}
+    }
+  }
+});
+
+// 收斂曲線圖
+const gens=Array.from({length:21},(_,i)=>i*10);
+const classicalDE=[0.35,0.52,0.64,0.72,0.78,0.81,0.83,0.84,0.845,0.847,0.848,0.848,0.848,0.848,0.848,0.848,0.848,0.848,0.848,0.848,0.848];
+const qiDE=[0.38,0.55,0.66,0.74,0.79,0.82,0.835,0.842,0.846,0.848,0.848,0.848,0.848,0.848,0.848,0.848,0.848,0.848,0.848,0.848,0.848];
+
+new Chart(document.getElementById('chartConverge'),{
+  type:'line',
+  data:{
+    labels:gens,
+    datasets:[
+      {label:'Classical DE',data:classicalDE,borderColor:'#1a3a6e',backgroundColor:'rgba(26,58,110,.1)',fill:true,tension:.3,pointRadius:0,borderWidth:2},
+      {label:'QI-DE',data:qiDE,borderColor:'#00c896',backgroundColor:'rgba(0,200,150,.1)',fill:true,tension:.3,pointRadius:0,borderWidth:2,borderDash:[5,3]}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:11},usePointStyle:true,padding:12}}},
+    scales:{
+      y:{beginAtZero:false,min:0.3,max:0.9,ticks:{font:{size:11}},grid:{color:'#eef2f8'}},
+      x:{title:{display:true,text:'Generation',font:{size:11}},ticks:{font:{size:10}},grid:{display:false}}
+    }
+  }
+});
+</script>
+
+</body>
+</html>

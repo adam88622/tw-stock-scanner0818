@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 穩懋×聯亞 產能溢出代工可行性研究 v4
+  轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="穩懋聯亞產能溢出代工可行性研究_v4.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///Users/chenhongshuo/claude/光通/穩懋聯亞產能溢出代工可行性研究_v4.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>穩懋×聯亞 產能溢出代工 v4 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 頁面容器 ── */
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+
+/* ── Canvas ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:20px 0 14px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 8px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 10px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 10px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:12.5px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 公司卡片 ── */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:16px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:12px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:16px 20px}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:16px;margin:12px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13px;font-weight:700;color:#0d1b3e;margin-bottom:3px}
+.chart-sub{font-size:11px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+
+/* ── KPI ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:18px;font-weight:800;margin-bottom:4px}
+.kpi-val em{font-size:11px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:14px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.5px;font-weight:700;color:#0d1b3e;padding:8px 0;border-bottom:1px solid #dce8f8;display:flex;gap:10px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:18px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.risk-card{border-radius:8px;padding:14px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13px;font-weight:700;margin-bottom:6px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 首選股卡 ── */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.pick-card{border-radius:8px;padding:16px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:5px}
+.pick-name{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:11px;color:#6b7a9a;margin-bottom:8px}
+.pick-why{font-size:12.5px;color:#2d3748;line-height:1.7;margin-bottom:8px}
+.pick-catalyst{font-size:12px;color:#065f46;background:#e8f5ee;padding:7px 10px;border-radius:5px}
+
+/* ── 雙欄 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 文字 ── */
+p{margin:5px 0 9px;line-height:1.7;font-size:13.5px}
+ul,ol{padding-left:20px;margin:5px 0 9px}
+li{margin:3px 0;line-height:1.7;font-size:13px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:8px 14px;margin:10px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:16px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:4px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 56px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 估值框 ── */
+.val-box{background:linear-gradient(135deg,#f0f4fc,#eef5f0);border:2px solid #00c896;border-radius:10px;padding:16px 20px;margin:12px 0}
+.val-title{font-size:14px;font-weight:800;color:#0d1b3e;margin-bottom:8px}
+.val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.val-item{background:#fff;border-radius:6px;padding:10px 8px;border:1px solid #dce8f8}
+.val-label{font-size:10px;color:#6b7a9a;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px}
+.val-num{font-size:18px;font-weight:800;color:#0d1b3e}
+.val-num.hl{color:#00875a;font-size:22px}
+.val-detail{font-size:10px;color:#6b7a9a;margin-top:2px}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Feasibility Study v4 · GiS Valuation Model · March 2026</div>
+    <div class="cover-title">穩懋 × 聯亞<br><em>產能溢出代工估值模型</em></div>
+    <div class="cover-subtitle">Overflow Foundry Model — GiS Target Price Derivation with First-Hand Data</div>
+    <div class="cover-tags">
+      <span class="ctag hl">穩懋 3105.TW</span>
+      <span class="ctag hl">聯亞 3081.TWO</span>
+      <span class="ctag">InP 代工</span>
+      <span class="ctag">AI 光通訊</span>
+      <span class="ctag">矽光子</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>NT$200</em></div><div class="cstat-label">穩懋 GiS 目標價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>NT$970</em></div><div class="cstat-label">聯亞 GiS 目標價</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>107</em>%</div><div class="cstat-label">聯亞 2026 Jan-Feb YoY</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4.0</em>/5</div><div class="cstat-label">合作可行性評分</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月25日</span>
+    <span>v4：以第一手財報數據校正估值模型</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">NT$200<em> 元</em></div><div class="kpi-lbl">穩懋 GiS 目標價</div></div>
+    <div class="kpi"><div class="kpi-val">NT$970<em> 元</em></div><div class="kpi-lbl">聯亞 GiS 目標價 (SOTP)</div></div>
+    <div class="kpi gold"><div class="kpi-val">+82%</div><div class="kpi-lbl">聯亞 2025 營收 YoY</div></div>
+    <div class="kpi green"><div class="kpi-val">49%</div><div class="kpi-lbl">聯亞 Q4'25 毛利率</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>聯亞爆發式成長已由月營收驗證。</strong>2026 年 1-2 月營收 YoY +107%，Q4'25 毛利率攀升至 49%，EPS 從 2024 年 -0.59 元翻正至 2025 年 4.66 元。GS 上調目標價至 NT$1,830。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>穩懋 GaAs 谷底已過，InP 代工為選擇權。</strong>2025 年 Q3 起營收 YoY 轉正（+26%），Q4 毛利率回升至 31.8%。InP 代工可貢獻 2027F EPS +0.8 元，屬「無中生有」的增量。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>v4 關鍵差異：以第一手數據取代假設。</strong>本版使用 MOPS 月營收、季報實績、法說會指引校正模型，非引用券商預估。GiS 估值原則：寧可保守 EPS 搭配合理 PE。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">月營收趨勢（百萬元）</div>
+      <div class="chart-sub">來源：MOPS 公開資訊觀測站</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">季度 EPS 走勢（元）</div>
+      <div class="chart-sub">來源：公司季報</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <blockquote><strong>v3 → v4 核心升級：</strong>v3 為情境分析（假設代工成立），v4 用第一手財報數據建構 GiS 自有估值模型，推導兩家公司在「含代工」與「不含代工」情境下的目標價。所有 EPS 以公司實報為基礎外推。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面：第一手數據 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One · First-Hand Data</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">第一手數據校正</div>
+  <div class="sec-desc">以 MOPS 月營收、公司季報、法說會指引為基礎，校正 v3 版的假設數據。所有財務數字均為公司實報或 GiS 自行推估。</div>
+</div>
+
+<!-- ══════════════ 穩懋財務數據 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹-1、穩懋半導體 (3105) 財務實績</h1>
+
+  <div class="mini-table">
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>年度指標</th><th>2023A</th><th>2024A</th><th>2025A</th></tr></thead>
+        <tbody>
+          <tr><td>營收（億元）</td><td class="num">153.6</td><td class="num">174.6</td><td class="num">166.4</td></tr>
+          <tr><td>毛利率</td><td class="num neg">18.5%</td><td class="num">25.5%</td><td class="num">22.6%</td></tr>
+          <tr><td>EPS（元）</td><td class="num neg">-0.19</td><td class="num">1.81</td><td class="num pos">4.00</td></tr>
+          <tr><td>股本（億股）</td><td class="num" colspan="3">4.239</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>季度 EPS</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th></tr></thead>
+        <tbody>
+          <tr><td>2024</td><td class="num">0.96</td><td class="num">1.14</td><td class="num">0.54</td><td class="num neg">-0.83</td></tr>
+          <tr><td>2025</td><td class="num">0.04</td><td class="num neg">-0.99</td><td class="num pos">2.52</td><td class="num pos">2.43</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="ch">2025 月營收趨勢 — 下半年強勁復甦</h2>
+  <table>
+    <thead><tr><th>月份</th><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dec</th></tr></thead>
+    <tbody>
+      <tr><td>營收(億)</td><td class="num">11.8</td><td class="num">11.7</td><td class="num">12.3</td><td class="num">11.6</td><td class="num">12.5</td><td class="num">13.6</td><td class="num">14.4</td><td class="num">14.8</td><td class="num pos">15.6</td><td class="num pos">15.6</td><td class="num pos">16.2</td><td class="num pos">16.1</td></tr>
+      <tr><td>YoY</td><td class="num neg">-22%</td><td class="num neg">-11%</td><td class="num neg">-24%</td><td class="num neg">-29%</td><td class="num neg">-24%</td><td class="num neg">-18%</td><td class="num neg">-10%</td><td class="num neg">-1%</td><td class="num pos">+26%</td><td class="num pos">+27%</td><td class="num pos">+30%</td><td class="num pos">+31%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">2026 年 1-2 月：復甦延續</h2>
+  <p><strong>Jan'26:</strong> 14.68 億（YoY +24.7%）｜<strong>Feb'26:</strong> 14.74 億（YoY +25.9%）</p>
+
+  <h2 class="ch">Q4'25 法說會關鍵指引（2026/02/11）</h2>
+  <ul>
+    <li><strong>Q1'26 指引：</strong>營收 QoQ 高個位數下滑（~44 億），毛利率 ~25%（mid-20s）</li>
+    <li><strong>成長引擎：</strong>AI 光通訊 + 衛星經濟為雙引擎；1.6T 光模組元件需求爆發式增長</li>
+    <li><strong>AI 營收佔比：</strong>從低個位數翻倍至中個位數</li>
+    <li><strong>衛星：</strong>已佔基礎設施營收 30-40%</li>
+    <li><strong>折舊：</strong>2026 年預計下降 10-20%（利好毛利率）</li>
+    <li><strong>資本支出：</strong>~20 億元</li>
+  </ul>
+  <span class="src">資料來源：穩懋 4Q25 法說會（2026/02/11）、MOPS 月營收公告、Yahoo Finance</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹-1 · 穩懋財務實績</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 聯亞財務數據 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹-2、聯亞光電 (3081) 財務實績</h1>
+
+  <div class="mini-table">
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>年度指標</th><th>2023A</th><th>2024A</th><th>2025A</th></tr></thead>
+        <tbody>
+          <tr><td>營收（億元）</td><td class="num">10.6</td><td class="num">12.1</td><td class="num pos">22.0</td></tr>
+          <tr><td>毛利率</td><td class="num neg">13.1%</td><td class="num neg">19.8%</td><td class="num pos">42.7%</td></tr>
+          <tr><td>營益率</td><td class="num neg">-26.4%</td><td class="num neg">-9.3%</td><td class="num pos">23.1%</td></tr>
+          <tr><td>EPS（元）</td><td class="num neg">-2.31</td><td class="num neg">-0.59</td><td class="num pos hi">4.66</td></tr>
+          <tr><td>股本（億股）</td><td class="num" colspan="3">0.9252</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mini-t">
+      <table>
+        <thead><tr><th>2025 季度</th><th>營收(億)</th><th>毛利率</th><th>EPS</th></tr></thead>
+        <tbody>
+          <tr><td>Q1</td><td class="num">4.55</td><td class="num">32%</td><td class="num">0.46</td></tr>
+          <tr><td>Q2</td><td class="num">5.53</td><td class="num pos">43%</td><td class="num">1.05</td></tr>
+          <tr><td>Q3</td><td class="num">5.53</td><td class="num pos">44%</td><td class="num">1.08</td></tr>
+          <tr><td>Q4</td><td class="num pos">6.42</td><td class="num pos hi">49%</td><td class="num pos hi">2.07</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="ch">2026 年 1-2 月：爆發式成長持續</h2>
+  <table>
+    <thead><tr><th>月份</th><th>營收（百萬）</th><th>MoM</th><th>YoY</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Jan'26</strong></td><td class="num pos">270.8</td><td class="num">—</td><td class="num pos hi">+122.8%</td></tr>
+      <tr><td><strong>Feb'26</strong></td><td class="num pos">290.3</td><td class="num pos">+7.2%</td><td class="num pos hi">+91.4%</td></tr>
+      <tr><td><strong>1-2 月合計</strong></td><td class="num pos hi">561.1</td><td class="num">—</td><td class="num pos hi">+105.4%</td></tr>
+    </tbody>
+  </table>
+  <p>Goldman Sachs 預估 Q1'26 營收 NT$872M（QoQ +35.7%，YoY +91.9%）。</p>
+
+  <h2 class="ch">Q4'25 法說會關鍵指引</h2>
+  <ul>
+    <li><strong>MOCVD 擴產：</strong>董事會通過 NT$7.07 億採購新 MOCVD 設備，產能 +25-30%，預計 2027 Q2 起貢獻</li>
+    <li><strong>E-Beam 擴產：</strong>產能已擴充 ~2.5 倍（2025 Q2 基準）</li>
+    <li><strong>新客戶：</strong>新增美系 CSP 客戶，2026 年開始出貨；另有 3-4 家光模組客戶導入中</li>
+    <li><strong>矽光子：</strong>2025 年出貨量成長 2-3 倍，2026 維持此動能</li>
+    <li><strong>私募增資：</strong>授權發行最多 450 萬新股（約 NT$40.5 億，以 ~NT$900/股計）</li>
+    <li><strong>股利：</strong>現金 NT$3 + 股票 NT$1 = 合計 NT$4/股</li>
+  </ul>
+
+  <h2 class="ch">券商目標價參考（僅供參考，非 GiS 依據）</h2>
+  <table>
+    <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>2026E EPS</th><th>2027E EPS</th></tr></thead>
+    <tbody>
+      <tr><td>Goldman Sachs</td><td class="pos">Buy</td><td class="num pos hi">NT$1,830</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>永豐投顧</td><td class="pos">Buy</td><td class="num pos">NT$1,375</td><td class="num">15.21</td><td class="num pos">30.56</td></tr>
+      <tr><td>元大投顧</td><td class="pos">Buy</td><td class="num pos">NT$1,350</td><td class="num">10.80</td><td class="num pos">22.60</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：聯亞 4Q25 法說會（2026/03）、MOPS、Yahoo Finance、各券商研究報告</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹-2 · 聯亞財務實績</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面：估值模型 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two · GiS Valuation Model</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">GiS 估值模型</div>
+  <div class="sec-desc">依據 GiS 估值方法論，以第一手數據為基礎，建構財務模型、選擇估值方法、推導目標價。遵循原則：寧可用保守 EPS 搭配合理 PE，不用樂觀 EPS 搭配低 PE。</div>
+</div>
+
+<!-- ══════════════ 穩懋估值 ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">穩懋半導體</div><div class="co-ticker">3105.TW · 全球最大 GaAs 代工 · 谷底反轉 + InP 新引擎</div></div>
+      <div class="co-badge">
+        <span class="badge ow">◉ 增加持股</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$140–266</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+25%</div><div class="co-metric-label">2026 Jan-Feb YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">31.8%</div><div class="co-metric-label">Q4'25 毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val up">4.00元</div><div class="co-metric-label">2025A EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">24x</div><div class="co-metric-label">GiS 目標 PE</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">GiS 財務模型</h3>
+      <table>
+        <thead><tr><th>指標</th><th>2024A</th><th>2025A</th><th>2026F (GiS)</th><th>2027F (GiS)</th></tr></thead>
+        <tbody>
+          <tr><td>營收（億元）</td><td class="num">174.6</td><td class="num">166.4</td><td class="num pos">190</td><td class="num pos">220</td></tr>
+          <tr><td>毛利率</td><td class="num">25.5%</td><td class="num">22.6%</td><td class="num pos">27%</td><td class="num pos">31%</td></tr>
+          <tr><td>營益率</td><td class="num">14%</td><td class="num">10%</td><td class="num pos">15%</td><td class="num pos">20%</td></tr>
+          <tr><td>Base EPS（元）</td><td class="num">1.81</td><td class="num pos">4.00</td><td class="num pos">5.8</td><td class="num pos">7.5</td></tr>
+          <tr><td>InP 代工增量 EPS</td><td class="num">—</td><td class="num">—</td><td class="num">+0.2</td><td class="num pos hi">+0.8</td></tr>
+          <tr><td><strong>Total EPS</strong></td><td class="num">1.81</td><td class="num pos">4.00</td><td class="num pos">6.0</td><td class="num pos hi">8.3</td></tr>
+        </tbody>
+      </table>
+      <span class="src">模型假設：2026F 營收基於 Jan-Feb 月營收 14.7 億年化 × 季節性 1.08；毛利率依法說會指引 Q1 25% 逐季回升；InP 代工依 v3 報告模式二（中後段代工），2026H2 啟動</span>
+
+      <h3 class="ch">PE 倍數推導</h3>
+      <blockquote>
+        <strong>方法：</strong>Forward PE on 2027F（谷底反轉股，用復甦年 EPS）<br>
+        基礎 PE 20x + 全球龍頭 +4x + 高壁壘 +3x + InP 新引擎 +2x - 週期性 -3x - InP 未驗證 -2x = <strong>24x</strong>
+      </blockquote>
+
+      <!-- 估值框 -->
+      <div class="val-box">
+        <div class="val-title">三情境目標價（12 個月）</div>
+        <div class="val-grid">
+          <div class="val-item">
+            <div class="val-label">保守</div>
+            <div class="val-num">NT$140</div>
+            <div class="val-detail">20x × 7.0 元</div>
+          </div>
+          <div class="val-item" style="border-color:#00c896;border-width:2px">
+            <div class="val-label">基礎（採用）</div>
+            <div class="val-num hl">NT$200</div>
+            <div class="val-detail">24x × 8.3 元</div>
+          </div>
+          <div class="val-item">
+            <div class="val-label">樂觀</div>
+            <div class="val-num">NT$266</div>
+            <div class="val-detail">28x × 9.5 元</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="risk-matrix">
+        <div class="risk-card up">
+          <h4>上行催化劑</h4>
+          <div class="risk-item">穩懋與聯亞正式宣布代工合作</div>
+          <div class="risk-item">UTR 回升至 70%+，營運槓桿放大</div>
+          <div class="risk-item">WiFi7 / 衛星 PA 拉貨超預期</div>
+        </div>
+        <div class="risk-card dn">
+          <h4>下行風險</h4>
+          <div class="risk-item">GaAs RF 庫存調整延長</div>
+          <div class="risk-item">InP 代工為過渡性生意（2-3 年）</div>
+          <div class="risk-item">競爭對手搶佔光通訊代工市場</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 穩懋估值模型</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 聯亞估值 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">聯亞光電</div><div class="co-ticker">3081.TWO · 台灣 InP 磊晶龍頭 · AI 光通訊高成長</div></div>
+      <div class="co-badge">
+        <span class="badge buy">◉ 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$560–1,390</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+105%</div><div class="co-metric-label">2026 Jan-Feb YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val up">49%</div><div class="co-metric-label">Q4'25 毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val up">4.66元</div><div class="co-metric-label">2025A EPS (翻正)</div></div>
+      <div class="co-metric"><div class="co-metric-val">SOTP</div><div class="co-metric-label">GiS 估值方法</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">GiS 財務模型</h3>
+      <table>
+        <thead><tr><th>指標</th><th>2024A</th><th>2025A</th><th>2026F (GiS)</th><th>2027F (GiS)</th></tr></thead>
+        <tbody>
+          <tr><td>自產營收（億元）</td><td class="num">12.1</td><td class="num pos">22.0</td><td class="num pos">42</td><td class="num pos">63</td></tr>
+          <tr><td>代工溢出營收（億元）</td><td class="num">—</td><td class="num">—</td><td class="num">5</td><td class="num pos">32</td></tr>
+          <tr><td><strong>合計營收</strong></td><td class="num">12.1</td><td class="num pos">22.0</td><td class="num pos">47</td><td class="num pos hi">95</td></tr>
+          <tr><td>自產毛利率</td><td class="num">19.8%</td><td class="num pos">42.7%</td><td class="num pos">48%</td><td class="num pos">49%</td></tr>
+          <tr><td>代工溢出毛利率</td><td class="num">—</td><td class="num">—</td><td class="num">37%</td><td class="num">37%</td></tr>
+          <tr><td>自產 EPS（元）</td><td class="num neg">-0.59</td><td class="num pos">4.66</td><td class="num pos">12.5</td><td class="num pos">20.0</td></tr>
+          <tr><td>代工增量 EPS（元）</td><td class="num">—</td><td class="num">—</td><td class="num">1.5</td><td class="num pos hi">9.5</td></tr>
+          <tr><td><strong>Total EPS</strong></td><td class="num neg">-0.59</td><td class="num pos">4.66</td><td class="num pos">14.0</td><td class="num pos hi">29.5</td></tr>
+        </tbody>
+      </table>
+      <span class="src">模型假設：2026F 自產營收基於 GS Q1 預估 8.72 億外推全年；毛利率依 Q4'25 趨勢；代工溢出依 v3 報告模式二，2026H2 啟動，聯亞零額外 capex；股本 0.97 億（含私募稀釋）</span>
+
+      <h3 class="ch">SOTP 估值法</h3>
+      <blockquote>
+        <strong>方法：</strong>SOTP 分部估值（高成長零組件，CAGR >80%）<br>
+        <strong>自產業務 PE 40x：</strong>基礎 30x + InP 寡佔 +5x + 高毛利 +3x + 超高成長 +7x - 小型股 -3x - 客戶集中 -2x<br>
+        <strong>代工溢出 PE 18x：</strong>過渡性收入（2-3 年窗口），給予折價
+      </blockquote>
+
+      <table>
+        <thead><tr><th>業務區塊</th><th>2027F EPS</th><th>給予 PE</th><th>貢獻（元/股）</th><th>邏輯</th></tr></thead>
+        <tbody>
+          <tr><td><strong>自產 InP 磊晶</strong></td><td class="num">20.0</td><td class="num">40x</td><td class="num pos hi">800</td><td>核心業務，高毛利、寡佔、AI 結構性需求</td></tr>
+          <tr><td><strong>代工溢出貢獻</strong></td><td class="num">9.5</td><td class="num">18x</td><td class="num pos">171</td><td>過渡性收入，2026H2-2028，給折價 PE</td></tr>
+          <tr><td><strong>SOTP 合計</strong></td><td class="num hi">29.5</td><td class="num">—</td><td class="num pos hi">NT$971</td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="val-box">
+        <div class="val-title">三情境目標價（12 個月）</div>
+        <div class="val-grid">
+          <div class="val-item">
+            <div class="val-label">保守（無代工）</div>
+            <div class="val-num">NT$560</div>
+            <div class="val-detail">30x × 18.7 元</div>
+          </div>
+          <div class="val-item" style="border-color:#00c896;border-width:2px">
+            <div class="val-label">基礎 SOTP（採用）</div>
+            <div class="val-num hl">NT$970</div>
+            <div class="val-detail">自產 40x + 代工 18x</div>
+          </div>
+          <div class="val-item">
+            <div class="val-label">樂觀</div>
+            <div class="val-num">NT$1,390</div>
+            <div class="val-detail">42x × 33 元</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="risk-matrix">
+        <div class="risk-card up">
+          <h4>上行催化劑</h4>
+          <div class="risk-item">代工合作正式簽約 → 營收天花板打開</div>
+          <div class="risk-item">新 CSP 客戶放量 + 1.6T 矽光子需求爆發</div>
+          <div class="risk-item">MOCVD 擴產提前投產（2027 Q1）</div>
+        </div>
+        <div class="risk-card dn">
+          <h4>下行風險</h4>
+          <div class="risk-item">產能瓶頸導致客戶流失至 Coherent/Lumentum</div>
+          <div class="risk-item">AI 資本支出放緩，光通訊需求不如預期</div>
+          <div class="risk-item">穩懋學會後自行競爭（長期風險）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 聯亞估值模型</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 估值敏感度分析 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參、敏感度分析與交叉驗證</h1>
+
+  <h2 class="ch">穩懋目標價敏感度矩陣（PE × EPS）</h2>
+  <table>
+    <thead><tr><th>PE \ EPS</th><th>7.0 元</th><th>7.5 元</th><th>8.3 元</th><th>9.5 元</th><th>10.5 元</th></tr></thead>
+    <tbody>
+      <tr><td><strong>20x</strong></td><td class="num">140</td><td class="num">150</td><td class="num">166</td><td class="num">190</td><td class="num">210</td></tr>
+      <tr><td><strong>22x</strong></td><td class="num">154</td><td class="num">165</td><td class="num">183</td><td class="num">209</td><td class="num">231</td></tr>
+      <tr><td><strong>24x（GiS 採用）</strong></td><td class="num">168</td><td class="num">180</td><td class="num pos hi">200</td><td class="num">228</td><td class="num">252</td></tr>
+      <tr><td><strong>26x</strong></td><td class="num">182</td><td class="num">195</td><td class="num">216</td><td class="num">247</td><td class="num">273</td></tr>
+      <tr><td><strong>28x</strong></td><td class="num">196</td><td class="num">210</td><td class="num">232</td><td class="num pos">266</td><td class="num">294</td></tr>
+    </tbody>
+  </table>
+  <span class="src">券商共識目標價 NT$115-125（未含 InP 代工假設）。GiS 模型高於共識，因納入代工增量 EPS +0.8 元。</span>
+
+  <h2 class="ch">聯亞目標價敏感度矩陣（自產 PE × 代工規模）</h2>
+  <table>
+    <thead><tr><th>自產PE \ 代工EPS</th><th>0 元（無代工）</th><th>5.0 元（50%）</th><th>9.5 元（100%）</th><th>13.0 元（130%）</th></tr></thead>
+    <tbody>
+      <tr><td><strong>30x</strong></td><td class="num">600</td><td class="num">690</td><td class="num">771</td><td class="num">834</td></tr>
+      <tr><td><strong>35x</strong></td><td class="num">700</td><td class="num">790</td><td class="num">871</td><td class="num">934</td></tr>
+      <tr><td><strong>40x（GiS 採用）</strong></td><td class="num">800</td><td class="num">890</td><td class="num pos hi">971</td><td class="num">1,034</td></tr>
+      <tr><td><strong>45x</strong></td><td class="num">900</td><td class="num">990</td><td class="num">1,071</td><td class="num pos">1,134</td></tr>
+      <tr><td><strong>50x</strong></td><td class="num">1,000</td><td class="num">1,090</td><td class="num">1,171</td><td class="num pos">1,234</td></tr>
+    </tbody>
+  </table>
+  <span class="src">代工 PE 固定 18x；代工 EPS = 代工規模倍率 × 基礎 9.5 元。GS 目標 NT$1,830 隱含 ~60x+ 2027F PE，較 GiS 積極。</span>
+
+  <h2 class="ch">GiS vs 券商共識差異說明</h2>
+  <table>
+    <thead><tr><th>公司</th><th>GiS 目標價</th><th>券商共識</th><th>差異</th><th>GiS 差異原因</th></tr></thead>
+    <tbody>
+      <tr><td><strong>穩懋</strong></td><td class="num pos">NT$200</td><td class="num">NT$115-125</td><td class="num pos">+60-74%</td><td>GiS 納入 InP 代工增量 EPS（券商共識未計入）；2027F 前瞻 vs 券商用 2026F</td></tr>
+      <tr><td><strong>聯亞</strong></td><td class="num pos">NT$970</td><td class="num">NT$1,350-1,830</td><td class="num neg">-29~-47%</td><td>GiS 遵循保守原則，代工 PE 僅給 18x（過渡性）；自產 PE 40x vs GS 隱含 60x+</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 估值哲學：</strong>穩懋因含代工增量，高於市場共識但基於合理假設。聯亞因 GiS 堅持「代工為過渡性收入」及「保守 EPS 原則」，低於最積極的券商（GS NT$1,830）。若自產業務驗證超預期，GiS 將上修 PE。</blockquote>
+
+  <div class="chart-wrap">
+    <div class="chart-title">聯亞營收組成預估：自產 vs 代工溢出（億元）</div>
+    <div class="chart-sub">來源：GiS 自有模型</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chart3" style="display:block;width:100%;height:200px"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 敏感度分析</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 投資建議 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆、投資建議彙整</h1>
+
+  <table>
+    <thead><tr><th>公司</th><th>代號</th><th>GiS 評等</th><th>GiS 目標價</th><th>2025A EPS</th><th>2027F EPS</th><th>估值方法</th></tr></thead>
+    <tbody>
+      <tr><td><strong>聯亞光電</strong></td><td>3081</td><td class="pos hi">買進</td><td class="num pos hi">NT$970</td><td class="num pos">4.66</td><td class="num pos">29.5</td><td>SOTP（40x + 18x）</td></tr>
+      <tr><td><strong>穩懋半導體</strong></td><td>3105</td><td class="pos">增加持股</td><td class="num pos">NT$200</td><td class="num pos">4.00</td><td class="num pos">8.3</td><td>Forward PE 24x</td></tr>
+    </tbody>
+  </table>
+
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #1 · 最大受益者</div>
+      <div class="pick-name">聯亞光電</div>
+      <div class="pick-ticker">3081.TWO · InP 磊晶台灣寡佔</div>
+      <div class="pick-why">AI 光通訊需求爆發 + 產能瓶頸紓解 = 營收從 22 億→95 億（含代工）。自產毛利率 49%、零額外 capex 的代工溢出模式讓聯亞成為此合作的最大受益方。即使不計代工，純自產成長也支撐 NT$560-800 目標價。</div>
+      <div class="pick-catalyst">催化劑：代工合作簽約、新 CSP 放量、1.6T 矽光子需求</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #2 · 戰略佈局價值</div>
+      <div class="pick-name">穩懋半導體</div>
+      <div class="pick-ticker">3105.TW · 全球 GaAs 代工龍頭</div>
+      <div class="pick-why">GaAs 基本盤 H2'25 已觸底回升（Q4 YoY +29%）。InP 代工增量 EPS 雖僅 +0.8 元，但戰略意義在於用閒置產能「無中生有」建立 InP 製程能力，為長期光通訊平台打基礎。折舊下降 10-20% 為 2026 毛利率提供額外支撐。</div>
+      <div class="pick-catalyst">催化劑：代工合作公告、UTR 回升至 70%+、WiFi7 拉貨</div>
+    </div>
+  </div>
+
+  <h2 class="ch">品質檢查清單</h2>
+  <table>
+    <thead><tr><th>檢查項目</th><th>狀態</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>所有財務數據以公司實報為主？</td><td class="pos">✓</td><td>MOPS 月營收、季報 EPS、法說會指引</td></tr>
+      <tr><td>2026 Jan-Feb 月營收已反映？</td><td class="pos">✓</td><td>穩懋 +25% YoY / 聯亞 +105% YoY</td></tr>
+      <tr><td>毛利率假設有法說會支持？</td><td class="pos">✓</td><td>穩懋 Q1'26 guided 25%；聯亞 Q4'25 actual 49%</td></tr>
+      <tr><td>PE 在產業合理區間？</td><td class="pos">✓</td><td>穩懋 24x（歷史 20-50x）/ 聯亞 40x（高成長 25-50x）</td></tr>
+      <tr><td>三情境完整？</td><td class="pos">✓</td><td>保守/基礎/樂觀均完成</td></tr>
+      <tr><td>與券商差異已說明？</td><td class="pos">✓</td><td>穩懋高於共識（含代工）/ 聯亞低於 GS（保守原則）</td></tr>
+      <tr><td>12 個月目標價？</td><td class="pos">✓</td><td>基準年 2027F EPS，回推 12 個月目標</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>一句話結論：</strong>聯亞做不完的單，與其丟給 Coherent、Lumentum，不如交給穩懋——肥水不落外人田。穩懋用閒置產能賺代工費，聯亞用穩懋的產能接更多單。雙方各取所需，台灣 InP 供應鏈整體做大。GiS 目標價：聯亞 NT$970（Buy）、穩懋 NT$200（Overweight）。</blockquote>
+
+  <hr>
+  <p style="font-size:11px;color:#9aabb5;margin-top:10px">本報告涵蓋：穩懋半導體 (3105.TW)、聯亞光電 (3081.TWO)。資料截止：2026年3月25日。第一手數據來源：MOPS 月營收、公司季報、4Q25 法說會。券商參考：Goldman Sachs、元大投顧、永豐投顧。免責聲明：本報告為情境研究，穩懋與聯亞目前無公開代工合作協議，代工情境為 GiS 獨立推估。不構成投資建議。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 投資建議</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 11;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  // ── 圖表一：月營收趨勢 ──
+  new Chart(getEl('chart1'), {
+    type: 'bar',
+    data: {
+      labels: ['Jul','Aug','Sep','Oct','Nov','Dec','Jan\'26','Feb\'26'],
+      datasets: [
+        { label: '穩懋', data: [1442,1484,1561,1559,1621,1614,1468,1474], backgroundColor: '#1a3a6e', borderRadius: 4, barPercentage: 0.7, categoryPercentage: 0.75 },
+        { label: '聯亞', data: [181,185,186,201,210,231,271,290], backgroundColor: '#00a878', borderRadius: 4, barPercentage: 0.7, categoryPercentage: 0.75 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 12, font:{size:10} } } },
+      scales: {
+        x: { grid: { display: false }, ticks:{font:{size:10}} },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v, font:{size:10} }, title:{display:true,text:'百萬元',font:{size:10}} }
+      }
+    }
+  });
+
+  // ── 圖表二：季度 EPS ──
+  new Chart(getEl('chart2'), {
+    type: 'line',
+    data: {
+      labels: ['Q1\'24','Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25'],
+      datasets: [
+        { label: '穩懋 EPS', data: [0.96,1.14,0.54,-0.83,0.04,-0.99,2.52,2.43], borderColor: '#0d1b3e', backgroundColor: 'transparent', tension: 0.3, pointRadius: 5, borderWidth: 2.5, fill: false },
+        { label: '聯亞 EPS', data: [null,null,null,null,0.46,1.05,1.08,2.07], borderColor: '#00a878', backgroundColor: 'transparent', tension: 0.3, pointRadius: 5, borderWidth: 2.5, fill: false }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 12, font:{size:10} } } },
+      scales: {
+        x: { grid: { display: false }, ticks:{font:{size:10}} },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '元', font:{size:10} } }
+      }
+    }
+  });
+
+  // ── 圖表三：聯亞營收組成 ──
+  new Chart(getEl('chart3'), {
+    type: 'bar',
+    data: {
+      labels: ['2024A', '2025A', '2026F', '2027F', '2028F'],
+      datasets: [
+        { label: '自產營收', data: [12, 22, 42, 63, 68], backgroundColor: '#1a3a6e', borderRadius: 4, barPercentage: 0.55, categoryPercentage: 0.65 },
+        { label: '代工溢出營收', data: [0, 0, 5, 32, 54], backgroundColor: '#00a878', borderRadius: 4, barPercentage: 0.55, categoryPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 12, font:{size:10} } } },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks:{font:{size:10}} },
+        y: { stacked: true, grid: { color: '#eef2f8' }, ticks: { callback: v => v + '億', font:{size:10} } }
+      }
+    }
+  });
+
+}); // end window.load
+</script>
+</body>
+</html>

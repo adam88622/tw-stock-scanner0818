@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — Finance Lab 研究精選
+  產出日期：2026-03-25
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>金融 AI 研究精選 | GiS Finance Lab</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.full-page{display:flex;flex-direction:column}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:42px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* ── 正文頁 ── */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.done{background:#065f46;color:#fff}
+.tl-item .tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-item .tl-tech{font-size:12.5px;opacity:.8;line-height:1.5}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+code{background:#f0f4fa;padding:2px 6px;border-radius:3px;font-size:14px;color:#1a3a6e;font-family:'Consolas','Monaco',monospace}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 檔案樹 ── */
+.file-tree{background:#0d1b3e;color:#e0e8f4;border-radius:8px;padding:20px 24px;margin:12px 0;font-family:'Consolas','Monaco',monospace;font-size:14px;line-height:1.8}
+.file-tree .dir{color:#00c896;font-weight:700}
+.file-tree .new{color:#f59e0b}
+.file-tree .pending{color:#6b7a9a}
+
+/* ── 新增樣式 ── */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.warn-box{background:#fff8e1;border:1.5px solid #d97706;border-radius:8px;padding:14px;margin:12px 0}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Finance Lab · Research Briefing</div>
+    <div class="cover-title">金融 AI 研究精選<br><em>量化投資前沿技術全景</em></div>
+    <div class="cover-subtitle">Qlib RD-Agent, FinRL-X, FinGPT, FINSABER, FinTradeBench, LLM-Guided RL</div>
+    <div class="cover-tags">
+      <span class="ctag hl">Qlib</span>
+      <span class="ctag hl">FinRL-X</span>
+      <span class="ctag hl">FINSABER</span>
+      <span class="ctag">FinGPT</span>
+      <span class="ctag">AgentQuant</span>
+      <span class="ctag">LLM-Guided RL</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>5</em></div><div class="cstat-label">深度研究</div></div>
+    <div class="cstat"><div class="cstat-num">39K<em>+</em></div><div class="cstat-label">Qlib Stars</div></div>
+    <div class="cstat"><div class="cstat-num"><em>20</em>年</div><div class="cstat-label">回測驗證</div></div>
+    <div class="cstat"><div class="cstat-num"><em>8</em></div><div class="cstat-label">篇論文引用</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年3月25日</span>
+    <span>研究精選 — 技術前沿追蹤與啟示</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 研究方法與文獻取得 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">研究方法與文獻取得聲明</h1>
+  <table>
+    <thead><tr><th>項目</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><td>報告編號</td><td>R-2026-03-25-C01</td></tr>
+      <tr><td>研究日期</td><td>2026-03-25</td></tr>
+      <tr><td>研究範圍</td><td>9 GitHub 專案 + 8 arXiv 論文</td></tr>
+      <tr><td>資料收集</td><td>WebFetch (GitHub README, arXiv HTML), WebSearch, Agent (並行研究)</td></tr>
+      <tr><td>驗證方式</td><td>多來源交叉驗證</td></tr>
+    </tbody>
+  </table>
+  <span class="src">所有論文從 arXiv 公開頁面取得，GitHub 專案從公開 README 取得。取得日期：2026-03-25。</span>
+  <h2 class="ch">文獻取得明細</h2>
+  <table>
+    <thead><tr><th>#</th><th>來源</th><th>取得方式</th><th>品質</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Qlib + RD-Agent (GitHub + arXiv:2505.15155)</td><td>Agent WebFetch</td><td>A+</td></tr>
+      <tr><td>2</td><td>FinRL-X + FinGPT (GitHub x4)</td><td>Agent WebFetch</td><td>A</td></tr>
+      <tr><td>3</td><td>FINSABER + FinTradeBench (arXiv x2)</td><td>WebFetch</td><td>A</td></tr>
+      <tr><td>4</td><td>AI Quant 綜述 x2 (arXiv)</td><td>Agent WebFetch</td><td>A</td></tr>
+      <tr><td>5</td><td>AgentQuant + LLM-Guided RL</td><td>WebFetch</td><td>A</td></tr>
+    </tbody>
+  </table>
+  <div style="background:#fff8e1;border:1.5px solid #d97706;border-radius:8px;padding:14px;margin:12px 0;font-size:14px;line-height:1.7"><strong>已知限制：</strong>① GitHub stars 為快照 ② 論文性能未獨立復現 ③ RD-Agent 需 Linux+Docker</div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>研究方法</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════════════ 第 2 頁：執行摘要 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">5 <em>個</em></div><div class="kpi-lbl">研究專案</div></div>
+    <div class="kpi"><div class="kpi-val">8 <em>篇</em></div><div class="kpi-lbl">論文引用</div></div>
+    <div class="kpi gold"><div class="kpi-val">80K<em>+</em></div><div class="kpi-lbl">Combined Stars</div></div>
+    <div class="kpi green"><div class="kpi-val">20<em>+</em></div><div class="kpi-lbl">預建模型</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>Microsoft Qlib RD-Agent（NeurIPS 2025）實現 LLM 自動因子發現。</strong>年化報酬從 5.70% 提升至 14.21%（+2.5x），因子數量僅需原來 30%，LLM 成本 &lt;$10。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>FINSABER（KDD 2026）用 20 年 100+ 標的回測揭示 LLM 交易策略長期衰減。</strong>牛市過度謹慎、熊市過度激進。建議：體制感知風控 &gt; 框架複雜度。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>FinRL-X 自適應輪動策略 Sharpe 1.10、MaxDD -21.46%。</strong>模擬交易 Sharpe 1.96 — 為量化策略提供可驗證的性能基線。</span></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>Finance Lab · Research Briefing</span>
+    <span>2 / 6</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 3 頁：Qlib + RD-Agent ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">壹、Microsoft Qlib + RD-Agent</h1>
+
+  <h2 class="ch">RD-Agent 自動因子發現性能</h2>
+  <table>
+    <thead><tr><th>方法</th><th>IC</th><th>年化報酬</th><th>資訊比率</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>RD-Agent o3-mini</td><td class="num">0.0532</td><td class="num pos">14.21%</td><td class="num pos">1.7382</td></tr>
+      <tr><td>Alpha158 基線</td><td class="num">0.0341</td><td class="num">5.70%</td><td class="num">0.8459</td></tr>
+      <tr><td>Alpha360 基線</td><td class="num">0.0420</td><td class="num">4.38%</td><td class="num">0.6731</td></tr>
+    </tbody>
+  </table>
+  <span class="src">Source: Microsoft Research, arXiv:2505.15155, NeurIPS 2025</span>
+
+  <h2 class="ch">Qlib 資料引擎性能</h2>
+  <p>Qlib 資料引擎達到 <strong>49x faster than MySQL</strong>，支援高頻因子計算與大規模回測場景。</p>
+
+  <h2 class="ch">跨市場驗證</h2>
+  <table>
+    <thead><tr><th>市場</th><th>資訊比率 (IR)</th><th>排名</th></tr></thead>
+    <tbody>
+      <tr><td>CSI500</td><td class="num pos">2.1721</td><td class="pos">#1</td></tr>
+      <tr><td>NASDAQ100</td><td class="num pos">1.7737</td><td class="pos">#1</td></tr>
+    </tbody>
+  </table>
+  <span class="src">Source: github.com/microsoft/qlib (39.3K stars), github.com/microsoft/RD-Agent</span>
+
+  <h3 class="ch">關鍵特點</h3>
+  <ul>
+    <li><strong>因子-模型聯合優化</strong> — LLM 同時搜索因子空間與模型架構</li>
+    <li><strong>LLM 成本 &lt;$10</strong> — 單次完整因子發現流程</li>
+    <li><strong>僅支援 Linux + Docker</strong> — 部署限制需注意</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>Finance Lab · Research Briefing</span>
+    <span>3 / 6</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 4 頁：FinRL-X + FinGPT ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">貳、AI4Finance 生態系統</h1>
+
+  <div class="split">
+    <div>
+      <h2 class="ch">FinRL-X 自適應輪動策略</h2>
+      <h3 class="ch">回測表現（2018–2025）</h3>
+      <table>
+        <thead><tr><th>指標</th><th>自適應輪動</th><th>SPY</th></tr></thead>
+        <tbody>
+          <tr><td>年化</td><td class="num pos">22.32%</td><td class="num">14.14%</td></tr>
+          <tr><td>Sharpe</td><td class="num pos">1.10</td><td class="num">0.72</td></tr>
+          <tr><td>MaxDD</td><td class="num">-21.46%</td><td class="num neg">-33.72%</td></tr>
+        </tbody>
+      </table>
+      <span class="src">Source: arXiv:2603.21330 (PAKDD 2026)</span>
+
+      <h3 class="ch">模擬交易（2025-10 ~ 2026-03）</h3>
+      <p>Sharpe <strong>1.96</strong>，累計報酬 <strong>+19.76%</strong></p>
+    </div>
+    <div>
+      <h2 class="ch">FinGPT 開源金融大模型</h2>
+      <ul>
+        <li><strong>18,900</strong> GitHub Stars</li>
+        <li>訓練成本僅 <strong>$17.25</strong></li>
+        <li>Twitter 情緒分析 F1: <strong>0.903</strong></li>
+        <li>vs BloombergGPT：7-13B 微調 vs 50B 完整訓練（$2.67M）</li>
+        <li>支援中文（ChatGLM2 基座）</li>
+      </ul>
+    </div>
+  </div>
+
+  <span class="src">Source: github.com/AI4Finance-Foundation — FinRL 14.5K + FinGPT 18.9K + FinRobot 6.5K + FinRL-X 2.8K = 42.7K total stars</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>Finance Lab · Research Briefing</span>
+    <span>4 / 6</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 5 頁：FINSABER + FinTradeBench ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">參、LLM 金融基準測試</h1>
+
+  <div class="warn-box">
+    <strong>FINSABER（KDD 2026）核心警告：</strong>LLM 交易策略優勢在 20 年 100+ 標的回測中顯著衰減。牛市過度謹慎跑輸被動投資，熊市過度激進產生大量虧損。
+  </div>
+
+  <h2 class="ch">FINSABER — LLM 策略長期表現</h2>
+  <table>
+    <thead><tr><th>市場環境</th><th>LLM 策略表現</th></tr></thead>
+    <tbody>
+      <tr><td>牛市</td><td class="neg">過度謹慎，跑輸被動</td></tr>
+      <tr><td>熊市</td><td class="neg">過度激進，大量虧損</td></tr>
+      <tr><td>長期</td><td class="neg">先前優勢消失</td></tr>
+    </tbody>
+  </table>
+  <span class="src">Source: arXiv:2505.07078 (KDD 2026)</span>
+
+  <h2 class="ch">FinTradeBench — 交易信號基準</h2>
+  <ul>
+    <li><strong>1,400 題</strong> NASDAQ-100 交易情境，覆蓋 10 年，14 個 LLM</li>
+    <li>RAG 對文本推理有效，<strong>對交易信號推理無效</strong></li>
+  </ul>
+  <span class="src">Source: arXiv:2603.19225</span>
+
+  <blockquote>
+    「開發者應專注於趨勢偵測和體制感知風控，而非擴展框架複雜度」— FINSABER
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>Finance Lab · Research Briefing</span>
+    <span>5 / 6</span>
+  </div>
+</div>
+
+<!-- ══════════════ 第 6 頁：Alpha Lab 啟示 + 參考文獻 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆、對 Alpha Lab 的啟示</h1>
+
+  <table>
+    <thead><tr><th>發現</th><th>對應實驗</th><th>行動建議</th></tr></thead>
+    <tbody>
+      <tr><td>RD-Agent 自動因子</td><td>實驗1 文本因子</td><td>整合 Qlib RD-Agent 取代手動因子設計</td></tr>
+      <tr><td>FINSABER 策略衰減</td><td>實驗4 Cascade RL</td><td>體制感知已是對的方向，需擴展到 20 年+回測</td></tr>
+      <tr><td>FinRL-X Sharpe 1.10</td><td>全部實驗</td><td>作為性能目標基線</td></tr>
+      <tr><td>RAG 對交易信號無效</td><td>實驗1+2</td><td>文本用嵌入模型、數值用 ML，混合架構</td></tr>
+      <tr><td>FinGPT $17.25 微調</td><td>實驗1</td><td>考慮用 FinGPT 替代通用嵌入模型</td></tr>
+      <tr><td>LLM-Guided RL</td><td>實驗4</td><td>LLM 生成初始參數 → RL 精調，改善 Cascade RL</td></tr>
+    </tbody>
+  </table>
+  <span class="src">Source: Alpha Lab 實驗對照分析</span>
+
+  <h2 class="ch">完整參考文獻</h2>
+  <ol>
+    <li>Microsoft Qlib — <a href="https://github.com/microsoft/qlib">github.com/microsoft/qlib</a></li>
+    <li>Microsoft RD-Agent — <a href="https://arxiv.org/abs/2505.15155">arXiv:2505.15155</a> (NeurIPS 2025)</li>
+    <li>FinRL — <a href="https://github.com/AI4Finance-Foundation/FinRL">github.com/AI4Finance-Foundation/FinRL</a></li>
+    <li>FinRL-X — <a href="https://arxiv.org/abs/2603.21330">arXiv:2603.21330</a> (PAKDD 2026)</li>
+    <li>FinGPT — <a href="https://arxiv.org/abs/2306.06031">arXiv:2306.06031</a></li>
+    <li>FINSABER — <a href="https://arxiv.org/abs/2505.07078">arXiv:2505.07078</a> (KDD 2026)</li>
+    <li>FinTradeBench — <a href="https://arxiv.org/abs/2603.19225">arXiv:2603.19225</a></li>
+    <li>LLM-Guided RL — <a href="https://arxiv.org/abs/2508.02366">arXiv:2508.02366</a> (FLLM 2025)</li>
+    <li>From DL to LLMs Survey — <a href="https://arxiv.org/abs/2503.21422">arXiv:2503.21422</a></li>
+    <li>The New Quant Survey — <a href="https://arxiv.org/abs/2510.05533">arXiv:2510.05533</a></li>
+    <li>AgentQuant — <a href="https://github.com/OnePunchMonk/AgentQuant">github.com/OnePunchMonk/AgentQuant</a></li>
+    <li>Automate Strategy Finding — <a href="https://arxiv.org/abs/2409.06289">arXiv:2409.06289</a></li>
+  </ol>
+
+  <h2 class="ch">因子資料來源與「1926-2024」說明</h2>
+  <p style="font-size:15px;line-height:1.75">
+    因子回測數據來自 <strong>Chen & Zimmermann (2022) Open Source Asset Pricing</strong>（openassetpricing.com），涵蓋 <strong>212 個學術因子</strong>的月度多空報酬。<strong>所有數據均為美國股市（NYSE / AMEX / NASDAQ），無台股資料。</strong>
+  </p>
+  <p style="font-size:15px;line-height:1.75">
+    數據標示跨度 1926-2024 年，但<strong>並非 1926 年即有因子論文</strong>：
+  </p>
+  <ul style="font-size:14.5px">
+    <li><strong>1926</strong> = CRSP 資料庫起始年（芝加哥大學開始記錄 NYSE 股價），不是有論文</li>
+    <li><strong>1963</strong> = Compustat 財報資料庫起始年，會計類因子從此年才有資料</li>
+    <li><strong>1979-2014</strong> = 報告所用因子的原始論文發表期間</li>
+    <li><strong>2022</strong> = Chen & Zimmermann 用統一方法重新計算 212 篇論文的因子，延伸至 2024</li>
+  </ul>
+  <p style="font-size:14px;color:#6b7a9a">
+    1926 年的因子報酬 = 用當時股價資料，套用後來論文發明的公式回算（學術慣例）。早期數據品質與市場結構與現代差異極大。因子在台灣股市的有效性尚未驗證。
+  </p>
+
+  <p style="margin-top:24px;padding:14px 18px;background:#f7f9fd;border:1px solid #e5edf8;border-radius:8px;font-size:13.5px;color:#6b7a9a;line-height:1.7">
+    <strong style="color:#1a3a6e">研究資料使用聲明</strong><br>
+    本報告所引用之研究成果、數據與圖表均來自公開學術論文及開源專案，僅供內部研究參考之用。所有資料之智慧財產權歸屬原作者及其所屬機構。本報告不構成任何投資建議，引用資料之準確性以原始出處為準。所有因子數據均為美國股市，直接套用於台股需獨立驗證。
+  </p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>Finance Lab · Research Briefing</span>
+    <span>6 / 6</span>
+  </div>
+</div>
+
+</body>
+</html>

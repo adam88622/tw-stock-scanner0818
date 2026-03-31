@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Taiwan Stock Specific Strategies Report | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:16px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1}.pb{break-after:page;page-break-after:always}.full-page{display:flex;flex-direction:column}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:16px;color:rgba(255,255,255,.65);margin-bottom:40px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8)}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:24px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13px;color:rgba(255,255,255,.5)}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,.45)}
+.body-page{padding:30px 48px;position:relative;z-index:1}.body-page.alt{background:#fafbfd}
+h1.ch{font-size:22px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 12px;page-break-after:avoid}
+h2.ch{font-size:18px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:16px 0 10px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:6px 0 12px;font-size:13.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 10px;text-align:left;font-weight:600;font-size:12.5px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}tbody tr:nth-child(even){background:#fff}
+td{padding:8px 10px;border-bottom:1px solid #e5edf8;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.pos{color:#00875a;font-weight:600}td.neg{color:#c0392b;font-weight:600}td.hi{background:#fff8e1!important;font-weight:700}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi-val{font-size:22px;font-weight:800;margin-bottom:4px}.kpi-val em{font-size:13px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:12.5px;opacity:.7}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:16px;margin:10px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:15px;font-weight:700;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:22px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+p{margin:6px 0 10px;line-height:1.7;font-size:15px}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:10px 14px;margin:10px 0;color:#1a3a6e;font-size:14.5px;border-radius:0 5px 5px 0}
+.src{font-size:12px;color:#9aabb5;display:block;margin-top:5px}
+.warn-box{background:#fff8e1;border:1.5px solid #d97706;border-radius:8px;padding:12px;margin:10px 0;font-size:14px;line-height:1.7}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:10px 48px;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:15px}.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- PAGE 1: 封面 -->
+<div class="cover pb page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div><div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">AI量化交易與相關應用產品開發</div></div></div>
+    <div class="cover-eyebrow">Research Report R-2026-03-26-TW01</div>
+    <div class="cover-title">台股特定策略研究<br><em>前沿研究總覽</em></div>
+    <div class="cover-subtitle">Institutional Investors, Margin Trading, Monthly Revenue, Quantum RL</div>
+    <div class="cover-tags"><span class="ctag hl">三大法人</span><span class="ctag hl">融資融券</span><span class="ctag hl">月營收</span><span class="ctag hl">Quantum RL</span><span class="ctag">FinMind</span><span class="ctag">Momentum</span><span class="ctag">Price Discovery</span></div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>4</em></div><div class="cstat-label">學術論文</div></div>
+    <div class="cstat"><div class="cstat-num"><em>45.41</em>%</div><div class="cstat-label">外資持股比例</div></div>
+    <div class="cstat"><div class="cstat-num">Momentum <em>V</em></div><div class="cstat-label">動量效應驗證</div></div>
+    <div class="cstat"><div class="cstat-num"><em>75+</em></div><div class="cstat-label">FinMind 資料集</div></div>
+  </div>
+  <div class="cover-bottom"><span>報告編號：R-2026-03-26-TW01</span><span>研究日期：2026-03-26</span><span>&copy; 2026 Genesis International Capital</span></div>
+</div>
+
+<!-- PAGE 2: 研究方法 -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">研究方法與資料來源聲明</h1>
+  <table>
+    <thead><tr><th>項目</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><td>報告編號</td><td>R-2026-03-26-TW01</td></tr>
+      <tr><td>研究日期</td><td>2026-03-26</td></tr>
+      <tr><td>研究人員</td><td>GiS Research + Claude Code Agent</td></tr>
+      <tr><td>資料收集</td><td>WebSearch（摘要級）</td></tr>
+      <tr><td>驗證方式</td><td>學術論文摘要交叉比對</td></tr>
+    </tbody>
+  </table>
+  <span class="src">本報告僅使用 WebSearch 摘要級資料收集，未取得論文全文。</span>
+
+  <h2 class="ch">台股資料來源總覽</h2>
+  <table>
+    <thead><tr><th>資料來源</th><th>類型</th><th>費用</th><th>涵蓋範圍</th><th>連結</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">FinMind</td><td>Open Source</td><td class="pos">免費</td><td>75+ 資料集（股價、法人買賣超、融資融券、月營收等）</td><td><a href="https://github.com/FinMind/FinMind">github.com/FinMind/FinMind</a></td></tr>
+      <tr><td>TEJ</td><td>商業資料庫</td><td class="neg">付費</td><td>台股全面歷史數據、財報、法人、公司治理</td><td>tej.com.tw</td></tr>
+      <tr><td>TWSE Open Data</td><td>政府開放資料</td><td class="pos">免費</td><td>每日交易資訊、三大法人買賣超、融資融券餘額</td><td>twse.com.tw</td></tr>
+    </tbody>
+  </table>
+  <span class="src">FinMind: github.com/FinMind/FinMind. TEJ: tej.com.tw. TWSE: twse.com.tw.</span>
+
+  <div class="warn-box"><strong>已知限制：</strong>① 本報告僅基於 WebSearch 摘要級資料，未取得論文全文 ② 台股歷史數據尚未實際取得與驗證 ③ 所有策略績效為作者自報數據</div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>研究方法</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- PAGE 3: 執行摘要 + 論文 + 台股因子 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">執行摘要</h1>
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">4 <em>篇</em></div><div class="kpi-lbl">學術論文</div></div>
+    <div class="kpi green"><div class="kpi-val">45.41<em>%</em></div><div class="kpi-lbl">外資持股 (2024)</div></div>
+    <div class="kpi green"><div class="kpi-val">Momentum</div><div class="kpi-lbl">台股動量驗證</div></div>
+    <div class="kpi"><div class="kpi-val">75+</div><div class="kpi-lbl">FinMind 資料集</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>Quantum RL Sector Rotation（arXiv:2506.20930）：</strong>PPO + LSTM/Transformer 架構，結合量子強化學習進行台股產業輪動。探索量子計算在金融時序決策的前沿應用。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>ML Momentum Taiwan（ScienceDirect）：</strong>機器學習驗證台股動量效應，發現動量因子在台灣市場橫截面（cross-section）與時間序列（time-series）均顯著有效。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>Institutional Price Discovery（Springer）：</strong>研究台股法人資訊優勢，發現機構投資人的資訊含量顯著高於散戶，法人買賣超具領先指標特性。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>Multi-stage Data Mining：</strong>多階段資料探勘方法應用於台股，結合多層篩選機制提升因子選取效率與策略穩健性。</span></div>
+  </div>
+
+  <h2 class="ch">台股特定因子</h2>
+  <table>
+    <thead><tr><th>因子名稱</th><th>說明</th><th>資料頻率</th><th>策略意涵</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">三大法人買賣超</td><td>外資、投信、自營商每日淨買賣</td><td>日頻</td><td>法人動向領先指標，資訊優勢顯著（Springer 論文驗證）</td></tr>
+      <tr><td class="hi">融資融券</td><td>融資餘額、融券餘額、券資比</td><td>日頻</td><td>散戶情緒指標，極端值具反轉訊號</td></tr>
+      <tr><td class="hi">月營收</td><td>上市櫃公司每月自結營收</td><td>月頻</td><td>台股獨有高頻基本面數據，營收年增率為核心選股因子</td></tr>
+      <tr><td>外資持股比例</td><td>外資持有個股比例（2024 年市場平均 45.41%）</td><td>日頻</td><td>外資偏好指標，高外資持股股票流動性與效率較高</td></tr>
+      <tr><td>董監持股</td><td>董事監察人持股比例與變動</td><td>月頻</td><td>內部人信心指標，大幅減持為警示訊號</td></tr>
+    </tbody>
+  </table>
+  <span class="src">因子資料來源：FinMind API、TWSE 公開資訊觀測站、TEJ。外資持股 45.41% 為 2024 年統計。</span>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>執行摘要</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- PAGE 4: 參考文獻 + 免責聲明 -->
+<div class="full-page page body-page">
+  <h1 class="ch">參考文獻與研究聲明</h1>
+  <table>
+    <thead><tr><th>#</th><th>文獻</th><th>來源</th><th>取得方式</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Quantum RL Sector Rotation for Taiwan Stock Market</td><td>arXiv:2506.20930</td><td>WebSearch（摘要）</td></tr>
+      <tr><td>2</td><td>Machine Learning and Momentum in Taiwan Stock Market</td><td>ScienceDirect</td><td>WebSearch（摘要）</td></tr>
+      <tr><td>3</td><td>Institutional Investors and Price Discovery in Taiwan</td><td>Springer</td><td>WebSearch（摘要）</td></tr>
+      <tr><td>4</td><td>Multi-stage Data Mining for Taiwan Stock Selection</td><td>學術期刊</td><td>WebSearch（摘要）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">所有文獻均透過 WebSearch 摘要級方式取得，未下載全文。</span>
+
+  <h2 class="ch">資料來源</h2>
+  <table>
+    <thead><tr><th>#</th><th>來源</th><th>費用</th><th>連結</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>FinMind — 開源台股資料平台（75+ 資料集）</td><td class="pos">免費</td><td><a href="https://github.com/FinMind/FinMind">github.com/FinMind/FinMind</a></td></tr>
+      <tr><td>2</td><td>TEJ — 台灣經濟新報商業資料庫</td><td class="neg">付費</td><td>tej.com.tw</td></tr>
+      <tr><td>3</td><td>TWSE Open Data — 台灣證券交易所公開資料</td><td class="pos">免費</td><td>twse.com.tw</td></tr>
+    </tbody>
+  </table>
+  <span class="src">FinMind 為開源專案，提供 Python API 存取台股歷史數據。</span>
+
+  <div class="warn-box">
+    <strong>研究聲明：</strong><br>
+    1. 所有論文資料均透過 WebSearch 摘要級方式取得，未取得全文。<br>
+    2. 論文性能數據為作者自報，本報告未獨立復現驗證。<br>
+    3. 台股歷史數據尚未實際取得，FinMind / TEJ / TWSE 資料品質與完整性待驗證。<br>
+    4. 外資持股比例 45.41% 為 2024 年公開統計數據。<br>
+    5. 過去績效不代表未來表現。本報告僅供研究參考，不構成投資建議。
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參考文獻</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- 實作結果頁 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">實作結果（台灣 50 成分股 2020-2024）</h1>
+  <p><strong>資料：</strong>FinMind（開源），15 檔台灣 50 成分股日頻 + 三大法人買賣超。<br><strong>日期：</strong>2026-03-26 實測。1,215 交易日。</p>
+  <table>
+    <thead><tr><th>Strategy</th><th>Sharpe</th><th>CAGR%</th><th>Cum%</th><th>MaxDD%</th><th>Win%</th></tr></thead>
+    <tbody>
+      <tr><td style="background:#fff8e1;font-weight:700">Foreign Investor Momentum</td><td style="color:#00875a;font-weight:600">3.516</td><td style="color:#00875a;font-weight:600">121.4</td><td style="color:#00875a;font-weight:600">4,432.9</td><td>-29.8</td><td style="color:#00875a;font-weight:600">60.7</td></tr>
+      <tr><td>Momentum Top-3 (20d)</td><td>0.918</td><td>21.0</td><td>146.8</td><td>-30.9</td><td>52.6</td></tr>
+      <tr><td>Equal Weight (15 stocks)</td><td>0.708</td><td>10.8</td><td>64.2</td><td>-29.0</td><td>54.0</td></tr>
+    </tbody>
+  </table>
+  <span class="src">實作日期：2026-03-26。資料：FinMind API (github.com/FinMind/FinMind)。標的：2330/2317/2454/2881/2882 等 15 檔。</span>
+  <p><strong>結論：</strong>外資動能策略 Sharpe 3.52 — 追蹤外資連續 5 日淨買超的股票在台股極為有效。驗證 Springer RQFA 論文「機構資訊含量 > 散戶」。<br>
+  <strong>注意：</strong>外資動能 Sharpe 3.52 可能受倖存者偏差影響（僅 15 檔大型股），需擴展到全市場驗證。不含交易成本。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>實作結果</span><span>&copy; 2026 GiS</span></div>
+</div>
+</body>
+</html>
