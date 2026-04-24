@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>台灣工業電腦產業深度報告 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 頁面容器（固定 A4 高度，避免空白頁） ── */
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+
+/* ── Canvas 強制填滿容器 ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 公司卡片 ── */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 首選股卡 ── */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:32px}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Industry Research Report &middot; Q2 2026</div>
+    <div class="cover-title">台灣工業電腦產業深度報告</div>
+    <div class="cover-subtitle">Edge AI 驅動結構升級・七大標的全面評析</div>
+    <div class="cover-tags">
+      <span class="ctag hl">研華</span>
+      <span class="ctag hl">樺漢</span>
+      <span class="ctag hl">艾訊</span>
+      <span class="ctag">飛捷</span>
+      <span class="ctag">融程電</span>
+      <span class="ctag">威強電</span>
+      <span class="ctag">凌華</span>
+      
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>7家</em></div><div class="cstat-label">涵蓋標的</div></div>
+    <div class="cstat"><div class="cstat-num"><em>NT$4,300億+</em></div><div class="cstat-label">總市值</div></div>
+    <div class="cstat"><div class="cstat-num"><em>25.9%</em></div><div class="cstat-label">Edge AI CAGR</div></div>
+    <div class="cstat"><div class="cstat-num"><em>>1.2</em></div><div class="cstat-label">平均BB Ratio</div></div>
+    
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年4月14日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">7</div><div class="kpi-lbl">涵蓋標的</div></div>
+    <div class="kpi"><div class="kpi-val">3檔買進</div><div class="kpi-lbl">買進評等</div></div>
+    <div class="kpi gold"><div class="kpi-val">+9.9%</div><div class="kpi-lbl">平均上檔空間</div></div>
+    <div class="kpi green"><div class="kpi-val">+14.1%</div><div class="kpi-lbl">產業營收成長</div></div>
+    
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>AI 邊緣推論需求加速。</strong>IPC 硬體規格升級與換機潮，帶動 ASP 提升</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>垂直場景滲透率擴大。</strong>智慧工廠、智慧零售等場景持續滲透，驅動穩定結構性成長</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>軟體訂閱轉型。</strong>SaaS/ESaaS 轉型提升經常性收入比重，改善獲利可見度</span></div>
+    
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">產業營收趨勢</div>
+      <div class="chart-sub">來源：公司財報、GiS 預估</div>
+      <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chart_exec_1" style="display:block;width:100%;height:260px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">EPS 趨勢比較</div>
+      <div class="chart-sub">來源：公司財報、GiS 預估</div>
+      <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chart_exec_2" style="display:block;width:100%;height:260px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>執行摘要</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">投資建議彙整</h1>
+
+  <table>
+    <thead><tr><th>公司</th><th>代號</th><th>評等</th><th>目標價</th><th>2026F EPS</th><th>主要看點</th></tr></thead>
+    <tbody>
+      <tr><td><strong>研華</strong></td><td>2395.TT</td><td class="pos">增加持股</td><td class="num hi">$372</td><td class="num pos">13.78</td><td>全球工業電腦龍頭・Edge AI 平台商</td></tr>
+      <tr><td><strong>樺漢</strong></td><td>6414.TT</td><td class="pos hi">買進</td><td class="num hi">$357</td><td class="num pos">25.47</td><td>IIoT + ESaaS 平台・NCR Voyix 獨家代工</td></tr>
+      <tr><td><strong>艾訊</strong></td><td>3088.TT</td><td class="pos hi">買進</td><td class="num hi">$108</td><td class="num pos">8.27</td><td>研華子公司・邊緣AI自動化受惠者</td></tr>
+      <tr><td><strong>飛捷</strong></td><td>6206.TT</td><td class="">減碼</td><td class="num hi">$87</td><td class="num pos">6.67</td><td>全球第三大POS廠商・Berry AI 子公司</td></tr>
+      <tr><td><strong>融程電</strong></td><td>3416.TT</td><td class="">減碼</td><td class="num hi">$141</td><td class="num pos">9.42</td><td>國防+邊緣AI強固型電腦專家</td></tr>
+      <tr><td><strong>威強電</strong></td><td>3022.TT</td><td class="">中立</td><td class="num hi">$60</td><td class="num pos">4.64</td><td>IPC多元應用・網通大案啟動</td></tr>
+      <tr><td><strong>凌華</strong></td><td>6166.TT</td><td class="pos hi">買進</td><td class="num hi">$79</td><td class="num pos">4.14</td><td>邊緣AI運算・NVIDIA Jetson 平台</td></tr>
+      
+    </tbody>
+  </table>
+
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #1 &middot; </div>
+      <div class="pick-name">樺漢</div>
+      <div class="pick-ticker">6414.TT</div>
+      <div class="pick-why">目標價 357 元，上檔空間 +35.2%，評等 買進</div>
+      <div class="pick-catalyst">催化劑：NCR Voyix獨家代工啟動</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #2 &middot; </div>
+      <div class="pick-name">凌華</div>
+      <div class="pick-ticker">6166.TT</div>
+      <div class="pick-why">目標價 79 元，上檔空間 +27.4%，評等 買進</div>
+      <div class="pick-catalyst">催化劑：NVIDIA Jetson機器人平台</div>
+    </div>
+
+  </div>
+
+  <blockquote>本期涵蓋 7 檔 IPC 標的，其中 3 檔「買進」、1 檔「增加持股」。整體平均上檔空間 +9.9%。首選標的為 樺漢、凌華。</blockquote>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:16px">本報告涵蓋公司：研華、樺漢、艾訊、飛捷、融程電、威強電、凌華。資料截止日期：2026年4月14日。僅供研究參考，不構成投資建議。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資建議</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業總覽</div>
+  <div class="sec-desc">Edge AI 工業電腦產業全景分析，涵蓋技術演進、市場規模與競爭格局。</div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、產業總覽</h1>
+  <p>台灣工業電腦（IPC）產業</p>
+
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2020-2023</div><div class="tl-spec">IoT基礎建設期</div><div class="tl-tech">工業物聯網普及，IPC從單機走向聯網，雲端數據收集成為標配</div></div>
+    <div class="tl-item active"><div class="tl-year">2024-2025</div><div class="tl-spec">Edge AI 萌芽期（←現在）</div><div class="tl-tech">邊緣AI推理需求浮現，研華/凌華推出AI加速平台，ASP開始提升</div></div>
+    <div class="tl-item next"><div class="tl-year">2026-2027</div><div class="tl-spec">Edge AI 爆發期</div><div class="tl-tech">AI模型輕量化成熟，工廠/零售/醫療大規模部署邊緣AI，營收占比顯著提升</div></div>
+    <div class="tl-item"><div class="tl-year">2028+</div><div class="tl-spec">AI Agent / Physical AI</div><div class="tl-tech">自主機器人、數位分身、物理AI成為下一波成長引擎</div></div>
+    
+  </div>
+
+  <h2 class="ch">關鍵主題</h2>
+  <table>
+    <thead><tr><th>主題</th><th>說明</th><th>影響</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Edge AI 爆發</strong></td><td>研華Edge AI營收佔比17%→25%，艾訊受惠北美工廠自動化，凌華Jetson平台切入機器人</td><td>高</td></tr>
+      <tr><td><strong>DRAM/SSD 漲價衝擊</strong></td><td>全產業共同面對記憶體漲價，多數公司具成本轉嫁機制但短期毛利率承壓</td><td>中高</td></tr>
+      <tr><td><strong>NCR Voyix 大單</strong></td><td>樺漢獨家代工5年NT$600億大單，2Q26開始認列營收，為產業最大個別催化劑</td><td>高</td></tr>
+      <tr><td><strong>美國再工業化</strong></td><td>半導體廠建設帶動帆宣工程收入（TSMC US P2-P3），IPC設備需求隨之增加</td><td>中高</td></tr>
+      <tr><td><strong>歐洲國防擴張</strong></td><td>EU 8,000億歐元重整軍備計畫，融程電強固型電腦直接受惠</td><td>高</td></tr>
+      <tr><td><strong>ESaaS 轉型</strong></td><td>樺漢從硬體製造轉向軟體即服務，毛利率30-70%，改變IPC產業獲利結構</td><td>中</td></tr>
+      
+    </tbody>
+  </table>
+
+  <h2 class="ch">市場數據</h2>
+  <table>
+    <thead><tr><th>項目</th><th>數值</th><th>資料來源</th></tr></thead>
+    <tbody>
+      <tr><td><strong>全球IPC市場規模(2025)</strong></td><td class="num">USD 72B</td><td>MarketsandMarkets</td></tr>
+      <tr><td><strong>Edge AI CAGR(2024-2030)</strong></td><td class="num">25.9%</td><td>Grand View Research</td></tr>
+      <tr><td><strong>台灣IPC廠商全球市佔</strong></td><td class="num">~35%</td><td>DIGITIMES</td></tr>
+      <tr><td><strong>IPC平均毛利率區間</strong></td><td class="num">33-44%</td><td>公司財報彙整</td></tr>
+      
+    </tbody>
+  </table>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 產業總覽</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h2 class="ch">競爭格局</h2>
+  <table>
+    <thead><tr><th>公司</th><th>定位</th><th>市值</th><th>Edge AI</th></tr></thead>
+    <tbody>
+      <tr><td><strong>研華</strong></td><td>全球IPC龍頭</td><td class="num">NT$2,600億</td><td>領先</td></tr>
+      <tr><td><strong>樺漢</strong></td><td>IIoT平台+併購整合</td><td class="num">NT$600億</td><td>中等</td></tr>
+      <tr><td><strong>艾訊</strong></td><td>研華子公司・邊緣自動化</td><td class="num">NT$90億</td><td>受惠</td></tr>
+      <tr><td><strong>飛捷</strong></td><td>POS專業廠</td><td class="num">NT$110億</td><td>初期</td></tr>
+      <tr><td><strong>融程電</strong></td><td>國防強固型電腦</td><td class="num">NT$95億</td><td>利基</td></tr>
+      <tr><td><strong>威強電</strong></td><td>多元應用IPC</td><td class="num">NT$120億</td><td>中等</td></tr>
+      <tr><td><strong>凌華</strong></td><td>邊緣AI運算</td><td class="num">NT$120億</td><td>領先</td></tr>
+      
+    </tbody>
+  </table>
+  <span class="src">資料來源：IDC、Gartner、各公司年報、GiS 整理</span>
+
+  <div class="chart-wrap">
+    <div class="chart-title">IPC 產業市場規模成長趨勢</div>
+    <div class="chart-sub">來源：IDC、GiS 預估</div>
+    <div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chart_industry_1" style="display:block;width:100%;height:220px"></canvas></div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 產業總覽</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">個股分析</div>
+  <div class="sec-desc">七家 IPC 核心企業之 GiS 損益預估模型、估值分析與催化劑評估。</div>
+</div>
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">研華</div><div class="co-ticker">2395.TT · 全球工業電腦龍頭・Edge AI 平台商</div></div>
+      <div class="co-badge">
+        <span class="badge ow">◉ 增加持股</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$372 | 現價 NT$345</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+7.8%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">27.0x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">13.78元</div><div class="co-metric-label">Target EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">39.5%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>N+1F EPS</th><th>N+2F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>元大</td><td class="pos">Buy</td><td class="num">NT$390</td><td>Forward PE</td><td class="num">12.26</td><td class="num">13.45</td></tr>
+          <tr><td>凱基</td><td class="">Outperform</td><td class="num">NT$365</td><td>Forward PE</td><td class="num">12.26</td><td class="num">14.03</td></tr>
+          <tr><td>Morgan Stanley</td><td class="pos">Overweight</td><td class="num">NT$400</td><td>Forward PE</td><td class="num">12.26</td><td class="num">14.77</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800;color:#0d1b3e">GiS</td><td style="font-weight:800">增加持股</td><td class="num hi" style="font-weight:800">NT$372</td><td style="font-weight:700">PE-based (GiS Forward PE × EPS)</td><td class="num" style="font-weight:800">13.78</td><td class="num" style="font-weight:800">—</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">研華 營收趨勢</h3>
+      <div class="chart-wrap" style="padding:14px">
+        <div class="chart-container" style="height:180px;width:100%;position:relative"><canvas id="chart_2395_TT_rev" style="display:block;width:100%;height:180px"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>研華 · 2395.TT · 券商比較</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">GiS 季度損益預估模型</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-10px 0 10px">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）。單位：百萬元（EPS 除外）</p>
+
+  <table style="font-size:11.5px">
+    <thead>
+      <tr>
+        <th>損益項目</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">16,800</td><td class="num">17,500</td><td class="num">17,800</td><td class="num">18,800</td><td class="num hi">20,400</td><td class="num pos">+8.5%</td><td class="num pos">+21.4%</td><td class="num hi">20,200</td><td class="num" style="font-weight:700">70,900</td><td class="num hi" style="font-weight:800">80,000</td></tr>
+      <tr><td>營業成本</td><td class="num">10,214</td><td class="num">10,588</td><td class="num">10,680</td><td class="num">11,186</td><td class="num hi">12,281</td><td class="num pos">+9.8%</td><td class="num pos">+20.2%</td><td class="num hi">12,221</td><td class="num" style="font-weight:700">42,682</td><td class="num hi" style="font-weight:800">48,400</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num">6,586</td><td class="num">6,912</td><td class="num">7,120</td><td class="num">7,614</td><td class="num hi">8,119</td><td class="num pos">+6.6%</td><td class="num pos">+23.3%</td><td class="num hi">7,979</td><td class="num" style="font-weight:700">28,218</td><td class="num hi" style="font-weight:800">31,600</td></tr>
+      <tr><td>營業費用</td><td class="num">3,696</td><td class="num">3,815</td><td class="num">3,827</td><td class="num">4,004</td><td class="num hi">4,386</td><td class="num pos">+9.5%</td><td class="num pos">+18.7%</td><td class="num hi">4,303</td><td class="num" style="font-weight:700">15,314</td><td class="num hi" style="font-weight:800">16,960</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">2,890</td><td class="num">3,098</td><td class="num">3,293</td><td class="num">3,610</td><td class="num hi">3,733</td><td class="num pos">+3.4%</td><td class="num pos">+29.2%</td><td class="num hi">3,676</td><td class="num" style="font-weight:700">12,904</td><td class="num hi" style="font-weight:800">14,640</td></tr>
+      <tr><td>業外收支</td><td class="num">180</td><td class="num">200</td><td class="num">210</td><td class="num">220</td><td class="num hi">250</td><td class="num pos">+13.6%</td><td class="num pos">+38.9%</td><td class="num hi">240</td><td class="num" style="font-weight:700">810</td><td class="num hi" style="font-weight:800">960</td></tr>
+      <tr><td><strong>稅前淨利</strong></td><td class="num">3,070</td><td class="num">3,298</td><td class="num">3,503</td><td class="num">3,830</td><td class="num hi">3,983</td><td class="num pos">+4.0%</td><td class="num pos">+29.8%</td><td class="num hi">3,916</td><td class="num" style="font-weight:700">13,714</td><td class="num hi" style="font-weight:800">15,600</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">2,517</td><td class="num">2,704</td><td class="num">2,872</td><td class="num">3,140</td><td class="num hi">3,266</td><td class="num pos">+4.0%</td><td class="num pos">+29.8%</td><td class="num hi">3,211</td><td class="num" style="font-weight:700">11,245</td><td class="num hi" style="font-weight:800">12,792</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">3.23</td><td class="num" style="font-weight:700">3.47</td><td class="num" style="font-weight:700">3.68</td><td class="num" style="font-weight:700">4.03</td><td class="num hi" style="font-weight:800">4.19</td><td class="num pos">+4.0%</td><td class="num pos">+29.7%</td><td class="num hi" style="font-weight:800">4.12</td><td class="num" style="font-weight:700">14.42</td><td class="num hi" style="font-weight:800">16.40</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>獲利能力(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num">39.2</td><td class="num">39.5</td><td class="num">40.0</td><td class="num">40.5</td><td class="num hi">39.8</td><td class="num neg">-0.7pp</td><td class="num pos">+0.6pp</td><td class="num hi">39.5</td><td class="num">39.8</td><td class="num hi">39.5</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">17.2</td><td class="num">17.7</td><td class="num">18.5</td><td class="num">19.2</td><td class="num hi">18.3</td><td class="num neg">-0.9pp</td><td class="num pos">+1.1pp</td><td class="num hi">18.2</td><td class="num">18.2</td><td class="num hi">18.3</td></tr>
+      <tr><td><strong>稅後淨利率</strong></td><td class="num">15.0</td><td class="num">15.5</td><td class="num">16.1</td><td class="num">16.7</td><td class="num hi">16.0</td><td class="num neg">-0.7pp</td><td class="num pos">+1.0pp</td><td class="num hi">15.9</td><td class="num">15.9</td><td class="num hi">16.0</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>成長率(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46" colspan="2">QoQ / YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>營收 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+21.4%</td><td class="num" colspan="2"></td><td class="num pos">+15.4%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>營業利益 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+29.2%</td><td class="num" colspan="2"></td><td class="num pos">+18.7%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>稅後淨利 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+29.8%</td><td class="num" colspan="2"></td><td class="num pos">+18.8%</td><td class="num">—</td><td class="num">—</td></tr>
+      
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:10px">
+    <strong>GiS 模型假設：</strong>GiS 給予 27.0x PE（leader 類型，合理區間 24-30x）；券商共識中位數 29.0x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+  <span class="src">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）</span>
+
+    <blockquote style="margin-top:8px">
+    <strong>GiS 估值情境分析：</strong>基於 PE-based (GiS Forward PE × EPS)，EPS 基準年：2026E
+  </blockquote>
+  <table style="font-size:12px">
+    <thead><tr><th>情境</th><th>PE</th><th>EPS</th><th>目標價</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>conservative</strong></td><td class="num">21.6x</td><td class="num">12.13</td><td class="num hi">262</td><td>營收成長低於預期、毛利率承壓，PE 給予折價</td></tr>
+        <tr><td><strong>base</strong></td><td class="num">27.0x</td><td class="num">13.78</td><td class="num hi">372</td><td>基本情境：營收與獲利符合市場預期</td></tr>
+        <tr><td><strong>optimistic</strong></td><td class="num">32.4x</td><td class="num">15.43</td><td class="num hi">500</td><td>AI/邊緣運算催化劑兌現、獲利超預期，PE 享有溢價</td></tr>
+        
+    </tbody>
+  </table>
+
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>GiS 季度損益預估模型</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">催化劑與風險評估</h1>
+
+  <h2 class="ch">關鍵催化劑</h2>
+  <table>
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響程度</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Edge AI 營收爆發</strong></td><td>2026H1</td><td class="pos">高</td><td>Edge AI佔營收比從2025年20%提升至2026年30%+，毛利率42-43%遠高於整體均值</td></tr>
+      <tr><td><strong>BB Ratio 創歷史新高</strong></td><td>1Q26</td><td class="pos">高</td><td>1Q26 BB ratio達1.88，訂單能見度延伸至2026H2，為近5年新高</td></tr>
+      <tr><td><strong>全球製造業PMI擴張</strong></td><td>2026</td><td class="pos">中高</td><td>全球PMI重返擴張區間，帶動工廠自動化與IPC設備資本支出</td></tr>
+      <tr><td><strong>新品平台上市</strong></td><td>2Q26</td><td class="">中</td><td>WISE-Agent邊緣AI平台正式商轉，打開AIoT新應用場景</td></tr>
+      
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>Edge AI 營收爆發</strong> &rarr; Edge AI佔營收比從2025年20%提升至2026年30%+，毛利率42-43%遠高於整體均值</div>
+      <div class="risk-item"><strong>BB Ratio 創歷史新高</strong> &rarr; 1Q26 BB ratio達1.88，訂單能見度延伸至2026H2，為近5年新高</div>
+      <div class="risk-item"><strong>全球製造業PMI擴張</strong> &rarr; 全球PMI重返擴張區間，帶動工廠自動化與IPC設備資本支出</div>
+      <div class="risk-item"><strong>新品平台上市</strong> &rarr; WISE-Agent邊緣AI平台正式商轉，打開AIoT新應用場景</div>
+      
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>DRAM/SSD漲價</strong> &rarr; DDR5記憶體及SSD持續漲價，壓縮毛利率約50-80bps</div>
+      <div class="risk-item"><strong>匯率波動</strong> &rarr; 美元走弱不利以美元計價之海外營收，約60%營收為外幣</div>
+      <div class="risk-item"><strong>景氣反轉風險</strong> &rarr; 若全球經濟衰退，企業資本支出將首先被砍，影響IPC需求</div>
+      
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 風險評估：</strong>GiS 給予 27.0x PE（leader 類型，合理區間 24-30x）；券商共識中位數 29.0x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>催化劑與風險評估</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">樺漢</div><div class="co-ticker">6414.TT · IIoT + ESaaS 平台・NCR Voyix 獨家代工</div></div>
+      <div class="co-badge">
+        <span class="badge buy">◉ 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$357 | 現價 NT$264</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+35.2%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">14.0x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">25.47元</div><div class="co-metric-label">Target EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">20.8%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>N+1F EPS</th><th>N+2F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>元大</td><td class="pos">Buy</td><td class="num">NT$345</td><td>Forward PE</td><td class="num">23.26</td><td class="num">26.57</td></tr>
+          <tr><td>永豐</td><td class="pos">Buy</td><td class="num">NT$330</td><td>Forward PE</td><td class="num">20.50</td><td class="num">22.05</td></tr>
+          <tr><td>統一</td><td class="pos">Buy</td><td class="num">NT$370</td><td>Forward PE</td><td class="num">23.26</td><td class="num">25.03</td></tr>
+          <tr><td>宏遠</td><td class="pos">Buy</td><td class="num">NT$327</td><td>Forward PE</td><td class="num">22.00</td><td class="num">23.31</td></tr>
+          <tr><td>華南</td><td class="pos">Buy</td><td class="num">NT$298</td><td>Forward PE</td><td class="num">24.50</td><td class="num">26.90</td></tr>
+          <tr><td>富邦</td><td class="pos">Buy</td><td class="num">NT$340</td><td>Forward PE</td><td class="num">21.80</td><td class="num">23.10</td></tr>
+          <tr><td>群益</td><td class="">Trading Buy</td><td class="num">NT$310</td><td>Forward PE</td><td class="num">20.00</td><td class="num">22.32</td></tr>
+          <tr><td>福邦</td><td class="pos">Buy</td><td class="num">NT$340</td><td>Forward PE</td><td class="num">23.00</td><td class="num">25.16</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800;color:#0d1b3e">GiS</td><td style="font-weight:800">買進</td><td class="num hi" style="font-weight:800">NT$357</td><td style="font-weight:700">PE-based (GiS Forward PE × EPS)</td><td class="num" style="font-weight:800">25.47</td><td class="num" style="font-weight:800">—</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">樺漢 營收趨勢</h3>
+      <div class="chart-wrap" style="padding:14px">
+        <div class="chart-container" style="height:180px;width:100%;position:relative"><canvas id="chart_6414_TT_rev" style="display:block;width:100%;height:180px"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>樺漢 · 6414.TT · 券商比較</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">GiS 季度損益預估模型</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-10px 0 10px">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）。單位：百萬元（EPS 除外）</p>
+
+  <table style="font-size:11.5px">
+    <thead>
+      <tr>
+        <th>損益項目</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">32,500</td><td class="num">34,800</td><td class="num">36,500</td><td class="num">38,500</td><td class="num hi">37,000</td><td class="num neg">-3.9%</td><td class="num pos">+13.8%</td><td class="num hi">40,000</td><td class="num" style="font-weight:700">142,300</td><td class="num hi" style="font-weight:800">160,000</td></tr>
+      <tr><td>營業成本</td><td class="num">25,935</td><td class="num">27,736</td><td class="num">29,018</td><td class="num">30,415</td><td class="num hi">29,415</td><td class="num neg">-3.3%</td><td class="num pos">+13.4%</td><td class="num hi">31,600</td><td class="num" style="font-weight:700">113,128</td><td class="num hi" style="font-weight:800">126,720</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num">6,565</td><td class="num">7,064</td><td class="num">7,482</td><td class="num">8,085</td><td class="num hi">7,585</td><td class="num neg">-6.2%</td><td class="num pos">+15.5%</td><td class="num hi">8,400</td><td class="num" style="font-weight:700">29,172</td><td class="num hi" style="font-weight:800">33,280</td></tr>
+      <tr><td>營業費用</td><td class="num">5,362</td><td class="num">5,707</td><td class="num">5,950</td><td class="num">6,237</td><td class="num hi">5,994</td><td class="num neg">-3.9%</td><td class="num pos">+11.8%</td><td class="num hi">6,400</td><td class="num" style="font-weight:700">23,195</td><td class="num hi" style="font-weight:800">25,760</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">1,202</td><td class="num">1,357</td><td class="num">1,533</td><td class="num">1,848</td><td class="num hi">1,591</td><td class="num neg">-13.9%</td><td class="num pos">+32.3%</td><td class="num hi">2,000</td><td class="num" style="font-weight:700">5,977</td><td class="num hi" style="font-weight:800">7,520</td></tr>
+      <tr><td>業外收支</td><td class="num">150</td><td class="num">180</td><td class="num">200</td><td class="num">220</td><td class="num hi">200</td><td class="num neg">-9.1%</td><td class="num pos">+33.3%</td><td class="num hi">250</td><td class="num" style="font-weight:700">750</td><td class="num hi" style="font-weight:800">900</td></tr>
+      <tr><td><strong>稅前淨利</strong></td><td class="num">1,352</td><td class="num">1,537</td><td class="num">1,733</td><td class="num">2,068</td><td class="num hi">1,791</td><td class="num neg">-13.4%</td><td class="num pos">+32.4%</td><td class="num hi">2,250</td><td class="num" style="font-weight:700">6,727</td><td class="num hi" style="font-weight:800">8,420</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">717</td><td class="num">815</td><td class="num">918</td><td class="num">1,096</td><td class="num hi">949</td><td class="num neg">-13.4%</td><td class="num pos">+32.4%</td><td class="num hi">1,192</td><td class="num" style="font-weight:700">3,565</td><td class="num hi" style="font-weight:800">4,463</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">4.91</td><td class="num" style="font-weight:700">5.58</td><td class="num" style="font-weight:700">6.29</td><td class="num" style="font-weight:700">7.51</td><td class="num hi" style="font-weight:800">6.50</td><td class="num neg">-13.4%</td><td class="num pos">+32.4%</td><td class="num hi" style="font-weight:800">8.17</td><td class="num" style="font-weight:700">24.42</td><td class="num hi" style="font-weight:800">30.57</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>獲利能力(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num">20.2</td><td class="num">20.3</td><td class="num">20.5</td><td class="num">21.0</td><td class="num hi">20.5</td><td class="num neg">-0.5pp</td><td class="num pos">+0.3pp</td><td class="num hi">21.0</td><td class="num">20.5</td><td class="num hi">20.8</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">3.7</td><td class="num">3.9</td><td class="num">4.2</td><td class="num">4.8</td><td class="num hi">4.3</td><td class="num neg">-0.5pp</td><td class="num pos">+0.6pp</td><td class="num hi">5.0</td><td class="num">4.2</td><td class="num hi">4.7</td></tr>
+      <tr><td><strong>稅後淨利率</strong></td><td class="num">2.2</td><td class="num">2.3</td><td class="num">2.5</td><td class="num">2.8</td><td class="num hi">2.6</td><td class="num neg">-0.2pp</td><td class="num pos">+0.4pp</td><td class="num hi">3.0</td><td class="num">2.5</td><td class="num hi">2.8</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>成長率(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46" colspan="2">QoQ / YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>營收 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+13.8%</td><td class="num" colspan="2"></td><td class="num pos">+14.9%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>營業利益 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+32.3%</td><td class="num" colspan="2"></td><td class="num pos">+47.4%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>稅後淨利 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+32.4%</td><td class="num" colspan="2"></td><td class="num pos">+46.4%</td><td class="num">—</td><td class="num">—</td></tr>
+      
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:10px">
+    <strong>GiS 模型假設：</strong>GiS 給予 14.0x PE（growth 類型，合理區間 12-16x）；券商共識中位數 13.8x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+  <span class="src">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）</span>
+
+    <blockquote style="margin-top:8px">
+    <strong>GiS 估值情境分析：</strong>基於 PE-based (GiS Forward PE × EPS)，EPS 基準年：2026E
+  </blockquote>
+  <table style="font-size:12px">
+    <thead><tr><th>情境</th><th>PE</th><th>EPS</th><th>目標價</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>conservative</strong></td><td class="num">11.2x</td><td class="num">22.41</td><td class="num hi">251</td><td>營收成長低於預期、毛利率承壓，PE 給予折價</td></tr>
+        <tr><td><strong>base</strong></td><td class="num">14.0x</td><td class="num">25.47</td><td class="num hi">357</td><td>基本情境：營收與獲利符合市場預期</td></tr>
+        <tr><td><strong>optimistic</strong></td><td class="num">16.8x</td><td class="num">28.53</td><td class="num hi">479</td><td>AI/邊緣運算催化劑兌現、獲利超預期，PE 享有溢價</td></tr>
+        
+    </tbody>
+  </table>
+
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>GiS 季度損益預估模型</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">催化劑與風險評估</h1>
+
+  <h2 class="ch">關鍵催化劑</h2>
+  <table>
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響程度</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>NCR Voyix獨家代工啟動</strong></td><td>2Q26</td><td class="pos">高</td><td>5年NT$600億大單，2Q26開始認列營收，為營收增長最大引擎</td></tr>
+      <tr><td><strong>ESaaS高毛利轉型</strong></td><td>2026-2027</td><td class="pos">高</td><td>軟體即服務毛利率30-70%，逐步提升整體獲利結構</td></tr>
+      <tr><td><strong>帆宣TSMC工程收入</strong></td><td>2026</td><td class="pos">中高</td><td>TSMC美國P2-P3廠建設帶動帆宣工程營收，樺漢間接受惠</td></tr>
+      <tr><td><strong>Kontron整合綜效</strong></td><td>2026H2</td><td class="">中</td><td>歐洲Kontron併購整合完成後，規模經濟降低營運費用率</td></tr>
+      
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>NCR Voyix獨家代工啟動</strong> &rarr; 5年NT$600億大單，2Q26開始認列營收，為營收增長最大引擎</div>
+      <div class="risk-item"><strong>ESaaS高毛利轉型</strong> &rarr; 軟體即服務毛利率30-70%，逐步提升整體獲利結構</div>
+      <div class="risk-item"><strong>帆宣TSMC工程收入</strong> &rarr; TSMC美國P2-P3廠建設帶動帆宣工程營收，樺漢間接受惠</div>
+      <div class="risk-item"><strong>Kontron整合綜效</strong> &rarr; 歐洲Kontron併購整合完成後，規模經濟降低營運費用率</div>
+      
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>NCR訂單延遲風險</strong> &rarr; NCR Voyix量產時程若延後，將影響2026營收預期</div>
+      <div class="risk-item"><strong>Kontron整合風險</strong> &rarr; 跨國整合複雜度高，文化差異可能導致綜效不如預期</div>
+      <div class="risk-item"><strong>CB5轉換稀釋</strong> &rarr; 第五次可轉債若轉換，將稀釋每股盈餘約5-8%</div>
+      
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 風險評估：</strong>GiS 給予 14.0x PE（growth 類型，合理區間 12-16x）；券商共識中位數 13.8x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>催化劑與風險評估</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div><div class="co-name">艾訊</div><div class="co-ticker">3088.TT · 研華子公司・邊緣AI自動化受惠者</div></div>
+      <div class="co-badge">
+        <span class="badge buy">◉ 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$108 | 現價 NT$89</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+21.3%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">13.0x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">8.27元</div><div class="co-metric-label">Target EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">35.3%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>N+1F EPS</th><th>N+2F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>統一(初版)</td><td class="">Neutral</td><td class="num">NT$80</td><td>Forward PE</td><td class="num">4.56</td><td class="num">6.72</td></tr>
+          <tr><td>統一(更新)</td><td class="pos">Buy</td><td class="num">NT$110</td><td>Forward PE</td><td class="num">6.72</td><td class="num">8.79</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800;color:#0d1b3e">GiS</td><td style="font-weight:800">買進</td><td class="num hi" style="font-weight:800">NT$108</td><td style="font-weight:700">PE-based (GiS Forward PE × EPS)</td><td class="num" style="font-weight:800">8.27</td><td class="num" style="font-weight:800">—</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">艾訊 營收趨勢</h3>
+      <div class="chart-wrap" style="padding:14px">
+        <div class="chart-container" style="height:180px;width:100%;position:relative"><canvas id="chart_3088_TT_rev" style="display:block;width:100%;height:180px"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>艾訊 · 3088.TT · 券商比較</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">GiS 季度損益預估模型</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-10px 0 10px">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）。單位：百萬元（EPS 除外）</p>
+
+  <table style="font-size:11.5px">
+    <thead>
+      <tr>
+        <th>損益項目</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">1,550</td><td class="num">1,700</td><td class="num">1,780</td><td class="num">1,870</td><td class="num hi">1,950</td><td class="num pos">+4.3%</td><td class="num pos">+25.8%</td><td class="num hi">2,100</td><td class="num" style="font-weight:700">6,900</td><td class="num hi" style="font-weight:800">8,300</td></tr>
+      <tr><td>營業成本</td><td class="num">1,038</td><td class="num">1,130</td><td class="num">1,166</td><td class="num">1,216</td><td class="num hi">1,264</td><td class="num pos">+4.0%</td><td class="num pos">+21.7%</td><td class="num hi">1,354</td><td class="num" style="font-weight:700">4,554</td><td class="num hi" style="font-weight:800">5,370</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num">512</td><td class="num">570</td><td class="num">614</td><td class="num">654</td><td class="num hi">686</td><td class="num pos">+4.9%</td><td class="num pos">+34.2%</td><td class="num hi">746</td><td class="num" style="font-weight:700">2,346</td><td class="num hi" style="font-weight:800">2,930</td></tr>
+      <tr><td>營業費用</td><td class="num">341</td><td class="num">366</td><td class="num">374</td><td class="num">389</td><td class="num hi">410</td><td class="num pos">+5.3%</td><td class="num pos">+20.1%</td><td class="num hi">430</td><td class="num" style="font-weight:700">1,470</td><td class="num hi" style="font-weight:800">1,726</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">170</td><td class="num">204</td><td class="num">240</td><td class="num">266</td><td class="num hi">277</td><td class="num pos">+4.3%</td><td class="num pos">+62.4%</td><td class="num hi">315</td><td class="num" style="font-weight:700">876</td><td class="num hi" style="font-weight:800">1,204</td></tr>
+      <tr><td>業外收支</td><td class="num">30</td><td class="num">35</td><td class="num">40</td><td class="num">45</td><td class="num hi">45</td><td class="num ">0.0%</td><td class="num pos">+50.0%</td><td class="num hi">50</td><td class="num" style="font-weight:700">150</td><td class="num hi" style="font-weight:800">190</td></tr>
+      <tr><td><strong>稅前淨利</strong></td><td class="num">200</td><td class="num">239</td><td class="num">280</td><td class="num">310</td><td class="num hi">322</td><td class="num pos">+3.7%</td><td class="num pos">+60.5%</td><td class="num hi">365</td><td class="num" style="font-weight:700">1,026</td><td class="num hi" style="font-weight:800">1,394</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">164</td><td class="num">196</td><td class="num">230</td><td class="num">255</td><td class="num hi">264</td><td class="num pos">+3.7%</td><td class="num pos">+60.6%</td><td class="num hi">299</td><td class="num" style="font-weight:700">842</td><td class="num hi" style="font-weight:800">1,143</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">1.79</td><td class="num" style="font-weight:700">2.13</td><td class="num" style="font-weight:700">2.50</td><td class="num" style="font-weight:700">2.77</td><td class="num hi" style="font-weight:800">2.87</td><td class="num pos">+3.6%</td><td class="num pos">+60.3%</td><td class="num hi" style="font-weight:800">3.25</td><td class="num" style="font-weight:700">9.15</td><td class="num hi" style="font-weight:800">12.42</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>獲利能力(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num">33.0</td><td class="num">33.5</td><td class="num">34.5</td><td class="num">35.0</td><td class="num hi">35.2</td><td class="num pos">+0.2pp</td><td class="num pos">+2.2pp</td><td class="num hi">35.5</td><td class="num">34.0</td><td class="num hi">35.3</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">11.0</td><td class="num">12.0</td><td class="num">13.5</td><td class="num">14.2</td><td class="num hi">14.2</td><td class="num ">0.0pp</td><td class="num pos">+3.2pp</td><td class="num hi">15.0</td><td class="num">12.7</td><td class="num hi">14.5</td></tr>
+      <tr><td><strong>稅後淨利率</strong></td><td class="num">10.6</td><td class="num">11.5</td><td class="num">12.9</td><td class="num">13.6</td><td class="num hi">13.5</td><td class="num neg">-0.1pp</td><td class="num pos">+2.9pp</td><td class="num hi">14.3</td><td class="num">12.2</td><td class="num hi">13.8</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>成長率(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46" colspan="2">QoQ / YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>營收 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+25.8%</td><td class="num" colspan="2"></td><td class="num pos">+23.5%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>營業利益 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+62.4%</td><td class="num" colspan="2"></td><td class="num pos">+54.4%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>稅後淨利 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+60.6%</td><td class="num" colspan="2"></td><td class="num pos">+52.7%</td><td class="num">—</td><td class="num">—</td></tr>
+      
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:10px">
+    <strong>GiS 模型假設：</strong>GiS 給予 13.0x PE（growth 類型，合理區間 11-15x）；券商共識中位數 12.5x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+  <span class="src">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）</span>
+
+    <blockquote style="margin-top:8px">
+    <strong>GiS 估值情境分析：</strong>基於 PE-based (GiS Forward PE × EPS)，EPS 基準年：2026E
+  </blockquote>
+  <table style="font-size:12px">
+    <thead><tr><th>情境</th><th>PE</th><th>EPS</th><th>目標價</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>conservative</strong></td><td class="num">10.4x</td><td class="num">7.28</td><td class="num hi">76</td><td>營收成長低於預期、毛利率承壓，PE 給予折價</td></tr>
+        <tr><td><strong>base</strong></td><td class="num">13.0x</td><td class="num">8.27</td><td class="num hi">108</td><td>基本情境：營收與獲利符合市場預期</td></tr>
+        <tr><td><strong>optimistic</strong></td><td class="num">15.6x</td><td class="num">9.26</td><td class="num hi">144</td><td>AI/邊緣運算催化劑兌現、獲利超預期，PE 享有溢價</td></tr>
+        
+    </tbody>
+  </table>
+
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>GiS 季度損益預估模型</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">催化劑與風險評估</h1>
+
+  <h2 class="ch">關鍵催化劑</h2>
+  <table>
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響程度</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>北美工廠自動化需求</strong></td><td>2026</td><td class="pos">高</td><td>美國再工業化政策帶動工廠自動化投資，艾訊北美營收佔比提升</td></tr>
+      <tr><td><strong>Edge AI ASP提升</strong></td><td>2026H1</td><td class="pos">中高</td><td>搭載AI加速器的IPC產品單價提升20-30%，帶動毛利率改善</td></tr>
+      <tr><td><strong>訂單能見度改善</strong></td><td>2026Q1</td><td class="">中</td><td>客戶端庫存消化完畢，新訂單回補力道強勁</td></tr>
+      
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>北美工廠自動化需求</strong> &rarr; 美國再工業化政策帶動工廠自動化投資，艾訊北美營收佔比提升</div>
+      <div class="risk-item"><strong>Edge AI ASP提升</strong> &rarr; 搭載AI加速器的IPC產品單價提升20-30%，帶動毛利率改善</div>
+      <div class="risk-item"><strong>訂單能見度改善</strong> &rarr; 客戶端庫存消化完畢，新訂單回補力道強勁</div>
+      
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>記憶體漲價壓力</strong> &rarr; DDR5及SSD價格上漲，短期成本難以完全轉嫁</div>
+      <div class="risk-item"><strong>匯率風險</strong> &rarr; 營收以美元為主，台幣升值將壓縮毛利率</div>
+      <div class="risk-item"><strong>客戶下單時點不確定</strong> &rarr; 大型專案客戶下單節奏不固定，季度營收波動可能加大</div>
+      
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 風險評估：</strong>GiS 給予 13.0x PE（growth 類型，合理區間 11-15x）；券商共識中位數 12.5x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>催化劑與風險評估</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">飛捷</div><div class="co-ticker">6206.TT · 全球第三大POS廠商・Berry AI 子公司</div></div>
+      <div class="co-badge">
+        <span class="badge sell">◉ 減碼</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$87 | 現價 NT$95</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val dn">-8.4%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">13.0x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">6.67元</div><div class="co-metric-label">Target EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">41.5%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>N+1F EPS</th><th>N+2F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>統一</td><td class="">Neutral</td><td class="num">NT$116</td><td>Forward PE</td><td class="num">6.92</td><td class="num">7.17</td></tr>
+          <tr><td>宏遠</td><td class="">Range</td><td class="num">NT$95</td><td>Forward PE</td><td class="num">6.80</td><td class="num">7.35</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800;color:#0d1b3e">GiS</td><td style="font-weight:800">減碼</td><td class="num hi" style="font-weight:800">NT$87</td><td style="font-weight:700">PE-based (GiS Forward PE × EPS)</td><td class="num" style="font-weight:800">6.67</td><td class="num" style="font-weight:800">—</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">飛捷 營收趨勢</h3>
+      <div class="chart-wrap" style="padding:14px">
+        <div class="chart-container" style="height:180px;width:100%;position:relative"><canvas id="chart_6206_TT_rev" style="display:block;width:100%;height:180px"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>飛捷 · 6206.TT · 券商比較</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">GiS 季度損益預估模型</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-10px 0 10px">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）。單位：百萬元（EPS 除外）</p>
+
+  <table style="font-size:11.5px">
+    <thead>
+      <tr>
+        <th>損益項目</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">1,200</td><td class="num">1,280</td><td class="num">1,300</td><td class="num">1,320</td><td class="num hi">1,300</td><td class="num neg">-1.5%</td><td class="num pos">+8.3%</td><td class="num hi">1,360</td><td class="num" style="font-weight:700">5,100</td><td class="num hi" style="font-weight:800">5,400</td></tr>
+      <tr><td>營業成本</td><td class="num">684</td><td class="num">723</td><td class="num">728</td><td class="num">746</td><td class="num hi">754</td><td class="num pos">+1.1%</td><td class="num pos">+10.2%</td><td class="num hi">796</td><td class="num" style="font-weight:700">2,882</td><td class="num hi" style="font-weight:800">3,159</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num">516</td><td class="num">557</td><td class="num">572</td><td class="num">574</td><td class="num hi">546</td><td class="num neg">-4.9%</td><td class="num pos">+5.8%</td><td class="num hi">564</td><td class="num" style="font-weight:700">2,218</td><td class="num hi" style="font-weight:800">2,241</td></tr>
+      <tr><td>營業費用</td><td class="num">348</td><td class="num">365</td><td class="num">364</td><td class="num">376</td><td class="num hi">370</td><td class="num neg">-1.5%</td><td class="num pos">+6.5%</td><td class="num hi">381</td><td class="num" style="font-weight:700">1,454</td><td class="num hi" style="font-weight:800">1,501</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">168</td><td class="num">192</td><td class="num">208</td><td class="num">198</td><td class="num hi">176</td><td class="num neg">-11.4%</td><td class="num pos">+4.5%</td><td class="num hi">184</td><td class="num" style="font-weight:700">765</td><td class="num hi" style="font-weight:800">740</td></tr>
+      <tr><td>業外收支</td><td class="num">20</td><td class="num">25</td><td class="num">25</td><td class="num">20</td><td class="num hi">22</td><td class="num pos">+10.0%</td><td class="num pos">+10.0%</td><td class="num hi">25</td><td class="num" style="font-weight:700">90</td><td class="num hi" style="font-weight:800">100</td></tr>
+      <tr><td><strong>稅前淨利</strong></td><td class="num">188</td><td class="num">217</td><td class="num">233</td><td class="num">218</td><td class="num hi">198</td><td class="num neg">-9.4%</td><td class="num pos">+5.1%</td><td class="num hi">209</td><td class="num" style="font-weight:700">855</td><td class="num hi" style="font-weight:800">840</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">154</td><td class="num">178</td><td class="num">191</td><td class="num">179</td><td class="num hi">162</td><td class="num neg">-9.5%</td><td class="num pos">+5.0%</td><td class="num hi">171</td><td class="num" style="font-weight:700">701</td><td class="num hi" style="font-weight:800">689</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">1.47</td><td class="num" style="font-weight:700">1.69</td><td class="num" style="font-weight:700">1.82</td><td class="num" style="font-weight:700">1.70</td><td class="num hi" style="font-weight:800">1.54</td><td class="num neg">-9.4%</td><td class="num pos">+4.8%</td><td class="num hi" style="font-weight:800">1.63</td><td class="num" style="font-weight:700">6.68</td><td class="num hi" style="font-weight:800">6.56</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>獲利能力(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num">43.0</td><td class="num">43.5</td><td class="num">44.0</td><td class="num">43.5</td><td class="num hi">42.0</td><td class="num neg">-1.5pp</td><td class="num neg">-1.0pp</td><td class="num hi">41.5</td><td class="num">43.5</td><td class="num hi">41.5</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">14.0</td><td class="num">15.0</td><td class="num">16.0</td><td class="num">15.0</td><td class="num hi">13.5</td><td class="num neg">-1.5pp</td><td class="num neg">-0.5pp</td><td class="num hi">13.5</td><td class="num">15.0</td><td class="num hi">13.7</td></tr>
+      <tr><td><strong>稅後淨利率</strong></td><td class="num">12.8</td><td class="num">13.9</td><td class="num">14.7</td><td class="num">13.5</td><td class="num hi">12.5</td><td class="num neg">-1.0pp</td><td class="num neg">-0.3pp</td><td class="num hi">12.6</td><td class="num">13.7</td><td class="num hi">12.8</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>成長率(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46" colspan="2">QoQ / YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>營收 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+8.3%</td><td class="num" colspan="2"></td><td class="num pos">+6.2%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>營業利益 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+4.5%</td><td class="num" colspan="2"></td><td class="num neg">-4.4%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>稅後淨利 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+5.0%</td><td class="num" colspan="2"></td><td class="num neg">-3.8%</td><td class="num">—</td><td class="num">—</td></tr>
+      
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:10px">
+    <strong>GiS 模型假設：</strong>GiS 給予 13.0x PE（cyclical 類型，合理區間 11-16x）；券商共識中位數 14.5x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+  <span class="src">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）</span>
+
+    <blockquote style="margin-top:8px">
+    <strong>GiS 估值情境分析：</strong>基於 PE-based (GiS Forward PE × EPS)，EPS 基準年：2026E
+  </blockquote>
+  <table style="font-size:12px">
+    <thead><tr><th>情境</th><th>PE</th><th>EPS</th><th>目標價</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>conservative</strong></td><td class="num">10.4x</td><td class="num">5.87</td><td class="num hi">61</td><td>營收成長低於預期、毛利率承壓，PE 給予折價</td></tr>
+        <tr><td><strong>base</strong></td><td class="num">13.0x</td><td class="num">6.67</td><td class="num hi">87</td><td>基本情境：營收與獲利符合市場預期</td></tr>
+        <tr><td><strong>optimistic</strong></td><td class="num">15.6x</td><td class="num">7.47</td><td class="num hi">117</td><td>AI/邊緣運算催化劑兌現、獲利超預期，PE 享有溢價</td></tr>
+        
+    </tbody>
+  </table>
+
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>GiS 季度損益預估模型</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">催化劑與風險評估</h1>
+
+  <h2 class="ch">關鍵催化劑</h2>
+  <table>
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響程度</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Berry AI子公司轉盈</strong></td><td>2026H2</td><td class="pos">中高</td><td>Berry AI切入餐飲業AI解決方案，預計2026H2損益兩平</td></tr>
+      <tr><td><strong>北美QSR AI需求</strong></td><td>2026</td><td class="">中</td><td>美國快餐連鎖店導入AI點餐系統，帶動POS升級換機潮</td></tr>
+      <tr><td><strong>毛利率穩定高位</strong></td><td>持續</td><td class="">中</td><td>飛捷毛利率維持40%+，為IPC產業中最高水準之一</td></tr>
+      
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>Berry AI子公司轉盈</strong> &rarr; Berry AI切入餐飲業AI解決方案，預計2026H2損益兩平</div>
+      <div class="risk-item"><strong>北美QSR AI需求</strong> &rarr; 美國快餐連鎖店導入AI點餐系統，帶動POS升級換機潮</div>
+      <div class="risk-item"><strong>毛利率穩定高位</strong> &rarr; 飛捷毛利率維持40%+，為IPC產業中最高水準之一</div>
+      
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>美國關稅風險</strong> &rarr; 若美國加徵關稅，POS出口成本上升，壓縮獲利空間</div>
+      <div class="risk-item"><strong>POS消費需求疲弱</strong> &rarr; 全球零售消費若放緩，POS設備更換週期將延長</div>
+      <div class="risk-item"><strong>DRAM成本上升</strong> &rarr; 記憶體佔BOM成本比重高，漲價直接影響毛利率</div>
+      
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 風險評估：</strong>GiS 給予 13.0x PE（cyclical 類型，合理區間 11-16x）；券商共識中位數 14.5x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>催化劑與風險評估</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div><div class="co-name">融程電</div><div class="co-ticker">3416.TT · 國防+邊緣AI強固型電腦專家</div></div>
+      <div class="co-badge">
+        <span class="badge sell">◉ 減碼</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$141 | 現價 NT$155</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val dn">-9.0%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">15.0x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">9.42元</div><div class="co-metric-label">Target EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">41.4%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>N+1F EPS</th><th>N+2F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>國泰</td><td class="pos">Buy</td><td class="num">NT$185</td><td>Forward PE</td><td class="num">7.48</td><td class="num">10.19</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800;color:#0d1b3e">GiS</td><td style="font-weight:800">減碼</td><td class="num hi" style="font-weight:800">NT$141</td><td style="font-weight:700">PE-based (GiS Forward PE × EPS)</td><td class="num" style="font-weight:800">9.42</td><td class="num" style="font-weight:800">—</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">融程電 營收趨勢</h3>
+      <div class="chart-wrap" style="padding:14px">
+        <div class="chart-container" style="height:180px;width:100%;position:relative"><canvas id="chart_3416_TT_rev" style="display:block;width:100%;height:180px"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>融程電 · 3416.TT · 券商比較</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">GiS 季度損益預估模型</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-10px 0 10px">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）。單位：百萬元（EPS 除外）</p>
+
+  <table style="font-size:11.5px">
+    <thead>
+      <tr>
+        <th>損益項目</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">850</td><td class="num">910</td><td class="num">950</td><td class="num">990</td><td class="num hi">1,100</td><td class="num pos">+11.1%</td><td class="num pos">+29.4%</td><td class="num hi">1,200</td><td class="num" style="font-weight:700">3,700</td><td class="num hi" style="font-weight:800">4,700</td></tr>
+      <tr><td>營業成本</td><td class="num">518</td><td class="num">550</td><td class="num">565</td><td class="num">584</td><td class="num hi">649</td><td class="num pos">+11.1%</td><td class="num pos">+25.2%</td><td class="num hi">702</td><td class="num" style="font-weight:700">2,220</td><td class="num hi" style="font-weight:800">2,754</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num">332</td><td class="num">360</td><td class="num">385</td><td class="num">406</td><td class="num hi">451</td><td class="num pos">+11.1%</td><td class="num pos">+36.0%</td><td class="num hi">498</td><td class="num" style="font-weight:700">1,480</td><td class="num hi" style="font-weight:800">1,946</td></tr>
+      <tr><td>營業費用</td><td class="num">212</td><td class="num">223</td><td class="num">228</td><td class="num">236</td><td class="num hi">264</td><td class="num pos">+12.1%</td><td class="num pos">+24.2%</td><td class="num hi">282</td><td class="num" style="font-weight:700">899</td><td class="num hi" style="font-weight:800">1,104</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">119</td><td class="num">136</td><td class="num">157</td><td class="num">170</td><td class="num hi">187</td><td class="num pos">+9.8%</td><td class="num pos">+57.1%</td><td class="num hi">216</td><td class="num" style="font-weight:700">581</td><td class="num hi" style="font-weight:800">841</td></tr>
+      <tr><td>業外收支</td><td class="num">15</td><td class="num">18</td><td class="num">20</td><td class="num">22</td><td class="num hi">25</td><td class="num pos">+13.6%</td><td class="num pos">+66.7%</td><td class="num hi">30</td><td class="num" style="font-weight:700">75</td><td class="num hi" style="font-weight:800">110</td></tr>
+      <tr><td><strong>稅前淨利</strong></td><td class="num">134</td><td class="num">154</td><td class="num">177</td><td class="num">192</td><td class="num hi">212</td><td class="num pos">+10.2%</td><td class="num pos">+58.2%</td><td class="num hi">246</td><td class="num" style="font-weight:700">656</td><td class="num hi" style="font-weight:800">951</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">110</td><td class="num">127</td><td class="num">145</td><td class="num">158</td><td class="num hi">174</td><td class="num pos">+10.2%</td><td class="num pos">+58.1%</td><td class="num hi">202</td><td class="num" style="font-weight:700">538</td><td class="num hi" style="font-weight:800">780</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">1.77</td><td class="num" style="font-weight:700">2.04</td><td class="num" style="font-weight:700">2.34</td><td class="num" style="font-weight:700">2.54</td><td class="num hi" style="font-weight:800">2.80</td><td class="num pos">+10.2%</td><td class="num pos">+58.2%</td><td class="num hi" style="font-weight:800">3.25</td><td class="num" style="font-weight:700">8.67</td><td class="num hi" style="font-weight:800">12.58</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>獲利能力(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num">39.0</td><td class="num">39.5</td><td class="num">40.5</td><td class="num">41.0</td><td class="num hi">41.0</td><td class="num ">0.0pp</td><td class="num pos">+2.0pp</td><td class="num hi">41.5</td><td class="num">40.0</td><td class="num hi">41.4</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">14.0</td><td class="num">15.0</td><td class="num">16.5</td><td class="num">17.2</td><td class="num hi">17.0</td><td class="num neg">-0.2pp</td><td class="num pos">+3.0pp</td><td class="num hi">18.0</td><td class="num">15.7</td><td class="num hi">17.9</td></tr>
+      <tr><td><strong>稅後淨利率</strong></td><td class="num">12.9</td><td class="num">13.9</td><td class="num">15.3</td><td class="num">15.9</td><td class="num hi">15.8</td><td class="num neg">-0.1pp</td><td class="num pos">+2.9pp</td><td class="num hi">16.8</td><td class="num">14.5</td><td class="num hi">16.6</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>成長率(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46" colspan="2">QoQ / YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>營收 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+29.4%</td><td class="num" colspan="2"></td><td class="num pos">+31.9%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>營業利益 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+57.1%</td><td class="num" colspan="2"></td><td class="num pos">+58.2%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>稅後淨利 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+58.1%</td><td class="num" colspan="2"></td><td class="num pos">+59.2%</td><td class="num">—</td><td class="num">—</td></tr>
+      
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:10px">
+    <strong>GiS 模型假設：</strong>GiS 給予 15.0x PE（growth 類型，合理區間 13-18x）；券商共識中位數 15.0x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+  <span class="src">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）</span>
+
+    <blockquote style="margin-top:8px">
+    <strong>GiS 估值情境分析：</strong>基於 PE-based (GiS Forward PE × EPS)，EPS 基準年：2026E
+  </blockquote>
+  <table style="font-size:12px">
+    <thead><tr><th>情境</th><th>PE</th><th>EPS</th><th>目標價</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>conservative</strong></td><td class="num">12.0x</td><td class="num">8.29</td><td class="num hi">99</td><td>營收成長低於預期、毛利率承壓，PE 給予折價</td></tr>
+        <tr><td><strong>base</strong></td><td class="num">15.0x</td><td class="num">9.42</td><td class="num hi">141</td><td>基本情境：營收與獲利符合市場預期</td></tr>
+        <tr><td><strong>optimistic</strong></td><td class="num">18.0x</td><td class="num">10.55</td><td class="num hi">190</td><td>AI/邊緣運算催化劑兌現、獲利超預期，PE 享有溢價</td></tr>
+        
+    </tbody>
+  </table>
+
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>GiS 季度損益預估模型</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">催化劑與風險評估</h1>
+
+  <h2 class="ch">關鍵催化劑</h2>
+  <table>
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響程度</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>EU國防8000億歐元重整軍備</strong></td><td>2026-2028</td><td class="pos">高</td><td>歐盟重整軍備計畫帶動強固型電腦/車載系統需求大幅增長</td></tr>
+      <tr><td><strong>台灣軍用無人機計畫</strong></td><td>2026</td><td class="pos">中高</td><td>國防部無人機國造政策，融程電為主要強固型顯示器供應商</td></tr>
+      <tr><td><strong>Swiss PSD/PVD通路擴展</strong></td><td>2026H1</td><td class="">中</td><td>透過瑞士通路商打入歐洲工業/醫療市場，擴大非國防營收</td></tr>
+      
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>EU國防8000億歐元重整軍備</strong> &rarr; 歐盟重整軍備計畫帶動強固型電腦/車載系統需求大幅增長</div>
+      <div class="risk-item"><strong>台灣軍用無人機計畫</strong> &rarr; 國防部無人機國造政策，融程電為主要強固型顯示器供應商</div>
+      <div class="risk-item"><strong>Swiss PSD/PVD通路擴展</strong> &rarr; 透過瑞士通路商打入歐洲工業/醫療市場，擴大非國防營收</div>
+      
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>中東地緣衝突</strong> &rarr; 中東局勢不穩影響部分國防訂單交付與新案進度</div>
+      <div class="risk-item"><strong>國防預算執行延遲</strong> &rarr; 政府採購流程繁複，預算執行進度常低於預期</div>
+      <div class="risk-item"><strong>產品認證週期長</strong> &rarr; 軍規產品認證需12-18個月，新品導入時程不確定</div>
+      
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 風險評估：</strong>GiS 給予 15.0x PE（growth 類型，合理區間 13-18x）；券商共識中位數 15.0x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>催化劑與風險評估</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head indigo">
+      <div><div class="co-name">威強電</div><div class="co-ticker">3022.TT · IPC多元應用・網通大案啟動</div></div>
+      <div class="co-badge">
+        <span class="badge neutral">◉ 中立</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$60 | 現價 NT$63</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val dn">-4.8%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">13.0x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">4.64元</div><div class="co-metric-label">Target EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">32.8%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>N+1F EPS</th><th>N+2F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>群益</td><td class="pos">Buy</td><td class="num">NT$76</td><td>Forward PE</td><td class="num">4.63</td><td class="num">5.08</td></tr>
+          <tr><td>統一</td><td class="">Neutral</td><td class="num">NT$75</td><td>Forward PE</td><td class="num">4.63</td><td class="num">6.22</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800;color:#0d1b3e">GiS</td><td style="font-weight:800">中立</td><td class="num hi" style="font-weight:800">NT$60</td><td style="font-weight:700">PE-based (GiS Forward PE × EPS)</td><td class="num" style="font-weight:800">4.64</td><td class="num" style="font-weight:800">—</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">威強電 營收趨勢</h3>
+      <div class="chart-wrap" style="padding:14px">
+        <div class="chart-container" style="height:180px;width:100%;position:relative"><canvas id="chart_3022_TT_rev" style="display:block;width:100%;height:180px"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>威強電 · 3022.TT · 券商比較</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">GiS 季度損益預估模型</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-10px 0 10px">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）。單位：百萬元（EPS 除外）</p>
+
+  <table style="font-size:11.5px">
+    <thead>
+      <tr>
+        <th>損益項目</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">1,500</td><td class="num">1,600</td><td class="num">1,650</td><td class="num">1,750</td><td class="num hi">1,720</td><td class="num neg">-1.7%</td><td class="num pos">+14.7%</td><td class="num hi">1,830</td><td class="num" style="font-weight:700">6,500</td><td class="num hi" style="font-weight:800">7,200</td></tr>
+      <tr><td>營業成本</td><td class="num">1,005</td><td class="num">1,064</td><td class="num">1,089</td><td class="num">1,164</td><td class="num hi">1,161</td><td class="num neg">-0.2%</td><td class="num pos">+15.5%</td><td class="num hi">1,226</td><td class="num" style="font-weight:700">4,322</td><td class="num hi" style="font-weight:800">4,838</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num">495</td><td class="num">536</td><td class="num">561</td><td class="num">586</td><td class="num hi">559</td><td class="num neg">-4.6%</td><td class="num pos">+12.9%</td><td class="num hi">604</td><td class="num" style="font-weight:700">2,178</td><td class="num hi" style="font-weight:800">2,362</td></tr>
+      <tr><td>營業費用</td><td class="num">338</td><td class="num">352</td><td class="num">360</td><td class="num">376</td><td class="num hi">370</td><td class="num neg">-1.7%</td><td class="num pos">+9.6%</td><td class="num hi">384</td><td class="num" style="font-weight:700">1,430</td><td class="num hi" style="font-weight:800">1,526</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">158</td><td class="num">184</td><td class="num">201</td><td class="num">210</td><td class="num hi">189</td><td class="num neg">-9.9%</td><td class="num pos">+20.1%</td><td class="num hi">220</td><td class="num" style="font-weight:700">748</td><td class="num hi" style="font-weight:800">835</td></tr>
+      <tr><td>業外收支</td><td class="num">20</td><td class="num">25</td><td class="num">28</td><td class="num">30</td><td class="num hi">28</td><td class="num neg">-6.7%</td><td class="num pos">+40.0%</td><td class="num hi">32</td><td class="num" style="font-weight:700">103</td><td class="num hi" style="font-weight:800">125</td></tr>
+      <tr><td><strong>稅前淨利</strong></td><td class="num">178</td><td class="num">209</td><td class="num">229</td><td class="num">240</td><td class="num hi">217</td><td class="num neg">-9.5%</td><td class="num pos">+22.4%</td><td class="num hi">252</td><td class="num" style="font-weight:700">850</td><td class="num hi" style="font-weight:800">960</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">146</td><td class="num">171</td><td class="num">188</td><td class="num">197</td><td class="num hi">178</td><td class="num neg">-9.5%</td><td class="num pos">+22.3%</td><td class="num hi">206</td><td class="num" style="font-weight:700">697</td><td class="num hi" style="font-weight:800">787</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">0.88</td><td class="num" style="font-weight:700">1.04</td><td class="num" style="font-weight:700">1.14</td><td class="num" style="font-weight:700">1.19</td><td class="num hi" style="font-weight:800">1.08</td><td class="num neg">-9.2%</td><td class="num pos">+22.7%</td><td class="num hi" style="font-weight:800">1.25</td><td class="num" style="font-weight:700">4.23</td><td class="num hi" style="font-weight:800">4.77</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>獲利能力(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num">33.0</td><td class="num">33.5</td><td class="num">34.0</td><td class="num">33.5</td><td class="num hi">32.5</td><td class="num neg">-1.0pp</td><td class="num neg">-0.5pp</td><td class="num hi">33.0</td><td class="num">33.5</td><td class="num hi">32.8</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">10.5</td><td class="num">11.5</td><td class="num">12.2</td><td class="num">12.0</td><td class="num hi">11.0</td><td class="num neg">-1.0pp</td><td class="num pos">+0.5pp</td><td class="num hi">12.0</td><td class="num">11.5</td><td class="num hi">11.6</td></tr>
+      <tr><td><strong>稅後淨利率</strong></td><td class="num">9.7</td><td class="num">10.7</td><td class="num">11.4</td><td class="num">11.2</td><td class="num hi">10.4</td><td class="num neg">-0.8pp</td><td class="num pos">+0.7pp</td><td class="num hi">11.3</td><td class="num">10.7</td><td class="num hi">10.9</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>成長率(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46" colspan="2">QoQ / YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>營收 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+14.7%</td><td class="num" colspan="2"></td><td class="num pos">+14.4%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>營業利益 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+20.1%</td><td class="num" colspan="2"></td><td class="num pos">+19.3%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>稅後淨利 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+22.3%</td><td class="num" colspan="2"></td><td class="num pos">+20.4%</td><td class="num">—</td><td class="num">—</td></tr>
+      
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:10px">
+    <strong>GiS 模型假設：</strong>GiS 給予 13.0x PE（cyclical 類型，合理區間 10-15x）；券商共識中位數 13.5x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+  <span class="src">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）</span>
+
+    <blockquote style="margin-top:8px">
+    <strong>GiS 估值情境分析：</strong>基於 PE-based (GiS Forward PE × EPS)，EPS 基準年：2026E
+  </blockquote>
+  <table style="font-size:12px">
+    <thead><tr><th>情境</th><th>PE</th><th>EPS</th><th>目標價</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>conservative</strong></td><td class="num">10.4x</td><td class="num">4.08</td><td class="num hi">42</td><td>營收成長低於預期、毛利率承壓，PE 給予折價</td></tr>
+        <tr><td><strong>base</strong></td><td class="num">13.0x</td><td class="num">4.64</td><td class="num hi">60</td><td>基本情境：營收與獲利符合市場預期</td></tr>
+        <tr><td><strong>optimistic</strong></td><td class="num">15.6x</td><td class="num">5.20</td><td class="num hi">81</td><td>AI/邊緣運算催化劑兌現、獲利超預期，PE 享有溢價</td></tr>
+        
+    </tbody>
+  </table>
+
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>GiS 季度損益預估模型</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">催化劑與風險評估</h1>
+
+  <h2 class="ch">關鍵催化劑</h2>
+  <table>
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響程度</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>德國鐵路網通專案</strong></td><td>2026H1</td><td class="pos">高</td><td>德國鐵路大型網通設備標案，金額達數億台幣，2026啟動交貨</td></tr>
+      <tr><td><strong>記憶體大廠合作專案</strong></td><td>2026</td><td class="pos">中高</td><td>與國際記憶體大廠合作邊緣運算設備，打入半導體供應鏈</td></tr>
+      <tr><td><strong>醫療超音波設備</strong></td><td>2026H2</td><td class="">中</td><td>醫療用AI超音波設備通過認證，開始量產出貨</td></tr>
+      
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>德國鐵路網通專案</strong> &rarr; 德國鐵路大型網通設備標案，金額達數億台幣，2026啟動交貨</div>
+      <div class="risk-item"><strong>記憶體大廠合作專案</strong> &rarr; 與國際記憶體大廠合作邊緣運算設備，打入半導體供應鏈</div>
+      <div class="risk-item"><strong>醫療超音波設備</strong> &rarr; 醫療用AI超音波設備通過認證，開始量產出貨</div>
+      
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>中東出貨延遲</strong> &rarr; 中東地區政治不穩定，影響網通設備出貨排程</div>
+      <div class="risk-item"><strong>記憶體/CPU漲價</strong> &rarr; DDR5及Intel/AMD新平台漲價，短期BOM成本上升</div>
+      <div class="risk-item"><strong>地緣政治風險</strong> &rarr; 國際貿易摩擦可能影響歐美客戶下單意願</div>
+      
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 風險評估：</strong>GiS 給予 13.0x PE（cyclical 類型，合理區間 10-15x）；券商共識中位數 13.5x 供參考；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>催化劑與風險評估</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">凌華</div><div class="co-ticker">6166.TT · 邊緣AI運算・NVIDIA Jetson 平台</div></div>
+      <div class="co-badge">
+        <span class="badge buy">◉ 買進</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$79 | 現價 NT$62</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+27.4%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">19.0x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">4.14元</div><div class="co-metric-label">Target EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">35.9%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>N+1F EPS</th><th>N+2F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>統一</td><td class="pos">Buy</td><td class="num">NT$77</td><td>PBR 3x</td><td class="num">2.57</td><td class="num">3.94</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800;color:#0d1b3e">GiS</td><td style="font-weight:800">買進</td><td class="num hi" style="font-weight:800">NT$79</td><td style="font-weight:700">PE-based (GiS Forward PE × EPS)</td><td class="num" style="font-weight:800">4.14</td><td class="num" style="font-weight:800">—</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">凌華 營收趨勢</h3>
+      <div class="chart-wrap" style="padding:14px">
+        <div class="chart-container" style="height:180px;width:100%;position:relative"><canvas id="chart_6166_TT_rev" style="display:block;width:100%;height:180px"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>凌華 · 6166.TT · 券商比較</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">GiS 季度損益預估模型</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-10px 0 10px">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）。單位：百萬元（EPS 除外）</p>
+
+  <table style="font-size:11.5px">
+    <thead>
+      <tr>
+        <th>損益項目</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">2,900</td><td class="num">3,050</td><td class="num">3,150</td><td class="num">3,200</td><td class="num hi">3,300</td><td class="num pos">+3.1%</td><td class="num pos">+13.8%</td><td class="num hi">3,450</td><td class="num" style="font-weight:700">12,300</td><td class="num hi" style="font-weight:800">13,500</td></tr>
+      <tr><td>營業成本</td><td class="num">1,885</td><td class="num">1,967</td><td class="num">2,016</td><td class="num">2,048</td><td class="num hi">2,119</td><td class="num pos">+3.4%</td><td class="num pos">+12.4%</td><td class="num hi">2,208</td><td class="num" style="font-weight:700">7,921</td><td class="num hi" style="font-weight:800">8,654</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num">1,015</td><td class="num">1,083</td><td class="num">1,134</td><td class="num">1,152</td><td class="num hi">1,181</td><td class="num pos">+2.6%</td><td class="num pos">+16.4%</td><td class="num hi">1,242</td><td class="num" style="font-weight:700">4,379</td><td class="num hi" style="font-weight:800">4,846</td></tr>
+      <tr><td>營業費用</td><td class="num">798</td><td class="num">824</td><td class="num">850</td><td class="num">848</td><td class="num hi">874</td><td class="num pos">+3.1%</td><td class="num pos">+9.7%</td><td class="num hi">897</td><td class="num" style="font-weight:700">3,321</td><td class="num hi" style="font-weight:800">3,537</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">218</td><td class="num">259</td><td class="num">284</td><td class="num">304</td><td class="num hi">307</td><td class="num pos">+1.0%</td><td class="num pos">+41.1%</td><td class="num hi">345</td><td class="num" style="font-weight:700">1,058</td><td class="num hi" style="font-weight:800">1,310</td></tr>
+      <tr><td>業外收支</td><td class="num">30</td><td class="num">35</td><td class="num">38</td><td class="num">40</td><td class="num hi">42</td><td class="num pos">+5.0%</td><td class="num pos">+40.0%</td><td class="num hi">45</td><td class="num" style="font-weight:700">143</td><td class="num hi" style="font-weight:800">180</td></tr>
+      <tr><td><strong>稅前淨利</strong></td><td class="num">248</td><td class="num">294</td><td class="num">322</td><td class="num">344</td><td class="num hi">349</td><td class="num pos">+1.4%</td><td class="num pos">+41.0%</td><td class="num hi">390</td><td class="num" style="font-weight:700">1,201</td><td class="num hi" style="font-weight:800">1,490</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">203</td><td class="num">241</td><td class="num">264</td><td class="num">282</td><td class="num hi">286</td><td class="num pos">+1.4%</td><td class="num pos">+40.9%</td><td class="num hi">320</td><td class="num" style="font-weight:700">985</td><td class="num hi" style="font-weight:800">1,221</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">1.10</td><td class="num" style="font-weight:700">1.30</td><td class="num" style="font-weight:700">1.43</td><td class="num" style="font-weight:700">1.52</td><td class="num hi" style="font-weight:800">1.55</td><td class="num pos">+2.0%</td><td class="num pos">+40.9%</td><td class="num hi" style="font-weight:800">1.73</td><td class="num" style="font-weight:700">5.32</td><td class="num hi" style="font-weight:800">6.60</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>獲利能力(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num">35.0</td><td class="num">35.5</td><td class="num">36.0</td><td class="num">36.0</td><td class="num hi">35.8</td><td class="num neg">-0.2pp</td><td class="num pos">+0.8pp</td><td class="num hi">36.0</td><td class="num">35.6</td><td class="num hi">35.9</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">7.5</td><td class="num">8.5</td><td class="num">9.0</td><td class="num">9.5</td><td class="num hi">9.3</td><td class="num neg">-0.2pp</td><td class="num pos">+1.8pp</td><td class="num hi">10.0</td><td class="num">8.6</td><td class="num hi">9.7</td></tr>
+      <tr><td><strong>稅後淨利率</strong></td><td class="num">7.0</td><td class="num">7.9</td><td class="num">8.4</td><td class="num">8.8</td><td class="num hi">8.7</td><td class="num neg">-0.1pp</td><td class="num pos">+1.7pp</td><td class="num hi">9.3</td><td class="num">8.0</td><td class="num hi">9.0</td></tr>
+      
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>成長率(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26</th>
+        <th style="text-align:right;background:#065f46" colspan="2">QoQ / YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26</th>
+        <th style="text-align:right">FY2025</th>
+        <th style="text-align:right;background:#065f46">FY2026E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>營收 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+13.8%</td><td class="num" colspan="2"></td><td class="num pos">+13.1%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>營業利益 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+41.1%</td><td class="num" colspan="2"></td><td class="num pos">+33.1%</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>稅後淨利 YoY</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num pos">+40.9%</td><td class="num" colspan="2"></td><td class="num pos">+32.5%</td><td class="num">—</td><td class="num">—</td></tr>
+      
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:10px">
+    <strong>GiS 模型假設：</strong>GiS 給予 19.0x PE（turnaround 類型，合理區間 16-22x）；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+  <span class="src">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）</span>
+
+    <blockquote style="margin-top:8px">
+    <strong>GiS 估值情境分析：</strong>基於 PE-based (GiS Forward PE × EPS)，EPS 基準年：2026E
+  </blockquote>
+  <table style="font-size:12px">
+    <thead><tr><th>情境</th><th>PE</th><th>EPS</th><th>目標價</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>conservative</strong></td><td class="num">15.2x</td><td class="num">3.64</td><td class="num hi">55</td><td>營收成長低於預期、毛利率承壓，PE 給予折價</td></tr>
+        <tr><td><strong>base</strong></td><td class="num">19.0x</td><td class="num">4.14</td><td class="num hi">79</td><td>基本情境：營收與獲利符合市場預期</td></tr>
+        <tr><td><strong>optimistic</strong></td><td class="num">22.8x</td><td class="num">4.64</td><td class="num hi">106</td><td>AI/邊緣運算催化劑兌現、獲利超預期，PE 享有溢價</td></tr>
+        
+    </tbody>
+  </table>
+
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>GiS 季度損益預估模型</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">催化劑與風險評估</h1>
+
+  <h2 class="ch">關鍵催化劑</h2>
+  <table>
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響程度</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>NVIDIA Jetson機器人平台</strong></td><td>2026</td><td class="pos">高</td><td>凌華為NVIDIA Jetson主要合作夥伴，機器人/AMR市場快速成長</td></tr>
+      <tr><td><strong>費用率持續下降</strong></td><td>2026</td><td class="pos">中高</td><td>營收規模擴大+費用管控，營業費用率從27%降至26%，獲利槓桿顯現</td></tr>
+      <tr><td><strong>Edge AI佔比倍增至10%</strong></td><td>2026H2</td><td class="pos">中高</td><td>Edge AI相關營收佔比從2025年5%提升至2026年10%，ASP更高</td></tr>
+      
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>NVIDIA Jetson機器人平台</strong> &rarr; 凌華為NVIDIA Jetson主要合作夥伴，機器人/AMR市場快速成長</div>
+      <div class="risk-item"><strong>費用率持續下降</strong> &rarr; 營收規模擴大+費用管控，營業費用率從27%降至26%，獲利槓桿顯現</div>
+      <div class="risk-item"><strong>Edge AI佔比倍增至10%</strong> &rarr; Edge AI相關營收佔比從2025年5%提升至2026年10%，ASP更高</div>
+      
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>獲利波動大</strong> &rarr; 凌華歷史獲利波動劇烈，EPS從虧損到4元皆有，預測難度高</div>
+      <div class="risk-item"><strong>新業務驗證期</strong> &rarr; 機器人/AMR業務尚在早期，商業模式尚未完全驗證</div>
+      <div class="risk-item"><strong>客戶集中風險</strong> &rarr; 前十大客戶營收佔比偏高，單一客戶流失影響較大</div>
+      
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 風險評估：</strong>GiS 給予 19.0x PE（turnaround 類型，合理區間 16-22x）；2026E Forward EPS（券商共識(60%) + 內部預估(40%)，GiS 保守調整 -1%）
+  </blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>催化劑與風險評估</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">研究方法論</h1>
+  <p>本報告採用 GiS（Global Investment Solutions）估值框架，以 Forward PE 為主要估值方法，輔以 PBR 交叉驗證。PE 倍數選取基於歷史均值±1標準差、成長性調整及同業比較。評等定義：Buy（上檔空間>15%）、Overweight（5-15%）、Neutral（±5%）、Underweight（下檔>5%）。所有財務預估為 GiS 自建模型，參考但不直接複製券商預估。</p>
+  
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>研究方法論</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  Chart.register({
+    id: 'labelPlugin',
+    afterDatasetsDraw(chart) {
+      const ctx = chart.ctx;
+      const isStacked = chart.options.scales?.y?.stacked === true;
+      const isH = chart.options.indexAxis === 'y';
+      chart.data.datasets.forEach((ds, i) => {
+        const meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach((bar, idx) => {
+          const v = ds.data[idx];
+          if (!v && v !== 0) return;
+          ctx.save();
+          ctx.font = 'bold 11.5px PingFang TC, Arial';
+          ctx.textAlign = 'center';
+          if (isH) {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'middle';
+            ctx.fillText(v, bar.x + 6, bar.y);
+          } else if (isStacked) {
+            const bh = Math.abs(bar.base - bar.y);
+            if (bh < 14) { ctx.restore(); return; }
+            ctx.fillStyle = bh > 22 ? '#fff' : '#1a2a4a';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(v + '%', bar.x, bar.y + bh / 2);
+          } else {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'bottom';
+            ctx.fillText(String(v), bar.x, bar.y - 3);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+  new Chart(getEl('chart_exec_1'), {
+    type: 'bar',
+    data: {
+      labels: ['1Q25', '2Q25', '3Q25', '4Q25', '1Q26', '2Q26'],
+      datasets: [{ label: '研華', data: [16800, 17500, 17800, 18800, 20400, 20200], backgroundColor: '#1a3a6e', borderRadius: 5, barPercentage: 0.7, categoryPercentage: 0.75 }, { label: '樺漢', data: [32500, 34800, 36500, 38500, 37000, 40000], backgroundColor: '#00a878', borderRadius: 5, barPercentage: 0.7, categoryPercentage: 0.75 }, { label: '艾訊', data: [1550, 1700, 1780, 1870, 1950, 2100], backgroundColor: '#e67e22', borderRadius: 5, barPercentage: 0.7, categoryPercentage: 0.75 }, { label: '飛捷', data: [1200, 1280, 1300, 1320, 1300, 1360], backgroundColor: '#8e44ad', borderRadius: 5, barPercentage: 0.7, categoryPercentage: 0.75 }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v } }
+      }
+    }
+  });
+
+  new Chart(getEl('chart_exec_2'), {
+    type: 'line',
+    data: {
+      labels: ['1Q25', '2Q25', '3Q25', '4Q25', '1Q26', '2Q26'],
+      datasets: [{ label: '研華', data: [3.23, 3.47, 3.68, 4.03, 4.19, 4.12], borderColor: '#0d1b3e', backgroundColor: 'transparent', tension: 0.35, pointRadius: 6, borderWidth: 2.5, fill: false }, { label: '樺漢', data: [4.91, 5.58, 6.29, 7.51, 6.5, 8.17], borderColor: '#00a878', backgroundColor: 'transparent', tension: 0.35, pointRadius: 6, borderWidth: 2.5, fill: false }, { label: '艾訊', data: [1.79, 2.13, 2.5, 2.77, 2.87, 3.25], borderColor: '#e67e22', backgroundColor: 'transparent', tension: 0.35, pointRadius: 6, borderWidth: 2.5, fill: false }, { label: '飛捷', data: [1.47, 1.69, 1.82, 1.7, 1.54, 1.63], borderColor: '#8e44ad', backgroundColor: 'transparent', tension: 0.35, pointRadius: 6, borderWidth: 2.5, fill: false }, { label: '融程電', data: [1.77, 2.04, 2.34, 2.54, 2.8, 3.25], borderColor: '#2980b9', backgroundColor: 'transparent', tension: 0.35, pointRadius: 6, borderWidth: 2.5, fill: false }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '元' } }
+      }
+    }
+  });
+
+  new Chart(getEl('chart_industry_1'), {
+    type: 'bar',
+    data: {
+      labels: ['全球IPC市場規模(2025)', 'Edge AI CAGR(2024-2030)', '台灣IPC廠商全球市佔', 'IPC平均毛利率區間'],
+      datasets: [
+        { label: '市場規模', data: [72.0, 25.9, 35.0, 33.0], backgroundColor: ['#1a3a6e','#00a878','#e67e22','#8e44ad','#2980b9','#c0392b'], borderRadius: 4, barPercentage: 0.55 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#eef2f8' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  new Chart(getEl('chart_2395_TT_rev'), {
+    type: 'bar',
+    data: {
+      labels: ['1Q25', '2Q25', '3Q25', '4Q25', '1Q26', '2Q26'],
+      datasets: [
+        { label: '營收', data: [16800, 17500, 17800, 18800, 20400, 20200], backgroundColor: ['#1a3a6e', '#1a3a6e', '#1a3a6e', '#1a3a6e', '#00c896', '#00c896'], borderRadius: 5, barPercentage: 0.6, categoryPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' } }
+      }
+    }
+  });
+
+  new Chart(getEl('chart_6414_TT_rev'), {
+    type: 'bar',
+    data: {
+      labels: ['1Q25', '2Q25', '3Q25', '4Q25', '1Q26', '2Q26'],
+      datasets: [
+        { label: '營收', data: [32500, 34800, 36500, 38500, 37000, 40000], backgroundColor: ['#1a3a6e', '#1a3a6e', '#1a3a6e', '#1a3a6e', '#00c896', '#00c896'], borderRadius: 5, barPercentage: 0.6, categoryPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' } }
+      }
+    }
+  });
+
+  new Chart(getEl('chart_3088_TT_rev'), {
+    type: 'bar',
+    data: {
+      labels: ['1Q25', '2Q25', '3Q25', '4Q25', '1Q26', '2Q26'],
+      datasets: [
+        { label: '營收', data: [1550, 1700, 1780, 1870, 1950, 2100], backgroundColor: ['#1a3a6e', '#1a3a6e', '#1a3a6e', '#1a3a6e', '#00c896', '#00c896'], borderRadius: 5, barPercentage: 0.6, categoryPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' } }
+      }
+    }
+  });
+
+  new Chart(getEl('chart_6206_TT_rev'), {
+    type: 'bar',
+    data: {
+      labels: ['1Q25', '2Q25', '3Q25', '4Q25', '1Q26', '2Q26'],
+      datasets: [
+        { label: '營收', data: [1200, 1280, 1300, 1320, 1300, 1360], backgroundColor: ['#1a3a6e', '#1a3a6e', '#1a3a6e', '#1a3a6e', '#00c896', '#00c896'], borderRadius: 5, barPercentage: 0.6, categoryPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' } }
+      }
+    }
+  });
+
+  new Chart(getEl('chart_3416_TT_rev'), {
+    type: 'bar',
+    data: {
+      labels: ['1Q25', '2Q25', '3Q25', '4Q25', '1Q26', '2Q26'],
+      datasets: [
+        { label: '營收', data: [850, 910, 950, 990, 1100, 1200], backgroundColor: ['#1a3a6e', '#1a3a6e', '#1a3a6e', '#1a3a6e', '#00c896', '#00c896'], borderRadius: 5, barPercentage: 0.6, categoryPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' } }
+      }
+    }
+  });
+
+  new Chart(getEl('chart_3022_TT_rev'), {
+    type: 'bar',
+    data: {
+      labels: ['1Q25', '2Q25', '3Q25', '4Q25', '1Q26', '2Q26'],
+      datasets: [
+        { label: '營收', data: [1500, 1600, 1650, 1750, 1720, 1830], backgroundColor: ['#1a3a6e', '#1a3a6e', '#1a3a6e', '#1a3a6e', '#00c896', '#00c896'], borderRadius: 5, barPercentage: 0.6, categoryPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' } }
+      }
+    }
+  });
+
+  new Chart(getEl('chart_6166_TT_rev'), {
+    type: 'bar',
+    data: {
+      labels: ['1Q25', '2Q25', '3Q25', '4Q25', '1Q26', '2Q26'],
+      datasets: [
+        { label: '營收', data: [2900, 3050, 3150, 3200, 3300, 3450], backgroundColor: ['#1a3a6e', '#1a3a6e', '#1a3a6e', '#1a3a6e', '#00c896', '#00c896'], borderRadius: 5, barPercentage: 0.6, categoryPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' } }
+      }
+    }
+  });
+
+}); // end window.load
+</script>
+
+</body>
+</html>

@@ -14,6 +14,29 @@
     <!-- ═══ Tab 1：週報簡報 ═══ -->
     <div id="tab-briefings" class="weekly-tab-panel active">
 
+        <!-- GiS 研究週報 -->
+        {% if gis_reports %}
+        <div class="weekly-section">
+            <h5 class="weekly-section-title">
+                <span class="weekly-badge gis">GiS</span> GiS 研究週報
+            </h5>
+            <div class="weekly-list">
+                {% for r in gis_reports %}
+                <div class="weekly-row" onclick="openWeekly('gis/{{ r.filename }}', '{{ r.title }}')">
+                    <div class="weekly-row-left">
+                        <div class="weekly-row-title">{{ r.title }}</div>
+                        <div class="weekly-row-meta">
+                            <span class="weekly-tag gis">GiS Research</span>
+                            <span class="weekly-row-date">{{ r.date }}</span>
+                        </div>
+                    </div>
+                    <div class="weekly-row-arrow">›</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
         <!-- 量化研究 -->
         <div class="weekly-section">
             <h5 class="weekly-section-title">
@@ -47,6 +70,7 @@
             '情緒與 NLP': '#22c55e',
             '總經與資產配置': '#3b82f6',
             '特殊主題': '#a78bfa',
+            '量化研究': '#00c896',
             '其他': '#64748b'
         } %}
         {% for cat_name, reports in cat_reports.items() | sort %}
@@ -228,6 +252,7 @@
     color: #fff;
     letter-spacing: 1px;
 }
+.weekly-badge.gis { background: linear-gradient(135deg, #0d1b3e, #00c896); }
 .weekly-badge.fin { background: linear-gradient(135deg, #065f46, #00a878); }
 .weekly-badge.tech { background: linear-gradient(135deg, #1e3a5f, #3b82f6); }
 
@@ -268,6 +293,10 @@
     padding: 2px 8px;
     border-radius: 10px;
     font-weight: 600;
+}
+.weekly-tag.gis {
+    background: rgba(0, 200, 150, 0.15);
+    color: #00c896;
 }
 .weekly-tag.fin {
     background: rgba(0, 168, 120, 0.15);

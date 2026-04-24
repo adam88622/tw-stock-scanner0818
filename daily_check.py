@@ -267,7 +267,44 @@ def main():
     except Exception as e:
         logger.warning(f"盤前籌碼失敗（非致命）: {e}")
 
-    # 7. Weekly sector update + VACUUM (Mondays only)
+    # 7. 市場體溫更新（每日，SPY/VIX 基於美股資料）
+    logger.info("--- 市場體溫更新 ---")
+    try:
+        from scanners.regime import update_regime_db, rolling_retrain
+        result = update_regime_db(conn)
+        conn.commit()
+        logger.info(f"市場體溫: {result['temperature']}° ({result['regime']}) ✓")
+    except ImportError:
+        logger.warning("regime 模組未安裝，跳過")
+    except Exception as e:
+        logger.warning(f"市場體溫更新失敗（非致命）: {e}")
+        errors.append(f"市場體溫: {e}")
+
+    # 7c. 信用利差紅綠燈更新（每日，HYG/SHY 基於美股資料）
+    logger.info("--- 信用利差更新 ---")
+    try:
+        from scanners.credit_spread import update_credit_spread_db
+        cs_result = update_credit_spread_db(conn)
+        logger.info(f"信用利差: {cs_result['signal']} ({cs_result['indicator_value']:.4f}) ✓")
+    except Exception as e:
+        logger.warning(f"信用利差更新失敗（非致命）: {e}")
+        errors.append(f"信用利差: {e}")
+
+    # 7b. 模型滾動重訓練（每月 1 號）
+    if datetime.now().day == 1:
+        logger.info("--- 月度模型重訓練 ---")
+        try:
+            from scanners.regime import rolling_retrain
+            retrain_result = rolling_retrain(window_years=2)
+            logger.info(f"重訓練完成: τ {retrain_result['old_tau']:.4f} → {retrain_result['new_tau']:.4f}")
+            # 重訓後立即更新 regime_history
+            result = update_regime_db(conn)
+            conn.commit()
+            logger.info(f"重訓後體溫: {result['temperature']}° ({result['regime']})")
+        except Exception as e:
+            logger.warning(f"模型重訓練失敗（非致命）: {e}")
+
+    # 8. Weekly sector update + VACUUM (Mondays only)
     if datetime.now().weekday() == 0:  # Monday
         logger.info("--- 產業分類更新（週一） ---")
         try:

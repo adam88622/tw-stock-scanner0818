@@ -1,0 +1,36 @@
+台股三大法人買賣超 — 完整資料包
+產生時間: 2026-04-13 21:20:57
+============================================================
+
+總筆數: 3,829,011
+日期範圍: 2012-05-02  ~  2026-04-13
+涵蓋股票: 2,019 檔
+涵蓋交易日: 3,336 天
+
+依市場分群:
+           rows first_date  last_date  unique_stocks  unique_dates
+market                                                            
+tpex    1008543 2018-01-15 2026-04-13            885          1992
+twse    2820468 2012-05-02 2026-04-13           1134          3336
+
+============================================================
+欄位說明 (單位：張)
+============================================================
+date         交易日 (datetime)
+stock_id     證券代號 (4 碼)
+name         證券名稱
+market       twse=上市 / tpex=上櫃
+foreign_net  外資買賣超（不含自營），>0 買超 / <0 賣超
+sitc_net     投信買賣超
+dealer_net   自營商買賣超（合計，含自行+避險）
+total_net    三大法人合計 = foreign + sitc + dealer
+
+============================================================
+讀檔範例 (Python)
+============================================================
+import pandas as pd
+df = pd.read_parquet(r'D:\claude\tw-stock-scanner\data\institutional_full.parquet')
+# 篩近一年外資買超累積前 20
+recent = df[df['date'] >= df['date'].max() - pd.Timedelta('365D')]
+top = recent.groupby(['stock_id','name'])['foreign_net'].sum().nlargest(20)
+print(top)

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>上銀科技 (2049) 研究報告 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.neutral{background:#f59e0b;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Equity Research · Company Update · April 2026</div>
+    <div class="cover-title">上銀科技 (2049 TT)<br><em>景氣反轉在即，但估值已先行</em></div>
+    <div class="cover-subtitle">Hiwin Technologies — Cyclical Recovery Priced In; Initiate at Neutral</div>
+    <div class="cover-tags">
+      <span class="ctag hl">線性滑軌</span>
+      <span class="ctag hl">工業自動化</span>
+      <span class="ctag">半導體設備</span>
+      <span class="ctag">機器人</span>
+      <span class="ctag">景氣循環</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">NT$<em>277</em></div><div class="cstat-label">GiS 目標價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>5.88</em></div><div class="cstat-label">2026F EPS</div></div>
+    <div class="cstat"><div class="cstat-num"><em>30.1</em>%</div><div class="cstat-label">2026F 毛利率</div></div>
+    <div class="cstat"><div class="cstat-num"><em>35</em>x</div><div class="cstat-label">Target PE</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年4月15日</span>
+    <span>現價 NT$286（04/15 收盤）</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi gold"><div class="kpi-val">NT$277</div><div class="kpi-lbl">GiS 目標價 (中立)</div></div>
+    <div class="kpi"><div class="kpi-val">-3.1%</div><div class="kpi-lbl">預期報酬 (12M)</div></div>
+    <div class="kpi green"><div class="kpi-val">+13.7%<em> YoY</em></div><div class="kpi-lbl">2026F 營收成長</div></div>
+    <div class="kpi"><div class="kpi-val">5.88<em> 元</em></div><div class="kpi-lbl">GiS 2026F EPS</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">1</span><span><strong>產業供需反轉確立，但股價已先行反映。</strong>工具機庫存調整逾 3 年，JMTBA 三大區域訂單同步回升，上銀訂單能見度自 2-2.5 個月拉長至 4 個月。3 月營收 23.57 億創 42 個月新高，YoY +17.4%。然而，目前 NTM PE 約 44x 已顯著高於歷史均值 28.6x，recovery 利多大致 priced in。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">2</span><span><strong>漲價效應 2Q26 起發酵，毛利率有望改善。</strong>上銀 3 月起調漲部分產品售價 7-15%，GiS 預估 2026F 毛利率回升至 30.1%（vs 2025 年 28.76%），營益率改善至 9.2%，帶動 FY2026F EPS 達 5.88 元（YoY +36%）。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">3</span><span><strong>機器人 + 半導體提供中長期結構性題材。</strong>工業機器人營收佔比已達近 10%，人形機器人關鍵元件送樣中，2026 年出貨可望倍數成長。半導體設備需求受惠 AI capex 循環，晶圓移載系統持續擴產。此為 2027-2028 年的上行催化劑。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">季度營收趨勢與年增率</div>
+      <div class="chart-sub">來源：公司月營收公告、GiS 預估（F）</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">季度 EPS 趨勢</div>
+      <div class="chart-sub">來源：公司季報、GiS 預估（F）</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面：產業與公司 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業概況與<br>公司定位</div>
+  <div class="sec-desc">全球線性滑軌產業景氣循環反轉跡象明確，上銀為全球第二大供應商，受惠半導體、AI 自動化及機器人需求驅動，營運自谷底回升。</div>
+</div>
+
+<!-- ══════════════ 產業與公司概況 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、產業與公司概況</h1>
+  <p><strong>上銀科技</strong>（Hiwin Technologies, 2049.TW）為全球第二大線性運動元件製造商，僅次於日本 THK（6481.JP），全球市佔率約 18%（2024 年）。產品涵蓋線性滑軌、滾珠螺桿、工業機器人及精密定位系統，廣泛應用於工具機、半導體設備、自動化產線及醫療設備等領域。</p>
+
+  <h2 class="ch">產品組合與營收佔比（2025 年）</h2>
+  <table>
+    <thead><tr><th>產品線</th><th>營收佔比</th><th>毛利率區間</th><th>主要應用</th></tr></thead>
+    <tbody>
+      <tr><td><strong>線性滑軌</strong></td><td class="num">62%</td><td class="num">28-33%</td><td>工具機、半導體設備、自動化設備、醫療</td></tr>
+      <tr><td><strong>滾珠螺桿</strong></td><td class="num">20%</td><td class="num">25-30%</td><td>工具機 XYZ 軸精密定位</td></tr>
+      <tr><td><strong>工業機器人</strong></td><td class="num">9%</td><td class="num">20-35%</td><td>單軸/多軸機器人、半導體晶圓移載</td></tr>
+      <tr><td><strong>其他</strong></td><td class="num">9%</td><td class="num">25-30%</td><td>減速機、軸承、旋轉工作台、刀具等</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">產業景氣循環位置</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2022-2023</div><div class="tl-spec">下行期</div><div class="tl-tech">庫存去化、需求急凍<br>EPS 5.75→5.57</div></div>
+    <div class="tl-item"><div class="tl-year">2024-2025</div><div class="tl-spec">谷底</div><div class="tl-tech">營收持平、毛利率壓縮<br>EPS 降至 4.31</div></div>
+    <div class="tl-item active"><div class="tl-year">2026 &larr; 現在</div><div class="tl-spec">初期復甦</div><div class="tl-tech">訂單回升、漲價啟動<br>GiS 預估 EPS 5.88</div></div>
+    <div class="tl-item next"><div class="tl-year">2027-2028</div><div class="tl-spec">擴張期</div><div class="tl-tech">價量齊揚、機器人放量<br>GiS 預估 EPS 7.92</div></div>
+  </div>
+
+  <h2 class="ch">銷售地區分佈</h2>
+  <table>
+    <thead><tr><th>地區</th><th>營收佔比</th><th>2026 展望</th></tr></thead>
+    <tbody>
+      <tr><td><strong>亞洲（不含台灣）</strong></td><td class="num">63%</td><td>中國自動化需求受財稅政策刺激復甦，日本/印度穩定成長</td></tr>
+      <tr><td><strong>歐洲</strong></td><td class="num">26%</td><td>PMI 回升至 50 榮枯線，國防/醫療/半導體需求成長顯著</td></tr>
+      <tr><td><strong>美洲</strong></td><td class="num">6%</td><td>受惠 onshoring 趨勢，但關稅不確定性仍存</td></tr>
+      <tr><td><strong>台灣</strong></td><td class="num">5%</td><td>半導體 capex 上行，晶圓移載設備需求強勁</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司法說會、公司年報、凱基投顧</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 產業與公司概況</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ GiS 季度損益預估模型 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">GiS 季度損益預估模型</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-10px 0 10px">資料來源：FY2025 1Q-4Q 為公司季報實績；1Q26F 以後為 GiS 預估。單位：百萬元（EPS 除外）</p>
+
+  <table style="font-size:11.5px">
+    <thead>
+      <tr>
+        <th>損益項目</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26F</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26F</th>
+        <th style="text-align:right">FY25</th>
+        <th style="text-align:right;background:#065f46">FY26F</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">5,839</td><td class="num">5,925</td><td class="num">5,995</td><td class="num">6,503</td><td class="num hi">6,379</td><td class="num neg">-1.9%</td><td class="num pos">+9.2%</td><td class="num hi">7,000</td><td class="num" style="font-weight:700">24,263</td><td class="num hi" style="font-weight:700">27,579</td></tr>
+      <tr><td>營業成本</td><td class="num">4,097</td><td class="num">4,163</td><td class="num">4,281</td><td class="num">4,744</td><td class="num">4,510</td><td class="num">-4.9%</td><td class="num">+10.1%</td><td class="num">4,886</td><td class="num">17,285</td><td class="num">19,278</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num">1,742</td><td class="num">1,762</td><td class="num">1,715</td><td class="num">1,759</td><td class="num hi">1,869</td><td class="num pos">+6.3%</td><td class="num pos">+7.3%</td><td class="num hi">2,114</td><td class="num" style="font-weight:700">6,978</td><td class="num hi" style="font-weight:700">8,301</td></tr>
+      <tr><td>營業費用</td><td class="num">1,323</td><td class="num">1,264</td><td class="num">1,304</td><td class="num">1,444</td><td class="num">1,359</td><td class="num">-5.9%</td><td class="num">+2.7%</td><td class="num">1,428</td><td class="num">5,335</td><td class="num">5,754</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">419</td><td class="num">499</td><td class="num">411</td><td class="num">315</td><td class="num hi">510</td><td class="num pos">+61.9%</td><td class="num pos">+21.7%</td><td class="num hi">686</td><td class="num" style="font-weight:700">1,643</td><td class="num hi" style="font-weight:700">2,547</td></tr>
+      <tr><td>業外收支</td><td class="num">181</td><td class="num">-430</td><td class="num">163</td><td class="num">207</td><td class="num">10</td><td class="num">&mdash;</td><td class="num neg">-94.5%</td><td class="num">0</td><td class="num">121</td><td class="num">20</td></tr>
+      <tr><td><strong>稅前淨利</strong></td><td class="num">600</td><td class="num">69</td><td class="num">573</td><td class="num">523</td><td class="num hi">520</td><td class="num neg">-0.6%</td><td class="num neg">-13.3%</td><td class="num hi">686</td><td class="num" style="font-weight:700">1,764</td><td class="num hi" style="font-weight:700">2,567</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">483</td><td class="num">135</td><td class="num">446</td><td class="num">462</td><td class="num hi">421</td><td class="num neg">-8.9%</td><td class="num neg">-12.8%</td><td class="num hi">556</td><td class="num" style="font-weight:700">1,526</td><td class="num hi" style="font-weight:700">2,079</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">1.36</td><td class="num" style="font-weight:700">0.38</td><td class="num" style="font-weight:700">1.26</td><td class="num" style="font-weight:700">1.31</td><td class="num hi" style="font-weight:800">1.19</td><td class="num neg" style="font-weight:700">-9.2%</td><td class="num neg" style="font-weight:700">-12.5%</td><td class="num hi" style="font-weight:800">1.57</td><td class="num" style="font-weight:800">4.31</td><td class="num hi" style="font-weight:800">5.88</td></tr>
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>獲利能力(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26F</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26F</th>
+        <th style="text-align:right">FY25</th>
+        <th style="text-align:right;background:#065f46">FY26F</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num">29.84</td><td class="num">29.74</td><td class="num">28.60</td><td class="num">27.05</td><td class="num hi">29.30</td><td class="num pos">+2.3pp</td><td class="num neg">-0.5pp</td><td class="num hi">30.20</td><td class="num">28.76</td><td class="num hi">30.10</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">7.17</td><td class="num">8.41</td><td class="num">6.85</td><td class="num">4.85</td><td class="num hi">7.99</td><td class="num pos">+3.1pp</td><td class="num pos">+0.8pp</td><td class="num hi">9.80</td><td class="num">6.77</td><td class="num hi">9.23</td></tr>
+      <tr><td><strong>稅後淨利率</strong></td><td class="num">8.27</td><td class="num">2.28</td><td class="num">7.44</td><td class="num">7.10</td><td class="num hi">6.60</td><td class="num neg">-0.5pp</td><td class="num neg">-1.7pp</td><td class="num hi">7.94</td><td class="num">6.29</td><td class="num hi">7.54</td></tr>
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>成長率(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26F</th>
+        <th style="text-align:right;background:#065f46" colspan="2">QoQ / YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26F</th>
+        <th style="text-align:right">FY25</th>
+        <th style="text-align:right;background:#065f46">FY26F</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>營收 YoY</td><td class="num pos">+6.0%</td><td class="num neg">-4.2%</td><td class="num neg">-5.2%</td><td class="num pos">+2.0%</td><td class="num pos">+9.2%</td><td class="num" colspan="2"></td><td class="num pos">+18.1%</td><td class="num neg">-0.5%</td><td class="num pos">+13.7%</td></tr>
+      <tr><td>營業利益 YoY</td><td class="num neg">-24.0%</td><td class="num neg">-40.0%</td><td class="num neg">-0.9%</td><td class="num neg">-1.0%</td><td class="num pos">+21.7%</td><td class="num" colspan="2"></td><td class="num pos">+37.5%</td><td class="num neg">-20.2%</td><td class="num pos">+55.0%</td></tr>
+      <tr><td>稅後淨利 YoY</td><td class="num pos">+22.2%</td><td class="num neg">-76.8%</td><td class="num neg">-32.9%</td><td class="num pos">+40.0%</td><td class="num neg">-12.8%</td><td class="num" colspan="2"></td><td class="num pos">+311.9%</td><td class="num neg">-22.6%</td><td class="num pos">+36.2%</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:8px">
+    <strong>GiS 模型關鍵假設：</strong>
+    (1) 1Q26 營收依據實際月營收公告（63.79 億）；(2) 2Q26 起反映 7-15% 漲價效應，毛利率逐季改善至 30%+；(3) 費用率假設營運槓桿小幅改善；(4) 業外收支假設正常化（排除 2025 年大幅匯兌波動）；(5) 有效稅率 19%。
+  </blockquote>
+  <span class="src">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>GiS 季度損益預估模型</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 公司卡片 + 券商比較 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">上銀科技 Hiwin Technologies</div><div class="co-ticker">2049.TW &middot; TWSE &middot; 全球第二大線性運動元件廠</div></div>
+      <div class="co-badge">
+        <span class="badge neutral">&#9678; 中立 Neutral</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$277 | 現價 NT$286（04/15 收盤）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val dn">-3.1%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">35x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val">7.92元</div><div class="co-metric-label">2027F EPS (基準)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">30.1%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>日期</th><th>評等</th><th>目標價</th><th>方法</th><th>2026F EPS</th><th>2027F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>元大投顧</td><td>03/03</td><td class="pos">Buy</td><td class="num hi">NT$340</td><td>38x 2026E PE</td><td class="num">8.90</td><td class="num">13.80</td></tr>
+          <tr><td>群益投顧</td><td>04/14</td><td class="pos">Buy</td><td class="num">NT$337</td><td>Forward PE</td><td class="num">5.19</td><td class="num">6.55</td></tr>
+          <tr><td>凱基投顧</td><td>02/26</td><td class="pos">OW</td><td class="num">NT$308</td><td>Forward PE</td><td class="num">7.54</td><td class="num">10.25</td></tr>
+          <tr><td>Morgan Stanley</td><td>03/30</td><td class="pos">OW</td><td class="num">NT$300</td><td>37x 2026E PE</td><td class="num">8.17</td><td class="num">9.87</td></tr>
+          <tr><td>CTBC 中信</td><td>02/25</td><td>Neutral</td><td class="num">NT$250</td><td>38.5x EPS</td><td class="num">6.50</td><td class="num">8.17</td></tr>
+          <tr><td>Goldman Sachs</td><td>02/27</td><td class="neg">Sell</td><td class="num">NT$127</td><td>20x Norm. PE</td><td class="num">5.84</td><td class="num">8.07</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800;color:#0d1b3e">GiS</td><td style="font-weight:700">04/15</td><td style="font-weight:800">Neutral</td><td class="num hi" style="font-weight:800">NT$277</td><td style="font-weight:700">35x 2027F PE</td><td class="num" style="font-weight:800">5.88</td><td class="num" style="font-weight:800">7.92</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">年度財務數據</h3>
+      <table style="font-size:12px">
+        <thead><tr><th>指標</th><th style="text-align:right">FY2023</th><th style="text-align:right">FY2024</th><th style="text-align:right">FY2025</th><th style="text-align:right;background:#065f46">FY2026F</th><th style="text-align:right;background:#065f46">FY2027F</th></tr></thead>
+        <tbody>
+          <tr><td>營收（百萬）</td><td class="num">24,633</td><td class="num">24,392</td><td class="num">24,263</td><td class="num hi">27,579</td><td class="num hi">31,000</td></tr>
+          <tr><td>毛利率</td><td class="num">31.08%</td><td class="num">29.59%</td><td class="num">28.76%</td><td class="num hi">30.10%</td><td class="num hi">31.00%</td></tr>
+          <tr><td>營益率</td><td class="num">10.76%</td><td class="num">8.44%</td><td class="num">6.77%</td><td class="num hi">9.23%</td><td class="num hi">11.00%</td></tr>
+          <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">5.75</td><td class="num" style="font-weight:700">5.57</td><td class="num" style="font-weight:700">4.31</td><td class="num hi" style="font-weight:800">5.88</td><td class="num hi" style="font-weight:800">7.92</td></tr>
+          <tr><td>ROE</td><td class="num">5.83%</td><td class="num">4.16%</td><td class="num">4.07%</td><td class="num">5.60%</td><td class="num">7.20%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>上銀科技 &middot; 2049 &middot; 公司評價</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 估值邏輯 + 三情境 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳、GiS 估值邏輯</h1>
+
+  <h2 class="ch">估值方法選擇</h2>
+  <blockquote>
+    <strong>採用方法：Forward PE on N+2 year (2027F) EPS</strong><br>
+    上銀為典型景氣循環股，目前處於谷底反轉初期。2025 年 EPS 4.31 為景氣谷底，不適合以 trailing PE 估值。採用 2027F EPS 作為基準，反映產業復甦進入中段後的正常化獲利水平，搭配 35 倍 PE（位於歷史均值 28.6x 與高峰 40x 之間），兼顧復甦動能與週期性風險。
+  </blockquote>
+
+  <h2 class="ch">三情境目標價分析</h2>
+  <table>
+    <thead><tr><th>情境</th><th style="text-align:right">PE 倍數</th><th style="text-align:right">EPS</th><th style="text-align:right">目標價</th><th style="text-align:right">潛在報酬</th><th>情境假設</th></tr></thead>
+    <tbody>
+      <tr><td><strong>保守</strong></td><td class="num">30x</td><td class="num">7.13</td><td class="num neg">NT$214</td><td class="num neg">-25.2%</td><td>復甦低於預期，毛利率改善有限，PE 回落</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>基礎（採用）</strong></td><td class="num hi" style="font-weight:700">35x</td><td class="num hi" style="font-weight:700">7.92</td><td class="num hi" style="font-weight:800">NT$277</td><td class="num" style="font-weight:700">-3.1%</td><td style="font-weight:600">GiS 核心預估，漲價效應 + 半導體需求兌現</td></tr>
+      <tr><td><strong>樂觀</strong></td><td class="num">40x</td><td class="num">8.71</td><td class="num pos">NT$348</td><td class="num pos">+21.7%</td><td>機器人放量 + 全球工具機超預期復甦</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">GiS vs 券商共識差異說明</h2>
+  <table>
+    <thead><tr><th>差異項目</th><th>GiS 觀點</th><th>市場多數觀點</th></tr></thead>
+    <tbody>
+      <tr><td><strong>2026F 營收</strong></td><td>27,579（+13.7%）— 溫和復甦</td><td>26,500-30,200（+9%~+25%）— 分歧極大</td></tr>
+      <tr><td><strong>2026F 毛利率</strong></td><td>30.1% — 漲價效應部分反映</td><td>29.3%-32.3% — MS/元大偏高</td></tr>
+      <tr><td><strong>PE 倍數</strong></td><td>35x — 復甦初期合理估值</td><td>20x（GS 極空）至 38x（MS/元大）</td></tr>
+      <tr><td><strong>估值結論</strong></td><td>股價已反映復甦預期，上行空間有限</td><td>多數看多（4 Buy / 1 Neutral / 1 Sell）</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>GiS 觀點：</strong>市場對上銀 2026F EPS 共識極度分歧（5.19-8.90 元），反映景氣循環股在轉折點的估值困難。GiS 採取保守偏中的 EPS 預估（5.88 元），搭配合理 PE 35x，得出目標價 NT$277。目前股價 NT$286 已 price in 大部分復甦利多，建議等待更好的進場時機。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; GiS 估值邏輯</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 催化劑與風險 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、催化劑與風險評估</h1>
+
+  <h2 class="ch">關鍵催化劑</h2>
+  <table>
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1Q26 季報優於預期</strong></td><td>2026/05</td><td class="pos">高</td><td>若 1Q26 EPS &gt;1.3 元（優於 GiS 預估 1.19），將驗證復甦力道</td></tr>
+      <tr><td><strong>漲價效應全面反映</strong></td><td>2Q26</td><td class="pos">高</td><td>7-15% 漲幅於 2Q26 全季反映，毛利率可望突破 30%</td></tr>
+      <tr><td><strong>半導體 Capex 上行</strong></td><td>2026-27</td><td class="pos">中高</td><td>台積電擴產 + 先進封裝設備需求，帶動晶圓移載系統出貨</td></tr>
+      <tr><td><strong>人形機器人元件出貨</strong></td><td>2H26-27</td><td>中</td><td>關鍵元件送樣中，2026 倍數成長但基期極低，量化影響有限</td></tr>
+      <tr><td><strong>中國工具機需求復甦</strong></td><td>2026</td><td class="pos">中</td><td>財稅政策刺激 + 庫存回補，中國工具機訂單自 4Q25 顯著回升</td></tr>
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（上修目標價條件）</h4>
+      <div class="risk-item"><strong>EV & 半導體 Capex 超預期</strong> &rarr; 2027F EPS 上修 10%+，PE re-rate 至 40x，目標價可至 NT$348</div>
+      <div class="risk-item"><strong>漲價幅度/持續性超預期</strong> &rarr; 毛利率改善至 31%+，2026F EPS 上修至 6.5+ 元</div>
+      <div class="risk-item"><strong>機器人業務超預期放量</strong> &rarr; 營收佔比提升至 15%+，帶動 PE 給予結構性溢價</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（下修目標價條件）</h4>
+      <div class="risk-item"><strong>地緣政治風險升溫</strong> &rarr; 中美關稅加劇、台海緊張，壓制需求並推升不確定性折價</div>
+      <div class="risk-item"><strong>中國本土供應商競爭加劇</strong> &rarr; 氣立等中國廠商以低價搶市，壓縮 ASP 與市佔率</div>
+      <div class="risk-item"><strong>AI Capex 循環低於預期</strong> &rarr; 半導體設備訂單不如預期，延後營收復甦節奏</div>
+      <div class="risk-item"><strong>工具機需求復甦延遲</strong> &rarr; 歐洲/中國 PMI 反覆，導致訂單能見度再度縮短</div>
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 風險評估：</strong>上行與下行風險大致均衡。產業循環確實在反轉，但目前股價已隱含 44x NTM PE 的高估值，需要獲利加速才能支撐。建議密切追蹤：(1) 月營收 YoY 趨勢是否持續加速、(2) 季度毛利率是否突破 30%、(3) JMTBA 月度訂單數據、(4) 半導體設備相關訂單進展。若 1Q26 季報顯著優於預期（EPS &gt;1.4 元），將考慮上調評等至增加持股。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 &middot; 催化劑與風險評估</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 投資建議彙整 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆、投資建議彙整</h1>
+
+  <table>
+    <thead><tr><th>公司</th><th>代號</th><th>GiS 評等</th><th>目標價</th><th>現價</th><th>預期報酬</th><th>2026F EPS</th><th>2027F EPS</th></tr></thead>
+    <tbody>
+      <tr><td><strong>上銀科技</strong></td><td>2049.TW</td><td style="font-weight:700;color:#d97706">中立</td><td class="num hi">NT$277</td><td class="num">NT$286</td><td class="num">-3.1%</td><td class="num">5.88</td><td class="num">7.92</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">投資論點摘要</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">1</span><span><strong>景氣循環反轉確立。</strong>工具機產業庫存調整逾 3 年，JMTBA 三大區域訂單同步回升。上銀訂單能見度拉長至 4 個月，3 月營收創 42 個月新高（YoY +17.4%）。公司指引 2Q26 營運優於 1Q26 及去年同期。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">2</span><span><strong>漲價 + 產品組合升級驅動毛利率改善。</strong>3 月起調漲部分產品 7-15%，GiS 預估 FY2026F 毛利率回升至 30.1%，營益率改善至 9.2%，帶動 EPS 成長 36% 至 5.88 元。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">3</span><span><strong>估值已 price in 復甦預期。</strong>目前 NTM PE 約 44x，顯著高於歷史均值 28.6x。市場共識極度分歧（2026F EPS 5.19-8.90），反映景氣轉折點的不確定性。GiS 目標價 NT$277 暗示上行空間有限。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">4</span><span><strong>中長期看點：機器人 + 半導體。</strong>工業機器人佔營收近 10%，人形機器人元件 2026 年開始出貨。半導體晶圓移載系統受惠 AI capex 循環。此為 2027-2028 年的結構性成長動能。</span></div>
+  </div>
+
+  <h2 class="ch">建議操作策略</h2>
+  <blockquote>
+    <strong>維持中立。</strong>上銀為產業循環反轉受惠股，但目前估值已充分反映復甦預期。建議在以下情境考慮加碼：(1) 股價回落至 NT$240 以下（對應 30x 2027F PE，提供安全邊際）；(2) 1Q26/2Q26 季報顯著優於預期，確認獲利加速；(3) 機器人業務出現超預期訂單。相反，若月營收 YoY 轉弱或全球 PMI 反轉，應考慮減碼。
+  </blockquote>
+
+  <h2 class="ch">GiS 評等定義</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>GiS 評等</th><th>定義</th><th>預期報酬</th><th>本報告</th></tr></thead>
+    <tbody>
+      <tr><td>買進 (Buy)</td><td>12 個月目標價上檔 &gt;15%</td><td>&gt;15%</td><td></td></tr>
+      <tr><td>增加持股 (Overweight)</td><td>12 個月目標價上檔 5-15%</td><td>5-15%</td><td></td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>中立 (Neutral)</strong></td><td><strong>12 個月目標價上檔 -5% ~ +5%</strong></td><td><strong>&plusmn;5%</strong></td><td style="font-weight:800;color:#d97706">&#9678; -3.1%</td></tr>
+      <tr><td>減碼 (Underweight)</td><td>12 個月目標價下檔 &gt;5%</td><td>&lt;-5%</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:16px">本報告涵蓋公司：上銀科技（2049.TW）。資料截止日期：2026 年 4 月 15 日。現價以 04/15 收盤價 NT$286 計算。所有財務數據以公司官方公告為主（月營收、季報），券商報告僅供交叉參考。GiS 預估為自有模型產出。本報告僅供研究參考，不構成投資建議。</p>
+
+  <div class="page-footer" style="margin-top:32px">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 &middot; 投資建議</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  // ── 圖表一：季度營收 + YoY 成長率 ──
+  new Chart(getEl('chart1'), {
+    type: 'bar',
+    data: {
+      labels: ['1Q25','2Q25','3Q25','4Q25','1Q26F','2Q26F','3Q26F','4Q26F'],
+      datasets: [
+        {
+          label: '營收（百萬）',
+          data: [5839, 5925, 5995, 6503, 6379, 7000, 7200, 7000],
+          backgroundColor: ['#1a3a6e','#1a3a6e','#1a3a6e','#1a3a6e','#00a878','#00a878','#00a878','#00a878'],
+          borderRadius: 5,
+          barPercentage: 0.7,
+          categoryPercentage: 0.8,
+          yAxisID: 'y'
+        },
+        {
+          label: 'YoY%',
+          data: [6.0, -4.2, -5.2, 2.0, 9.2, 18.1, 20.1, 7.6],
+          type: 'line',
+          borderColor: '#d97706',
+          backgroundColor: 'transparent',
+          tension: 0.35,
+          pointRadius: 5,
+          borderWidth: 2.5,
+          fill: false,
+          yAxisID: 'y1'
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 12 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { position: 'left', grid: { color: '#eef2f8' }, ticks: { callback: v => (v/1000).toFixed(1)+'B' }, min: 4000, max: 8000 },
+        y1: { position: 'right', grid: { display: false }, ticks: { callback: v => v+'%' }, min: -10, max: 25 }
+      }
+    }
+  });
+
+  // ── 圖表二：季度 EPS ──
+  new Chart(getEl('chart2'), {
+    type: 'bar',
+    data: {
+      labels: ['1Q25','2Q25','3Q25','4Q25','1Q26F','2Q26F','3Q26F','4Q26F'],
+      datasets: [
+        {
+          label: 'EPS（元）',
+          data: [1.36, 0.38, 1.26, 1.31, 1.19, 1.57, 1.73, 1.39],
+          backgroundColor: ['#1a3a6e','#1a3a6e','#1a3a6e','#1a3a6e','#00a878','#00a878','#00a878','#00a878'],
+          borderRadius: 5,
+          barPercentage: 0.65,
+          categoryPercentage: 0.8
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => 'EPS: ' + ctx.raw + '元' } }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v.toFixed(1)+'元' }, min: 0, max: 2.0 }
+      }
+    }
+  });
+
+  // Label plugin for bar values
+  Chart.register({
+    id: 'labelPlugin',
+    afterDatasetsDraw(chart) {
+      const ctx = chart.ctx;
+      chart.data.datasets.forEach((ds, i) => {
+        if (ds.type === 'line') return;
+        const meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach((bar, idx) => {
+          const v = ds.data[idx];
+          if (!v && v !== 0) return;
+          ctx.save();
+          ctx.font = 'bold 10.5px PingFang TC, Arial';
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#1a2a4a';
+          ctx.textBaseline = 'bottom';
+          const label = ds.label.includes('EPS') ? v.toFixed(2) : (v/1000).toFixed(1)+'B';
+          ctx.fillText(label, bar.x, bar.y - 3);
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+}); // end window.load
+</script>
+</body>
+</html>

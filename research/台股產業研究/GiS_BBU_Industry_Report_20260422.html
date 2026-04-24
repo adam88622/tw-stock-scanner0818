@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>BBU 產業深度報告 | GiS Genesis International Capital</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:12.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:12.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:12.5px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:16px;margin:14px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:12.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:12.5px;color:#9aabb5;display:block;margin-top:6px}
+</style>
+</head>
+<body>
+
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ══════════════ P1 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none"><line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/><line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/><circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/><circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/><line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/></svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">AI 量化交易與相關應用產品開發</div></div>
+    </div>
+    <div class="cover-eyebrow">Industry Deep Dive &middot; Q2 2026</div>
+    <div class="cover-title">AI 資料中心電力革命<br><em>BBU 七雄爭霸戰</em></div>
+    <div class="cover-subtitle">從 54V 到 800V HVDC &mdash; 誰能搶下兆瓦級 AI 機櫃的電力版圖</div>
+    <div class="cover-tags">
+      <span class="ctag hl">台達電 2308</span>
+      <span class="ctag hl">光寶科 2301</span>
+      <span class="ctag hl">AES-KY 6781</span>
+      <span class="ctag">順達 3211</span>
+      <span class="ctag">新盛力 4931</span>
+      <span class="ctag">系統電 5309</span>
+      <span class="ctag">加百裕 3323</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">$<em>230</em>億</div><div class="cstat-label">2028E AI PSU TAM</div></div>
+    <div class="cstat"><div class="cstat-num"><em>14</em>萬櫃+</div><div class="cstat-label">2026E GB/VR 機櫃需求</div></div>
+    <div class="cstat"><div class="cstat-num"><em>800</em>V</div><div class="cstat-label">HVDC 新架構標準</div></div>
+    <div class="cstat"><div class="cstat-num"><em>3</em> Buy</div><div class="cstat-label">GiS 買進評等</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 4 月 21 日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ P2 投資建議總覽 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch" style="margin-top:16px">GiS 投資建議與目標價</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-10px 0 8px">現價截至 2026/04/21 收盤；EPS 為 GiS 自行預估；PE 依 GiS 估值方法論決定</p>
+
+  <table style="font-size:11px">
+    <thead><tr><th>公司</th><th>代號</th><th style="text-align:right">現價</th><th style="text-align:center;background:#065f46">評等</th><th style="text-align:right;background:#065f46">目標價</th><th style="text-align:right;background:#065f46">上檔</th><th style="text-align:right">26E EPS</th><th style="text-align:right">27E EPS</th><th>估值方法</th><th style="text-align:right">Target PE</th></tr></thead>
+    <tbody>
+      <tr><td><strong>新盛力</strong></td><td>4931</td><td class="num">145</td><td class="pos" style="font-weight:800;text-align:center">買進</td><td class="num hi" style="font-weight:800">300</td><td class="num pos" style="font-weight:800">+107%</td><td class="num">8.0</td><td class="num hi">15.0</td><td>Fwd PE 27E</td><td class="num">20x</td></tr>
+      <tr><td><strong>系統電</strong></td><td>5309</td><td class="num">61.6</td><td class="pos" style="font-weight:800;text-align:center">買進</td><td class="num hi" style="font-weight:800">105</td><td class="num pos" style="font-weight:800">+70%</td><td class="num">3.5</td><td class="num hi">7.0</td><td>Fwd PE 27E</td><td class="num">15x</td></tr>
+      <tr><td><strong>加百裕</strong></td><td>3323</td><td class="num">34.1</td><td class="pos" style="font-weight:800;text-align:center">買進</td><td class="num hi" style="font-weight:800">54</td><td class="num pos" style="font-weight:800">+59%</td><td class="num">2.0</td><td class="num hi">4.5</td><td>Fwd PE 27E</td><td class="num">12x</td></tr>
+      <tr><td><strong>光寶科</strong></td><td>2301</td><td class="num">171.6</td><td style="color:#3b82f6;font-weight:800;text-align:center">增持</td><td class="num hi" style="font-weight:800">198</td><td class="num pos">+15%</td><td class="num hi">9.0</td><td class="num">12.5</td><td>Fwd PE 26E</td><td class="num">22x</td></tr>
+      <tr><td><strong>AES-KY</strong></td><td>6781</td><td class="num">1,020</td><td style="color:#3b82f6;font-weight:800;text-align:center">增持</td><td class="num hi" style="font-weight:800">1,150</td><td class="num pos">+13%</td><td class="num hi">46.0</td><td class="num">56.0</td><td>Fwd PE 26E</td><td class="num">25x</td></tr>
+      <tr><td><strong>順達</strong></td><td>3211</td><td class="num">379.5</td><td style="color:#3b82f6;font-weight:800;text-align:center">增持</td><td class="num hi" style="font-weight:800">420</td><td class="num pos">+11%</td><td class="num hi">14.0</td><td class="num">20.0</td><td>Blended PE</td><td class="num">28x/22x</td></tr>
+      <tr><td><strong>台達電</strong></td><td>2308</td><td class="num">2,015</td><td style="color:#d97706;font-weight:800;text-align:center">中立</td><td class="num" style="font-weight:800">2,070</td><td class="num">+3%</td><td class="num">35.0</td><td class="num hi">46.0</td><td>Fwd PE 27E</td><td class="num">45x</td></tr>
+    </tbody>
+  </table>
+
+  <div class="picks-grid" style="margin-top:12px">
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #1 &middot; 高壓 BBU 純題材</div>
+      <div class="pick-name">新盛力 4931</div>
+      <div class="pick-ticker">目標價 NT$300 | 現價 NT$145（+107%）</div>
+      <div class="pick-why">台系唯一以 25kW 高壓 BBU 為主力，已獲 CSP 認證。Rubin 平台 2027 年帶動出貨 6-7 萬顆，潛在營收 80 億、毛利率 30%+。</div>
+      <div class="pick-catalyst">催化劑：2026 H2 高壓放量、NVIDIA 訂單、Rubin 量產</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #2 &middot; 美國製造差異化</div>
+      <div class="pick-name">系統電 5309</div>
+      <div class="pick-ticker">目標價 NT$105 | 現價 NT$61.6（+70%）</div>
+      <div class="pick-why">台灣唯一在美有 BBU 廠房，和碩入股鎖定 100% 美國製造。BBU+IPC+無人機「AI 鐵三角」，CSP 訂單看到 2028 年。</div>
+      <div class="pick-catalyst">催化劑：Q2 BBU 放量、Plano 廠爬坡、和碩協同</div>
+    </div>
+  </div>
+
+  <blockquote><strong>GiS 觀點：</strong>我們在 BBU 七雄中精選 3 檔買進、3 檔增持、1 檔中立。核心邏輯是<strong>押注高壓段的贏家</strong> &mdash; 5kW 紅海搏殺的利潤正在向 12kW+ 高壓藍海集中，而「美國製造」正從加分題變成必答題。台達電雖是絕對龍頭，但 NT$2,015 已反映大部分利多。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資建議總覽</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ P3 執行摘要 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">執行摘要：三大核心論點</h1>
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">10x<em> 成長</em></div><div class="kpi-lbl">AI PSU TAM 2025→2028</div></div>
+    <div class="kpi"><div class="kpi-val">65-70%</div><div class="kpi-lbl">台達電 AI PSU 市占率</div></div>
+    <div class="kpi gold"><div class="kpi-val">0.5<em> USD/W</em></div><div class="kpi-lbl">HVDC Rack ASP 躍升</div></div>
+    <div class="kpi green"><div class="kpi-val">300%+</div><div class="kpi-lbl">BBU 模組年增率（2025）</div></div>
+  </div>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">1</span><span><strong>HVDC 800V 將在 2027 年重新定義資料中心電力架構。</strong>我們認為市場低估了 800VDC Power Rack 對整體電源供應鏈價值的「再定價效應」 &mdash; ASP per watt 由 0.1 美元跳升至 0.5 美元，相當於每瓦價值量翻 5 倍。這不是漸進式升級，而是產業結構斷裂。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">2</span><span><strong>BBU 已從選配變標配，但真正的爆發在高壓段。</strong>3~5.5kW BBU 正在經歷價格戰，利潤向 12kW 以上高壓產品集中。我們看好直接切入高壓規格的廠商（新盛力 25kW、系統電 11kW），而非仍在 5kW 紅海搏殺的玩家。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">3</span><span><strong>「美國製造」不再是加分題，而是必答題。</strong>CSP 客戶 RFQ 已明確要求在美生產，系統電 Plano 廠 + 和碩結盟的「100% 美國製造」模式，是我們給予其長期 9 分的核心理由。這個門檻將在未來 2-3 年逐步篩掉缺乏海外產能的中小型模組廠。</span></div>
+  </div>
+
+  <h2 class="ch">3 月營收驗證：成長動能分化</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>排名</th><th>公司</th><th style="text-align:right">3月營收</th><th style="text-align:right">MoM%</th><th style="text-align:right">YoY%</th><th style="text-align:right">YTD YoY%</th><th>GiS 解讀</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>順達</strong></td><td class="num">14.68 億</td><td class="num pos">+69%</td><td class="num pos" style="font-weight:800">+76%</td><td class="num pos">+42%</td><td>BBU 轉型成效最強驗證</td></tr>
+      <tr><td>2</td><td><strong>台達電</strong></td><td class="num">597.8 億</td><td class="num pos">+20%</td><td class="num pos" style="font-weight:800">+38%</td><td class="num pos">+34%</td><td>歷史新高，AI 電源主力</td></tr>
+      <tr><td>3</td><td><strong>新盛力</strong></td><td class="num">2.83 億</td><td class="num pos">+30%</td><td class="num pos" style="font-weight:800">+36%</td><td class="num pos">+21%</td><td>高壓 BBU 動能持續增強</td></tr>
+      <tr><td>4</td><td><strong>AES-KY</strong></td><td class="num">15.06 億</td><td class="num pos">+1%</td><td class="num pos">+26%</td><td class="num pos">+32%</td><td>穩健但成長趨緩需留意</td></tr>
+      <tr><td>5</td><td><strong>光寶科</strong></td><td class="num">164.84 億</td><td class="num pos">+29%</td><td class="num pos">+24%</td><td class="num pos">+19%</td><td>AI+BBU 推升至 7 年新高</td></tr>
+      <tr><td>6</td><td><strong>系統電</strong></td><td class="num">2.92 億</td><td class="num pos">+2%</td><td class="num neg">-6%</td><td class="num neg">-1%</td><td>BBU 遞延壓抑，Q2 轉折</td></tr>
+      <tr><td>7</td><td><strong>加百裕</strong></td><td class="num">3.35 億</td><td class="num pos">+10%</td><td class="num neg">-14%</td><td class="num neg">-8%</td><td>轉型陣痛中，2027 收成</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：MOPS 公告（2026/04）、GiS 彙編</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ P3 章節封面 壹 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One &mdash; Industry Landscape</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業洞察：AI 電力革命與 BBU 結構性升級</div>
+  <div class="sec-desc">從 54V 低壓走向 800V HVDC，從單顆 PSU 走向兆瓦級電源櫃，AI 資料中心的電力架構正在經歷一次性的世代斷裂。本章拆解 BBU 市場規模、技術路線與關鍵時間軸。</div>
+</div>
+
+<!-- ══════════════ P4 產業洞察 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、BBU 產業結構：從備援走向標配</h1>
+  <p>過去 BBU（Battery Backup Unit）在資料中心僅扮演「選配」角色 &mdash; 主要用途是為伺服器提供 5-10 秒的斷電備援，讓系統有時間平滑地切換到 UPS 或柴油發電機。但隨著 AI 伺服器單櫃功耗從數十 kW 飆升至數百 kW 甚至兆瓦級，CSP 已將 BBU 列為<strong>機櫃標配</strong>，NVIDIA GB200/GB300 起的新平台均內建 BBU 需求。</p>
+
+  <h2 class="ch">BBU 功率規格世代躍進</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2023-2024</div><div class="tl-spec">3~5kW</div><div class="tl-tech">54V 低壓<br>傳統 ASIC/GPU 伺服器</div></div>
+    <div class="tl-item active"><div class="tl-year">2025-2026 &larr; 現在</div><div class="tl-spec">5.5~12kW</div><div class="tl-tech">GB200/300 標配<br>400V 開始導入</div></div>
+    <div class="tl-item next"><div class="tl-year">2027-2028</div><div class="tl-spec">12~25kW</div><div class="tl-tech">Rubin/VR 平台<br>800V HVDC 主流</div></div>
+    <div class="tl-item"><div class="tl-year">2029+</div><div class="tl-spec">25kW+</div><div class="tl-tech">MW 級機櫃<br>SST + 微電網整合</div></div>
+  </div>
+
+  <h2 class="ch">台系 BBU 供應鏈全景</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>供應鏈角色</th><th>代表廠商</th><th>產品定位</th><th>CSP 客戶</th></tr></thead>
+    <tbody>
+      <tr><td><strong>系統整合/電源櫃</strong></td><td>台達電、光寶科</td><td>PSU + BBU + Power Rack + 液冷</td><td>四大 CSP 直供</td></tr>
+      <tr><td><strong>BBU 模組龍頭</strong></td><td>AES-KY、順達</td><td>3~25kW BBU 電池模組</td><td>AWS/Meta/Google（直供或透過電源廠）</td></tr>
+      <tr><td><strong>高壓 BBU 挑戰者</strong></td><td>新盛力、系統電</td><td>11~26kW 高壓 + HVDC BBU</td><td>CSP 認證中/已獲1-2家</td></tr>
+      <tr><td><strong>轉型中模組廠</strong></td><td>加百裕</td><td>直攻 12kW BBU（2027 量產）</td><td>透過系統電間接供應</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 核心觀點：</strong>BBU 產業正在經歷「價值遷移」 &mdash; 利潤從 3~5kW 低壓紅海，快速向 12kW+ 高壓藍海集中。我們預估 2026 年台廠 BBU 整體產值約 350 億元，但供給仍明顯不足。真正的爆發將在 2027 年 HVDC 架構全面放量後出現，屆時 25kW BBU 單顆 ASP 可達 $2,000 美元，是 5kW 的 4-5 倍。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 產業洞察</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ P5 供需與 TAM ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹、AI 電源 TAM 與供需結構</h1>
+  <p>根據高盛與產業鏈調查，全球 AI 伺服器電源（含 PSU、BBU、Power Rack）TAM 將從 2025 年約 23 億美元，成長至 2028 年約 230 億美元，4 年翻 10 倍。其中 HVDC Power Rack 為新增最大宗，每瓦 ASP 由 $0.1 跳升至 $0.5。</p>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">AI 電源 TAM 成長軌跡（億美元）</div>
+      <div class="chart-sub">資料來源：Goldman Sachs、GiS 預估</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartTAM" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">台系 BBU 七雄 3 月營收 YoY 成長率</div>
+      <div class="chart-sub">資料來源：MOPS 公告、GiS 彙編</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartRevYoY" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">供需缺口判斷：需求 >> 供給</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>指標</th><th style="text-align:right">2025</th><th style="text-align:right">2026E</th><th>GiS 判斷</th></tr></thead>
+    <tbody>
+      <tr><td>GB/VR 機櫃需求</td><td class="num">~2 萬櫃</td><td class="num hi">14 萬櫃+</td><td class="pos">爆發性成長，電源/BBU 全面吃緊</td></tr>
+      <tr><td>AI PSU 交期</td><td class="num">2-4 個月</td><td class="num neg">4-8 個月</td><td class="neg">交期拉長反映供不應求</td></tr>
+      <tr><td>功率半導體價格</td><td class="num">持平</td><td class="num neg">+25%</td><td>上游吃緊，轉嫁至 ASP</td></tr>
+      <tr><td>台廠 BBU 產值</td><td class="num">~180 億</td><td class="num hi">~350 億</td><td class="pos">翻倍但仍不足，各廠全力擴產</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司法說會、Goldman Sachs 供應鏈調查、GiS 預估</span>
+
+  <blockquote><strong>GiS 供需判斷：</strong>我們給予整體 BBU 產業「需求 9.0 / 供給 7.0」的評分（滿分 10），差距達 2 分，處於典型供不應求階段。這個缺口至少要到 2027 年下半年各廠新產能全面開出後才會緩解。在此之前，具備量產能力且已獲 CSP 認證的廠商，將享有極佳的訂單能見度與議價空間。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; TAM 與供需</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ P6 章節封面 貳 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two &mdash; Competitive Landscape</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">七雄爭霸：誰的護城河最深、成長斜率最陡</div>
+  <div class="sec-desc">台達電與光寶科以系統整合卡位頂層，AES-KY 與順達為 BBU 模組量產主力，新盛力、系統電、加百裕則各以高壓先行、美國製造、無人機電池等差異化策略搶攻第二梯隊。</div>
+</div>
+
+<!-- ══════════════ P7 七雄比較 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳、七雄全面對照</h1>
+  <table style="font-size:12.5px">
+    <thead><tr><th style="min-width:70px">面向</th><th>台達電 2308</th><th>光寶科 2301</th><th>AES-KY 6781</th><th>順達 3211</th><th>新盛力 4931</th><th>系統電 5309</th><th>加百裕 3323</th></tr></thead>
+    <tbody>
+      <tr><td><strong>2025 營收</strong></td><td class="num">5,549 億</td><td class="num">1,661 億</td><td class="num">160 億</td><td class="num">132 億</td><td class="num">~34 億</td><td class="num">34 億</td><td class="num">~38 億</td></tr>
+      <tr><td><strong>角色定位</strong></td><td>AI 電源龍頭</td><td>電源系統平台</td><td>BBU 模組龍頭</td><td>BBU 轉型主力</td><td>高壓 BBU 先行</td><td>美國製造 BBU</td><td>轉型中模組廠</td></tr>
+      <tr><td><strong>BBU 規格</strong></td><td>PSU+BBU+Rack</td><td>PSU+BBU+Rack</td><td>5→8→HVDC</td><td>3~25kW</td><td class="pos">25~26kW</td><td>3~11kW+HVDC</td><td class="pos">直攻 12kW</td></tr>
+      <tr><td><strong>CSP 客戶</strong></td><td class="pos">四大 CSP</td><td class="pos">直供 CSP</td><td>AWS+Meta</td><td>三大 CSP</td><td>1 家+ NVIDIA</td><td>2 家→4 家</td><td>透過系統電</td></tr>
+      <tr><td><strong>毛利率</strong></td><td class="num">34.3%</td><td class="num">22.9%</td><td class="num">35.9%</td><td class="num">16.6%→20%</td><td class="num">25~35%</td><td class="num">~25%</td><td class="num">轉型中</td></tr>
+      <tr><td><strong>HVDC 時點</strong></td><td class="pos">2026 Q3 量產</td><td>2027 H1</td><td>2027 放量</td><td>2027 H2</td><td class="pos">2026 H2</td><td>有布局</td><td>無</td></tr>
+      <tr><td><strong>美國產能</strong></td><td>泰/美/印</td><td>德州</td><td>越南為主</td><td>泰國+台灣</td><td>無</td><td class="pos">Plano 廠</td><td>透過系統電</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>GiS 評等</strong></td><td style="color:#d97706;font-weight:800">中立</td><td class="pos" style="font-weight:800">增持</td><td class="pos" style="font-weight:800">增持</td><td class="pos" style="font-weight:800">增持</td><td class="pos" style="font-weight:800">買進</td><td class="pos" style="font-weight:800">買進</td><td class="pos" style="font-weight:800">買進</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：各公司法說會、季報、GiS 研究整理（截至 2026/04/21）</span>
+
+  <h2 class="ch">HVDC 量產時程交叉比對</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>廠商</th><th>400V 進度</th><th>800V 進度</th><th>GiS 時程判斷</th></tr></thead>
+    <tbody>
+      <tr><td><strong>台達電</strong></td><td class="pos">2026 Q3 量產</td><td class="pos">2026 Q3 提前量產</td><td style="font-weight:700;color:#00875a">業界最快，搭配 Rubin 放量</td></tr>
+      <tr><td><strong>光寶科</strong></td><td>2026 已出貨（50V Rack）</td><td>2026 Q3 測試→Q4 小量</td><td>緊追台達，800V 2027 H1 放量</td></tr>
+      <tr><td><strong>新盛力</strong></td><td class="pos">2026 H2 高壓 BBU 放量</td><td>與台達電協作</td><td style="font-weight:700;color:#00875a">BBU 模組廠中高壓進度最快</td></tr>
+      <tr><td><strong>AES-KY</strong></td><td>2026 Q4 HVDC 出貨</td><td>2027 放量</td><td>規模大但高壓時程居中</td></tr>
+      <tr><td><strong>順達</strong></td><td>2026 H2 小量（台達電協作）</td><td>2027 H2（800VDC）</td><td>BBU 模組廠中時程最晚</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 觀點：</strong>HVDC 時程是我們區分「贏家」與「跟隨者」的核心指標。台達電與新盛力在高壓段進度明顯領先，將率先享受 ASP 躍升紅利。順達雖然 3~5.5kW 量最大，但 800V 產品要到 2027 H2 才放量，意味著在高壓轉折期將面臨「舊產品價格戰 + 新產品尚未貢獻」的青黃不接風險。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; 競爭格局</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ P8 章節封面 參 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three &mdash; Valuation &amp; Stock Picks</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">估值模型與投資建議</div>
+  <div class="sec-desc">基於 GiS 自建財務模型，採用 Forward PE 搭配三情境分析，推導七檔個股目標價與評等。我們在估值上刻意保守 &mdash; 寧可用合理 EPS 搭配合理 PE，也不為了「湊出」高目標價而疊加樂觀假設。</div>
+</div>
+
+<!-- ══════════════ P9 GiS 估值總表 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參、GiS 估值模型與目標價</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-10px 0 14px">現價截至 2026/04/21 收盤；EPS 為 GiS 自行預估；PE 依 GiS 估值方法論決定</p>
+
+  <table style="font-size:11px">
+    <thead><tr><th>公司</th><th>代號</th><th style="text-align:right">現價</th><th style="text-align:right">25A EPS</th><th style="text-align:right;background:#065f46">26E EPS</th><th style="text-align:right;background:#065f46">27E EPS</th><th>估值方法</th><th style="text-align:right;background:#065f46">Target PE</th><th style="text-align:right;background:#065f46">目標價</th><th>評等</th><th style="text-align:right">上檔</th></tr></thead>
+    <tbody>
+      <tr><td><strong>新盛力</strong></td><td>4931</td><td class="num">145</td><td class="num">3.1</td><td class="num">8.0</td><td class="num hi">15.0</td><td>Fwd PE 27E</td><td class="num hi">20x</td><td class="num hi" style="font-weight:800">300</td><td class="pos" style="font-weight:800">買進</td><td class="num pos" style="font-weight:800">+107%</td></tr>
+      <tr><td><strong>系統電</strong></td><td>5309</td><td class="num">61.6</td><td class="num">2.0</td><td class="num">3.5</td><td class="num hi">7.0</td><td>Fwd PE 27E</td><td class="num hi">15x</td><td class="num hi" style="font-weight:800">105</td><td class="pos" style="font-weight:800">買進</td><td class="num pos" style="font-weight:800">+70%</td></tr>
+      <tr><td><strong>加百裕</strong></td><td>3323</td><td class="num">34.1</td><td class="num">1.0</td><td class="num">2.0</td><td class="num hi">4.5</td><td>Fwd PE 27E</td><td class="num hi">12x</td><td class="num hi" style="font-weight:800">54</td><td class="pos" style="font-weight:800">買進</td><td class="num pos" style="font-weight:800">+59%</td></tr>
+      <tr><td><strong>光寶科</strong></td><td>2301</td><td class="num">171.6</td><td class="num">6.64</td><td class="num hi">9.0</td><td class="num">12.5</td><td>Fwd PE 26E</td><td class="num">22x</td><td class="num hi" style="font-weight:800">198</td><td style="color:#3b82f6;font-weight:800">增持</td><td class="num pos">+15%</td></tr>
+      <tr><td><strong>AES-KY</strong></td><td>6781</td><td class="num">1,020</td><td class="num">39.5</td><td class="num hi">46.0</td><td class="num">56.0</td><td>Fwd PE 26E</td><td class="num">25x</td><td class="num hi" style="font-weight:800">1,150</td><td style="color:#3b82f6;font-weight:800">增持</td><td class="num pos">+13%</td></tr>
+      <tr><td><strong>順達</strong></td><td>3211</td><td class="num">379.5</td><td class="num">9.1</td><td class="num hi">14.0</td><td class="num">20.0</td><td>Blended PE</td><td class="num">28x/22x</td><td class="num hi" style="font-weight:800">420</td><td style="color:#3b82f6;font-weight:800">增持</td><td class="num pos">+11%</td></tr>
+      <tr><td><strong>台達電</strong></td><td>2308</td><td class="num">2,015</td><td class="num">23.14</td><td class="num">35.0</td><td class="num hi">46.0</td><td>Fwd PE 27E</td><td class="num">45x</td><td class="num" style="font-weight:800">2,070</td><td style="color:#d97706;font-weight:800">中立</td><td class="num">+3%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">估值邏輯說明</h2>
+  <div class="callout green">
+    <div class="callout-title">為什麼新盛力用 2027E &times; 20x？</div>
+    <ul style="font-size:12.5px">
+      <li><strong>高成長確定性：</strong>25kW BBU 已獲 CSP 認證並開始供貨，Rubin 平台 2027 年放量路徑清晰，訂單能見度 >6 個月</li>
+      <li><strong>PE 20x 依據：</strong>產業平均 15x + 龍頭地位溢價 0x（非龍頭）+ 高成長溢價 +5x + 小型股折價 -2x + 客戶集中風險 -2x = 16~20x 取上緣</li>
+      <li><strong>vs 券商：</strong>市場共識目標價約 NT$250~300，GiS 取中高位 NT$300 反映我們對 Rubin 放量信心</li>
+    </ul>
+  </div>
+  <div class="callout">
+    <div class="callout-title">為什麼台達電只給中立？</div>
+    <ul style="font-size:12.5px">
+      <li><strong>估值已充分反映：</strong>現價 NT$2,015 隱含 2026E PE 57.6x、2027E PE 43.8x，市場已 price-in AI 電源龍頭溢價</li>
+      <li><strong>邊際利多有限：</strong>AI PSU 市占 65-70% 意味向上空間受限，液冷市占反而在被分食</li>
+      <li><strong>GiS 原則：</strong>我們不追高已反映在股價中的利多。台達電是好公司，但 NT$2,015 不是好價格</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 &middot; 估值模型</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ P10 三情境分析 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、三情境敏感度分析</h1>
+  <table style="font-size:11px">
+    <thead><tr><th>公司</th><th style="text-align:center" colspan="2">保守情境</th><th style="text-align:center;background:#065f46" colspan="2">基礎情境（採用）</th><th style="text-align:center" colspan="2">樂觀情境</th></tr></thead>
+    <tbody>
+      <tr style="background:#e8f5ee!important"><td></td><td style="text-align:center;font-weight:700">EPS</td><td style="text-align:center;font-weight:700">目標價</td><td style="text-align:center;font-weight:700">EPS</td><td style="text-align:center;font-weight:700">目標價</td><td style="text-align:center;font-weight:700">EPS</td><td style="text-align:center;font-weight:700">目標價</td></tr>
+      <tr><td><strong>新盛力 4931</strong></td><td class="num">12.0</td><td class="num">216</td><td class="num hi">15.0</td><td class="num hi" style="font-weight:800">300</td><td class="num">18.0</td><td class="num">396</td></tr>
+      <tr><td><strong>系統電 5309</strong></td><td class="num">5.5</td><td class="num">72</td><td class="num hi">7.0</td><td class="num hi" style="font-weight:800">105</td><td class="num">9.0</td><td class="num">144</td></tr>
+      <tr><td><strong>加百裕 3323</strong></td><td class="num">3.5</td><td class="num">39</td><td class="num hi">4.5</td><td class="num hi" style="font-weight:800">54</td><td class="num">6.0</td><td class="num">78</td></tr>
+      <tr><td><strong>光寶科 2301</strong></td><td class="num">8.0</td><td class="num">160</td><td class="num hi">9.0</td><td class="num hi" style="font-weight:800">198</td><td class="num">10.5</td><td class="num">241</td></tr>
+      <tr><td><strong>AES-KY 6781</strong></td><td class="num">42.0</td><td class="num">882</td><td class="num hi">46.0</td><td class="num hi" style="font-weight:800">1,150</td><td class="num">52.0</td><td class="num">1,352</td></tr>
+      <tr><td><strong>順達 3211</strong></td><td class="num">12.0</td><td class="num">336</td><td class="num hi">14.0</td><td class="num hi" style="font-weight:800">420</td><td class="num">17.0</td><td class="num">510</td></tr>
+      <tr><td><strong>台達電 2308</strong></td><td class="num">42.0</td><td class="num">1,764</td><td class="num hi">46.0</td><td class="num hi" style="font-weight:800">2,070</td><td class="num">52.0</td><td class="num">2,496</td></tr>
+    </tbody>
+  </table>
+  <span class="src">保守：EPS 下修 10-20%、PE &times; 0.8；樂觀：EPS 上修 15-20%、PE &times; 1.1-1.2。GiS 預估。</span>
+
+  <h2 class="ch">關鍵催化劑時間軸</h2>
+  <table style="font-size:11px">
+    <thead><tr><th>時間</th><th>事件</th><th>受惠個股</th><th>影響</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:700">2026 Q2-Q3</td><td>GB300/VR 平台 12kW PSU 全面放量</td><td class="pos">台達電、光寶科</td><td class="pos">AI PSU 營收倍增</td></tr>
+      <tr><td style="font-weight:700">2026 H2</td><td>新盛力高壓 25kW BBU 放量出貨</td><td class="pos">新盛力</td><td class="pos">營收結構質變</td></tr>
+      <tr><td style="font-weight:700">2026 Q4</td><td>系統電 BBU 美國廠 4 線全開</td><td class="pos">系統電</td><td class="pos">CSP 訂單轉化為營收</td></tr>
+      <tr><td style="font-weight:700">2027 H1</td><td>800VDC Power Rack 正式量產</td><td class="pos">台達電、光寶科</td><td class="pos">ASP per watt 5 倍跳升</td></tr>
+      <tr><td style="font-weight:700">2027 H1</td><td>順達 25kW HVDC BBU 隨 800VDC 出貨</td><td class="pos">順達</td><td class="pos">BBU ASP 再升一階</td></tr>
+      <tr><td style="font-weight:700">2027</td><td>加百裕 12kW BBU 量產</td><td class="pos">加百裕</td><td class="pos">營收與毛利率轉折點</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 &middot; 敏感度與催化劑</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 風險矩陣（獨立一頁） ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參、核心風險矩陣</h1>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>HVDC 時程再度提前</strong> &rarr; 台達電、新盛力 EPS 可上修 10-15%</div>
+      <div class="risk-item"><strong>CSP capex 超預期</strong> &rarr; 全面利多，BBU 訂單再放大</div>
+      <div class="risk-item"><strong>5kW&rarr;12kW 升規加速</strong> &rarr; AES-KY、順達 ASP 提前改善</div>
+      <div class="risk-item"><strong>美國製造政策加碼</strong> &rarr; 系統電 Plano 廠訂單超預期</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>CSP capex 延後/縮減</strong> &rarr; 全面利空，EPS 下修 15-20%</div>
+      <div class="risk-item"><strong>HVDC 認證反覆遞延</strong> &rarr; 新盛力、系統電成長曲線推後</div>
+      <div class="risk-item"><strong>5kW 價格戰加劇</strong> &rarr; AES-KY 毛利率跌破 35%</div>
+      <div class="risk-item"><strong>電芯供應瓶頸</strong> &rarr; 日韓寡占下交期拉長，壓抑全體出貨</div>
+    </div>
+  </div>
+
+  <h2 class="ch">個股風險差異化</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>公司</th><th>最大特有風險</th><th>風險等級</th><th>GiS 應對建議</th></tr></thead>
+    <tbody>
+      <tr><td><strong>台達電</strong></td><td>估值過高 &mdash; 2027E PE 已達 43.8x</td><td style="color:#d97706;font-weight:700">中</td><td>等待回檔至 1,800 以下再介入</td></tr>
+      <tr><td><strong>光寶科</strong></td><td>液冷出貨遞延 + IT 消費產品拖累毛利</td><td style="color:#d97706;font-weight:700">中</td><td>追蹤 Q2 液冷正式出貨驗證</td></tr>
+      <tr><td><strong>AES-KY</strong></td><td>5kW 價格戰 + 部分出貨轉經電源廠</td><td style="color:#d97706;font-weight:700">中</td><td>盯 Q2-Q3 毛利率能否守住 36%</td></tr>
+      <tr><td><strong>順達</strong></td><td>IT（NB 電池）連兩年衰退拖累整體</td><td>中低</td><td>追蹤 Non-IT 佔比是否如期突破 50%</td></tr>
+      <tr><td><strong>新盛力</strong></td><td>CSP 認證遞延 + 電芯供應（日韓寡占）</td><td style="color:#c0392b;font-weight:700">中高</td><td>季度追蹤高壓 BBU 出貨量</td></tr>
+      <tr><td><strong>系統電</strong></td><td>BBU 出貨已遞延一次（+46%&rarr;+35%）</td><td style="color:#c0392b;font-weight:700">中高</td><td>Q2 營收是否如預期 QoQ +24%</td></tr>
+      <tr><td><strong>加百裕</strong></td><td>12kW BBU 量產要等 2027、龍潭產能不足</td><td style="color:#c0392b;font-weight:700">高</td><td>短期看無人機+E-bike 能否撐住營收</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 風險總評：</strong>本產業最大的系統性風險是 CSP 資本支出周期反轉 &mdash; 一旦四大 CSP 同步縮減 AI 基建投資，所有標的都會受衝擊。但我們判斷 2026-2027 年 CSP capex 仍在上升軌道（合計預估逾 7,000 億美元），系統性風險短期可控。個股風險則高度分化：台達電的風險在於估值而非基本面，新盛力與系統電的風險在於執行力（時程能否兌現），加百裕的風險在於轉型速度。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 &middot; 風險矩陣</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 新盛力 4931 ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">新盛力</div><div class="co-ticker">4931 &middot; OTC &middot; 高壓 BBU 純題材先行者</div></div>
+      <div class="co-badge"><span class="badge buy">&#9679; 買進</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$300 | 現價 NT$145（04/21）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+107%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">20x</div><div class="co-metric-label">Target PE (27E)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">15.0 元</div><div class="co-metric-label">27E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">25~35%</div><div class="co-metric-label">儲能毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <p style="font-size:14px;line-height:1.75"><strong>產品結構已質變：</strong>儲能（BBU+UPS）營收佔比已逾 5 成，毛利率 25~35% 為三大產品線最高；電動工具約 2~3 成（毛利率 10~15%）、LEV 約 1 成。公司 7~8 成資源集中在資料中心用 BBU，戰略重心非常清晰。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>高壓 BBU 進度領先同業：</strong>主力規格 25~26kW，鎖定 HVDC 400V 架構。2025 Q3 試樣、Q4 放量獲 CSP 認證，四大 CSP 中已有 1 家以上客戶，與 NVIDIA BBU 訂單洽談中，並與台達電在 HVDC 應用協作。自動化產線月產能 ~1 萬顆，最大可擴至 2.8 萬顆，2026 年產能增 1.5 倍。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>毛利率翻轉：</strong>2025 Q2 因匯損跌至 9.08%，Q4 已回升至 26%+。法人估 2026 營收 YoY +20%，毛利率 22%+，Q1 有望改寫新高。現金股利 2.5 元為史上最高，配息率 79.87%。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>GiS 估值：</strong>2026E EPS 8 元（GB200/300 帶動 5.5kW/12kW）、2027E EPS 15 元（Rubin 25kW 出貨 6~7 萬顆，潛在營收 80 億，毛利率 30%+）。以 Fwd PE 27E &times; 20x = NT$300。3 月營收 YoY +36%、YTD +20.5%，動能持續加速。</p>
+      <div style="display:flex;gap:12px;margin:8px 0;align-items:center;background:#f0f4fc;border-radius:8px;padding:10px 14px">
+        <img src="https://www.stl-tech.com/upload/product/images/220160819173032.JPG" style="height:160px;width:200px;border-radius:6px;object-fit:cover" alt="新盛力 BBU/儲能產品" onerror="this.style.display='none'">
+        <div style="font-size:12px;color:#1a3a6e;line-height:1.6"><strong>核心產品：</strong>25~26kW 高壓 BBU 模組（HVDC 400V）、10kW UPS、儲能系統<br><strong>電芯：</strong>18650（2.5Ah）→ 21700（4~5Ah）升級中，電池成本占 BBU 約 6 成<br><strong>合作夥伴：</strong>台達電（HVDC 協作）、四大 CSP 中 1 家+、NVIDIA 洽談中</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px">
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">產品營收結構</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>產品線</th><th style="text-align:right">營收佔比</th><th style="text-align:right">毛利率</th><th>趨勢</th></tr></thead>
+            <tbody>
+              <tr><td><strong>儲能（BBU+UPS）</strong></td><td class="num hi">&gt;50%</td><td class="num pos">25~35%</td><td class="pos">快速拉升</td></tr>
+              <tr><td>電動手工具</td><td class="num">20~30%</td><td class="num">10~15%</td><td>穩定</td></tr>
+              <tr><td>LEV + 其他</td><td class="num">~10%</td><td class="num">10~20%</td><td>輔助</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">關鍵時程與產能</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>里程碑</th><th>時間</th></tr></thead>
+            <tbody>
+              <tr><td>高壓 BBU 試樣</td><td>2025 Q3</td></tr>
+              <tr><td>部分 CSP 認證通過</td><td>2025 Q4</td></tr>
+              <tr><td class="pos" style="font-weight:700">高壓 BBU 主要放量</td><td class="pos" style="font-weight:700">2026 H2</td></tr>
+              <tr><td>自動化產線月產能</td><td>~1 萬顆（最大 2.8 萬）</td></tr>
+              <tr><td>2026E 產能增幅</td><td>+1.5 倍</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>新盛力 4931</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════════════ AES-KY 6781 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div><div class="co-name">AES-KY</div><div class="co-ticker">6781 &middot; TSE &middot; BBU 模組營收規模最大，AWS + Meta 直供</div></div>
+      <div class="co-badge"><span class="badge ow">&#9679; 增持</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$1,150 | 現價 NT$1,020（04/21）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+13%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">25x</div><div class="co-metric-label">Target PE (26E)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">46.0 元</div><div class="co-metric-label">26E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">~36%</div><div class="co-metric-label">毛利率保衛戰</div></div>
+    </div>
+    <div class="co-body">
+      <p style="font-size:14px;line-height:1.75"><strong>BBU 絕對龍頭：</strong>2025 營收 160 億（YoY +59%），BBU 佔比 70~75%（2024 年僅 57%），BBU 年增逾 100%。NVIDIA 新 AI 伺服器已將 BBU 列為標配，AES-KY 提供電池模組。主力客戶 AWS，Meta 為第二家，與光寶科合作切入 Google/Microsoft 送樣測試中。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>規格升級路線：</strong>主流 5kW &rarr; 2026 年 8kW &rarr; 2027 年 12~18kW，HVDC 電源櫃 BBU 20kW+。2.5Ah 高容量電芯開始量產。HVDC 預計 2026 Q4 末出貨、2027 放量。但常規 5kW 競爭者明顯增加，價格戰加劇。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>產能與多元化：</strong>中國常熟 + 台灣新竹 + 越南大規模擴產，2026 年產能 +20~30%，CapEx +20~30%。LEV 觸底回溫（歐洲自行車庫存健康化）。Telecom BBU 2026 年翻倍，AGV/AMR 2027 年貢獻，目標「三足鼎立」。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>GiS 估值：</strong>2025A EPS ~39.5 元（近四個股本），配息 19.1 元（史上最高）。2026E 營收 +28~30%，毛利率面臨 36% 保衛戰，EPS 46 元。2027E HVDC 放量 + 毛利回升，EPS 56 元。給予 Fwd PE 26E &times; 25x = NT$1,150。增持而非買進：估值已合理反映短期成長，高壓段時程居中。</p>
+      <div style="display:flex;gap:12px;margin:8px 0;align-items:center;background:#f0f4fc;border-radius:8px;padding:10px 14px">
+        <img src="https://www.advancedenergysolution.com.tw/archive/image/article2/product.webp" style="height:160px;width:200px;border-radius:6px;object-fit:cover" alt="AES-KY BBU 產品" onerror="this.style.display='none'">
+        <div style="font-size:12px;color:#1a3a6e;line-height:1.6"><strong>核心產品：</strong>5kW→8kW→12~18kW BBU 電池模組、LEV 電動自行車電池<br><strong>客戶：</strong>AWS（主力）、Meta（第二家）、Google/Microsoft 送樣中（透過光寶科）<br><strong>產能：</strong>中國常熟+台灣新竹+越南，2026 產能 +20~30%，走輕資產+高研發模式</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px">
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">產品與客戶結構</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>項目</th><th style="text-align:right">2024</th><th style="text-align:right">2025</th><th style="text-align:right">2026E</th></tr></thead>
+            <tbody>
+              <tr><td><strong>BBU 佔比</strong></td><td class="num">57%</td><td class="num hi">70~75%</td><td class="num hi">75~80%</td></tr>
+              <tr><td>LEV 佔比</td><td class="num">43%</td><td class="num">25~30%</td><td class="num">20~25%</td></tr>
+              <tr><td><strong>毛利率</strong></td><td class="num">~39%</td><td class="num neg">35.9%</td><td class="num neg">~36%</td></tr>
+              <tr><td>配息</td><td class="num">—</td><td class="num pos">19.1 元</td><td class="num">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">BBU 規格升級路線</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>規格</th><th>時程</th><th>ASP</th></tr></thead>
+            <tbody>
+              <tr><td><strong>5kW（主流）</strong></td><td>量產中</td><td>$350~500</td></tr>
+              <tr><td><strong>8kW</strong></td><td>2026 升規</td><td>$400~500</td></tr>
+              <tr><td><strong>12~18kW</strong></td><td>2027 放量</td><td>~$800</td></tr>
+              <tr><td class="pos"><strong>HVDC 20kW+</strong></td><td class="pos">2026Q4→2027</td><td class="pos">&gt;$1,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>AES-KY 6781</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════════════ 順達 3211 ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head indigo">
+      <div><div class="co-name">順達</div><div class="co-ticker">3211 &middot; OTC &middot; NB 電池轉型 AI BBU，Non-IT 佔比翻轉中</div></div>
+      <div class="co-badge"><span class="badge ow">&#9679; 增持</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$420 | 現價 NT$379.5（04/21）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+11%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">Blended</div><div class="co-metric-label">28x(26E)/22x(27E)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">14.0 元</div><div class="co-metric-label">26E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">20%+</div><div class="co-metric-label">26E 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <p style="font-size:14px;line-height:1.75"><strong>轉型最劇烈：</strong>Non-IT 佔比從 2023 年 8% &rarr; 2024 年 15~20% &rarr; 2025 年 30~40% &rarr; 2026E &gt;50%。IT（NB 電池）毛利率僅 5~10%，Non-IT（BBU/儲能）20~35%。2025 整體毛利率 16.6%，Q4 跳升至 ~20%，2026E 目標 19.8~20.4%，2027E 看 23%+。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>BBU 客戶與規格：</strong>已打入三大 CSP，與台達電/光寶合作 design-in。主力 3kW/3.3kW/5.5kW（GB200/300 搭配），8kW/12kW 2026 H2 小量出貨，25kW HVDC（800VDC）2027 H2 隨台達電出貨。BBU 營收目標 2026 年 &gt;50 億，YoY +~90%。法人估產能滿載對應 160~200 億營收。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>產能翻倍 + 資產防護：</strong>2026 年 Non-IT 產能較 2025 年擴增 2 倍，台灣二廠 + 泰國二/三廠已啟用，CapEx 5~8 億。A7 科技園區 13,382 坪，帳面 21.2 億 vs 市價 ~104 億。配息 11.5 元（配息率 127%），10 年承諾每年不低於 5 元已提前達標。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>GiS 估值：</strong>3 月營收 YoY +76%（七雄之冠），BBU 動能強勁。但 IT 電池連兩年衰退（2025 -22%、2026E -8%），紅色供應鏈壓價。我們採 Blended PE（轉型中公司）：50% &times; 26E 14 元 &times; 28x + 50% &times; 27E 20 元 &times; 22x = NT$416 &asymp; 420。增持。</p>
+      <div style="display:flex;gap:12px;margin:8px 0;align-items:center;background:#f0f4fc;border-radius:8px;padding:10px 14px">
+        <img src="https://www.simplo.com.tw/archive/image/application_scenarios.webp" style="height:160px;width:200px;border-radius:6px;object-fit:cover" alt="順達產品應用場景" onerror="this.style.display='none'">
+        <div style="font-size:12px;color:#1a3a6e;line-height:1.6"><strong>核心產品：</strong>3kW/3.3kW/5.5kW BBU（GB200/300）、8/12kW、25kW HVDC BBU<br><strong>轉型亮點：</strong>Non-IT 佔比 8%(2023)→50%+(2026E)，IT 電池 毛利僅 5~10% vs Non-IT 20~35%<br><strong>特殊資產：</strong>A7 科技園區 13,382 坪（市價 104 億 vs 帳面 21 億），配息 11.5 元</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px">
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">Non-IT 佔比翻轉路徑</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>年度</th><th style="text-align:right">Non-IT 佔比</th><th style="text-align:right">整體毛利率</th></tr></thead>
+            <tbody>
+              <tr><td>2023</td><td class="num">8%</td><td class="num">~13%</td></tr>
+              <tr><td>2024</td><td class="num">15~20%</td><td class="num">~15%</td></tr>
+              <tr><td>2025</td><td class="num">30~40%</td><td class="num">16.6%</td></tr>
+              <tr><td style="font-weight:700">2025 Q4</td><td class="num hi">~45%</td><td class="num hi">~20%</td></tr>
+              <tr><td class="pos" style="font-weight:700">2026E</td><td class="num pos" style="font-weight:700">&gt;50%</td><td class="num pos" style="font-weight:700">19.8~20.4%</td></tr>
+              <tr><td class="pos">2027E</td><td class="num pos">~60%</td><td class="num pos">23%+</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">BBU 規格與產能</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>BBU 規格</th><th>時程</th></tr></thead>
+            <tbody>
+              <tr><td><strong>3kW / 3.3kW / 5.5kW</strong></td><td>量產出貨中</td></tr>
+              <tr><td><strong>8kW / 12kW</strong></td><td>2026 H2 小量出貨</td></tr>
+              <tr><td class="pos"><strong>25kW HVDC（800VDC）</strong></td><td class="pos">2027 H2 隨台達電</td></tr>
+              <tr><td>Non-IT 產能</td><td>2026 年較 2025 擴增 <strong>2 倍</strong></td></tr>
+              <tr><td>BBU 營收目標</td><td>2026E &gt;50 億（YoY +90%）</td></tr>
+              <tr><td>A7 土地市價</td><td>~104 億（帳面 21 億）</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>順達 3211</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════════════ 系統電 5309 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">系統電</div><div class="co-ticker">5309 &middot; OTC &middot; 美國製造 BBU + AI 鐵三角（BBU/IPC/無人機）</div></div>
+      <div class="co-badge"><span class="badge buy">&#9679; 買進</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$105 | 現價 NT$61.6（04/21）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+70%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">15x</div><div class="co-metric-label">Target PE (27E)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">7.0 元</div><div class="co-metric-label">27E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">25.4%</div><div class="co-metric-label">26E 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <p style="font-size:14px;line-height:1.75"><strong>美國製造差異化：</strong>台灣唯一在美擁有 BBU 廠房。德州 Plano 廠 2025/11 啟用，4 條 BBU 全自動線，鎖定 CSP「在地製造」+「非紅供應鏈」需求。和碩私募入股 13.75 億（每股 55 元、2.2 萬張），雙方鎖定 100% 美國製造 AI 伺服器 + BBU。員工庫藏股轉讓價 35 元 vs 和碩入股價 55 元，隱含管理層對成長有信心。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>BBU 全規格布局：</strong>3kW/3.5kW/5.5kW/7kW/11kW + HVDC 全系列，由子公司電統能源主導。已切入 2 家 CSP，目標搶攻全部 4 家，CSP 訂單能見度看到 2028 年。目標 2028 年能源產品營收佔比達 50%、成為全球第三大 BBU 製造商（僅次 Panasonic）。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>AI 鐵三角：</strong>IPC（Qualcomm AI BOX + SMARC 模組，毛利率 30%+）+ 無人機（Quantum Systems 合作，Blue UAS 認證，三電整合 + GCS）。2025 TPMS 佔 57%、IPC 23%、能源 20%，未來 TPMS 下滑、能源拉升至 50%。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>GiS 估值：</strong>BBU 出貨已遞延一次（營收成長率從 +46% 下修至 +35%），Q1 營收 YoY -1.2%。但 Q2 起放量（QoQ +23.5%），下半年為轉折點。2026E EPS 3.5 元、2027E EPS 7 元。以 Fwd PE 27E &times; 15x = NT$105。短期 7 分、長期 9 分。</p>
+      <div style="display:flex;gap:12px;margin:8px 0;align-items:center;background:#f0f4fc;border-radius:8px;padding:10px 14px">
+        <img src="https://www.sysgration.com/uploads/product/ess/All-in-one_BESS.jpg" style="height:160px;width:200px;border-radius:6px;object-fit:cover" alt="系統電 Energy Brick ESS" onerror="this.style.display='none'">
+        <div style="font-size:12px;color:#1a3a6e;line-height:1.6"><strong>核心產品：</strong>BBU（3~11kW + HVDC 全系列）、IPC（Qualcomm AI BOX）、ISR 無人機<br><strong>美國廠：</strong>德州 Plano，4 條全自動 BBU 線，2025/11 啟用，台灣唯一在美有 BBU 產能<br><strong>策略夥伴：</strong>和碩（私募 13.75 億 @55 元）、Quantum Systems（無人機）、Qualcomm</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px">
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">營收結構演進</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>事業</th><th style="text-align:right">2025 佔比</th><th style="text-align:right">2028E 目標</th></tr></thead>
+            <tbody>
+              <tr><td><strong>TPMS（胎壓偵測）</strong></td><td class="num">57%</td><td class="num neg">&darr; 下滑</td></tr>
+              <tr><td><strong>IPC（工業電腦）</strong></td><td class="num">23%</td><td class="num">穩定+</td></tr>
+              <tr><td class="pos"><strong>能源系統（BBU 等）</strong></td><td class="num">~20%</td><td class="num pos hi">~50%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">關鍵資本動作</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>事件</th><th>細節</th></tr></thead>
+            <tbody>
+              <tr><td><strong>和碩私募入股</strong></td><td>@55 元、2.2 萬張、13.75 億</td></tr>
+              <tr><td>員工庫藏股</td><td>@35 元（低於和碩價）</td></tr>
+              <tr><td><strong>Plano 廠</strong></td><td>4 條 BBU 全自動線</td></tr>
+              <tr><td>CSP 訂單能見度</td><td class="pos">看到 2028 年</td></tr>
+              <tr><td>2028 目標</td><td class="pos">全球第三大 BBU 廠</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>系統電 5309</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════════════ 加百裕 3323 ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">加百裕</div><div class="co-ticker">3323 &middot; OTC &middot; 谷底反轉：系統電結盟 + 12kW BBU + 無人機</div></div>
+      <div class="co-badge"><span class="badge buy">&#9679; 買進</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$54 | 現價 NT$34.1（04/21）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+59%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">12x</div><div class="co-metric-label">Target PE (27E)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">4.5 元</div><div class="co-metric-label">27E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">50~55%</div><div class="co-metric-label">26E 非3C占比</div></div>
+    </div>
+    <div class="co-body">
+      <p style="font-size:14px;line-height:1.75"><strong>從 3C 轉向高附加價值：</strong>過去 3C 佔比高達 85%，毛利偏低。2026 年目標非 3C（BBU/無人機/E-bike/儲能）佔比拉至 50~55%。2025 年營收 YoY -9%，主因筆電需求疲弱（聯想衰退多，華碩持平），但核心客戶穩定，新產品佈局持續。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>BBU 直攻 12kW 高階：</strong>因切入較晚，跳過 3/5/8kW 直攻 12kW 高難度 BBU。2025 底完成廠內延燒測試，2026 H1 客戶認證、H2 樣品出貨、2027 量產。與系統電結盟打造「BBU 美國製造」，系統電入股近 20% 取得 3 席董事，深度合作。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>無人機 + E-mobility 雙軸：</strong>2025 年已接 1~2 家美歐大型無人機廠電池訂單並出貨，2026 年列為主力業務。E-bike 拿到美國大廠至少 2 年長約（2026/5 出貨）。LEV（高爾夫球車/堆高機）2026 Q1 新客戶出貨。鋰金屬電池 + BMS 鎖定 AGV/機器人。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>GiS 估值：</strong>龍潭廠產能嚴重不足被客戶詬病，正在桃園找新廠。3 月營收 YoY -14%，轉型陣痛期。但多條新產品線 2026 Q2 起陸續出貨，2027 年 BBU 量產為轉折點。以谷底反轉模型，2027E EPS 4.5 元 &times; 12x = NT$54。短期評分 6、長期 8。</p>
+      <div style="display:flex;gap:12px;margin:8px 0;align-items:center;background:#f0f4fc;border-radius:8px;padding:10px 14px">
+        <img src="https://m3.hocom.tw/ckfinder/connector?command=Proxy&type=Images&currentFolder=%2f&fileName=3200W_BBU_EN.png" style="height:90px;border-radius:6px;object-fit:contain;background:#fff;padding:4px" alt="加百裕 3200W BBU" onerror="this.style.display='none'">
+        <div style="font-size:12px;color:#1a3a6e;line-height:1.6"><strong>核心產品：</strong>直攻 12kW BBU（跳過 3/5/8kW）、無人機電池、E-bike 電池、儲能貨櫃<br><strong>策略結盟：</strong>系統電入股 ~20%（3 席董事），共攻 BBU 美國製造 + 無人機市場<br><strong>新技術：</strong>鋰金屬電池 + BMS（鎖定 AGV/機器人），與國內新電芯廠深度合作</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px">
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">新產品出貨時程</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>產品線</th><th>出貨時點</th><th>狀態</th></tr></thead>
+            <tbody>
+              <tr><td><strong>無人機電池</strong></td><td>2025 已出貨</td><td class="pos">2026 主力</td></tr>
+              <tr><td><strong>E-bike（美國大廠）</strong></td><td>2026/5 起</td><td class="pos">至少 2 年約</td></tr>
+              <tr><td><strong>LEV（高爾夫球車等）</strong></td><td>2026 Q1</td><td class="pos">新客戶</td></tr>
+              <tr><td><strong>12kW BBU</strong></td><td>2026 H2 樣品</td><td>2027 量產</td></tr>
+              <tr><td>儲能貨櫃</td><td>2024 起出貨</td><td>轉攻日本</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">策略合作與技術</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>項目</th><th>細節</th></tr></thead>
+            <tbody>
+              <tr><td><strong>系統電入股</strong></td><td>近 20%、3 席董事</td></tr>
+              <tr><td>合作方向</td><td>BBU 美國製造 + 無人機</td></tr>
+              <tr><td>3C 佔比目標</td><td>從 85% 壓至 &lt;50%</td></tr>
+              <tr><td>新技術</td><td>鋰金屬電池 + BMS</td></tr>
+              <tr><td>瓶頸</td><td class="neg">龍潭產能不足</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>加百裕 3323</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════════════ 光寶科 2301 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">光寶科</div><div class="co-ticker">2301 &middot; TSE &middot; PSU + BBU + HVDC Power Rack + 液冷系統整合</div></div>
+      <div class="co-badge"><span class="badge ow">&#9679; 增持</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$198 | 現價 NT$171.6（04/21）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+15%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">22x</div><div class="co-metric-label">Target PE (26E)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">9.0 元</div><div class="co-metric-label">26E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">30%+</div><div class="co-metric-label">26E AI 營收占比</div></div>
+    </div>
+    <div class="co-body">
+      <p style="font-size:14px;line-height:1.75"><strong>AI 營收佔比快速上修：</strong>2025 年 AI 佔比 ~20%，2026E 多次上修至 30%+（管理層稱仍保守，長期看 &gt;50%）。雲端部門 2025 營收 YoY +70%，佔比從 37% 升至 Q4 48%、2026 年 1~2 月已達 52~53%。33kW Power Shelf 主力搭配 GB200/300，110kW 對應 Rubin 平台（ASP 2.5~3 倍提升）。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>BBU 供不應求：</strong>2025 年 BBU 營收 YoY +300~400%，佔雲端營收 15~20%。Q4 產能被美系 CSP 全包。2026 年產能擴至 1.5 倍，產線 4&rarr;8&rarr;12 條。但訂單仍大於產能。下一代 800V BBU 需新磁性材料，技術門檻再升。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>HVDC + 液冷 + 5G 併購：</strong>50V Rack 已 Q1 量產出貨，800V Rack 2026 Q3 測試→Q4 小量→2027 H1 量產（法人估貢獻 50~60 億）。液冷 CDU 遞延 ~1 季至 Q2 出貨（壓抑 Q1 毛利率至 21.9%）。併購宇智（6470）補齊 FWA/5G+/AI-RAN，NVIDIA AI Aerial 生態夥伴。CapEx 從 50~70 億升至 70~110 億。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>GiS 估值：</strong>2025A 營收 1,661 億（+21%），毛利率 22.9%，EPS 6.64 元。2026E 營收 +15~18%（從 +20% 下修，IT/散熱拖累），毛利率 22.7~23.6%，EPS 9 元。2027E HVDC+液冷放量，EPS 12.5 元。給予 Fwd PE 26E &times; 22x = NT$198。增持。</p>
+      <div style="display:flex;gap:12px;margin:8px 0;align-items:center;background:#f0f4fc;border-radius:8px;padding:10px 14px">
+        <img src="https://liteon-cips.com/wp-content/uploads/2020/12/10slotpowershelf_1.png" style="height:140px;width:180px;border-radius:6px;object-fit:contain;background:#fff;padding:6px" alt="光寶科 Power Shelf" onerror="this.style.display='none'">
+        <img src="https://liteon-cips.com/wp-content/uploads/2020/12/BM-1112-01X-I-300x252.png" style="height:140px;width:180px;border-radius:6px;object-fit:contain;background:#fff;padding:6px" alt="光寶科 BBU" onerror="this.style.display='none'">
+        <div style="font-size:12px;color:#1a3a6e;line-height:1.6"><strong>系統整合：</strong>PSU(33→110kW) + BBU(4→12條線) + Power Rack(50/400/800V) + CDU 液冷<br><strong>BBU：</strong>2025 YoY +300~400%，產能被 CSP 全包，供不應求<br><strong>併購：</strong>宇智 6470（FWA/5G+），補齊 AI-RAN 版圖</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px">
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">AI 產品線全景</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>產品</th><th>規格</th><th>重要度</th></tr></thead>
+            <tbody>
+              <tr><td><strong>AI PSU/Shelf</strong></td><td>33kW→110kW</td><td class="pos">極高</td></tr>
+              <tr><td><strong>BBU</strong></td><td>4→8→12 條線</td><td class="pos">極高</td></tr>
+              <tr><td><strong>Power Rack</strong></td><td>50V/400V/800V</td><td class="pos">高</td></tr>
+              <tr><td><strong>液冷 CDU</strong></td><td>2.1MW/280kW</td><td>中高</td></tr>
+              <tr><td>AI-RAN/FWA</td><td>併購宇智 6470</td><td>中</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">AI 營收佔比上修軌跡</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>時點</th><th style="text-align:right">AI 佔比</th><th>事件</th></tr></thead>
+            <tbody>
+              <tr><td>2025A</td><td class="num">~20%</td><td>略高於原估</td></tr>
+              <tr><td>2026 初估</td><td class="num">~25%</td><td>管理層原始指引</td></tr>
+              <tr><td class="pos" style="font-weight:700">2026 最新</td><td class="num pos hi" style="font-weight:700">30%+</td><td class="pos">多次上修</td></tr>
+              <tr><td>長期目標</td><td class="num pos">&gt;50%</td><td>管理層稱仍保守</td></tr>
+              <tr><td>CapEx</td><td class="num" colspan="2">70~110 億（高雄/越南/德州）</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>光寶科 2301</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════════════ 台達電 2308 ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div><div class="co-name">台達電</div><div class="co-ticker">2308 &middot; TSE &middot; 全球 AI 電源絕對龍頭，市占 65~70%</div></div>
+      <div class="co-badge"><span class="badge neutral">&#9679; 中立</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$2,070 | 現價 NT$2,015（04/21）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">+3%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">45x</div><div class="co-metric-label">Target PE (27E)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">46.0 元</div><div class="co-metric-label">27E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">34.3%</div><div class="co-metric-label">毛利率（業界最高）</div></div>
+    </div>
+    <div class="co-body">
+      <p style="font-size:14px;line-height:1.75"><strong>AI 電源絕對霸主：</strong>2025 營收 5,549 億（+32%），毛利率 34.3%，營益率 15.1%，EPS 23.14 元，現金股利 11.6 元。AI PSU 市佔 65~70%，33kW Power Shelf 主力，110kW 對應 Rubin/VR（ASP 2.5~3 倍）。12kW PSU 2026 Q2 起全面放量，18.3kW Q3 導入。AI PSU 交期拉長至 4~8 個月，功率半導體漲 25%+。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>液冷 + HVDC 領先：</strong>Sidecar 市占極高但被分食中。液冷營收佔比 2024 &lt;1% &rarr; 2025 ~9% &rarr; 2026E &gt;13%，YoY +50~140%。專案型波動大（10 月衝 17%、11 月回 7%）。400V/800V HVDC 2026 Q3 提前量產（業界最快），ASP per watt 0.1&rarr;0.5 美元。法人估 2027 HVDC 貢獻 50~60 億。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>產能與新事業：</strong>2025 CapEx 461 億（+38%），2026 年更高，泰國 3 座新廠已開出。EV 部門轉為 AI 電源產線。SOFC 燃料電池 2026 底少量出貨。SST 送樣四大 CSP。2026 Q1 營收 1,594 億（+34%），3 月 598 億創史上新高。管理層預估 2026 年「賺逾三個股本」。</p>
+      <p style="font-size:14px;line-height:1.75"><strong>GiS 估值 &mdash; 好公司，但不是好價格：</strong>現價 NT$2,015 隱含 2026E PE 57.6x、2027E PE 43.8x，已充分反映 AI 電源龍頭溢價。液冷市占被分食、EV 連 5 季虧損、CapEx 創新高帶來折舊壓力。我們以 Fwd PE 27E &times; 45x = NT$2,070，給予中立。等待回檔至 1,800 以下再考慮增持。</p>
+      <div style="display:flex;gap:12px;margin:8px 0;align-items:center;background:#f0f4fc;border-radius:8px;padding:10px 14px">
+        <img src="https://filecenter.deltaww.com/products/images/2312/202312011405082392001.jpg" style="height:140px;width:180px;border-radius:6px;object-fit:contain;background:#fff;padding:6px" alt="台達電 ORV3 PSU" onerror="this.style.display='none'">
+        <img src="https://filecenter.deltaww.com/products/images/2312/202312011522332460001.jpg" style="height:140px;width:180px;border-radius:6px;object-fit:contain;background:#fff;padding:6px" alt="台達電 33kW Power Shelf" onerror="this.style.display='none'">
+        <div style="font-size:12px;color:#1a3a6e;line-height:1.6"><strong>絕對龍頭：</strong>AI PSU 市占 65~70%，Sidecar 液冷市占極高，HVDC 進度業界最快<br><strong>規格路線：</strong>33kW Shelf→110kW(Rubin)，PSU 5.5~8kW→11~18kW，800V HVDC<br><strong>產能：</strong>CapEx 461 億(+38%)，泰/美/印/中全球擴產，EV 線轉 AI 電源</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px">
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">產品營收結構（2025）</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>事業群</th><th style="text-align:right">營收佔比</th><th style="text-align:right">YoY</th></tr></thead>
+            <tbody>
+              <tr><td class="pos"><strong>Infrastructure（AI 電源+液冷）</strong></td><td class="num hi">~48%</td><td class="num pos">+82%</td></tr>
+              <tr><td><strong>Power Electronics</strong></td><td class="num">~38%</td><td class="num pos">+25%</td></tr>
+              <tr><td class="neg"><strong>Automation + Mobility</strong></td><td class="num">~14%</td><td class="num neg">衰退</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 class="ch" style="margin:8px 0 6px">關鍵數據一覽</h3>
+          <table style="font-size:12.5px;margin:4px 0">
+            <thead><tr><th>指標</th><th style="text-align:right">2025A</th><th style="text-align:right">2026E</th></tr></thead>
+            <tbody>
+              <tr><td><strong>營收</strong></td><td class="num">5,549 億</td><td class="num pos">~7,200 億</td></tr>
+              <tr><td><strong>毛利率</strong></td><td class="num">34.3%</td><td class="num">34~35%</td></tr>
+              <tr><td><strong>營益率</strong></td><td class="num">15.1%</td><td class="num pos">16.9~17.6%</td></tr>
+              <tr><td><strong>EPS</strong></td><td class="num">23.14</td><td class="num pos">~35</td></tr>
+              <tr><td><strong>CapEx</strong></td><td class="num">461 億</td><td class="num neg">&gt;461 億（創新高）</td></tr>
+              <tr><td><strong>AI PSU 市占</strong></td><td class="num pos" colspan="2">65~70%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>台達電 2308</span><span>&copy; 2026 GiS</span></div>
+</div>
+
+<!-- ══════════════ 投資建議彙整 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資建議彙整</h1>
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #1 &middot; 高壓 BBU 純題材</div>
+      <div class="pick-name">新盛力 4931</div>
+      <div class="pick-ticker">目標價 NT$300（+107%）</div>
+      <div class="pick-why">台系唯一以 25kW 高壓 BBU 為主力，已獲 CSP 認證。Rubin 平台 2027 年帶動出貨 6~7 萬顆，潛在營收 80 億、毛利率 30%+。儲能佔比已逾 5 成且持續拉高。</div>
+      <div class="pick-catalyst">催化劑：2026 H2 高壓放量、NVIDIA 訂單、2027 Rubin 量產</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #2 &middot; 美國製造差異化</div>
+      <div class="pick-name">系統電 5309</div>
+      <div class="pick-ticker">目標價 NT$105（+70%）</div>
+      <div class="pick-why">台灣唯一在美有 BBU 廠房，和碩入股 13.75 億鎖定 100% 美國製造。BBU+IPC+無人機「AI 鐵三角」，CSP 訂單看到 2028 年。目標 2028 年全球第三大 BBU 製造商。</div>
+      <div class="pick-catalyst">催化劑：Q2 BBU 放量、Plano 廠爬坡、和碩協同</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #3 &middot; 谷底反轉</div>
+      <div class="pick-name">加百裕 3323</div>
+      <div class="pick-ticker">目標價 NT$54（+59%）</div>
+      <div class="pick-why">直攻 12kW 高階 BBU、系統電入股 20%。無人機電池已接美歐大廠訂單，E-bike 美國長約 2026/5 出貨。從 3C 85% 轉向非 3C 50%+。</div>
+      <div class="pick-catalyst">催化劑：無人機新案、E-bike 出貨、2027 BBU 量產</div>
+    </div>
+    <div class="pick-card" style="border-color:#c8d8f0">
+      <div class="pick-rank" style="color:#3b82f6">OVERWEIGHT &middot; 穩健增持</div>
+      <div class="pick-name">光寶科 / AES-KY / 順達</div>
+      <div class="pick-ticker">上檔 +11~15%</div>
+      <div class="pick-why">三家均為 BBU/AI 電源核心受惠者，但估值已部分反映成長。光寶科看 HVDC+液冷，AES-KY 看高壓升規，順達看 Non-IT 佔比突破 50%。</div>
+      <div class="pick-catalyst">追蹤：毛利率改善趨勢、HVDC 時程、CSP 新客戶</div>
+    </div>
+  </div>
+
+  <blockquote><strong>GiS 結論：</strong>AI 資料中心電力革命是未來 3~5 年最確定的產業趨勢之一。我們在七雄中精選 3 檔買進（新盛力、系統電、加百裕）&mdash; 核心邏輯是押注高壓段贏家與美國製造門檻。台達電雖為絕對龍頭，但 NT$2,015 已是「好公司、滿價格」，建議等待回檔。下一個關鍵觀察窗口：2026 年 Q2~Q3 各家 BBU 出貨數據與 HVDC 認證進度。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資建議</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ P15 Disclaimer ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">GiS 評等定義與免責聲明</h1>
+  <table style="font-size:12px">
+    <thead><tr><th>GiS 評等</th><th>定義</th><th>12 個月預期報酬</th></tr></thead>
+    <tbody>
+      <tr><td class="pos" style="font-weight:700">買進 (Buy)</td><td>目標價上檔空間 >15%</td><td class="pos">>15%</td></tr>
+      <tr><td style="color:#3b82f6;font-weight:700">增持 (Overweight)</td><td>目標價上檔空間 5-15%</td><td>5-15%</td></tr>
+      <tr><td style="color:#d97706;font-weight:700">中立 (Neutral)</td><td>目標價上下 &plusmn;5%</td><td>&plusmn;5%</td></tr>
+      <tr><td class="neg" style="font-weight:700">減碼 (Underweight)</td><td>目標價下檔空間 >5%</td><td class="neg">&lt;-5%</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+  <p style="font-size:12.5px;color:#6b7a9a;line-height:1.8">
+    <strong>免責聲明：</strong>本報告由 GiS Genesis International Capital 研究團隊撰寫，僅供研究參考，不構成任何投資建議、邀約或推薦。報告中所有目標價與評等均基於 GiS 自建財務模型，主要資料來源包括各公司公開資訊觀測站（MOPS）公告之月營收與季報、法說會簡報與逐字稿、以及產業公開資料。券商研究報告僅作為交叉參考。
+  </p>
+  <p style="font-size:12.5px;color:#6b7a9a;line-height:1.8">
+    投資人應自行評估投資風險，GiS 不對任何因使用本報告資訊所導致之損失負責。本報告涵蓋公司：台達電（2308）、光寶科（2301）、AES-KY（6781）、順達（3211）、新盛力（4931）、系統電（5309）、加百裕（3323）。現價截至 2026 年 4 月 21 日收盤。
+  </p>
+  <p style="font-size:12.5px;color:#6b7a9a;line-height:1.8">
+    <strong>分析師聲明：</strong>本報告撰寫人對所涵蓋之公司無任何利益衝突。報告觀點純屬研究判斷，分析師個人未持有本報告涵蓋公司之股票部位。
+  </p>
+  <hr>
+  <p style="font-size:11px;color:#9aabb5;text-align:center;margin-top:20px">&copy; 2026 GiS Genesis International Capital. All rights reserved.</p>
+
+  <div class="page-footer" style="margin-top:auto">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>免責聲明</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  // TAM 成長
+  new Chart(document.getElementById('chartTAM'), {
+    type: 'bar',
+    data: {
+      labels: ['2025', '2026E', '2027E', '2028E'],
+      datasets: [{
+        label: 'AI 電源 TAM（億美元）',
+        data: [23, 70, 140, 230],
+        backgroundColor: ['#1a3a6e','#1a3a6e','#00a878','#00c896'],
+        borderRadius: 5, barPercentage: 0.6
+      }]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false } }, y: { grid: { color: '#eef2f8' } } }
+    }
+  });
+
+  // 3月營收 YoY
+  new Chart(document.getElementById('chartRevYoY'), {
+    type: 'bar',
+    data: {
+      labels: ['順達', '台達電', '新盛力', 'AES-KY', '光寶科', '系統電', '加百裕'],
+      datasets: [{
+        label: '3月營收 YoY%',
+        data: [76.3, 37.6, 36.1, 25.6, 23.5, -6.0, -13.6],
+        backgroundColor: [76.3,37.6,36.1,25.6,23.5,-6,-13.6].map(v => v >= 0 ? '#00a878' : '#e74c3c'),
+        borderRadius: 4, barPercentage: 0.55
+      }]
+    },
+    options: {
+      responsive: false, animation: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { color: '#eef2f8' } }, y: { grid: { display: false } } }
+    }
+  });
+});
+</script>
+</body>
+</html>

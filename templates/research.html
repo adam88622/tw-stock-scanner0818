@@ -18,17 +18,16 @@
         {% endfor %}
     </div>
 
-    {% for cat, reports in categories.items() %}
-    {% set dates_seen = [] %}
-    <div class="research-category" data-category="{{ cat }}">
-        <h5 class="research-cat-title">{{ cat }} <span style="font-size:13px;color:var(--text-muted);">({{ reports|length }})</span></h5>
+    {# 全部 view：純日期排序 #}
+    {% set dates_seen_all = [] %}
+    <div class="research-category" data-category="all">
         <div class="research-list">
-            {% for r in reports %}
-            {% if r.date not in dates_seen %}
-            {% if dates_seen.append(r.date) %}{% endif %}
+            {% for r in all_reports %}
+            {% if r.date not in dates_seen_all %}
+            {% if dates_seen_all.append(r.date) %}{% endif %}
             <div class="research-date-divider">{{ r.date }}</div>
             {% endif %}
-            <div class="research-row" onclick="openReport('{% if r.category %}{{ r.category }}/{% endif %}{{ r.filename }}', '{{ r.title }}')">
+            <div class="research-row" onclick="openReport('{{ r.filename }}', '{{ r.title }}')">
                 <div class="research-row-left">
                     <div class="research-row-title">{{ r.title }}</div>
                     {% if r.summary %}
@@ -36,6 +35,35 @@
                     {% endif %}
                     <div class="research-row-meta">
                         <span class="research-tag">{{ r.category }}</span>
+                        <span class="research-row-date">{{ r.date }}</span>
+                    </div>
+                </div>
+                <div class="research-row-arrow">›</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {# 分類 view：按類別分段（最近更新的類別在最上） #}
+    {% for cat, reports in categories.items() %}
+    {% set dates_seen = [] %}
+    <div class="research-category" data-category="{{ cat }}" style="display:none;">
+        <h5 class="research-cat-title">{{ cat }} <span style="font-size:13px;color:var(--text-muted);">({{ reports|length }})</span></h5>
+        <div class="research-list">
+            {% for r in reports %}
+            {% if r.date not in dates_seen %}
+            {% if dates_seen.append(r.date) %}{% endif %}
+            <div class="research-date-divider">{{ r.date }}</div>
+            {% endif %}
+            <div class="research-row" onclick="openReport('{{ r.filename }}', '{{ r.title }}')">
+                <div class="research-row-left">
+                    <div class="research-row-title">{{ r.title }}</div>
+                    {% if r.summary %}
+                    <div class="research-row-summary">{{ r.summary }}</div>
+                    {% endif %}
+                    <div class="research-row-meta">
+                        <span class="research-tag">{{ r.category }}</span>
+                        <span class="research-row-date">{{ r.date }}</span>
                     </div>
                 </div>
                 <div class="research-row-arrow">›</div>
@@ -254,11 +282,7 @@ document.querySelectorAll('.research-filter-btn').forEach(function(btn) {
         btn.classList.add('active');
         var cat = btn.getAttribute('data-cat');
         document.querySelectorAll('.research-category').forEach(function(el) {
-            if (cat === 'all') {
-                el.style.display = '';
-            } else {
-                el.style.display = el.getAttribute('data-category') === cat ? '' : 'none';
-            }
+            el.style.display = el.getAttribute('data-category') === cat ? '' : 'none';
         });
     });
 });

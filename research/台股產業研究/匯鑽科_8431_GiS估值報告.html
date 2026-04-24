@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 匯鑽科 (8431) 研究報告
+  轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="匯鑽科_8431_GiS估值報告.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///Users/chenhongshuo/claude/匯鑽科_8431_GiS估值報告.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>匯鑽科 (8431) 深度研究 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:24px 0 16px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:20px 0 12px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 8px;page-break-after:avoid}
+
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:8px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-name{font-size:19px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:16px 22px}
+
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:18px;margin:14px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:12px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.red{background:linear-gradient(135deg,#7b2020,#c0392b)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.75;letter-spacing:.5px}
+
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.5px;font-weight:700;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.65}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:16px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12px;font-weight:800;margin-bottom:7px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.85;line-height:1.5}
+
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:14px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.pick-card{border-radius:8px;padding:16px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:12.5px;color:#2d3748;line-height:1.65;margin-bottom:8px}
+.pick-catalyst{font-size:11.5px;color:#065f46;background:#e8f5ee;padding:6px 10px;border-radius:5px;line-height:1.55}
+
+p{margin:6px 0 10px;line-height:1.7}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+li{margin:3px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:10px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:20px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.red{border-color:#e74c3c;background:#fdf0ef}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+.callout.red .callout-title{color:#7b2020}
+.callout ul{font-size:12.5px}
+
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+.scn-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}
+.scn{border-radius:8px;padding:16px;border:1.5px solid;page-break-inside:avoid}
+.scn.bear{border-color:#c0392b;background:#fdf0ef}
+.scn.base{border-color:#0d1b3e;background:#eef5ff;border-width:2.5px}
+.scn.bull{border-color:#00a878;background:#e8f5ee}
+.scn-hd{font-size:12.5px;font-weight:700;letter-spacing:1px;margin-bottom:6px}
+.scn.bear .scn-hd{color:#7b2020}
+.scn.base .scn-hd{color:#0d1b3e}
+.scn.bull .scn-hd{color:#065f46}
+.scn-px{font-size:26px;font-weight:900;margin-bottom:3px}
+.scn.bear .scn-px{color:#c0392b}
+.scn.base .scn-px{color:#0d1b3e}
+.scn.bull .scn-px{color:#00875a}
+.scn-upside{font-size:12px;font-weight:700;margin-bottom:10px}
+.scn-detail{font-size:11.5px;color:#4a5568;line-height:1.6}
+.scn-detail div{padding:2px 0;border-bottom:1px dashed #d0ddf0}
+.scn-detail div:last-child{border:none}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Equity Research · Company Initiation · 2026/04/23</div>
+    <div class="cover-title">匯鑽科 8431<br><em>谷底反轉 × AI 伺服器供應鏈</em><br>矽光子＋水冷散熱的三線齊發</div>
+    <div class="cover-subtitle">From HDD/Type-C Legacy to AI Silicon Photonics & Liquid Cooling Play</div>
+    <div class="cover-tags">
+      <span class="ctag hl">AI 矽光子封裝</span>
+      <span class="ctag hl">AI 伺服器水冷快接頭</span>
+      <span class="ctag">HDD 底座表面處理</span>
+      <span class="ctag">泰國二期 2026 Q4</span>
+      <span class="ctag">CB + 現增</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">NT$<em>78</em></div><div class="cstat-label">GiS 目標價 12M</div></div>
+    <div class="cstat"><div class="cstat-num"><em>+14.1</em>%</div><div class="cstat-label">對現價上檔</div></div>
+    <div class="cstat"><div class="cstat-num"><em>29.5</em>x</div><div class="cstat-label">Blended Target PE</div></div>
+    <div class="cstat"><div class="cstat-num"><em>OW</em></div><div class="cstat-label">增加持股</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 4 月 23 日</span>
+    <span>現價：NT$68.35（2026/04/23 收盤, +7.07%）</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要 · 匯鑽科 (8431)</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">NT$<em> 78</em></div><div class="kpi-lbl">GiS 12M 目標價</div></div>
+    <div class="kpi"><div class="kpi-val">+14.1%</div><div class="kpi-lbl">預期報酬（對現價）</div></div>
+    <div class="kpi gold"><div class="kpi-val">2.64<em>元</em></div><div class="kpi-lbl">Blended EPS（稀釋後）</div></div>
+    <div class="kpi red"><div class="kpi-val">-3.9<em>元</em></div><div class="kpi-lbl">2025 TTM EPS（虧損）</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>谷底反轉：</strong>2025 年為六年來首度虧損（EPS -3.9 元，毛利率 12.79%），董事會不配息，形成「壞消息已充分反映」的定位。2026 Q1 月營收 2.53 億元、YoY +7.68%，景氣循環屬性評分 75/100、轉機股屬性 85/100，正處「剛走出谷底、仍在修復早期」階段。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>AI 雙主軸落地：</strong>泰國二期 2026/04/27 動工、2026Q4 投產，產能翻倍以上，主力為矽光子封裝＋記憶儲存表面處理；北越廠專注 AI 伺服器水冷散熱快接頭，採 CNC 自製＋清洗鈍化一條龍，已取得投資營業執照。兩條新線皆綁定 AI 結構性需求，非 3C 週期題材。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>舊業務補位、不拖累：</strong>HDD 表面處理（占 22%）隨企業級近線容量升級（平均 16.3TB）仍穩定成長；泰國廠於搖臂之外新增硬碟底座處理，與 Seagate/WD/Toshiba 合作 12–20 年、認證週期 6–24 個月，屬高黏著現金流基礎。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>估值框架：</strong>屬轉型中公司，採 Blended PE 模型（50% FY27F + 50% FY28F EPS）。Blended EPS 2.64 元 × Target PE 29.5x = NT$78，給予 <strong>增加持股（Overweight）</strong>。主要風險為 CB 轉換＋2026H2 現增稀釋、Type-C 分食率仍偏低、AI 新產能爬坡不如預期。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">營收與毛利率趨勢（實績→GiS 預估）</div>
+      <div class="chart-sub">來源：公司公告（2023-2026Q1 實績）、GiS 預估（F）</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartRev" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">EPS 軌跡：谷底 → AI 新動能放量</div>
+      <div class="chart-sub">稀釋後 EPS（含 CB 轉換＋現增假設）</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartEPS" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>匯鑽科 8431 · 執行摘要</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 公司卡片 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">公司定位 · 評等 · 核心數據</h1>
+
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">匯鑽科 (Chien Kuo Chemical)</div><div class="co-ticker">8431 · 上櫃 · AI 伺服器矽光子/水冷散熱表面處理供應鏈</div></div>
+      <div class="co-badge">
+        <span class="badge ow">◉ OW 增加持股</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$78 ｜ 現價 NT$68.35（2026/04/23）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+14.1%</div><div class="co-metric-label">預期報酬 12M</div></div>
+      <div class="co-metric"><div class="co-metric-val">29.5x</div><div class="co-metric-label">GiS Blended PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">2.64 元</div><div class="co-metric-label">Target EPS（Blended）</div></div>
+      <div class="co-metric"><div class="co-metric-val">22%</div><div class="co-metric-label">2027F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <p style="font-size:12.5px;line-height:1.7"><strong>論點一｜六年首虧但前瞻式擴產：</strong>2025 年營收 10.56 億、毛利率 12.79%（YoY -14.16pp），首度出現虧損並停發股利，反映 Type-C 與 3C 舊主軸的價格壓力超過規模經濟。但公司同步發行 3 億元 CB、規劃 2026H2 現增，資本全數投入泰國矽光子二期與北越 AI 水冷新線，屬「以一次性獲利陣痛換取 AI 卡位」的結構性決策。</p>
+      <p style="font-size:12.5px;line-height:1.7"><strong>論點二｜泰國＋北越雙廠綁定 AI 訂單：</strong>泰國二期 2026/04/27 動工、2026Q4 開出，主力矽光子封裝＋記憶儲存，完工後當地產能翻倍；北越廠聚焦 AI 伺服器水冷快接頭，採 CNC 自主加工＋清洗鈍化一條龍。兩者皆非 3C 景氣題材，而是與 AI 伺服器高速互連、液冷滲透直接連動，2027–2028 將成為獲利反轉主軸。</p>
+      <p style="font-size:12.5px;line-height:1.7"><strong>論點三｜舊業務現金牛與摺疊機新材料雙補位：</strong>HDD 受益企業級近線（16.3TB）升級，台廠泰國新增底座表面處理；3C 類 Type-C 仍為最大營收單一業務（2025Q2 占 66%），雖貢獻低於 2023 年法人預期，但搭配摺疊機碳纖維新材料（2025Q2 約 14%、中系雙品牌 7 專案），可在 AI 放量前撐住基期。</p>
+      <p style="font-size:12.5px;line-height:1.7"><strong>GiS 估值｜Blended PE 29.5x × EPS 2.64 元：</strong>公司處轉型期且 EPS 基期極低，純 Forward PE 易過度樂觀。採 50% FY27F EPS 1.63 元 + 50% FY28F EPS 3.65 元 = Blended EPS 2.64 元；Target PE 取 29.5x（表面處理產業平均 18x＋AI 成長溢價 7–9x＋進入障礙溢價 2–3x），得目標價 NT$78。</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+        <div>
+          <h3 class="ch" style="margin:6px 0 4px">產品 / 營收結構（2025Q2）</h3>
+          <table style="font-size:11px;margin:4px 0">
+            <thead><tr><th>產品線</th><th style="text-align:right">營收佔比</th><th style="text-align:right">毛利率</th><th>趨勢</th></tr></thead>
+            <tbody>
+              <tr><td><strong>3C Type-C / USB-C</strong></td><td class="num hi">66%</td><td class="num">低~中</td><td class="neg">價格壓力</td></tr>
+              <tr><td>HDD 表面處理</td><td class="num">20%</td><td class="num pos">中高</td><td class="pos">企業級升級</td></tr>
+              <tr><td>碳纖維摺疊新材料</td><td class="num">14%</td><td class="num pos">高</td><td class="pos">新案放量</td></tr>
+              <tr><td>AI 水冷＋矽光子</td><td class="num">&lt;3%</td><td class="num pos">極高</td><td class="pos">2026Q4 放量</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 class="ch" style="margin:6px 0 4px">關鍵時程 / 資本配置</h3>
+          <table style="font-size:11px;margin:4px 0">
+            <thead><tr><th>項目</th><th>數據 / 時點</th></tr></thead>
+            <tbody>
+              <tr><td>泰國二期動工</td><td class="pos">2026/04/27</td></tr>
+              <tr><td>泰國新產能投產</td><td class="pos">2026 Q4（產能 ×2）</td></tr>
+              <tr><td>越南水冷線量產</td><td>2026 H2 ~ 2027</td></tr>
+              <tr><td>CB 發行</td><td>3 億元（2025）</td></tr>
+              <tr><td>2026 H2 現增</td><td>支應越南擴產</td></tr>
+              <tr><td>庫藏股</td><td>100 萬股 @ 53.43 元</td></tr>
+              <tr><td>2025 配息</td><td class="neg">不配發</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>匯鑽科 8431 · 公司卡片</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面：產業洞察 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One · Industry Insight</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">AI 伺服器驅動表面處理需求質變</div>
+  <div class="sec-desc">從 HDD、Type-C 的單點循環，走向 AI 伺服器高速互連＋液冷散熱＋中國+1 多據點的結構性成長。匯鑽科定位於表面處理產業升級的受益前段。</div>
+</div>
+
+<!-- ══════════════ 產業洞察頁 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、產業洞察 — AI 伺服器供應鏈的表面處理再定價</h1>
+  <p style="font-size:13px">表面處理長期被視為「產品美容師」的低估值加工業，但 AI 伺服器矽光子傳輸、液冷散熱、以及企業級 HDD 持續升級，正把產業從「代工加值」推向「高精密解決方案」。中國環保法規收緊抬升合規門檻，反而讓具多國基地、長期認證資歷的業者拿到結構性紅利。</p>
+
+  <h2 class="ch">關鍵終端需求比較：為何 AI 伺服器最值得定價？</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">各應用對表面處理需求強度（log scale）</div>
+    <div class="chart-sub">資料來源：公司法說會、SEMI、TRI；GiS 彙編</div>
+    <div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chartIndustry" style="display:block;width:100%;height:220px"></canvas></div>
+  </div>
+
+  <table style="font-size:11.5px">
+    <thead><tr><th>終端平台</th><th style="text-align:right">單機用量（相對）</th><th style="text-align:right">年出貨/建置規模</th><th style="text-align:right">表面處理需求指數</th><th>GiS 觀點</th></tr></thead>
+    <tbody>
+      <tr><td>手機 USB-C 接頭</td><td class="num">1×</td><td class="num">12 億支</td><td class="num">12 億</td><td>量大但單價低、價格戰</td></tr>
+      <tr><td>穿戴 / TWS</td><td class="num">0.3×</td><td class="num">5 億支</td><td class="num">1.5 億</td><td>輔助性，難差異化</td></tr>
+      <tr><td>消費/企業級 HDD 零件</td><td class="num">20×</td><td class="num">1.5 億台</td><td class="num">30 億</td><td>高精密、高黏著現金流</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">AI 伺服器（矽光子＋水冷）</td><td class="num hi" style="font-weight:800;color:#00875a">150–300×</td><td class="num">~500 萬機櫃</td><td class="num hi" style="font-weight:800;color:#00875a">極高價值密度</td><td style="font-size:11px;color:#00875a;font-weight:700">單機單價數倍，毛利率最高</td></tr>
+      <tr><td>新能源車動力模組</td><td class="num">50×</td><td class="num">1,800 萬輛</td><td class="num">9 億</td><td>認證長、2026 後放量</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>GiS 核心觀點：</strong>表面處理產業的重評價不會來自 3C 數量，而來自 AI 伺服器的「單機價值密度」— 矽光子封裝與水冷快接頭的單位加工費數倍於 Type-C，且客戶綁定更深。匯鑽科是台系少數同時布局矽光子＋水冷＋HDD 底座的純表面處理廠，這是 Blended PE 給到 29.5x 而非產業平均 18x 的最核心原因。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 產業洞察</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面：產品演進 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two · Product Evolution</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產品組合演進：從 HDD × Type-C 到 AI 雙主軸</div>
+  <div class="sec-desc">未來三年最大結構性變化：AI 水冷＋矽光子從 &lt;3% 快速放大至 &gt;25%，摺疊新材料穩定補位，Type-C 比重下降但仍是基期底盤。</div>
+</div>
+
+<!-- ══════════════ 產品演進頁 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳、產品組合演進（2023 → 2028F）</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">產品營收佔比演進（%）</div>
+    <div class="chart-sub">資料來源：公司年報、法說會、GiS 預估（F）</div>
+    <div class="chart-container" style="height:250px;width:100%;position:relative"><canvas id="chartMix" style="display:block;width:100%;height:250px"></canvas></div>
+  </div>
+
+  <h2 class="ch">各產品線深度對比</h2>
+  <table style="font-size:11px">
+    <thead><tr><th>產品線</th><th>2025 佔比</th><th>2028F 佔比</th><th>AI 關聯度</th><th>成長邏輯</th><th>競爭壁壘</th><th>價格趨勢</th></tr></thead>
+    <tbody>
+      <tr><td><strong>3C Type-C / USB-C</strong></td><td class="num">66%</td><td class="num">35%</td><td>低</td><td>EU 統一介面＋快充升級（已部分兌現）</td><td>中（美系客戶高集中）</td><td class="neg">價格壓力</td></tr>
+      <tr><td><strong>HDD 零組件表面處理</strong></td><td class="num">20%</td><td class="num">18%</td><td>中（近線儲存）</td><td>企業級 16.3TB 升級、底座新增</td><td class="pos">高（20 年客戶）</td><td>穩定</td></tr>
+      <tr><td>碳纖維摺疊新材料</td><td class="num">14%</td><td class="num">15%</td><td>低</td><td>中系雙品牌 7 專案量產</td><td>中</td><td>穩定</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">AI 矽光子封裝處理</td><td class="num" style="font-weight:700">&lt;1%</td><td class="num hi" style="font-weight:800;color:#00875a">17%</td><td class="pos" style="font-weight:700">極高</td><td style="font-weight:700">2026Q4 泰國二期開出</td><td class="pos" style="font-weight:700">極高（認證長）</td><td class="pos" style="font-weight:700">高單價</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">AI 伺服器水冷快接頭</td><td class="num" style="font-weight:700">~2%</td><td class="num hi" style="font-weight:800;color:#00875a">12%</td><td class="pos" style="font-weight:700">極高</td><td style="font-weight:700">北越廠 CNC 一條龍</td><td class="pos" style="font-weight:700">高（垂直整合）</td><td class="pos" style="font-weight:700">高單價</td></tr>
+      <tr><td>車用 / 新能源車</td><td class="num">&lt;3%</td><td class="num">3%</td><td>低</td><td>2025 新案導入，車用半導體 2026 後復甦</td><td>中</td><td>認證後穩定</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">策略里程碑時間軸</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2023-2024</div><div class="tl-spec">Type-C 題材</div><div class="tl-tech">預期珍珠鎳倍增<br>實際分食率低</div></div>
+    <div class="tl-item"><div class="tl-year">2025</div><div class="tl-spec">首度虧損</div><div class="tl-tech">EPS -3.9 元<br>CB 3 億＋庫藏股</div></div>
+    <div class="tl-item active"><div class="tl-year">2026 ← 現在</div><div class="tl-spec">雙廠投資</div><div class="tl-tech">泰二期 4/27 動工<br>北越水冷落地</div></div>
+    <div class="tl-item next"><div class="tl-year">2027-2028</div><div class="tl-spec">AI 放量</div><div class="tl-tech">矽光子＋水冷<br>營收結構翻轉</div></div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 觀點：</strong>2025 年的「虧損 + 不配息」不是終點而是 reset — CB 與現增所籌的資本金完全指向 AI 雙軸產能，Type-C 的失望反而逼迫公司加速轉向矽光子與水冷。真正的結構性轉捩點落在 2027 年，屆時 AI 雙軸合計占比將首度突破 25%，帶動整體毛利率由 17% 升至 22%。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 產品演進</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面：財務模型 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three · GiS Financial Model</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">季度損益預估模型 與 估值三情境</div>
+  <div class="sec-desc">以公司實績 + 月營收外推 + 法說會指引，建構 FY2026–2028F 季度模型；採 Blended PE 反映轉型期風險。</div>
+</div>
+
+<!-- ══════════════ 季度損益模型頁 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">GiS 季度損益預估模型（匯鑽科 8431）</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-8px 0 8px">資料來源：2025 全年與 2026 Q1 為公司公告實績；2026 Q2F 起為 GiS 預估。單位：百萬元（EPS 除外）。</p>
+
+  <style>
+    table.fm{table-layout:fixed;width:100%;font-size:10px}
+    table.fm th{padding:7px 3px!important;font-size:9.5px!important;letter-spacing:0!important;white-space:nowrap}
+    table.fm td{padding:5px 3px!important;font-size:9.8px!important;line-height:1.4!important}
+    table.fm td:first-child{font-size:10.5px!important;padding-left:10px!important}
+    table.fm td.num{font-size:9.8px!important}
+  </style>
+  <table class="fm">
+    <colgroup>
+      <col style="width:18%"><col style="width:9.1%"><col style="width:9.1%"><col style="width:9.1%">
+      <col style="width:9.1%"><col style="width:9.1%"><col style="width:9.1%"><col style="width:9.1%">
+      <col style="width:9.1%"><col style="width:9.1%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>損益項目</th>
+        <th style="text-align:right">FY24A</th>
+        <th style="text-align:right">FY25A</th>
+        <th style="text-align:right">1Q26A</th>
+        <th style="text-align:right;background:#065f46">2Q26F</th>
+        <th style="text-align:right;background:#065f46">3Q26F</th>
+        <th style="text-align:right;background:#065f46">4Q26F</th>
+        <th style="text-align:right;background:#065f46">FY26F</th>
+        <th style="text-align:right;background:#065f46">FY27F</th>
+        <th style="text-align:right;background:#065f46">FY28F</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">1,230</td><td class="num">1,056</td><td class="num">253</td><td class="num">268</td><td class="num">283</td><td class="num">320</td><td class="num hi" style="font-weight:700">1,124</td><td class="num hi" style="font-weight:700">1,580</td><td class="num hi" style="font-weight:700">2,020</td></tr>
+      <tr><td>營業成本</td><td class="num">985</td><td class="num">921</td><td class="num">217</td><td class="num">225</td><td class="num">232</td><td class="num">256</td><td class="num">930</td><td class="num">1,232</td><td class="num">1,475</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num">245</td><td class="num">135</td><td class="num">36</td><td class="num">43</td><td class="num">51</td><td class="num">64</td><td class="num hi" style="font-weight:700">194</td><td class="num hi" style="font-weight:700">348</td><td class="num hi" style="font-weight:700">545</td></tr>
+      <tr><td>營業費用</td><td class="num">220</td><td class="num">215</td><td class="num">51</td><td class="num">52</td><td class="num">53</td><td class="num">55</td><td class="num">211</td><td class="num">223</td><td class="num">285</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">25</td><td class="num neg">-80</td><td class="num neg">-15</td><td class="num neg">-9</td><td class="num neg">-2</td><td class="num pos">9</td><td class="num hi" style="color:#c0392b">-17</td><td class="num hi" style="font-weight:700;color:#00875a">125</td><td class="num hi" style="font-weight:700;color:#00875a">260</td></tr>
+      <tr><td>業外收支</td><td class="num">5</td><td class="num neg">-103</td><td class="num neg">-5</td><td class="num neg">-5</td><td class="num neg">-5</td><td class="num neg">-5</td><td class="num">-20</td><td class="num">-10</td><td class="num">-5</td></tr>
+      <tr><td><strong>稅前淨利</strong></td><td class="num">30</td><td class="num neg">-183</td><td class="num neg">-20</td><td class="num neg">-14</td><td class="num neg">-7</td><td class="num">4</td><td class="num hi" style="color:#c0392b">-37</td><td class="num hi" style="font-weight:700;color:#00875a">115</td><td class="num hi" style="font-weight:700;color:#00875a">255</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">24</td><td class="num neg">-183</td><td class="num neg">-20</td><td class="num neg">-14</td><td class="num neg">-7</td><td class="num">3</td><td class="num hi" style="color:#c0392b">-38</td><td class="num hi" style="font-weight:700;color:#00875a">92</td><td class="num hi" style="font-weight:700;color:#00875a">204</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元, 稀釋後）</strong></td><td class="num" style="font-weight:700">0.51</td><td class="num neg" style="font-weight:700">-3.90</td><td class="num neg" style="font-weight:700">-0.43</td><td class="num neg" style="font-weight:700">-0.29</td><td class="num neg" style="font-weight:700">-0.14</td><td class="num" style="font-weight:700">0.06</td><td class="num hi" style="font-weight:800;color:#c0392b">-0.72</td><td class="num hi" style="font-weight:800;color:#00875a">1.63</td><td class="num hi" style="font-weight:800;color:#00875a">3.65</td></tr>
+    </tbody>
+  </table>
+
+  <table class="fm" style="margin-top:-6px">
+    <colgroup>
+      <col style="width:18%"><col style="width:9.1%"><col style="width:9.1%"><col style="width:9.1%">
+      <col style="width:9.1%"><col style="width:9.1%"><col style="width:9.1%"><col style="width:9.1%">
+      <col style="width:9.1%"><col style="width:9.1%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>獲利能力 / 成長率</th>
+        <th style="text-align:right">FY24A</th>
+        <th style="text-align:right">FY25A</th>
+        <th style="text-align:right">1Q26A</th>
+        <th style="text-align:right;background:#065f46">2Q26F</th>
+        <th style="text-align:right;background:#065f46">3Q26F</th>
+        <th style="text-align:right;background:#065f46">4Q26F</th>
+        <th style="text-align:right;background:#065f46">FY26F</th>
+        <th style="text-align:right;background:#065f46">FY27F</th>
+        <th style="text-align:right;background:#065f46">FY28F</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>毛利率（%）</strong></td><td class="num">19.9</td><td class="num neg">12.8</td><td class="num">14.2</td><td class="num">16.0</td><td class="num">18.0</td><td class="num">20.0</td><td class="num hi">17.3</td><td class="num hi pos">22.0</td><td class="num hi pos">27.0</td></tr>
+      <tr><td><strong>營益率（%）</strong></td><td class="num">2.0</td><td class="num neg">-7.6</td><td class="num neg">-5.9</td><td class="num neg">-3.4</td><td class="num neg">-0.7</td><td class="num">2.8</td><td class="num hi neg">-1.5</td><td class="num hi pos">7.9</td><td class="num hi pos">12.9</td></tr>
+      <tr><td>營收 YoY（%）</td><td class="num neg">-5.0</td><td class="num neg">-14.1</td><td class="num pos">+7.7</td><td class="num pos">+8.0</td><td class="num pos">+5.7</td><td class="num pos">+14.3</td><td class="num hi pos">+6.4</td><td class="num hi pos">+40.6</td><td class="num hi pos">+27.8</td></tr>
+      <tr><td>稅後淨利 YoY（%）</td><td class="num neg">-25</td><td class="num neg">N.M.</td><td class="num">N.M.</td><td class="num">N.M.</td><td class="num">N.M.</td><td class="num pos">轉正</td><td class="num hi">虧損收斂</td><td class="num hi pos">轉盈</td><td class="num hi pos">+122</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:10px">
+    <strong>GiS 模型關鍵假設：</strong>
+    ① 2026Q1 營收 253M（實績）、Q4 新廠試產 320M；FY2026F 毛利率由 12.8% 回升至 17.3%，主因規模經濟＋摺疊機新材料放量。
+    ② FY2027F 營收 +40.6%，由 AI 矽光子（貢獻 ~10%）＋水冷快接頭（~8%）＋HDD 底座驅動；毛利率升至 22%。
+    ③ FY2028F 為 AI 新產能滿載首年，AI 雙軸合計佔比 ~29%，毛利率達 27%。
+    ④ 稀釋股數：目前 47M → CB 轉換 +5M → 2026H2 現增 +5M，合計 57M 股計算 EPS。
+  </blockquote>
+  <span class="src">資料來源：公司季報（實績）、公司法說會指引、GiS 預估（F 標記）</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>GiS 季度損益預估模型</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 估值邏輯頁 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、估值邏輯 — Blended PE 的轉型股應用</h1>
+
+  <h2 class="ch">為何採用 Blended PE 而非單年 Forward PE？</h2>
+  <div class="chart-grid">
+    <div class="callout red">
+      <div class="callout-title">純 Forward PE 的風險</div>
+      <ul>
+        <li>FY26F EPS 仍為 <strong>-0.72 元</strong>，無法做分母</li>
+        <li>FY27F EPS 1.63 元單年推估，估值對「AI 新產能是否準時放量」高度敏感</li>
+        <li>景氣循環 × 轉型雙重不確定性 → 單年 EPS 震盪大</li>
+      </ul>
+    </div>
+    <div class="callout green">
+      <div class="callout-title">GiS Blended PE 的優勢</div>
+      <ul>
+        <li>以 50% FY27F + 50% FY28F 為基準，平滑爬坡節奏風險</li>
+        <li>Blended EPS = (1.63 + 3.65)/2 = <strong>2.64 元</strong></li>
+        <li>對應 GiS 方法論「轉型中公司」建議的 50/50 Blended 結構</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="ch">Target PE 29.5x 拆解</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>調整項</th><th style="text-align:right">PE 貢獻</th><th>依據</th></tr></thead>
+    <tbody>
+      <tr><td>表面處理產業平均 PE（基礎）</td><td class="num">18.0x</td><td>GiS 方法論 5.3「特用化學/表面處理」區間 15–30x 中位</td></tr>
+      <tr><td>AI 成長性溢價</td><td class="num pos">+7.0x</td><td>AI 矽光子＋水冷雙軸綁定，非週期題材</td></tr>
+      <tr><td>高進入障礙溢價</td><td class="num pos">+3.0x</td><td>中國電鍍牌照與 HDD 客戶 6–24 個月認證期</td></tr>
+      <tr><td>客戶集中度折價</td><td class="num neg">-1.5x</td><td>美系 3C 客戶占 2025Q2 達 66%</td></tr>
+      <tr><td>小型股 / 流動性折價</td><td class="num neg">-2.0x</td><td>市值 &lt; 50 億，日均成交量偏低</td></tr>
+      <tr><td>轉型執行風險折價</td><td class="num neg">-1.0x</td><td>CB 轉換＋現增稀釋、AI 產能爬坡不確定性</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">GiS Target PE</td><td class="num hi" style="font-weight:800">29.5x</td><td style="font-weight:700">Blended EPS 2.64 元 × 29.5x = NT$78</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">三情境目標價</h2>
+  <div class="scn-grid">
+    <div class="scn bear">
+      <div class="scn-hd">保守情境</div>
+      <div class="scn-px">NT$52</div>
+      <div class="scn-upside" style="color:#c0392b">下檔 -23.9%</div>
+      <div class="scn-detail">
+        <div>AI 新線延後 2 季</div>
+        <div>Blended EPS ↓15% → 2.24 元</div>
+        <div>Target PE 23x</div>
+        <div>Type-C 市佔續下滑</div>
+      </div>
+    </div>
+    <div class="scn base">
+      <div class="scn-hd">基礎情境（採用）</div>
+      <div class="scn-px">NT$78</div>
+      <div class="scn-upside" style="color:#0d1b3e">上檔 +14.1%</div>
+      <div class="scn-detail">
+        <div>AI 產能 2026Q4 準時</div>
+        <div>Blended EPS 2.64 元</div>
+        <div>Target PE 29.5x</div>
+        <div>HDD 底座新增按計畫</div>
+      </div>
+    </div>
+    <div class="scn bull">
+      <div class="scn-hd">樂觀情境</div>
+      <div class="scn-px">NT$106</div>
+      <div class="scn-upside" style="color:#00875a">上檔 +55.1%</div>
+      <div class="scn-detail">
+        <div>AI 需求大於預期</div>
+        <div>Blended EPS ↑15% → 3.04 元</div>
+        <div>Target PE 35x</div>
+        <div>北越廠切入二大 CSP</div>
+      </div>
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 判斷：</strong>現價 NT$68.35（2026/04/23 收盤，+7.07%）已反映「AI 題材＋谷底預期」的部分 upside，但尚未充分定價 FY2028 毛利率升至 27%、AI 雙軸合計占比 29% 的結構性改善。基礎情境 NT$78 對應 +14.1% 上檔，符合「增加持股（Overweight）」評等定義。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 估值邏輯</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 催化劑與風險頁 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆、催化劑與風險矩陣</h1>
+
+  <h2 class="ch">關鍵催化劑時間軸</h2>
+  <table>
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響程度</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>泰國二期土建動工</strong></td><td>2026/04/27</td><td class="pos">高</td><td>矽光子封裝產能確認，資本支出進入實質執行</td></tr>
+      <tr><td><strong>北越廠水冷快接頭首批出貨</strong></td><td>2026 H2</td><td class="pos">高</td><td>驗證 CNC 一條龍毛利率結構，成為 FY27 關鍵 proof point</td></tr>
+      <tr><td><strong>月營收突破 1 億</strong></td><td>2026 H2</td><td class="pos">中高</td><td>代表 AI 新線初步量產，對應 FY26F 營收 1,124M 的達成</td></tr>
+      <tr><td><strong>2026H2 現增定價</strong></td><td>2026 Q3-Q4</td><td>中</td><td>稀釋幅度與認購價格將影響 Target EPS 計算</td></tr>
+      <tr><td><strong>泰國新廠完工投產</strong></td><td>2026 Q4</td><td class="pos">高</td><td>當地產能翻倍，矽光子+記憶儲存客戶導入能否順利</td></tr>
+      <tr><td><strong>FY27 毛利率回升至 20%+</strong></td><td>2027 Q1 法說會</td><td class="pos">高</td><td>驗證 AI 雙軸毛利結構，PE re-rating 關鍵觸發</td></tr>
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>AI 水冷客戶打入二家以上 CSP</strong> → FY27F 營收上修 10–15%、毛利率再+2pp</div>
+      <div class="risk-item"><strong>矽光子封裝訂單拉貨超預期</strong> → 泰國二期產能利用率快速爬坡，Target PE 再 re-rate 至 35x+</div>
+      <div class="risk-item"><strong>Type-C 摺疊機新材料成中國品牌主供</strong> → 14% → 20% 比重，壓抑 FY26 虧損</div>
+      <div class="risk-item"><strong>現增價格高於 70 元</strong> → 稀釋幅度縮小，Target EPS 上修 5%</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>泰二期延後 1–2 季</strong> → FY27F 營收 -8%、EPS -15%，目標價下修至 60 元</div>
+      <div class="risk-item"><strong>美系 3C 客戶訂單再砍</strong> → 66% 高集中度風險兌現，毛利率續壓至 11% 下</div>
+      <div class="risk-item"><strong>CB 轉換＋現增稀釋超預期</strong> → 稀釋股本 &gt;60M，EPS 全面下修</div>
+      <div class="risk-item"><strong>鎳/金/銀原料續漲</strong> → 毛利率修復節奏延後 2–3 季</div>
+      <div class="risk-item"><strong>中國環保政策突變</strong> → 深圳/東莞廠短期停工，主體營收 80% 受影響</div>
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 風險評估：</strong>下行風險機率與上行催化劑約 45/55 略偏樂觀。建議以 <strong>月營收突破 300M（2026/09）</strong> 與 <strong>泰國二期動土後土建進度</strong> 為最先期觀察指標；若 Q3 月營收仍在 270M 以下，須觸發基礎情境的 -10% 預警，下調至中立評等。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 催化劑與風險</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 投資結論頁 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍、投資結論與追蹤指標</h1>
+
+  <table>
+    <thead><tr><th>公司</th><th>代號</th><th>評等</th><th>目標價</th><th>Blended EPS</th><th>Target PE</th><th>主要看點</th></tr></thead>
+    <tbody>
+      <tr style="background:#eefaf4!important"><td><strong>匯鑽科</strong></td><td>8431</td><td class="pos hi" style="font-weight:800">增加持股 OW</td><td class="num hi" style="font-weight:800">NT$78</td><td class="num pos" style="font-weight:800">2.64 元</td><td class="num" style="font-weight:700">29.5x</td><td>AI 矽光子＋水冷雙廠落地 × 谷底反轉</td></tr>
+    </tbody>
+  </table>
+
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">GIS CORE THESIS · 轉型股谷底反轉</div>
+      <div class="pick-name">匯鑽科 8431</div>
+      <div class="pick-ticker">現價 NT$68.35 · 目標 NT$78 · +14.1%</div>
+      <div class="pick-why">
+        2025 年虧損＋停發股利已充分反映 Type-C 失望，CB 與現增轉而全數押注 AI 矽光子（泰國）與水冷散熱快接頭（越南）。2026Q4 泰國新產能投產、2027 起 AI 雙軸占比跳升至 25%+，將帶動毛利率由 17% 修復至 27%，為 Blended PE 29.5x 的核心支撐。
+      </div>
+      <div class="pick-catalyst">催化劑：泰二期動工 (4/27)、北越水冷首次出貨 (2026 H2)、月營收突破 1 億、2027 法說會毛利率指引</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">KEY WATCH · 風險觸發點</div>
+      <div class="pick-name">下行預警指標</div>
+      <div class="pick-ticker">Trigger Level Monitoring</div>
+      <div class="pick-why">
+        若出現以下之一，GiS 將下調至「中立」並重估目標價：(1) 2026 Q3 月營收續低於 270M；(2) 泰國二期完工延後 &gt; 1 季；(3) 美系 3C 客戶比重再升至 70%+（集中度惡化）；(4) 現增定價低於 60 元（稀釋超過 10% 股本）。
+      </div>
+      <div class="pick-catalyst">追蹤：每月 10 日月營收、季報毛利率、法說會 AI 產品指引、CB 轉換進度</div>
+    </div>
+  </div>
+
+  <h2 class="ch">投資摘要一頁速覽</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>項目</th><th>GiS 數據</th><th>備註</th></tr></thead>
+    <tbody>
+      <tr><td>現價（2026/04/23 收盤）</td><td class="num">NT$68.35</td><td>+7.07%</td></tr>
+      <tr><td>GiS 12M 目標價</td><td class="num hi">NT$78</td><td>Blended 29.5x × 2.64 元</td></tr>
+      <tr><td>預期報酬</td><td class="num pos">+14.1%</td><td>符合 OW 區間</td></tr>
+      <tr><td>評等</td><td style="font-weight:700;color:#00875a">增加持股（Overweight）</td><td>GiS Initiation</td></tr>
+      <tr><td>保守/基礎/樂觀目標</td><td class="num">52 / 78 / 106</td><td>-23.9% / +14.1% / +55.1%</td></tr>
+      <tr><td>估值方法</td><td>Blended PE</td><td>50% FY27F + 50% FY28F</td></tr>
+      <tr><td>FY2026F 營收 / EPS</td><td class="num">1,124M / -0.72 元</td><td>虧損收斂</td></tr>
+      <tr><td>FY2027F 營收 / EPS</td><td class="num">1,580M / 1.63 元</td><td>轉盈</td></tr>
+      <tr><td>FY2028F 營收 / EPS</td><td class="num">2,020M / 3.65 元</td><td>AI 滿載</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>結論：</strong>匯鑽科是 2026 年台股中少數同時具備「AI 伺服器題材 × 景氣谷底反轉 × 已充分下修預期」三重特性的轉型股。2025 年虧損與停發股利已完成 expectation reset，後續 2026Q4 泰國矽光子新產能與北越水冷出貨將是 PE re-rating 的關鍵 catalysts。給予 <strong>增加持股（Overweight）</strong>，12 個月目標價 NT$78。
+  </blockquote>
+
+  <hr>
+  <p style="font-size:11px;color:#9aabb5;margin-top:12px">本報告涵蓋公司：匯鑽科 (8431)。資料截止：2026 年 4 月 23 日。所有財務預估（F 標記）由 GiS 模型推導，與券商共識可能存在差異。本報告僅供研究參考，不構成投資建議。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · 投資結論</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 11.5;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  // ── 營收與毛利率趨勢 ──
+  new Chart(getEl('chartRev'), {
+    type: 'bar',
+    data: {
+      labels: ['2023A', '2024A', '2025A', '2026F', '2027F', '2028F'],
+      datasets: [
+        { type: 'bar', label: '營收（百萬）', data: [1295, 1230, 1056, 1124, 1580, 2020], backgroundColor: '#1a3a6e', borderRadius: 4, barPercentage: 0.6, yAxisID: 'y' },
+        { type: 'line', label: '毛利率（%）', data: [21.5, 19.9, 12.8, 17.3, 22.0, 27.0], borderColor: '#00c896', backgroundColor: 'transparent', tension: 0.3, pointRadius: 5, borderWidth: 2.5, yAxisID: 'y1' }
+      ]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 10, font:{size:11} } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { position: 'left', grid: { color: '#eef2f8' }, ticks: { callback: v => v } },
+        y1: { position: 'right', grid: { display:false }, min: 0, max: 32, ticks: { callback: v => v + '%' } }
+      }
+    }
+  });
+
+  // ── EPS 軌跡 ──
+  new Chart(getEl('chartEPS'), {
+    type: 'bar',
+    data: {
+      labels: ['2024A', '2025A', '2026F', '2027F', '2028F'],
+      datasets: [
+        { label: 'EPS（元）', data: [0.51, -3.90, -0.72, 1.63, 3.65], backgroundColor: ['#6b7a9a', '#c0392b', '#e67e22', '#1a3a6e', '#00875a'], borderRadius: 4, barPercentage: 0.55 }
+      ]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '元' } }
+      }
+    }
+  });
+
+  // ── 產業用量橫條圖 ──
+  new Chart(getEl('chartIndustry'), {
+    type: 'bar',
+    data: {
+      labels: ['手機 USB-C', '穿戴 TWS', '消費/企業 HDD', 'AI 伺服器（矽光子+水冷）', '新能源車動力'],
+      datasets: [
+        { label: '需求指數（相對規模）', data: [12, 1.5, 30, 85, 9], backgroundColor: ['#6b7a9a','#95a5b8','#1a3a6e','#00c896','#e67e22'], borderRadius: 4, barPercentage: 0.6 }
+      ]
+    },
+    options: {
+      responsive: false, animation: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { type:'logarithmic', grid: { color: '#eef2f8' }, ticks: { callback: v => v } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── 產品佔比堆疊圖 ──
+  new Chart(getEl('chartMix'), {
+    type: 'bar',
+    data: {
+      labels: ['2023A', '2025A', '2026F', '2027F', '2028F'],
+      datasets: [
+        { label: '3C Type-C/USB-C', data: [70, 66, 58, 45, 35], backgroundColor: '#6b7a9a', borderRadius: 3, barPercentage: 0.6 },
+        { label: 'HDD 表面處理', data: [22, 20, 20, 19, 18], backgroundColor: '#1a3a6e', borderRadius: 3, barPercentage: 0.6 },
+        { label: '摺疊新材料', data: [3, 14, 15, 15, 15], backgroundColor: '#e67e22', borderRadius: 3, barPercentage: 0.6 },
+        { label: 'AI 矽光子', data: [0, 0.5, 3, 10, 17], backgroundColor: '#00a878', borderRadius: 3, barPercentage: 0.6 },
+        { label: 'AI 水冷快接頭', data: [0, 2, 5, 8, 12], backgroundColor: '#00c896', borderRadius: 3, barPercentage: 0.6 },
+        { label: '車用 / 其他', data: [5, 2, 2, 3, 3], backgroundColor: '#95a5b8', borderRadius: 3, barPercentage: 0.6 }
+      ]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12, padding: 10, font:{size:11} } },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw + '%' } }
+      },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, max: 100, grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%' } }
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

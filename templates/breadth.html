@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+{% block title %}市場廣度指標{% endblock %}
+
+{% block content %}
+<style>
+    .br-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:16px; }
+    @media (max-width: 900px) { .br-grid { grid-template-columns:1fr; } }
+    .br-card { background:#0f172a; border-radius:10px; padding:20px; text-align:center; border:1.5px solid #1e293b; }
+    .br-card.active-bull { border-color:#ef4444; box-shadow:0 0 12px rgba(239,68,68,.15); }
+    .br-card.active-bear { border-color:#22c55e; box-shadow:0 0 12px rgba(34,197,94,.15); }
+    .br-card.active-neutral { border-color:#f59e0b; box-shadow:0 0 12px rgba(245,158,11,.15); }
+    .br-label { font-size:12px; color:#64748b; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; }
+    .br-adr { font-size:36px; font-weight:800; margin-bottom:4px; }
+    .br-regime { font-size:14px; font-weight:600; padding:4px 12px; border-radius:20px; display:inline-block; margin-bottom:8px; }
+    .br-regime.STRONG_BULL, .br-regime.BULL { background:rgba(239,68,68,.15); color:#ef4444; }
+    .br-regime.NEUTRAL { background:rgba(245,158,11,.15); color:#f59e0b; }
+    .br-regime.BEAR, .br-regime.CRASH { background:rgba(34,197,94,.15); color:#22c55e; }
+    .br-detail { font-size:13px; color:#94a3b8; line-height:1.8; }
+    .br-detail strong { color:#e2e8f0; }
+
+    /* 投票系統 */
+    .vote-box { background:#0f172a; border-radius:10px; padding:24px; margin-top:16px; text-align:center; border:1.5px solid #1e293b; }
+    .vote-title { font-size:14px; color:#64748b; margin-bottom:12px; }
+    .vote-score { font-size:52px; font-weight:900; margin-bottom:4px; }
+    .vote-score.bull { color:#ef4444; }
+    .vote-score.bear { color:#22c55e; }
+    .vote-score.neutral { color:#f59e0b; }
+    .vote-regime { font-size:20px; font-weight:700; margin-bottom:12px; }
+    .vote-pills { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+    .vote-pill { padding:6px 16px; border-radius:20px; font-size:13px; font-weight:600; }
+    .vote-pill.bull { background:rgba(239,68,68,.15); color:#ef4444; }
+    .vote-pill.bear { background:rgba(34,197,94,.15); color:#22c55e; }
+    .vote-pill.neutral { background:rgba(245,158,11,.15); color:#f59e0b; }
+
+    /* 漲跌停 */
+    .limit-row { display:flex; gap:16px; justify-content:center; margin-top:12px; }
+    .limit-tag { padding:4px 12px; border-radius:4px; font-size:13px; font-weight:600; }
+    .limit-tag.up { background:rgba(239,68,68,.15); color:#ef4444; }
+    .limit-tag.dn { background:rgba(34,197,94,.15); color:#22c55e; }
+
+    /* 判讀規則 */
+    .rules-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+    @media (max-width: 768px) { .rules-grid { grid-template-columns:1fr; } }
+    .rule-card { background:#0f172a; border-radius:8px; padding:14px; }
+    .rule-card h6 { color:#818cf8; margin-bottom:8px; font-size:14px; }
+    .rule-card table { width:100%; }
+    .rule-card td { padding:4px 8px; font-size:12.5px; color:#94a3b8; border-bottom:1px solid #1e293b; }
+    .rule-card td:first-child { color:#e2e8f0; font-weight:600; white-space:nowrap; }
+</style>
+
+<div class="content-area">
+    <h4 class="page-title">市場廣度指標 — 三層投票系統</h4>
+
+    {% if current %}
+    <!-- ═══ 投票系統總分 ═══ -->
+    <div class="vote-box">
+        <div class="vote-title">MARKET BREADTH COMPOSITE SCORE</div>
+        <div class="vote-score {{ 'bull' if current.composite_score > 0.55 else ('bear' if current.composite_score < 0.45 else 'neutral') }}">
+            {{ "%.1f"|format(current.composite_score * 100) }}
+        </div>
+        <div class="vote-regime">
+            {% if current.composite_regime == 'STRONG_BULL' %}🔥 強多 — 資金全面進場
+            {% elif current.composite_regime == 'BULL' %}🟢 偏多 — 正常上漲
+            {% elif current.composite_regime == 'NEUTRAL' %}⚖️ 中性 — 分歧盤
+            {% elif current.composite_regime == 'BEAR' %}🔴 偏空 — 弱勢
+            {% else %}💀 崩盤 — 系統性賣壓{% endif %}
+        </div>
+        <div class="vote-pills">
+            <span class="vote-pill bull">▲ 看多 {{ current.vote_bull }} 層</span>
+            <span class="vote-pill neutral">— 中性 {{ current.vote_neutral }} 層</span>
+            <span class="vote-pill bear">▼ 看空 {{ current.vote_bear }} 層</span>
+        </div>
+        <div class="limit-row">
+            <span class="limit-tag up">漲停 {{ current.full.limit_up }} 家</span>
+            <span class="limit-tag dn">跌停 {{ current.full.limit_down }} 家</span>
+        </div>
+        <div style="color:#64748b; font-size:12px; margin-top:8px;">資料日期：{{ current.date }}</div>
+    </div>
+
+    <!-- ═══ 三層卡片 ═══ -->
+    <div class="br-grid">
+        <!-- Layer 1: 權值 Top 200 -->
+        <div class="br-card {{ 'active-bull' if current.top200.regime in ('STRONG_BULL','BULL') else ('active-bear' if current.top200.regime in ('BEAR','CRASH') else 'active-neutral') }}">
+            <div class="br-label">Layer 1 · 權值前 200 大</div>
+            <div class="br-adr" style="color:{{ '#ef4444' if current.top200.adr > 1 else '#22c55e' }};">
+                {{ current.top200.adr }}
+            </div>
+            <div class="br-regime {{ current.top200.regime }}">{{ current.top200.regime }}</div>
+            <div class="br-detail">
+                <strong style="color:#ef4444;">▲ {{ current.top200.advancers }}</strong> /
+                <strong style="color:#22c55e;">▼ {{ current.top200.decliners }}</strong> /
+                — {{ current.top200.unchanged }}<br>
+                權重 40% · Score {{ "%.2f"|format(current.top200.score) }}
+            </div>
+        </div>
+
+        <!-- Layer 2: 熱門股 -->
+        <div class="br-card {{ 'active-bull' if current.hot.regime in ('STRONG_BULL','BULL') else ('active-bear' if current.hot.regime in ('BEAR','CRASH') else 'active-neutral') }}">
+            <div class="br-label">Layer 2 · 熱門股族群</div>
+            <div class="br-adr" style="color:{{ '#ef4444' if current.hot.adr > 1 else '#22c55e' }};">
+                {{ current.hot.adr }}
+            </div>
+            <div class="br-regime {{ current.hot.regime }}">{{ current.hot.regime }}</div>
+            <div class="br-detail">
+                <strong style="color:#ef4444;">▲ {{ current.hot.advancers }}</strong> /
+                <strong style="color:#22c55e;">▼ {{ current.hot.decliners }}</strong> /
+                — {{ current.hot.unchanged }}<br>
+                權重 30% · Score {{ "%.2f"|format(current.hot.score) }}
+            </div>
+        </div>
+
+        <!-- Layer 3: 全市場 -->
+        <div class="br-card {{ 'active-bull' if current.full.regime in ('STRONG_BULL','BULL') else ('active-bear' if current.full.regime in ('BEAR','CRASH') else 'active-neutral') }}">
+            <div class="br-label">Layer 3 · 全市場廣度</div>
+            <div class="br-adr" style="color:{{ '#ef4444' if current.full.adr > 1 else '#22c55e' }};">
+                {{ current.full.adr }}
+            </div>
+            <div class="br-regime {{ current.full.regime }}">{{ current.full.regime }}</div>
+            <div class="br-detail">
+                <strong style="color:#ef4444;">▲ {{ current.full.advancers }}</strong> /
+                <strong style="color:#22c55e;">▼ {{ current.full.decliners }}</strong> /
+                — {{ current.full.unchanged }}<br>
+                權重 30% · Score {{ "%.2f"|format(current.full.score) }} · 共 {{ current.full.total }} 檔
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ 判讀規則 ═══ -->
+    <div class="rules-grid">
+        <div class="rule-card">
+            <h6>廣度狀態判讀</h6>
+            <table>
+                <tr><td>🔥 STRONG_BULL</td><td>ADR &gt; 2.0 — 資金全面進場</td></tr>
+                <tr><td>🟢 BULL</td><td>ADR 1.0~2.0 — 正常上漲</td></tr>
+                <tr><td>⚖️ NEUTRAL</td><td>ADR 0.8~1.0 — 分歧盤</td></tr>
+                <tr><td>🔴 BEAR</td><td>ADR 0.5~0.8 — 弱勢</td></tr>
+                <tr><td>💀 CRASH</td><td>ADR &lt; 0.5 — 系統性賣壓</td></tr>
+            </table>
+        </div>
+        <div class="rule-card">
+            <h6>投票系統邏輯</h6>
+            <table>
+                <tr><td>3層全多</td><td>score &gt; 0.65 → STRONG_BULL</td></tr>
+                <tr><td>2層以上多</td><td>score &gt; 0.55 → BULL</td></tr>
+                <tr><td>分歧</td><td>→ NEUTRAL</td></tr>
+                <tr><td>2層以上空</td><td>score &lt; 0.45 → BEAR</td></tr>
+                <tr><td>3層全空</td><td>score &lt; 0.35 → CRASH</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ═══ 歷史走勢圖 ═══ -->
+    <div class="chart-card" style="margin-top:16px;">
+        <h5>廣度歷史走勢 (近60天)</h5>
+        <canvas id="breadthChart" height="100"></canvas>
+    </div>
+
+    <!-- ═══ 歷史表格 ═══ -->
+    {% if history %}
+    <div class="chart-card" style="margin-top:16px;">
+        <h5>近 20 日廣度紀錄</h5>
+        <div style="overflow-x:auto;">
+        <table class="table table-sm data-table" style="font-size:12px;">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>Composite</th>
+                    <th>Regime</th>
+                    <th>投票</th>
+                    <th>Top200 ADR</th>
+                    <th>熱門 ADR</th>
+                    <th>全市場 ADR</th>
+                    <th>漲↑</th>
+                    <th>跌↓</th>
+                    <th>漲停</th>
+                    <th>跌停</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for h in history[-20:]|reverse %}
+                <tr>
+                    <td>{{ h.date }}</td>
+                    <td><strong>{{ "%.1f"|format(h.composite_score * 100) }}</strong></td>
+                    <td><span class="br-regime {{ h.composite_regime }}" style="font-size:11px; padding:2px 8px;">{{ h.composite_regime }}</span></td>
+                    <td>{{ h.vote_bull }}多/{{ h.vote_bear }}空</td>
+                    <td>{{ h.top200_adr }}</td>
+                    <td>{{ h.hot_adr }}</td>
+                    <td>{{ h.full_adr }}</td>
+                    <td style="color:#ef4444;">{{ h.full_adv }}</td>
+                    <td style="color:#22c55e;">{{ h.full_dec }}</td>
+                    <td style="color:#ef4444;">{{ h.limit_up }}</td>
+                    <td style="color:#22c55e;">{{ h.limit_down }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="regime-dashboard" style="margin-top:24px;">
+        <div class="regime-gauge">
+            <div class="regime-temp-value" style="font-size:24px; color:#64748b;">
+                暫無資料
+            </div>
+            <div style="color:#94a3b8; margin-top:8px;">
+                {% if error %}{{ error }}{% else %}請先執行每日收盤資料抓取{% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% if current and history %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+    var raw = {{ history_json|safe }};
+    var labels = raw.map(function(r) { return r.date.slice(5); });
+    var scores = raw.map(function(r) { return (r.composite_score * 100).toFixed(1); });
+    var fullAdr = raw.map(function(r) { return Math.min(r.full_adr, 3.0); });
+
+    var ctx = document.getElementById('breadthChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Composite Score',
+                    data: scores,
+                    borderColor: '#818cf8',
+                    backgroundColor: 'rgba(129,140,248,.08)',
+                    fill: true,
+                    tension: 0.35,
+                    borderWidth: 2,
+                    pointRadius: 2,
+                    pointHoverRadius: 4,
+                    yAxisID: 'y',
+                },
+                {
+                    label: '全市場 ADR',
+                    data: fullAdr,
+                    borderColor: '#22c55e',
+                    backgroundColor: 'transparent',
+                    tension: 0.35,
+                    borderWidth: 1.5,
+                    pointRadius: 0,
+                    borderDash: [4,3],
+                    yAxisID: 'y1',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { labels: { color: '#94a3b8', boxWidth: 14, padding: 16 } },
+            },
+            scales: {
+                x: { ticks: { color: '#64748b', maxRotation: 0, maxTicksLimit: 15, font: { size: 11 } }, grid: { color: '#1e293b' } },
+                y: {
+                    position: 'left',
+                    title: { display: true, text: 'Score', color: '#818cf8' },
+                    min: 30, max: 75,
+                    ticks: { color: '#818cf8', stepSize: 5 },
+                    grid: { color: '#1e293b' }
+                },
+                y1: {
+                    position: 'right',
+                    title: { display: true, text: 'ADR', color: '#22c55e' },
+                    min: 0.3, max: 2.5,
+                    ticks: { color: '#22c55e', stepSize: 0.5 },
+                    grid: { drawOnChartArea: false }
+                }
+            }
+        }
+    });
+})();
+</script>
+{% endif %}
+{% endblock %}

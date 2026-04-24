@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+{% block title %}持股水位投票{% endblock %}
+
+{% block content %}
+<style>
+    .pv-gauge { text-align:center; padding:32px 20px; }
+    .pv-score { font-size:72px; font-weight:900; line-height:1; }
+    .pv-pct { font-size:28px; font-weight:400; opacity:.6; }
+    .pv-level { font-size:22px; font-weight:700; margin-top:8px; }
+    .pv-action { font-size:14px; color:#94a3b8; margin-top:6px; }
+
+    .pv-bar-wrap { max-width:600px; margin:24px auto; }
+    .pv-bar { height:36px; border-radius:8px; background:#1e293b; position:relative; overflow:hidden; }
+    .pv-bar-fill { height:100%; border-radius:8px; transition:width .5s ease; display:flex; align-items:center; justify-content:flex-end; padding-right:12px; font-size:13px; font-weight:700; color:#fff; }
+    .pv-bar-labels { display:flex; justify-content:space-between; margin-top:6px; font-size:11px; color:#64748b; }
+    .pv-bar-zones { display:flex; height:8px; border-radius:4px; overflow:hidden; margin-top:4px; }
+    .pv-zone { height:100%; }
+
+    .pv-vote-summary { display:flex; gap:12px; justify-content:center; margin-top:16px; }
+    .pv-vote-chip { padding:6px 18px; border-radius:20px; font-size:14px; font-weight:700; }
+
+    /* 八指標 grid */
+    .pv-grid8 { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:20px; }
+    @media (max-width: 900px) { .pv-grid8 { grid-template-columns:repeat(2, 1fr); } }
+    @media (max-width: 600px) { .pv-grid8 { grid-template-columns:1fr; } }
+    .pv-card { background:#0f172a; border-radius:10px; padding:16px; border:1.5px solid #1e293b; }
+    .pv-card.green { border-color:rgba(239,68,68,.4); }
+    .pv-card.yellow { border-color:rgba(245,158,11,.4); }
+    .pv-card.red { border-color:rgba(34,197,94,.4); }
+    .pv-card-dim { font-size:10px; color:#64748b; letter-spacing:1px; text-transform:uppercase; }
+    .pv-card-title { font-size:12px; color:#94a3b8; margin:4px 0 8px; }
+    .pv-card-signal { font-size:22px; font-weight:800; margin-bottom:4px; }
+    .pv-card-pos { font-size:14px; font-weight:600; margin-bottom:6px; }
+    .pv-mini-bar { height:5px; border-radius:3px; background:#1e293b; overflow:hidden; }
+    .pv-mini-fill { height:100%; border-radius:3px; }
+    .pv-card-detail { font-size:11px; color:#64748b; margin-top:6px; }
+    .pv-card-weight { font-size:10px; color:#475569; margin-top:4px; }
+
+    .pv-caps { margin-top:12px; text-align:center; }
+    .pv-cap-tag { display:inline-block; padding:4px 12px; border-radius:4px; font-size:12px; font-weight:600; background:rgba(245,158,11,.12); color:#f59e0b; margin:3px; }
+
+    /* 規則/分析 */
+    .pv-rules-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px; }
+    @media (max-width: 768px) { .pv-rules-grid { grid-template-columns:1fr; } }
+    .pv-rule-card { background:#0f172a; border-radius:8px; padding:16px; }
+    .pv-rule-card h6 { color:#818cf8; margin-bottom:10px; font-size:14px; }
+    .pv-rule-card table { width:100%; }
+    .pv-rule-card td { padding:5px 8px; font-size:12px; color:#94a3b8; border-bottom:1px solid #1e293b; }
+    .pv-rule-card td:first-child { font-weight:600; color:#e2e8f0; white-space:nowrap; }
+    .pv-rule-card td:last-child { text-align:right; font-weight:700; }
+</style>
+
+<div class="content-area">
+    <h4 class="page-title">持股水位投票系統 — 六指標五維度</h4>
+
+    {% if data %}
+    <!-- ═══ 綜合水位 ═══ -->
+    <div class="regime-dashboard">
+        <div class="pv-gauge">
+            <div class="pv-score" style="color:{{ '#ef4444' if data.composite_position >= 60 else ('#f59e0b' if data.composite_position >= 40 else '#22c55e') }};">
+                {{ data.composite_position }}<span class="pv-pct">%</span>
+            </div>
+            <div class="pv-level" style="color:{{ '#ef4444' if data.composite_position >= 60 else ('#f59e0b' if data.composite_position >= 40 else '#22c55e') }};">
+                {{ data.level }}
+            </div>
+            <div class="pv-action">{{ data.action }}</div>
+        </div>
+    </div>
+
+    <!-- 水位條 -->
+    <div class="pv-bar-wrap">
+        <div class="pv-bar">
+            <div class="pv-bar-fill" style="width:{{ data.composite_position }}%;
+                background:linear-gradient(90deg,
+                    {{ '#22c55e' if data.composite_position < 30 else ('#f59e0b' if data.composite_position < 60 else '#ef4444') }},
+                    {{ '#22c55e' if data.composite_position < 30 else ('#f59e0b' if data.composite_position < 60 else '#ef4444') }}cc);">
+                {{ data.composite_position }}%
+            </div>
+        </div>
+        <div class="pv-bar-zones">
+            <div class="pv-zone" style="width:20%; background:#22c55e;"></div>
+            <div class="pv-zone" style="width:20%; background:#4ade80;"></div>
+            <div class="pv-zone" style="width:20%; background:#f59e0b;"></div>
+            <div class="pv-zone" style="width:20%; background:#f87171;"></div>
+            <div class="pv-zone" style="width:20%; background:#ef4444;"></div>
+        </div>
+        <div class="pv-bar-labels">
+            <span>0% 空手</span><span>20%</span><span>40% 中性</span><span>60%</span><span>80%</span><span>100% 滿倉</span>
+        </div>
+    </div>
+
+    <!-- 投票統計 -->
+    <div class="pv-vote-summary">
+        <span class="pv-vote-chip" style="background:rgba(239,68,68,.15); color:#ef4444;">{{ data.vote_summary.green }} GREEN</span>
+        <span class="pv-vote-chip" style="background:rgba(245,158,11,.15); color:#f59e0b;">{{ data.vote_summary.yellow }} YELLOW</span>
+        <span class="pv-vote-chip" style="background:rgba(34,197,94,.15); color:#22c55e;">{{ data.vote_summary.red }} RED</span>
+        <span class="pv-vote-chip" style="background:rgba(129,140,248,.1); color:#818cf8;">共 {{ data.vote_summary.total }} 票</span>
+    </div>
+
+    <!-- 強制上限 -->
+    {% if data.caps_applied %}
+    <div class="pv-caps">
+        {% for cap in data.caps_applied %}
+        <span class="pv-cap-tag">{{ cap }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- ═══ 八指標卡片 ═══ -->
+    <div class="pv-grid8">
+        {% set indicator_order = ['credit', 'breadth', 'T10Y3M', 'CP_SPREAD', 'DOLLAR', 'COR3M'] %}
+        {% set names = {
+            'credit': '信用利差紅綠燈',
+            'breadth': '市場廣度',
+            'T10Y3M': '殖利率利差 10Y-3M',
+            'CP_SPREAD': 'CP-Treasury 資金壓力',
+            'DOLLAR': '美元指數',
+            'COR3M': 'VIX 系統性風險'
+        } %}
+        {% set dims = {
+            'credit': '信用風險',
+            'breadth': '台股內部',
+            'T10Y3M': '景氣政策',
+            'CP_SPREAD': '資金流動',
+            'DOLLAR': '資金流動',
+            'COR3M': '尾部波動'
+        } %}
+
+        {% for key in indicator_order %}
+        {% set ind = data.indicators[key] %}
+        {% set sig = ind.signal %}
+        <div class="pv-card {{ 'green' if sig == 'GREEN' else ('red' if sig == 'RED' else 'yellow') }}">
+            <div class="pv-card-dim">{{ dims[key] }}</div>
+            <div class="pv-card-title">{{ names[key] }}</div>
+            <div class="pv-card-signal" style="color:{{ '#ef4444' if sig == 'GREEN' else ('#f59e0b' if sig == 'YELLOW' else '#22c55e') }};">
+                {% if sig == 'GREEN' %}🟢{% elif sig == 'YELLOW' %}🟡{% else %}🔴{% endif %}
+                {{ ind.status }}
+            </div>
+            <div class="pv-card-pos" style="color:{{ '#ef4444' if ind.position >= 60 else ('#f59e0b' if ind.position >= 40 else '#22c55e') }};">
+                持股 {{ ind.position }}%
+            </div>
+            <div class="pv-mini-bar">
+                <div class="pv-mini-fill" style="width:{{ ind.position }}%;
+                    background:{{ '#ef4444' if ind.position >= 60 else ('#f59e0b' if ind.position >= 40 else '#22c55e') }};"></div>
+            </div>
+            <div class="pv-card-detail">{{ ind.detail }}{% if ind.date %} · {{ ind.date }}{% endif %}</div>
+            <div class="pv-card-weight">權重 {{ "%.0f"|format(ind.weight * 100) }}%</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ═══ 八指標閾值說明 ═══ -->
+    <div style="margin-top:24px;">
+        <h5 style="color:#e2e8f0; margin-bottom:16px;">八指標說明與閾值</h5>
+        <div style="overflow-x:auto;">
+        <table class="table table-sm data-table" style="font-size:11.5px;">
+            <thead>
+                <tr><th>維度</th><th>指標</th><th>資料來源</th><th>衡量什麼</th><th style="text-align:center;">GREEN</th><th style="text-align:center;">YELLOW</th><th style="text-align:center;">RED</th><th>解讀邏輯</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>信用風險</td><td><strong>信用利差紅綠燈</strong></td><td>HYG/SHY 比率<br>Yahoo Finance</td>
+                    <td>高收益債 vs 短期公債，反映市場承擔信用風險的意願</td>
+                    <td style="text-align:center;">指標 &lt;0.28<br>風險偏好正常</td>
+                    <td style="text-align:center;">0.28~0.32<br>轉換中</td>
+                    <td style="text-align:center;">≥0.32<br>風險趨避</td>
+                    <td>RED = 資金從垃圾債逃向公債，歷史上常領先股市下跌</td>
+                </tr>
+                <tr>
+                    <td>台股內部</td><td><strong>市場廣度</strong></td><td>TWSE/TPEx<br>全市場漲跌家數</td>
+                    <td>三層（權值200大/熱門股/全市場）漲跌家數比，衡量上漲是否全面</td>
+                    <td style="text-align:center;">ADR &gt;1.0<br>多數股上漲</td>
+                    <td style="text-align:center;">ADR 0.8~1.0<br>分歧盤</td>
+                    <td style="text-align:center;">ADR &lt;0.8<br>多數股下跌</td>
+                    <td>比加權指數更真實。指數漲但廣度空=「假多頭」(narrow rally)</td>
+                </tr>
+                <tr>
+                    <td>景氣政策</td><td><strong>殖利率利差 10Y-3M</strong></td><td>FRED T10Y3M<br>美國公債</td>
+                    <td>10年期減3個月國債殖利率，反映市場對未來景氣與政策的預期</td>
+                    <td style="text-align:center;">&gt;1.0%<br>景氣擴張</td>
+                    <td style="text-align:center;">0~1.0%<br>趨平警戒</td>
+                    <td style="text-align:center;">&lt;0%<br>倒掛=衰退</td>
+                    <td>殖利率曲線倒掛是最經典的衰退領先指標（紐約聯儲長期研究）</td>
+                </tr>
+                <tr>
+                    <td>資金流動</td><td><strong>CP-Treasury 資金壓力</strong></td><td>FRED DCPF3M-DTB3<br>商業票據利差</td>
+                    <td>金融商業票據利率 vs 國庫券利率，短端資金緊鬆度的直接量尺</td>
+                    <td style="text-align:center;">&lt;0.3%<br>資金寬鬆</td>
+                    <td style="text-align:center;">0.3~0.8%<br>偏緊</td>
+                    <td style="text-align:center;">&gt;0.8%<br>資金枯竭</td>
+                    <td>資金壓力常先於股市惡化。2008、2020 危機前此指標率先飆升</td>
+                </tr>
+                <tr>
+                    <td>資金流動</td><td><strong>美元指數 (Broad Dollar)</strong></td><td>FRED DTWEXBGS<br>聯準會貿易加權</td>
+                    <td>美元對主要貿易夥伴的加權匯率，美元強=全球槓桿收縮</td>
+                    <td style="text-align:center;">百分位 &lt;30<br>美元偏弱</td>
+                    <td style="text-align:center;">30~70<br>中性區間</td>
+                    <td style="text-align:center;">&gt;70<br>美元偏強</td>
+                    <td>BIS 研究指出美元比 VIX 更能反映銀行部門的槓桿胃納</td>
+                </tr>
+                <tr>
+                    <td>尾部波動</td><td><strong>VIX 系統性風險</strong></td><td>FRED VIXCLS<br>Cboe VIX</td>
+                    <td>S&P 500 選擇權隱含波動率，壓力期股票間相關性飆升=分散失效</td>
+                    <td style="text-align:center;">&lt;20<br>平靜</td>
+                    <td style="text-align:center;">20~30<br>警戒</td>
+                    <td style="text-align:center;">&gt;30<br>恐慌</td>
+                    <td>VIX 飆高=避險需求暴增，歷史上 &gt;30 常對應中期修正</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <!-- ═══ 權重公式 ═══ -->
+    <div class="pv-rules-grid" style="margin-top:24px;">
+        <div class="pv-rule-card">
+            <h6>五維度權重配置</h6>
+            <table>
+                <tr><td>信用風險</td><td>信用利差 15%</td></tr>
+                <tr><td>台股內部</td><td>市場廣度 25%</td></tr>
+                <tr><td>景氣政策</td><td>殖利率利差 20%</td></tr>
+                <tr><td>資金流動</td><td>CP壓力 15% + 美元 10%</td></tr>
+                <tr><td>尾部波動</td><td>VIX 15%</td></tr>
+                <tr><td colspan="2" style="border:none; padding-top:8px; color:#818cf8; font-weight:700;">合計 = 100%</td></tr>
+            </table>
+        </div>
+        <div class="pv-rule-card">
+            <h6>強制上限規則</h6>
+            <table>
+                <tr><td>信用利差 RED</td><td style="color:#f59e0b;">持股不超過 50%</td></tr>
+                <tr><td>廣度 CRASH</td><td style="color:#f59e0b;">持股不超過 30%</td></tr>
+                <tr><td>殖利率倒掛</td><td style="color:#f59e0b;">持股不超過 50%</td></tr>
+                <tr><td>資金壓力 RED</td><td style="color:#f59e0b;">持股不超過 40%</td></tr>
+            </table>
+            <h6 style="margin-top:12px;">設計原則</h6>
+            <div style="font-size:11px; color:#64748b; line-height:1.8;">
+                移除 AE 體制（與 5 個指標 r&gt;0.55，冗餘同源）。<br>
+                移除 MOVE（與 VIX 同維度）。<br>
+                五維度覆蓋：信用/台股/景氣/資金/尾部。
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ 八指標相關性分析 ═══ -->
+    {% if corr %}
+    <div style="margin-top:24px;">
+        <h5 style="color:#e2e8f0; margin-bottom:16px;">指標獨立性驗證（{{ corr.recommendation.stats.total_pairs }} 對配對）</h5>
+
+        <!-- 綜合判定 -->
+        <div class="pv-rule-card" style="margin-bottom:14px;">
+            <h6>綜合判定</h6>
+            <div style="display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
+                <span class="pv-vote-chip" style="background:rgba(239,68,68,.12); color:#ef4444;">高相關 {{ corr.recommendation.stats.high }}</span>
+                <span class="pv-vote-chip" style="background:rgba(245,158,11,.12); color:#f59e0b;">中度 {{ corr.recommendation.stats.moderate }}</span>
+                <span class="pv-vote-chip" style="background:rgba(34,197,94,.12); color:#22c55e;">獨立 {{ corr.recommendation.stats.low }}</span>
+            </div>
+            <div style="padding:10px; background:#1e293b; border-radius:6px; font-size:13px; color:#e2e8f0; line-height:1.8;">
+                {{ corr.recommendation.verdict }}
+            </div>
+        </div>
+
+        <div class="pv-rules-grid">
+            <!-- 高相關 & 警告 -->
+            <div class="pv-rule-card">
+                <h6>高相關配對（|r| &ge; 0.6）</h6>
+                {% if corr.high_corr %}
+                <table>
+                    <tr><td style="color:#64748b;">配對</td><td style="color:#64748b; text-align:center;">r</td><td style="color:#64748b; text-align:center;">天數</td><td style="color:#64748b;">判讀</td></tr>
+                    {% for e in corr.high_corr %}
+                    <tr>
+                        <td style="font-size:11px;">{{ e.cn }}{% if e.same_dim %} <span style="color:#818cf8;">(同維度)</span>{% endif %}</td>
+                        <td style="text-align:center; font-weight:800; color:#ef4444;">{{ "%.3f"|format(e.r) }}</td>
+                        <td style="text-align:center;">{{ e.n }}</td>
+                        <td style="font-size:10px;">{{ e.interpretation }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% else %}
+                <div style="color:#22c55e; font-size:13px; padding:8px;">無高相關配對</div>
+                {% endif %}
+
+                <h6 style="margin-top:14px;">中度相關（|r| 0.3~0.6）</h6>
+                {% if corr.moderate_corr %}
+                <table>
+                    <tr><td style="color:#64748b;">配對</td><td style="color:#64748b; text-align:center;">r</td><td style="color:#64748b; text-align:center;">天數</td></tr>
+                    {% for e in corr.moderate_corr %}
+                    <tr>
+                        <td style="font-size:11px;">{{ e.cn }}{% if e.same_dim %} <span style="color:#818cf8;">(同維度)</span>{% endif %}</td>
+                        <td style="text-align:center; font-weight:700; color:#f59e0b;">{{ "%.3f"|format(e.r) }}</td>
+                        <td style="text-align:center;">{{ e.n }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% else %}
+                <div style="color:#22c55e; font-size:13px; padding:8px;">無中度相關配對</div>
+                {% endif %}
+            </div>
+
+            <!-- 完整矩陣（摘要） -->
+            <div class="pv-rule-card">
+                <h6>完整配對矩陣（28 對）</h6>
+                <div style="max-height:400px; overflow-y:auto;">
+                <table>
+                    <tr><td style="color:#64748b;">配對</td><td style="color:#64748b; text-align:center;">r</td><td style="color:#64748b; text-align:center;">天數</td></tr>
+                    {% for pair, d in corr.correlation_matrix.items() %}
+                    <tr>
+                        <td style="font-size:10px;">{{ d.cn if d.cn else pair }}</td>
+                        <td style="text-align:center; font-weight:700; font-size:11px;
+                            color:{{ '#ef4444' if d.r is not none and d.r|abs >= 0.6 else ('#f59e0b' if d.r is not none and d.r|abs >= 0.3 else '#22c55e') }};">
+                            {{ "%.3f"|format(d.r) if d.r is not none else '—' }}
+                        </td>
+                        <td style="text-align:center; font-size:10px;">{{ d.n }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lag & Granger -->
+        {% if corr.lag_analysis %}
+        <div class="pv-rules-grid" style="margin-top:14px;">
+            <div class="pv-rule-card">
+                <h6>滯後相關分析（重點配對）</h6>
+                <div style="font-size:11px; color:#64748b; margin-bottom:8px;">lag>0 = 左方指標領先右方 N 天</div>
+                {% for pair_key, info in corr.lag_analysis.items() %}
+                {% if info.data %}
+                <div style="font-size:11px; color:#94a3b8; margin:6px 0 2px; font-weight:600;">{{ info.cn }}</div>
+                <table>
+                    <tr>
+                        {% for lag in info.data.keys()|sort %}
+                        <td style="text-align:center; color:#64748b; font-size:9px; padding:2px 4px;">{{ lag }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for lag in info.data.keys()|sort %}
+                        {% set val = info.data[lag] %}
+                        <td style="text-align:center; font-size:10px; font-weight:700; padding:2px 4px;
+                            color:{{ '#818cf8' if val|abs >= 0.15 else '#475569' }};">{{ "%.2f"|format(val) }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+                {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="pv-rule-card">
+                <h6>Granger 因果（殘差改善 %）</h6>
+                <div style="font-size:11px; color:#64748b; margin-bottom:8px;">正值=有預測力</div>
+                <table>
+                    {% for test, info in corr.granger_causality.items() %}
+                    {% if info.data %}
+                    <tr>
+                        <td style="font-size:11px;">{{ info.cn }}</td>
+                        <td style="text-align:right; font-size:11px;">
+                            {% for lag, val in info.data.items() %}L{{ lag }}: <strong style="color:{{ '#22c55e' if val > 0 else '#ef4444' }};">{{ "%.1f"|format(val) }}%</strong>{% if not loop.last %} · {% endif %}{% endfor %}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <div style="font-size:11px; color:#475569; margin-top:8px; text-align:right;">
+            資料天數：{% for ind, n in corr.data_summary.items() %}{{ ind }}={{ n }} {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="regime-dashboard" style="margin-top:24px;">
+        <div class="regime-gauge">
+            <div style="font-size:24px; color:#64748b;">暫無資料</div>
+            <div style="color:#94a3b8; margin-top:8px;">
+                {% if error %}{{ error }}{% else %}請先執行每日資料抓取{% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

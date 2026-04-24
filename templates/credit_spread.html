@@ -1,0 +1,552 @@
+{% extends "base.html" %}
+{% block title %}信用利差紅綠燈{% endblock %}
+
+{% block content %}
+<style>
+    .cs-detail { display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:16px; justify-content:center; }
+    .cs-detail span { white-space:nowrap; }
+    .cs-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+    @media (max-width: 768px) {
+        .cs-grid { grid-template-columns:1fr; }
+        .cs-detail { flex-direction:column; align-items:center; gap:4px; }
+    }
+    .cs-card { background:#0f172a; border-radius:8px; padding:16px; }
+    .cs-card h6 { color:#818cf8; margin-bottom:8px; font-size:14px; }
+    .cs-card ul { color:#94a3b8; font-size:13px; line-height:1.8; padding-left:16px; margin:0; }
+
+    /* Gauge bar */
+    .gauge-wrap { margin:20px auto; max-width:600px; }
+    .gauge-bar { position:relative; height:32px; border-radius:6px; overflow:hidden; display:flex; }
+    .gauge-zone { height:100%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:#fff; }
+    .gauge-green { background:linear-gradient(90deg,#16a34a,#22c55e); }
+    .gauge-yellow { background:linear-gradient(90deg,#eab308,#f59e0b); }
+    .gauge-red { background:linear-gradient(90deg,#ef4444,#dc2626); }
+    .gauge-marker { position:absolute; top:-6px; bottom:-6px; width:3px; background:#fff; border-radius:2px;
+                    box-shadow:0 0 8px rgba(255,255,255,0.8); z-index:10; transition:left 0.3s; }
+    .gauge-labels { display:flex; justify-content:space-between; margin-top:4px; font-size:11px; color:#64748b; }
+    .gauge-current { text-align:center; margin-top:8px; font-size:13px; color:#94a3b8; }
+    .gauge-current strong { font-size:18px; }
+
+    /* Rules table */
+    .rules-table td { padding:6px 12px; font-size:13px; }
+    .rules-table .dot { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+    .rules-table .dot-green { background:#22c55e; }
+    .rules-table .dot-yellow { background:#f59e0b; }
+    .rules-table .dot-red { background:#ef4444; }
+</style>
+
+<div class="content-area">
+    <h4 class="page-title">信用利差紅綠燈</h4>
+
+    <!-- 紅綠燈儀表板 -->
+    <div class="regime-dashboard">
+        <div class="regime-gauge">
+            <div class="regime-temp-value {{ 'safe' if signal == 'GREEN' else ('danger' if signal == 'RED' else 'warning') }}" style="font-size:48px;">
+                {% if signal == 'GREEN' %}
+                    🟢 GREEN
+                {% elif signal == 'YELLOW' %}
+                    🟡 YELLOW
+                {% else %}
+                    🔴 RED
+                {% endif %}
+                <span style="font-size:28px; margin-left:8px; opacity:0.8;">
+                    {% if trend5d < -0.01 %}
+                        <span style="color:#22c55e;" title="5D趨勢向下（改善中）">&#x25BC;</span>
+                    {% elif trend5d > 0.01 %}
+                        <span style="color:#ef4444;" title="5D趨勢向上（惡化中）">&#x25B2;</span>
+                    {% else %}
+                        <span style="color:#94a3b8;" title="5D趨勢持平">&#x25C6;</span>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="regime-status {{ 'normal' if signal == 'GREEN' else ('abnormal' if signal == 'RED' else 'warning') }}" style="font-size:16px; margin-top:8px;">
+                {% if signal == 'GREEN' %}
+                    持有 / 高槓桿
+                {% elif signal == 'YELLOW' %}
+                    觀望 / 信號轉換中
+                {% else %}
+                    不持有 / 低槓桿
+                {% endif %}
+                <span style="font-size:13px; color:#94a3b8; margin-left:8px;">
+                    {% if trend5d < -0.01 %}
+                        5D趨勢: 改善中
+                    {% elif trend5d > 0.01 %}
+                        5D趨勢: 惡化中
+                    {% else %}
+                        5D趨勢: 持平
+                    {% endif %}
+                </span>
+            </div>
+            <div class="cs-detail">
+                <span>指標: <strong>{{ "%.4f"|format(indicator_value) }}</strong></span>
+                <span style="color:#64748b; font-size:12px;">5D avg: {{ "%.4f"|format(avg5d) }}
+                    {% if avg5d_signal == 'GREEN' %}
+                        <span style="color:#22c55e;">&#x25CF;</span>
+                    {% elif avg5d_signal == 'YELLOW' %}
+                        <span style="color:#f59e0b;">&#x25CF;</span>
+                    {% else %}
+                        <span style="color:#ef4444;">&#x25CF;</span>
+                    {% endif %}
+                </span>
+                <span>百分位: <strong>{{ "%.1f"|format(percentile * 100) }}%</strong></span>
+                <span>持續: <strong>{{ days_in_signal }} 天</strong></span>
+                <span>切換: <strong>{{ last_switch }}</strong></span>
+                <span>日期: <strong>{{ latest_date }}</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gauge Bar 0-1 -->
+    <div class="gauge-wrap">
+        <div class="gauge-bar">
+            <div class="gauge-zone gauge-green" style="width:{{ yellow_low * 100 }}%;">GREEN</div>
+            <div class="gauge-zone gauge-yellow" style="width:{{ (yellow_high - yellow_low) * 100 }}%;">!</div>
+            <div class="gauge-zone gauge-red" style="width:{{ (1 - yellow_high) * 100 }}%;">RED</div>
+            <div class="gauge-marker" style="left:{{ [0, [indicator_value * 100, 100]|min]|max }}%;"></div>
+        </div>
+        <div class="gauge-labels">
+            <span>0</span><span>0.1</span><span>0.2</span><span>{{ "%.2f"|format(yellow_low) }}</span>
+            <span>{{ "%.2f"|format(yellow_high) }}</span><span>0.4</span><span>0.5</span>
+            <span>0.6</span><span>0.7</span><span>0.8</span><span>0.9</span><span>1.0</span>
+        </div>
+        <div class="gauge-current">
+            目前值: <strong style="color:{{ '#22c55e' if signal == 'GREEN' else ('#f59e0b' if signal == 'YELLOW' else '#ef4444') }};">{{ "%.4f"|format(indicator_value) }}</strong>
+        </div>
+    </div>
+
+    <!-- 信號規則 -->
+    <div class="chart-card" style="margin-bottom:20px;">
+        <h5>信號判定規則</h5>
+        <table class="table table-sm data-table rules-table">
+            <thead>
+                <tr><th>燈號</th><th>條件</th><th>含義</th><th>操作建議</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="dot dot-green"></span>GREEN</td>
+                    <td>指標明確 <strong>&lt; 閾值 ({{ "%.1f"|format(threshold) }})</strong></td>
+                    <td>信用市場健康，HYG 相對 SHY 強勢</td>
+                    <td>持有 / 高槓桿</td>
+                </tr>
+                <tr>
+                    <td><span class="dot dot-yellow"></span>YELLOW</td>
+                    <td>指標 <strong>接近閾值</strong>（&plusmn;0.05 緩衝區）</td>
+                    <td>即將觸發或剛脫離閾值，信號可能翻轉</td>
+                    <td>提高警覺 / 準備調整</td>
+                </tr>
+                <tr>
+                    <td><span class="dot dot-red"></span>RED</td>
+                    <td>指標明確 <strong>&ge; 閾值 ({{ "%.1f"|format(threshold) }})</strong></td>
+                    <td>信用收縮，高收益債相對走弱，避險情緒升溫</td>
+                    <td>不持有 / 低槓桿</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="color:#64748b; font-size:12px; margin-top:8px;">
+            閾值 = {{ "%.1f"|format(threshold) }}，黃燈為閾值 &plusmn;0.05 的緩衝區（{{ "%.2f"|format(yellow_low) }} ~ {{ "%.2f"|format(yellow_high) }}），提醒信號可能即將切換。<br>
+            指標值 = 1 - rolling_percentile_rank(HYG/SHY, 189天)。值越低越安全，越高越危險。信號延遲 1 天防止前視偏差。
+        </p>
+    </div>
+
+    <!-- 圖表 -->
+    <div class="chart-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <h5 style="margin:0;">信用利差指標 vs S&P 500</h5>
+            <div style="display:flex; gap:6px;">
+                <button class="btn btn-sm" onclick="setRange(60)" style="background:#1e293b;color:#94a3b8;border:1px solid #334155;">60D</button>
+                <button class="btn btn-sm" onclick="setRange(120)" style="background:#334155;color:#e2e8f0;border:1px solid #475569;">120D</button>
+                <button class="btn btn-sm" onclick="setRange(252)" style="background:#1e293b;color:#94a3b8;border:1px solid #334155;">1Y</button>
+                <button class="btn btn-sm" onclick="setRange(0)" style="background:#1e293b;color:#94a3b8;border:1px solid #334155;">ALL</button>
+            </div>
+        </div>
+        <div style="position:relative; height:340px; margin-top:12px;">
+            <canvas id="spreadChart"></canvas>
+        </div>
+        <p style="color:#64748b; font-size:11px; margin-top:6px;">左軸：信用利差指標（0-1） / 右軸：S&P 500 價格</p>
+    </div>
+
+    <!-- 燈號判讀 -->
+    <div class="regime-legend">
+        <div class="legend-item safe">
+            <span class="legend-dot safe"></span>
+            <strong>GREEN</strong> 持有 - 風險偏好環境
+        </div>
+        <div class="legend-item warning">
+            <span class="legend-dot warning"></span>
+            <strong>YELLOW</strong> 觀望 - 信號轉換中
+        </div>
+        <div class="legend-item danger">
+            <span class="legend-dot danger"></span>
+            <strong>RED</strong> 不持有 - 信用收縮
+        </div>
+    </div>
+
+    <!-- 原理說明 -->
+    <div class="chart-card" style="margin-bottom:20px;">
+        <h5>這是什麼？</h5>
+        <p style="color:#94a3b8; line-height:1.8; margin:8px 0;">
+            信用利差紅綠燈是一個基於 <strong style="color:#818cf8;">HYG/SHY 比率</strong> 的市場風險環境指標。
+            高收益債（HYG）相對短期國債（SHY）的強弱反映信用市場的風險偏好 -
+            比率高代表資金敢冒險（綠燈），比率低代表資金避險（紅燈）。
+        </p>
+        <div class="cs-grid">
+            <div class="cs-card">
+                <h6>指標原理</h6>
+                <ul>
+                    <li>HYG / SHY 日收盤比率</li>
+                    <li>189 日滾動百分位排名，反轉（1 - rank）</li>
+                    <li>0 = 最安全（綠），1 = 最危險（紅）</li>
+                    <li>信號 shift(1) 防前視偏差</li>
+                </ul>
+            </div>
+            <div class="cs-card">
+                <h6>怎麼用</h6>
+                <ul>
+                    <li><strong style="color:#22c55e;">GREEN</strong>：可持股、維持高槓桿</li>
+                    <li><strong style="color:#f59e0b;">YELLOW</strong>：留意信號變化，準備調整</li>
+                    <li><strong style="color:#ef4444;">RED</strong>：降倉位、減少槓桿</li>
+                    <li>2008 年避開 -36.8% 崩盤</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 回測績效 -->
+    {% if backtest %}
+    <div class="chart-card" style="margin-bottom:20px;">
+        <h5>回測績效（2008 ~ 至今）</h5>
+        <div class="table-responsive">
+        <table class="table table-hover table-sm data-table">
+            <thead>
+                <tr>
+                    <th>指標</th>
+                    <th class="text-end">策略</th>
+                    <th class="text-end">Buy & Hold</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>CAGR</td><td class="text-end">{{ "%.2f"|format(backtest.cagr * 100) }}%</td><td class="text-end">{{ "%.2f"|format(backtest.bh_cagr * 100) }}%</td></tr>
+                <tr><td>Sharpe</td><td class="text-end fw-bold {{ 'text-success' if backtest.sharpe > backtest.bh_sharpe else '' }}">{{ "%.3f"|format(backtest.sharpe) }}</td><td class="text-end">{{ "%.3f"|format(backtest.bh_sharpe) }}</td></tr>
+                <tr><td>MaxDD</td><td class="text-end fw-bold {{ 'text-success' if backtest.maxdd > backtest.bh_maxdd else '' }}">{{ "%.2f"|format(backtest.maxdd * 100) }}%</td><td class="text-end text-danger">{{ "%.2f"|format(backtest.bh_maxdd * 100) }}%</td></tr>
+                <tr><td>Vol</td><td class="text-end">{{ "%.2f"|format(backtest.vol * 100) }}%</td><td class="text-end">{{ "%.2f"|format(backtest.bh_vol * 100) }}%</td></tr>
+                <tr><td>Calmar</td><td class="text-end fw-bold {{ 'text-success' if backtest.calmar > backtest.bh_calmar else '' }}">{{ "%.3f"|format(backtest.calmar) }}</td><td class="text-end">{{ "%.3f"|format(backtest.bh_calmar) }}</td></tr>
+                <tr><td>在場時間</td><td class="text-end">{{ "%.1f"|format(backtest.tim * 100) }}%</td><td class="text-end">100.0%</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- 黃燈緩衝區回測比較 -->
+    <div class="chart-card" style="margin-bottom:20px;">
+        <h5>黃燈緩衝區回測比較</h5>
+        <p style="color:#94a3b8; font-size:13px; margin:8px 0 12px;">
+            閾值固定 0.3，黃燈 = 接近閾值時維持前一天倉位（不切換）。測試不同緩衝寬度對績效的影響。
+        </p>
+        <div class="table-responsive">
+        <table class="table table-hover table-sm data-table">
+            <thead>
+                <tr>
+                    <th>方法</th>
+                    <th class="text-end">CAGR</th>
+                    <th class="text-end">Sharpe</th>
+                    <th class="text-end">MaxDD</th>
+                    <th class="text-end">Vol</th>
+                    <th class="text-end">切換次數</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>無黃燈（純 0.3）</td>
+                    <td class="text-end">9.90%</td>
+                    <td class="text-end">1.024</td>
+                    <td class="text-end">-14.28%</td>
+                    <td class="text-end">9.67%</td>
+                    <td class="text-end">84</td>
+                </tr>
+                <tr style="background:rgba(129,140,248,0.1);">
+                    <td><strong>&plusmn;0.02 固定（採用）</strong></td>
+                    <td class="text-end fw-bold text-success">10.07%</td>
+                    <td class="text-end fw-bold text-success">1.036</td>
+                    <td class="text-end">-14.28%</td>
+                    <td class="text-end">9.72%</td>
+                    <td class="text-end fw-bold text-success">66</td>
+                </tr>
+                <tr>
+                    <td>&plusmn;0.05 固定</td>
+                    <td class="text-end">9.91%</td>
+                    <td class="text-end">1.011</td>
+                    <td class="text-end">-14.28%</td>
+                    <td class="text-end">9.82%</td>
+                    <td class="text-end">51</td>
+                </tr>
+                <tr>
+                    <td>&plusmn;0.10 固定</td>
+                    <td class="text-end">8.12%</td>
+                    <td class="text-end">0.850</td>
+                    <td class="text-end text-danger">-19.83%</td>
+                    <td class="text-end">9.75%</td>
+                    <td class="text-end">41</td>
+                </tr>
+                <tr>
+                    <td>動態 0.5x vol</td>
+                    <td class="text-end">9.12%</td>
+                    <td class="text-end">0.959</td>
+                    <td class="text-end">-16.68%</td>
+                    <td class="text-end">9.59%</td>
+                    <td class="text-end">46</td>
+                </tr>
+                <tr>
+                    <td>動態 1.0x vol</td>
+                    <td class="text-end">6.41%</td>
+                    <td class="text-end">0.716</td>
+                    <td class="text-end">-19.01%</td>
+                    <td class="text-end">9.29%</td>
+                    <td class="text-end">32</td>
+                </tr>
+                <tr style="border-top:1px solid #334155;">
+                    <td style="color:#64748b;">Buy & Hold</td>
+                    <td class="text-end" style="color:#64748b;">10.86%</td>
+                    <td class="text-end" style="color:#64748b;">0.618</td>
+                    <td class="text-end text-danger">-51.48%</td>
+                    <td class="text-end" style="color:#64748b;">19.88%</td>
+                    <td class="text-end" style="color:#64748b;">-</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <p style="color:#64748b; font-size:12px; margin-top:8px;">
+            &plusmn;0.02 為最佳平衡：Sharpe 最高（1.036），MaxDD 不變（-14.28%），切換次數減少 21%（84→66）。
+            動態緩衝因黃燈區過寬（指標 vol 均值 0.14）反而吃掉有效信號，績效下降。
+        </p>
+    </div>
+
+    <!-- 資料來源 -->
+    <div class="chart-card" style="margin-bottom:20px;">
+        <h5>資料來源與參考文獻</h5>
+        <div class="cs-grid" style="margin-top:12px;">
+            <div>
+                <h6 style="color:#818cf8; margin-bottom:8px; font-size:14px;">資料來源</h6>
+                <div class="table-responsive">
+                <table class="table table-sm data-table" style="font-size:13px;">
+                    <tbody>
+                        <tr><td>高收益債</td><td>HYG - Yahoo Finance</td></tr>
+                        <tr><td>短期國債</td><td>SHY - Yahoo Finance</td></tr>
+                        <tr><td>標的指數</td><td>SPY - Yahoo Finance</td></tr>
+                        <tr><td>更新頻率</td><td>每日收盤後</td></tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            <div>
+                <h6 style="color:#818cf8; margin-bottom:8px; font-size:14px;">學術參考</h6>
+                <ul style="color:#94a3b8; font-size:12px; line-height:1.9; padding-left:16px; margin:0;">
+                    <li>Gilchrist & Zakrajsek (2012) <em>Credit Spreads and Business Cycle Fluctuations</em> <span style="color:#64748b;">AER</span></li>
+                    <li>Faust et al. (2013) <em>Forecasting US Output Growth Using Credit Spreads</em> <span style="color:#64748b;">REStat</span></li>
+                    <li>Mueller (2009) <em>Credit Spreads and Real Activity</em></li>
+                </ul>
+            </div>
+        </div>
+        <p style="color:#64748b; font-size:11px; margin-top:12px; border-top:1px solid #334155; padding-top:8px;">
+            免責聲明：本指標僅供研究參考，不構成投資建議。過去表現不代表未來結果。
+        </p>
+    </div>
+
+    <!-- 近期信號 -->
+    <div class="regime-stats">
+        <h5>近期信號（最近 30 個交易日）</h5>
+        <div class="table-responsive">
+        <table class="table table-hover table-sm data-table">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th class="text-end">SPY</th>
+                    <th class="text-end">HYG/SHY</th>
+                    <th class="text-end">指標值</th>
+                    <th>信號</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in history[-30:]|reverse %}
+                <tr>
+                    <td>{{ item.date }}</td>
+                    <td class="text-end">{{ "%.2f"|format(item.spy) if item.spy else '-' }}</td>
+                    <td class="text-end">{{ "%.4f"|format(item.ratio) }}</td>
+                    <td class="text-end">{{ "%.4f"|format(item.value) }}</td>
+                    <td>
+                        {% if item.signal == 'GREEN' %}
+                            <span class="badge bg-success">GREEN</span>
+                        {% elif item.signal == 'YELLOW' %}
+                            <span class="badge" style="background:#f59e0b;">YELLOW</span>
+                        {% elif item.signal == 'RED' %}
+                            <span class="badge bg-danger">RED</span>
+                        {% else %}
+                            <span class="badge bg-secondary">-</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js + zoom plugin -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+<script>
+const allData = {{ history_json|safe }};
+const thLow = {{ yellow_low }};
+const thHigh = {{ yellow_high }};
+
+let chart;
+const defaultRange = 120;
+
+function buildChart(data) {
+    const ctx = document.getElementById('spreadChart').getContext('2d');
+    if (chart) chart.destroy();
+
+    const labels = data.map(d => d.date);
+    const values = data.map(d => d.value);
+    const spyPrices = data.map(d => d.spy || null);
+
+    // Background colors based on signal zones
+    const bgColors = values.map(v => {
+        if (v < thLow) return 'rgba(34,197,94,0.12)';
+        if (v < thHigh) return 'rgba(245,158,11,0.12)';
+        return 'rgba(239,68,68,0.12)';
+    });
+
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Credit Spread Index',
+                    data: values,
+                    borderColor: '#818cf8',
+                    backgroundColor: bgColors,
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 0,
+                    pointHitRadius: 8,
+                    borderWidth: 1.8,
+                    yAxisID: 'y',
+                    order: 1,
+                },
+                {
+                    label: 'RED threshold (' + thHigh + ')',
+                    data: values.map(() => thHigh),
+                    borderColor: '#ef4444',
+                    borderDash: [6, 3],
+                    borderWidth: 1.2,
+                    pointRadius: 0,
+                    fill: false,
+                    yAxisID: 'y',
+                    order: 3,
+                },
+                {
+                    label: 'GREEN threshold (' + thLow + ')',
+                    data: values.map(() => thLow),
+                    borderColor: '#22c55e',
+                    borderDash: [6, 3],
+                    borderWidth: 1.2,
+                    pointRadius: 0,
+                    fill: false,
+                    yAxisID: 'y',
+                    order: 3,
+                },
+                {
+                    label: 'S&P 500 (SPY)',
+                    data: spyPrices,
+                    borderColor: 'rgba(251,191,36,0.7)',
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 0,
+                    pointHitRadius: 8,
+                    borderWidth: 1.5,
+                    yAxisID: 'y2',
+                    order: 2,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: {
+                    labels: { color: '#94a3b8', font: { size: 11 }, usePointStyle: true, pointStyle: 'line' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            if (ctx.datasetIndex === 0) {
+                                const v = ctx.raw;
+                                let sig = '🟢 GREEN';
+                                if (v >= thHigh) sig = '🔴 RED';
+                                else if (v >= thLow) sig = '🟡 YELLOW';
+                                return 'Index: ' + v.toFixed(4) + '  ' + sig;
+                            }
+                            if (ctx.datasetIndex === 3) {
+                                return 'SPY: $' + (ctx.raw ? ctx.raw.toFixed(2) : '-');
+                            }
+                            return null;
+                        }
+                    }
+                },
+                zoom: {
+                    pan: { enabled: true, mode: 'x' },
+                    zoom: {
+                        wheel: { enabled: true },
+                        pinch: { enabled: true },
+                        mode: 'x',
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#64748b', maxTicksLimit: 12, font: { size: 10 }, maxRotation: 45 },
+                    grid: { color: 'rgba(148,163,184,0.08)' }
+                },
+                y: {
+                    position: 'left',
+                    min: 0,
+                    max: 1,
+                    title: { display: true, text: 'Credit Spread Index', color: '#818cf8', font: { size: 12 } },
+                    ticks: { color: '#64748b', font: { size: 11 },
+                             callback: function(v) { return v.toFixed(1); } },
+                    grid: { color: 'rgba(148,163,184,0.08)' }
+                },
+                y2: {
+                    position: 'right',
+                    title: { display: true, text: 'SPY Price ($)', color: '#fbbf24', font: { size: 12 } },
+                    ticks: { color: '#64748b', font: { size: 11 } },
+                    grid: { drawOnChartArea: false }
+                }
+            }
+        }
+    });
+}
+
+function setRange(days) {
+    // Update button styles
+    document.querySelectorAll('.chart-card .btn').forEach(b => {
+        b.style.background = '#1e293b'; b.style.color = '#94a3b8'; b.style.borderColor = '#334155';
+    });
+    event.target.style.background = '#334155'; event.target.style.color = '#e2e8f0'; event.target.style.borderColor = '#475569';
+
+    if (days === 0 || days >= allData.length) {
+        buildChart(allData);
+    } else {
+        buildChart(allData.slice(-days));
+    }
+}
+
+// Default: 120 days
+buildChart(allData.slice(-defaultRange));
+</script>
+{% endblock %}

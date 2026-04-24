@@ -2,6 +2,13 @@
 {% block title %}市場體溫{% endblock %}
 
 {% block content %}
+<style>
+    .regime-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+    @media (max-width: 768px) {
+        .regime-grid { grid-template-columns:1fr; }
+        .regime-detail { flex-direction:column; align-items:center; gap:4px !important; }
+    }
+</style>
 <div class="content-area">
     <h4 class="page-title">市場體溫 — AE 體制偵測</h4>
 
@@ -58,7 +65,7 @@
             核心思想很簡單：先讓 AI 學會「正常市場長什麼樣」，然後每天拿新數據去比對——如果 AI 還原得很差（重建誤差高），
             代表今天的市場跟平常不一樣，可能有風險。
         </p>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
+        <div class="regime-grid">
             <div style="background:#0f172a; border-radius:8px; padding:16px;">
                 <h6 style="color:#818cf8; margin-bottom:8px; font-size:14px;">模型原理</h6>
                 <ul style="color:#94a3b8; font-size:13px; line-height:1.8; padding-left:16px; margin:0;">
@@ -83,7 +90,7 @@
     <!-- 資料來源 -->
     <div class="chart-card" style="margin-bottom:20px;">
         <h5>資料來源與參考文獻</h5>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px;">
+        <div class="regime-grid" style="margin-top:12px;">
             <div>
                 <h6 style="color:#818cf8; margin-bottom:8px; font-size:14px;">資料來源</h6>
                 <table class="table table-sm data-table" style="font-size:13px;">

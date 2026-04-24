@@ -164,10 +164,19 @@ def get_model_info():
 
 
 def update_regime_db(conn):
-    """更新 regime_history 資料庫。"""
+    """
+    更新 regime_history 資料庫。
+    SPY/VIX 基於美股，美股假日時 Yahoo Finance 會回傳到前一個交易日的資料，
+    不會產生錯誤，只是當天不會有新的一筆。
+    """
     from models.database import upsert_regime
+    import logging as _log
 
-    result = get_market_temperature(lookback_days=30)
+    try:
+        result = get_market_temperature(lookback_days=30)
+    except Exception as e:
+        _log.getLogger(__name__).warning(f"市場體溫計算失敗（可能 Yahoo API 暫時不可用）: {e}")
+        raise
 
     for item in result['history']:
         upsert_regime(conn, item['date'], item['error'], result['tau'], item['regime'])

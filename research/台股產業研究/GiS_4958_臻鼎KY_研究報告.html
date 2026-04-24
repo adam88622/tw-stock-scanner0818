@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 臻鼎-KY (4958.TW) 個股研究報告
+  轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="GiS_4958_臻鼎KY_研究報告.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///Users/chenhongshuo/claude/個股報告/4958/GiS_4958_臻鼎KY_研究報告.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>臻鼎-KY (4958.TW) 研究報告 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 頁面容器（固定 A4 高度，避免空白頁） ── */
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+
+/* ── Canvas 強制填滿容器 ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 公司卡片 ── */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 首選股卡 ── */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:32px}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<!-- 浮水印（固定不動） -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ Page 1: 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Individual Stock Research Report · 2026</div>
+    <div class="cover-title">臻鼎-KY (4958.TT) — 全球 PCB 龍頭<br><em>AI 時代的新成長引擎</em></div>
+    <div class="cover-subtitle">Zhen Ding Technology Holding — Global PCB Leader Riding the AI Wave</div>
+    <div class="cover-tags">
+      <span class="ctag hl">AI 伺服器</span>
+      <span class="ctag hl">ABF 載板</span>
+      <span class="ctag">光模組</span>
+      <span class="ctag">FPCB</span>
+      <span class="ctag">CoWoS</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">NT$<em>226</em></div><div class="cstat-label">GiS 目標價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>13.30</em></div><div class="cstat-label">Blended 26/27F EPS</div></div>
+    <div class="cstat"><div class="cstat-num"><em>21.0</em>%</div><div class="cstat-label">2026F 毛利率</div></div>
+    <div class="cstat"><div class="cstat-num"><em>219.5</em></div><div class="cstat-label">現價 (4/1 收盤)</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年4月2日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 投資建議彙整 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">投資建議彙整</h1>
+
+  <h2 class="ch">GiS 估值模型 — 三情境分析</h2>
+  <table>
+    <thead><tr><th>情境</th><th>PE 倍數</th><th>EPS 假設</th><th>目標價</th><th>vs 現價報酬</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>保守</td><td class="num">14x</td><td class="num">12.00</td><td class="num">NT$168</td><td class="num neg">-23%</td><td>ABF 持續虧損、消費電子疲軟、Capex 拖累</td></tr>
+      <tr><td><strong>基礎（GiS）</strong></td><td class="num hi">17x</td><td class="num hi">13.30</td><td class="num hi">NT$226</td><td class="num pos hi">+3%</td><td>AI PCB 放量、毛利率改善（Blended 26/27F EPS）</td></tr>
+      <tr><td>樂觀</td><td class="num">20x</td><td class="num">14.50</td><td class="num pos">NT$290</td><td class="num pos">+32%</td><td>ABF 滿載漲價、AI 超預期、2027 EPS 上修</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">GiS vs 市場共識</h2>
+  <p>GiS 目標價 NT$226 高於共識均值 NT$187（範圍 NT$145-273），但股價自 3 月中以來已漲 28% 至 NT$219.50，短期上檔空間有限（+3%）。GiS 採 Blended 2026/2027F 平均 EPS 13.30 元 × 17x PE 估值，考量：(1) 2027 年 EPS 成長至 15.30 元能見度高（AI 訂單 + 泰國廠滿載）；(2) 但 Capex NT$500 億+/年帶來折舊壓力；(3) 業外匯率波動風險。現階段評等「中立」，建議等待回檔至 NT$200 以下再積極布局。</p>
+
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">GiS RATING · 中立 NEUTRAL</div>
+      <div class="pick-name">臻鼎-KY</div>
+      <div class="pick-ticker">4958.TW · 目標價 NT$226 · 現價 NT$219.50 · 上檔 +3%</div>
+      <div class="pick-why">全球 PCB 龍頭，AI 三箭齊發（伺服器/光模組/ABF），2026-2027 EPS CAGR ~35%。但股價已自 3 月中 NT$171 大漲 28%，短線充分反映利多。建議等待回檔至 NT$200 以下再積極布局。</div>
+      <div class="pick-catalyst">催化劑：ABF 轉盈、AI PCB 2H26 放量、泰國廠滿載、光模組 10 倍成長</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">PE 倍數推導邏輯</div>
+      <div class="pick-name">GiS Blended PE = 17x</div>
+      <div class="pick-ticker">Blended 2026/2027F 平均 EPS 13.30 元</div>
+      <div class="pick-why">產業平均 13x + 全球 PCB 龍頭（+3x）+ AI/ABF 高成長（+3x）+ 產品組合升級（+1x）- 客戶集中度（-2x）- Capex 風險（-1x）= 17x。因 2027 EPS 成長能見度高，採 Blended 26/27F 平均 EPS。</div>
+      <div class="pick-catalyst">現價 NT$219.50 隱含 16.5x 2026F PE / 14.3x 2027F PE — 估值尚屬合理但非低估</div>
+    </div>
+  </div>
+
+  <blockquote>臻鼎-KY 正處於從「傳統 FPCB 龍頭」轉型為「AI 時代全方位 PCB 平台」的關鍵拐點。ABF 載板轉盈、AI 伺服器 PCB 放量、光模組爆發三箭齊發，2026-2027 年獲利成長動能明確。然而股價自 3 月中以來已大漲 28%，短期利多充分反映。GiS 給予中立（Neutral）評等，目標價 NT$226（17x Blended 26/27F EPS），建議等待回檔至 NT$200 以下再積極布局。</blockquote>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:16px">本報告涵蓋公司：臻鼎-KY（4958.TW）。資料截止日期：2026年4月2日。本報告僅供研究參考，不構成投資建議。投資人應自行評估風險，GiS 不對任何投資損益負責。4Q25 實績數據來源為公司財報，2026F/2027F 為 GiS 預估值。</p>
+
+  <div class="page-footer" style="margin-top:32px">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資建議</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 2: 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <!-- 4格 KPI -->
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">NT$226</div><div class="kpi-lbl">GiS 目標價</div></div>
+    <div class="kpi"><div class="kpi-val">中立 Neutral</div><div class="kpi-lbl">GiS 評等</div></div>
+    <div class="kpi gold"><div class="kpi-val">13.30<em> 元</em></div><div class="kpi-lbl">Blended 26/27F EPS</div></div>
+    <div class="kpi green"><div class="kpi-val">NT$219.5</div><div class="kpi-lbl">現價 (4/1 收盤)</div></div>
+  </div>
+
+  <!-- 核心論點 -->
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>AI 伺服器與光模組 PCB 開啟第二成長曲線。</strong>NVIDIA compute tray 驗證通過，ASIC 客戶 AWS/Google 放量，光模組 PCB 2026 年營收預估成長 10 倍，800G/1.6T 訂單能見度高，伺服器/光通訊/IC 載板營收佔比將從 2025 年 11.6% 躍升至 2026 年 18%。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>ABF 載板轉虧為盈，毛利率結構性改善。</strong>ABF 載板 2025 年仍虧損約 NT$1/share，2026 年隨高雄 AI 園區產能開出可望轉正，整體毛利率從 2025 年 19.8% 提升至 2026F 21.0%、2027F 22.0%，產品組合升級驅動獲利加速。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>泰國新廠 + 高雄園區雙引擎，產能瓶頸逐步打開。</strong>泰國廠一期 2Q26 滿載、二期量產，高階 iHDI/HLC/光通訊產品放量；高雄 AI 園區 2H26 ABF/高階 PCB 產能開出，支撐 2026-2027 年營收 CAGR 約 16%。</span></div>
+  </div>
+
+  <!-- 雙圖並排 -->
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">營收與毛利率趨勢</div>
+      <div class="chart-sub">來源：公司財報、GiS 預估</div>
+      <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:260px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">EPS 趨勢</div>
+      <div class="chart-sub">來源：公司財報、GiS 預估</div>
+      <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:260px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 3: 章節封面「壹」══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">公司概覽與產品組合</div>
+  <div class="sec-desc">臻鼎-KY 為全球第一大 PCB 廠，鴻海集團旗下核心子公司。產品涵蓋 FPC、RPCB（HDI/HLC）、IC 載板（ABF/BT）及光模組 PCB，客戶橫跨 Apple、NVIDIA、AWS、Google 等全球科技巨頭。</div>
+</div>
+
+<!-- ══════════════ Page 4: 公司概覽正文 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、公司概覽與產品組合</h1>
+  <p>臻鼎-KY（4958.TW）為全球市佔率 7-10% 的 PCB 龍頭，員工約 47,756 人（2025），市值約 NT$1,836 億，外資持股 62.93%。主要客戶包括 Apple（FPCB/SLP）、AI 伺服器客戶（NVIDIA compute tray）、光模組廠，以及 ASIC 客戶 AWS 與 Google。</p>
+
+  <h2 class="ch">產能擴張時間軸</h2>
+  <!-- 技術路線時間軸 -->
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2024</div><div class="tl-spec">泰國廠動工</div><div class="tl-tech">一期建設中<br>高階 iHDI/HLC 規劃</div></div>
+    <div class="tl-item active"><div class="tl-year">2025-2026 &larr; 現在</div><div class="tl-spec">雙廠放量</div><div class="tl-tech">泰國一期 2Q26 滿載<br>二期 2Q26 量產<br>高雄 AI 園區 2H26 開出</div></div>
+    <div class="tl-item next"><div class="tl-year">2027</div><div class="tl-spec">ABF 滿載</div><div class="tl-tech">高雄 ABF 產能爬坡<br>AI PCB 營收佔比 &gt;20%</div></div>
+    <div class="tl-item"><div class="tl-year">2028+</div><div class="tl-spec">全球佈局成熟</div><div class="tl-tech">泰國+高雄雙引擎<br>產品高階化完成</div></div>
+  </div>
+
+  <h2 class="ch">2025 年產品營收組合</h2>
+  <!-- 水平柱圖 -->
+  <div class="chart-wrap">
+    <div class="chart-title">產品營收佔比（2025 年）</div>
+    <div class="chart-sub">來源：公司法說會</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chart3" style="display:block;width:100%;height:200px"></canvas></div>
+  </div>
+
+  <p><strong>行動通訊（61.3%）：</strong>以 Apple FPCB/SLP 為主力，摺疊手機/AR 眼鏡帶動 FPC 含量提升。<strong>電腦消費（27%）：</strong>HDI/HLC 板，受惠 AI PC 需求。<strong>IC 載板（6.4%）：</strong>ABF/BT 載板，2025 年仍虧損但 2026 年可望轉正。<strong>伺服器/光通訊/其他（5.3%）：</strong>成長最快業務，2026 年佔比預估跳升至 18%。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 公司概覽與產品組合</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 5: 章節封面「貳」══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">GiS 財務模型與估值</div>
+  <div class="sec-desc">基於 Forward PE 估值法，考量 2027 年 EPS 高成長能見度，採用 Blended 2026/2027F 平均 EPS 為估值基準。GiS 給予 17x Blended PE，目標價 NT$226，評等「中立 Neutral」。股價自 3 月中 NT$171 已漲 28%，短期上檔空間有限。</div>
+</div>
+
+<!-- ══════════════ Page 6: GiS 季度損益模型 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">GiS 季度損益預估模型</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-10px 0 10px">資料來源：FY2024-4Q25 為公司季報實績；1Q26F/2Q26F/FY2026F 為 GiS 預估。單位：百萬元（EPS 除外）</p>
+
+  <table style="font-size:11.5px">
+    <thead>
+      <tr>
+        <th>損益項目</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26F</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26F</th>
+        <th style="text-align:right">2025</th>
+        <th style="text-align:right;background:#065f46">2026F</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">40,082</td><td class="num">38,203</td><td class="num">47,366</td><td class="num">56,870</td><td class="num hi">40,800</td><td class="num neg">-28.2%</td><td class="num pos">+1.8%</td><td class="num hi">44,000</td><td class="num" style="font-weight:700">182,522</td><td class="num hi" style="font-weight:700">212,000</td></tr>
+      <tr><td>營業成本</td><td class="num">34,197</td><td class="num">31,193</td><td class="num">36,956</td><td class="num">44,040</td><td class="num">34,068</td><td class="num">-22.6%</td><td class="num">-0.4%</td><td class="num">36,080</td><td class="num">146,385</td><td class="num">167,480</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num">5,885</td><td class="num">7,011</td><td class="num">10,410</td><td class="num">12,830</td><td class="num hi">6,732</td><td class="num neg">-47.5%</td><td class="num pos">+14.4%</td><td class="num hi">7,920</td><td class="num" style="font-weight:700">36,136</td><td class="num hi" style="font-weight:700">44,520</td></tr>
+      <tr><td>營業費用</td><td class="num">4,829</td><td class="num">4,586</td><td class="num">5,880</td><td class="num">6,909</td><td class="num">5,100</td><td class="num">-26.2%</td><td class="num">+5.6%</td><td class="num">5,300</td><td class="num">22,205</td><td class="num">24,700</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">1,056</td><td class="num">2,425</td><td class="num">4,530</td><td class="num">5,921</td><td class="num hi">1,632</td><td class="num neg">-72.4%</td><td class="num pos">+54.5%</td><td class="num hi">2,620</td><td class="num" style="font-weight:700">13,932</td><td class="num hi" style="font-weight:700">17,800</td></tr>
+      <tr><td>業外收支</td><td class="num">401</td><td class="num neg">-153</td><td class="num">131</td><td class="num neg">-248</td><td class="num">150</td><td class="num">—</td><td class="num">-62.6%</td><td class="num">200</td><td class="num">131</td><td class="num">1,200</td></tr>
+      <tr><td><strong>稅前淨利</strong></td><td class="num">1,457</td><td class="num">2,272</td><td class="num">4,661</td><td class="num">5,673</td><td class="num hi">1,782</td><td class="num neg">-68.6%</td><td class="num pos">+22.3%</td><td class="num hi">2,820</td><td class="num" style="font-weight:700">14,063</td><td class="num hi" style="font-weight:700">19,000</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">632</td><td class="num">605</td><td class="num">2,392</td><td class="num">3,161</td><td class="num hi">1,044</td><td class="num neg">-67.0%</td><td class="num pos">+65.2%</td><td class="num hi">1,650</td><td class="num" style="font-weight:700">6,791</td><td class="num hi" style="font-weight:700">11,800</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">0.66</td><td class="num" style="font-weight:700">0.63</td><td class="num" style="font-weight:700">2.46</td><td class="num" style="font-weight:700">3.12</td><td class="num hi" style="font-weight:800">1.00</td><td class="num neg" style="font-weight:700">-67.9%</td><td class="num pos" style="font-weight:700">+51.5%</td><td class="num hi" style="font-weight:800">1.58</td><td class="num" style="font-weight:800">6.91</td><td class="num hi" style="font-weight:800">11.30</td></tr>
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>獲利能力(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26F</th>
+        <th style="text-align:right;background:#065f46">QoQ</th>
+        <th style="text-align:right;background:#065f46">YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26F</th>
+        <th style="text-align:right">2025</th>
+        <th style="text-align:right;background:#065f46">2026F</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num">14.7</td><td class="num">18.4</td><td class="num">22.0</td><td class="num">22.6</td><td class="num hi">16.5</td><td class="num neg">-6.1pp</td><td class="num pos">+1.8pp</td><td class="num hi">18.0</td><td class="num">19.8</td><td class="num hi">21.0</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">2.6</td><td class="num">6.4</td><td class="num">9.6</td><td class="num">10.4</td><td class="num hi">4.0</td><td class="num neg">-6.4pp</td><td class="num pos">+1.4pp</td><td class="num hi">6.0</td><td class="num">7.6</td><td class="num hi">8.4</td></tr>
+      <tr><td><strong>稅後淨利率</strong></td><td class="num">1.6</td><td class="num">1.6</td><td class="num">5.1</td><td class="num">5.6</td><td class="num hi">2.6</td><td class="num neg">-3.0pp</td><td class="num pos">+1.0pp</td><td class="num hi">3.8</td><td class="num">3.7</td><td class="num hi">5.6</td></tr>
+    </tbody>
+  </table>
+
+  <table style="font-size:11.5px;margin-top:-8px">
+    <thead>
+      <tr>
+        <th>成長率(%)</th>
+        <th style="text-align:right">1Q25</th>
+        <th style="text-align:right">2Q25</th>
+        <th style="text-align:right">3Q25</th>
+        <th style="text-align:right">4Q25</th>
+        <th style="text-align:right;background:#065f46">1Q26F</th>
+        <th style="text-align:right;background:#065f46" colspan="2">QoQ / YoY</th>
+        <th style="text-align:right;background:#065f46">2Q26F</th>
+        <th style="text-align:right">2025</th>
+        <th style="text-align:right;background:#065f46">2026F</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>營收 YoY</td><td class="num pos">+23.3%</td><td class="num pos">+17.9%</td><td class="num neg">-6.4%</td><td class="num pos">+1.3%</td><td class="num pos">+1.8%</td><td class="num" colspan="2"></td><td class="num pos">+15.2%</td><td class="num pos">+6.3%</td><td class="num pos">+16.2%</td></tr>
+      <tr><td>營業利益 YoY</td><td class="num pos">+42.2%</td><td class="num">N.A.</td><td class="num neg">-23.6%</td><td class="num pos">+6.6%</td><td class="num pos">+54.5%</td><td class="num" colspan="2"></td><td class="num pos">+8.0%</td><td class="num pos">+20.3%</td><td class="num pos">+27.8%</td></tr>
+      <tr><td>稅後淨利 YoY</td><td class="num pos">+48.3%</td><td class="num pos">+24.5%</td><td class="num neg">-28.7%</td><td class="num neg">-27.6%</td><td class="num pos">+65.2%</td><td class="num" colspan="2"></td><td class="num pos">+172.7%</td><td class="num neg">-26.0%</td><td class="num pos">+73.8%</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:10px">
+    <strong>GiS 模型假設：</strong>1Q26F 營收季減反映消費電子傳統淡季，但 YoY +1.8% 受惠 AI 伺服器/光通訊維持強勁。毛利率 16.5% 優於去年同期 14.7%，因高階 AI 產品佔比提升。2H26 為獲利主力期，泰國廠/高雄廠產能開出 + 旺季效應推動全年 EPS 達 11.30 元。
+  </blockquote>
+  <span class="src">資料來源：公司季報（1Q25-4Q25 實績）、公司法說會指引、GiS 預估（1Q26F 以後）</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · GiS 季度損益預估模型</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 7: 公司卡片 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">臻鼎-KY</div><div class="co-ticker">4958.TW · TWSE · 全球第一大 PCB 廠</div></div>
+      <div class="co-badge">
+        <span class="badge neutral">&#9673; 中立 Neutral</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$226 | 現價 NT$219.50</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">+3%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">17x</div><div class="co-metric-label">GiS Blended PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">13.30元</div><div class="co-metric-label">Blended 26/27F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">21.0%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <!-- 券商評等比較 -->
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>2026F EPS</th><th>2027F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>Goldman Sachs</td><td class="pos">Buy</td><td class="num hi">NT$228</td><td>SOTP</td><td class="num">14.04</td><td class="num">21.67</td></tr>
+          <tr><td>GF Securities</td><td class="pos">Buy</td><td class="num hi">NT$273</td><td>15x avg EPS</td><td class="num">14.00</td><td class="num">22.42</td></tr>
+          <tr><td>兆豐投顧</td><td class="pos">Buy</td><td class="num">NT$247</td><td>18x 26-27F PE</td><td class="num">11.62</td><td class="num">15.84</td></tr>
+          <tr><td>統一投顧</td><td class="pos">Buy</td><td class="num">NT$240</td><td>20x 26F PE</td><td class="num">11.99</td><td class="num">—</td></tr>
+          <tr><td>富邦投顧</td><td class="pos">Buy</td><td class="num">NT$216</td><td>15x 27F PE</td><td class="num">10.13</td><td class="num">14.40</td></tr>
+          <tr><td>國票投顧</td><td class="pos">Buy</td><td class="num">NT$200</td><td>20x 26F PE</td><td class="num">10.04</td><td class="num">—</td></tr>
+          <tr><td>Morgan Stanley</td><td>EW</td><td class="num">NT$145</td><td>RI Model</td><td class="num">11.85</td><td class="num">14.99</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800;color:#0d1b3e">GiS</td><td style="font-weight:800">Neutral</td><td class="num hi" style="font-weight:800">NT$226</td><td style="font-weight:700">17x Blended PE</td><td class="num" style="font-weight:800">11.30</td><td class="num" style="font-weight:800">15.30</td></tr>
+        </tbody>
+      </table>
+
+      <!-- 公司內嵌圖表 -->
+      <h3 class="ch">伺服器/光通訊/IC 載板營收佔比趨勢</h3>
+      <div class="chart-wrap" style="padding:14px">
+        <div class="chart-container" style="height:160px;width:100%;position:relative"><canvas id="coChart1" style="display:block;width:100%;height:160px"></canvas></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>臻鼎-KY · 4958.TW · 券商比較</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 8: 催化劑與風險 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">催化劑與風險評估</h1>
+
+  <h2 class="ch">關鍵催化劑</h2>
+  <table>
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響程度</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>ABF 載板轉虧為盈</strong></td><td>2H26</td><td class="pos">高</td><td>2025 年 EPS 拖累 ~NT$1，高雄 AI 園區產能開出後可望轉正，並受惠漲價 ~10% QoQ</td></tr>
+      <tr><td><strong>AI 伺服器 PCB 放量</strong></td><td>2H26</td><td class="pos">高</td><td>NVIDIA compute tray 驗證通過，ASIC 客戶 AWS/Google 放量，淮安廠 3Q26 擴產貢獻</td></tr>
+      <tr><td><strong>光模組 PCB 爆發</strong></td><td>2Q26+</td><td class="pos">高</td><td>2026 年營收預估 10 倍成長，800G/1.6T 訂單能見度高，部分客戶已預訂 2027 產能</td></tr>
+      <tr><td><strong>泰國廠一期滿載</strong></td><td>2Q26</td><td class="pos">中高</td><td>高階 iHDI/HLC/光通訊產品，二期 2H26 量產，產值預計達一廠兩倍</td></tr>
+      <tr><td><strong>iPhone 17 / 摺疊手機</strong></td><td>3Q26</td><td>中</td><td>FPCB 含量提升，摺疊手機帶動高複雜度 FPC 需求，ASP 提升 30-50%</td></tr>
+      <tr><td><strong>高雄 AI 園區開出</strong></td><td>2H26</td><td class="pos">中高</td><td>ABF 載板 + 高階 PCB（30-80 層）產能，超高階產品（CoWoS backplane）開發中</td></tr>
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>ABF 產能利用率加速至滿載</strong>，漲價幅度超預期 → EPS 上修 10-15%</div>
+      <div class="risk-item"><strong>AI 伺服器 PCB 認列速度快於預期</strong>，2026 年佔比突破 20% → 毛利率上行 1-2pp</div>
+      <div class="risk-item"><strong>iPhone 17 FPCB 含量超預期</strong>，帶動行動通訊營收重返成長</div>
+      <div class="risk-item"><strong>2027 年 EPS 上修至 17+ 元</strong> → 支撐 PE re-rating 至 18-20x</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>iPhone 需求低於預期</strong>，消費電子整體疲軟 → 行動通訊營收（61%）承壓</div>
+      <div class="risk-item"><strong>ABF 良率不如預期</strong>，虧損延續至 2H26 → EPS 下修 NT$0.5-1.0</div>
+      <div class="risk-item"><strong>中國 FPCB 競爭加劇</strong>，價格壓力侵蝕毛利率</div>
+      <div class="risk-item"><strong>Capex NT$500 億+/年</strong>致折舊壓力大、自由現金流持續為負</div>
+      <div class="risk-item"><strong>台幣升值 / 匯率波動</strong>壓抑營收與業外損益（4Q25 匯損 6.6 億為前例）</div>
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 風險評估：</strong>整體而言，上行催化劑的實現機率較高（ABF 轉盈、AI 放量已有法說會指引支持），但股價已提前反映部分利多。下行風險中，消費電子疲軟與匯率波動為最大不確定因素。建議密切追蹤每月營收及 2Q26 法說會指引。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>催化劑與風險評估</span>
+    <span>&copy; 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  Chart.register({
+    id: 'labelPlugin',
+    afterDatasetsDraw(chart) {
+      const ctx = chart.ctx;
+      const isStacked = chart.options.scales?.y?.stacked === true;
+      const isH = chart.options.indexAxis === 'y';
+      chart.data.datasets.forEach((ds, i) => {
+        const meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach((bar, idx) => {
+          const v = ds.data[idx];
+          if (!v && v !== 0) return;
+          ctx.save();
+          ctx.font = 'bold 11.5px PingFang TC, Arial';
+          ctx.textAlign = 'center';
+          if (isH) {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'middle';
+            ctx.fillText(v, bar.x + 6, bar.y);
+          } else if (isStacked) {
+            const bh = Math.abs(bar.base - bar.y);
+            if (bh < 14) { ctx.restore(); return; }
+            ctx.fillStyle = bh > 22 ? '#fff' : '#1a2a4a';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(v + '%', bar.x, bar.y + bh / 2);
+          } else {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'bottom';
+            ctx.fillText(String(v), bar.x, bar.y - 3);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+  // ── Chart 1: 營收(Grouped Bar) + 毛利率(Line) ──
+  new Chart(getEl('chart1'), {
+    type: 'bar',
+    data: {
+      labels: ['2023', '2024', '2025', '2026F', '2027F'],
+      datasets: [
+        {
+          label: '營收(億)',
+          data: [1514, 1717, 1825, 2120, 2600],
+          backgroundColor: '#1a3a6e',
+          borderRadius: 5,
+          barPercentage: 0.6,
+          categoryPercentage: 0.7,
+          yAxisID: 'y'
+        },
+        {
+          label: '毛利率(%)',
+          data: [18.1, 18.9, 19.8, 21.0, 22.0],
+          type: 'line',
+          borderColor: '#00c896',
+          backgroundColor: 'transparent',
+          tension: 0.35,
+          pointRadius: 6,
+          pointBackgroundColor: '#00c896',
+          borderWidth: 2.5,
+          fill: false,
+          yAxisID: 'y1'
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v }, position: 'left' },
+        y1: { grid: { display: false }, ticks: { callback: v => v + '%' }, position: 'right', min: 15, max: 25 }
+      }
+    }
+  });
+
+  // ── Chart 2: EPS 趨勢 (Bar) ──
+  new Chart(getEl('chart2'), {
+    type: 'bar',
+    data: {
+      labels: ['2023', '2024', '2025', '2026F', '2027F'],
+      datasets: [
+        {
+          label: 'EPS (元)',
+          data: [6.55, 9.67, 6.91, 11.30, 15.30],
+          backgroundColor: ['#6b7a9a', '#1a3a6e', '#c0392b', '#00a878', '#00c896'],
+          borderRadius: 5,
+          barPercentage: 0.6,
+          categoryPercentage: 0.7
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '元' } }
+      }
+    }
+  });
+
+  // ── Chart 3: 產品組合 2025 (Horizontal Bar) ──
+  new Chart(getEl('chart3'), {
+    type: 'bar',
+    data: {
+      labels: ['行動通訊', '電腦消費', 'IC 載板', '伺服器/光通訊/其他'],
+      datasets: [
+        {
+          label: '營收佔比(%)',
+          data: [61.3, 27.0, 6.4, 5.3],
+          backgroundColor: ['#1a3a6e', '#00a878', '#e67e22', '#8e44ad'],
+          borderRadius: 4,
+          barPercentage: 0.55
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── coChart1: 伺服器/光通訊/IC載板營收佔比趨勢 (Bar) ──
+  new Chart(getEl('coChart1'), {
+    type: 'bar',
+    data: {
+      labels: ['2022', '2023', '2024', '2025', '2026F'],
+      datasets: [
+        {
+          label: '伺服器/光通訊/IC載板佔比(%)',
+          data: [6.2, 7.4, 9.9, 11.6, 18],
+          backgroundColor: ['#6b7a9a', '#6b7a9a', '#1a3a6e', '#00a878', '#00c896'],
+          borderRadius: 5,
+          barPercentage: 0.6,
+          categoryPercentage: 0.65
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw + '%' } }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%' }, max: 22 }
+      }
+    }
+  });
+
+}); // end window.load
+</script>
+</body>
+</html>

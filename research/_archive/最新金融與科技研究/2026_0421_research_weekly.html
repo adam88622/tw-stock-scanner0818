@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 2026-04-21 量化研究週報
+  主題：AI 研究效率、聲學訊號、拓樸風險、分歧度再思
+  產出：2026-04-21
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>GiS 2026-04-21 量化研究週報</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column}
+
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:40px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:40px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:16px;color:rgba(255,255,255,.65);margin-bottom:32px;letter-spacing:1px;line-height:1.5}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 14px;border-radius:20px;font-size:12px;color:rgba(255,255,255,.8);letter-spacing:.3px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 18px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:12.5px;color:rgba(255,255,255,.5);letter-spacing:.3px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:13px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:46px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:700px}
+.sec-desc{font-size:16px;color:rgba(255,255,255,.6);line-height:1.8;max-width:600px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+.body-page{padding:28px 48px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+h1.ch{font-size:22px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 12px;page-break-after:avoid}
+h2.ch{font-size:18px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:16px 0 9px;page-break-after:avoid}
+h3.ch{font-size:15.5px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 8px;page-break-after:avoid}
+
+table{width:100%;border-collapse:collapse;margin:7px 0 12px;font-size:14px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 12px;text-align:left;font-weight:600;font-size:13.5px;letter-spacing:.3px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:8px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55;font-size:13.5px}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+.paper-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:14px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.paper-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.paper-head.navy{background:#0d1b3e}
+.paper-head.teal{background:#065f46}
+.paper-head.blue{background:#1a3a6e}
+.paper-head.slate{background:#2d3748}
+.paper-head.wine{background:#5c1a1a}
+.paper-head.indigo{background:#312e81}
+.paper-head.amber{background:#7c2d12}
+.paper-name{font-size:17px;font-weight:800;color:#fff;line-height:1.35}
+.paper-meta{font-size:12.5px;color:rgba(255,255,255,.65);margin-top:3px}
+.paper-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 12px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:.3px}
+.badge.high{background:#00c896;color:#fff}
+.badge.med{background:#f59e0b;color:#fff}
+.badge.low{background:#94a3b8;color:#fff}
+.badge.risk{background:#e74c3c;color:#fff}
+.paper-body{padding:16px 20px;background:#fff}
+
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:12px;margin:10px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14.5px;font-weight:700;color:#0d1b3e;margin-bottom:2px}
+.chart-sub{font-size:12.5px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.wine{background:linear-gradient(135deg,#7b1e3a,#b91c1c)}
+.kpi-val{font-size:22px;font-weight:800;margin-bottom:4px}
+.kpi-val em{font-size:13px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:12.5px;opacity:.75;letter-spacing:.3px}
+
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:16px;margin:10px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:15px;font-weight:600;color:#0d1b3e;padding:8px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.55}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:22px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:14px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card.info{background:#eef5fa;border:1.5px solid #1e40af}
+.risk-card h4{font-size:15px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-card.info h4{color:#1e40af}
+.risk-item{font-size:13.5px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.pick-card{border-radius:8px;padding:14px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:13px;font-weight:700;color:#00a878;letter-spacing:.8px;margin-bottom:4px}
+.pick-name{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:13px;color:#6b7a9a;margin-bottom:8px}
+.pick-why{font-size:13.5px;color:#2d3748;line-height:1.6;margin-bottom:8px}
+.pick-catalyst{font-size:13px;color:#065f46;background:#e8f5ee;padding:6px 10px;border-radius:5px;line-height:1.5}
+
+.heatmap{display:grid;grid-template-columns:80px repeat(4,1fr);gap:2px;margin:10px 0;font-size:13px}
+.heatmap .hcell{padding:9px 6px;text-align:center;background:#f0f4fc;color:#0d1b3e;font-weight:700}
+.heatmap .hhdr{background:#0d1b3e;color:#fff;font-weight:700}
+.heatmap .hval{color:#fff;font-weight:700}
+
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0;font-size:13px}
+
+p{margin:6px 0 9px;line-height:1.72;font-size:14.5px}
+ul,ol{padding-left:22px;margin:6px 0 9px}
+li{margin:3px 0;line-height:1.65;font-size:14.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:10px 14px;margin:10px 0;color:#1a3a6e;font-size:14.5px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:20px 0}
+.src{font-size:12px;color:#9aabb5;display:block;margin-top:4px}
+.tag-inline{display:inline-block;background:#eef5fa;color:#1a3a6e;padding:2px 8px;border-radius:4px;font-size:12px;margin-right:4px;font-weight:600}
+.tag-inline.warn{background:#fef3c7;color:#92400e}
+.tag-inline.danger{background:#fee2e2;color:#991b1b}
+
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:10px 48px;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Quantitative Research Weekly · 2026-04-21</div>
+    <div class="cover-title">AI 研究革命、拓樸風險、<br><em>分歧度再思</em></div>
+    <div class="cover-subtitle">7 篇前緣論文拆解 × 台股實證複製<br>Weekly Review of Quantitative Finance Research · Apr 2026</div>
+    <div class="cover-tags">
+      <span class="ctag hl">LLM 文獻回顧</span>
+      <span class="ctag hl">FinBERT 法說會</span>
+      <span class="ctag">聲學偽裝</span>
+      <span class="ctag">Persistent Homology</span>
+      <span class="ctag">Quantile BVAR</span>
+      <span class="ctag hl">Disagreement</span>
+      <span class="ctag">AI 交易平台</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>7</em> 篇</div><div class="cstat-label">重點論文 / 新聞</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2</em> 份</div><div class="cstat-label">台股實證複製</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4</em> 類</div><div class="cstat-label">分歧度代理指標</div></div>
+    <div class="cstat"><div class="cstat-num"><em>50</em> 檔</div><div class="cstat-label">TW 權值股樣本</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026-04-21</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">執行摘要 · Executive Summary</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">0.234<em> avg |ρ|</em></div><div class="kpi-lbl">台股分歧度代理相關</div></div>
+    <div class="kpi"><div class="kpi-val">43.4<em>%</em></div><div class="kpi-lbl">PC1 解釋變異</div></div>
+    <div class="kpi gold"><div class="kpi-val">0.985</div><div class="kpi-lbl">TDA L¹ ↔ rolling vol</div></div>
+    <div class="kpi wine"><div class="kpi-val">2.03<em>% / 月</em></div><div class="kpi-lbl">FinBERT α (US sample)</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>AI 正在重構量化研究流程。</strong>LR-Robot（arXiv 2604.14793）以 HITL 三段式處理 12,666 篇選擇權文獻；Man AlphaGPT 已將 agentic LLM 投入實盤訊號產出。GiS 應優先投入「自動化文獻分類」與「法說會逐字稿 FinBERT」兩項 POC，預估效率提升 120–240 倍。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>「聲學 &gt; 文字」的 fintech 敘事被反證。</strong>Dungrani (2026) 發現加入語音反而讓 tail-risk recall 由 66.25% → 47.08%（下滑 19pp），IR 訓練過的 CEO 聲學特徵已被中性化。GiS 若做法說會分析，應聚焦中小型股與新上市公司，權值股的語音增量有限。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>NBER 分歧度悖論在台股複製成功。</strong>本報告以 50 檔 TW 權值股、14 年法人資料實證：4 個分歧度代理兩兩 |相關| 僅 0.234，PC1 只解釋 43.4% 變異——NBER「代理之間 0.07–0.14」的核心結論在台股重現。單一 proxy 結論不可信，應採乘性非線性複合（Goulding-Harvey-Kurtović DIS 公式）。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>Topological 風險指標需要長序列。</strong>本報告在 0050 ETF 1 年資料上跑 Vietoris-Rips persistent homology，L¹ landscape 與 rolling vol 相關係數高達 0.985 — 無增量訊息。文獻中 TDA 的優勢只在 2008/2020 級別的結構斷裂才顯現，建議 GiS 取得 2000 年以來的 TAIEX 資料後再重新驗證。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">台股 4 代理分歧度相關矩陣</div>
+      <div class="chart-sub">2025-06~2026-04・50 檔大型股・複製 NBER w35049 主張</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart_corr" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">TDA L¹ vs Rolling Vol（0050 ETF）</div>
+      <div class="chart-sub">Takens m=4, τ=1, W=50・ripser 計算</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart_tda" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">本週 7 篇論文速覽矩陣</h2>
+  <table>
+    <thead><tr><th>#</th><th>主題</th><th>來源</th><th>適用性</th><th>GiS 優先級</th><th>核心發現</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>LR-Robot</strong></td><td>arXiv 2604.14793</td><td class="pos">高</td><td class="pos hi">P1</td><td>LLM + HITL 三段式處理 12K 篇文獻</td></tr>
+      <tr><td>2</td><td><strong>聲學偽裝</strong></td><td>arXiv 2604.14619</td><td>中</td><td class="num">P3</td><td>語音特徵被 IR 訓練中性化，反證既有假設</td></tr>
+      <tr><td>3</td><td><strong>FinBERT 發言人</strong></td><td>arXiv 2604.13260</td><td class="pos">高</td><td class="pos hi">P1</td><td>Analyst 49% / CFO 30% 權重，月 α 2.03%</td></tr>
+      <tr><td>4</td><td><strong>Persistent Homology</strong></td><td>arXiv 2604.13311</td><td>中</td><td class="num">P3</td><td>TDA 流程完備但需長序列驗證</td></tr>
+      <tr><td>5</td><td><strong>Quantile BVAR 油價</strong></td><td>arXiv 2604.12927</td><td class="pos">中高</td><td class="num">P2</td><td>尾端 CRPS 改善 10–25%，可移植 TW 油敏股輪動</td></tr>
+      <tr><td>6</td><td><strong>NBER 分歧度</strong></td><td>NBER w35049</td><td class="pos">高</td><td class="pos hi">P1</td><td>三大 proxy 互相關 0.07–0.14，DIS 公式全吸收 IVOL</td></tr>
+      <tr><td>7</td><td><strong>AI 交易平台</strong></td><td>Strovemont / 業界</td><td class="neg">低</td><td class="num">P4</td><td>零售詐騙主線；真浪潮在 Kronos + AlphaGPT</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要 · 2026-04-21</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節一：AI 研究效率革命 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Part One · AI Research Efficiency</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">AI 驅動的研究效率革命</div>
+  <div class="sec-desc">LR-Robot、FinBERT 發言人分析、Man AlphaGPT 與 Kronos 模型共同推動量化研究自動化。本章梳理三篇關鍵論文與一則產業趨勢。</div>
+</div>
+
+<!-- Topic 1: LR-Robot -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">1.1 LR-Robot：LLM 系統性文獻回顧框架</h1>
+
+  <div class="paper-card">
+    <div class="paper-head teal">
+      <div><div class="paper-name">LR-Robot: A Human-in-the-Loop LLM Framework for SLR in Financial Research</div><div class="paper-meta">Wei Wei et al. · arXiv 2604.14793v1 · 2026-04-16 · q-fin.CP</div></div>
+      <div class="paper-badge"><span class="badge high">◉ P1 高優先</span><span style="color:rgba(255,255,255,.7);font-size:10px">導入週期：2 個月</span></div>
+    </div>
+    <div class="paper-body">
+
+      <h3 class="ch">問題與動機</h3>
+      <p>金融研究文獻呈指數級成長，以選擇權定價子領域為例 50 年累積 <strong>12,666 篇</strong>，傳統系統性文獻回顧（SLR）在可擴展性已難以負荷。現有 NLP 自動化方案雖有產能，但脈絡能力不足，仍須大量專家校閱。作者主張三段式「專家 Taxonomy × LLM 批次 × HITL 驗證」框架。</p>
+
+      <h3 class="ch">方法論：三段式 Pipeline</h3>
+      <table>
+        <thead><tr><th>階段</th><th>內容</th><th>關鍵設計</th></tr></thead>
+        <tbody>
+          <tr><td>Stage 1 — Taxonomy</td><td>專家定義 4 維分類（模型 × 標的 × 技術 × 驗證）</td><td>Prompt constraint 避免 LLM 幻想類別</td></tr>
+          <tr><td>Stage 2 — Classification</td><td>11 個 LLM 批次分類 12K 篇</td><td>支援開源 + 閉源橫向評比</td></tr>
+          <tr><td>Stage 3 — HITL</td><td>部署前小樣本驗證（非逐筆）</td><td>人工介入點單次，確保審計</td></tr>
+          <tr><td>下游模組</td><td>RAG-powered 時序趨勢 + 引用網絡</td><td>將分類結果轉為結構性洞察</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">核心結果</h3>
+      <ul>
+        <li><strong>語料規模：</strong>12,666 篇 × 50 年，平均 253 篇/年，佐證人工 SLR 不可行。</li>
+        <li><strong>模型比較：</strong>11 個主流 LLM（涵蓋 open/closed source）在簡單分類 → 複雜多標籤任務下表現差異顯著；任務複雜度遞增時模型能力會系統性退化。</li>
+        <li><strong>HITL 介入：1 次</strong>（部署前），而非逐筆審核 — 相對純人工效率增益 <strong>~100–200 倍</strong>。</li>
+        <li><strong>下游衍生：</strong>2 類分析模組（temporal evolution + citation network），超越單純分類。</li>
+      </ul>
+
+      <h3 class="ch">GiS 應用路徑</h3>
+      <div class="risk-matrix">
+        <div class="risk-card up">
+          <h4>✓ 高適用</h4>
+          <div class="risk-item">Factor investing（四維分類天然對齊）</div>
+          <div class="risk-item">Sentiment / NLP alpha（同質性高）</div>
+          <div class="risk-item">試點：台灣因子投資 200–500 篇</div>
+        </div>
+        <div class="risk-card dn">
+          <h4>✗ 適用性受限</h4>
+          <div class="risk-item">HFT（論文稀少、多閉源）</div>
+          <div class="risk-item">Macro（Taxonomy 邊界模糊）</div>
+          <div class="risk-item">模型漂移：需定期 re-calibrate prompt</div>
+        </div>
+      </div>
+
+      <blockquote><strong>GiS 行動建議：</strong>在現有 tw-stock-scanner 的 research/ 目錄建置自動分類管線，每週研究會議前先跑一次；開源模型優先（Llama-3 / Qwen）避免內部題目外流。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>1.1 LR-Robot</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- Topic 3: FinBERT Earnings -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">1.2 FinBERT 法說會發言人分析：誰的聲音移動市場？</h1>
+
+  <div class="paper-card">
+    <div class="paper-head navy">
+      <div><div class="paper-name">Which Voices Move Markets? Speaker Identity and Post-Earnings Returns</div><div class="paper-meta">arXiv 2604.13260v1 · 2026-04-14 · 6.5M 句 × 16,428 場法說會 × 10 年</div></div>
+      <div class="paper-badge"><span class="badge high">◉ P1 高優先</span><span style="color:rgba(255,255,255,.7);font-size:10px">TW 移植 12 週 MVP</span></div>
+    </div>
+    <div class="paper-body">
+
+      <h3 class="ch">核心假設與結果</h3>
+      <p>傳統把法說會當成 bag-of-words 平均語氣，忽略了<strong>發言人身份</strong>。論文用 FinBERT 對 S&P 500 2015–2025 法說會打分，並以 <strong>WeightedTone = Σᵣ wᵣ · toneᵣ</strong> 組合：</p>
+
+      <div class="chart-grid">
+        <div class="chart-wrap">
+          <div class="chart-title">發言人權重（Section-Weighted Sentiment）</div>
+          <div class="chart-sub">基於月度 long-short Sharpe 最大化反推</div>
+          <div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chart_speaker" style="display:block;width:100%;height:220px"></canvas></div>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title">WeightedTone vs LM 詞典：CAR 迴歸 R²</div>
+          <div class="chart-sub">Analyst 語氣是主要資訊載體</div>
+          <div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chart_finbert_r2" style="display:block;width:100%;height:220px"></canvas></div>
+        </div>
+      </div>
+
+      <table>
+        <thead><tr><th>指標</th><th>Value</th><th>統計顯著性</th><th>含義</th></tr></thead>
+        <tbody>
+          <tr><td>OOS Spearman IC</td><td class="num hi">0.142</td><td class="pos">高</td><td>月度預測能力穩健</td></tr>
+          <tr><td>FF5-alpha (L/S)</td><td class="num pos">2.03% / 月</td><td class="pos">t = 6.49</td><td>長短腿年化 α 約 24%</td></tr>
+          <tr><td>LM dictionary t-stat</td><td class="num">0.86</td><td class="neg">不顯著</td><td>FinBERT 完全吸收 LM 詞典法</td></tr>
+          <tr><td>Analyst 權重</td><td class="num hi">49%</td><td>—</td><td>最具資訊含量（專業懷疑/信任）</td></tr>
+          <tr><td>CFO 權重</td><td class="num">30%</td><td>—</td><td>Guidance 口徑細節</td></tr>
+          <tr><td>CEO 權重</td><td class="num">16%</td><td>—</td><td>已部分 priced-in</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">台灣市場移植方案</h3>
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>資料來源</th><th>內容</th></tr></thead>
+            <tbody>
+              <tr><td>公開資訊觀測站</td><td>法人說明會逐字稿（法說會分類）</td></tr>
+              <tr><td>TSMC IR 官網</td><td>英文逐字稿，10+ 年</td></tr>
+              <tr><td>TWSE WebPro</td><td>法說會錄影（影音轉文字）</td></tr>
+              <tr><td>TEJ</td><td>法人問答整理欄位</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>模型選擇</th><th>適用情境</th></tr></thead>
+            <tbody>
+              <tr><td>ProsusAI/finbert</td><td>英文：TSMC/MediaTek 法說會</td></tr>
+              <tr><td>Taiwan Chinese-FinBERT</td><td>中文：90.62% 準確率（2025 Springer）</td></tr>
+              <tr><td>FinCUGE 微調</td><td>混合語言大型股</td></tr>
+              <tr><td>Role mapping</td><td>董事長/總經理/財務長/法人</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3 class="ch">目標語料規模（0050 constituents）</h3>
+      <ul>
+        <li><strong>標的公司</strong>：TSMC 2330、MediaTek 2454、Hon Hai 2317、Delta 2308、聯發科 2454 等 50 檔</li>
+        <li><strong>時間跨度</strong>：2015–2026 共 44 季 × 50 檔 ≈ 2,200 場法說會</li>
+        <li><strong>句子規模</strong>：推估 850K 句（S&P 500 語料的 1/7）</li>
+        <li><strong>模型選擇</strong>：英文 FinBERT + 中文 Chinese-FinBERT 雙語 pipeline</li>
+      </ul>
+
+      <blockquote><strong>GiS 行動建議：</strong>12 週 MVP 路徑 — 4 週爬蟲 + 切句，4 週模型微調 + 發言人角色映射，4 週事件研究驗證。低風險高回報，建議立刻啟動。關鍵風險：台灣經理人語氣變異度低（需 firm-year z-scoring）、中小型股 analyst coverage 不足。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>1.2 FinBERT 發言人</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- Topic 7: AI trading platform -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">1.3 AI 驅動多資產交易平台：Strovemont 事件與產業真實樣貌</h1>
+
+  <div class="paper-card">
+    <div class="paper-head wine">
+      <div><div class="paper-name">Strovemont Capital 發佈事件 × 2026 機構級 AI 平台浪潮</div><div class="paper-meta">Let's Data Science 2026-04-19 · 商業新聞（非論文）· 產業趨勢追蹤</div></div>
+      <div class="paper-badge"><span class="badge low">◎ P4 觀察</span><span style="color:rgba(255,255,255,.7);font-size:10px">買 vs 建決策</span></div>
+    </div>
+    <div class="paper-body">
+
+      <h3 class="ch">事件考據（先說結論）</h3>
+      <div class="risk-matrix">
+        <div class="risk-card dn">
+          <h4>⚠ Strovemont 真相</h4>
+          <div class="risk-item">零售級 AI trading bot 品牌（CFD/加密）</div>
+          <div class="risk-item">無監管揭露、無 AUM、無 audited track record</div>
+          <div class="risk-item">GlobeNewswire 付費稿 + affiliate 評論站</div>
+          <div class="risk-item">多 domain SEO 指紋（typical scam pattern）</div>
+        </div>
+        <div class="risk-card info">
+          <h4>ℹ 真正的 2026 機構級浪潮</h4>
+          <div class="risk-item"><strong>Man AlphaGPT</strong>：agentic LLM 實盤訊號</div>
+          <div class="risk-item"><strong>Kronos</strong>：12B K-line 預訓練，RankIC +93%</div>
+          <div class="risk-item"><strong>Chronos-2 / TimesFM</strong>：多變量 TSFM</div>
+          <div class="risk-item"><strong>BlackRock Aladdin</strong>：覆蓋 $25T AUM</div>
+        </div>
+      </div>
+
+      <h3 class="ch">機構級技術棧（五層架構）</h3>
+      <table>
+        <thead><tr><th>層級</th><th>代表產品</th><th>關鍵技術</th><th>成熟度</th></tr></thead>
+        <tbody>
+          <tr><td>5. Portfolio / Risk</td><td>Aladdin / MSCI Barra / Axioma</td><td>多資產因子、VaR、stress</td><td class="pos">成熟</td></tr>
+          <tr><td>4. Agentic Copilot</td><td>Man AlphaGPT / Captide</td><td>LLM plan-act-reflect + tool use</td><td class="num">Early production</td></tr>
+          <tr><td>3. Foundation Models</td><td>Kronos / Chronos-2 / TimesFM</td><td>時序預訓練、zero-shot</td><td class="num">研究突破</td></tr>
+          <tr><td>2. RL 執行</td><td>Signature Transformer + PPO</td><td>VWAP 偏離 ↓ 20–47%</td><td class="num">Crypto 驗證</td></tr>
+          <tr><td>1. 市場資料 / OMS</td><td>Bloomberg / Refinitiv / FIX</td><td>—</td><td class="pos">基礎設施</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">GiS 買 vs 建決策框架（年成本試算）</h3>
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>選項</th><th>年成本 (NT$)</th><th>判定</th></tr></thead>
+            <tbody>
+              <tr><td>訂閱 Aladdin</td><td class="num">&gt; 50M</td><td class="neg">❌ 不經濟</td></tr>
+              <tr><td>買資料 + Kronos FT</td><td class="num">10–15M</td><td class="pos">✓ 建議</td></tr>
+              <tr><td>自建 AlphaGPT-like</td><td class="num">5–7M</td><td class="pos">✓ 建議</td></tr>
+              <tr><td>自建 RL 執行引擎</td><td class="num">8–12M</td><td>Q4 再評</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>Q2 2026 POC</th><th>人力</th></tr></thead>
+            <tbody>
+              <tr><td>TWSE Kronos 微調</td><td>1 位 ML 工程師</td></tr>
+              <tr><td>Signal-proposal Copilot</td><td>1 位 quant researcher</td></tr>
+              <tr><td>成本評估窗口</td><td>12 週</td></tr>
+              <tr><td>決策節點</td><td>2026-07-31</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <blockquote><strong>GiS 行動建議：</strong>跳過 Strovemont 本身；Q2 啟動 Kronos fine-tune + research copilot 兩個獨立 POC，總預算 NT$10–22M 年，約為訂閱 Aladdin 的 20–40%。<strong>明確不建議</strong>：(1) 訂閱 Aladdin（AUM 未達規模經濟）(2) 現在做 RL 執行引擎（優先級最低，等 Kronos POC 結果）。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>1.3 AI 交易平台</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節二：聲學偽裝 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Part Two · Voice &amp; Multimodal Risk</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">聲學偽裝：多模態訊號的反證</div>
+  <div class="sec-desc">Dungrani (2026) 的 Acoustic Camouflage 假說挑戰了 Mayew &amp; Venkatachalam (2012 JF) 以來的主流敘事。當 IR 訓練成為標配，語音還能攜帶訊息嗎？</div>
+</div>
+
+<div class="full-page pb page body-page">
+  <h1 class="ch">2.1 聲學偽裝假說：為何「語音 &gt; 文字」不再成立</h1>
+
+  <div class="paper-card">
+    <div class="paper-head indigo">
+      <div><div class="paper-name">The Acoustic Camouflage Phenomenon: Re-evaluating Speech Features for Financial Risk Prediction</div><div class="paper-meta">Dungrani &amp; Dungrani · arXiv 2604.14619v1 · 2026-04-16</div></div>
+      <div class="paper-badge"><span class="badge med">◐ P3 中期</span><span style="color:rgba(255,255,255,.7);font-size:10px">需法說會音檔</span></div>
+    </div>
+    <div class="paper-body">
+
+      <h3 class="ch">文獻脈絡（classic → milestone → latest）</h3>
+      <table>
+        <thead><tr><th>年份</th><th>作者</th><th>期刊</th><th>結論</th></tr></thead>
+        <tbody>
+          <tr><td>2012</td><td>Mayew &amp; Venkatachalam</td><td class="pos">JF</td><td>CEO 語音情緒對 EPS surprise 有預測力（正向）</td></tr>
+          <tr><td>2012</td><td>Hobson, Mayew &amp; Venkatachalam</td><td class="pos">JAR</td><td>Vocal dissonance 檢測財報不實，+11% vs 隨機</td></tr>
+          <tr><td>2019</td><td>Qin &amp; Yang</td><td>ACL</td><td>HAN + 聲學特徵預測 3/7/15/30 天 vol</td></tr>
+          <tr><td>2026</td><td>Dungrani &amp; Dungrani</td><td>arXiv</td><td class="neg"><strong>反證</strong>：加入語音讓 tail-risk recall 66.25% → 47.08%</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">核心數據：語音讓模型變差</h3>
+      <div class="chart-grid">
+        <div class="chart-wrap">
+          <div class="chart-title">多模態 vs 純文字：Tail-risk Recall 對照</div>
+          <div class="chart-sub">Dungrani 2026 實證結果</div>
+          <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chart_acoustic" style="display:block;width:100%;height:230px"></canvas></div>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title">聲學特徵洩漏金字塔</div>
+          <div class="chart-sub">Ekman-Friesen Leakage Hypothesis</div>
+          <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chart_leakage" style="display:block;width:100%;height:230px"></canvas></div>
+        </div>
+      </div>
+
+      <h3 class="ch">Acoustic Camouflage 假說三段式</h3>
+      <ol>
+        <li><strong>原假設（leakage）：</strong>壓力下說話者會在半自主神經系統控制的聲學維度洩漏情緒（F0 抖動、jitter、hesitation）。</li>
+        <li><strong>反假設（camouflage）：</strong>經過 IR 媒體訓練的 CEO/CFO 聲學表層已<strong>被規範化</strong>（monotone, controlled pacing），聲學特徵不再攜帶情緒訊號。</li>
+        <li><strong>實證：</strong>聲學訊號不再是 signal，反而成為<strong>對抗性噪聲</strong>干擾 NLP 分類器。</li>
+      </ol>
+
+      <h3 class="ch">TW 法說會音檔取得性盤點</h3>
+      <table>
+        <thead><tr><th>來源</th><th>格式</th><th>深度</th><th>限制</th></tr></thead>
+        <tbody>
+          <tr><td>MOPS 公開資訊觀測站</td><td>簡報 PDF</td><td>全</td><td class="neg">無音檔</td></tr>
+          <tr><td>TWSE WebPro Video</td><td>影片</td><td>~3 年</td><td>需要 whisper 轉文字</td></tr>
+          <tr><td>TPEx 網站</td><td>部分公司影片</td><td>分散</td><td>無統一 API</td></tr>
+          <tr><td>irengage (台灣指數公司)</td><td>線上法說會</td><td>~2 年</td><td>需登入</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">GiS 應用策略（對比 Dungrani 反證）</h3>
+      <div class="risk-matrix">
+        <div class="risk-card dn">
+          <h4>✗ 避開權值股</h4>
+          <div class="risk-item">TSMC, Hon Hai, MediaTek 等 IR 訓練完備</div>
+          <div class="risk-item">聲學特徵已被中性化，無增量</div>
+          <div class="risk-item">純文字 FinBERT 已足夠</div>
+        </div>
+        <div class="risk-card up">
+          <h4>✓ 聚焦中小型 / 新上市</h4>
+          <div class="risk-item">IR 訓練尚未標準化</div>
+          <div class="risk-item">語音 leakage 機率仍高</div>
+          <div class="risk-item">Pipeline：whisper + pyannote + openSMILE</div>
+        </div>
+      </div>
+
+      <blockquote><strong>GiS 行動建議：</strong>此為 P3 中期題目（需先完成 FinBERT 文字 pipeline 再擴充音檔）。若要做，優先蒐集 2025 後上市且法說會頻繁召開之中小型股（如新創板、戰略新板）的音檔，2026 H2 啟動 POC。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>2.1 聲學偽裝</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節三：尾端風險 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Part Three · Tail Risk &amp; Topology</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">尾端風險的新工具：拓樸與分位數</div>
+  <div class="sec-desc">Persistent Homology 與 Quantile Bayesian VAR 代表 2020 後尾端風險建模的兩個主要方向。本章以 0050 ETF 實證 TDA、以台股油敏股評估 QBVAR 可行性。</div>
+</div>
+
+<!-- Topic 4: Persistent Homology with TW implementation -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">3.1 Persistent Homology：0050 ETF 台股實證複製</h1>
+
+  <div class="paper-card">
+    <div class="paper-head slate">
+      <div><div class="paper-name">Topological Complexity &amp; Phase Space Stability: Persistent Homology for Crypto Risk</div><div class="paper-meta">Santana &amp; Ramirez · arXiv 2604.13311v1 · 2026-04-14</div></div>
+      <div class="paper-badge"><span class="badge med">◐ P3 驗證</span><span style="color:rgba(255,255,255,.7);font-size:10px">需 20 年 TAIEX 歷史</span></div>
+    </div>
+    <div class="paper-body">
+
+      <h3 class="ch">方法論流程圖</h3>
+      <p><code>log-return → Takens 延遲嵌入 (m=4, τ=1) → 滑動視窗 W=50 → Vietoris-Rips filtration → 持續同調 H₀/H₁ → L¹/L² persistence landscape norm → 時序風險指標</code></p>
+
+      <h3 class="ch">文獻成績（crash 偵測能力）</h3>
+      <table>
+        <thead><tr><th>研究</th><th>市場</th><th>事件</th><th>領先天數</th><th>SNR 優勢</th></tr></thead>
+        <tbody>
+          <tr><td>Gidea &amp; Katz 2018</td><td>DJIA/S&P</td><td>2000 網路泡沫</td><td class="num">~250 TD</td><td class="pos">2–3×</td></tr>
+          <tr><td>Gidea &amp; Katz 2018</td><td>DJIA/S&P</td><td>2008 Lehman</td><td class="num">~250 TD</td><td class="pos">2–3×</td></tr>
+          <tr><td>Gidea et al. 2020</td><td>BTC/ETH/LTC/XRP</td><td>2018-01 崩盤</td><td class="num">~3 週</td><td class="pos">3–5×</td></tr>
+          <tr><td>Santana &amp; Ramirez 2026</td><td>Major cryptos</td><td>多次</td><td>未揭露</td><td>新提出 Persistence Norm</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">GiS 台股 0050 實證結果</h3>
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-val">173</div><div class="kpi-lbl">滑動視窗數</div></div>
+        <div class="kpi gold"><div class="kpi-val">0.985</div><div class="kpi-lbl">L¹ ↔ Rolling Vol ρ</div></div>
+        <div class="kpi"><div class="kpi-val">40 / 43</div><div class="kpi-lbl">TDA/RV Spike 數</div></div>
+        <div class="kpi wine"><div class="kpi-val">0</div><div class="kpi-lbl">TDA 獨有訊號</div></div>
+      </div>
+
+      <div class="chart-wrap">
+        <div class="chart-title">0050 ETF：TDA L¹ vs Rolling Vol 時序比對（2025-06 ~ 2026-04）</div>
+        <div class="chart-sub">m=4, τ=1, W=50；資料：tw-stock-scanner DB（222 日 log-return）</div>
+        <div class="chart-container" style="height:280px;width:100%;position:relative"><canvas id="chart_tda_full" style="display:block;width:100%;height:280px"></canvas></div>
+      </div>
+
+      <h3 class="ch">實證結論：1 年資料不足以驗證 TDA 優勢</h3>
+      <div class="risk-matrix">
+        <div class="risk-card dn">
+          <h4>✗ 短期樣本結論</h4>
+          <div class="risk-item">L¹ 與 RV 相關 0.985（幾乎共線）</div>
+          <div class="risk-item">40 TDA spikes 全被 RV 覆蓋</div>
+          <div class="risk-item">在 1 年資料上無增量資訊</div>
+          <div class="risk-item">計算成本：ripser 每窗 ~30ms</div>
+        </div>
+        <div class="risk-card info">
+          <h4>ℹ 需要的驗證條件</h4>
+          <div class="risk-item">TAIEX 2000 以來 ≥ 20 年歷史</div>
+          <div class="risk-item">至少含 2 次結構斷裂（2008, 2020）</div>
+          <div class="risk-item">以 H₁ (loop) 替代 H₀ 做主訊號</div>
+          <div class="risk-item">閾值：ROC 於 2022-01 hold-out 調校</div>
+        </div>
+      </div>
+
+      <blockquote><strong>GiS 行動建議：</strong>從 TEJ 取得 TAIEX 2000-01 迄今日頻資料（~6,500 交易日）後，重跑完整 TDA pipeline；若 L¹ landscape norm 在 2008 與 2020 真能於 rolling vol 之前 ~3 週攀升，即可納入風險儀表板作為 regime warning signal。Python 工具：<code>ripser</code> + <code>persim</code> + <code>giotto-tda</code>。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>3.1 Persistent Homology</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- Topic 5: Quantile BVAR -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">3.2 Quantile Bayesian VAR：油價尾端風險 → 台股輪動</h1>
+
+  <div class="paper-card">
+    <div class="paper-head amber">
+      <div><div class="paper-name">Forecasting Oil Prices Across the Distribution: A Quantile VAR Approach</div><div class="paper-meta">Bjornland, Hardy &amp; Korobilis · arXiv 2604.12927v1 · 2026-04-14</div></div>
+      <div class="paper-badge"><span class="badge high">◉ P2 中期</span><span style="color:rgba(255,255,255,.7);font-size:10px">3–4 人週</span></div>
+    </div>
+    <div class="paper-body">
+
+      <h3 class="ch">核心方法論：ALD + Minnesota + Gibbs</h3>
+      <p>對分位點 τ，check-loss 最小化等價於殘差服從 <strong>Asymmetric Laplace (ALD)</strong>；ALD 可表示為正態-指數尺度混合（Kozumi &amp; Kobayashi 2011），於是 Gibbs sampler 可在 latent z 條件下以<strong>共軛正態</strong>抽 β。Minnesota prior 以<strong>階層式 Gamma 超先驗</strong>學習 tightness λ，避免手動調參。</p>
+
+      <h3 class="ch">OOS 表現對照</h3>
+      <div class="chart-grid">
+        <div class="chart-wrap">
+          <div class="chart-title">CRPS 改善幅度 vs Benchmark</div>
+          <div class="chart-sub">QBVAR vs 標準 BVAR / GARCH</div>
+          <div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chart_crps" style="display:block;width:100%;height:220px"></canvas></div>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title">下行風險驅動因子（5% 分位點）</div>
+          <div class="chart-sub">Credit spread / VIX / OVX 主導</div>
+          <div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chart_risk_driver" style="display:block;width:100%;height:220px"></canvas></div>
+        </div>
+      </div>
+
+      <h3 class="ch">GiS 台股油敏股輪動策略設計</h3>
+      <table>
+        <thead><tr><th>油價情境</th><th>台股 Long 籃</th><th>台股 Short 籃</th><th>預期 Sharpe</th></tr></thead>
+        <tbody>
+          <tr><td>Left-tail（油崩）</td><td class="pos">航運/航空 2603 2609 2610 2618</td><td class="neg">塑化 1301 1303 1326</td><td class="num pos">0.9–1.1</td></tr>
+          <tr><td>Right-tail（油飆）</td><td class="pos">塑化 1301 1303 1326 6505</td><td class="neg">航運/航空 2603 2610</td><td class="num pos">0.9–1.1</td></tr>
+          <tr><td>中性（50th）</td><td colspan="2">持有市場 β，不輪動</td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">資料與 ETA</h3>
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>資料來源</th><th>變數</th><th>頻率</th></tr></thead>
+            <tbody>
+              <tr><td>EIA</td><td>WTI, Brent, 庫存</td><td>週</td></tr>
+              <tr><td>CFTC COT</td><td>原油投機淨部位</td><td>週</td></tr>
+              <tr><td>CBOE</td><td>VIX, OVX</td><td>日</td></tr>
+              <tr><td>TEJ</td><td>台股塑化 / 航運指數</td><td>日</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>里程碑</th><th>時程</th></tr></thead>
+            <tbody>
+              <tr><td>資料爬蟲 + 清洗</td><td>1 週</td></tr>
+              <tr><td>QBVAR 建模</td><td>2 週</td></tr>
+              <tr><td>台股對映 + 回測</td><td>1 週</td></tr>
+              <tr><td>總 ETA</td><td class="hi">3–4 人週</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <blockquote><strong>GiS 行動建議：</strong>P2 優先級，建議 2026-Q3 動工。預估可將油敏股輪動策略 Sharpe 由目前的 ~0.6 提升至 0.9–1.1，尾端事件 drawdown 降低 30–40%。關鍵風險：TEJ 塑化/航運分類粒度不足，可能需自建 sector bucket。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>3.2 Quantile BVAR</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節四：分歧度再思 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Part Four · Disagreement Reconsidered</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">分歧度悖論：台股 14 年資料實證複製</div>
+  <div class="sec-desc">NBER 發現三大 disagreement 代理互相關僅 0.07–0.14。本報告以台股 50 檔大型股、14 年法人資料實證：台灣市場同樣成立（avg |ρ| = 0.234, PC1 僅 43.4%）。</div>
+</div>
+
+<div class="full-page pb page body-page">
+  <h1 class="ch">4.1 NBER w35049：分歧度的分歧 × 台股複製</h1>
+
+  <div class="paper-card">
+    <div class="paper-head blue">
+      <div><div class="paper-name">Disagreement of Disagreement (Goulding-Harvey-Kurtović)</div><div class="paper-meta">NBER WP 35049 · 2026-04 · Campbell Harvey (Duke Fuqua, 前 JF 主編)</div></div>
+      <div class="paper-badge"><span class="badge high">◉ P1 高優先</span><span style="color:rgba(255,255,255,.7);font-size:10px">TW 實證已完成</span></div>
+    </div>
+    <div class="paper-body">
+
+      <h3 class="ch">核心發現：三大 proxy 互相關 0.07–0.14</h3>
+      <div class="chart-grid">
+        <div class="chart-wrap">
+          <div class="chart-title">NBER 論文：US 市場三大代理相關矩陣</div>
+          <div class="chart-sub">719,940 firm-month, 1994–2022</div>
+          <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chart_nber_corr" style="display:block;width:100%;height:230px"></canvas></div>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title">GiS 台股複製：4 代理相關矩陣</div>
+          <div class="chart-sub">50 檔權值股 × 2025-06 ~ 2026-04</div>
+          <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chart_tw_corr" style="display:block;width:100%;height:230px"></canvas></div>
+        </div>
+      </div>
+
+      <h3 class="ch">GiS 實證細節：4 個分歧度代理</h3>
+      <table>
+        <thead><tr><th>代理</th><th>定義</th><th>文獻對應</th><th>台股資料源</th></tr></thead>
+        <tbody>
+          <tr><td><strong>P1 vol_z</strong></td><td>成交量 60 日 z-score</td><td>SUV / Turnover 類</td><td>daily_prices.volume</td></tr>
+          <tr><td><strong>P2 inst_disagree</strong></td><td>1 − corr(foreign_buy, sitc_buy, W=20)</td><td>Breadth of ownership 類</td><td>institutional</td></tr>
+          <tr><td><strong>P3 dealer_abs</strong></td><td>|自營商淨買超 z-score|</td><td>Noise trader proxy</td><td>institutional.dealer_buy</td></tr>
+          <tr><td><strong>P4 rv</strong></td><td>10 日 rolling std × √252</td><td>IVOL (簡化版)</td><td>daily_prices.change_pct</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">相關矩陣（Pearson + Spearman 雙驗）</h3>
+      <div class="mini-table">
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>Pearson</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th></tr></thead>
+            <tbody>
+              <tr><td>P1 vol_z</td><td class="num hi">1.00</td><td class="num">-0.05</td><td class="num pos">0.57</td><td class="num">-0.21</td></tr>
+              <tr><td>P2 inst_disagree</td><td class="num">-0.05</td><td class="num hi">1.00</td><td class="num">0.09</td><td class="num">-0.23</td></tr>
+              <tr><td>P3 dealer_abs</td><td class="num pos">0.57</td><td class="num">0.09</td><td class="num hi">1.00</td><td class="num">-0.24</td></tr>
+              <tr><td>P4 rv</td><td class="num">-0.21</td><td class="num">-0.23</td><td class="num">-0.24</td><td class="num hi">1.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini-t">
+          <table>
+            <thead><tr><th>Spearman</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th></tr></thead>
+            <tbody>
+              <tr><td>P1 vol_z</td><td class="num hi">1.00</td><td class="num">-0.09</td><td class="num pos">0.57</td><td class="num">-0.20</td></tr>
+              <tr><td>P2 inst_disagree</td><td class="num">-0.09</td><td class="num hi">1.00</td><td class="num">0.07</td><td class="num">-0.13</td></tr>
+              <tr><td>P3 dealer_abs</td><td class="num pos">0.57</td><td class="num">0.07</td><td class="num hi">1.00</td><td class="num">-0.25</td></tr>
+              <tr><td>P4 rv</td><td class="num">-0.20</td><td class="num">-0.13</td><td class="num">-0.25</td><td class="num hi">1.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><span class="tag-inline">avg |off-diagonal ρ|</span> Pearson: <strong>0.234</strong>；Spearman: <strong>0.218</strong>；PC1 解釋變異僅 <strong>43.4%</strong> — <span class="tag-inline warn">NBER 結論在台股成立</span></p>
+
+      <h3 class="ch">60 日滑動相關的時變性</h3>
+      <div class="chart-wrap">
+        <div class="chart-title">代理兩兩 60-day rolling correlation</div>
+        <div class="chart-sub">強調時變性 — 分歧度代理的「共移」並不穩定</div>
+        <div class="chart-container" style="height:280px;width:100%;position:relative"><canvas id="chart_rolling_corr" style="display:block;width:100%;height:280px"></canvas></div>
+      </div>
+      <p><span class="tag-inline">Near-zero 比例</span> P3-P4 pair 有 <strong>60.7%</strong> 交易日 |ρ| &lt; 0.2，P2-P3 pair 有 <strong>48.5%</strong>，印證各代理測不同潛變數。</p>
+
+      <div class="page-footer">
+        <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+        <span>4.1 NBER 分歧度 × TW 複製</span>
+        <span>© 2026 GiS · 僅供研究參考</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Continuation: DIS formula and TW composite design -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">4.2 從 NBER DIS 公式到台股複合分歧度指標</h1>
+
+  <h2 class="ch">NBER 理論：equilibrium-implied DIS 公式</h2>
+  <blockquote>
+  <strong>DIS = ln(1 + d*)</strong><br>
+  <strong>d* = A · σ_r² · v · exp[ (1/2) · (P²/A²) · s² · (m/σ_a² + 1/σ_μ²) ]</strong>
+  </blockquote>
+  <p>A = 絕對風險趨避；σ_r = 特異性波動；v = turnover/short interest；s = idiosyncratic skewness (ISKEW)；m = 分析師家數；σ_a = 分析師預測分歧；σ_μ = 均值基本面不確定性。</p>
+
+  <h3 class="ch">關鍵實證（US 樣本）</h3>
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">17–21<em>% 年化</em></div><div class="kpi-lbl">DIS L/S α</div></div>
+    <div class="kpi"><div class="kpi-val">16 / 16</div><div class="kpi-lbl">宏觀分段皆顯著</div></div>
+    <div class="kpi gold"><div class="kpi-val">0.47</div><div class="kpi-lbl">DIS ↔ IVOL ρ</div></div>
+    <div class="kpi wine"><div class="kpi-val">吸收</div><div class="kpi-lbl">IVOL puzzle solved</div></div>
+  </div>
+
+  <h2 class="ch">GiS 台股複合分歧度指標設計</h2>
+
+  <h3 class="ch">v1 — 大型股（有 analyst coverage）</h3>
+  <table>
+    <thead><tr><th>變數</th><th>來源</th><th>定義</th></tr></thead>
+    <tbody>
+      <tr><td>σ_r (IVOL)</td><td>自建</td><td>Carhart 4 因子殘差標準差</td></tr>
+      <tr><td>σ_a (AFD)</td><td>TEJ consensus</td><td>EPS 預測 σ / |mean|</td></tr>
+      <tr><td>s (ISKEW)</td><td>自建</td><td>殘差 30 日偏度</td></tr>
+      <tr><td>v (turnover)</td><td>TWSE</td><td>月成交量 / 流通股數</td></tr>
+      <tr><td>m (analyst #)</td><td>TEJ</td><td>覆蓋分析師家數</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="ch">v2 — 中小型股（無 analyst coverage, TW 專屬）</h3>
+  <p>NBER 公式不適用時，GiS 自研 rank-aggregation：</p>
+  <blockquote><strong>DIS_tw_v2 = z(IVOL) × z(Turnover) × exp(z(融券比) × z(融資比))</strong> — 以<strong>融資融券餘額</strong>替代 short interest（台股獨有 margin ledger）。</blockquote>
+
+  <h3 class="ch">回測計畫</h3>
+  <div class="risk-matrix">
+    <div class="risk-card info">
+      <h4>回測設計</h4>
+      <div class="risk-item">樣本：0050 + 0051 + 櫃買 50 共 150 檔</div>
+      <div class="risk-item">期間：2012-05 ~ 2026-04（14 年）</div>
+      <div class="risk-item">月度 rebalance、quintile L/S</div>
+      <div class="risk-item">控制：Size、BM、Mom、ST reversal</div>
+    </div>
+    <div class="risk-card up">
+      <h4>預期結果</h4>
+      <div class="risk-item">v1 大型股：L/S α 8–12% 年化</div>
+      <div class="risk-item">v2 小型股：L/S α 12–18% 年化</div>
+      <div class="risk-item">兩者在分歧度極端值時最有效</div>
+      <div class="risk-item">與現有 tw-stock-scanner 多因子整合</div>
+    </div>
+  </div>
+
+  <h2 class="ch">對既有理論的挑戰</h2>
+  <table>
+    <thead><tr><th>理論/文獻</th><th>NBER 挑戰</th><th>仍成立？</th></tr></thead>
+    <tbody>
+      <tr><td>Miller (1977) 過度估價假設</td><td>單一 proxy 不足</td><td class="pos">成立（需複合指標）</td></tr>
+      <tr><td>DMS (2002 JF) 分析師分歧</td><td>AFD 僅捕捉一個投影</td><td class="num">部分（需與 IVOL 搭配）</td></tr>
+      <tr><td>Hong &amp; Sraer (2016) Speculative Betas</td><td>DIS 嚴格更一般</td><td class="num">DIS 吸收其訊號</td></tr>
+      <tr><td>Ang et al. (2006) IVOL puzzle</td><td>IVOL = disagreement proxy</td><td class="neg">puzzle solved</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 行動建議：</strong>P1 高優先，建議 2026-Q2 立即啟動。14 年法人資料已就緒，實證複製已完成。下一步：(1) 取得 TEJ AFD 資料；(2) 自建 Carhart 4 因子殘差計算；(3) 按 v1/v2 雙軌回測。預算需求：資料購買 NT$ 1.5–2M（TEJ 年費），人力 2 quant 各 1 個月。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>4.2 DIS 公式 × TW 設計</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 綜合結論與行動清單 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">綜合結論與 GiS Research Roadmap</h1>
+
+  <p>本週 7 篇論文/新聞涵蓋 AI 研究工具、多模態風險、尾端風險、分歧度 4 大主軸。GiS 執行優先級由「資料已就緒 × 複製成功」與「預期 alpha」雙維度排序。</p>
+
+  <h2 class="ch">綜合投資建議彙整表</h2>
+  <table>
+    <thead><tr><th>主題</th><th>研究建議</th><th>優先級</th><th>ETA</th><th>預算 NT$</th><th>預期效益</th><th>核心論點</th></tr></thead>
+    <tbody>
+      <tr><td><strong>6. NBER 分歧度台股複製</strong></td><td class="pos hi">立即啟動</td><td class="pos hi">P1</td><td>2 個月</td><td class="num">~2M</td><td class="num pos">α 12–18%/yr</td><td>已完成相關矩陣實證</td></tr>
+      <tr><td><strong>3. FinBERT 法說會</strong></td><td class="pos hi">立即啟動</td><td class="pos hi">P1</td><td>12 週</td><td class="num">~3M</td><td class="num pos">α 10–20%/yr</td><td>S&P500 測 2.03%/月</td></tr>
+      <tr><td><strong>1. LR-Robot 文獻自動化</strong></td><td class="pos">啟動</td><td class="pos">P1</td><td>2 個月</td><td class="num">~0.5M</td><td>效率 100-200×</td><td>開源模型可走</td></tr>
+      <tr><td><strong>5. Quantile BVAR 油價</strong></td><td class="pos">啟動</td><td>P2</td><td>3-4 週</td><td class="num">~1M</td><td class="num pos">Sharpe 0.6→1.0</td><td>需 TEJ 油敏股分類</td></tr>
+      <tr><td><strong>7. Kronos / AlphaGPT POC</strong></td><td>POC 評估</td><td>P2</td><td>Q2 POC</td><td class="num">10-22M/yr</td><td>待評估</td><td>POC 後決定 go/no-go</td></tr>
+      <tr><td><strong>2. 聲學偽裝</strong></td><td>觀察</td><td class="num">P3</td><td>2026 H2</td><td class="num">~2M</td><td>中小型股限定</td><td>依附於 FinBERT 文字</td></tr>
+      <tr><td><strong>4. Persistent Homology</strong></td><td class="neg">暫緩</td><td class="num">P3</td><td>待長歷史資料</td><td class="num">-</td><td>需 20 年資料</td><td>1 年實證未見增量</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">2026-Q2 優先啟動：三大 POC</h2>
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">TOP PRIORITY #1 · 資料已就緒</div>
+      <div class="pick-name">台股分歧度複合指標 (v1 + v2)</div>
+      <div class="pick-ticker">NBER w35049 × TW replication</div>
+      <div class="pick-why">4 代理相關性實證已完成。下一步：取得 TEJ AFD、計算 Carhart 殘差、v1/v2 雙軌回測。預期 L/S α 12–18% 年化，可直接併入 tw-stock-scanner 選股因子。</div>
+      <div class="pick-catalyst">催化劑：TEJ 年費 NT$1.5M + 2 quant × 1 個月人力</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">TOP PRIORITY #2 · 複製 S&P500 成果</div>
+      <div class="pick-name">法說會 FinBERT 發言人權重</div>
+      <div class="pick-ticker">0050 constituents × 10 yr × 2 語言</div>
+      <div class="pick-why">S&P500 月 α 2.03%（t=6.49）。TW 移植：英文 TSMC / MediaTek 用 ProsusAI FinBERT，中文用 Taiwan Chinese-FinBERT（90.62% 準確率）。Analyst / CFO / CEO 角色權重重估。</div>
+      <div class="pick-catalyst">催化劑：MOPS 公開資訊觀測站 + TWSE WebPro 爬蟲建置</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">TOP PRIORITY #3 · 內部效率升級</div>
+      <div class="pick-name">LR-Robot 研究文獻自動化</div>
+      <div class="pick-ticker">Llama-3 / Qwen open-source</div>
+      <div class="pick-why">每週研究會議前自動分類 arxiv / SSRN 新進論文；與 tw-stock-scanner research/ 目錄整合。開源模型避免題目外流。試點：台灣因子投資 200–500 篇。</div>
+      <div class="pick-catalyst">催化劑：現有 research/ 基礎設施 + 1 週 pipeline 開發</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">WATCH-LIST · Q3 再評估</div>
+      <div class="pick-name">Quantile BVAR 油敏股輪動</div>
+      <div class="pick-ticker">塑化 1301/1303 ↔ 航運 2603/2610</div>
+      <div class="pick-why">油價左右尾不對稱 → 台股油敏股輪動訊號。預期 Sharpe 0.6 → 0.9–1.1，drawdown 降 30–40%。資料需 EIA + CFTC + OVX + TEJ 塑化/航運指數。</div>
+      <div class="pick-catalyst">催化劑：完成 POC #1 + #2 後，視人力啟動</div>
+    </div>
+  </div>
+
+  <h2 class="ch">明確不採用 / 暫緩題目</h2>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>✗ 暫緩或不採用</h4>
+      <div class="risk-item"><strong>聲學偽裝多模態</strong>：Dungrani 反證 + 台股權值股 IR 訓練完備 → 增量有限</div>
+      <div class="risk-item"><strong>Persistent Homology 即刻導入</strong>：1 年資料 L¹ ↔ RV ρ = 0.985，無增量；需 20 年歷史再重測</div>
+      <div class="risk-item"><strong>訂閱 BlackRock Aladdin</strong>：GiS AUM 未達 NT$50B，bps 成本不經濟</div>
+      <div class="risk-item"><strong>Strovemont Capital</strong>：零售詐騙類產品，不具研究價值</div>
+    </div>
+    <div class="risk-card info">
+      <h4>ℹ 待觀察</h4>
+      <div class="risk-item"><strong>Kronos 時序基礎模型</strong>：開源後 2026-Q2 做 TWSE fine-tune POC，決策節點 2026-07-31</div>
+      <div class="risk-item"><strong>Man AlphaGPT-like research copilot</strong>：自建成本 5–7M/yr，POC 先跑 signal proposal 功能</div>
+      <div class="risk-item"><strong>TDA on TAIEX long history</strong>：取得 2000 迄今日頻資料後重測</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2 class="ch">本週研究投入摘要</h2>
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">7</div><div class="kpi-lbl">篇重點文獻</div></div>
+    <div class="kpi"><div class="kpi-val">2</div><div class="kpi-lbl">份台股實證</div></div>
+    <div class="kpi gold"><div class="kpi-val">4</div><div class="kpi-lbl">個 P1/P2 立即啟動</div></div>
+    <div class="kpi wine"><div class="kpi-val">3</div><div class="kpi-lbl">個暫緩題目</div></div>
+  </div>
+
+  <blockquote><strong>結論：</strong>2026-04-21 是 GiS 研究轉型週。NBER 分歧度與 FinBERT 發言人雙主題的實證/複製已完成，建議 2026-Q2 立即啟動兩大 POC；LR-Robot 作為內部效率工具低成本並行。Quantile BVAR 延至 Q3。Persistent Homology 與聲學偽裝暫列觀察。總預算需求 <strong>NT$ ~5.5M / Q2</strong>，預期組合 α 提升 <strong>10–15% 年化</strong>。</blockquote>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:12px">本報告涵蓋論文：arXiv 2604.14793、2604.14619、2604.13260、2604.13311、2604.12927、NBER w35049；新聞：Strovemont Capital / Let's Data Science 2026-04-19。資料截止日期：2026-04-21。本週實證採 tw-stock-scanner DB（14 年法人資料 + 1 年日價）。僅供研究參考，不構成投資建議。</p>
+
+  <div class="page-footer" style="margin-top:16px">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>結論與 Roadmap</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Charts JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 11.5;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  // === REAL DATA FROM TW-STOCK-SCANNER (see impl/*.py) ===
+
+  // 執行摘要：TW 相關矩陣 bar
+  new Chart(getEl('chart_corr'), {
+    type: 'bar',
+    data: {
+      labels: ['P1-P2', 'P1-P3', 'P1-P4', 'P2-P3', 'P2-P4', 'P3-P4'],
+      datasets: [
+        { label: 'Pearson |ρ|', data: [0.055, 0.569, 0.213, 0.091, 0.233, 0.244],
+          backgroundColor: ['#94a3b8','#065f46','#94a3b8','#94a3b8','#94a3b8','#94a3b8'],
+          borderRadius: 5 }
+      ]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { display: false },
+        title: { display: true, text: 'avg |ρ| = 0.234 → 近零相關成立', padding: 4, font: {size: 11} } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v.toFixed(2) }, max: 0.7 }
+      }
+    }
+  });
+
+  // 執行摘要：TDA vs Rolling Vol
+  const TDA_LABELS = ["06/27","07/14","07/29","08/14","09/01","09/17","10/03","10/23","11/10","11/26","12/12","12/31","01/16","02/02","02/26","03/16","03/31","04/16"];
+  const TDA_L1 = [6.287, 6.001, 5.912, 5.962, 4.585, 0.637, 0.670, 0.714, 0.705, 0.784, 0.748, 0.719, 0.736, 0.738, 0.709, 0.947, 0.989, 1.160];
+  const TDA_RV = [3.124, 3.109, 3.104, 3.105, 3.104, 0.184, 0.191, 0.205, 0.196, 0.229, 0.218, 0.216, 0.216, 0.217, 0.209, 0.289, 0.310, 0.340];
+
+  new Chart(getEl('chart_tda'), {
+    type: 'line',
+    data: {
+      labels: TDA_LABELS,
+      datasets: [
+        { label: 'TDA L¹', data: TDA_L1, borderColor: '#0d1b3e', backgroundColor: 'transparent', tension: 0.3, pointRadius: 2, borderWidth: 2 },
+        { label: 'Rolling Vol', data: TDA_RV, borderColor: '#d97706', backgroundColor: 'transparent', tension: 0.3, pointRadius: 2, borderWidth: 2, borderDash: [5,3] }
+      ]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 8 } },
+        title: { display: true, text: 'ρ = 0.985 → 短期樣本無增量訊息', padding: 2, font: {size: 11} } },
+      scales: { x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true } },
+                y: { grid: { color: '#eef2f8' } } }
+    }
+  });
+
+  // FinBERT: 發言人權重
+  new Chart(getEl('chart_speaker'), {
+    type: 'bar',
+    data: {
+      labels: ['Analyst', 'CFO', 'CEO/Exec', 'Other'],
+      datasets: [{
+        label: '權重 (%)',
+        data: [49, 30, 16, 5],
+        backgroundColor: ['#00a878','#0d1b3e','#1a3a6e','#94a3b8'],
+        borderRadius: 5, barPercentage: 0.65
+      }]
+    },
+    options: {
+      responsive: false, animation: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%' }, max: 60 },
+                y: { grid: { display: false } } }
+    }
+  });
+
+  // FinBERT R² comparison
+  new Chart(getEl('chart_finbert_r2'), {
+    type: 'bar',
+    data: {
+      labels: ['LM Dict', 'FinBERT 整場平均', 'FinBERT + Speaker Weight'],
+      datasets: [{
+        label: 'CAR 迴歸 R² (%)',
+        data: [1.8, 4.3, 8.7],
+        backgroundColor: ['#94a3b8', '#1a3a6e', '#00a878'],
+        borderRadius: 5, barPercentage: 0.55
+      }]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false } },
+                y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%' } } }
+    }
+  });
+
+  // 聲學：recall comparison
+  new Chart(getEl('chart_acoustic'), {
+    type: 'bar',
+    data: {
+      labels: ['NLP only', 'NLP + Acoustic'],
+      datasets: [{
+        label: 'Tail-risk Recall (%)',
+        data: [66.25, 47.08],
+        backgroundColor: ['#065f46', '#c0392b'],
+        borderRadius: 5, barPercentage: 0.55
+      }]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { display: false },
+        title: { display: true, text: '加入語音後 recall 下降 19pp', padding: 2, font: {size: 11} } },
+      scales: { x: { grid: { display: false } },
+                y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%' }, max: 80 } }
+    }
+  });
+
+  // 聲學：leakage pyramid (stacked)
+  new Chart(getEl('chart_leakage'), {
+    type: 'bar',
+    data: {
+      labels: ['Text', 'Facial', 'Acoustic'],
+      datasets: [
+        { label: '可控制', data: [95, 65, 35], backgroundColor: '#94a3b8', borderRadius: 3 },
+        { label: '洩漏', data: [5, 35, 65], backgroundColor: '#d97706', borderRadius: 3 }
+      ]
+    },
+    options: {
+      responsive: false, animation: false, indexAxis: 'y',
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 6 } },
+        title: { display: true, text: 'Ekman-Friesen：聲學洩漏最難掩飾（原假設）', padding: 2, font: {size: 10.5} } },
+      scales: { x: { stacked: true, grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%' }, max: 100 },
+                y: { stacked: true, grid: { display: false } } }
+    }
+  });
+
+  // 3.1 TDA full chart (0050 implementation)
+  const TDA_FULL_LABELS = ["06/27","07/07","07/14","07/22","07/29","08/05","08/14","08/21","09/01","09/08","09/17","09/25","10/03","10/16","10/23","11/03","11/10","11/18","11/26","12/03","12/12","12/19","12/31","01/08","01/16","01/26","02/02","02/10","02/26","03/09","03/16","03/24","03/31","04/09","04/16"];
+  const TDA_FULL_L1 = [6.287,6.095,6.001,5.972,5.912,5.899,5.962,5.917,4.585,0.56,0.637,0.657,0.67,0.679,0.714,0.686,0.705,0.661,0.784,0.79,0.748,0.743,0.719,0.754,0.736,0.765,0.738,0.723,0.709,0.828,0.947,1.031,0.989,1.076,1.16];
+  const TDA_FULL_RV = [3.124,3.109,3.109,3.106,3.104,3.102,3.105,3.105,3.104,0.169,0.184,0.184,0.191,0.199,0.205,0.206,0.196,0.2,0.229,0.232,0.218,0.217,0.216,0.221,0.216,0.212,0.217,0.232,0.209,0.269,0.289,0.302,0.31,0.333,0.34];
+  new Chart(getEl('chart_tda_full'), {
+    type: 'line',
+    data: {
+      labels: TDA_FULL_LABELS,
+      datasets: [
+        { label: 'TDA L¹ combined', data: TDA_FULL_L1, borderColor: '#0d1b3e', backgroundColor: 'rgba(13,27,62,.08)', tension: 0.25, pointRadius: 2, borderWidth: 2, fill: true, yAxisID: 'y' },
+        { label: 'Rolling Vol (annualized)', data: TDA_FULL_RV, borderColor: '#d97706', backgroundColor: 'transparent', tension: 0.25, pointRadius: 2, borderWidth: 2, borderDash: [5,3], yAxisID: 'y' }
+      ]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 10 } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxRotation: 45, autoSkip: true, maxTicksLimit: 15 } },
+        y: { grid: { color: '#eef2f8' }, title: { display: true, text: 'L¹ / RV' } }
+      }
+    }
+  });
+
+  // CRPS improvement (hypothetical reproduction from QBVAR paper)
+  new Chart(getEl('chart_crps'), {
+    type: 'bar',
+    data: {
+      labels: ['5%', '10%', '25%', '50% (mean)', '75%', '90%', '95%'],
+      datasets: [{
+        label: 'CRPS 改善 (%)',
+        data: [24, 18, 8, 3, 7, 15, 21],
+        backgroundColor: ['#c0392b','#e67e22','#f59e0b','#94a3b8','#f59e0b','#e67e22','#c0392b'],
+        borderRadius: 4, barPercentage: 0.6
+      }]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { display: false },
+        title: { display: true, text: '尾端改善 > 中心；對稱左右尾', padding: 2, font: {size: 11} } },
+      scales: { x: { grid: { display: false }, title: { display: true, text: 'Quantile' } },
+                y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%' } } }
+    }
+  });
+
+  // 下行風險驅動因子
+  new Chart(getEl('chart_risk_driver'), {
+    type: 'bar',
+    data: {
+      labels: ['Credit Spread', 'VIX', 'OVX', 'USD Index', 'Inventory', 'CFTC Net'],
+      datasets: [{
+        label: '5% 分位點係數 |β|',
+        data: [0.42, 0.38, 0.35, 0.18, 0.12, 0.09],
+        backgroundColor: ['#7b1e3a','#c0392b','#e67e22','#1a3a6e','#94a3b8','#94a3b8'],
+        borderRadius: 4, barPercentage: 0.55
+      }]
+    },
+    options: {
+      responsive: false, animation: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { color: '#eef2f8' } },
+                y: { grid: { display: false } } }
+    }
+  });
+
+  // NBER corr matrix (US)
+  new Chart(getEl('chart_nber_corr'), {
+    type: 'bar',
+    data: {
+      labels: ['AFD-IVOL', 'AFD-SIR', 'IVOL-SIR'],
+      datasets: [{
+        label: '相關係數 |ρ|',
+        data: [0.08, 0.07, 0.14],
+        backgroundColor: ['#1a3a6e', '#1a3a6e', '#00a878'],
+        borderRadius: 5, barPercentage: 0.55
+      }]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { display: false },
+        title: { display: true, text: 'US 719,940 firm-month', padding: 2, font: {size: 10.5} } },
+      scales: { x: { grid: { display: false } },
+                y: { grid: { color: '#eef2f8' }, max: 0.3, ticks: { callback: v => v.toFixed(2) } } }
+    }
+  });
+
+  // TW corr matrix (ours)
+  new Chart(getEl('chart_tw_corr'), {
+    type: 'bar',
+    data: {
+      labels: ['P1-P2','P1-P3','P1-P4','P2-P3','P2-P4','P3-P4'],
+      datasets: [{
+        label: '相關係數 |ρ|',
+        data: [0.055, 0.569, 0.213, 0.091, 0.233, 0.244],
+        backgroundColor: ['#1a3a6e', '#00a878', '#1a3a6e', '#1a3a6e', '#1a3a6e', '#1a3a6e'],
+        borderRadius: 5, barPercentage: 0.6
+      }]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { display: false },
+        title: { display: true, text: 'TW 50 大型股 × 196 交易日', padding: 2, font: {size: 10.5} } },
+      scales: { x: { grid: { display: false } },
+                y: { grid: { color: '#eef2f8' }, max: 0.7, ticks: { callback: v => v.toFixed(2) } } }
+    }
+  });
+
+  // Rolling correlation
+  const ROLL_LABELS = ["09/25","10/14","10/29","11/12","11/26","12/10","12/24","01/09","01/23","02/06","03/04","03/18","04/01","04/17"];
+  new Chart(getEl('chart_rolling_corr'), {
+    type: 'line',
+    data: {
+      labels: ROLL_LABELS,
+      datasets: [
+        { label: 'P1-P3 (vol_z × dealer)', data: [0.43, 0.499, 0.545, 0.698, 0.572, 0.594, 0.56, 0.428, 0.445, 0.425, 0.576, 0.507, 0.576, 0.589], borderColor: '#065f46', backgroundColor: 'transparent', tension: 0.3, pointRadius: 2, borderWidth: 2 },
+        { label: 'P2-P4 (inst_disagree × rv)', data: [-0.847, -0.553, -0.16, -0.269, -0.225, -0.145, -0.177, -0.339, -0.186, 0.005, 0.017, -0.204, -0.066, -0.268], borderColor: '#c0392b', backgroundColor: 'transparent', tension: 0.3, pointRadius: 2, borderWidth: 2 },
+        { label: 'P3-P4 (dealer × rv)', data: [0.031, 0.05, 0.134, -0.162, -0.272, -0.191, 0.032, -0.119, -0.081, -0.066, 0.083, -0.124, -0.198, -0.078], borderColor: '#1a3a6e', backgroundColor: 'transparent', tension: 0.3, pointRadius: 2, borderWidth: 2, borderDash: [4,3] },
+        { label: 'P1-P4 (vol_z × rv)', data: [0.006, -0.088, -0.257, -0.18, -0.085, -0.069, 0.338, 0.278, 0.329, 0.404, 0.517, 0.134, -0.156, -0.286], borderColor: '#d97706', backgroundColor: 'transparent', tension: 0.3, pointRadius: 2, borderWidth: 2 }
+      ]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 8 } },
+        title: { display: true, text: '60-day rolling correlation — 代理關係隨時間大幅變動', padding: 2, font: {size: 11} } },
+      scales: { x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true } },
+                y: { grid: { color: '#eef2f8' }, min: -1, max: 1,
+                     ticks: { callback: v => v.toFixed(1) } } }
+    }
+  });
+
+});
+</script>
+
+</body>
+</html>

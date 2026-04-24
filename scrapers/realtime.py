@@ -28,11 +28,43 @@ def _build_query(stock_ids_with_market):
     return '|'.join(parts)
 
 
-def is_trading_hours():
-    """檢查是否在交易時段（週一至五 09:00~13:30）"""
+def is_trading_day():
+    """
+    檢查今天是否為台股交易日。
+    先排除週末，再用 TWSE API 確認非國定假日。
+    結果快取一整天，避免重複呼叫。
+    """
+    today = datetime.now().strftime('%Y%m%d')
+
+    # 快取：同一天只查一次
+    if hasattr(is_trading_day, '_cache') and is_trading_day._cache[0] == today:
+        return is_trading_day._cache[1]
+
     now = datetime.now()
-    if now.weekday() >= 5:  # 週六日
+    if now.weekday() >= 5:
+        is_trading_day._cache = (today, False)
         return False
+
+    # 用 TWSE 當日行情 API 確認（有資料 = 有開盤）
+    try:
+        r = requests.get(
+            'https://www.twse.com.tw/exchangeReport/MI_INDEX',
+            params={'response': 'json', 'date': today, 'type': 'IND'},
+            headers=REQUEST_HEADERS, timeout=10)
+        data = r.json()
+        is_open = data.get('stat') == 'OK'
+    except Exception:
+        is_open = True  # API 失敗就假設有開盤，寧可多抓不漏抓
+
+    is_trading_day._cache = (today, is_open)
+    return is_open
+
+
+def is_trading_hours():
+    """檢查是否在交易時段（交易日 09:00~13:30）"""
+    if not is_trading_day():
+        return False
+    now = datetime.now()
     hour_min = now.hour * 100 + now.minute
     return 855 <= hour_min <= 1335  # 08:55 ~ 13:35 (含盤前盤後緩衝)
 
@@ -84,6 +116,11 @@ def fetch_realtime_prices(conn):
                 stock_id = item.get('c', '')  # 股票代號
                 if not stock_id or not stock_id.isdigit() or len(stock_id) != 4:
                     continue
+
+                # 驗證資料日期：d 欄位格式 'YYYYMMDD'，必須是今天
+                item_date = item.get('d', '')
+                if item_date and item_date != today.replace('-', ''):
+                    continue  # 非今日資料，跳過
 
                 # z=收盤/最新成交價, o=開盤, h=最高, l=最低, v=成交量(張)
                 close_price = _parse_float(item.get('z'))

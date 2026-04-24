@@ -134,11 +134,29 @@
                     </a>
                 </li>
 
-                <li class="nav-section">市場體溫</li>
+                <li class="nav-section">市場體溫投票系統</li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'position_vote' %}active{% endif %}"
+                       href="/position-vote">
+                        持股水位投票
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link {% if request.endpoint == 'regime' %}active{% endif %}"
                        href="/regime">
                         AE 體制偵測
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'credit_spread' %}active{% endif %}"
+                       href="/credit-spread">
+                        信用利差紅綠燈
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'breadth' %}active{% endif %}"
+                       href="/breadth">
+                        市場廣度
                     </a>
                 </li>
 

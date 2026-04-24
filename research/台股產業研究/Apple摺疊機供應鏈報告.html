@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 蘋果摺疊機供應鏈研究報告
+  轉 PDF 指令：
+  chrome --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="GiS_蘋果摺疊機供應鏈_研究報告.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///完整路徑/apple-foldable-supply-chain-report.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>蘋果摺疊機供應鏈研究報告 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:34px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h1.ch:first-child{margin-top:0}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+table[style*="font-size:10px"] td{padding:6px 5px}
+table[style*="font-size:10px"] th{font-size:10px;padding:8px 5px}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7;font-size:13.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+/* supply chain map */
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.sc-box{border-radius:8px;padding:16px;border:1.5px solid #c8d8f0;background:#fff}
+.sc-box h4{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid #00c896}
+.sc-item{font-size:13px;padding:4px 0;line-height:1.6;display:flex;justify-content:space-between}
+.sc-role{color:#6b7a9a;font-size:12px}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ Page 1: 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Industry Research Report &middot; Q2 2026</div>
+    <div class="cover-title">蘋果摺疊機供應鏈 —<br><em>台股八大概念股深度解析</em></div>
+    <div class="cover-subtitle">Apple Foldable iPhone Supply Chain — Hinge / Casing / Touch / Materials</div>
+    <div class="cover-tags">
+      <span class="ctag hl">新日興 3376</span>
+      <span class="ctag hl">富世達 6805</span>
+      <span class="ctag hl">達興材料 5234</span>
+      <span class="ctag">兆利 3548</span>
+      <span class="ctag">可成 2474</span>
+      <span class="ctag">鴻準 2354</span>
+      <span class="ctag">GIS-KY 6456</span>
+      <span class="ctag">TPK-KY 3673</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>8</em> 檔</div><div class="cstat-label">涵蓋個股</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2H26</em></div><div class="cstat-label">Apple 摺疊機預計時程</div></div>
+    <div class="cstat"><div class="cstat-num"><em>3</em> Buy</div><div class="cstat-label">GiS 買進評等</div></div>
+    <div class="cstat"><div class="cstat-num"><em>新日興</em></div><div class="cstat-label">GiS Top Pick</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年4月7日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 2: 投資建議彙整 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資建議彙整</h1>
+
+  <table style="font-size:12px">
+    <thead><tr><th>公司</th><th>代號</th><th>供應鏈角色</th><th>GiS 評等</th><th>目標價</th><th>現價 (4/7)</th><th>上檔空間</th><th>2025 EPS</th><th>2026F EPS</th><th>估值方法</th></tr></thead>
+    <tbody>
+      <tr><td><strong>新日興</strong></td><td>3376</td><td>轉軸</td><td class="pos hi">買進 Buy</td><td class="num hi">NT$280</td><td class="num">NT$204</td><td class="num pos hi">+37.3%</td><td class="num">1.63</td><td class="num pos">9.75</td><td>28x Fwd PE 2026F</td></tr>
+      <tr><td><strong>富世達</strong></td><td>6805</td><td>轉軸/液冷</td><td class="pos hi">買進 Buy</td><td class="num hi">NT$2,200</td><td class="num">NT$1,925</td><td class="num pos hi">+14.3%</td><td class="num">31.00</td><td class="num pos">65.00</td><td>28x Fwd PE 2027F</td></tr>
+      <tr><td><strong>達興材料</strong></td><td>5234</td><td>材料</td><td class="pos hi">買進 Buy</td><td class="num hi">NT$480</td><td class="num">NT$357</td><td class="num pos hi">+34.5%</td><td class="num">7.37</td><td class="num pos">10.00</td><td>48x Fwd PE 2026F</td></tr>
+      <tr><td><strong>兆利</strong></td><td>3548</td><td>轉軸</td><td>中立 Neutral</td><td class="num">NT$92</td><td class="num">NT$80</td><td class="num">+15.0%</td><td class="num">2.23</td><td class="num">2.27</td><td>1.0x P/B</td></tr>
+      <tr><td><strong>GIS-KY</strong></td><td>6456</td><td>觸控/光學</td><td>中立 Neutral</td><td class="num">NT$70</td><td class="num">NT$55</td><td class="num pos">+27.3%</td><td class="num neg">-0.79</td><td class="num">1.26</td><td>0.8x P/B</td></tr>
+      <tr><td><strong>TPK-KY</strong></td><td>3673</td><td>觸控</td><td>中立 Neutral</td><td class="num">NT$46</td><td class="num">NT$44.5</td><td class="num">+3.4%</td><td class="num">2.71</td><td class="num">2.50</td><td>0.5x P/B</td></tr>
+      <tr><td><strong>可成</strong></td><td>2474</td><td>機殼</td><td class="neg">減碼 UW</td><td class="num">NT$170</td><td class="num">NT$189</td><td class="num neg">-10.1%</td><td class="num">11.33</td><td class="num">12.03</td><td>殘值模型</td></tr>
+      <tr><td><strong>鴻準</strong></td><td>2354</td><td>機殼/散熱</td><td>中立 Neutral</td><td class="num">NT$62</td><td class="num">NT$51.4</td><td class="num pos">+20.6%</td><td class="num">2.32</td><td class="num">3.47</td><td>18x Fwd PE</td></tr>
+    </tbody>
+  </table>
+
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">GiS TOP PICK &middot; 買進 BUY</div>
+      <div class="pick-name">新日興</div>
+      <div class="pick-ticker">3376.TW &middot; 目標價 NT$280 &middot; 上檔 +37.3%</div>
+      <div class="pick-why">Apple 摺疊 iPhone 核心轉軸供應商。與 Apple 合作開發摺疊鉸鏈多年，2H26 量產。Goldman Sachs 預估 2026 營收 +122% YoY 至 NT$238 億。摺疊手機鉸鏈 ASP 高達 US$80，毛利率從 14% 提升至 19.5%。蘇州新廠 2Q26 完工。</div>
+      <div class="pick-catalyst">Apple 摺疊機 2H26 量產、蘇州新廠完工、NB 新品拉貨</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">GiS #2 &middot; 買進 BUY</div>
+      <div class="pick-name">富世達</div>
+      <div class="pick-ticker">6805.TW &middot; 目標價 NT$2,200 &middot; 上檔 +14.3%</div>
+      <div class="pick-why">雙引擎成長：摺疊手機鉸鏈 + AI 伺服器液冷 QD。伺服器營收佔比從 5%(2024) 飆升至 50%+(2026)。GB300/VR200 液冷 QD 出貨加速，毛利率 30-38%。Groq LPU 每機架需 384 個 QD。2026E EPS 65 元（+110% YoY）。</div>
+      <div class="pick-catalyst">GB300 Compute Tray QD 出貨、Groq LPU、Apple 摺疊機</div>
+    </div>
+  </div>
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">GiS #3 &middot; 買進 BUY</div>
+      <div class="pick-name">達興材料</div>
+      <div class="pick-ticker">5234.TW &middot; 目標價 NT$480 &middot; 上檔 +34.5%</div>
+      <div class="pick-why">PSPI 半導體先進封裝材料 + 摺疊手機顯示材料雙驅動。半導體營收佔比從 17% 升至 27%（+89% YoY），受惠 CoWoS/HBM/2nm。毛利率從 40.6% 升至 43-46%。</div>
+      <div class="pick-catalyst">PSPI 新案量產、CoWoS/HBM 需求、摺疊手機 PI 材料</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">GiS #4 &middot; 中立 NEUTRAL</div>
+      <div class="pick-name">兆利</div>
+      <div class="pick-ticker">3548.TW &middot; 目標價 NT$92 &middot; 上檔 +8.2%</div>
+      <div class="pick-why">傳統轉軸龍頭，但失去華為 Mate X7 訂單，2026 為產品空窗期。等待 Mate X8 競標結果（2Q26）與 Apple 摺疊機樣品階段推進。光通訊 MPO 為新成長動能但佔比仍低。</div>
+      <div class="pick-catalyst">Mate X8 得標、Apple 樣品推進、光通訊 MPO</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資建議彙整</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 3: 執行摘要 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">3 Buy / 4 N / 1 UW</div><div class="kpi-lbl">GiS 評等分布</div></div>
+    <div class="kpi"><div class="kpi-val">2H26</div><div class="kpi-lbl">Apple 摺疊機預計量產</div></div>
+    <div class="kpi gold"><div class="kpi-val">US$80</div><div class="kpi-lbl">摺疊鉸鏈 ASP</div></div>
+    <div class="kpi green"><div class="kpi-val">+80%</div><div class="kpi-lbl">富世達 Jan-Feb 營收 YoY</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">&#9312;</span><span><strong>Apple 摺疊 iPhone 為 2H26 最大催化劑。</strong>供應鏈訊息收斂為書本式折疊，內螢幕 ~7.8 吋、外螢幕 ~5.5 吋。Samsung Display 獨供面板，新日興為鉸鏈主供。Apple 聚焦低摺痕、高耐久、CPI 保護膜，而非追求最薄。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&#9313;</span><span><strong>轉軸供應商兩極分化。</strong>新日興（Apple 獨家合作）與富世達（摺疊機+液冷雙引擎）將大幅受惠，2026E EPS 分別成長 +498% 與 +110%。兆利則因失去華為訂單進入空窗期，EPS 從 8.73 元跌至 2.27 元。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&#9314;</span><span><strong>材料與觸控為次要受惠層。</strong>達興材料受惠 PSPI 半導體 + 摺疊 PI 材料，為跨週期成長股。GIS-KY/TPK-KY 則需等 2027-28 年 AR/VR 光學業務才有實質貢獻，短期仍在低毛利觸控業務。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">八家公司 2026F EPS 成長率</div>
+      <div class="chart-sub">來源：各券商報告、GiS 整理</div>
+      <div class="chart-container" style="height:190px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:190px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">全球摺疊手機出貨量預估</div>
+      <div class="chart-sub">來源：Counterpoint Research、TrendForce</div>
+      <div class="chart-container" style="height:190px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:190px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 4: 產業總覽章節封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One &middot; Industry Overview</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">蘋果摺疊機產業總覽</div>
+  <div class="sec-desc">Apple 首款摺疊 iPhone 預計 2H26 量產。技術方向聚焦低摺痕、高耐久、折疊區工程整合，而非追求最薄或三摺。台灣供應鏈卡位轉軸、機殼、觸控、材料四大環節。</div>
+</div>
+
+<!-- ══════════════ Page 5: 產業總覽正文 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹、Apple 摺疊機技術方向與供應鏈</h1>
+
+  <h2 class="ch">Apple 摺疊機三大技術亮點</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>技術方向</th><th>說明</th><th>vs. 競品</th></tr></thead>
+    <tbody>
+      <tr><td><strong>低摺痕顯示</strong></td><td>Samsung Display 獨供面板，摺痕控制技術領先。Apple 專利揭示折疊區支撐結構與局部減薄 UTG</td><td>Samsung Fold 系列仍可見摺痕；Apple 目標接近不可感知</td></tr>
+      <tr><td><strong>CPI 硬質保護膜</strong></td><td>評估以 CPI（透明聚醯亞胺）替代 PET，爭取更佳表面硬度與抗刮性。Kolon Industry 為候選供應商</td><td>多數競品仍用 PET，「塑膠感」為主要使用者抱怨</td></tr>
+      <tr><td><strong>折疊區工程整合</strong></td><td>不追求整片超薄 UTG，而是中央折疊區局部減薄。Lens Technology 為 UTG 主供，Corning 提供原料玻璃</td><td>HONOR/OPPO 走極限薄化（9.2mm/4.35mm），Apple 走整機耐久</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：MacRumors、The Elec、Apple 專利 US20220342450A1 / US12114451B2</span>
+
+  <h2 class="ch">Apple 摺疊機產品規格預測</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2024-2025</div><div class="tl-spec">研發驗證</div><div class="tl-tech">鉸鏈樣品<br>UTG 測試<br>面板選型</div></div>
+    <div class="tl-item active"><div class="tl-year">2H26 &larr; 量產</div><div class="tl-spec">首款摺疊 iPhone</div><div class="tl-tech">書本式 7.8"+5.5"<br>Samsung OLED<br>新日興鉸鏈</div></div>
+    <div class="tl-item next"><div class="tl-year">2027</div><div class="tl-spec">第二代</div><div class="tl-tech">翻蓋式可能<br>iPad 摺疊?<br>供應鏈擴大</div></div>
+    <div class="tl-item"><div class="tl-year">2028+</div><div class="tl-spec">AR/VR 融合</div><div class="tl-tech">摺疊+AR 眼鏡<br>Micro LED<br>光波導</div></div>
+  </div>
+
+  <h2 class="ch">台灣供應鏈定位</h2>
+  <div class="sc-grid">
+    <div class="sc-box">
+      <h4>轉軸（鉸鏈）— 價值量最高</h4>
+      <div class="sc-item"><strong>新日興 3376</strong> <span class="sc-role">Apple 鉸鏈主供，ASP ~US$80</span></div>
+      <div class="sc-item"><strong>富世達 6805</strong> <span class="sc-role">摺疊鉸鏈+伺服器液冷雙引擎</span></div>
+      <div class="sc-item"><strong>兆利 3548</strong> <span class="sc-role">華為供應商，MIM 技術</span></div>
+    </div>
+    <div class="sc-box">
+      <h4>機殼與精密機構</h4>
+      <div class="sc-item"><strong>鴻準 2354</strong> <span class="sc-role">鴻海集團，散熱/機殼</span></div>
+      <div class="sc-item"><strong>可成 2474</strong> <span class="sc-role">高階金屬加工，PC/NB 為主</span></div>
+    </div>
+    <div class="sc-box">
+      <h4>螢幕、觸控與模組</h4>
+      <div class="sc-item"><strong>GIS-KY 6456</strong> <span class="sc-role">觸控+AR/VR 光學轉型</span></div>
+      <div class="sc-item"><strong>TPK-KY 3673</strong> <span class="sc-role">觸控面板+3D列印/LiDAR</span></div>
+    </div>
+    <div class="sc-box">
+      <h4>材料</h4>
+      <div class="sc-item"><strong>達興材料 5234</strong> <span class="sc-role">PI/PSPI 材料，摺疊+半導體</span></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 產業總覽</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 5b: 競品比較 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、摺疊手機競品格局與市場規模</h1>
+
+  <h2 class="ch">主要品牌摺疊機規格比較</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>品牌/型號</th><th>形態</th><th>摺疊厚度</th><th>展開厚度</th><th>電池</th><th>鉸鏈材料</th><th>特色</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Apple (預測)</strong></td><td>書本式</td><td class="num">~9.5mm</td><td class="num">~4.5mm</td><td class="num">—</td><td>—</td><td class="hi">低摺痕、CPI、UTG 局部減薄</td></tr>
+      <tr><td><strong>Samsung Fold 6</strong></td><td>書本式</td><td class="num">12.1mm</td><td class="num">5.6mm</td><td class="num">4,400mAh</td><td>Armor 鋁</td><td>量產最成熟、第六代</td></tr>
+      <tr><td><strong>HONOR Magic V3</strong></td><td>書本式</td><td class="num hi">9.2mm</td><td class="num hi">4.35mm</td><td class="num">5,150mAh</td><td>2100MPa 鋼</td><td>業界最薄+大電池</td></tr>
+      <tr><td><strong>OPPO Find N5</strong></td><td>書本式</td><td class="num">9.2mm</td><td class="num">4.35mm</td><td class="num hi">5,600mAh</td><td>2000MPa 鋼</td><td>矽碳電池，全球最薄之一</td></tr>
+      <tr><td><strong>Huawei Mate XT</strong></td><td>三摺</td><td class="num">12.8mm</td><td class="num">3.6mm</td><td class="num">5,600mAh</td><td>—</td><td>全球首款商用三摺機</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：各品牌官方規格、供應鏈報導。Apple 數據為市場預測</span>
+
+  <h2 class="ch">全球摺疊手機出貨量與 Apple 市佔預估</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>年度</th><th>全球出貨量（百萬台）</th><th>YoY</th><th>Apple 市佔</th><th>Apple 出貨（百萬台）</th></tr></thead>
+    <tbody>
+      <tr><td>2024</td><td class="num">27</td><td class="num">—</td><td class="num">0%</td><td class="num">0</td></tr>
+      <tr><td>2025E</td><td class="num">32</td><td class="num pos">+19%</td><td class="num">0%</td><td class="num">0</td></tr>
+      <tr><td>2026F</td><td class="num hi">43</td><td class="num pos">+34%</td><td class="num hi">28%</td><td class="num hi">5-13</td></tr>
+      <tr><td>2027F</td><td class="num">55</td><td class="num pos">+28%</td><td class="num">35%</td><td class="num">15-19</td></tr>
+      <tr><td>2028F</td><td class="num">65</td><td class="num pos">+18%</td><td class="num">38%</td><td class="num">20-25</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：Counterpoint Research、TrendForce、Goldman Sachs、群益投顧</span>
+
+  <blockquote><strong>GiS 觀點：</strong>Apple 切入摺疊市場的真正意義不是「第一台摺疊 iPhone」，而是「第一台把摺疊機做得更像標準 iPhone 的摺疊機」。Apple 不會追求最薄或三摺，而是在摺痕、耐久性與軟硬體一致性上建立差異。Counterpoint 預估 Apple 首年即可拿下 28% 市佔，GS 基準假設 1,300 萬台（牛市 3,500 萬台）。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 競品格局與市場規模</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 6: 新日興 章節封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two &middot; Individual Stock Analysis</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">個股分析</div>
+  <div class="sec-desc">依供應鏈價值量排序，從轉軸（鉸鏈）→ 材料 → 機殼 → 觸控/模組，逐一分析八家概念股的財務、估值與催化劑。</div>
+</div>
+
+<!-- ══════════════ Page 7: 新日興 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">新日興</div><div class="co-ticker">3376.TW &middot; Apple 摺疊 iPhone 鉸鏈主供應商</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; 買進 Buy</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$280 | 現價 NT$204（4/7）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+37.3%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">28x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">9.75元</div><div class="co-metric-label">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">19.5%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>2026F EPS</th><th>2027F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>Goldman Sachs</td><td class="pos">Buy</td><td class="num hi">NT$332</td><td>21x 2027E PE</td><td class="num">10.87</td><td class="num">15.83</td></tr>
+          <tr><td>富邦投顧</td><td class="pos">Buy</td><td class="num">NT$300</td><td>30x 2026F PE</td><td class="num">9.75</td><td class="num">16.80</td></tr>
+          <tr><td>群益投顧</td><td class="pos">Buy</td><td class="num">NT$246</td><td>34.7x PE</td><td class="num">6.64</td><td class="num">11.93</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800">GiS</td><td style="font-weight:800;color:#00875a">Buy</td><td class="num hi" style="font-weight:800">NT$280</td><td style="font-weight:700">28x Fwd PE</td><td class="num" style="font-weight:800">9.75</td><td class="num" style="font-weight:800">15.00</td></tr>
+        </tbody>
+      </table>
+      <blockquote style="margin-top:6px;font-size:12.5px"><strong>GiS 估值邏輯：</strong>採 28x Forward PE on 2026F EPS NT$9.75（富邦估值）= NT$273，取整 NT$280。GiS EPS 採用富邦估值而非 GS 的 NT$10.87，因 GS 假設 Apple 首年 1,300 萬台偏樂觀。28x PE 介於群益 34.7x（偏高）與 GS 隱含之 20x 2027E（偏低）之間，反映摺疊機成長確定性高但 Apple 尚未正式發布的不確定性。</blockquote>
+
+      <h3 class="ch">營收結構轉型 — 摺疊手機鉸鏈成為主力</h3>
+      <table style="font-size:12px">
+        <thead><tr><th>產品線</th><th>2025</th><th>佔比</th><th>2026F</th><th>佔比</th><th>2027F</th><th>佔比</th></tr></thead>
+        <tbody>
+          <tr><td><strong>NB 鉸鏈</strong></td><td class="num">2,800M</td><td class="num">26%</td><td class="num">3,050M</td><td class="num">16%</td><td class="num">3,200M</td><td class="num">11%</td></tr>
+          <tr><td><strong>摺疊手機鉸鏈</strong></td><td class="num">890M</td><td class="num">8%</td><td class="num hi">5,800M</td><td class="num hi">30%</td><td class="num hi">11,700M</td><td class="num hi">41%</td></tr>
+          <tr><td><strong>穿戴裝置</strong></td><td class="num">5,000M</td><td class="num">47%</td><td class="num">5,400M</td><td class="num">28%</td><td class="num">5,600M</td><td class="num">20%</td></tr>
+          <tr><td>LCD/其他</td><td class="num">2,000M</td><td class="num">19%</td><td class="num">4,850M</td><td class="num">26%</td><td class="num">8,000M</td><td class="num">28%</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:700">合計</td><td class="num" style="font-weight:700">10,690M</td><td class="num">100%</td><td class="num hi" style="font-weight:700">19,100M</td><td class="num">100%</td><td class="num hi" style="font-weight:700">28,500M</td><td class="num">100%</td></tr>
+        </tbody>
+      </table>
+      <span class="src">資料來源：富邦投顧（2026/3/19）、群益投顧（2026/2/23）、GiS 整理</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>新日興 &middot; 3376 &middot; 券商比較</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 7b: 新日興 P&L ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">新日興（3376）財務數據與估值模型</h1>
+
+  <h2 class="ch">季度損益摘要</h2>
+  <table style="font-size:11px">
+    <thead><tr><th style="padding:8px 6px">項目</th><th style="text-align:right;padding:8px 6px">1Q25</th><th style="text-align:right;padding:8px 6px">2Q25</th><th style="text-align:right;padding:8px 6px">3Q25</th><th style="text-align:right;padding:8px 6px">4Q25</th><th style="text-align:right;padding:8px 6px;background:#065f46">FY25</th><th style="text-align:right;padding:8px 6px;background:#065f46">FY26F</th><th style="text-align:right;padding:8px 6px;background:#065f46">FY27F</th></tr></thead>
+    <tbody>
+      <tr><td><strong>營收（百萬）</strong></td><td class="num">2,609</td><td class="num">2,785</td><td class="num">2,963</td><td class="num">2,333</td><td class="num" style="font-weight:700">10,690</td><td class="num hi" style="font-weight:700">19,100</td><td class="num hi" style="font-weight:700">28,500</td></tr>
+      <tr><td><strong>毛利率</strong></td><td class="num">16.2%</td><td class="num">15.3%</td><td class="num">14.8%</td><td class="num">9.8%</td><td class="num">14.0%</td><td class="num hi">19.5%</td><td class="num hi">21.0%</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">5.4%</td><td class="num">3.6%</td><td class="num">2.8%</td><td class="num neg">-3.6%</td><td class="num">1.6%</td><td class="num hi">11.3%</td><td class="num hi">14.3%</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">0.72</td><td class="num" style="font-weight:700">0.53</td><td class="num" style="font-weight:700">0.45</td><td class="num neg" style="font-weight:700">-0.07</td><td class="num" style="font-weight:800">1.63</td><td class="num hi" style="font-weight:800">9.75</td><td class="num hi" style="font-weight:800">16.80</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司季報（FY25 實績）、富邦投顧（2026/3/19 預估）</span>
+
+  <h2 class="ch">三情境分析</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>情境</th><th>Apple 出貨假設</th><th>2026F EPS</th><th>PE 倍數</th><th>目標價</th></tr></thead>
+    <tbody>
+      <tr><td><strong>保守</strong></td><td>Apple 延至 2027</td><td class="num">6.64</td><td class="num">25x</td><td class="num">NT$166</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>基礎（GiS 採用）</strong></td><td>Apple 2H26, 5-8M 台</td><td class="num hi">9.75</td><td class="num">28x</td><td class="num hi">NT$280</td></tr>
+      <tr><td><strong>樂觀</strong></td><td>Apple 2H26, 13M 台</td><td class="num pos">10.87</td><td class="num">30x</td><td class="num pos">NT$332</td></tr>
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑</h4>
+      <div class="risk-item"><strong>Apple 摺疊機出貨超預期</strong> → EPS 上修 15-30%</div>
+      <div class="risk-item"><strong>第二款摺疊 iPhone（翻蓋式）</strong> → 2027 營收再跳升</div>
+      <div class="risk-item"><strong>新客戶 NB 訂單</strong> → 穩定基本盤</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險</h4>
+      <div class="risk-item"><strong>Apple 摺疊機延後至 2027</strong> → 2026 EPS 大幅下修</div>
+      <div class="risk-item"><strong>摺疊手機滲透率低於預期</strong> → 量不如預期</div>
+      <div class="risk-item"><strong>鉸鏈競爭加劇</strong> → ASP/毛利率壓力</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>新日興 &middot; 3376 &middot; 財務與估值</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 8: 富世達 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">富世達</div><div class="co-ticker">6805.TW &middot; 摺疊鉸鏈 + AI 伺服器液冷 QD 雙引擎</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; 買進 Buy</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$2,200 | 現價 NT$1,925（4/7）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+14.3%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">28x</div><div class="co-metric-label">GiS Target PE(2027F)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">65.0元</div><div class="co-metric-label">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">32%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table style="font-size:12px">
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>2026F EPS</th><th>2027F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>元大投顧</td><td class="pos">Buy</td><td class="num hi">NT$2,425</td><td>30x 2H26-1H27 PE</td><td class="num">65.48</td><td class="num">97.68</td></tr>
+          <tr><td>Daiwa</td><td class="pos">Buy</td><td class="num">NT$2,315</td><td>33x Fwd PE</td><td class="num">66.15</td><td class="num">89.95</td></tr>
+          <tr><td>永豐投顧</td><td class="pos">Buy</td><td class="num">NT$2,100</td><td>28x 2027E PE</td><td class="num">52.08</td><td class="num">74.30</td></tr>
+          <tr><td>華南投顧</td><td class="pos">Strong Buy</td><td class="num">NT$1,900</td><td>25-30x PE</td><td class="num">70.00</td><td class="num">—</td></tr>
+          <tr><td>Goldman Sachs</td><td class="pos">Buy</td><td class="num">NT$1,818</td><td>22x 2027E PE</td><td class="num">57.30</td><td class="num">82.65</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800">GiS</td><td style="font-weight:800;color:#00875a">Buy</td><td class="num hi" style="font-weight:800">NT$2,200</td><td style="font-weight:700">28x 2027F PE</td><td class="num" style="font-weight:800">65.00</td><td class="num" style="font-weight:800">80.00</td></tr>
+        </tbody>
+      </table>
+      <blockquote style="margin-top:6px;font-size:12.5px"><strong>GiS 估值邏輯：</strong>採 28x Forward PE on 2027F EPS NT$80（偏保守，低於元大 97.68 與 Daiwa 89.95）= NT$2,240，取整 NT$2,200。28x PE 反映伺服器液冷高成長（EPS CAGR 62%），但低於元大 30x，因液冷競爭者增加。2026F EPS NT$65 介於 GS 57.30 與華南 70.00 之間。</blockquote>
+
+      <h3 class="ch">營收結構 — 伺服器液冷躍升為主力</h3>
+      <table style="font-size:12px">
+        <thead><tr><th>產品線</th><th>2024</th><th>佔比</th><th>2025E</th><th>佔比</th><th>2026F</th><th>佔比</th></tr></thead>
+        <tbody>
+          <tr><td><strong>摺疊手機</strong></td><td class="num">6,759M</td><td class="num">83%</td><td class="num">7,300M</td><td class="num">58%</td><td class="num">7,665M</td><td class="num">41%</td></tr>
+          <tr><td><strong>伺服器（QD+滑軌）</strong></td><td class="num">435M</td><td class="num">5%</td><td class="num hi">4,263M</td><td class="num hi">34%</td><td class="num hi">10,018M</td><td class="num hi">54%</td></tr>
+          <tr><td>NB/其他</td><td class="num">994M</td><td class="num">12%</td><td class="num">969M</td><td class="num">8%</td><td class="num">993M</td><td class="num">5%</td></tr>
+        </tbody>
+      </table>
+      <span class="src">資料來源：Daiwa（2026/1/5）、華南投顧（2026/2/25）</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>富世達 &middot; 6805 &middot; 券商比較</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 8b: 富世達 P&L ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">富世達（6805）財務數據與估值模型</h1>
+
+  <h2 class="ch">季度損益摘要</h2>
+  <table style="font-size:11px">
+    <thead><tr><th style="padding:8px 6px">項目</th><th style="text-align:right;padding:8px 6px">1Q25</th><th style="text-align:right;padding:8px 6px">2Q25</th><th style="text-align:right;padding:8px 6px">3Q25</th><th style="text-align:right;padding:8px 6px">4Q25</th><th style="text-align:right;padding:8px 6px;background:#065f46">FY25</th><th style="text-align:right;padding:8px 6px;background:#065f46">FY26F</th><th style="text-align:right;padding:8px 6px;background:#065f46">FY27F</th></tr></thead>
+    <tbody>
+      <tr><td><strong>營收（百萬）</strong></td><td class="num">2,660</td><td class="num">2,810</td><td class="num">2,968</td><td class="num">3,976</td><td class="num" style="font-weight:700">12,414</td><td class="num hi" style="font-weight:700">18,870</td><td class="num hi" style="font-weight:700">24,559</td></tr>
+      <tr><td><strong>毛利率</strong></td><td class="num">22.9%</td><td class="num">24.1%</td><td class="num">25.8%</td><td class="num">29.0%</td><td class="num">26.3%</td><td class="num hi">33.0%</td><td class="num hi">34.0%</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">17.5%</td><td class="num">18.9%</td><td class="num">19.8%</td><td class="num">21.2%</td><td class="num">20.3%</td><td class="num hi">28.1%</td><td class="num hi">29.6%</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">6.10</td><td class="num" style="font-weight:700">7.20</td><td class="num" style="font-weight:700">7.74</td><td class="num" style="font-weight:700">10.96</td><td class="num" style="font-weight:800">31.00</td><td class="num hi" style="font-weight:800">65.00</td><td class="num hi" style="font-weight:800">80.00</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司季報（FY25 實績）、Daiwa（2026/3/5 預估）、GiS 調整</span>
+
+  <h2 class="ch">AI 伺服器液冷 — 核心成長動能</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>產品</th><th>客戶</th><th>單機架用量</th><th>毛利率</th><th>2026 展望</th></tr></thead>
+    <tbody>
+      <tr><td><strong>QD（快速接頭）</strong></td><td>GPU (NV GB300) + ASIC</td><td class="num">180→450 個</td><td class="num pos">30-38%</td><td class="pos">Compute Tray QD 2Q26 開始出貨</td></tr>
+      <tr><td><strong>滑軌（Rail Kit）</strong></td><td>2 家 Tier-1 CSP</td><td class="num">—</td><td class="num pos hi">40-50%</td><td class="pos">AI 伺服器用高強度滑軌</td></tr>
+      <tr><td><strong>Groq LPU</strong></td><td>Groq</td><td class="num">256 冷板 + 384 QD</td><td class="num pos">30%+</td><td class="pos">2026 500-1000 機架，2027 6-7K</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：元大投顧（2026/3/2）、華南投顧（2026/2/25）</span>
+
+  <blockquote><strong>GiS 觀點：</strong>富世達是本報告中唯一同時受惠「摺疊手機」與「AI 伺服器」兩大主題的公司。VR200（Vera Rubin）世代每機架 QD 用量從 180 個大增至 450 個。伺服器營收佔比從 5%（2024）躍升至 54%（2026F），毛利率從 22% 拉升至 33%。雙引擎驅動下 EPS CAGR 62%，PEG 僅 0.5x。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>富世達 &middot; 6805 &middot; 財務與估值</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 9: 達興材料 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div><div class="co-name">達興材料</div><div class="co-ticker">5234.TW &middot; PSPI 半導體材料 + 摺疊手機 PI 材料</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; 買進 Buy</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$480 | 現價 NT$357（4/7）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+34.5%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">48x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">10.0元</div><div class="co-metric-label">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">43.5%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>2026F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>兆豐投顧</td><td class="pos">Buy</td><td class="num hi">NT$500</td><td>51x PE</td><td class="num">9.79</td></tr>
+          <tr><td>元富投顧</td><td class="pos">Buy</td><td class="num hi">NT$500</td><td>33x 2027F PE</td><td class="num">10.70</td></tr>
+          <tr><td>群益投顧</td><td class="pos">Trading Buy</td><td class="num">NT$472</td><td>Fwd PE band</td><td class="num">10.03</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800">GiS</td><td style="font-weight:800;color:#00875a">Buy</td><td class="num hi" style="font-weight:800">NT$480</td><td style="font-weight:700">48x Fwd PE</td><td class="num" style="font-weight:800">10.00</td></tr>
+        </tbody>
+      </table>
+      <blockquote style="margin-top:6px;font-size:12.5px"><strong>GiS 估值邏輯：</strong>達興材料為「材料型高毛利成長股」，PE 區間 20-60x 反映高 ROE（26.7%）與低資本支出特性。GiS 採 48x Fwd PE × 2026F EPS NT$10.00 = NT$480。EPS 取群益 10.03 與元富 10.70 均值。PSPI 半導體營收 +89% YoY 為核心驅動力，摺疊手機 PI 材料為額外利多。</blockquote>
+
+      <h3 class="ch">營收結構 — 半導體 PSPI 快速崛起</h3>
+      <table style="font-size:12.5px">
+        <thead><tr><th>事業別</th><th>FY2025</th><th>佔比</th><th>FY2026F</th><th>佔比</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td><strong>顯示器材料</strong></td><td class="num">38,400M</td><td class="num">83%</td><td class="num">37,500M</td><td class="num">70%</td><td class="num">~flat</td></tr>
+          <tr><td><strong>半導體 PSPI</strong></td><td class="num hi">7,900M</td><td class="num">17%</td><td class="num hi">14,600M</td><td class="num hi">27%</td><td class="num pos hi">+89%</td></tr>
+          <tr><td>其他</td><td class="num">—</td><td class="num">—</td><td class="num">1,460M</td><td class="num">3%</td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+      <span class="src">資料來源：元富投顧（2026/3/3）、群益投顧（2026/3/2）</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>達興材料 &middot; 5234 &middot; 券商比較</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 10: 兆利 ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">兆利</div><div class="co-ticker">3548.TW &middot; 傳統轉軸 ODM &middot; 產品空窗期</div></div>
+      <div class="co-badge">
+        <span class="badge neutral">&#9673; 中立 Neutral</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$92 | 現價 NT$80（4/7）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">+15.0%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">1.0x</div><div class="co-metric-label">GiS Target P/B</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">2.27元</div><div class="co-metric-label">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">11.4%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">關鍵數據</h3>
+      <table style="font-size:12.5px">
+        <thead><tr><th>指標</th><th>FY2024</th><th>FY2025</th><th>FY2026F</th></tr></thead>
+        <tbody>
+          <tr><td><strong>營收（百萬）</strong></td><td class="num">9,578</td><td class="num">9,405</td><td class="num neg">8,008</td></tr>
+          <tr><td><strong>毛利率</strong></td><td class="num">16.6%</td><td class="num">12.0%</td><td class="num neg">11.4%</td></tr>
+          <tr><td><strong>EPS（元）</strong></td><td class="num">8.73</td><td class="num neg">2.23</td><td class="num neg">2.27</td></tr>
+          <tr><td><strong>P/B</strong></td><td class="num">2.1x</td><td class="num">0.9x</td><td class="num">0.9x</td></tr>
+        </tbody>
+      </table>
+      <blockquote><strong>GiS 觀點：</strong>兆利面臨三重壓力：(1) 失去華為 Mate X7 鉸鏈訂單，3C 營收 -22% YoY；(2) NB 摺疊第二代引入第二供應商，ASP -20%；(3) LCD 業務受中國供應鏈競爭侵蝕。EPS 從 2024 年 8.73 元暴跌至 2.27 元。雖然 Pura X2 訂單已確認（2Q26 出貨高峰），但 Mate X8 競標結果未定。Apple 摺疊機仍在樣品階段。光通訊 MPO 為唯一亮點但佔比僅 7-10%。P/B 0.9x 已反映谷底，但無明確反轉催化劑前給中立。</blockquote>
+      <span class="src">資料來源：國票投顧（2026/3/19）、統一投顧（2026/2/26）、公司法說會</span>
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div><div class="co-name">可成</div><div class="co-ticker">2474.TW &middot; 精密金屬加工 &middot; PC/NB 機殼 70%+</div></div>
+      <div class="co-badge">
+        <span class="badge sell">&#9673; 減碼 UW</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$170 | 現價 NT$189（4/7）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val dn">-10.1%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">0.7x</div><div class="co-metric-label">P/B</div></div>
+      <div class="co-metric"><div class="co-metric-val">12.03元</div><div class="co-metric-label">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">33%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <blockquote><strong>GiS 觀點：</strong>Morgan Stanley 給 Underweight，目標價 NT$160。70%+ 營收仍暴露於疲弱的 PC/NB 市場，記憶體漲價與零組件缺料壓縮 NB 供應。醫療器材（太醫收購）與航太轉型雖已啟動，但短期難以改變營收結構。ROE 僅 4.7%。4Q25 毛利率 33% 好於預期，但高 R&D 支出壓縮營益率至 13.7%。GiS 跟隨 MS 觀點，在 PC 需求明確復甦前維持減碼。</blockquote>
+      <span class="src">資料來源：Morgan Stanley（2026/3/3）、國泰證期法說會紀要（2026/1/13）</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>兆利 &middot; 可成</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 11: 鴻準 + GIS-KY ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">鴻準</div><div class="co-ticker">2354.TW &middot; 鴻海集團 &middot; 遊戲機組裝 86% + 散熱</div></div>
+      <div class="co-badge">
+        <span class="badge neutral">&#9673; 中立 Neutral</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$62 | 現價 NT$51.4（4/7）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+20.6%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">18x</div><div class="co-metric-label">Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val">3.47元</div><div class="co-metric-label">2026E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">3.6%</div><div class="co-metric-label">毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <blockquote><strong>GiS 觀點：</strong>鴻準 86% 營收來自遊戲機組裝（低毛利固定費率），散熱模組才是高毛利核心。水冷（Cold plate、Manifold）與氣冷（3D VC）已出貨，但營收佔比仍低（8.4%）。市場共識 2026E EPS +35% YoY 至 3.47 元，17-18x PE 估值合理。美國肯塔基新廠 2026 完工。摺疊機概念偏間接（金屬機殼研發能力），短期催化劑不足。中立。</blockquote>
+      <span class="src">資料來源：凱基投顧（2025/12/31）、公司法說會</span>
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head indigo">
+      <div><div class="co-name">GIS-KY 業成</div><div class="co-ticker">6456.TW &middot; 觸控面板 + AR/VR 光學轉型中</div></div>
+      <div class="co-badge">
+        <span class="badge neutral">&#9673; 中立 Neutral</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$70 | 現價 NT$55（4/7）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+52.2%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">0.8x</div><div class="co-metric-label">Target P/B</div></div>
+      <div class="co-metric"><div class="co-metric-val">1.26元</div><div class="co-metric-label">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">6.6%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <blockquote><strong>GiS 觀點：</strong>GIS-KY 核心業務（NB/平板觸控）毛利率僅 3-7%，FY2025 EPS -0.79 元。FY2026 靠業外收入（利息+匯兌 NT$10 億+）勉強轉正至 1.26 元。真正的看點是 2027-28 年 AR/VR 光學業務：Micro LED 光引擎、波導 AR、Pancake VR 鏡片、Metalens，均與 Apple 合作。但目前營收貢獻幾乎為零。OLED 觸控轉型（與 TPK 競爭）為近期催化劑。元富給目標價 NT$75，隱含 50x 2026F PE，反映 AR 期權價值。GiS 偏保守，用 0.8x P/B（BVPS NT$88.77）= NT$70。</blockquote>
+      <span class="src">資料來源：元富投顧（2026/3/29）、CTBC（2025/11/11）、公司法說會</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>鴻準 &middot; GIS-KY</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 12: TPK-KY ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">TPK-KY 宸鴻</div><div class="co-ticker">3673.TW &middot; 觸控面板 + 3D列印/LiDAR 轉型</div></div>
+      <div class="co-badge">
+        <span class="badge neutral">&#9673; 中立 Neutral</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$46 | 現價 NT$44.5（4/7）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">+3.4%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">0.5x</div><div class="co-metric-label">Target P/B</div></div>
+      <div class="co-metric"><div class="co-metric-val">2.50元</div><div class="co-metric-label">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">6.3%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">關鍵數據</h3>
+      <table style="font-size:12.5px">
+        <thead><tr><th>指標</th><th>FY2024</th><th>FY2025</th><th>FY2026F</th></tr></thead>
+        <tbody>
+          <tr><td><strong>營收（百萬）</strong></td><td class="num">68,874</td><td class="num">62,836</td><td class="num">72,000</td></tr>
+          <tr><td><strong>毛利率</strong></td><td class="num">4.2%</td><td class="num">6.3%</td><td class="num">6.3%</td></tr>
+          <tr><td><strong>EPS（元）</strong></td><td class="num">1.16</td><td class="num">2.71</td><td class="num">2.50</td></tr>
+          <tr><td><strong>殖利率</strong></td><td class="num">—</td><td class="num">4.0%</td><td class="num">~4%</td></tr>
+        </tbody>
+      </table>
+      <blockquote><strong>GiS 觀點：</strong>TPK 核心觸控業務毛利率僅 4-6%，但淨現金部位極為雄厚（NT$440 億現金），市值 NT$159 億 vs. 淨流動資產 NT$169 億，帳面價值嚴重低估。FY2025 業外收入 NT$118 億（利息+匯兌）是獲利主力。2026 定義為「轉型收穫年」：OLED 平板觸控（Apple OLED iPad 利多）、3D 列印業務（營收翻倍）、LiDAR 延伸至機器人感測、透過奕力科技（ITH）切入半導體。泰國廠 2026 年底量產。永豐升評至買進（TP NT$48），華南持有（TP NT$48）。GiS 取保守 0.5x P/B = NT$46，因核心業務轉型速度仍慢。</blockquote>
+      <span class="src">資料來源：永豐投顧（2026/3/18）、華南投顧（2026/3/25）、公司法說會（2026/3/24）</span>
+    </div>
+  </div>
+
+  <h1 class="ch" style="margin-top:24px">全供應鏈 2026F 財務比較</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>公司</th><th>代號</th><th>2026F 營收<br>(百萬)</th><th>2026F<br>毛利率</th><th>2026F<br>營益率</th><th>2026F<br>EPS</th><th>2026F<br>ROE</th><th>EPS<br>YoY</th></tr></thead>
+    <tbody>
+      <tr><td><strong>新日興</strong></td><td>3376</td><td class="num">19,100</td><td class="num hi">19.5%</td><td class="num">11.3%</td><td class="num hi">9.75</td><td class="num">10.6%</td><td class="num pos hi">+498%</td></tr>
+      <tr><td><strong>富世達</strong></td><td>6805</td><td class="num">18,870</td><td class="num hi">33.0%</td><td class="num hi">28.1%</td><td class="num hi">65.00</td><td class="num hi">50.7%</td><td class="num pos hi">+110%</td></tr>
+      <tr><td><strong>達興材料</strong></td><td>5234</td><td class="num">53,000</td><td class="num hi">43.5%</td><td class="num hi">21.0%</td><td class="num hi">10.00</td><td class="num">26.7%</td><td class="num pos">+36%</td></tr>
+      <tr><td><strong>兆利</strong></td><td>3548</td><td class="num">8,008</td><td class="num">11.4%</td><td class="num neg">1.4%</td><td class="num">2.27</td><td class="num">2.5%</td><td class="num">+2%</td></tr>
+      <tr><td><strong>可成</strong></td><td>2474</td><td class="num">19,759</td><td class="num">33.0%</td><td class="num">14.0%</td><td class="num">12.03</td><td class="num">4.7%</td><td class="num pos">+6%</td></tr>
+      <tr><td><strong>鴻準</strong></td><td>2354</td><td class="num">—</td><td class="num">3.7%</td><td class="num">1.3%</td><td class="num">3.47</td><td class="num">—</td><td class="num pos">+50%</td></tr>
+      <tr><td><strong>GIS-KY</strong></td><td>6456</td><td class="num">72,127</td><td class="num neg">6.6%</td><td class="num neg">-0.1%</td><td class="num">1.26</td><td class="num">1.4%</td><td class="num pos">轉正</td></tr>
+      <tr><td><strong>TPK-KY</strong></td><td>3673</td><td class="num">72,000</td><td class="num neg">6.3%</td><td class="num">1.1%</td><td class="num">2.50</td><td class="num">2.8%</td><td class="num neg">-8%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>TPK-KY &middot; 全供應鏈比較</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 12b: 月營收追蹤 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">月營收追蹤（2026 年 1-3 月）</h1>
+
+  <table style="font-size:12px">
+    <thead><tr><th>公司</th><th>代號</th><th>Jan 2026</th><th>Feb 2026</th><th>Mar 2026</th><th>Jan-Feb YoY</th><th>趨勢判斷</th></tr></thead>
+    <tbody>
+      <tr><td><strong>富世達</strong></td><td>6805</td><td class="num pos">14.04 億（+116%）</td><td class="num pos">11.79 億（+51%）</td><td class="num">待公告</td><td class="num pos hi">+80.5%</td><td class="pos">液冷 QD 出貨加速，3月可望再創新高</td></tr>
+      <tr><td><strong>達興材料</strong></td><td>5234</td><td class="num pos">4.12 億（+20%）</td><td class="num">3.65 億</td><td class="num pos hi">4.24 億（歷史新高）</td><td class="num pos">+8.6%</td><td class="pos">PSPI 放量，3月創歷史新高</td></tr>
+      <tr><td><strong>新日興</strong></td><td>3376</td><td class="num">8.71 億</td><td class="num neg">6.76 億（-22%）</td><td class="num">待公告</td><td class="num neg">-19.2%</td><td>谷底期，3月起 Apple NPI 帶動回升</td></tr>
+      <tr><td><strong>鴻準</strong></td><td>2354</td><td class="num pos">133.9 億（+58%）</td><td class="num">72.0 億（-23%）</td><td class="num neg">46.9 億（-61%）</td><td class="num neg">-15.6%</td><td>遊戲機週期波動大</td></tr>
+      <tr><td><strong>可成</strong></td><td>2474</td><td class="num">14.83 億（+8%）</td><td class="num neg">10.91 億（-21%）</td><td class="num">待公告</td><td class="num neg">-6.6%</td><td>PC/NB 需求疲弱</td></tr>
+      <tr><td><strong>兆利</strong></td><td>3548</td><td class="num neg">6.01 億（-24%）</td><td class="num neg">4.55 億（-45%）</td><td class="num">待公告</td><td class="num neg hi">-34.9%</td><td class="neg">Mate X7 訂單流失衝擊</td></tr>
+      <tr><td><strong>GIS-KY</strong></td><td>6456</td><td class="num pos">66.6 億（+28%）</td><td class="num">44.7 億（+8%）</td><td class="num">待公告</td><td class="num pos">+19.0%</td><td>OLED 觸控轉型帶動溫和成長</td></tr>
+      <tr><td><strong>TPK-KY</strong></td><td>3673</td><td class="num">67.0 億</td><td class="num pos">49.3 億（+19%）</td><td class="num">待公告</td><td class="num pos">+34.6%</td><td>基期低，觸控回溫</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：MOPS 月營收公告、CMoney、鉅亨網、各公司重大訊息。營收單位：新台幣。YoY 為年增率</span>
+
+  <blockquote><strong>月營收觀察：</strong>富世達 Jan-Feb 營收 +80.5% YoY 最為亮眼，驗證伺服器液冷 QD 出貨加速。達興材料 3 月營收創歷史新高，PSPI 半導體材料放量。新日興 Jan-Feb -19.2%，處於 Apple 量產前谷底，3 月起有望回升。兆利 Jan-Feb -34.9% 為最弱，反映 Mate X7 訂單流失。鴻準 3 月營收 -61% YoY 為遊戲機週期波動。GIS-KY 與 TPK-KY 均呈溫和復甦。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>月營收追蹤</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 13: 催化劑與風險 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">催化劑與風險評估</h1>
+
+  <h2 class="ch">產業關鍵催化劑</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響</th><th>受惠標的</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Apple 摺疊 iPhone 正式發布</strong></td><td>2H26</td><td class="pos">極高</td><td>新日興、富世達、達興材料</td></tr>
+      <tr><td><strong>NPI 量產驗證通過</strong></td><td>1H26</td><td class="pos">高</td><td>新日興（蘇州新廠）</td></tr>
+      <tr><td><strong>GB300/VR200 液冷出貨加速</strong></td><td>全年</td><td class="pos">高</td><td>富世達</td></tr>
+      <tr><td><strong>PSPI 半導體新案量產</strong></td><td>全年</td><td class="pos">中高</td><td>達興材料</td></tr>
+      <tr><td><strong>華為 Mate X8 訂單競標</strong></td><td>2Q26</td><td>中</td><td>兆利</td></tr>
+      <tr><td><strong>OLED iPad 觸控切換</strong></td><td>2H26</td><td>中</td><td>GIS-KY、TPK-KY</td></tr>
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>Apple 摺疊機出貨超預期（>13M 台）</strong> → 新日興/富世達 EPS 上修 20-40%</div>
+      <div class="risk-item"><strong>第二款摺疊 iPhone（翻蓋式 or iPad）</strong> → 2027 供應鏈再擴大</div>
+      <div class="risk-item"><strong>AI 伺服器 Capex 超預期</strong> → 富世達液冷訂單激增</div>
+      <div class="risk-item"><strong>PSPI 滲透率加速</strong> → 達興材料毛利率突破 45%</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>Apple 摺疊機延後至 2027</strong> → 新日興/富世達 2026 EPS 大幅下修</div>
+      <div class="risk-item"><strong>摺疊手機滲透率不如預期</strong> → 全供應鏈受壓</div>
+      <div class="risk-item"><strong>鉸鏈供應商增加</strong> → ASP/毛利率競爭</div>
+      <div class="risk-item"><strong>美中貿易/關稅升級</strong> → 供應鏈重組成本上升</div>
+      <div class="risk-item"><strong>消費性電子需求疲弱</strong> → PC/NB 相關公司承壓</div>
+    </div>
+  </div>
+
+  <blockquote><strong>GiS 風險評估：</strong>整體看多轉軸+材料、中性看待觸控/機殼。最大單一風險為 Apple 摺疊機延後。新日興與富世達的 2026 EPS 高度依賴 Apple 時程，若延後至 2027，兩者 EPS 將分別下修 ~40% 與 ~15%（富世達受惠液冷有緩衝）。追蹤重點：Apple 供應鏈驗證進度、新日興蘇州新廠產能、富世達月營收趨勢。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>催化劑與風險評估</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 14: 三情境分析 + 估值方法論 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">GiS 三情境分析</h1>
+
+  <table style="font-size:11.5px">
+    <thead><tr><th>情境</th><th>新日興 3376</th><th>富世達 6805</th><th>達興 5234</th><th>兆利 3548</th></tr></thead>
+    <tbody>
+      <tr><td><strong>保守</strong></td><td class="num">NT$166<br><span style="font-size:10px;color:#999">25x × 6.64</span></td><td class="num">NT$1,630<br><span style="font-size:10px;color:#999">25x × 65</span></td><td class="num">NT$400<br><span style="font-size:10px;color:#999">40x × 10.00</span></td><td class="num">NT$78<br><span style="font-size:10px;color:#999">0.85x P/B</span></td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>基礎（GiS）</strong></td><td class="num hi">NT$280<br><span style="font-size:10px;color:#065f46">28x × 9.75</span></td><td class="num hi">NT$2,200<br><span style="font-size:10px;color:#065f46">28x × 80 '27F</span></td><td class="num hi">NT$480<br><span style="font-size:10px;color:#065f46">48x × 10.00</span></td><td class="num">NT$92<br><span style="font-size:10px;color:#065f46">1.0x P/B</span></td></tr>
+      <tr><td><strong>樂觀</strong></td><td class="num pos">NT$332<br><span style="font-size:10px;color:#999">30x × 10.87</span></td><td class="num pos">NT$2,930<br><span style="font-size:10px;color:#999">30x × 97.68</span></td><td class="num pos">NT$550<br><span style="font-size:10px;color:#999">55x × 10.00</span></td><td class="num">NT$100<br><span style="font-size:10px;color:#999">1.1x P/B</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">估值方法論摘要</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>公司</th><th>類型</th><th>主要方法</th><th>PE/PB 區間</th><th>EPS 基準</th></tr></thead>
+    <tbody>
+      <tr><td><strong>新日興 3376</strong></td><td>高成長（摺疊機）</td><td>Forward PE on 2026F</td><td>25-30x</td><td>2026F EPS NT$9.75</td></tr>
+      <tr><td><strong>富世達 6805</strong></td><td>雙引擎高成長</td><td>Forward PE on 2027F</td><td>22-33x</td><td>2027F EPS NT$80</td></tr>
+      <tr><td><strong>達興材料 5234</strong></td><td>材料型高毛利</td><td>Forward PE（高 ROE 溢價）</td><td>40-55x</td><td>2026F EPS NT$10.00</td></tr>
+      <tr><td><strong>兆利 3548</strong></td><td>景氣谷底</td><td>P/B（EPS 波動過大）</td><td>0.85-1.1x P/B</td><td>BVPS NT$92.9</td></tr>
+      <tr><td><strong>可成 2474</strong></td><td>轉型中（高現金）</td><td>殘值模型（MS）</td><td>0.7-0.8x P/B</td><td>—</td></tr>
+      <tr><td><strong>鴻準 2354</strong></td><td>低毛利組裝</td><td>Forward PE</td><td>17-20x</td><td>2026E EPS NT$3.47</td></tr>
+      <tr><td><strong>GIS-KY 6456</strong></td><td>轉型（AR 期權）</td><td>P/B + AR 期權溢價</td><td>0.7-0.9x P/B</td><td>BVPS NT$88.77</td></tr>
+      <tr><td><strong>TPK-KY 3673</strong></td><td>低毛利（高淨現金）</td><td>P/B</td><td>0.4-0.6x P/B</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 原則：</strong>（1）鉸鏈供應商（新日興/富世達）因 Apple 摺疊機帶來結構性成長，適用 Forward PE。（2）材料股（達興材料）因高毛利+高 ROE+低 Capex 特性，歷史 PE 區間 20-60x，合理給予溢價。（3）谷底型（兆利）或轉型型（GIS-KY/TPK-KY/可成）因 EPS 不穩定，改用 P/B 錨定。（4）低毛利組裝（鴻準）用 Forward PE 但給較低倍數。</blockquote>
+
+  <hr>
+  <p style="font-size:11px;color:#9aabb5;margin-top:12px">本報告涵蓋公司：新日興（3376）、富世達（6805）、達興材料（5234）、兆利（3548）、可成（2474）、鴻準（2354）、GIS-KY（6456）、TPK-KY（3673）。資料截止日期：2026年4月7日。現價為近期收盤價。本報告僅供研究參考，不構成投資建議。財報實績來源為各公司季報及法說會，預估值來源為各券商報告及 GiS 整理。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>三情境分析 &middot; 估值方法論</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  Chart.register({
+    id: 'labelPlugin',
+    afterDatasetsDraw(chart) {
+      const ctx = chart.ctx;
+      const isH = chart.options.indexAxis === 'y';
+      chart.data.datasets.forEach((ds, i) => {
+        const meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach((bar, idx) => {
+          const v = ds.data[idx];
+          if (!v && v !== 0) return;
+          ctx.save();
+          ctx.font = 'bold 11px PingFang TC, Microsoft JhengHei, Arial';
+          ctx.textAlign = 'center';
+          if (isH) {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'middle';
+            ctx.fillText(v + '%', bar.x + 22, bar.y);
+          } else {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'bottom';
+            ctx.fillText(String(v), bar.x, bar.y - 3);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+  // Chart 1: EPS Growth Rate Bar (horizontal)
+  new Chart(getEl('chart1'), {
+    type: 'bar',
+    data: {
+      labels: ['新日興', '富世達', '達興材料', '鴻準', '可成', '兆利', 'GIS-KY', 'TPK-KY'],
+      datasets: [{
+        label: '2026F EPS YoY 成長率 (%)',
+        data: [498, 110, 36, 35, 15, 2, 100, -8],
+        backgroundColor: ['#00c896','#00c896','#00a878','#6b7a9a','#6b7a9a','#6b7a9a','#3b82f6','#c0392b'],
+        borderRadius: 4,
+        barPercentage: 0.55
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#eef2f8' }, max: 550 },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  // Chart 2: Foldable Phone Shipments
+  new Chart(getEl('chart2'), {
+    type: 'bar',
+    data: {
+      labels: ['2024', '2025E', '2026F', '2027F', '2028F'],
+      datasets: [
+        { label: '其他品牌 (M)', data: [27, 32, 30, 36, 40], backgroundColor: '#1a3a6e', borderRadius: 5, barPercentage: 0.7, categoryPercentage: 0.75 },
+        { label: 'Apple (M)', data: [0, 0, 13, 19, 25], backgroundColor: '#00c896', borderRadius: 5, barPercentage: 0.7, categoryPercentage: 0.75 }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, grid: { color: '#eef2f8' }, ticks: { callback: v => v + 'M' } }
+      }
+    }
+  });
+
+}); // end window.load
+</script>
+</body>
+</html>

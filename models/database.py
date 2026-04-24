@@ -112,6 +112,27 @@ def init_db():
             updated_at TEXT DEFAULT CURRENT_TIMESTAMP
         );
 
+        CREATE TABLE IF NOT EXISTS credit_spread_history (
+            date TEXT PRIMARY KEY,
+            hyg_shy_ratio REAL NOT NULL,
+            indicator_value REAL NOT NULL,
+            signal TEXT NOT NULL,
+            spy_close REAL DEFAULT 0,
+            trend5d REAL DEFAULT 0,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS macro_indicators (
+            date TEXT NOT NULL,
+            indicator TEXT NOT NULL,
+            value REAL NOT NULL,
+            signal TEXT DEFAULT 'NEUTRAL',
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (date, indicator)
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_macro_date ON macro_indicators(date);
+        CREATE INDEX IF NOT EXISTS idx_macro_indicator ON macro_indicators(indicator);
         CREATE INDEX IF NOT EXISTS idx_daily_prices_date ON daily_prices(date);
         CREATE INDEX IF NOT EXISTS idx_breakouts_date ON breakouts(date);
         CREATE INDEX IF NOT EXISTS idx_institutional_date ON institutional(date);
@@ -227,8 +248,11 @@ def get_institutional_ranking(conn, inst_type, days, date, market=None, limit=50
     if col not in ALLOWED_COLUMNS:
         raise ValueError(f"Invalid institutional column: {col}")
 
-    # 取最近 N 個交易日
-    dates = get_trading_dates(conn, days)
+    # 從 institutional 表取基準日往回 N 個交易日
+    dates = [r['date'] for r in conn.execute(
+        "SELECT DISTINCT date FROM institutional WHERE date <= ? ORDER BY date DESC LIMIT ?",
+        (date, days)
+    ).fetchall()]
     if not dates:
         return [], []
 
@@ -373,3 +397,60 @@ def get_latest_regime(conn):
         LIMIT 1
     """).fetchone()
     return row
+
+
+# ===== Credit Spread =====
+
+def upsert_credit_spread(conn, date, hyg_shy_ratio, indicator_value, signal, spy_close=0, trend5d=0):
+    conn.execute("""
+        INSERT INTO credit_spread_history (date, hyg_shy_ratio, indicator_value, signal, spy_close, trend5d)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ON CONFLICT(date) DO UPDATE SET
+            hyg_shy_ratio=excluded.hyg_shy_ratio,
+            indicator_value=excluded.indicator_value,
+            signal=excluded.signal,
+            spy_close=excluded.spy_close,
+            trend5d=excluded.trend5d,
+            updated_at=CURRENT_TIMESTAMP
+    """, (date, hyg_shy_ratio, indicator_value, signal, spy_close, trend5d))
+
+
+def get_credit_spread_history(conn, limit=500):
+    rows = conn.execute("""
+        SELECT date, hyg_shy_ratio, indicator_value, signal, spy_close, trend5d
+        FROM credit_spread_history
+        ORDER BY date DESC
+        LIMIT ?
+    """, (limit,)).fetchall()
+    return rows
+
+
+# ===== Macro Indicators =====
+
+def upsert_macro(conn, date, indicator, value, signal='NEUTRAL'):
+    conn.execute("""
+        INSERT INTO macro_indicators (date, indicator, value, signal)
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT(date, indicator) DO UPDATE SET
+            value=excluded.value,
+            signal=excluded.signal,
+            updated_at=CURRENT_TIMESTAMP
+    """, (date, indicator, value, signal))
+
+
+def get_macro_latest(conn, indicator):
+    row = conn.execute("""
+        SELECT date, value, signal FROM macro_indicators
+        WHERE indicator = ?
+        ORDER BY date DESC LIMIT 1
+    """, (indicator,)).fetchone()
+    return row
+
+
+def get_macro_history(conn, indicator, limit=500):
+    rows = conn.execute("""
+        SELECT date, value, signal FROM macro_indicators
+        WHERE indicator = ?
+        ORDER BY date DESC LIMIT ?
+    """, (indicator, limit)).fetchall()
+    return rows

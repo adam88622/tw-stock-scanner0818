@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 每週技術研究周報（含實作驗證）
+  2026-04-08 | W15
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>技術研究周報 W15（實作版）| GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.full-page{display:flex;flex-direction:column}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* cover */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:40px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:17px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+/* section divider */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:13px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:16px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* body */
+.body-page{padding:32px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:24px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 14px;page-break-after:avoid}
+h2.ch{font-size:20px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:17px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* table */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:12px 14px;text-align:left;font-weight:600;font-size:14.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:10px 14px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:15px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+td.mid{color:#d97706;font-weight:600}
+
+/* kpi */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.red{background:linear-gradient(135deg,#7b2020,#c0392b)}
+.kpi-val{font-size:24px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:14px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:13.5px;opacity:.7;letter-spacing:.5px}
+
+/* exec summary */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:16.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:24px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* chart */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:14px;margin:10px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:16px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:14px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* verdict */
+.verdict{border-radius:8px;padding:14px 18px;margin:10px 0;font-size:15.5px;line-height:1.7}
+.verdict.go{background:#e8f5ee;border-left:4px solid #00c896;color:#065f46}
+.verdict.skip{background:#fdf0ef;border-left:4px solid #e74c3c;color:#7b2020}
+.verdict.study{background:#eff6ff;border-left:4px solid #3b82f6;color:#1e40af}
+.verdict.wait{background:#fffbeb;border-left:4px solid #f59e0b;color:#78350f}
+.verdict.fail{background:#fdf0ef;border-left:4px solid #e74c3c;color:#7b2020}
+
+/* risk */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:15px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* misc */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:22px;margin:7px 0 11px}
+li{margin:5px 0;line-height:1.7;font-size:15.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:12px 16px;margin:12px 0;color:#1a3a6e;font-size:16px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:13px;color:#9aabb5;display:block;margin-top:6px}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:13px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:16px}
+.footer-logo em{color:#00c896;font-style:normal}
+.code-block{background:#1a1a2e;color:#e0e0e0;padding:14px 18px;border-radius:8px;font-family:'Consolas','Courier New',monospace;font-size:13.5px;line-height:1.6;overflow-x:auto;margin:10px 0}
+.code-block .comment{color:#6b7a9a}
+.code-block .val{color:#00c896}
+.code-block .neg-val{color:#e74c3c}
+</style>
+</head>
+<body>
+
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI 量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Weekly Tech Research &middot; W15 2026 &middot; WITH EXPERIMENTS</div>
+    <div class="cover-title">前沿技術周報<br><em>實作驗證版</em></div>
+    <div class="cover-subtitle">7 Topics Evaluated: Code Run, Data Collected, Results Measured</div>
+    <div class="cover-tags">
+      <span class="ctag hl">TimesFM 實測</span>
+      <span class="ctag hl">VibeVoice 實測</span>
+      <span class="ctag">BCR</span>
+      <span class="ctag">AI-Scientist-v2</span>
+      <span class="ctag">ActionParty</span>
+      <span class="ctag">Omni123</span>
+      <span class="ctag">VOID</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>7</em></div><div class="cstat-label">研究主題</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2</em></div><div class="cstat-label">實際跑過程式</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2,500</em></div><div class="cstat-label">TimesFM 預測筆數</div></div>
+    <div class="cstat"><div class="cstat-num"><em>0</em></div><div class="cstat-label">可直接用於交易</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 4 月 8 日</span>
+    <span>GPU：NVIDIA RTX 5090 32GB</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi red"><div class="kpi-val">-4.9%<em> R&sup2;</em></div><div class="kpi-lbl">TimesFM 台股報酬預測</div></div>
+    <div class="kpi red"><div class="kpi-val">46.4%</div><div class="kpi-lbl">TimesFM 方向準確率</div></div>
+    <div class="kpi gold"><div class="kpi-val">N/A</div><div class="kpi-lbl">VibeVoice 無法載入</div></div>
+    <div class="kpi"><div class="kpi-val">4<em>/7</em></div><div class="kpi-lbl">無法在本機執行</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">&#9312;</span><span><strong>TimesFM 零樣本台股預測全面失敗。</strong>5 檔標的日頻報酬 R&sup2; 均為負（-0.04 ~ -0.07），方向準確率 44-49%（比擲硬幣差），波動率預測 R&sup2;&asymp;0（EWMA 完勝 0.21-0.28）。實驗用 500 個交易日、RTX 5090 GPU、每檔 &lt;2 秒完成。<u>這是本週最核心的實證發現。</u></span></div>
+    <div class="exec-thesis"><span class="thesis-num">&#9313;</span><span><strong>VibeVoice ASR 號稱開源但實際無法使用。</strong>HuggingFace 上有權重（7B, 585K downloads），但 transformers 不支援 vibevoice model type，repo 中無 modeling code，Microsoft 主 repo 和社群 fork 均需認證或不存在。這是「假開源」的典型案例。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&#9314;</span><span><strong>7 項中只有 TimesFM 真正跑通並產出數據。</strong>其餘受限於：模型未真正開源（VibeVoice）、無 API key（BCR/AI-Scientist）、需要 Linux（AI-Scientist）、VRAM 不足（VOID 40GB+）、零金融相關（ActionParty/Omni123）。</span></div>
+  </div>
+
+  <h2 class="ch">實作結果總覽</h2>
+  <table>
+    <thead><tr><th>#</th><th>主題</th><th>能否安裝</th><th>能否執行</th><th>實際結果</th><th>金融可用</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">1</td><td><strong>TimesFM 2.5</strong></td><td class="pos">pip + HF</td><td class="pos">GPU 推理成功</td><td class="neg">R&sup2; &lt; 0, 方向 &lt; 50%</td><td class="neg hi">不可用</td></tr>
+      <tr><td>2</td><td><strong>VibeVoice ASR</strong></td><td class="neg">模型類型不支援</td><td class="neg">無法載入</td><td class="mid">權重存在但無法用</td><td class="mid">待觀察</td></tr>
+      <tr><td>3</td><td><strong>BCR</strong></td><td class="mid">無程式碼</td><td class="mid">概念可行</td><td>-</td><td class="mid">理論有用</td></tr>
+      <tr><td>4</td><td><strong>AI-Scientist-v2</strong></td><td class="pos">repo 已 clone</td><td class="neg">需 Linux + API key</td><td>-</td><td class="mid">架構參考</td></tr>
+      <tr><td>5</td><td>ActionParty</td><td class="mid">Melting Pot 有衝突</td><td class="neg">需多 A100</td><td>-</td><td class="neg">零相關</td></tr>
+      <tr><td>6</td><td>Omni123</td><td class="neg">未開源</td><td class="neg">256x H100</td><td>-</td><td class="neg">零相關</td></tr>
+      <tr><td>7</td><td>VOID</td><td class="pos">Netflix 開源</td><td class="neg">需 40GB+ VRAM</td><td>-</td><td class="neg">零相關</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ TimesFM 實驗章節 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">&#22777;</div>
+  <div class="sec-eyebrow">Experiment #1 &middot; Actual Results</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">TimesFM 2.5<br>台股零樣本預測實驗</div>
+  <div class="sec-desc">231M 參數、512 天 context、5 檔台股標的、500 個交易日測試。結論：完全無法用於金融預測。</div>
+</div>
+
+<!-- TimesFM 報酬預測結果 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">壹、TimesFM 台股零樣本預測 &mdash; 實驗數據</h1>
+
+  <h2 class="ch">實驗設定</h2>
+  <div class="code-block">
+<span class="comment"># 實驗環境</span>
+Model:    google/timesfm-2.5-200m-pytorch (<span class="val">231M params</span>)
+GPU:      NVIDIA RTX 5090 (<span class="val">32GB VRAM</span>)
+Context:  <span class="val">512</span> trading days
+Test:     <span class="val">500</span> trading days (latest)
+Targets:  0050.TW, 2330.TW, 2317.TW, 2454.TW, ^TWII
+Period:   2020-01-02 ~ 2026-04-02 (<span class="val">1,513</span> returns)
+Speed:    <span class="val">~1.6 sec / 500 predictions</span> (batched, GPU)
+  </div>
+
+  <h2 class="ch">日頻報酬預測結果</h2>
+  <table>
+    <thead><tr><th>標的</th><th>TimesFM R&sup2;</th><th>AR(0) R&sup2;</th><th>Mean R&sup2;</th><th>TFM 方向</th><th>AR(0) 方向</th><th>Mean 方向</th></tr></thead>
+    <tbody>
+      <tr><td><strong>元大台灣50</strong></td><td class="neg num">-0.0493</td><td class="neg num">-1.0147</td><td class="neg num">-0.0027</td><td class="num">49.4%</td><td class="num">49.2%</td><td class="pos num">53.8%</td></tr>
+      <tr><td><strong>台積電</strong></td><td class="neg num">-0.0446</td><td class="neg num">-1.1549</td><td class="neg num">-0.0023</td><td class="neg num">46.0%</td><td class="neg num">39.4%</td><td class="num">50.0%</td></tr>
+      <tr><td><strong>鴻海</strong></td><td class="neg num">-0.0652</td><td class="neg num">-0.8120</td><td class="neg num">-0.0049</td><td class="neg num">45.8%</td><td class="num">46.6%</td><td class="num">51.0%</td></tr>
+      <tr><td><strong>聯發科</strong></td><td class="neg num">-0.0489</td><td class="neg num">-0.8936</td><td class="neg num">-0.0027</td><td class="neg num">44.2%</td><td class="neg num">41.4%</td><td class="neg num">45.0%</td></tr>
+      <tr><td><strong>加權指數</strong></td><td class="neg num">-0.0539</td><td class="neg num">-1.0233</td><td class="neg num">-0.0026</td><td class="num">48.8%</td><td class="num">50.6%</td><td class="pos num">55.6%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">R&sup2; &lt; 0 表示模型預測比「預測均值」更差。方向準確率 50% = 隨機。AR(0) = 預測昨天報酬。Mean = 預測過去 512 天均值。</span>
+
+  <div class="verdict fail">
+    <strong>核心發現：TimesFM 零樣本在台股上全面失敗。</strong><br>
+    &bull; R&sup2; 全部為負（-0.04 ~ -0.07），代表「直接猜均值都比 TimesFM 準」<br>
+    &bull; 方向準確率 44-49%，比擲硬幣（50%）還差<br>
+    &bull; 最簡單的 Mean baseline 在方向準確率上反而最好（45-56%）<br>
+    &bull; 有趣的是，AR(0) 的 R&sup2; 比 TimesFM 更差 —— 兩者都不行，但 AR(0) 更離譜
+  </div>
+
+  <h2 class="ch">多空策略回測</h2>
+  <table>
+    <thead><tr><th>標的</th><th>Sharpe</th><th>年化報酬</th><th>累積報酬</th></tr></thead>
+    <tbody>
+      <tr><td><strong>元大台灣50</strong></td><td class="pos num">0.313</td><td class="pos num">+8.12%</td><td class="pos num">+9.8%</td></tr>
+      <tr><td><strong>台積電</strong></td><td class="num">0.016</td><td class="num">+0.54%</td><td class="neg num">-9.8%</td></tr>
+      <tr><td><strong>鴻海</strong></td><td class="neg num">-0.163</td><td class="neg num">-6.65%</td><td class="neg num">-25.8%</td></tr>
+      <tr><td><strong>聯發科</strong></td><td class="num">0.065</td><td class="num">+2.69%</td><td class="neg num">-10.8%</td></tr>
+      <tr><td><strong>加權指數</strong></td><td class="neg num">-0.345</td><td class="neg num">-8.32%</td><td class="neg num">-20.0%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">策略：TimesFM 預測為正則做多，為負則做空。Sharpe = (mean return / std) * sqrt(252)。</span>
+
+  <p><strong>解讀：</strong>只有元大台灣50勉強正報酬（Sharpe 0.31），但這很可能是因為牛市期間 long bias 碰巧獲利。其餘 4 檔標的的多空策略都虧損。加權指數虧最多（-20%），說明 TimesFM 的預測方向與實際走勢系統性相反。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; TimesFM 實驗</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- TimesFM 波動率 + 圖表 -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">壹（續）、波動率預測 &amp; 視覺化</h1>
+
+  <h2 class="ch">5 日實現波動率預測</h2>
+  <table>
+    <thead><tr><th>標的</th><th>TimesFM R&sup2;</th><th>EWMA(20) R&sup2;</th><th>TimesFM MAE</th><th>EWMA MAE</th></tr></thead>
+    <tbody>
+      <tr><td><strong>元大台灣50</strong></td><td class="neg num">0.0001</td><td class="pos num hi">0.2632</td><td class="num">0.0885</td><td class="pos num">0.0822</td></tr>
+      <tr><td><strong>台積電</strong></td><td class="neg num">0.0010</td><td class="pos num hi">0.2128</td><td class="num">0.1087</td><td class="pos num">0.1066</td></tr>
+      <tr><td><strong>鴻海</strong></td><td class="neg num hi">-0.2722</td><td class="pos num hi">0.2247</td><td class="neg num">0.1532</td><td class="pos num">0.1238</td></tr>
+      <tr><td><strong>聯發科</strong></td><td class="neg num">-0.0250</td><td class="pos num hi">0.2210</td><td class="num">0.1312</td><td class="pos num">0.1168</td></tr>
+      <tr><td><strong>加權指數</strong></td><td class="neg num">-0.0044</td><td class="pos num hi">0.2802</td><td class="num">0.0796</td><td class="pos num">0.0767</td></tr>
+    </tbody>
+  </table>
+
+  <div class="verdict fail">
+    <strong>波動率預測同樣失敗。</strong>TimesFM R&sup2; 在 -0.27 ~ 0.001 之間，基本為零或為負。而 EWMA(20) 這個最簡單的指數加權移動平均，R&sup2; 穩定在 0.21-0.28。<strong>一個沒有任何學習能力的統計公式，完勝 231M 參數的預訓練模型。</strong>
+  </div>
+
+  <!-- R² 對比圖表 -->
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">報酬預測 R&sup2; 對比</div>
+      <div class="chart-sub">TimesFM vs Mean Baseline（越高越好，0 = 隨機）</div>
+      <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chart_r2" style="display:block;width:100%;height:260px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">波動率預測 R&sup2; 對比</div>
+      <div class="chart-sub">TimesFM vs EWMA(20)（越高越好）</div>
+      <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chart_vol" style="display:block;width:100%;height:260px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">為什麼 TimesFM 在金融資料上失敗？</h2>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>失敗原因分析</h4>
+      <div class="risk-item"><strong>1. 信噪比極低：</strong>日頻股票報酬的 noise 遠大於 signal，預訓練時學到的 pattern（天氣、銷售等有規律的序列）不適用</div>
+      <div class="risk-item"><strong>2. 非平穩性：</strong>金融報酬的分佈隨時間劇烈變化（regime change），TimesFM 假設資料分佈穩定</div>
+      <div class="risk-item"><strong>3. 單變量限制：</strong>股價受無數外部因子驅動，單靠歷史價格序列預測本質上是弱信號</div>
+      <div class="risk-item"><strong>4. 預訓練偏差：</strong>100B 時間點的預訓練語料以能源、天氣、零售等「有模式」的序列為主</div>
+    </div>
+    <div class="risk-card up">
+      <h4>後續值得測試</h4>
+      <div class="risk-item"><strong>1. 波動率聚類序列：</strong>GARCH 殘差 或 realized vol 可能有更強的自相關</div>
+      <div class="risk-item"><strong>2. 分鐘頻/tick 頻：</strong>高頻資料 mean-reversion 更明確，可能更適合 TSFM</div>
+      <div class="risk-item"><strong>3. 成交量序列：</strong>成交量有日內/週內週期性，符合 TSFM 預訓練分佈</div>
+      <div class="risk-item"><strong>4. Fine-tune：</strong>在台股資料上繼續訓練，測 marginal improvement</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; TimesFM 實驗（續）</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ VibeVoice 實測 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">貳、VibeVoice ASR 實測 &mdash; 假開源的教訓</h1>
+
+  <h2 class="ch">實測過程</h2>
+  <div class="code-block">
+<span class="comment"># Step 1: 模型確認存在</span>
+HuggingFace ID: microsoft/VibeVoice-ASR
+Downloads:      <span class="val">585,324</span>
+Pipeline:       automatic-speech-recognition
+Files:          config.json + 8x model.safetensors (~14GB total)
+Architecture:   VibeVoiceForASRTraining (7B, based on Qwen2 3584-hidden)
+
+<span class="comment"># Step 2: 嘗試載入</span>
+transformers==5.6.0.dev0 (from GitHub main)
+AutoModel.from_pretrained("microsoft/VibeVoice-ASR")
+<span class="neg-val">ERROR: model type `vibevoice` not recognized by Transformers</span>
+
+<span class="comment"># Step 3: 檢查是否有 custom modeling code</span>
+Repo files: config.json, model-*.safetensors, README.md, figures/
+<span class="neg-val">NO modeling_vibevoice.py found</span>
+<span class="neg-val">NO tokenizer files found</span>
+
+<span class="comment"># Step 4: 檢查替代來源</span>
+microsoft/VibeVoice     → <span class="neg-val">401 Repository Not Found (private/gated)</span>
+vibevoice-community/*   → <span class="neg-val">401 Repository Not Found</span>
+  </div>
+
+  <div class="verdict fail">
+    <strong>結論：VibeVoice ASR 目前無法使用。</strong><br>
+    &bull; 權重公開在 HuggingFace（14GB），但缺少 modeling code（模型定義的 Python 類）<br>
+    &bull; transformers 官方尚未 merge vibevoice model type<br>
+    &bull; Microsoft 主 repo 需要認證存取，社群 fork 也不存在<br>
+    &bull; 這是「看起來開源但實際上無法使用」的典型案例<br>
+    <strong>建議：</strong>等 transformers 正式支援 vibevoice 後再評估。或等 Microsoft 開放主 repo 的程式碼。
+  </div>
+
+  <h2 class="ch">與 Whisper 的對比</h2>
+  <table>
+    <thead><tr><th>比較項目</th><th>Whisper (OpenAI)</th><th>VibeVoice ASR (MS)</th></tr></thead>
+    <tbody>
+      <tr><td>實際可用</td><td class="pos">立即可用</td><td class="neg">無法載入</td></tr>
+      <tr><td>說話者分離</td><td class="neg">不支援</td><td class="pos">支援（理論上）</td></tr>
+      <tr><td>中文支援</td><td class="pos">支援</td><td class="pos">支援（理論上）</td></tr>
+      <tr><td>即時串流</td><td class="neg">不支援</td><td class="pos">300ms（理論上）</td></tr>
+      <tr><td>模型大小</td><td>1.5B (large-v3)</td><td>7B</td></tr>
+      <tr><td>授權</td><td>MIT</td><td>MIT</td></tr>
+    </tbody>
+  </table>
+  <p><strong>實際建議：</strong>在 VibeVoice 真正可用之前，法說會轉錄應使用 Whisper large-v3 + pyannote（說話者分離）的組合方案，這是目前真正能跑的選擇。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; VibeVoice ASR</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 其餘五項 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">參、其餘五項可行性實測</h1>
+
+  <table>
+    <thead><tr><th>項目</th><th>安裝嘗試</th><th>執行嘗試</th><th>阻擋因素</th><th>結論</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>BCR</strong><br><span style="font-size:13px;color:#6b7a9a">Batched Contextual RL</span></td>
+        <td class="neg">無程式碼</td>
+        <td class="neg">無 API key</td>
+        <td>論文無開源、本機無 Anthropic/OpenAI API key</td>
+        <td class="mid">等程式碼釋出</td>
+      </tr>
+      <tr>
+        <td><strong>AI-Scientist-v2</strong><br><span style="font-size:13px;color:#6b7a9a">SakanaAI</span></td>
+        <td class="pos">repo 已 clone</td>
+        <td class="neg">需 Linux + API</td>
+        <td>Windows 不支援、需 OpenAI/Gemini/Claude API key + LaTeX</td>
+        <td class="mid">架構研讀</td>
+      </tr>
+      <tr>
+        <td><strong>ActionParty</strong><br><span style="font-size:13px;color:#6b7a9a">多主體視頻</span></td>
+        <td class="mid">Melting Pot 有依賴衝突</td>
+        <td class="neg">需多 A100</td>
+        <td>dm-meltingpot pip 安裝失敗（依賴衝突）、訓練需多 A100</td>
+        <td class="neg">略過</td>
+      </tr>
+      <tr>
+        <td><strong>Omni123</strong><br><span style="font-size:13px;color:#6b7a9a">3D 基礎模型</span></td>
+        <td class="neg">完全未開源</td>
+        <td class="neg">256x H100</td>
+        <td>無程式碼、無權重、無資料。需 256 張 H100</td>
+        <td class="neg">略過</td>
+      </tr>
+      <tr>
+        <td><strong>VOID</strong><br><span style="font-size:13px;color:#6b7a9a">Netflix 視頻修復</span></td>
+        <td class="pos">Netflix 開源</td>
+        <td class="neg">VRAM 不足</td>
+        <td>需 40GB+ VRAM，RTX 5090 只有 32GB</td>
+        <td class="neg">略過</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">AI-Scientist-v2 架構值得借鏡的部分</h2>
+  <p>雖然無法在本機執行，但 repo 結構和設計模式對我們有參考價值：</p>
+  <ul>
+    <li><strong>漸進式樹搜索：</strong>自動分支假說 &rarr; 實驗 &rarr; 評估 &rarr; 修剪。這個模式可套用到量化策略搜索（假說=因子組合，實驗=回測）</li>
+    <li><strong>每篇約 $25 API 成本：</strong>意味著自動化研究的邊際成本已經很低</li>
+    <li><strong>experiment manager agent：</strong>專門管理實驗分支的 agent 設計，可參考用於策略管理系統</li>
+  </ul>
+
+  <blockquote>本週的實測告訴我們：「開源」不等於「可用」。7 個熱門專案中，只有 1 個（TimesFM）真正能在本機跑出結果。其餘要嘛假開源、要嘛硬體門檻過高、要嘛缺少關鍵組件。研究報告必須以實際可執行為準。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 &middot; 其餘五項</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 結論 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆、結論與下一步</h1>
+
+  <h2 class="ch">本週實證結論</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">&#9312;</span><span><strong>時間序列基礎模型在金融預測上的「零樣本通用性」不存在。</strong>TimesFM 2.5 在台股 5 檔標的上，報酬 R&sup2; 全部為負、方向準確率低於 50%、波動率預測輸給 EWMA(20)。Google 在通用基準上的 SOTA 成績完全無法遷移到金融場景。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&#9313;</span><span><strong>本週 7 個「熱門開源」專案中，只有 1 個能真正跑通。</strong>「開源」在 2026 年已經成為 marketing 用語。權重公開 &ne; 可用。需要實際 pip install + model.forward() 才算數。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">&#9314;</span><span><strong>簡單模型仍然是最強的 baseline。</strong>EWMA(20) 完勝 231M 參數的 TimesFM。均值預測完勝所有 ML 模型。在金融領域，「什麼都不做」往往是最好的策略。</span></div>
+  </div>
+
+  <h2 class="ch">下一步行動</h2>
+  <table>
+    <thead><tr><th>行動</th><th>目標</th><th>資源需求</th></tr></thead>
+    <tbody>
+      <tr><td><strong>TimesFM fine-tune 實驗</strong></td><td>測試台股 continual pretraining 是否能改善 R&sup2;</td><td>8x V100 or 1x A100, 1hr</td></tr>
+      <tr><td><strong>TimesFM 頻率實驗</strong></td><td>測分鐘頻/成交量序列是否有更好結果</td><td>RTX 5090 + 分鐘資料</td></tr>
+      <tr><td><strong>Whisper + pyannote 法說會管線</strong></td><td>替代 VibeVoice 的可行方案</td><td>RTX 5090, 已有模型</td></tr>
+      <tr><td><strong>BCR 概念驗證</strong></td><td>手動構建批次 prompt 測 token 節省</td><td>API key（需申請）</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:16px">
+    本報告涵蓋：Google TimesFM 2.5、Microsoft VibeVoice、Batched Contextual RL、AI-Scientist-v2、ActionParty、Omni123、VOID。
+    實驗環境：NVIDIA RTX 5090 32GB, Python 3.12, Windows 11。
+    所有實驗程式碼保存於 src/tech-research/research-2026-04-08/。
+    資料截止：2026 年 4 月 8 日。僅供內部研究參考。
+  </p>
+
+  <div class="page-footer" style="margin-top:32px">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>結論</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  // R² comparison chart
+  new Chart(document.getElementById('chart_r2'), {
+    type: 'bar',
+    data: {
+      labels: ['0050', '2330', '2317', '2454', 'TWII'],
+      datasets: [
+        {
+          label: 'TimesFM R\u00b2',
+          data: [-0.0493, -0.0446, -0.0652, -0.0489, -0.0539],
+          backgroundColor: '#e74c3c',
+          borderRadius: 4,
+        },
+        {
+          label: 'Mean Baseline R\u00b2',
+          data: [-0.0027, -0.0023, -0.0049, -0.0027, -0.0026],
+          backgroundColor: '#f59e0b',
+          borderRadius: 4,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top' },
+        title: { display: false },
+      },
+      scales: {
+        y: {
+          title: { display: true, text: 'R\u00b2 (higher = better, 0 = random)' },
+          min: -0.08,
+          max: 0.01,
+          grid: { color: '#e5edf8' },
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // Volatility R² comparison chart
+  new Chart(document.getElementById('chart_vol'), {
+    type: 'bar',
+    data: {
+      labels: ['0050', '2330', '2317', '2454', 'TWII'],
+      datasets: [
+        {
+          label: 'TimesFM R\u00b2',
+          data: [0.0001, 0.0010, -0.2722, -0.0250, -0.0044],
+          backgroundColor: '#e74c3c',
+          borderRadius: 4,
+        },
+        {
+          label: 'EWMA(20) R\u00b2',
+          data: [0.2632, 0.2128, 0.2247, 0.2210, 0.2802],
+          backgroundColor: '#00c896',
+          borderRadius: 4,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top' },
+        title: { display: false },
+      },
+      scales: {
+        y: {
+          title: { display: true, text: 'R\u00b2 (higher = better)' },
+          min: -0.3,
+          max: 0.35,
+          grid: { color: '#e5edf8' },
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

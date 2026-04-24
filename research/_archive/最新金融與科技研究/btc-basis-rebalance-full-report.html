@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 完整研究報告
+  BTC 幣本位 vs U本位 2:1 再平衡策略：學術基礎 + 回測結果
+  轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="BTC_Basis_Rebalance_Full_Report.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///Users/chenhongshuo/claude/src/btc-basis-rebalance-backtest/docs/btc-basis-rebalance-full-report.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>BTC 幣本位 vs U本位 2:1 再平衡策略 — 完整研究報告 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:34px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:14px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.red{background:linear-gradient(135deg,#7b2020,#c0392b)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+a{color:#1a3a6e;text-decoration:underline}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+.ref-list{font-size:12.5px;line-height:1.8}
+.ref-list li{margin:6px 0;padding-left:4px}
+.ref-cat{font-size:14px;font-weight:700;color:#0a4a30;margin:16px 0 8px;padding-left:10px;border-left:3px solid #00c896}
+</style>
+</head>
+<body>
+
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none"><line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/><line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/><circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/><circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/></svg>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div><div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">AI量化交易與相關應用產品開發</div></div></div>
+    <div class="cover-eyebrow">Quantitative Strategy Research &middot; April 2026</div>
+    <div class="cover-title">BTC 幣本位 vs U本位<br><em>2:1 槓桿做多再平衡策略</em><br>學術基礎 &middot; 回測驗證 &middot; 參數最優化</div>
+    <div class="cover-subtitle">Inverse-Linear Perpetual Spread with 5x Leverage: Literature Review, Backtest Results &amp; Sensitivity Analysis</div>
+    <div class="cover-tags">
+      <span class="ctag hl">5x Leverage</span><span class="ctag hl">Bull-Only</span><span class="ctag hl">Quanto Convexity</span><span class="ctag">Daily K</span><span class="ctag">Dynamic Rebalancing</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">+<em>487</em>%</div><div class="cstat-label">最佳多頭段報酬</div></div>
+    <div class="cstat"><div class="cstat-num"><em>5</em>x</div><div class="cstat-label">槓桿倍數</div></div>
+    <div class="cstat"><div class="cstat-num"><em>19</em></div><div class="cstat-label">引用期刊論文</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2:1</em></div><div class="cstat-label">多空持倉比例</div></div>
+  </div>
+  <div class="cover-bottom"><span>報告日期：2026年4月12日</span><span>本報告僅供研究參考，不構成投資建議</span><span>&copy; 2026 Genesis International Capital</span></div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">+487%</div><div class="kpi-lbl">最佳段報酬（Seg1）</div></div>
+    <div class="kpi green"><div class="kpi-val">+101%</div><div class="kpi-lbl">全期累積報酬</div></div>
+    <div class="kpi gold"><div class="kpi-val">45.9%</div><div class="kpi-lbl">平均最大回撤</div></div>
+    <div class="kpi"><div class="kpi-val">20-25%</div><div class="kpi-lbl">最優再平衡閾值</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>策略定位：帶對沖的 5 倍槓桿做多。</strong>2 份幣本位多頭 + 1 份 U本位空頭 = 淨多頭 1 份。在多頭趨勢中獲取方向性利潤，同時享有幣本位的 Quanto 凸性加成。空頭 leg 作為部分下行保護。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>多頭趨勢表現優異。</strong>2020-10 至 2021-06 的多頭段（BTC +213%），策略報酬 <strong>+487%</strong>，大幅跑贏 Buy &amp; Hold。5x 槓桿 + Quanto 凸性 = 超線性報酬。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>再平衡閾值越寬越好。</strong>敏感度分析顯示 1%-25% 閾值對最終報酬差異不大（+100.7% ~ +108.4%），但高閾值減少交易次數，節省手續費。<strong>建議 20-25%</strong>。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>趨勢判斷是關鍵。</strong>策略只適合在確認的多頭趨勢中運行。假多頭（Seg 2, 3, 5, 6）帶來的虧損拖累了總體表現。進場信號的品質決定成敗。</span></div>
+  </div>
+
+  <blockquote><strong>核心結論：</strong>策略邏輯成立，學術基礎充分（19 篇期刊），多頭趨勢中報酬顯著。但必須搭配可靠的趨勢判斷系統，避免在假多頭或趨勢反轉時進場。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>執行摘要</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 章節一：策略架構 ══════════════ -->
+<div class="sec-div page"><div class="sec-num">壹</div><div class="sec-eyebrow">Section One</div><div class="sec-line"></div><div class="sec-title">策略架構與<br>交易邏輯</div><div class="sec-desc">2:1 幣本位/U本位槓桿做多的完整交易結構、Quanto 凸性原理、以及為何選擇 5 倍槓桿。</div></div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、策略架構與交易邏輯</h1>
+
+  <h2 class="ch">1.1 持倉結構</h2>
+  <table>
+    <thead><tr><th>部位</th><th>合約類型</th><th>方向</th><th>保證金</th><th>比重</th><th>槓桿</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Leg A</strong></td><td>幣本位（Inverse）</td><td class="pos">做多</td><td>BTC</td><td class="num hi">2 份</td><td>5x</td><td>方向性獲利 + Quanto 凸性</td></tr>
+      <tr><td><strong>Leg B</strong></td><td>U本位（Linear）</td><td class="neg">做空</td><td>USDT</td><td class="num">1 份</td><td>5x</td><td>部分對沖下行風險</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>淨部位</strong></td><td colspan="2" class="pos"><strong>淨做多 1 份</strong></td><td>—</td><td>—</td><td>—</td><td><strong>多頭趨勢獲利</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">1.2 為什麼是 2:1 而不是純多頭？</h2>
+  <ul>
+    <li><strong>Quanto 凸性加成</strong>：幣本位多頭在 BTC 上漲時，保證金（BTC）本身升值，產生超線性報酬。2 份幣本位 vs 1 份線性空頭，放大凸性效果。</li>
+    <li><strong>下行保護</strong>：空頭 1 份在下跌時提供部分對沖，降低最大回撤。</li>
+    <li><strong>再平衡收益</strong>：偏離時重新調整比例，在波動中鎖定部分利潤。</li>
+  </ul>
+
+  <h2 class="ch">1.3 Quanto 凸性數學驗證</h2>
+  <table>
+    <thead><tr><th>場景</th><th>幣本位 PnL(BTC)</th><th>幣本位 PnL(USDT)</th><th>U本位空頭 PnL</th><th>淨 PnL</th></tr></thead>
+    <tbody>
+      <tr><td>BTC +20%</td><td class="pos">+0.0333 BTC</td><td class="pos">+2,000 USDT</td><td class="neg">-10,000 USDT</td><td class="neg">-8,000</td></tr>
+      <tr><td>BTC +100%</td><td class="pos">+0.5000 BTC</td><td class="pos">+10,000 USDT</td><td class="neg">-10,000 USDT</td><td class="pos hi">0（打平）</td></tr>
+      <tr><td>BTC +200%</td><td class="pos">+0.6667 BTC</td><td class="pos hi">+20,000 USDT</td><td class="neg">-10,000 USDT</td><td class="pos hi">+10,000</td></tr>
+    </tbody>
+  </table>
+  <span class="src">基於 100 張合約（面值 100 USD），入場價 $10,000，1x 槓桿計算。5x 槓桿下損益放大 5 倍。</span>
+
+  <blockquote><strong>關鍵洞察：</strong>在大幅上漲時（+100% 以上），幣本位凸性效應使得策略淨損益轉正，且漲幅越大，超額報酬越顯著。這就是為何此策略在<strong>強勁多頭趨勢</strong>中表現最佳。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 &middot; 策略架構</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 章節二：回測結果 ══════════════ -->
+<div class="sec-div page"><div class="sec-num">貳</div><div class="sec-eyebrow">Section Two</div><div class="sec-line"></div><div class="sec-title">回測結果</div><div class="sec-desc">5x 槓桿、日 K、多頭趨勢進場（延遲 3 個月確認）、閾值 15% 再平衡。回測期間 2020-01 至 2026-04。</div></div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">貳、回測結果（5x 槓桿 / 日 K / 多頭段）</h1>
+
+  <h2 class="ch">2.1 回測參數</h2>
+  <table>
+    <thead><tr><th>參數</th><th>設定</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>槓桿</td><td class="hi">5x</td><td>幣本位 5x 多頭 + U本位 5x 空頭</td></tr>
+      <tr><td>K 線週期</td><td>日 K（1d）</td><td>每日收盤價計算</td></tr>
+      <tr><td>進場條件</td><td>SMA(50) &gt; SMA(200) 確認後 +3 個月</td><td>多頭趨勢確認後延遲進場</td></tr>
+      <tr><td>出場條件</td><td>SMA(50) &lt; SMA(200)</td><td>多頭趨勢結束</td></tr>
+      <tr><td>再平衡</td><td>每日檢查，偏離 15% 觸發</td><td>閾值觸發模式</td></tr>
+      <tr><td>手續費</td><td>Taker 0.04%</td><td>雙邊計算</td></tr>
+      <tr><td>成交價</td><td>bar[i] 信號 &rarr; bar[i+1] open</td><td>防偷價</td></tr>
+      <tr><td>初始資金</td><td>$100,000 USDT</td><td>各段間累積</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">2.2 各段表現</h2>
+  <table>
+    <thead><tr><th>區段</th><th>期間</th><th>天數</th><th>BTC 走勢</th><th>策略報酬</th><th>B&amp;H</th><th>MDD</th><th>再平衡</th></tr></thead>
+    <tbody>
+      <tr><td class="pos hi"><strong>Seg 1</strong></td><td>2020-10 ~ 2021-06</td><td class="num">247</td><td>$11K &rarr; $35K</td><td class="pos hi">+487.2%</td><td class="pos">+213.5%</td><td class="num">47.9%</td><td class="num">14</td></tr>
+      <tr><td><strong>Seg 2</strong></td><td>2021-12 ~ 2022-01</td><td class="num">32</td><td>$48K &rarr; $43K</td><td class="neg">-25.6%</td><td class="neg">-10.9%</td><td class="num">40.2%</td><td class="num">1</td></tr>
+      <tr><td><strong>Seg 3</strong></td><td>2023-05 ~ 2023-09</td><td class="num">128</td><td>$28K &rarr; $26K</td><td class="neg">-15.9%</td><td class="neg">-6.6%</td><td class="num">40.3%</td><td class="num">0</td></tr>
+      <tr><td class="pos"><strong>Seg 4</strong></td><td>2024-01 ~ 2024-08</td><td class="num">196</td><td>$42K &rarr; $61K</td><td class="pos">+102.1%</td><td class="pos">+44.9%</td><td class="num">38.1%</td><td class="num">3</td></tr>
+      <tr><td><strong>Seg 5</strong></td><td>2025-01 ~ 2025-04</td><td class="num">72</td><td>$103K &rarr; $79K</td><td class="neg">-54.0%</td><td class="neg">-22.8%</td><td class="num">57.8%</td><td class="num">1</td></tr>
+      <tr><td><strong>Seg 6</strong></td><td>2025-08 ~ 2025-11</td><td class="num">89</td><td>$114K &rarr; $94K</td><td class="neg">-41.1%</td><td class="neg">-17.5%</td><td class="num">51.4%</td><td class="num">1</td></tr>
+      <tr style="background:#eefaf4!important"><td colspan="3"><strong>累積</strong></td><td>—</td><td class="pos" style="font-weight:800">+101.2%</td><td class="pos">+140.5%</td><td class="num">45.9%</td><td class="num">20</td></tr>
+    </tbody>
+  </table>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">$100K<em> &rarr;</em> $201K</div><div class="kpi-lbl">累積資金變化</div></div>
+    <div class="kpi green"><div class="kpi-val">+487%</div><div class="kpi-lbl">最佳段（Seg 1）</div></div>
+    <div class="kpi red"><div class="kpi-val">-54%</div><div class="kpi-lbl">最差段（Seg 5）</div></div>
+    <div class="kpi gold"><div class="kpi-val">2/6</div><div class="kpi-lbl">正報酬段數</div></div>
+  </div>
+
+  <blockquote><strong>核心發現：</strong>真正的多頭段（Seg 1, 4），策略大幅跑贏 B&amp;H（487% vs 213%, 102% vs 45%）。但假多頭段（多頭信號觸發但 BTC 隨後反轉下跌）導致 5x 槓桿虧損放大。<strong>策略成敗取決於趨勢判斷的品質。</strong></blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 &middot; 回測結果</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 章節三：敏感度分析 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參、再平衡閾值敏感度分析</h1>
+
+  <p>固定 5x 槓桿、日 K、多頭段進場 +3 個月延遲，掃描再平衡閾值從 1% 至 25%：</p>
+
+  <table>
+    <thead><tr><th>閾值</th><th>累積報酬</th><th>最終資金</th><th>Avg MDD</th><th>再平衡次數</th><th>手續費效率</th></tr></thead>
+    <tbody>
+      <tr><td>1%</td><td class="num">+100.7%</td><td class="num">$200,723</td><td class="num">45.8%</td><td class="num">486</td><td>最差（頻繁交易）</td></tr>
+      <tr><td>3%</td><td class="num">+101.3%</td><td class="num">$201,342</td><td class="num">45.8%</td><td class="num">213</td><td>—</td></tr>
+      <tr><td>5%</td><td class="num">+102.1%</td><td class="num">$202,097</td><td class="num">45.8%</td><td class="num">135</td><td>—</td></tr>
+      <tr><td>7%</td><td class="num">+104.7%</td><td class="num">$204,652</td><td class="num">45.7%</td><td class="num">85</td><td>—</td></tr>
+      <tr><td>10%</td><td class="num">+101.5%</td><td class="num">$201,539</td><td class="num">45.8%</td><td class="num">46</td><td>—</td></tr>
+      <tr><td>12%</td><td class="num">+105.3%</td><td class="num">$205,326</td><td class="num">45.7%</td><td class="num">42</td><td>—</td></tr>
+      <tr><td>15%</td><td class="num">+101.2%</td><td class="num">$201,201</td><td class="num">45.9%</td><td class="num">20</td><td>—</td></tr>
+      <tr><td class="hi">20%</td><td class="num hi">+105.4%</td><td class="num hi">$205,421</td><td class="num">45.9%</td><td class="num hi">17</td><td>—</td></tr>
+      <tr><td class="hi">25%</td><td class="num pos hi">+108.4%</td><td class="num pos hi">$208,415</td><td class="num">45.9%</td><td class="num hi">11</td><td>最佳</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">敏感度分析結論</h2>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>閾值對報酬影響極小。</strong>1% 至 25% 閾值的累積報酬差距僅 7.7 個百分點（100.7% ~ 108.4%）。再平衡不是此策略的主要獲利來源。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>再平衡越少越好。</strong>在趨勢市場中，再平衡等於「賣掉漲的，買入跌的」——這是逆勢操作，反而拖累績效。25% 閾值僅觸發 11 次，是最優。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>MDD 幾乎不受閾值影響。</strong>平均 MDD 穩定在 45.7%-45.9%，回撤主要由 BTC 趨勢反轉造成，而非再平衡頻率。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>建議使用 20-25% 閾值。</strong>減少交易次數、手續費，維持最高報酬率。再平衡僅作為極端偏離時的安全閥。</span></div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 &middot; 敏感度分析</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 風險與建議 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆、風險評估與操作建議</h1>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>策略優勢</h4>
+      <div class="risk-item"><strong>多頭段超額報酬顯著</strong> &rarr; BTC +213% 時策略 +487%（5x 槓桿 + Quanto 凸性）</div>
+      <div class="risk-item"><strong>學術基礎充分</strong> &rarr; 19 篇期刊論文支撐（Ackerer 2024, Alexander 2023 等頂刊）</div>
+      <div class="risk-item"><strong>空頭 leg 提供下行保護</strong> &rarr; BTC 小跌時空頭盈利部分抵消多頭虧損</div>
+      <div class="risk-item"><strong>機械性執行</strong> &rarr; 規則驅動，無需主觀判斷，適合自動化</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>策略風險</h4>
+      <div class="risk-item"><strong>5x 槓桿放大下行</strong> &rarr; BTC -23% 時策略 -54%（Seg 5）。槓桿是雙面刃</div>
+      <div class="risk-item"><strong>假多頭信號致命</strong> &rarr; 6 段中 4 段是假多頭，帶來累積虧損</div>
+      <div class="risk-item"><strong>MDD 偏高</strong> &rarr; 平均 45.9%，最差段 57.8%，心理承受壓力大</div>
+      <div class="risk-item"><strong>趨勢判斷依賴度高</strong> &rarr; SMA 交叉是滯後指標，容易在震盪市場頻繁觸發</div>
+    </div>
+  </div>
+
+  <h2 class="ch">操作建議</h2>
+  <table>
+    <thead><tr><th>項目</th><th>建議</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td><strong>再平衡閾值</strong></td><td class="pos hi">20-25%</td><td>趨勢市場中再平衡越少越好，僅作為極端偏離安全閥</td></tr>
+      <tr><td><strong>進場信號</strong></td><td>SMA(50) &gt; SMA(200) 確認 + 額外過濾</td><td>建議加入成交量確認、RSI 過濾，減少假信號</td></tr>
+      <tr><td><strong>停損機制</strong></td><td>帳面虧損 &gt; 30% 強制出場</td><td>控制最大回撤，避免 Seg 5 那種 -54% 的情況</td></tr>
+      <tr><td><strong>槓桿選擇</strong></td><td>3x-5x 視風險承受度</td><td>3x 更保守（MDD 約 30%），5x 更積極（MDD 約 46%）</td></tr>
+      <tr><td><strong>持倉管理</strong></td><td>全倉保證金模式（Cross Margin）</td><td>兩邊保證金共用，避免單邊被強平</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 &middot; 風險與建議</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 文獻列表 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">附錄：學術文獻支撐（19 篇）</h1>
+
+  <div class="ref-cat">A. Quanto / 反向合約定價（證明凸性效應）</div>
+  <ol class="ref-list">
+    <li>Ackerer, Hugonnier &amp; Jermann (2024). "Perpetual Futures Pricing." <em>Mathematical Finance</em>. <a href="https://arxiv.org/abs/2310.11771">arXiv</a></li>
+    <li>Alexander, Chen &amp; Imeraj (2023). "Crypto Quanto and Inverse Options." <em>Mathematical Finance</em>, 33(4). <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3893037">SSRN</a></li>
+    <li>Li &amp; Xia (2025). "Crypto Inverse-Power Options." <em>Quantitative Finance</em>, 25(7). <a href="https://arxiv.org/abs/2403.16006">arXiv</a></li>
+    <li>Deng, Pan, Zhang &amp; Zou (2021). "Optimal Bitcoin Trading with Inverse Futures." <em>Annals of Operations Research</em>.</li>
+    <li>Wu (2020). "Quantitative Analysis on BitMEX XBTUSD." <em>Undergraduate Economic Review</em>.</li>
+    <li>Kim et al. (2025). "Designing Funding Rates for Perpetual Futures." <a href="https://arxiv.org/abs/2506.08573">arXiv</a></li>
+  </ol>
+
+  <div class="ref-cat">B. 波動率收割與再平衡溢價</div>
+  <ol class="ref-list" start="7">
+    <li>Witte (2016). "Volatility Harvesting." <em>Wilmott Magazine</em>. <a href="https://arxiv.org/abs/1508.05241">arXiv</a></li>
+    <li>Perold &amp; Sharpe (1988). "Dynamic Strategies for Asset Allocation." <em>Financial Analysts Journal</em>.</li>
+    <li>Booth &amp; Fama (1992). "Diversification Returns." <em>Financial Analysts Journal</em>.</li>
+    <li>Willenbrock (2011). "Diversification Return &amp; Portfolio Rebalancing." <em>Financial Analysts Journal</em>.</li>
+    <li>Fernholz &amp; Shay (1982). "Stochastic Portfolio Theory." <em>The Journal of Finance</em>.</li>
+    <li>Kuhn &amp; Luenberger. "Rebalancing Frequency in Log-Optimal Portfolio." Stanford.</li>
+  </ol>
+
+  <div class="ref-cat">C. Crypto Carry &amp; 市場效率</div>
+  <ol class="ref-list" start="13">
+    <li>BIS (2023). "Crypto Carry." <em>BIS Working Papers</em> No. 1087. <a href="https://www.bis.org/publ/work1087.pdf">PDF</a></li>
+    <li>Inan (2025). "Predictability of Funding Rates." SSRN.</li>
+    <li>He, Manela, Ross &amp; von Wachter (2024). "Fundamentals of Perpetual Futures." <a href="https://arxiv.org/abs/2212.06888">arXiv</a></li>
+    <li>Makarov &amp; Schoar (2020). "Trading and Arbitrage in Cryptocurrency Markets." <em>Journal of Financial Economics</em>.</li>
+    <li>Gornall, Rinaldi &amp; Xiao (2024). "Perpetual Futures and Basis Risk." SSRN.</li>
+    <li>Alexander, Chen, Deng &amp; Wang (2024). "Arbitrage in Crypto Derivatives." <em>Journal of Financial Markets</em>.</li>
+    <li>Dai, Li &amp; Yang (2025). "Arbitrage in Perpetual Contracts." SSRN.</li>
+  </ol>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:16px">本報告涵蓋 19 篇學術論文文獻回顧與真實歷史數據回測。資料截止日期：2026年4月12日。僅供研究參考，不構成投資建議。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>附錄 &middot; 文獻列表</span><span>&copy; 2026 GiS &middot; 僅供研究參考</span></div>
+</div>
+
+</body>
+</html>

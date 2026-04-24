@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 研究報告
+  BTC 幣本位 vs U本位 2:1 再平衡策略：學術基礎與可行性分析
+  轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="BTC_Basis_Rebalance_Research.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///Users/chenhongshuo/claude/src/btc-basis-rebalance-backtest/docs/btc-basis-rebalance-research-report.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>BTC 幣本位 vs U本位 2:1 再平衡策略研究 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 頁面容器 ── */
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+
+/* ── Canvas ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+a{color:#1a3a6e;text-decoration:underline}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 文獻引用 ── */
+.ref-list{font-size:12.5px;line-height:1.8}
+.ref-list li{margin:6px 0;padding-left:4px}
+.ref-cat{font-size:14px;font-weight:700;color:#0a4a30;margin:16px 0 8px;padding-left:10px;border-left:3px solid #00c896}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Quantitative Strategy Research · April 2026</div>
+    <div class="cover-title">BTC 幣本位 vs U本位<br><em>2:1 再平衡策略</em><br>學術基礎與可行性分析</div>
+    <div class="cover-subtitle">Inverse-Linear Perpetual Futures Spread with Dynamic Rebalancing: Literature Review & Feasibility Study</div>
+    <div class="cover-tags">
+      <span class="ctag hl">Quanto Convexity</span>
+      <span class="ctag hl">Volatility Harvesting</span>
+      <span class="ctag">Perpetual Futures</span>
+      <span class="ctag">Dynamic Rebalancing</span>
+      <span class="ctag">Crypto Derivatives</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>19</em></div><div class="cstat-label">引用期刊論文</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4</em></div><div class="cstat-label">學術支撐主軸</div></div>
+    <div class="cstat"><div class="cstat-num">><em>10</em>%</div><div class="cstat-label">年均 Crypto Carry</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2:1</em></div><div class="cstat-label">目標持倉比例</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年4月12日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">19<em> 篇</em></div><div class="kpi-lbl">相關學術論文</div></div>
+    <div class="kpi"><div class="kpi-val">4 大主軸</div><div class="kpi-lbl">學術理論支撐</div></div>
+    <div class="kpi gold"><div class="kpi-val">加密獨有</div><div class="kpi-lbl">策略結構性優勢</div></div>
+    <div class="kpi green"><div class="kpi-val">充分支撐</div><div class="kpi-lbl">期刊驗證結論</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>Quanto 凸性效應有嚴謹數學證明。</strong>Ackerer et al. (2024, <em>Mathematical Finance</em>) 與 Alexander et al. (2023, <em>Mathematical Finance</em>) 從無套利定價框架推導出幣本位（反向）合約的凸性修正項，證明做多反向合約相較線性合約具有內嵌的正凸性（Gamma）優勢。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>再平衡可從波動率中提取超額報酬。</strong>Witte (2015, <em>Wilmott Magazine</em>)、Booth &amp; Fama (1992, <em>FAJ</em>)、Willenbrock (2011, <em>FAJ</em>) 共同建立了「再平衡溢價」理論——定期回到固定比例的 constant-mix 策略在高波動環境中系統性產生超額收益（Shannon's Demon）。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>加密市場 Carry 遠高於傳統市場。</strong>BIS Working Paper No. 1087 (2023) 記錄加密貨幣 carry 年化平均超過 10%，極端時期超過 40%，遠超股票、外匯、商品市場。資金費率是策略的穩定收益來源。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>策略為加密市場獨有，傳統市場無法複製。</strong>幣本位合約的「保證金隨標的升值」特性在傳統金融不存在。此結構性優勢使 2:1 再平衡策略成為加密衍生品市場特有的 Alpha 來源。</span></div>
+  </div>
+
+  <blockquote><strong>結論：</strong>本策略具備充分的學術理論支撐，橫跨衍生品定價、投資組合理論、市場微觀結構三大領域，共計 19 篇期刊論文與工作論文提供直接或間接證據。建議進入量化回測階段驗證實際績效。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節一封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">策略架構與<br>核心機制</div>
+  <div class="sec-desc">說明 2:1 幣本位/U本位再平衡策略的基本結構、Quanto 凸性效應原理，以及為何此策略為加密市場獨有。</div>
+</div>
+
+<!-- ══════════════ 策略架構 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、策略架構與核心機制</h1>
+
+  <h2 class="ch">1.1 策略基本結構</h2>
+  <p>本策略同時持有兩種 BTC 永續合約部位，維持固定名義價值比例 2:1：</p>
+
+  <table>
+    <thead><tr><th>部位</th><th>合約類型</th><th>方向</th><th>保證金幣種</th><th>比重</th><th>結算特性</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Leg A</strong></td><td>幣本位（Inverse）</td><td class="pos">做多</td><td>BTC</td><td class="num hi">2 份</td><td>BTC 計價，保證金隨標的升值</td></tr>
+      <tr><td><strong>Leg B</strong></td><td>U本位（Linear）</td><td class="neg">做空</td><td>USDT</td><td class="num">1 份</td><td>USDT 計價，線性損益</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">1.2 Quanto 凸性效應（Gamma Effect）</h2>
+  <p>幣本位合約的 PnL 計算公式為 <strong>PnL (BTC) = contracts &times; (1/entry - 1/exit)</strong>，這是一個<strong>凸函數</strong>（convex function）。當 BTC 價格上漲時：</p>
+  <ul>
+    <li><strong>部位損益</strong>：做多獲利（與線性合約相同方向）</li>
+    <li><strong>保證金升值</strong>：BTC 保證金本身以 USDT 計價上漲（線性合約不具備）</li>
+    <li><strong>雙重收益</strong>：這就是 Quanto 凸性——持有反向合約多頭在標的上漲時獲得超線性報酬</li>
+  </ul>
+
+  <p>Ackerer, Hugonnier &amp; Jermann (2024) 在 <em>Mathematical Finance</em> 期刊中，推導出反向永續合約相對於線性合約的<strong>凸性修正項（convexity correction）</strong>，在 Black-Scholes 設定下給出了閉合解。此修正項正比於標的波動率的平方——<strong>波動率越高，凸性優勢越大</strong>。</p>
+
+  <h2 class="ch">1.3 為何傳統市場無法複製</h2>
+  <table>
+    <thead><tr><th>比較項目</th><th>加密幣本位合約</th><th>傳統期貨（如黃金）</th></tr></thead>
+    <tbody>
+      <tr><td>保證金幣種</td><td class="pos">BTC（標的本身）</td><td>法幣（USD）</td></tr>
+      <tr><td>標的漲時保證金</td><td class="pos">同步升值</td><td class="neg">不變</td></tr>
+      <tr><td>Quanto 凸性</td><td class="pos">存在</td><td class="neg">不存在</td></tr>
+      <tr><td>雙重收益結構</td><td class="pos hi">具備</td><td class="neg">不具備</td></tr>
+      <tr><td>結算方式</td><td>以 BTC 結算</td><td>現金結算（USD）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">分析來源：Alexander, Chen &amp; Imeraj (2023), Mathematical Finance</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 策略架構與核心機制</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節二封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">學術文獻回顧</div>
+  <div class="sec-desc">彙整 19 篇期刊論文與工作論文，分為四大學術主軸：Quanto 定價理論、再平衡溢價理論、Crypto Carry、市場效率與套利。</div>
+</div>
+
+<!-- ══════════════ 主軸一：Quanto 定價 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳、學術文獻回顧</h1>
+
+  <h2 class="ch">主軸一：Quanto / 反向合約定價與凸性</h2>
+  <p>此類文獻直接證明幣本位（反向）合約內嵌凸性效應的數學基礎。</p>
+
+  <table>
+    <thead><tr><th>論文</th><th>作者</th><th>年份</th><th>期刊/來源</th><th>核心發現</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Perpetual Futures Pricing</strong></td>
+        <td>Ackerer, Hugonnier &amp; Jermann</td>
+        <td>2024</td>
+        <td class="hi">Mathematical Finance (Wiley) / NBER WP 32936</td>
+        <td>推導 linear、inverse、quanto 永續合約的無套利價格；在 BS 設定下給出<strong>凸性修正閉合解</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Crypto Quanto and Inverse Options</strong></td>
+        <td>Alexander, Chen &amp; Imeraj</td>
+        <td>2023</td>
+        <td class="hi">Mathematical Finance, 33(4), 1005-1043</td>
+        <td>首篇嚴謹處理反向與 quanto 加密衍生品數學；推導 quanto 調整項；記錄 90%+ 交易量為反向合約</td>
+      </tr>
+      <tr>
+        <td><strong>Crypto Inverse-Power Options</strong></td>
+        <td>Li &amp; Xia</td>
+        <td>2025</td>
+        <td>Quantitative Finance, 25(7)</td>
+        <td>在分數隨機波動率+共跳模型下推導反向選擇權定價與避險公式</td>
+      </tr>
+      <tr>
+        <td><strong>Optimal Bitcoin Trading with Inverse Futures</strong></td>
+        <td>Deng, Pan, Zhang &amp; Zou</td>
+        <td>2021</td>
+        <td>Annals of Operations Research</td>
+        <td>求解持有 BTC 現貨+反向期貨的最優交易問題；證明反向合約的<strong>非線性損益</strong>改變最優倉位</td>
+      </tr>
+      <tr>
+        <td><strong>Quantitative Analysis on BitMEX XBTUSD</strong></td>
+        <td>Wu</td>
+        <td>2020</td>
+        <td>Undergraduate Economic Review, 17(1)</td>
+        <td>量化反向永續合約的<strong>不對稱清算動態</strong>：多頭清算速度快於空頭，因 1/price 凸性</td>
+      </tr>
+      <tr>
+        <td><strong>Designing Funding Rates for Perpetual Futures</strong></td>
+        <td>Kim et al.</td>
+        <td>2025</td>
+        <td>arXiv:2506.08573</td>
+        <td>用 BSDE 方法推導不同合約類型（linear/inverse/quanto）的無套利資金費率設計</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="src">論文來源：arXiv、SSRN、Wiley Online Library、Springer</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; 文獻回顧：Quanto 定價理論</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 主軸二：再平衡溢價 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h2 class="ch">主軸二：波動率收割與再平衡溢價（Volatility Harvesting）</h2>
+  <p>此類文獻建立了「定期再平衡至固定比例可從波動率中提取超額報酬」的理論基礎，即 Shannon's Demon。</p>
+
+  <table>
+    <thead><tr><th>論文</th><th>作者</th><th>年份</th><th>期刊</th><th>核心發現</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Volatility Harvesting: Extracting Return from Randomness</strong></td>
+        <td>Witte</td>
+        <td>2016</td>
+        <td class="hi">Wilmott Magazine</td>
+        <td>數學證明<strong>零期望報酬資產透過再平衡可產生正複合成長</strong>（Shannon's Demon 形式化證明）</td>
+      </tr>
+      <tr>
+        <td><strong>Dynamic Strategies for Asset Allocation</strong></td>
+        <td>Perold &amp; Sharpe</td>
+        <td>1988</td>
+        <td class="hi">Financial Analysts Journal, 44(1)</td>
+        <td>定義三大動態策略：buy-and-hold、<strong>constant-mix</strong>、CPPI。constant-mix（本策略類型）在<strong>震盪市場表現最佳</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Diversification Returns and Asset Contributions</strong></td>
+        <td>Booth &amp; Fama</td>
+        <td>1992</td>
+        <td class="hi">Financial Analysts Journal, 48(3)</td>
+        <td>提出「分散化報酬」概念：其來源是<strong>再平衡本身</strong>（買低賣高的機械性操作），固定權重再平衡保證此報酬</td>
+      </tr>
+      <tr>
+        <td><strong>Diversification Return, Portfolio Rebalancing, and the Commodity Return Puzzle</strong></td>
+        <td>Willenbrock</td>
+        <td>2011</td>
+        <td class="hi">Financial Analysts Journal, 67(4)</td>
+        <td>證明<strong>分散化報酬 = 再平衡報酬</strong>；再平衡溢價取決於成分報酬率的變異數——<strong>波動率越高，溢價越大</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Stochastic Portfolio Theory and Stock Market Equilibrium</strong></td>
+        <td>Fernholz &amp; Shay</td>
+        <td>1982</td>
+        <td>The Journal of Finance, 37(2)</td>
+        <td>隨機投資組合理論奠基論文：充分市場波動率下，即使最小分散化也能透過<strong>波動率捕捉</strong>顯著提升績效</td>
+      </tr>
+      <tr>
+        <td><strong>Analysis of the Rebalancing Frequency in Log-Optimal Portfolio Selection</strong></td>
+        <td>Kuhn &amp; Luenberger</td>
+        <td>—</td>
+        <td>Stanford Academic Paper</td>
+        <td>研究<strong>再平衡頻率</strong>對 log-optimal 投資組合成長率的影響，與最優再平衡間隔直接相關</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>對本策略的意義：</strong>2:1 比例的定期再平衡正是 constant-mix 策略——在 BTC 這種高波動（年化 60-80%）環境中，再平衡溢價預期最為顯著。Willenbrock (2011) 的公式直接預測：波動率越高，再平衡獲利越多。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; 文獻回顧：再平衡溢價理論</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 主軸三四：Carry + 市場效率 ══════════════ -->
+<div class="full-page page body-page">
+  <h2 class="ch">主軸三：加密市場 Carry 與資金費率</h2>
+
+  <table>
+    <thead><tr><th>論文</th><th>作者</th><th>年份</th><th>期刊</th><th>核心發現</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Crypto Carry</strong></td>
+        <td>Nie, Jiang et al.</td>
+        <td>2023</td>
+        <td class="hi">BIS Working Papers No. 1087</td>
+        <td>記錄加密 carry<strong>年化平均超過 10%，極端時超過 40%</strong>；遠超股票/外匯/商品。高 carry 預測未來價格崩盤</td>
+      </tr>
+      <tr>
+        <td><strong>Predictability of Funding Rates</strong></td>
+        <td>Inan</td>
+        <td>2025</td>
+        <td>SSRN 5576424</td>
+        <td>研究永續合約資金費率的可預測性——有助於策略的 carry 組件時機選擇</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">主軸四：市場效率與套利機會</h2>
+
+  <table>
+    <thead><tr><th>論文</th><th>作者</th><th>年份</th><th>期刊</th><th>核心發現</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Fundamentals of Perpetual Futures</strong></td>
+        <td>He, Manela, Ross &amp; von Wachter</td>
+        <td>2024</td>
+        <td>arXiv / SSRN (Utah Winter Finance Conf.)</td>
+        <td>推導永續合約無套利價格與交易成本下界；加密市場偏離<strong>大於傳統外匯市場</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Trading and Arbitrage in Cryptocurrency Markets</strong></td>
+        <td>Makarov &amp; Schoar</td>
+        <td>2020</td>
+        <td class="hi">Journal of Financial Economics, 135(2)</td>
+        <td>記錄加密交易所間<strong>大量持續套利機會</strong>，持續數小時至數週</td>
+      </tr>
+      <tr>
+        <td><strong>Perpetual Futures and Basis Risk</strong></td>
+        <td>Gornall, Rinaldi &amp; Xiao</td>
+        <td>2024</td>
+        <td>SSRN (AEA 2026)</td>
+        <td>永續合約緊密追蹤現貨，<strong>基差風險極低</strong>——支持策略執行的可行性</td>
+      </tr>
+      <tr>
+        <td><strong>Arbitrage Opportunities in Crypto Derivatives</strong></td>
+        <td>Alexander, Chen, Deng &amp; Wang</td>
+        <td>2024</td>
+        <td>Journal of Financial Markets</td>
+        <td>BTC 與 ETH 選擇權/永續市場效率檢驗；<strong>極端波動期創造高利潤套利機會</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Arbitrage in Perpetual Contracts</strong></td>
+        <td>Dai, Li &amp; Yang</td>
+        <td>2025</td>
+        <td>SSRN 5262988</td>
+        <td>研究資金費率 clamping 機制，推導永續合約價格的<strong>模型無關無套利界</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="src">論文來源：BIS、Journal of Financial Economics、Journal of Financial Markets、SSRN、arXiv</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; 文獻回顧：Carry &amp; 市場效率</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節三封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">策略收益來源<br>分解與風險</div>
+  <div class="sec-desc">分析策略三大收益來源的學術依據，以及對應的風險因子與市場狀態影響。</div>
+</div>
+
+<!-- ══════════════ 收益分解 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參、策略收益來源分解</h1>
+
+  <p>本策略的預期超額收益來自三個可分離的來源，每個來源都有獨立的學術支撐：</p>
+
+  <table>
+    <thead><tr><th>收益來源</th><th>機制</th><th>學術依據</th><th>與波動率關係</th><th>佔比估計</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>① Quanto 凸性溢價</strong></td>
+        <td>幣本位做多的非線性損益 + 保證金升值</td>
+        <td>Ackerer et al. (2024); Alexander et al. (2023)</td>
+        <td class="pos">正相關（&sigma;&sup2;）</td>
+        <td class="num hi">主要</td>
+      </tr>
+      <tr>
+        <td><strong>② 再平衡溢價</strong></td>
+        <td>定期回到 2:1 比例的 buy-low/sell-high 機制</td>
+        <td>Witte (2016); Booth &amp; Fama (1992); Willenbrock (2011)</td>
+        <td class="pos">正相關（&sigma;&sup2;）</td>
+        <td class="num">次要</td>
+      </tr>
+      <tr>
+        <td><strong>③ 資金費率 Carry</strong></td>
+        <td>永續合約每 8 小時資金費率結算</td>
+        <td>BIS WP 1087 (2023); Inan (2025)</td>
+        <td>不確定（視多空比）</td>
+        <td class="num">輔助</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">不同市場狀態下的預期表現</h2>
+  <p>根據 Perold &amp; Sharpe (1988) 的 constant-mix 理論框架：</p>
+
+  <table>
+    <thead><tr><th>市場狀態</th><th>定義方式</th><th>Quanto 凸性</th><th>再平衡溢價</th><th>Carry</th><th>綜合預期</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>多頭趨勢</strong></td>
+        <td>MA(50) &gt; MA(200) 且 ADX &gt; 25</td>
+        <td class="pos">極佳（BTC 漲，雙重收益）</td>
+        <td class="neg">較差（趨勢市再平衡賣太早）</td>
+        <td class="pos">正（多頭市場資金費率通常為正，空頭收取）</td>
+        <td class="pos hi">正向</td>
+      </tr>
+      <tr>
+        <td><strong>盤整震盪</strong></td>
+        <td>ADX &lt; 20 且價格在布林通道內</td>
+        <td>中性（漲跌互抵）</td>
+        <td class="pos hi">最佳（Perold &amp; Sharpe 理論最優場景）</td>
+        <td>中性</td>
+        <td class="pos">正向</td>
+      </tr>
+      <tr>
+        <td><strong>空頭趨勢</strong></td>
+        <td>MA(50) &lt; MA(200) 且 ADX &gt; 25</td>
+        <td class="neg">不利（BTC 跌，保證金縮水）</td>
+        <td class="neg">較差（趨勢市再平衡加碼太早）</td>
+        <td>不確定</td>
+        <td class="neg">風險最高</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="src">市場狀態定義參考：Wilder (1978) ADX 指標、Appel (1979) MACD 系統；趨勢/盤整分類方法見 Faber (2007, Journal of Wealth Management)</span>
+
+  <blockquote><strong>關鍵洞察：</strong>策略在多頭與盤整市場均有正期望值，但在<strong>持續空頭趨勢中風險最大</strong>——幣本位保證金縮水的 Gamma 效應會反向作用（凸性變為凹性損失）。回測應重點分析 2022 年空頭市場表現。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 &middot; 收益來源分解與市場狀態</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 風險評估 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">風險評估</h1>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>策略優勢（上行因素）</h4>
+      <div class="risk-item"><strong>高波動環境紅利</strong> &rarr; BTC 年化波動率 60-80%，Quanto 凸性溢價與再平衡溢價均正比於 &sigma;&sup2;</div>
+      <div class="risk-item"><strong>加密獨有結構</strong> &rarr; 傳統市場無法複製，競爭者有限</div>
+      <div class="risk-item"><strong>Carry 收入穩定</strong> &rarr; 多頭市場中資金費率多為正，空頭 leg 持續收取</div>
+      <div class="risk-item"><strong>機械性執行</strong> &rarr; 無需方向判斷，純規則驅動，適合自動化</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>策略風險（下行因素）</h4>
+      <div class="risk-item"><strong>空頭趨勢凹性</strong> &rarr; BTC 持續下跌時幣本位保證金縮水，可能觸發強平（Wu, 2020 實證）</div>
+      <div class="risk-item"><strong>過度再平衡</strong> &rarr; 閾值設太低導致頻繁交易，手續費侵蝕利潤</div>
+      <div class="risk-item"><strong>滑點與流動性</strong> &rarr; 極端行情下自動下單滑點嚴重</div>
+      <div class="risk-item"><strong>API 與執行風險</strong> &rarr; 網路斷線、交易所維護期間比例失控</div>
+      <div class="risk-item"><strong>資金費率反轉</strong> &rarr; 空頭市場中資金費率轉負，carry 變為成本</div>
+    </div>
+  </div>
+
+  <h2 class="ch">強平風險量化</h2>
+  <p>根據 Wu (2020) 的研究，幣本位多頭的強平價格公式使得<strong>多頭清算速度快於空頭</strong>。1x 槓桿下理論上不會被強平（保證金始終大於維持保證金），但若使用 2x 以上槓桿，需密切監控保證金率。</p>
+
+  <table>
+    <thead><tr><th>槓桿倍數</th><th>BTC 跌幅觸發強平</th><th>風險等級</th><th>建議</th></tr></thead>
+    <tbody>
+      <tr><td>1x</td><td class="num pos">理論不強平</td><td class="pos">低</td><td>適合本策略預設</td></tr>
+      <tr><td>2x</td><td class="num">約 -50%</td><td>中</td><td>需設止損或保證金預警</td></tr>
+      <tr><td>3x</td><td class="num neg">約 -33%</td><td class="neg">高</td><td>不建議使用</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 風險評估：</strong>策略在 1x 槓桿下強平風險極低，主要風險來自持續空頭趨勢的帳面虧損。建議回測中加入<strong>市場狀態分類器</strong>（基於 ADX/MA），分段評估績效，並考慮在空頭趨勢確認時降低幣本位比重。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>風險評估</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節四封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Section Four</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">回測設計<br>與下一步</div>
+  <div class="sec-desc">基於文獻回顧結論，設計量化回測框架，確保執行邏輯符合學術最佳實務。</div>
+</div>
+
+<!-- ══════════════ 回測設計 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆、回測設計建議</h1>
+
+  <h2 class="ch">4.1 執行邏輯要點</h2>
+  <table>
+    <thead><tr><th>項目</th><th>設計</th><th>學術依據</th></tr></thead>
+    <tbody>
+      <tr><td><strong>成交價格</strong></td><td class="hi">訊號在 bar[i] 產生，bar[i+1] 的 open 成交（防偷價）</td><td>回測最佳實務，避免 look-ahead bias</td></tr>
+      <tr><td><strong>交易成本</strong></td><td>Taker 手續費 0.04%（幣安合約費率），雙邊計算</td><td>Makarov &amp; Schoar (2020) 強調交易成本對套利收益的影響</td></tr>
+      <tr><td><strong>資金費率</strong></td><td>每 8 小時按歷史費率結算，分別計算兩邊 leg</td><td>BIS WP 1087 (2023)</td></tr>
+      <tr><td><strong>滑點</strong></td><td>考慮市場深度，大單拆分模擬</td><td>He et al. (2024) 交易成本下的無套利界</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">4.2 敏感度分析維度（優先級）</h2>
+  <table>
+    <thead><tr><th>優先級</th><th>參數</th><th>掃描範圍</th><th>目的</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">1</td><td><strong>再平衡頻率</strong></td><td>1h / 4h / 8h / 1d / 3d / 1w</td><td>找出最優再平衡間隔（Kuhn &amp; Luenberger）</td></tr>
+      <tr><td class="hi">2</td><td><strong>再平衡閾值</strong></td><td>5% / 10% / 15% / 20% / 30%</td><td>平衡交易成本 vs 偏離風險</td></tr>
+      <tr><td>3</td><td><strong>市場狀態</strong></td><td>多頭 / 盤整 / 空頭</td><td>驗證 Perold &amp; Sharpe 理論預測</td></tr>
+      <tr><td>4</td><td><strong>初始比例</strong></td><td>1.5:1 / 2:1 / 2.5:1 / 3:1</td><td>確認 2:1 是否最優</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">4.3 市場狀態定義（參考期刊）</h2>
+  <table>
+    <thead><tr><th>狀態</th><th>定義方法</th><th>學術來源</th></tr></thead>
+    <tbody>
+      <tr><td class="pos"><strong>多頭趨勢</strong></td><td>SMA(50) &gt; SMA(200) 且 ADX(14) &gt; 25</td><td>Wilder (1978) <em>New Concepts in Technical Trading</em>; Faber (2007) <em>J. of Wealth Management</em></td></tr>
+      <tr><td><strong>盤整震盪</strong></td><td>ADX(14) &lt; 20</td><td>Wilder (1978); Perold &amp; Sharpe (1988) constant-mix 最優場景</td></tr>
+      <tr><td class="neg"><strong>空頭趨勢</strong></td><td>SMA(50) &lt; SMA(200) 且 ADX(14) &gt; 25</td><td>同上</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">4.4 Benchmark 比較</h2>
+  <ul>
+    <li><strong>Buy &amp; Hold BTC</strong>：純持幣基準</li>
+    <li><strong>純幣本位 1x 做多</strong>：不含 U 本位對沖</li>
+    <li><strong>等權 1:1 對沖</strong>：幣本位多 + U本位空等權，無再平衡</li>
+    <li><strong>2:1 不再平衡</strong>：初始 2:1 設定但不調整</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 &middot; 回測設計建議</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 文獻列表 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">附錄：完整文獻列表與下載連結</h1>
+
+  <div class="ref-cat">A. Quanto / 反向合約定價</div>
+  <ol class="ref-list">
+    <li>Ackerer, D., Hugonnier, J. &amp; Jermann, U. (2024). "Perpetual Futures Pricing." <em>Mathematical Finance</em>. NBER WP 32936. <a href="https://arxiv.org/abs/2310.11771" target="_blank">arXiv</a> | <a href="https://www.nber.org/papers/w32936" target="_blank">NBER</a></li>
+    <li>Alexander, C., Chen, D. &amp; Imeraj, A. (2023). "Crypto Quanto and Inverse Options." <em>Mathematical Finance</em>, 33(4), 1005-1043. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3893037" target="_blank">SSRN</a></li>
+    <li>Li, B. &amp; Xia, W. (2025). "Crypto Inverse-Power Options and Fractional Stochastic Volatility." <em>Quantitative Finance</em>, 25(7). <a href="https://arxiv.org/abs/2403.16006" target="_blank">arXiv</a></li>
+    <li>Deng, J., Pan, H., Zhang, S. &amp; Zou, B. (2021). "Optimal Bitcoin Trading with Inverse Futures." <em>Annals of Operations Research</em>. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3441913" target="_blank">SSRN</a></li>
+    <li>Wu, Y. (2020). "A Quantitative Analysis on BitMEX Perpetual Inverse Futures XBTUSD Contract." <em>Undergraduate Economic Review</em>, 17(1). <a href="https://digitalcommons.iwu.edu/uer/vol17/iss1/12/" target="_blank">Digital Commons</a></li>
+    <li>Kim, S. et al. (2025). "Designing Funding Rates for Perpetual Futures in Cryptocurrency Markets." <a href="https://arxiv.org/abs/2506.08573" target="_blank">arXiv</a></li>
+  </ol>
+
+  <div class="ref-cat">B. 波動率收割與再平衡溢價</div>
+  <ol class="ref-list" start="7">
+    <li>Witte, J.H. (2016). "Volatility Harvesting: Extracting Return from Randomness." <em>Wilmott Magazine</em>, 2016, 60-67. <a href="https://arxiv.org/abs/1508.05241" target="_blank">arXiv</a></li>
+    <li>Perold, A.F. &amp; Sharpe, W.F. (1988). "Dynamic Strategies for Asset Allocation." <em>Financial Analysts Journal</em>, 44(1), 16-27. <a href="https://web.stanford.edu/class/msande348/papers/PeroldSharpe.pdf" target="_blank">Stanford PDF</a></li>
+    <li>Booth, D.G. &amp; Fama, E.F. (1992). "Diversification Returns and Asset Contributions." <em>Financial Analysts Journal</em>, 48(3), 26-32.</li>
+    <li>Willenbrock, S. (2011). "Diversification Return, Portfolio Rebalancing, and the Commodity Return Puzzle." <em>Financial Analysts Journal</em>, 67(4), 42-49. <a href="https://arxiv.org/abs/1109.1256" target="_blank">arXiv</a></li>
+    <li>Fernholz, R. &amp; Shay, B. (1982). "Stochastic Portfolio Theory and Stock Market Equilibrium." <em>The Journal of Finance</em>, 37(2), 615-624.</li>
+    <li>Kuhn, D. &amp; Luenberger, D. "Analysis of the Rebalancing Frequency in Log-Optimal Portfolio Selection." Stanford.</li>
+  </ol>
+
+  <div class="ref-cat">C. 加密市場 Carry 與資金費率</div>
+  <ol class="ref-list" start="13">
+    <li>BIS (2023). "Crypto Carry." <em>BIS Working Papers</em> No. 1087. <a href="https://www.bis.org/publ/work1087.pdf" target="_blank">BIS PDF</a></li>
+    <li>Inan (2025). "Predictability of Funding Rates." <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5576424" target="_blank">SSRN</a></li>
+  </ol>
+
+  <div class="ref-cat">D. 市場效率與套利</div>
+  <ol class="ref-list" start="15">
+    <li>He, S., Manela, A., Ross, O. &amp; von Wachter, V. (2024). "Fundamentals of Perpetual Futures." <a href="https://arxiv.org/abs/2212.06888" target="_blank">arXiv</a></li>
+    <li>Makarov, I. &amp; Schoar, A. (2020). "Trading and Arbitrage in Cryptocurrency Markets." <em>Journal of Financial Economics</em>, 135(2), 293-319. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3171204" target="_blank">SSRN</a></li>
+    <li>Gornall, W., Rinaldi, M. &amp; Xiao, Y. (2024). "Perpetual Futures and Basis Risk." <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5036933" target="_blank">SSRN</a></li>
+    <li>Alexander, C., Chen, X., Deng, J. &amp; Wang, T. (2024). "Arbitrage Opportunities and Efficiency Tests in Crypto Derivatives." <em>Journal of Financial Markets</em>. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4495548" target="_blank">SSRN</a></li>
+    <li>Dai, M., Li, L. &amp; Yang, C. (2025). "Arbitrage in Perpetual Contracts." <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5262988" target="_blank">SSRN</a></li>
+  </ol>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>附錄 &middot; 完整文獻列表</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 結論頁 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">研究結論</h1>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>學術支撐充分。</strong>策略橫跨 Quanto 定價理論、投資組合再平衡理論、Crypto Carry 研究、市場微觀結構四大學術領域，共 19 篇期刊論文（含 <em>Mathematical Finance</em>、<em>Journal of Financial Economics</em>、<em>Financial Analysts Journal</em> 等頂級期刊）提供直接或間接支撐。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>策略邏輯合理。</strong>三大收益來源（Quanto 凸性、再平衡溢價、Carry）均有獨立的學術驗證，且在高波動環境（BTC 年化 &sigma; 約 60-80%）中預期效果最強。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>加密市場獨有。</strong>幣本位合約的「保證金隨標的升值」特性為加密市場結構性優勢，傳統市場（黃金、原油、股票期貨）無法完整複製。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>需量化回測驗證。</strong>文獻支撐理論可行性，但實際績效需透過歷史回測確認。關鍵驗證點：(a) 最優再平衡頻率、(b) 多頭/盤整/空頭三態表現差異、(c) 交易成本對淨收益的影響。</span></div>
+  </div>
+
+  <h2 class="ch">建議下一步</h2>
+  <table>
+    <thead><tr><th>步驟</th><th>內容</th><th>預期產出</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Step 1</strong></td><td>從幣安 API 下載 2021-01 至今的歷史數據（K線 + 資金費率）</td><td>完整歷史數據集</td></tr>
+      <tr><td><strong>Step 2</strong></td><td>建構回測引擎（next-bar execution、雙合約 PnL、資金費率結算）</td><td>回測引擎核心模組</td></tr>
+      <tr><td><strong>Step 3</strong></td><td>再平衡頻率敏感度掃描（1h ~ 1w）</td><td>最優再平衡間隔</td></tr>
+      <tr><td><strong>Step 4</strong></td><td>市場狀態分段分析（ADX + MA 分類器）</td><td>三態績效比較表</td></tr>
+      <tr><td><strong>Step 5</strong></td><td>完整績效報告與 Benchmark 比較</td><td>最終回測報告</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:16px">本報告涵蓋 19 篇學術論文文獻回顧。資料截止日期：2026年4月12日。僅供研究參考，不構成投資建議。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>研究結論</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+</body>
+</html>

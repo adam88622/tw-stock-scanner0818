@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 車用電子產業鏈研究報告
+  轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="GiS_車用產業鏈研究報告.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///Users/chenhongshuo/claude/車用市況/GiS_車用產業鏈研究報告.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>車用電子產業鏈研究報告 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 頁面容器（固定 A4 高度，避免空白頁） ── */
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+
+/* ── Canvas 強制填滿容器 ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 公司卡片 ── */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 首選股卡 ── */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:32px}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+/* ── 產業鏈 compact card ── */
+.compact-card{border:1px solid #d0ddf0;border-radius:8px;margin:10px 0;overflow:hidden;box-shadow:0 1px 6px rgba(13,27,62,.06)}
+.compact-card-head{padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.compact-card-head .co-name{font-size:15px}
+.compact-card-head .co-ticker{font-size:11px;margin-top:1px}
+.compact-card-body{padding:8px 16px;font-size:12px;line-height:1.6;color:#2d3748}
+.compact-metrics{display:grid;grid-template-columns:repeat(5,1fr);background:#f0f4fc;font-size:11.5px}
+.compact-metrics .co-metric{padding:8px 10px}
+.compact-metrics .co-metric-val{font-size:14px}
+.compact-metrics .co-metric-label{font-size:10px}
+</style>
+</head>
+<body>
+
+<!-- 浮水印（固定不動） -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ PAGE 1: 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Industry Research Report &middot; 2026</div>
+    <div class="cover-title">台灣車用電子產業鏈<br><em>AI + 電動化驅動的結構性成長</em></div>
+    <div class="cover-subtitle">Taiwan Automotive Electronics Supply Chain</div>
+    <div class="cover-tags">
+      <span class="ctag hl">ADAS</span>
+      <span class="ctag hl">電動車</span>
+      <span class="ctag hl">車用半導體</span>
+      <span class="ctag">連接器</span>
+      <span class="ctag">PCB</span>
+      <span class="ctag">SiC/GaN</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>13</em>家</div><div class="cstat-label">涵蓋公司</div></div>
+    <div class="cstat"><div class="cstat-num"><em>3</em>層</div><div class="cstat-label">產業鏈分層</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>15</em>%</div><div class="cstat-label">平均營收成長</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2026</em></div><div class="cstat-label">研究年度</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年4月2日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 投資建議彙整 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch" style="margin-top:16px">伍、投資建議彙整</h1>
+
+  <table style="font-size:11px">
+    <thead><tr><th>公司</th><th>代號</th><th>層級</th><th style="text-align:right">現價</th><th>評等</th><th style="text-align:right">目標價</th><th style="text-align:right">2026F EPS</th><th style="text-align:right">26F Rev YoY</th><th>主要看點</th></tr></thead>
+    <tbody>
+      <tr><td><strong>矽力-KY</strong></td><td>6415</td><td>上游</td><td class="num">285.5</td><td class="pos">Buy</td><td class="num">353</td><td class="num">10.06</td><td class="num pos">+25%</td><td>資料中心+車用雙渦輪</td></tr>
+      <tr><td><strong>晶心科</strong></td><td>6533</td><td>上游</td><td class="num">175.0</td><td class="pos">Buy</td><td class="num">300</td><td class="num">0.94</td><td class="num pos">+24.5%</td><td>RISC-V車用IP長線題材</td></tr>
+      <tr><td><strong>強茂</strong></td><td>2481</td><td>上游</td><td class="num">90.7</td><td class="pos">Buy</td><td class="num hi">110</td><td class="num hi">5.00</td><td class="num pos">+22%</td><td>安世轉單+AI MOSFET</td></tr>
+      <tr><td><strong>同欣電</strong></td><td>6271</td><td>中游</td><td class="num">152.0</td><td class="pos">Buy</td><td class="num hi">190</td><td class="num hi">9.59</td><td class="num pos">+10%</td><td>SiC/GaN基板+AI光通訊</td></tr>
+      <tr><td><strong>敬鵬</strong></td><td>2355</td><td>中游</td><td class="num">51.7</td><td>Neutral</td><td class="num">50</td><td class="num">2.00</td><td class="num pos">+5%</td><td>全球車用PCB前五大，Q4回升</td></tr>
+      <tr><td><strong>群創</strong></td><td>3481</td><td>中游</td><td class="num">25.15</td><td class="pos">Buy</td><td class="num">28</td><td class="num">0.39</td><td class="num pos">+25%</td><td>FOPLP封裝+車用面板</td></tr>
+      <tr><td><strong>億光</strong></td><td>2393</td><td>中游</td><td class="num">68.7</td><td>Neutral</td><td class="num">70</td><td class="num">5.00</td><td class="num pos">+3%</td><td>車用LED+SiC MOSFET</td></tr>
+      <tr><td><strong>晶技</strong></td><td>3042</td><td>中游</td><td class="num">92.3</td><td class="pos">Buy</td><td class="num">115</td><td class="num">5.97</td><td class="num pos">+5%</td><td>AI+車用佔近50%營收</td></tr>
+      <tr><td><strong>胡連</strong></td><td>6279</td><td>下游</td><td class="num">115.5</td><td>Mixed</td><td class="num">137-147</td><td class="num">12.87</td><td class="num pos">+10%</td><td>中國車用連接器龍頭</td></tr>
+      <tr><td><strong>貿聯-KY</strong></td><td>3665</td><td>下游</td><td class="num">1,930</td><td class="pos">Buy</td><td class="num hi">2,220</td><td class="num hi">71.23</td><td class="num pos">+32%</td><td>HPC線束+收購XFS</td></tr>
+      <tr><td><strong>怡利電</strong></td><td>2497</td><td>下游</td><td class="num">&mdash;</td><td>&mdash;</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td>3D AR-HUD+收購KOSO</td></tr>
+      <tr><td><strong>SDI</strong></td><td>2351</td><td>下游</td><td class="num">&mdash;</td><td class="pos">Buy</td><td class="num">115</td><td class="num">4.66</td><td class="num pos">+11%</td><td>車用+工業雙復甦</td></tr>
+      <tr><td><strong>鴻海</strong></td><td>2317</td><td>下游</td><td class="num">&mdash;</td><td class="pos">Buy</td><td class="num">&mdash;</td><td class="num">17.6</td><td class="num pos">+21%</td><td>ZF合資+Foxtron EV</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司季報（MOPS 公開資訊觀測站）；2026F 為 GiS 預估；評等與目標價僅供參考</span>
+
+  <div class="picks-grid" style="margin-top:12px">
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #1</div>
+      <div class="pick-name">強茂</div>
+      <div class="pick-ticker">2481.TW &middot; 現價 90.7 &middot; TP 110（+21%）</div>
+      <div class="pick-why">車用功率半導體IDM，車用營收佔比33%。受惠安世（Nexperia）轉單效應，同時AI伺服器MOSFET需求爆發，2026F營收+22%、EPS從3.12倍增至5.00。</div>
+      <div class="pick-catalyst">催化劑：安世轉單+AI MOSFET雙動能，車用+AI伺服器電源管理需求共振</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #2</div>
+      <div class="pick-name">同欣電</div>
+      <div class="pick-ticker">6271.TW &middot; 現價 152.0 &middot; TP 190（+25%）</div>
+      <div class="pick-why">車用CIS封裝龍頭（佔營收64%），SiC/GaN陶瓷基板為第二成長曲線，AI光通訊CPO基板為第三引擎。三大動能驅動2026F EPS成長至9.59（+26% YoY）。</div>
+      <div class="pick-catalyst">催化劑：車用CIS封裝+SiC基板+AI光通訊三引擎共振</div>
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>結論：</strong>台灣車用電子產業鏈正迎來電動化+智慧化的結構性成長。上游半導體含量提升（矽力、強茂）、中游SiC/GaN新材料放量（同欣電）、下游中國自主品牌崛起（胡連）三大主軸，為2026-2028年提供明確的成長能見度。建議優先佈局車用佔比高且具備技術護城河的標的。
+  </blockquote>
+
+  <hr style="margin:12px 0">
+  <p style="font-size:11px;color:#9aabb5;margin-top:4px">本報告涵蓋公司：矽力-KY、晶心科、強茂、同欣電、敬鵬、群創、億光、晶技、胡連、貿聯-KY、怡利電、SDI、鴻海。資料截止日期：2026年4月2日。僅供研究參考，不構成投資建議。投資人應獨立判斷並承擔投資風險。</p>
+
+  <div class="page-footer" style="margin-top:12px">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資建議彙整</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 2: 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">13<em> 家</em></div><div class="kpi-lbl">涵蓋公司</div></div>
+    <div class="kpi"><div class="kpi-val">3<em> 層</em></div><div class="kpi-lbl">產業鏈分層</div></div>
+    <div class="kpi gold"><div class="kpi-val">69%</div><div class="kpi-lbl">買進評等比率</div></div>
+    <div class="kpi green"><div class="kpi-val">+15%</div><div class="kpi-lbl">Avg Rev Growth</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>電動化+智慧化帶動車用半導體含量提升。</strong>每輛車半導體含量從 500 美元升至 1,000+ 美元，矽力-KY（PMIC/BMS）、晶心科（RISC-V IP）、強茂（功率半導體）直接受惠，三家 2026F 平均營收成長 +24%。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>SiC/GaN + AI 光通訊成為中游新成長引擎。</strong>同欣電（SiC/GaN 陶瓷基板）、敬鵬（車用 PCB 前五）、晶技（車用石英元件）切入高附加價值領域，車用佔比持續攀升。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>中國自主品牌崛起+去中化雙向機會。</strong>胡連（中國車用端子龍頭）、怡利電（3D AR-HUD 中國前二）、貿聯（HPC + 車用全球線束），受惠中國 EV 滲透率突破 50%。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">各公司 2026F 營收成長率（%）</div>
+      <div class="chart-sub">資料來源：公司季報（MOPS）、公司法說會</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">車用營收佔比（%）</div>
+      <div class="chart-sub">資料來源：公司季報（MOPS）、公司法說會</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 3: 章節封面「壹」 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One &mdash; Supply Chain Overview</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業鏈總覽與分層</div>
+  <div class="sec-desc">涵蓋上游 IC 設計/矽智財、中游基板/PCB/面板/被動元件、下游連接器/線束/模組，共 13 家台灣車用電子核心供應商。從晶片到整車，完整解析 AI + 電動化浪潮下的結構性成長機會。</div>
+</div>
+
+<!-- ══════════════ PAGE 4: 產業鏈總覽 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch" style="margin-top:16px">壹、產業鏈總覽</h1>
+
+  <table style="font-size:11px">
+    <thead>
+      <tr>
+        <th>產業鏈</th>
+        <th>公司</th>
+        <th>代號</th>
+        <th style="text-align:right">現價</th>
+        <th>產品定位</th>
+        <th style="text-align:right">車用佔比</th>
+        <th style="text-align:right">2025 EPS</th>
+        <th style="text-align:right">2026F EPS</th>
+        <th style="text-align:right">26F Rev YoY</th>
+        <th>評等</th>
+        <th style="text-align:right">目標價</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td rowspan="3"><strong>上游 IC</strong></td><td><strong>矽力-KY</strong></td><td>6415</td><td class="num">285.5</td><td>車用PMIC/BMS</td><td class="num">15%</td><td class="num">6.40</td><td class="num hi">10.06</td><td class="num pos">+25%</td><td class="pos">Buy</td><td class="num">353</td></tr>
+      <tr><td><strong>晶心科</strong></td><td>6533</td><td class="num">175.0</td><td>RISC-V車用CPU IP</td><td class="num">4%</td><td class="num neg">−7.83</td><td class="num hi">0.94</td><td class="num pos">+24.5%</td><td class="pos">Buy</td><td class="num">300</td></tr>
+      <tr><td><strong>強茂</strong></td><td>2481</td><td class="num">90.7</td><td>MOSFET/Diode車用33%</td><td class="num">33%</td><td class="num">3.12</td><td class="num hi">5.00</td><td class="num pos">+22%</td><td class="pos">Buy</td><td class="num">110</td></tr>
+      <tr><td rowspan="5"><strong>中游<br>基板/PCB<br>/面板<br>/被動光電</strong></td><td><strong>同欣電</strong></td><td>6271</td><td class="num">152.0</td><td>陶瓷基板/CIS封裝</td><td class="num hi">64%</td><td class="num">7.13</td><td class="num hi">9.59</td><td class="num pos">+10%</td><td class="pos">Buy</td><td class="num">190</td></tr>
+      <tr><td><strong>敬鵬</strong></td><td>2355</td><td class="num">51.7</td><td>車用PCB全球前五</td><td class="num hi">77%</td><td class="num">1.60</td><td class="num hi">2.00</td><td class="num pos">+5%</td><td>Neutral</td><td class="num">50</td></tr>
+      <tr><td><strong>群創</strong></td><td>3481</td><td class="num">25.15</td><td>車用面板+FOPLP</td><td class="num">26%</td><td class="num">0.03</td><td class="num">0.39</td><td class="num pos">+25%</td><td class="pos">Buy</td><td class="num">28</td></tr>
+      <tr><td><strong>億光</strong></td><td>2393</td><td class="num">68.7</td><td>車用LED</td><td class="num">15%</td><td class="num">4.60</td><td class="num">5.00</td><td class="num pos">+3%</td><td>Neutral</td><td class="num">70</td></tr>
+      <tr><td><strong>晶技</strong></td><td>3042</td><td class="num">92.3</td><td>車用石英元件</td><td class="num">27%</td><td class="num">5.28</td><td class="num">5.97</td><td class="num pos">+5%</td><td class="pos">Buy</td><td class="num">115</td></tr>
+      <tr><td rowspan="5"><strong>下游<br>連接器<br>/模組</strong></td><td><strong>胡連</strong></td><td>6279</td><td class="num">115.5</td><td>中國車用端子龍頭</td><td class="num hi">~100%</td><td class="num">10.74</td><td class="num hi">12.87</td><td class="num pos">+10%</td><td>Mixed</td><td class="num">137-147</td></tr>
+      <tr><td><strong>貿聯-KY</strong></td><td>3665</td><td class="num">1,930</td><td>連接線束(HPC主力)</td><td class="num">10%</td><td class="num">46.57</td><td class="num hi">71.23</td><td class="num pos">+32%</td><td class="pos">Buy</td><td class="num">2,220</td></tr>
+      <tr><td><strong>怡利電</strong></td><td>2497</td><td class="num">&mdash;</td><td>AR-HUD+KOSO</td><td class="num">高</td><td class="num">2.37</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td>&mdash;</td><td class="num">&mdash;</td></tr>
+      <tr><td><strong>SDI</strong></td><td>2351</td><td class="num">&mdash;</td><td>車用電子零件</td><td class="num">中</td><td class="num">1.66</td><td class="num hi">4.66</td><td class="num pos">+11%</td><td class="pos">Buy</td><td class="num">115</td></tr>
+      <tr><td><strong>鴻海</strong></td><td>2317</td><td class="num">&mdash;</td><td>ZF底盤+Foxtron EV</td><td class="num">低</td><td class="num">13.61</td><td class="num">17.6</td><td class="num pos">+21%</td><td class="pos">Buy</td><td class="num">&mdash;</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司季報（MOPS 公開資訊觀測站）；2026F 為 GiS 預估；目標價僅供參考</span>
+
+  <div class="chart-wrap" style="padding:14px;margin-top:8px">
+    <div class="chart-title">車用營收佔比分布（%）</div>
+    <div class="chart-sub">資料來源：公司季報（MOPS）、公司法說會</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chart3" style="display:block;width:100%;height:200px"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 產業鏈總覽</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 5: 章節封面「貳」 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two &mdash; Upstream: IC Design / IP</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">上游：IC設計 / 矽智財</div>
+  <div class="sec-desc">車用半導體含量持續提升，PMIC/BMS、RISC-V IP、功率半導體（MOSFET/Diode）三大領域由矽力-KY、晶心科、強茂分別卡位，2026F 平均營收成長率達 +24%。</div>
+</div>
+
+<!-- ══════════════ PAGE 6: 上游三家公司 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch" style="margin-top:16px">貳、上游 IC 設計 / 矽智財</h1>
+
+  <!-- 矽力-KY compact card -->
+  <div class="compact-card">
+    <div class="co-card-head navy" style="padding:10px 16px">
+      <div><div class="co-name" style="font-size:15px">矽力-KY</div><div class="co-ticker" style="font-size:11px">6415.TW &middot; 車用 PMIC/BMS &middot; 資料中心+車用雙渦輪</div></div>
+      <div class="co-badge"><span class="badge buy">Buy</span><span style="color:rgba(255,255,255,.7);font-size:10px">TP 353 | 現價 285.5</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val up" style="font-size:14px">+24%</div><div class="co-metric-label" style="font-size:10px">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:14px">15%</div><div class="co-metric-label" style="font-size:10px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val up" style="font-size:14px">10.06</div><div class="co-metric-label" style="font-size:10px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up" style="font-size:14px">+25%</div><div class="co-metric-label" style="font-size:10px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:14px">235億</div><div class="co-metric-label" style="font-size:10px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <!-- 晶心科 compact card -->
+  <div class="compact-card">
+    <div class="co-card-head teal" style="padding:10px 16px">
+      <div><div class="co-name" style="font-size:15px">晶心科</div><div class="co-ticker" style="font-size:11px">6533.TW &middot; RISC-V CPU IP &middot; 車用佔比 4% &rarr; 2027E 20%</div></div>
+      <div class="co-badge"><span class="badge buy">Buy</span><span style="color:rgba(255,255,255,.7);font-size:10px">TP 300 | 現價 175.0</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val up" style="font-size:14px">+71%</div><div class="co-metric-label" style="font-size:10px">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:14px">4%</div><div class="co-metric-label" style="font-size:10px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val up" style="font-size:14px">0.94</div><div class="co-metric-label" style="font-size:10px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up" style="font-size:14px">+24.5%</div><div class="co-metric-label" style="font-size:10px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:14px">18.4億</div><div class="co-metric-label" style="font-size:10px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <!-- 強茂 compact card -->
+  <div class="compact-card">
+    <div class="co-card-head blue" style="padding:10px 16px">
+      <div><div class="co-name" style="font-size:15px">強茂</div><div class="co-ticker" style="font-size:11px">2481.TW &middot; 功率半導體 IDM（MOSFET/Diode） &middot; 安世轉單受惠者</div></div>
+      <div class="co-badge"><span class="badge buy">Buy</span><span style="color:rgba(255,255,255,.7);font-size:10px">TP 110 | 現價 90.7</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val up" style="font-size:14px">+21%</div><div class="co-metric-label" style="font-size:10px">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:14px">33%</div><div class="co-metric-label" style="font-size:10px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val up" style="font-size:14px">5.00</div><div class="co-metric-label" style="font-size:10px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up" style="font-size:14px">+22%</div><div class="co-metric-label" style="font-size:10px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:14px">160億</div><div class="co-metric-label" style="font-size:10px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <h2 class="ch" style="margin:14px 0 8px">上游財務比較</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>指標</th><th style="text-align:right">矽力-KY</th><th style="text-align:right">晶心科</th><th style="text-align:right">強茂</th></tr></thead>
+    <tbody>
+      <tr><td>代號</td><td class="num">6415</td><td class="num">6533</td><td class="num">2481</td></tr>
+      <tr><td>現價</td><td class="num">285.5</td><td class="num">175.0</td><td class="num">90.7</td></tr>
+      <tr><td>車用佔比</td><td class="num">15%</td><td class="num">4%</td><td class="num">33%</td></tr>
+      <tr><td>2025 營收（百萬）</td><td class="num">18,812</td><td class="num">1,478</td><td class="num">13,094</td></tr>
+      <tr><td>2026F 營收（億）</td><td class="num hi">235</td><td class="num hi">18.4</td><td class="num hi">160</td></tr>
+      <tr><td>Rev YoY</td><td class="num pos">+25%</td><td class="num pos">+24.5%</td><td class="num pos">+22%</td></tr>
+      <tr><td>2025 EPS</td><td class="num">6.40</td><td class="num neg">−7.83</td><td class="num">3.12</td></tr>
+      <tr><td>2026F EPS</td><td class="num hi">10.06</td><td class="num hi">0.94</td><td class="num hi">5.00</td></tr>
+      <tr><td>毛利率（2025）</td><td class="num">51.6%</td><td class="num">~99.9%</td><td class="num">31.3%</td></tr>
+      <tr><td>評等</td><td class="pos">Buy</td><td class="pos">Buy</td><td class="pos">Buy</td></tr>
+      <tr><td>目標價</td><td class="num">353</td><td class="num">300</td><td class="num">110</td></tr>
+      <tr><td>上檔空間</td><td class="num pos">+24%</td><td class="num pos">+71%</td><td class="num pos">+21%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司季報（MOPS 公開資訊觀測站）；2026F 為 GiS 預估</span>
+
+  <p style="font-size:12px;line-height:1.65;margin-top:6px"><strong>矽力-KY：</strong>車用 PMIC/BMS 佔營收 15%，目標拉升至 20%；資料中心+車用雙引擎驅動，2026F EPS 10.06（+57% YoY）。<strong>晶心科：</strong>RISC-V CPU IP 供應商，2025仍虧損（EPS −7.83），2026F 轉盈；車用佔比僅 4%，長線成長空間大。<strong>強茂：</strong>功率半導體 IDM，安世轉單+AI MOSFET 雙動能，2026F EPS 倍增至 5.00。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 &middot; 上游 IC 設計 / 矽智財</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 7: 中游 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch" style="margin-top:16px">參、中游：基板 / PCB / 面板 + 被動 / 光電</h1>
+
+  <!-- 同欣電 -->
+  <div class="compact-card">
+    <div class="co-card-head navy" style="padding:8px 16px">
+      <div><div class="co-name" style="font-size:14px">同欣電 (6271)</div><div class="co-ticker" style="font-size:10px">陶瓷基板/CIS封裝 &middot; 車用佔 64% &middot; SiC/GaN基板放量</div></div>
+      <div class="co-badge"><span class="badge buy" style="font-size:9.5px;padding:3px 10px">Buy TP 190</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">152.0</div><div class="co-metric-label" style="font-size:9.5px">現價</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">64%</div><div class="co-metric-label" style="font-size:9.5px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">9.59</div><div class="co-metric-label" style="font-size:9.5px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">+10%</div><div class="co-metric-label" style="font-size:9.5px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">127億</div><div class="co-metric-label" style="font-size:9.5px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <!-- 敬鵬 -->
+  <div class="compact-card">
+    <div class="co-card-head teal" style="padding:8px 16px">
+      <div><div class="co-name" style="font-size:14px">敬鵬 (2355)</div><div class="co-ticker" style="font-size:10px">車用PCB硬板 &middot; 車用佔 77% &middot; 全球車用PCB前五大</div></div>
+      <div class="co-badge"><span class="badge neutral" style="font-size:9.5px;padding:3px 10px">Neutral TP 50</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">51.7</div><div class="co-metric-label" style="font-size:9.5px">現價</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">77%</div><div class="co-metric-label" style="font-size:9.5px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">2.00</div><div class="co-metric-label" style="font-size:9.5px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">+5%</div><div class="co-metric-label" style="font-size:9.5px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">165億</div><div class="co-metric-label" style="font-size:9.5px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <!-- 群創 -->
+  <div class="compact-card">
+    <div class="co-card-head blue" style="padding:8px 16px">
+      <div><div class="co-name" style="font-size:14px">群創 (3481)</div><div class="co-ticker" style="font-size:10px">車用面板+FOPLP封裝 &middot; 車用佔 26%</div></div>
+      <div class="co-badge"><span class="badge buy" style="font-size:9.5px;padding:3px 10px">Buy TP 28</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">25.15</div><div class="co-metric-label" style="font-size:9.5px">現價</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">26%</div><div class="co-metric-label" style="font-size:9.5px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">0.39</div><div class="co-metric-label" style="font-size:9.5px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">+25%</div><div class="co-metric-label" style="font-size:9.5px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">2,838億</div><div class="co-metric-label" style="font-size:9.5px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 &middot; 中游基板/PCB/面板/被動/光電（1/2）</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 7b: 中游（續） ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch" style="margin-top:16px">參、中游（續）：被動 / 光電</h1>
+
+  <!-- 億光 -->
+  <div class="compact-card">
+    <div class="co-card-head slate" style="padding:8px 16px">
+      <div><div class="co-name" style="font-size:14px">億光 (2393)</div><div class="co-ticker" style="font-size:10px">車用LED（內外光源、背光）&middot; 車用佔 15%</div></div>
+      <div class="co-badge"><span class="badge neutral" style="font-size:9.5px;padding:3px 10px">Neutral TP 70</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">68.7</div><div class="co-metric-label" style="font-size:9.5px">現價</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">15%</div><div class="co-metric-label" style="font-size:9.5px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">5.00</div><div class="co-metric-label" style="font-size:9.5px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">+3%</div><div class="co-metric-label" style="font-size:9.5px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">202億</div><div class="co-metric-label" style="font-size:9.5px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <!-- 晶技 -->
+  <div class="compact-card">
+    <div class="co-card-head indigo" style="padding:8px 16px">
+      <div><div class="co-name" style="font-size:14px">晶技 (3042)</div><div class="co-ticker" style="font-size:10px">車用石英元件 &middot; 車用佔 27% &rarr; 2027E 31%</div></div>
+      <div class="co-badge"><span class="badge buy" style="font-size:9.5px;padding:3px 10px">Buy TP 115</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">92.3</div><div class="co-metric-label" style="font-size:9.5px">現價</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">27%</div><div class="co-metric-label" style="font-size:9.5px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">5.97</div><div class="co-metric-label" style="font-size:9.5px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">+5%</div><div class="co-metric-label" style="font-size:9.5px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">140億</div><div class="co-metric-label" style="font-size:9.5px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <h2 class="ch" style="margin:10px 0 6px">中游財務比較</h2>
+  <table style="font-size:11px">
+    <thead><tr><th>指標</th><th style="text-align:right">同欣電</th><th style="text-align:right">敬鵬</th><th style="text-align:right">群創</th><th style="text-align:right">億光</th><th style="text-align:right">晶技</th></tr></thead>
+    <tbody>
+      <tr><td>代號</td><td class="num">6271</td><td class="num">2355</td><td class="num">3481</td><td class="num">2393</td><td class="num">3042</td></tr>
+      <tr><td>現價</td><td class="num">152.0</td><td class="num">51.7</td><td class="num">25.15</td><td class="num">68.7</td><td class="num">92.3</td></tr>
+      <tr><td>車用佔比</td><td class="num hi">64%</td><td class="num hi">77%</td><td class="num">26%</td><td class="num">15%</td><td class="num">27%</td></tr>
+      <tr><td>2026F 營收（億）</td><td class="num">127</td><td class="num">165</td><td class="num">2,838</td><td class="num">202</td><td class="num">140</td></tr>
+      <tr><td>Rev YoY</td><td class="num pos">+10%</td><td class="num pos">+5%</td><td class="num pos">+25%</td><td class="num pos">+3%</td><td class="num pos">+5%</td></tr>
+      <tr><td>2025 / 2026F EPS</td><td class="num">7.13 / 9.59</td><td class="num">1.60 / 2.00</td><td class="num">0.03 / 0.39</td><td class="num">4.60 / 5.00</td><td class="num">5.28 / 5.97</td></tr>
+      <tr><td>評等 / 目標價</td><td class="num">Buy / 190</td><td class="num">Neutral / 50</td><td class="num">Buy / 28</td><td class="num">Neutral / 70</td><td class="num">Buy / 115</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司季報（MOPS 公開資訊觀測站）；2026F 為 GiS 預估</span>
+
+  <p style="font-size:11.5px;line-height:1.6;margin-top:4px"><strong>同欣電</strong>車用CIS封裝+SiC基板為核心成長引擎，車用佔比64%為中游最高。<strong>敬鵬</strong>為全球車用PCB前五，車用佔比77%，Q4'25獲利回升帶動2026展望改善。<strong>群創</strong>車用面板+FOPLP封裝雙題材，2026F營收成長+25%最亮眼。<strong>億光</strong>車用LED穩定，SiC MOSFET為新動能。<strong>晶技</strong>車用+AI佔營收近50%，石英元件需求受惠ADAS普及。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 &middot; 中游基板/PCB/面板/被動/光電（2/2）</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 8: 下游 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch" style="margin-top:16px">肆、下游：連接器 / 線束 / 模組</h1>
+
+  <!-- 胡連 -->
+  <div class="compact-card">
+    <div class="co-card-head navy" style="padding:8px 16px">
+      <div><div class="co-name" style="font-size:14px">胡連 (6279)</div><div class="co-ticker" style="font-size:10px">中國車用端子/連接器龍頭 &middot; 車用營收佔比~100% &middot; 區域化/模組化轉型</div></div>
+      <div class="co-badge"><span class="badge neutral" style="font-size:9.5px;padding:3px 10px">Mixed TP 137-147</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">115.5</div><div class="co-metric-label" style="font-size:9.5px">現價</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">~100%</div><div class="co-metric-label" style="font-size:9.5px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">12.87</div><div class="co-metric-label" style="font-size:9.5px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">+10%</div><div class="co-metric-label" style="font-size:9.5px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">108億</div><div class="co-metric-label" style="font-size:9.5px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <!-- 貿聯-KY -->
+  <div class="compact-card">
+    <div class="co-card-head teal" style="padding:8px 16px">
+      <div><div class="co-name" style="font-size:14px">貿聯-KY (3665)</div><div class="co-ticker" style="font-size:10px">全球連接線束方案 &middot; HPC(AEC/Power Whip)主力 &middot; 收購新富生光電(XFS)</div></div>
+      <div class="co-badge"><span class="badge buy" style="font-size:9.5px;padding:3px 10px">Buy TP 2,220</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">1,930</div><div class="co-metric-label" style="font-size:9.5px">現價</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">10%</div><div class="co-metric-label" style="font-size:9.5px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">71.23</div><div class="co-metric-label" style="font-size:9.5px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">+32%</div><div class="co-metric-label" style="font-size:9.5px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">940億</div><div class="co-metric-label" style="font-size:9.5px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <!-- 怡利電 -->
+  <div class="compact-card">
+    <div class="co-card-head blue" style="padding:8px 16px">
+      <div><div class="co-name" style="font-size:14px">怡利電 (2497)</div><div class="co-ticker" style="font-size:10px">3D AR-HUD 中國前二名 &middot; 收購KOSO（年營收10億, 毛利率30%+）</div></div>
+      <div class="co-badge"><span style="color:rgba(255,255,255,.7);font-size:9.5px">觀察中</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">&mdash;</div><div class="co-metric-label" style="font-size:9.5px">現價</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">高</div><div class="co-metric-label" style="font-size:9.5px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">&mdash;</div><div class="co-metric-label" style="font-size:9.5px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">&mdash;</div><div class="co-metric-label" style="font-size:9.5px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">&mdash;</div><div class="co-metric-label" style="font-size:9.5px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 &middot; 下游連接器/線束/模組（1/2）</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 8b: 下游（續） ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch" style="margin-top:16px">肆、下游（續）：車用零件 / EV 平台</h1>
+
+  <!-- SDI -->
+  <div class="compact-card">
+    <div class="co-card-head slate" style="padding:8px 16px">
+      <div><div class="co-name" style="font-size:14px">SDI (2351)</div><div class="co-ticker" style="font-size:10px">車用電子零件/手工具 &middot; 車用+工業復甦</div></div>
+      <div class="co-badge"><span class="badge buy" style="font-size:9.5px;padding:3px 10px">Buy TP 115</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">&mdash;</div><div class="co-metric-label" style="font-size:9.5px">現價</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">中</div><div class="co-metric-label" style="font-size:9.5px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">4.66</div><div class="co-metric-label" style="font-size:9.5px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">+11%</div><div class="co-metric-label" style="font-size:9.5px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">&mdash;</div><div class="co-metric-label" style="font-size:9.5px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <!-- 鴻海 -->
+  <div class="compact-card">
+    <div class="co-card-head wine" style="padding:8px 16px">
+      <div><div class="co-name" style="font-size:14px">鴻海 (2317)</div><div class="co-ticker" style="font-size:10px">ZF底盤模組合資 &middot; Foxtron EV &middot; 車用佔比持續擴張</div></div>
+      <div class="co-badge"><span class="badge buy" style="font-size:9.5px;padding:3px 10px">Buy</span></div>
+    </div>
+    <div class="compact-metrics">
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">&mdash;</div><div class="co-metric-label" style="font-size:9.5px">現價</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">低</div><div class="co-metric-label" style="font-size:9.5px">車用佔比</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">17.6</div><div class="co-metric-label" style="font-size:9.5px">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px;color:#00875a">+21%</div><div class="co-metric-label" style="font-size:9.5px">營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val" style="font-size:13px">&mdash;</div><div class="co-metric-label" style="font-size:9.5px">2026F 營收</div></div>
+    </div>
+  </div>
+
+  <h2 class="ch" style="margin:8px 0 6px">下游財務比較</h2>
+  <table style="font-size:11px">
+    <thead><tr><th>指標</th><th style="text-align:right">胡連</th><th style="text-align:right">貿聯-KY</th><th style="text-align:right">怡利電</th><th style="text-align:right">SDI</th><th style="text-align:right">鴻海</th></tr></thead>
+    <tbody>
+      <tr><td>代號</td><td class="num">6279</td><td class="num">3665</td><td class="num">2497</td><td class="num">2351</td><td class="num">2317</td></tr>
+      <tr><td>車用佔比</td><td class="num hi">~100%</td><td class="num">10%</td><td class="num">高</td><td class="num">中</td><td class="num">低</td></tr>
+      <tr><td>2026F 營收（億）</td><td class="num">108</td><td class="num hi">940</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr>
+      <tr><td>2025 / 2026F EPS</td><td class="num">10.74 / 12.87</td><td class="num">46.57 / 71.23</td><td class="num">2.37 / &mdash;</td><td class="num">1.66 / 4.66</td><td class="num">13.61 / 17.6</td></tr>
+      <tr><td>Rev YoY</td><td class="num pos">+10%</td><td class="num pos">+32%</td><td class="num">&mdash;</td><td class="num pos">+11%</td><td class="num pos">+21%</td></tr>
+      <tr><td>評等 / 目標價</td><td class="num">Mixed / 137-147</td><td class="num">Buy / 2,220</td><td class="num">&mdash; / &mdash;</td><td class="num">Buy / 115</td><td class="num">Buy / &mdash;</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司季報（MOPS 公開資訊觀測站）；2026F 為 GiS 預估</span>
+
+  <p style="font-size:11.5px;line-height:1.6;margin-top:4px"><strong>胡連</strong>為中國車用端子龍頭，車用營收佔比近100%，深度綁定中國自主品牌EV供應鏈，模組化轉型提升ASP。<strong>貿聯-KY</strong>以HPC線束為主力（佔營收60%+），車用佔比10%但絕對金額成長快速，2026F營收+32%為全覆蓋最高。<strong>怡利電</strong>主攻3D AR-HUD，中國市佔前二，收購KOSO拓展機車電子。<strong>SDI</strong>車用+工業雙復甦，EPS從1.66大幅成長至4.66。<strong>鴻海</strong>透過ZF合資切入底盤模組，Foxtron EV品牌佈局長線看好。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 &middot; 下游連接器/線束/模組（2/2）</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  Chart.register({
+    id: 'labelPlugin',
+    afterDatasetsDraw(chart) {
+      var ctx = chart.ctx;
+      var isH = chart.options.indexAxis === 'y';
+      chart.data.datasets.forEach(function(ds, i) {
+        var meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach(function(bar, idx) {
+          var v = ds.data[idx];
+          if (!v && v !== 0) return;
+          ctx.save();
+          ctx.font = 'bold 11.5px PingFang TC, Arial';
+          ctx.textAlign = isH ? 'left' : 'center';
+          if (isH) {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'middle';
+            ctx.fillText(v + '%', bar.x + 6, bar.y);
+          } else {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'bottom';
+            ctx.fillText(String(v) + '%', bar.x, bar.y - 3);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+  // ── Chart 1: 2026F 營收成長率 Horizontal Bar (sorted) ──
+  new Chart(getEl('chart1'), {
+    type: 'bar',
+    data: {
+      labels: ['貿聯 +32%', '群創 +25%', '矽力 +25%', '晶心科 +24.5%', '強茂 +22%', '同欣電 +10%', '胡連 +10%', '晶技 +5%', '敬鵬 +5%', '億光 +3%'],
+      datasets: [{
+        label: '2026F 營收 YoY (%)',
+        data: [32, 25, 25, 24.5, 22, 10, 10, 5, 5, 3],
+        backgroundColor: ['#00a878','#00a878','#00a878','#00a878','#00a878','#1a3a6e','#1a3a6e','#6b7a9a','#6b7a9a','#6b7a9a'],
+        borderRadius: 4,
+        barPercentage: 0.7,
+        categoryPercentage: 0.8
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#eef2f8' }, ticks: { callback: function(v) { return v + '%'; } } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Chart 2: 車用營收佔比 Bar (sorted descending) ──
+  new Chart(getEl('chart2'), {
+    type: 'bar',
+    data: {
+      labels: ['胡連', '敬鵬', '同欣電', '強茂', '晶技', '群創', '矽力', '億光', '貿聯'],
+      datasets: [{
+        label: '車用佔比 (%)',
+        data: [100, 75, 64, 33, 27, 26, 15, 15, 10],
+        backgroundColor: ['#0d1b3e','#0d1b3e','#0d1b3e','#00a878','#00a878','#1a3a6e','#1a3a6e','#6b7a9a','#6b7a9a'],
+        borderRadius: 4,
+        barPercentage: 0.7,
+        categoryPercentage: 0.8
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: function(v) { return v + '%'; } }, max: 110 }
+      }
+    }
+  });
+
+  // ── Chart 3: 車用營收佔比 Horizontal Bar (page 4) ──
+  new Chart(getEl('chart3'), {
+    type: 'bar',
+    data: {
+      labels: ['胡連 100%','敬鵬 77%','同欣電 64%','強茂 33%','晶技 27%','群創 26%','矽力 15%','億光 15%','貿聯 10%'],
+      datasets: [{
+        label: '車用佔比 (%)',
+        data: [100, 77, 64, 33, 27, 26, 15, 15, 10],
+        backgroundColor: ['#0d1b3e','#0d1b3e','#00a878','#00a878','#1a3a6e','#1a3a6e','#6b7a9a','#6b7a9a','#6b7a9a'],
+        borderRadius: 4,
+        barPercentage: 0.55
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#eef2f8' }, ticks: { callback: function(v) { return v + '%'; } }, max: 110 },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+}); // end window.load
+</script>
+</body>
+</html>

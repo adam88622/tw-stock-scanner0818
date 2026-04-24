@@ -165,13 +165,16 @@ def inject_global():
         if now - _latest_date_cache['ts'] < 60 and _latest_date_cache['value'] is not None:
             latest = _latest_date_cache['value']
         else:
-            conn = get_conn()
             try:
-                latest = get_latest_date(conn)
-                _latest_date_cache['value'] = latest
-                _latest_date_cache['ts'] = now
-            finally:
-                conn.close()
+                conn = get_conn()
+                try:
+                    latest = get_latest_date(conn)
+                    _latest_date_cache['value'] = latest
+                    _latest_date_cache['ts'] = now
+                finally:
+                    conn.close()
+            except Exception:
+                latest = _latest_date_cache['value'] or '更新中'
     return {
         'today': datetime.now().strftime('%Y-%m-%d %H:%M'),
         'last_update': latest or '尚未更新',
@@ -185,7 +188,18 @@ def page_not_found(e):
 
 @app.errorhandler(500)
 def server_error(e):
-    return render_template('error.html', code=500, message='伺服器錯誤'), 500
+    logger.error(f"500 錯誤: {e}")
+    return render_template('error.html', code=500,
+                           message='伺服器暫時無法處理請求，資料庫可能忙碌中，請稍後重試'), 500
+
+
+import sqlite3
+
+@app.errorhandler(sqlite3.OperationalError)
+def db_error(e):
+    logger.error(f"DB 錯誤: {e}")
+    return render_template('error.html', code=503,
+                           message='資料庫忙碌中（背景正在更新資料），請稍後重試'), 503
 
 
 @app.route('/')
@@ -215,6 +229,29 @@ def research_list():
             pass
         return None
 
+    def _extract_date(fpath):
+        """報告日期：優先檔名 YYYYMMDD / YYYY-MM-DD，其次 HTML 內容"""
+        fname = os.path.basename(fpath)
+        m = _re.search(r'(\d{4})(\d{2})(\d{2})', fname)
+        if m:
+            return f'{m.group(1)}-{m.group(2)}-{m.group(3)}'
+        m = _re.search(r'(\d{4})-(\d{2})-(\d{2})', fname)
+        if m:
+            return f'{m.group(1)}-{m.group(2)}-{m.group(3)}'
+        try:
+            with open(fpath, 'r', encoding='utf-8', errors='ignore') as fh:
+                content = fh.read(15000)
+            text = _re.sub(r'<[^>]+>', ' ', content)
+            m = _re.search(r'(\d{4})年(\d{1,2})月(\d{1,2})日', text)
+            if m:
+                return f'{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}'
+            m = _re.search(r'(\d{4})[-/](\d{1,2})[-/](\d{1,2})', text)
+            if m:
+                return f'{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}'
+        except Exception:
+            pass
+        return None
+
     def _extract_summary(fpath, max_len=80):
         """從 HTML 抓第一段有意義的文字當摘要"""
         try:
@@ -235,32 +272,63 @@ def research_list():
         return ''
 
     categories = {}
+
+    def _scan_folder(base_dir, category_name, path_prefix=''):
+        """掃描資料夾內的 .html 報告，加入 categories"""
+        reports = []
+        if not os.path.isdir(base_dir):
+            return
+        for f in sorted(os.listdir(base_dir)):
+            if f.endswith('.html'):
+                fpath = os.path.join(base_dir, f)
+                date_str = _extract_date(fpath)
+                if not date_str:
+                    mtime = os.path.getmtime(fpath)
+                    date_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d')
+                title = _extract_title(fpath) or f.replace('.html', '').replace('-', ' ').replace('_', ' ')
+                summary = _extract_summary(fpath)
+                rel_path = (path_prefix + '/' + f) if path_prefix else f
+                reports.append({'filename': rel_path, 'title': title, 'category': category_name, 'date': date_str, 'summary': summary})
+        if reports:
+            categories.setdefault(category_name, []).extend(reports)
+
     if os.path.isdir(RESEARCH_DIR):
         for item in sorted(os.listdir(RESEARCH_DIR)):
             item_path = os.path.join(RESEARCH_DIR, item)
-            if os.path.isdir(item_path) and not item.startswith('_'):
-                reports = []
-                for f in sorted(os.listdir(item_path)):
-                    if f.endswith('.html'):
-                        fpath = os.path.join(item_path, f)
-                        mtime = os.path.getmtime(fpath)
-                        date_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d')
-                        title = _extract_title(fpath) or f.replace('.html', '').replace('-', ' ').replace('_', ' ')
-                        summary = _extract_summary(fpath)
-                        reports.append({'filename': f, 'title': title, 'category': item, 'date': date_str, 'summary': summary})
-                if reports:
-                    # 按日期排序，最新的在前
-                    reports.sort(key=lambda x: x['date'], reverse=True)
-                    categories[item] = reports
+            if item == '_archive' and os.path.isdir(item_path):
+                # _archive 下的子資料夾自動展開為分類
+                for sub in sorted(os.listdir(item_path)):
+                    sub_path = os.path.join(item_path, sub)
+                    if os.path.isdir(sub_path):
+                        _scan_folder(sub_path, sub, path_prefix='_archive/' + sub)
+            elif os.path.isdir(item_path) and not item.startswith('_'):
+                _scan_folder(item_path, item, path_prefix=item)
             elif item.endswith('.html'):
                 fpath = os.path.join(RESEARCH_DIR, item)
-                mtime = os.path.getmtime(fpath)
-                date_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d')
+                date_str = _extract_date(fpath)
+                if not date_str:
+                    mtime = os.path.getmtime(fpath)
+                    date_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d')
                 title = _extract_title(fpath) or item.replace('.html', '').replace('-', ' ').replace('_', ' ')
                 summary = _extract_summary(fpath)
                 categories.setdefault('其他', []).append({'filename': item, 'title': title, 'category': '', 'date': date_str, 'summary': summary})
+
+        # 每個分類內部按日期排序
+        for cat in categories:
+            categories[cat].sort(key=lambda x: x['date'], reverse=True)
+
+        # 分類之間按最新報告日期排序（最近更新的分類排最前面）
+        categories = dict(sorted(
+            categories.items(),
+            key=lambda kv: kv[1][0]['date'] if kv[1] else '0000',
+            reverse=True
+        ))
+
     total_count = sum(len(v) for v in categories.values())
-    return render_template('research.html', categories=categories, total_count=total_count)
+    # 全部 view：跨類別純日期排序（新的置頂）
+    all_reports = [r for rs in categories.values() for r in rs]
+    all_reports.sort(key=lambda x: x['date'], reverse=True)
+    return render_template('research.html', categories=categories, total_count=total_count, all_reports=all_reports)
 
 @app.route('/api/research/<path:filepath>')
 def api_research(filepath):
@@ -402,6 +470,254 @@ def api_regime_retrain():
         return jsonify({'error': str(e)}), 500
 
 
+# ===== 持股水位投票系統 =====
+
+@app.route('/position-vote')
+def position_vote():
+    from scanners.position_vote import compute_position_vote
+    from scanners.indicator_correlation import run_correlation_analysis
+    conn = get_conn()
+    try:
+        data = compute_position_vote(conn)
+        corr = run_correlation_analysis(conn)
+        return render_template('position_vote.html', data=data, corr=corr)
+    except Exception as e:
+        logger.error(f"Position vote error: {e}")
+        return render_template('position_vote.html', data=None, corr=None, error=str(e))
+    finally:
+        conn.close()
+
+
+@app.route('/api/position-vote')
+def api_position_vote():
+    from scanners.position_vote import compute_position_vote
+    conn = get_conn()
+    try:
+        return jsonify(compute_position_vote(conn))
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        conn.close()
+
+
+# ===== 市場廣度指標 =====
+
+@app.route('/breadth')
+def breadth():
+    from scanners.breadth import compute_breadth, compute_breadth_history
+    conn = get_conn()
+    try:
+        current = compute_breadth(conn)
+        if not current:
+            return render_template('breadth.html', current=None, history_json='[]', error='無資料')
+        history = compute_breadth_history(conn, limit=60)
+        return render_template('breadth.html',
+                               current=current,
+                               history=history,
+                               history_json=json.dumps(history))
+    except Exception as e:
+        logger.error(f"Breadth error: {e}")
+        return render_template('breadth.html', current=None, history_json='[]', error=str(e))
+    finally:
+        conn.close()
+
+
+@app.route('/api/breadth')
+def api_breadth():
+    from scanners.breadth import compute_breadth
+    conn = get_conn()
+    try:
+        result = compute_breadth(conn)
+        return jsonify(result) if result else jsonify({'error': '無資料'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        conn.close()
+
+
+# ===== 信用利差紅綠燈 =====
+
+CREDIT_SPREAD_THRESHOLD = 0.3
+CREDIT_SPREAD_YELLOW_LOW = 0.28
+CREDIT_SPREAD_YELLOW_HIGH = 0.32
+
+@app.route('/credit-spread')
+def credit_spread():
+    from models.database import get_credit_spread_history
+    conn = get_conn()
+    try:
+        rows = get_credit_spread_history(conn, limit=500)
+
+        if not rows:
+            # DB empty - try live compute and seed
+            try:
+                from scanners.credit_spread import update_credit_spread_db
+                update_credit_spread_db(conn)
+                rows = get_credit_spread_history(conn, limit=500)
+            except Exception as e:
+                logger.warning(f"Credit spread live seed failed: {e}")
+                return render_template('credit_spread.html',
+                                       signal='N/A', indicator_value=0, percentile=0,
+                                       days_in_signal=0, last_switch='', latest_date='',
+                                       history=[], history_json='[]', backtest=None,
+                                       threshold=CREDIT_SPREAD_THRESHOLD,
+                                       error=f"DB empty. Run daily_check.py first. ({e})")
+
+        # rows are DESC order, reverse for chart
+        rows_asc = list(reversed(rows))
+
+        latest = rows[0]
+        signal = latest['signal']
+        value = latest['indicator_value']
+        latest_date = latest['date']
+
+        # Days in current signal
+        days = 0
+        for r in rows:
+            if r['signal'] == signal:
+                days += 1
+            else:
+                break
+        last_switch = rows[days - 1]['date'] if days < len(rows) else rows[-1]['date']
+
+        # History for chart (include spy_close + trend)
+        history = [{'date': r['date'], 'ratio': r['hyg_shy_ratio'],
+                     'value': r['indicator_value'], 'signal': r['signal'],
+                     'spy': r['spy_close'] if r['spy_close'] else 0,
+                     'trend': r['trend5d'] if r['trend5d'] else 0}
+                    for r in rows_asc]
+
+        # Current trend direction
+        latest_trend = rows[0]['trend5d'] if rows[0]['trend5d'] else 0
+
+        # 5-day average of indicator value + its signal
+        avg5d = sum(r['indicator_value'] for r in rows[:5]) / min(5, len(rows)) if rows else 0
+        if avg5d < CREDIT_SPREAD_YELLOW_LOW:
+            avg5d_signal = 'GREEN'
+        elif avg5d >= CREDIT_SPREAD_YELLOW_HIGH:
+            avg5d_signal = 'RED'
+        else:
+            avg5d_signal = 'YELLOW'
+
+        # Backtest: compute from DB data (simple version)
+        backtest = _compute_backtest_from_db(conn)
+
+        return render_template('credit_spread.html',
+                               signal=signal,
+                               indicator_value=value,
+                               percentile=value,
+                               days_in_signal=days,
+                               last_switch=last_switch,
+                               latest_date=latest_date,
+                               history=history,
+                               history_json=json.dumps(history),
+                               backtest=backtest,
+                               threshold=CREDIT_SPREAD_THRESHOLD,
+                               yellow_low=CREDIT_SPREAD_YELLOW_LOW,
+                               yellow_high=CREDIT_SPREAD_YELLOW_HIGH,
+                               trend5d=latest_trend,
+                               avg5d=avg5d,
+                               avg5d_signal=avg5d_signal)
+    except Exception as e:
+        logger.error(f"Credit spread error: {e}")
+        import traceback
+        traceback.print_exc()
+        return render_template('credit_spread.html',
+                               signal='N/A', indicator_value=0, percentile=0,
+                               days_in_signal=0, last_switch='', latest_date='',
+                               history=[], history_json='[]', backtest=None,
+                               threshold=CREDIT_SPREAD_THRESHOLD,
+                               error=str(e))
+    finally:
+        conn.close()
+
+
+def _compute_backtest_from_db(conn):
+    """Quick backtest from DB data."""
+    import numpy as np
+    import pandas as pd
+    rows = conn.execute("""
+        SELECT cs.date, cs.signal, cs.indicator_value
+        FROM credit_spread_history cs
+        ORDER BY cs.date ASC
+    """).fetchall()
+    if len(rows) < 252:
+        return None
+
+    try:
+        import yfinance as yf
+        spy = yf.download('SPY', start=rows[0]['date'], auto_adjust=True, progress=False)
+        if isinstance(spy.columns, pd.MultiIndex):
+            spy_close = spy['Close']['SPY']
+        else:
+            spy_close = spy['Close']
+        spy_close.index = spy_close.index.tz_localize(None) if spy_close.index.tz else spy_close.index
+
+        # Build signal series
+        sig_df = pd.DataFrame(rows)
+        sig_df['date'] = pd.to_datetime(sig_df['date'])
+        sig_df = sig_df.set_index('date')
+
+        # Align
+        common = spy_close.index.intersection(sig_df.index)
+        if len(common) < 100:
+            return None
+
+        spy_ret = spy_close.pct_change()
+        position = (sig_df.loc[common, 'signal'] == 'GREEN').astype(float)
+        tc = 0.5 * 0.01 * 0.01 * position.diff().abs().fillna(0)
+        strat_ret = (spy_ret.loc[common] * position - tc).fillna(0)
+        strat_eq = (1 + strat_ret).cumprod()
+        bh_ret = spy_ret.loc[common].fillna(0)
+        bh_eq = (1 + bh_ret).cumprod()
+
+        n_yr = len(strat_ret) / 252
+        s_tot = strat_eq.iloc[-1] / strat_eq.iloc[0] - 1
+        b_tot = bh_eq.iloc[-1] / bh_eq.iloc[0] - 1
+
+        class BT:
+            pass
+        bt = BT()
+        bt.cagr = (1 + s_tot) ** (1 / n_yr) - 1
+        bt.bh_cagr = (1 + b_tot) ** (1 / n_yr) - 1
+        bt.vol = strat_ret.std() * np.sqrt(252)
+        bt.bh_vol = bh_ret.std() * np.sqrt(252)
+        bt.sharpe = strat_ret.mean() * np.sqrt(252) / strat_ret.std() if strat_ret.std() > 0 else 0
+        bt.bh_sharpe = bh_ret.mean() * np.sqrt(252) / bh_ret.std() if bh_ret.std() > 0 else 0
+        bt.maxdd = float((strat_eq / strat_eq.cummax() - 1).min())
+        bt.bh_maxdd = float((bh_eq / bh_eq.cummax() - 1).min())
+        bt.calmar = bt.cagr / abs(bt.maxdd) if bt.maxdd != 0 else 0
+        bt.bh_calmar = bt.bh_cagr / abs(bt.bh_maxdd) if bt.bh_maxdd != 0 else 0
+        bt.tim = float(position.mean())
+        return bt
+    except Exception as e:
+        logger.warning(f"Backtest compute failed: {e}")
+        return None
+
+
+@app.route('/api/credit-spread')
+def api_credit_spread():
+    from models.database import get_credit_spread_history
+    conn = get_conn()
+    try:
+        rows = get_credit_spread_history(conn, limit=1)
+        if not rows:
+            return jsonify({'error': 'No data. Run daily_check.py first.'}), 404
+        latest = rows[0]
+        return jsonify({
+            'signal': latest['signal'],
+            'indicator_value': latest['indicator_value'],
+            'percentile': latest['indicator_value'],
+            'hyg_shy_ratio': latest['hyg_shy_ratio'],
+            'date': latest['date'],
+            'threshold': CREDIT_SPREAD_THRESHOLD,
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        conn.close()
+
+
 @app.route('/institutional')
 def institutional():
     conn = get_conn()
@@ -409,7 +725,10 @@ def institutional():
         inst_type = request.args.get('type', 'foreign')
         days = int(request.args.get('days', '1'))
         market = request.args.get('market', 'all')
-        date = request.args.get('date') or get_latest_date(conn)
+        date = request.args.get('date')
+        if not date:
+            row = conn.execute("SELECT MAX(date) as d FROM institutional").fetchone()
+            date = row['d'] if row else None
 
         if not date:
             return render_template('institutional.html', buy_rows=[], sell_rows=[],
@@ -874,7 +1193,11 @@ def report():
                                    message='尚無資料，請先執行 python run_daily.py 抓取資料')
 
         # DB queries (fast, no caching needed)
-        # 2. Institutional aggregates for TWSE (latest date)
+        # 法人資料可能比收盤價晚一天，用 institutional 自己的最新日期
+        inst_latest_row = conn.execute("SELECT MAX(date) as d FROM institutional").fetchone()
+        inst_latest = inst_latest_row['d'] if inst_latest_row and inst_latest_row['d'] else latest
+
+        # 2. Institutional aggregates for TWSE (latest institutional date)
         twse_inst = conn.execute("""
             SELECT SUM(i.foreign_buy) as foreign_net,
                    SUM(i.sitc_buy) as sitc_net,
@@ -882,7 +1205,7 @@ def report():
             FROM institutional i
             JOIN stocks s ON s.stock_id = i.stock_id
             WHERE i.date = ? AND s.market = 'twse'
-        """, (latest,)).fetchone()
+        """, (inst_latest,)).fetchone()
 
         # 3. Same for TPEx
         tpex_inst = conn.execute("""
@@ -892,7 +1215,7 @@ def report():
             FROM institutional i
             JOIN stocks s ON s.stock_id = i.stock_id
             WHERE i.date = ? AND s.market = 'tpex'
-        """, (latest,)).fetchone()
+        """, (inst_latest,)).fetchone()
 
         # 4. Foreign buy daily trend (20 days)
         foreign_trend = conn.execute("""
@@ -923,7 +1246,7 @@ def report():
             WHERE dp.date = ? AND dp.change_pct >= 9.5 AND i.foreign_buy < 0
             ORDER BY i.foreign_buy ASC
             LIMIT 15
-        """, (latest, latest)).fetchall()
+        """, (inst_latest, inst_latest)).fetchall()
 
         limit_dn_foreign_buy = conn.execute("""
             SELECT dp.stock_id, s.name, dp.close_price, dp.change_pct, dp.volume,
@@ -937,7 +1260,7 @@ def report():
             WHERE dp.date = ? AND dp.change_pct <= -9.5 AND i.foreign_buy > 0
             ORDER BY i.foreign_buy DESC
             LIMIT 15
-        """, (latest, latest)).fetchall()
+        """, (inst_latest, inst_latest)).fetchall()
 
         # Parallel fetch of all external API data with caching
         external_results = {}
@@ -945,9 +1268,9 @@ def report():
             'quotes': lambda: get_global_quotes(),
             'futures': lambda: fetch_futures_oi(days=20),
             'pc': lambda: fetch_put_call_ratio(days=20),
-            'margin_summary': lambda: fetch_margin_trading_summary(latest),
-            'inst_detail': lambda: fetch_institutional_detail(latest),
-            'inst_detail_prev': lambda: fetch_institutional_detail_prev(latest),
+            'margin_summary': lambda: fetch_margin_trading_summary(inst_latest),
+            'inst_detail': lambda: fetch_institutional_detail(inst_latest),
+            'inst_detail_prev': lambda: fetch_institutional_detail_prev(inst_latest),
             'night_session': lambda: fetch_night_session_spread(),
             'tsm_adr': lambda: _fetch_tsm_adr(),
         }
@@ -1095,7 +1418,11 @@ def api_institutional():
         inst_type = request.args.get('type', 'foreign')
         days = int(request.args.get('days', '1'))
         market = request.args.get('market', 'all')
-        date = request.args.get('date') or get_latest_date(conn)
+        date = request.args.get('date')
+        if not date:
+            # 用 institutional 表自己的最新日期，避免 daily_prices 超前
+            row = conn.execute("SELECT MAX(date) as d FROM institutional").fetchone()
+            date = row['d'] if row else None
         if not date:
             return jsonify({'error': '無資料'}), 404
         buy_rows, sell_rows = get_ranking(conn, inst_type, days, date,
@@ -2274,6 +2601,45 @@ def weekly():
     fin_lab = os.path.join(base_src, 'fin-lab')
     tech_research = os.path.join(base_src, 'tech-research')
 
+    # ── 0. GiS 研究週報（D:\claude\GiS_研究週報_*.html / GiS_*.html）
+    gis_reports = []
+    gis_dir = os.path.join(os.path.dirname(__file__), '..')
+    if os.path.isdir(gis_dir):
+        for pattern in ['GiS_研究週報_*.html', 'GiS_*.html']:
+            for f in sorted(glob.glob(os.path.join(gis_dir, pattern)), reverse=True):
+                fname = os.path.basename(f)
+                # 避免重複 & 排除樣板
+                if any(g['filename'] == fname for g in gis_reports):
+                    continue
+                if '樣板' in fname or 'template' in fname.lower():
+                    continue
+                m = re.search(r'(\d{8})', fname)
+                if m:
+                    raw = m.group(1)
+                    date_str = f'{raw[:4]}-{raw[4:6]}-{raw[6:]}'
+                else:
+                    mtime = os.path.getmtime(f)
+                    date_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d')
+                # 從 HTML <title> 取標題
+                title = fname.replace('.html', '')
+                try:
+                    with open(f, 'r', encoding='utf-8', errors='ignore') as fh:
+                        head = fh.read(3000)
+                    _m = re.search(r'<title[^>]*>([^<]+)</title>', head)
+                    if _m:
+                        t = _m.group(1).strip()
+                        t = re.sub(r'\s*\|\s*GiS.*$', '', t)
+                        if t:
+                            title = t
+                except Exception:
+                    pass
+                gis_reports.append({
+                    'filename': fname,
+                    'date': date_str,
+                    'type': 'gis',
+                    'title': title,
+                })
+
     # ── 1. 量化研究週報（fin-lab/output/weekly-briefing-*.html）
     fin_briefings = []
     output_dir = os.path.join(fin_lab, 'output')
@@ -2320,6 +2686,8 @@ def weekly():
         'CQ-01': '特殊主題', 'ED-01': '特殊主題', 'ES-01': '特殊主題',
         'HF-01': '特殊主題', 'XA-01': '特殊主題', 'alternative-data_report': '特殊主題',
         'checkpoint': '特殊主題',
+        # 量化研究
+        'crypto-quant': '量化研究',
     }
 
     if os.path.isdir(cat_reports_dir):
@@ -2407,6 +2775,7 @@ def weekly():
     }
 
     return render_template('weekly.html',
+        gis_reports=gis_reports,
         fin_briefings=fin_briefings,
         cat_reports=cat_reports,
         tech_reports=tech_reports,
@@ -2427,8 +2796,15 @@ def api_weekly_report(filepath):
     if '..' in filepath:
         return 'Invalid', 400
 
+    # GiS 研究週報
+    if filepath.startswith('gis/'):
+        fname = filepath[4:]
+        if not re.match(r'^GiS[\w\-\u4e00-\u9fff]+\.html$', fname):
+            return 'Invalid', 400
+        gis_dir = os.path.join(os.path.dirname(__file__), '..')
+        full_path = os.path.join(gis_dir, fname)
     # fin-lab 週報
-    if filepath.startswith('fin/'):
+    elif filepath.startswith('fin/'):
         fname = filepath[4:]
         if not re.match(r'^weekly-briefing-\d{4}-\d{2}-\d{2}\.html$', fname):
             return 'Invalid', 400
@@ -2501,4 +2877,7 @@ if os.environ.get('WERKZEUG_RUN_MAIN') == 'true' or not app.debug:
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    if os.environ.get('WATCHDOG_MANAGED'):
+        app.run(debug=False, host='127.0.0.1', port=5000)
+    else:
+        app.run(debug=True, host='127.0.0.1', port=5000)

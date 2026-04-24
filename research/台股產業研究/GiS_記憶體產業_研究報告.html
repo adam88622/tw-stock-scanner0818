@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 記憶體產業研究報告
+  轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="GiS_記憶體產業_研究報告.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///Users/chenhongshuo/claude/記憶體/GiS_記憶體產業_研究報告.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>記憶體產業研究報告 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+table[style*="font-size:10px"] td{padding:6px 5px}
+table[style*="font-size:10px"] th{font-size:10px;padding:8px 5px}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:32px}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ Page 1: 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Industry Research Report &middot; Q2 2026</div>
+    <div class="cover-title">記憶體產業 — AI 驅動的<br><em>結構性超級週期</em></div>
+    <div class="cover-subtitle">Memory Industry: AI-Driven Structural Super Cycle — DDR4 / NAND / HBM</div>
+    <div class="cover-tags">
+      <span class="ctag hl">群聯 8299</span>
+      <span class="ctag hl">南亞科 2408</span>
+      <span class="ctag">華邦電 2344</span>
+      <span class="ctag">旺宏 2337</span>
+      <span class="ctag">DDR4 / HBM / NAND</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>4</em> 檔</div><div class="cstat-label">涵蓋個股</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>560</em>%</div><div class="cstat-label">南亞科 3月營收 YoY</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2027</em>+</div><div class="cstat-label">供需缺口延續</div></div>
+    <div class="cstat"><div class="cstat-num"><em>群聯</em></div><div class="cstat-label">GiS Top Pick</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年4月4日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>&copy; 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 2: 投資建議彙整（最前面） ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資建議彙整</h1>
+
+  <table>
+    <thead><tr><th>公司</th><th>代號</th><th>GiS 評等</th><th>目標價</th><th>現價 (4/2)</th><th>上檔空間</th><th>2025A EPS</th><th>2026F EPS</th><th>估值方法</th></tr></thead>
+    <tbody>
+      <tr><td><strong>群聯</strong></td><td>8299</td><td class="pos hi">買進 Buy</td><td class="num hi">NT$1,950</td><td class="num">NT$1,555</td><td class="num pos hi">+25.4%</td><td class="num">41.98</td><td class="num pos">150.00</td><td>13x Fwd PE 2026F</td></tr>
+      <tr><td><strong>南亞科</strong></td><td>2408</td><td class="pos hi">買進 Buy</td><td class="num hi">NT$240</td><td class="num">NT$200.50</td><td class="num pos hi">+19.7%</td><td class="num">2.36</td><td class="num pos">24.00</td><td>3.0x P/B 2026e</td></tr>
+      <tr><td><strong>華邦電</strong></td><td>2344</td><td class="pos">增加持股 OW</td><td class="num">NT$105</td><td class="num">NT$91.80</td><td class="num pos">+14.4%</td><td class="num">0.88</td><td class="num pos">7.00</td><td>14x Fwd PE 2026F</td></tr>
+      <tr><td><strong>旺宏</strong></td><td>2337</td><td class="pos">增加持股 OW</td><td class="num">NT$144</td><td class="num">NT$129.00</td><td class="num pos">+11.6%</td><td class="num neg">-1.77</td><td class="num pos">4.50</td><td>16x Fwd PE 2027F</td></tr>
+    </tbody>
+  </table>
+
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">GiS TOP PICK &middot; 買進 BUY</div>
+      <div class="pick-name">群聯電子</div>
+      <div class="pick-ticker">8299.TWO &middot; 目標價 NT$1,950 &middot; 上檔 +25.4%</div>
+      <div class="pick-why">NAND 結構性缺貨最大受惠者。4Q25 毛利率 41.7% 創高，eSSD 佔比 5%→10%。Vera Rubin 每台需 1,152TB NAND。2026F EPS 150 元（+257%），13x PE 仍具吸引力。</div>
+      <div class="pick-catalyst">NAND Q1 +85-90% QoQ、eSSD 6 個 design wins、Computex aiDAPTIV+</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">GiS #2 &middot; 買進 BUY</div>
+      <div class="pick-name">南亞科技</div>
+      <div class="pick-ticker">2408.TW &middot; 目標價 NT$240 &middot; 上檔 +19.7%</div>
+      <div class="pick-why">DDR4 全球市佔 27%，4Q25 毛利率 18.5%→49%。Q1'26 營收 490 億（+583% YoY）。四大國際廠私募入股 NT$787 億驗證結構性需求。</div>
+      <div class="pick-catalyst">DDR4 Q1 +55-60% QoQ、私募案 NT$787億、泰山新廠 2027 量產</div>
+    </div>
+  </div>
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">GiS #3 &middot; 增加持股 OW</div>
+      <div class="pick-name">華邦電子</div>
+      <div class="pick-ticker">2344.TW &middot; 目標價 NT$105 &middot; 上檔 +14.4%</div>
+      <div class="pick-why">DRAM/NOR/SLC NAND 三線漲價。管理層指引 DRAM 至 6 月漲 4 倍，2026-27 產能全數售罄。Capex NT$421 億創紀錄。</div>
+      <div class="pick-catalyst">DRAM 4x 漲幅、產能售罄、CMS 客製化記憶體</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">GiS #4 &middot; 增加持股 OW</div>
+      <div class="pick-name">旺宏電子</div>
+      <div class="pick-ticker">2337.TW &middot; 目標價 NT$144 &middot; 上檔 +11.6%</div>
+      <div class="pick-why">Samsung 2026/6 停產 eMMC，旺宏成唯一大規模 MLC NAND 供應商。NOR Flash 全球 #1 漲 +30%。EPS -1.77→+4.50，典型谷底反轉。</div>
+      <div class="pick-catalyst">Samsung 退出 eMMC、NOR +30%、12 吋廠增 10K 片 NAND</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資建議彙整</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 3: 執行摘要 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">2 Buy / 2 OW</div><div class="kpi-lbl">GiS 評等分布</div></div>
+    <div class="kpi"><div class="kpi-val">+560%<em> YoY</em></div><div class="kpi-lbl">南亞科 3月營收</div></div>
+    <div class="kpi gold"><div class="kpi-val">4x</div><div class="kpi-lbl">DRAM 價格漲幅(至6月)</div></div>
+    <div class="kpi green"><div class="kpi-val">2027+</div><div class="kpi-lbl">SK 海力士預估缺貨延續</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>AI 驅動記憶體從「景氣循環」轉為「結構性成長」。</strong>HBM 擠壓傳統 DRAM/NAND 產能，Vera Rubin 每台需 HBM 288GB + NAND 1,152TB。供需缺口延續至 2027+，SK 海力士預估至 2030。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>DDR4 價格超級週期。</strong>三大廠僅保留 20-27% DDR4 產能，DDR4 8Gb 合約價從 US$1.40 飆至 US$13+（+800%）。南亞科全球市佔升至 27%。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>Legacy NAND 是下一個 DDR4。</strong>MS 指出 MLC/Legacy TLC NAND 供應缺口達 ~40%，Samsung/Kioxia 退出 eMMC。旺宏為最大受惠者（MS Top Pick），群聯 eSSD 雙線受惠。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">四家公司 2026F EPS 成長率</div>
+      <div class="chart-sub">來源：公司財報、GiS 預估</div>
+      <div class="chart-container" style="height:190px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:190px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">DDR4 供需充足比 — 持續惡化</div>
+      <div class="chart-sub">來源：華南投顧、GiS 整理</div>
+      <div class="chart-container" style="height:190px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:190px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 4: 產業總覽章節封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One &middot; Industry Overview</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業總覽與供需分析</div>
+  <div class="sec-desc">AI 基礎建設資本支出重塑全球記憶體供需結構。HBM 產能擠壓效應、DDR4 超級週期、Legacy NAND 結構性缺貨三大主題交織，台灣記憶體供應鏈迎來歷史性機遇。</div>
+</div>
+
+<!-- ══════════════ Page 5: 產業總覽正文（上） ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹、產業總覽與供需分析</h1>
+
+  <h2 class="ch">DRAM 供需結構 — DDR4 充足比持續惡化</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>季度</th><th>1Q25</th><th>2Q25</th><th>3Q25</th><th>4Q25</th><th style="background:#065f46">1Q26F</th><th style="background:#065f46">2Q26F</th><th style="background:#065f46">3Q26F</th><th style="background:#065f46">4Q26F</th></tr></thead>
+    <tbody>
+      <tr><td><strong>DDR4 充足比</strong></td><td class="num">111%</td><td class="num">101%</td><td class="num neg">85%</td><td class="num neg">77%</td><td class="num">92%</td><td class="num neg">82%</td><td class="num neg hi">70%</td><td class="num neg hi">61%</td></tr>
+      <tr><td>DDR4 8Gb 合約價(US$)</td><td class="num">$1.65</td><td class="num">$3.50</td><td class="num">$7.80</td><td class="num">$11.50</td><td class="num hi">$13.95</td><td class="num hi">$17.44</td><td class="num hi">$19.18</td><td class="num hi">$19.76</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：華南投顧（2026/3/25）、TrendForce</span>
+
+  <h2 class="ch">AI 記憶體需求路線圖</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2024</div><div class="tl-spec">GH200</div><div class="tl-tech">HBM3 96GB<br>eSSD 興起</div></div>
+    <div class="tl-item active"><div class="tl-year">2025-2026 &larr; 現在</div><div class="tl-spec">GB200/B300</div><div class="tl-tech">HBM3e 192-288GB<br>NAND 需求暴增</div></div>
+    <div class="tl-item next"><div class="tl-year">2027</div><div class="tl-spec">Vera Rubin</div><div class="tl-tech">HBM4 288GB<br>單台 NAND 1,152TB</div></div>
+    <div class="tl-item"><div class="tl-year">2028+</div><div class="tl-spec">HBF 時代</div><div class="tl-tech">HBF 2,048GB<br>AI NAND 佔比 20%</div></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 產業總覽（供需與路線圖）</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 5b: 產業總覽正文（下） ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、關鍵供需數據與產業格局</h1>
+
+  <h2 class="ch">關鍵供需數據</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>指標</th><th>數據</th><th>來源</th></tr></thead>
+    <tbody>
+      <tr><td>HBM 佔 DRAM 晶圓產能</td><td class="num hi">~25%（僅佔出貨量 10%）</td><td>華南投顧</td></tr>
+      <tr><td>HBM4 晶圓面積消耗</td><td class="num hi">DDR5 的 5 倍</td><td>華南投顧</td></tr>
+      <tr><td>三大廠 DDR4 剩餘產能佔比</td><td class="num neg">僅 20-27%</td><td>華南投顧</td></tr>
+      <tr><td>NAND 512Gb TLC 現貨漲幅（自 2025/9）</td><td class="num pos">+541%</td><td>元大投顧</td></tr>
+      <tr><td>Micron HBM TAM 預估（2028）</td><td class="num">US$1,000 億</td><td>Micron FY1Q26 法說會</td></tr>
+      <tr><td>SK 海力士預估缺貨延續至</td><td class="num hi">2030 年</td><td>SK Hynix 法說會</td></tr>
+      <tr><td>全球記憶體廠商庫存水位</td><td class="num neg">3-5 週（歷史低點）</td><td>國泰證期</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：各公司法說會、國泰證期（2026/3/13）、華南投顧（2026/3/25）、元大投顧（2026/3/9）</span>
+
+  <h2 class="ch">HBM 擠壓效應 — 為何 DDR4 / Legacy NAND 大缺貨</h2>
+  <blockquote><strong>核心機制：</strong>HBM 生產佔用 ~25% DRAM 晶圓產能但僅貢獻 10% 出貨量（因良率低 + 堆疊面積大）。三大廠（SK Hynix/Samsung/Micron）將產能優先轉向高利潤 HBM，DDR4 產能被壓縮至僅剩 20-27%。台灣廠商（南亞科 DDR4 全球市佔 27%、華邦電 DDR4+NOR）成為填補缺口的關鍵供應商。NAND 端亦然：Samsung/Kioxia 退出低容量 MLC NAND，旺宏成為唯一大規模替代供應商。</blockquote>
+
+  <h2 class="ch">台灣記憶體供應鏈定位</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>公司</th><th>核心產品</th><th>全球定位</th><th>產能狀態</th><th>2026 Capex</th></tr></thead>
+    <tbody>
+      <tr><td><strong>群聯 8299</strong></td><td>NAND 控制器 + eSSD</td><td>NAND 控制器全球 #1</td><td>控制器產能充足，NAND 原料吃緊</td><td class="num">—</td></tr>
+      <tr><td><strong>南亞科 2408</strong></td><td>DDR4 DRAM</td><td>DDR4 全球市佔 27%</td><td>滿載（65K 片/月）</td><td class="num hi">NT$520 億</td></tr>
+      <tr><td><strong>華邦電 2344</strong></td><td>NOR Flash + DRAM + SLC NAND</td><td>NOR Flash 全球 #1</td><td>滿載，2026-27 已售罄</td><td class="num hi">NT$421 億</td></tr>
+      <tr><td><strong>旺宏 2337</strong></td><td>NOR Flash + MLC NAND eMMC</td><td>NOR Flash #1，MLC NAND 唯一大廠</td><td>稼動率拉升至 ~100%</td><td class="num hi">NT$220 億</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 &middot; 關鍵供需數據</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 6: 群聯公司卡片 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">群聯電子</div><div class="co-ticker">8299.TWO &middot; NAND Flash 控制器 + eSSD 平台龍頭</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; 買進 Buy</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$1,950 | 現價 NT$1,555（4/2 收盤）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+25.4%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">13x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">150.0元</div><div class="co-metric-label">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">37.0%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>2026F EPS</th><th>2027F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>富邦投顧</td><td class="pos">Buy</td><td class="num">NT$2,488</td><td>18.5x PE</td><td class="num">134.78</td><td class="num">145.15</td></tr>
+          <tr><td>福邦投顧</td><td class="pos">Strong Buy</td><td class="num">NT$2,450</td><td>12.5x PE</td><td class="num">195.88</td><td class="num">—</td></tr>
+          <tr><td>元大投顧</td><td class="pos">Buy</td><td class="num hi">NT$2,400</td><td>14x P/B</td><td class="num">213.52</td><td class="num">127.58</td></tr>
+          <tr><td>國泰證期</td><td class="pos">Buy</td><td class="num">NT$2,300</td><td>Forward PE</td><td class="num">218.65</td><td class="num">191.66</td></tr>
+          <tr><td>群益投顧</td><td>Neutral</td><td class="num">NT$1,815</td><td>—</td><td class="num">118.75</td><td class="num">155.94</td></tr>
+          <tr><td>Morgan Stanley</td><td>EW</td><td class="num">—</td><td>—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800">GiS</td><td style="font-weight:800">Buy</td><td class="num hi" style="font-weight:800">NT$1,950</td><td style="font-weight:700">13x Fwd PE</td><td class="num" style="font-weight:800">150.00</td><td class="num" style="font-weight:800">135.00</td></tr>
+        </tbody>
+      </table>
+      <blockquote style="margin-top:6px;font-size:12.5px"><strong>GiS 估值邏輯：</strong>群聯為 NAND 景氣循環＋結構性成長混合體。採 13x Forward PE（景氣循環股 12-20x 區間偏低，因 EPS 高峰不持久）× 2026F EPS NT$150（介於富邦 134.78 與福邦 195.88 之間）。GiS 預估低於多數券商，因考量 NAND 現貨市場已出現盤整跡象、2H26 毛利率將從高點回落。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>群聯 &middot; 8299 &middot; 券商比較</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 7: 群聯 P&L ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">群聯（8299）GiS 季度損益預估模型</h1>
+  <p style="font-size:11px;color:#6b7a9a;margin:-10px 0 8px">資料來源：1Q25-4Q25 為公司季報實績；1Q26F 以後為 GiS 預估。單位：百萬元（EPS 除外）</p>
+
+  <table style="font-size:10px">
+    <thead>
+      <tr><th style="padding:8px 6px">損益項目</th><th style="text-align:right;padding:8px 6px">1Q25</th><th style="text-align:right;padding:8px 6px">2Q25</th><th style="text-align:right;padding:8px 6px">3Q25</th><th style="text-align:right;padding:8px 6px">4Q25</th><th style="text-align:right;padding:8px 6px;background:#065f46">1Q26F</th><th style="text-align:right;padding:8px 6px;background:#065f46">QoQ</th><th style="text-align:right;padding:8px 6px;background:#065f46">YoY</th><th style="text-align:right;padding:8px 6px;background:#065f46">2Q26F</th><th style="text-align:right;padding:8px 6px">FY25</th><th style="text-align:right;padding:8px 6px;background:#065f46">FY26F</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">13,839</td><td class="num">17,890</td><td class="num">18,137</td><td class="num">22,799</td><td class="num hi">35,000</td><td class="num pos">+53.5%</td><td class="num pos">+152.9%</td><td class="num hi">43,000</td><td class="num" style="font-weight:700">72,664</td><td class="num hi" style="font-weight:700">170,000</td></tr>
+      <tr><td>營業成本</td><td class="num">9,558</td><td class="num">12,690</td><td class="num">12,259</td><td class="num">13,299</td><td class="num">19,250</td><td class="num">+44.7%</td><td class="num">+101.4%</td><td class="num">26,660</td><td class="num">47,806</td><td class="num">107,100</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num">4,281</td><td class="num">5,200</td><td class="num">5,878</td><td class="num">9,500</td><td class="num hi">15,750</td><td class="num pos">+65.8%</td><td class="num pos">+267.8%</td><td class="num hi">16,340</td><td class="num" style="font-weight:700">24,858</td><td class="num hi" style="font-weight:700">62,900</td></tr>
+      <tr><td>營業費用</td><td class="num">3,120</td><td class="num">2,855</td><td class="num">4,456</td><td class="num">6,166</td><td class="num">6,650</td><td class="num">+7.8%</td><td class="num">+113.1%</td><td class="num">7,580</td><td class="num">16,591</td><td class="num">28,900</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">1,161</td><td class="num">2,345</td><td class="num">1,423</td><td class="num">3,334</td><td class="num hi">9,100</td><td class="num pos">+172.9%</td><td class="num pos">+683.7%</td><td class="num hi">8,760</td><td class="num" style="font-weight:700">8,266</td><td class="num hi" style="font-weight:700">34,000</td></tr>
+      <tr><td>業外收支</td><td class="num">236</td><td class="num neg">-285</td><td class="num">1,009</td><td class="num">1,865</td><td class="num">800</td><td class="num">—</td><td class="num pos">+238.9%</td><td class="num">700</td><td class="num">1,939</td><td class="num">3,200</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">1,089</td><td class="num">734</td><td class="num">2,195</td><td class="num">4,629</td><td class="num hi">8,320</td><td class="num pos">+79.7%</td><td class="num pos">+664.0%</td><td class="num hi">8,528</td><td class="num" style="font-weight:700">8,741</td><td class="num hi" style="font-weight:700">31,200</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">5.24</td><td class="num" style="font-weight:700">3.50</td><td class="num" style="font-weight:700">10.50</td><td class="num" style="font-weight:700">21.74</td><td class="num hi" style="font-weight:800">40.0</td><td class="num pos" style="font-weight:700">+84.0%</td><td class="num pos" style="font-weight:700">+663%</td><td class="num hi" style="font-weight:800">41.0</td><td class="num" style="font-weight:800">41.98</td><td class="num hi" style="font-weight:800">150.0</td></tr>
+    </tbody>
+  </table>
+
+  <table style="font-size:10px;margin-top:-8px">
+    <thead><tr><th style="padding:8px 6px">獲利能力(%)</th><th style="text-align:right;padding:8px 6px">1Q25</th><th style="text-align:right;padding:8px 6px">2Q25</th><th style="text-align:right;padding:8px 6px">3Q25</th><th style="text-align:right;padding:8px 6px">4Q25</th><th style="text-align:right;padding:8px 6px;background:#065f46">1Q26F</th><th style="text-align:right;padding:8px 6px;background:#065f46">QoQ</th><th style="text-align:right;padding:8px 6px;background:#065f46">YoY</th><th style="text-align:right;padding:8px 6px;background:#065f46">2Q26F</th><th style="text-align:right;padding:8px 6px">FY25</th><th style="text-align:right;padding:8px 6px;background:#065f46">FY26F</th></tr></thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num">30.9</td><td class="num">29.1</td><td class="num">32.4</td><td class="num">41.7</td><td class="num hi">45.0</td><td class="num pos">+3.3pp</td><td class="num pos">+14.1pp</td><td class="num hi">38.0</td><td class="num">34.2</td><td class="num hi">37.0</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">8.4</td><td class="num">13.1</td><td class="num">7.8</td><td class="num">14.6</td><td class="num hi">26.0</td><td class="num pos">+11.4pp</td><td class="num pos">+17.6pp</td><td class="num hi">20.4</td><td class="num">11.4</td><td class="num hi">20.0</td></tr>
+      <tr><td><strong>稅後淨利率</strong></td><td class="num">7.9</td><td class="num">4.1</td><td class="num">12.1</td><td class="num">20.3</td><td class="num hi">23.8</td><td class="num pos">+3.5pp</td><td class="num pos">+15.9pp</td><td class="num hi">19.8</td><td class="num">12.0</td><td class="num hi">18.4</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:8px"><strong>GiS 模型假設：</strong>1Q26F 毛利率 45% 為全年高點（低成本庫存高價出售）。2Q26F 起回落至 38%。全年營收 1,700 億（+134% YoY），eSSD 佔比 10%→30%。</blockquote>
+  <span class="src">資料來源：公司季報（1Q25-4Q25 實績）、公司法說會（2026/1 &amp; 2026/3）、MOPS 月營收公告、GiS 預估（F 標記）</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>群聯 &middot; 8299 &middot; GiS 季度損益模型</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 8: 南亞科公司卡片 ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">南亞科技</div><div class="co-ticker">2408.TW &middot; 台灣唯一純 DRAM 廠 &middot; DDR4 全球市佔 27%</div></div>
+      <div class="co-badge">
+        <span class="badge buy">&#9673; 買進 Buy</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$240 | 現價 NT$200.50（4/2 收盤）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+19.7%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">3.0x</div><div class="co-metric-label">GiS Target P/B</div></div>
+      <div class="co-metric"><div class="co-metric-val up">24.0元</div><div class="co-metric-label">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">55.0%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">券商目標價與評等比較</h3>
+      <table>
+        <thead><tr><th>券商</th><th>評等</th><th>目標價</th><th>方法</th><th>2026F EPS</th><th>2027F EPS</th></tr></thead>
+        <tbody>
+          <tr><td>Morgan Stanley</td><td>EW</td><td class="num">NT$298</td><td>2.91x P/B</td><td class="num">46.76</td><td class="num">55.53</td></tr>
+          <tr><td>群益投顧</td><td>Trading Buy</td><td class="num">NT$240</td><td>—</td><td class="num">21.57</td><td class="num">17.30</td></tr>
+          <tr><td>Daiwa</td><td class="pos">Buy</td><td class="num">—</td><td>—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr style="background:#eefaf4!important"><td style="font-weight:800">GiS</td><td style="font-weight:800">Buy</td><td class="num hi" style="font-weight:800">NT$240</td><td style="font-weight:700">3.0x P/B</td><td class="num" style="font-weight:800">24.00</td><td class="num" style="font-weight:800">22.00</td></tr>
+        </tbody>
+      </table>
+      <blockquote style="margin-top:6px;font-size:12.5px"><strong>GiS 估值邏輯：</strong>南亞科為純景氣循環 DRAM 股，採 P/B 估值法（避免 Forward PE 在循環高峰過度樂觀）。2026e BVPS 約 NT$80（含年度獲利積累），給予 3.0x P/B（歷史均值 1.5x，+1SD 2.3x，超級週期溢價至 3.0x）。GiS EPS 24 元介於群益 21.57 與 MS 46.76 之間，反映 DDR4 價格高峰但 CXMT 產能威脅。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>南亞科 &middot; 2408 &middot; 券商比較</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 8b: 南亞科私募案 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">南亞科（2408）重大事件：國際大廠私募入股</h1>
+
+  <h2 class="ch">四家國際大廠私募入股（2026/3/25）</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>投資人</th><th>股數（萬股）</th><th>佔比</th><th>金額（億元）</th><th>戰略意義</th></tr></thead>
+    <tbody>
+      <tr><td><strong>SanDisk</strong></td><td class="num">13,869</td><td class="num">4.5%</td><td class="num">311</td><td>eSSD 用 DDR4 buffer DRAM 長約</td></tr>
+      <tr><td><strong>Kioxia</strong></td><td class="num">7,000</td><td class="num">2.3%</td><td class="num">157</td><td>簽署長期 DRAM 供應協議</td></tr>
+      <tr><td><strong>Solidigm</strong></td><td class="num">7,139</td><td class="num">2.3%</td><td class="num">160</td><td>SK Hynix 旗下 NAND 廠</td></tr>
+      <tr><td><strong>Cisco</strong></td><td class="num">7,150</td><td class="num">2.3%</td><td class="num">160</td><td>網路交換器用 DDR4</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:700">合計</td><td class="num" style="font-weight:700">35,158</td><td class="num" style="font-weight:700">~10.1%</td><td class="num hi" style="font-weight:700">787</td><td>驗證 DDR4 結構性需求</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司重大訊息公告（2026/3/25）、Morgan Stanley（2026/3/26）、Daiwa（2026/3/26）</span>
+
+  <blockquote><strong>GiS 觀點：</strong>此為台灣記憶體產業史上最大規模私募案。SanDisk/Kioxia/Solidigm 三家均為 NAND 大廠，入股南亞科目的在於確保 eSSD 所需的 DDR4 buffer DRAM 供應。Cisco 則代表網路交換器對 DDR4 的持續需求。Morgan Stanley 解讀：此案核心不在純 DRAM，而在 eSSD + 網路交換器的結構性 DDR4 需求。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>南亞科 &middot; 2408 &middot; 私募案</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 9: 南亞科 P&L ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">南亞科（2408）GiS 季度損益預估模型</h1>
+  <p style="font-size:11px;color:#6b7a9a;margin:-10px 0 8px">資料來源：1Q25-4Q25 為公司季報實績；1Q26F 以後為 GiS 預估。單位：百萬元（EPS 除外）</p>
+
+  <table style="font-size:10px">
+    <thead><tr><th style="padding:8px 6px">損益項目</th><th style="text-align:right;padding:8px 6px">1Q25</th><th style="text-align:right;padding:8px 6px">2Q25</th><th style="text-align:right;padding:8px 6px">3Q25</th><th style="text-align:right;padding:8px 6px">4Q25</th><th style="text-align:right;padding:8px 6px;background:#065f46">1Q26F</th><th style="text-align:right;padding:8px 6px;background:#065f46">QoQ</th><th style="text-align:right;padding:8px 6px;background:#065f46">YoY</th><th style="text-align:right;padding:8px 6px;background:#065f46">2Q26F</th><th style="text-align:right;padding:8px 6px">FY25</th><th style="text-align:right;padding:8px 6px;background:#065f46">FY26F</th></tr></thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">7,188</td><td class="num">10,526</td><td class="num">18,779</td><td class="num">30,094</td><td class="num hi">49,000</td><td class="num pos">+62.8%</td><td class="num pos">+582%</td><td class="num hi">50,000</td><td class="num" style="font-weight:700">66,587</td><td class="num hi" style="font-weight:700">190,000</td></tr>
+      <tr><td>營業成本</td><td class="num">8,263</td><td class="num">12,691</td><td class="num">15,314</td><td class="num">15,335</td><td class="num">21,560</td><td class="num">+40.6%</td><td class="num">+161%</td><td class="num">21,500</td><td class="num">51,603</td><td class="num">85,500</td></tr>
+      <tr><td><strong>營業毛利</strong></td><td class="num neg">-1,075</td><td class="num neg">-2,165</td><td class="num">3,465</td><td class="num">14,759</td><td class="num hi">27,440</td><td class="num pos">+85.9%</td><td class="num pos">—</td><td class="num hi">28,500</td><td class="num" style="font-weight:700">14,984</td><td class="num hi" style="font-weight:700">104,500</td></tr>
+      <tr><td>營業費用</td><td class="num">2,080</td><td class="num">2,336</td><td class="num">2,346</td><td class="num">2,978</td><td class="num">3,500</td><td class="num">+17.5%</td><td class="num">+68.3%</td><td class="num">3,500</td><td class="num">9,741</td><td class="num">14,500</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num neg">-3,155</td><td class="num neg">-4,501</td><td class="num">1,119</td><td class="num">11,781</td><td class="num hi">23,940</td><td class="num pos">+103%</td><td class="num pos">—</td><td class="num hi">25,000</td><td class="num" style="font-weight:700">5,243</td><td class="num hi" style="font-weight:700">90,000</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num neg">-1,941</td><td class="num neg">-4,109</td><td class="num">1,563</td><td class="num">11,083</td><td class="num hi">19,340</td><td class="num pos">+74.5%</td><td class="num pos">—</td><td class="num hi">20,160</td><td class="num" style="font-weight:700">6,603</td><td class="num hi" style="font-weight:700">74,400</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num neg" style="font-weight:700">-0.63</td><td class="num neg" style="font-weight:700">-1.32</td><td class="num" style="font-weight:700">0.50</td><td class="num" style="font-weight:700">3.58</td><td class="num hi" style="font-weight:800">6.24</td><td class="num pos" style="font-weight:700">+74.3%</td><td class="num pos" style="font-weight:700">—</td><td class="num hi" style="font-weight:800">6.50</td><td class="num" style="font-weight:800">2.13</td><td class="num hi" style="font-weight:800">24.00</td></tr>
+    </tbody>
+  </table>
+
+  <table style="font-size:10px;margin-top:-8px">
+    <thead><tr><th style="padding:8px 6px">獲利能力(%)</th><th style="text-align:right;padding:8px 6px">1Q25</th><th style="text-align:right;padding:8px 6px">2Q25</th><th style="text-align:right;padding:8px 6px">3Q25</th><th style="text-align:right;padding:8px 6px">4Q25</th><th style="text-align:right;padding:8px 6px;background:#065f46">1Q26F</th><th style="text-align:right;padding:8px 6px;background:#065f46">QoQ</th><th style="text-align:right;padding:8px 6px;background:#065f46">YoY</th><th style="text-align:right;padding:8px 6px;background:#065f46">2Q26F</th><th style="text-align:right;padding:8px 6px">FY25</th><th style="text-align:right;padding:8px 6px;background:#065f46">FY26F</th></tr></thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num neg">-15.0</td><td class="num neg">-20.6</td><td class="num">18.5</td><td class="num">49.0</td><td class="num hi">56.0</td><td class="num pos">+7.0pp</td><td class="num pos">—</td><td class="num hi">57.0</td><td class="num">22.5</td><td class="num hi">55.0</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num neg">-43.9</td><td class="num neg">-42.8</td><td class="num">6.0</td><td class="num">39.1</td><td class="num hi">48.9</td><td class="num pos">+9.8pp</td><td class="num pos">—</td><td class="num hi">50.0</td><td class="num">7.9</td><td class="num hi">47.4</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote style="margin-top:8px"><strong>GiS 模型假設：</strong>1Q26 營收 490 億已由月營收確認。毛利率 56% 反映 DDR4 +55-60% QoQ（法說會指引）。Capex NT$520 億，70% 泰山新廠，2027 量產。風險：CXMT 增產，2027 起定價壓力。</blockquote>
+  <span class="src">資料來源：公司季報（1Q25-4Q25）、MOPS 月營收、公司法說會（2026/1 &amp; 2026/3）、GiS 預估（F 標記）</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>南亞科 &middot; 2408 &middot; GiS 季度損益模型</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 10: 華邦電公司卡片 + P&L ══════════════ -->
+<div class="full-page page body-page">
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div><div class="co-name">華邦電子</div><div class="co-ticker">2344.TW &middot; NOR Flash 全球第一 &middot; DRAM/Flash/Logic 三線並進</div></div>
+      <div class="co-badge">
+        <span class="badge ow">&#9673; 增加持股 OW</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$105 | 現價 NT$91.80（4/2 收盤）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+14.4%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">14x</div><div class="co-metric-label">GiS Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">7.00元</div><div class="co-metric-label">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">45.0%</div><div class="co-metric-label">2026F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">GiS 季度損益摘要</h3>
+      <table style="font-size:11.5px">
+        <thead><tr><th>項目</th><th style="text-align:right">1Q25</th><th style="text-align:right">2Q25</th><th style="text-align:right">3Q25</th><th style="text-align:right">4Q25</th><th style="text-align:right;background:#065f46">1Q26F</th><th style="text-align:right;background:#065f46">2Q26F</th><th style="text-align:right">FY25</th><th style="text-align:right;background:#065f46">FY26F</th></tr></thead>
+        <tbody>
+          <tr><td><strong>營收（百萬）</strong></td><td class="num">19,993</td><td class="num">21,018</td><td class="num">21,771</td><td class="num">26,625</td><td class="num hi">36,000</td><td class="num hi">40,000</td><td class="num" style="font-weight:700">89,406</td><td class="num hi" style="font-weight:700">152,000</td></tr>
+          <tr><td><strong>毛利率</strong></td><td class="num">25.6%</td><td class="num">22.7%</td><td class="num">46.7%</td><td class="num">41.9%</td><td class="num hi">48.0%</td><td class="num hi">51.0%</td><td class="num">34.9%</td><td class="num hi">45.0%</td></tr>
+          <tr><td><strong>營益率</strong></td><td class="num neg">-4.8%</td><td class="num neg">-6.2%</td><td class="num">17.0%</td><td class="num">15.4%</td><td class="num hi">28.0%</td><td class="num hi">32.5%</td><td class="num">6.2%</td><td class="num hi">25.5%</td></tr>
+          <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num neg" style="font-weight:700">-0.24</td><td class="num neg" style="font-weight:700">-0.29</td><td class="num" style="font-weight:700">0.65</td><td class="num" style="font-weight:700">0.76</td><td class="num hi" style="font-weight:800">1.71</td><td class="num hi" style="font-weight:800">2.24</td><td class="num" style="font-weight:800">0.88</td><td class="num hi" style="font-weight:800">7.00</td></tr>
+        </tbody>
+      </table>
+      <span class="src">資料來源：公司季報（StockAnalysis TPE:2344）、4Q25 法說會（2026/2/10）、GiS 預估</span>
+
+      <blockquote style="margin-top:8px;font-size:12.5px"><strong>GiS 估值邏輯：</strong>華邦電為景氣循環股（DDR4 + NOR Flash + SLC NAND），採 14x Forward PE（景氣循環股 12-20x 區間）× 2026F EPS NT$7.00。管理層指引 DRAM 至 6 月漲 4 倍、2026-27 產能全數售罄，支撐強勁獲利展望。但 Q3 2025 毛利率 46.7% 含存貨回沖利益，需注意常態化毛利率。BPS NT$23.99，目標價隱含 4.4x P/B。Capex NT$421 億為歷史新高，95% 用於生產設備。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>華邦電 &middot; 2344 &middot; GiS 估值</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 11: 旺宏公司卡片 + P&L ══════════════ -->
+<div class="full-page page body-page alt">
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">旺宏電子</div><div class="co-ticker">2337.TW &middot; NOR Flash #1 &middot; Legacy NAND 谷底反轉</div></div>
+      <div class="co-badge">
+        <span class="badge ow">&#9673; 增加持股 OW</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$144 | 現價 NT$129.00（4/2 收盤）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+11.6%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">16x</div><div class="co-metric-label">GiS Target PE(2027F)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">4.50元</div><div class="co-metric-label">2026F EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">9.00元</div><div class="co-metric-label">2027F EPS</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">GiS 季度損益摘要</h3>
+      <table style="font-size:11.5px">
+        <thead><tr><th>項目</th><th style="text-align:right">1Q25</th><th style="text-align:right">2Q25</th><th style="text-align:right">3Q25</th><th style="text-align:right">4Q25</th><th style="text-align:right;background:#065f46">1Q26F</th><th style="text-align:right;background:#065f46">2Q26F</th><th style="text-align:right">FY25</th><th style="text-align:right;background:#065f46">FY26F</th></tr></thead>
+        <tbody>
+          <tr><td><strong>營收（百萬）</strong></td><td class="num">6,137</td><td class="num">6,799</td><td class="num">8,214</td><td class="num">7,729</td><td class="num hi">9,500</td><td class="num hi">11,000</td><td class="num" style="font-weight:700">28,879</td><td class="num hi" style="font-weight:700">45,000</td></tr>
+          <tr><td><strong>毛利率</strong></td><td class="num">17.7%</td><td class="num">15.7%</td><td class="num">13.5%</td><td class="num">24.2%</td><td class="num hi">28.0%</td><td class="num hi">33.0%</td><td class="num">17.8%</td><td class="num hi">31.0%</td></tr>
+          <tr><td><strong>營益率</strong></td><td class="num neg">-17.6%</td><td class="num neg">-15.9%</td><td class="num neg">-13.9%</td><td class="num neg">-5.1%</td><td class="num hi">3.3%</td><td class="num hi">11.2%</td><td class="num neg">-12.8%</td><td class="num hi">9.3%</td></tr>
+          <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num neg" style="font-weight:700">-0.47</td><td class="num neg" style="font-weight:700">-0.69</td><td class="num neg" style="font-weight:700">-0.47</td><td class="num neg" style="font-weight:700">-0.16</td><td class="num" style="font-weight:800">0.08</td><td class="num hi" style="font-weight:800">0.50</td><td class="num neg" style="font-weight:800">-1.77</td><td class="num hi" style="font-weight:800">4.50</td></tr>
+        </tbody>
+      </table>
+      <span class="src">資料來源：公司季報（StockAnalysis TPE:2337）、4Q25 法說會（2026/1/27）、GiS 預估</span>
+
+      <blockquote style="margin-top:8px;font-size:12.5px"><strong>GiS 估值邏輯：</strong>谷底反轉股，採 16x Forward PE on 2027F × NT$9.00 = NT$144。Samsung 停產 eMMC + NOR +30% + 12 吋廠增 10K 片 NAND 為催化劑。外資共識 2026E NT$4.9、2027E NT$10.3。MS 列為 Top Pick。Capex NT$220 億（11x YoY）。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>旺宏 &middot; 2337 &middot; GiS 估值</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 12: 月營收彙總 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">四家公司月營收追蹤</h1>
+
+  <table style="font-size:12.5px">
+    <thead><tr><th>公司</th><th>Jan 2026</th><th>Feb 2026</th><th>Mar 2026</th><th>YoY 趨勢</th></tr></thead>
+    <tbody>
+      <tr><td><strong>群聯 8299</strong></td><td class="num">104.5 億</td><td class="num pos">122.0 億（+178%）</td><td class="num">待公告</td><td class="pos">Jan-Feb +180% YoY</td></tr>
+      <tr><td><strong>南亞科 2408</strong></td><td class="num">153.1 億</td><td class="num">156.1 億</td><td class="num pos hi">181.7 億（+560%）</td><td class="pos">Q1 +583% YoY</td></tr>
+      <tr><td><strong>華邦電 2344</strong></td><td class="num pos">117.8 億（歷史新高）</td><td class="num">119.7 億（+88%）</td><td class="num">待公告</td><td class="pos">Jan-Feb +91% YoY</td></tr>
+      <tr><td><strong>旺宏 2337</strong></td><td class="num">30.2 億（+51%）</td><td class="num">30.3 億（+60%）</td><td class="num">待公告</td><td class="pos">Jan-Feb +56% YoY</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：MOPS 月營收公告、鉅亨網、玩股網</span>
+
+  <blockquote><strong>月營收觀察：</strong>四家公司月營收均呈現強勁加速趨勢。南亞科 3 月營收 +560% YoY 為最亮眼，反映 DDR4 合約價暴漲 + 產能滿載。群聯 Feb +178% YoY 驗證 NAND 控制器 + eSSD 成長動能。華邦電 Jan 創歷史新高。旺宏 YoY 成長相對溫和（+56%），但隨 Samsung 退出 eMMC 及 NOR 漲價效應遞延，2Q26 起加速可期。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>月營收追蹤</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 12: 催化劑與風險 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">催化劑與風險評估</h1>
+
+  <h2 class="ch">產業關鍵催化劑</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響</th><th>受惠標的</th></tr></thead>
+    <tbody>
+      <tr><td><strong>DDR4 合約價持續上漲</strong></td><td>2Q-3Q26</td><td class="pos">高</td><td>南亞科、華邦電</td></tr>
+      <tr><td><strong>Samsung 停產 eMMC</strong></td><td>2026/6</td><td class="pos">高</td><td>旺宏（唯一替代）</td></tr>
+      <tr><td><strong>NAND 合約價 +85-90% QoQ</strong></td><td>1Q26</td><td class="pos">高</td><td>群聯</td></tr>
+      <tr><td><strong>NVIDIA Vera Rubin 量產</strong></td><td>4Q26</td><td class="pos">高</td><td>全產業（HBM+NAND）</td></tr>
+      <tr><td><strong>Kioxia/SanDisk 私募南亞科</strong></td><td>已完成</td><td class="pos">中高</td><td>南亞科</td></tr>
+      <tr><td><strong>Computex aiDAPTIV+ 發表</strong></td><td>6月</td><td>中</td><td>群聯</td></tr>
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>缺貨延續至 2028</strong> → EPS 上修 20-30%</div>
+      <div class="risk-item"><strong>HBF 標準確立</strong> → NAND 結構性跳升</div>
+      <div class="risk-item"><strong>AI Capex 超預期</strong> → HBM/eSSD 暴增</div>
+      <div class="risk-item"><strong>CXMT 擴產延遲</strong> → DDR4 缺口擴大</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>AI Capex 放緩</strong> → 擠壓效應減弱</div>
+      <div class="risk-item"><strong>CXMT 加速擴產</strong> → 衝擊定價權</div>
+      <div class="risk-item"><strong>HBM 良率改善</strong> → DRAM 缺口收斂</div>
+      <div class="risk-item"><strong>終端需求惡化</strong> → OEM 砍單</div>
+      <div class="risk-item"><strong>關稅/地緣風險</strong> → 貿易流受阻</div>
+    </div>
+  </div>
+
+  <blockquote><strong>GiS 風險評估：</strong>整體看多。供需缺口至少延續至 2027。最大風險為 CXMT 擴產超預期及 AI Capex 放緩。追蹤：月營收、合約價、CXMT 產能、2Q26 法說會。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>催化劑與風險評估</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 13: 三情境分析 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">GiS 三情境分析</h1>
+
+  <table style="font-size:12px">
+    <thead><tr><th>情境</th><th>群聯 8299</th><th>南亞科 2408</th><th>華邦電 2344</th><th>旺宏 2337</th></tr></thead>
+    <tbody>
+      <tr><td><strong>保守</strong></td><td class="num">NT$1,430<br><span style="font-size:11px;color:#999">10x × 143 EPS</span></td><td class="num">NT$175<br><span style="font-size:11px;color:#999">2.3x P/B</span></td><td class="num">NT$75<br><span style="font-size:11px;color:#999">11x × 6.8 EPS</span></td><td class="num">NT$105<br><span style="font-size:11px;color:#999">14x × 7.5 '27F</span></td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>基礎（GiS 採用）</strong></td><td class="num hi">NT$1,950<br><span style="font-size:11px;color:#065f46">13x × 150 EPS</span></td><td class="num hi">NT$240<br><span style="font-size:11px;color:#065f46">3.0x P/B</span></td><td class="num hi">NT$105<br><span style="font-size:11px;color:#065f46">14x × 7.5 EPS</span></td><td class="num hi">NT$144<br><span style="font-size:11px;color:#065f46">16x × 9.0 '27F</span></td></tr>
+      <tr><td><strong>樂觀</strong></td><td class="num pos">NT$2,700<br><span style="font-size:11px;color:#999">15x × 180 EPS</span></td><td class="num pos">NT$340<br><span style="font-size:11px;color:#999">3.5x P/B</span></td><td class="num pos">NT$140<br><span style="font-size:11px;color:#999">16x × 8.8 EPS</span></td><td class="num pos">NT$185<br><span style="font-size:11px;color:#999">18x × 10.3 '27F</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">估值方法論摘要</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>公司</th><th>公司類型</th><th>主要方法</th><th>PE/P/B 區間</th><th>EPS 基準</th></tr></thead>
+    <tbody>
+      <tr><td><strong>群聯 8299</strong></td><td>高成長 + 景氣循環</td><td>Forward PE on N+1 year</td><td>10-15x</td><td>2026F EPS NT$150</td></tr>
+      <tr><td><strong>南亞科 2408</strong></td><td>純景氣循環 DRAM</td><td>P/B（避免 PE 高峰陷阱）</td><td>2.3-3.5x P/B</td><td>2026e BVPS ~NT$80</td></tr>
+      <tr><td><strong>華邦電 2344</strong></td><td>景氣循環（多產品線）</td><td>Forward PE + P/B 交叉驗證</td><td>11-16x</td><td>2026F EPS NT$7.00</td></tr>
+      <tr><td><strong>旺宏 2337</strong></td><td>谷底反轉</td><td>Forward PE on recovery year</td><td>14-18x</td><td>2027F EPS NT$9.00</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 原則：</strong>寧可用保守的 EPS 基準搭配合理 PE，也不用樂觀 EPS 搭配低 PE 來「湊出」同樣的目標價。景氣循環股尤其危險：分析師傾向在谷底時給高 Forward PE，但實際復甦速度常低於預期。南亞科採 P/B 而非 PE，即是基於此原則。</blockquote>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:12px">本報告涵蓋公司：群聯（8299）、南亞科（2408）、華邦電（2344）、旺宏（2337）。資料截止日期：2026年4月4日。現價為 2026/4/2 收盤價。本報告僅供研究參考，不構成投資建議。財報實績來源為各公司季報及 MOPS 公告，預估值（F 標記）為 GiS 自建模型。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>三情境分析 &middot; 估值方法論</span>
+    <span>&copy; 2026 GiS &middot; 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  Chart.register({
+    id: 'labelPlugin',
+    afterDatasetsDraw(chart) {
+      const ctx = chart.ctx;
+      const isH = chart.options.indexAxis === 'y';
+      chart.data.datasets.forEach((ds, i) => {
+        const meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach((bar, idx) => {
+          const v = ds.data[idx];
+          if (!v && v !== 0) return;
+          ctx.save();
+          ctx.font = 'bold 11.5px PingFang TC, Arial';
+          ctx.textAlign = 'center';
+          if (isH) {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'middle';
+            ctx.fillText(v, bar.x + 6, bar.y);
+          } else {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'bottom';
+            ctx.fillText(String(v), bar.x, bar.y - 3);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+  // Chart 1: EPS Growth Bar
+  new Chart(getEl('chart1'), {
+    type: 'bar',
+    data: {
+      labels: ['群聯 8299', '南亞科 2408', '華邦電 2344', '旺宏 2337'],
+      datasets: [{
+        label: '2026F EPS (NT$)',
+        data: [150, 24, 7.0, 4.5],
+        backgroundColor: ['#00c896', '#1a3a6e', '#3b82f6', '#e67e22'],
+        borderRadius: 5,
+        barPercentage: 0.6
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => 'NT$' + v } }
+      }
+    }
+  });
+
+  // Chart 2: DDR4 Sufficiency Ratio
+  new Chart(getEl('chart2'), {
+    type: 'line',
+    data: {
+      labels: ['1Q25', '2Q25', '3Q25', '4Q25', '1Q26F', '2Q26F', '3Q26F', '4Q26F'],
+      datasets: [{
+        label: 'DDR4 充足比(%)',
+        data: [111, 101, 85, 77, 92, 82, 70, 61],
+        borderColor: '#c0392b',
+        backgroundColor: 'rgba(192,57,43,0.1)',
+        tension: 0.35,
+        pointRadius: 6,
+        pointBackgroundColor: '#c0392b',
+        borderWidth: 2.5,
+        fill: true
+      }, {
+        label: '供需平衡線(100%)',
+        data: [100, 100, 100, 100, 100, 100, 100, 100],
+        borderColor: '#999',
+        borderDash: [5, 5],
+        borderWidth: 1.5,
+        pointRadius: 0,
+        fill: false
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%' }, min: 50, max: 120 }
+      }
+    }
+  });
+
+}); // end window.load
+</script>
+</body>
+</html>
