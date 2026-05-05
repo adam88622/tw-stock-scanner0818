@@ -33,6 +33,22 @@
     .rules-table .dot-green { background:#22c55e; }
     .rules-table .dot-yellow { background:#f59e0b; }
     .rules-table .dot-red { background:#ef4444; }
+
+    /* CTA 並排燈卡 */
+    .cta-row { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin:20px 0; }
+    @media (max-width: 768px) { .cta-row { grid-template-columns:1fr; gap:16px; } }
+    .cta-card { background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);
+                border:1px solid #475569; border-radius:12px; padding:24px;
+                text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.35); }
+    .cta-card.cta-credit { border-top:3px solid #818cf8; }
+    .cta-card.cta-spy    { border-top:3px solid #fbbf24; }
+    .cta-card .src { color:#64748b; font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+    .cta-card .big { font-size:42px; font-weight:900; line-height:1.1; margin:6px 0; }
+    .cta-card .detail { color:#94a3b8; font-size:12px; }
+    .cta-card .detail strong { color:#e2e8f0; font-family:"Consolas",monospace; }
+
+    /* CTA 回測 / 勝率表 — reuse 既有 .data-table 樣式 */
+    .cta-section h5 { color:#818cf8; }
 </style>
 
 <div class="content-area">
@@ -113,6 +129,26 @@
             目前值: <strong style="color:{{ '#22c55e' if signal == 'GREEN' else ('#f59e0b' if signal == 'YELLOW' else '#ef4444') }};">{{ "%.4f"|format(indicator_value) }}</strong>
         </div>
     </div>
+
+    {% if cta %}
+    <!-- ▼▼▼ SPY CTA 訊號(並排) ▼▼▼ -->
+    <div class="cta-row">
+        <div class="cta-card cta-credit">
+            <div class="src">CREDIT SPREAD</div>
+            <div class="big" style="color:{% if signal == 'GREEN' %}#22c55e{% elif signal == 'YELLOW' %}#f59e0b{% else %}#ef4444{% endif %};">
+                {% if signal == 'GREEN' %}🟢 GREEN{% elif signal == 'YELLOW' %}🟡 YELLOW{% else %}🔴 RED{% endif %}
+            </div>
+            <div class="detail">indicator <strong>{{ "%.4f"|format(indicator_value) }}</strong> · {{ latest_date }}</div>
+        </div>
+        <div class="cta-card cta-spy">
+            <div class="src">SPY CTA(MXF Linear 邏輯·中頻)</div>
+            <div class="big" style="color:{% if cta.action == 'BUY' %}#22c55e{% elif cta.action == 'SELL' %}#ef4444{% else %}#94a3b8{% endif %};">
+                {% if cta.action == 'BUY' %}🟢 CTA:BUY{% elif cta.action == 'SELL' %}🔴 CTA:SELL{% else %}⚪ CTA:HOLD{% endif %}
+            </div>
+            <div class="detail">signal <strong>{{ "%+.6f"|format(cta.signal) }}</strong> · {{ cta.date }}</div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- 信號規則 -->
     <div class="chart-card" style="margin-bottom:20px;">
@@ -352,6 +388,89 @@
         </p>
     </div>
 
+    {% if cta and cta.backtest %}
+    <!-- ▼▼▼ SPY CTA 回測 ▼▼▼ -->
+    <div class="chart-card cta-section" style="margin-bottom:20px;">
+        <h5>SPY CTA 回測 · {{ cta.backtest.start }} → {{ cta.backtest.end }}({{ cta.backtest.strat.days }} 日,T+1 進場,單邊 {{ "%.0f"|format(cta.backtest.cost_bps) }} bps 成本)</h5>
+        <div class="table-responsive">
+        <table class="table table-hover table-sm data-table">
+            <thead>
+                <tr>
+                    <th>指標</th>
+                    <th class="text-end">策略(純方向)</th>
+                    <th class="text-end">策略(vol 調整)</th>
+                    <th class="text-end">Buy & Hold SPY</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>CAGR</td>
+                    <td class="text-end {{ 'text-success' if cta.backtest.strat.cagr > cta.backtest.bh.cagr else '' }}">{{ "%.2f"|format(cta.backtest.strat.cagr*100) }}%</td>
+                    <td class="text-end {{ 'text-success' if cta.backtest.vol.cagr > cta.backtest.bh.cagr else '' }}">{{ "%.2f"|format(cta.backtest.vol.cagr*100) }}%</td>
+                    <td class="text-end">{{ "%.2f"|format(cta.backtest.bh.cagr*100) }}%</td></tr>
+                <tr><td>Sharpe</td>
+                    <td class="text-end fw-bold {{ 'text-success' if cta.backtest.strat.sharpe > cta.backtest.bh.sharpe else '' }}">{{ "%.3f"|format(cta.backtest.strat.sharpe) }}</td>
+                    <td class="text-end fw-bold {{ 'text-success' if cta.backtest.vol.sharpe > cta.backtest.bh.sharpe else '' }}">{{ "%.3f"|format(cta.backtest.vol.sharpe) }}</td>
+                    <td class="text-end">{{ "%.3f"|format(cta.backtest.bh.sharpe) }}</td></tr>
+                <tr><td>Max DD</td>
+                    <td class="text-end fw-bold {{ 'text-success' if cta.backtest.strat.maxdd > cta.backtest.bh.maxdd else 'text-danger' }}">{{ "%.2f"|format(cta.backtest.strat.maxdd*100) }}%</td>
+                    <td class="text-end fw-bold {{ 'text-success' if cta.backtest.vol.maxdd > cta.backtest.bh.maxdd else 'text-danger' }}">{{ "%.2f"|format(cta.backtest.vol.maxdd*100) }}%</td>
+                    <td class="text-end text-danger">{{ "%.2f"|format(cta.backtest.bh.maxdd*100) }}%</td></tr>
+                <tr><td>年化 Vol</td>
+                    <td class="text-end">{{ "%.2f"|format(cta.backtest.strat.vol*100) }}%</td>
+                    <td class="text-end">{{ "%.2f"|format(cta.backtest.vol.vol*100) }}%</td>
+                    <td class="text-end">{{ "%.2f"|format(cta.backtest.bh.vol*100) }}%</td></tr>
+                <tr><td>Calmar</td>
+                    <td class="text-end fw-bold {{ 'text-success' if cta.backtest.strat.calmar > cta.backtest.bh.calmar else '' }}">{{ "%.3f"|format(cta.backtest.strat.calmar) }}</td>
+                    <td class="text-end fw-bold {{ 'text-success' if cta.backtest.vol.calmar > cta.backtest.bh.calmar else '' }}">{{ "%.3f"|format(cta.backtest.vol.calmar) }}</td>
+                    <td class="text-end">{{ "%.3f"|format(cta.backtest.bh.calmar) }}</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p style="color:#64748b; font-size:12px; margin-top:8px;">
+            切換次數:{{ cta.backtest.switches }} 次 · 在場時間:{{ "%.1f"|format(cta.backtest.time_in_market*100) }}%
+        </p>
+    </div>
+
+    {% if cta.trades and cta.trades.n %}
+    <!-- ▼▼▼ SPY CTA 交易勝率 ▼▼▼ -->
+    <div class="chart-card cta-section" style="margin-bottom:20px;">
+        <h5>SPY CTA 每筆交易勝率(扣 {{ "%.0f"|format(cta.backtest.cost_bps) }}bps/邊)</h5>
+        <div class="table-responsive">
+        <table class="table table-sm data-table">
+            <thead><tr>
+                <th>指標</th><th class="text-end">全部</th><th class="text-end">做多</th><th class="text-end">做空</th>
+            </tr></thead>
+            <tbody>
+                <tr><td>交易筆數</td>
+                    <td class="text-end">{{ cta.trades.n }} 筆</td>
+                    <td class="text-end">{{ cta.trades.long_n }} 筆</td>
+                    <td class="text-end">{{ cta.trades.short_n }} 筆</td></tr>
+                <tr><td>勝率</td>
+                    <td class="text-end fw-bold {{ 'text-success' if cta.trades.win_rate >= 0.5 else 'text-danger' }}">{{ "%.1f"|format(cta.trades.win_rate*100) }}%</td>
+                    <td class="text-end fw-bold {{ 'text-success' if cta.trades.long_win_rate >= 0.5 else 'text-danger' }}">{{ "%.1f"|format(cta.trades.long_win_rate*100) }}%</td>
+                    <td class="text-end fw-bold {{ 'text-success' if cta.trades.short_win_rate >= 0.5 else 'text-danger' }}">{{ "%.1f"|format(cta.trades.short_win_rate*100) }}%</td></tr>
+                <tr><td>平均贏</td>
+                    <td class="text-end text-success">{{ "%+.2f"|format(cta.trades.avg_win*100) }}%</td><td></td><td></td></tr>
+                <tr><td>平均輸</td>
+                    <td class="text-end text-danger">{{ "%+.2f"|format(cta.trades.avg_loss*100) }}%</td><td></td><td></td></tr>
+                <tr><td>盈虧比 (Payoff)</td>
+                    <td class="text-end fw-bold {{ 'text-success' if cta.trades.payoff > 1 else 'text-danger' }}">{{ "%.2f"|format(cta.trades.payoff) }}x</td><td></td><td></td></tr>
+                <tr><td>每筆期望值</td>
+                    <td class="text-end fw-bold {{ 'text-success' if cta.trades.expectancy > 0 else 'text-danger' }}">{{ "%+.2f"|format(cta.trades.expectancy*100) }}%</td><td></td><td></td></tr>
+                <tr><td>平均持倉天數</td>
+                    <td class="text-end">{{ "%.1f"|format(cta.trades.avg_hold_days) }} 天</td><td></td><td></td></tr>
+                <tr><td>最佳 / 最差交易</td>
+                    <td class="text-end"><span class="text-success">{{ "%+.2f"|format(cta.trades.best*100) }}%</span> / <span class="text-danger">{{ "%+.2f"|format(cta.trades.worst*100) }}%</span></td><td></td><td></td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p style="color:#64748b; font-size:12px; margin-top:8px;">
+            期望值 &gt; 0 即代表長期期望為正。Payoff &gt; 1 代表平均贏大於平均輸,配合勝率才有 edge。
+        </p>
+    </div>
+    {% endif %}
+    {% endif %}
+
     <!-- 近期信號 -->
     <div class="regime-stats">
         <h5>近期信號（最近 30 個交易日）</h5>
@@ -400,6 +519,10 @@ const allData = {{ history_json|safe }};
 const thLow = {{ yellow_low }};
 const thHigh = {{ yellow_high }};
 
+const ctaData = {{ (cta.history_json if cta else '[]')|safe }};
+const ctaByDate = {};
+ctaData.forEach(d => { ctaByDate[d.date] = d; });
+
 let chart;
 const defaultRange = 120;
 
@@ -417,6 +540,30 @@ function buildChart(data) {
         if (v < thHigh) return 'rgba(245,158,11,0.12)';
         return 'rgba(239,68,68,0.12)';
     });
+
+    // CTA 進出場(對齊 SPY 線):用 ctaByDate 按日期查
+    const _posAt = (i) => { const c = ctaByDate[labels[i]]; return c ? c.pos : 0; };
+    const buyEntries = labels.map((dt, i) => {
+        const cur = _posAt(i); const prev = i > 0 ? _posAt(i-1) : 0;
+        return (cur > 0 && cur !== prev) ? spyPrices[i] : null;
+    });
+    const sellEntries = labels.map((dt, i) => {
+        const cur = _posAt(i); const prev = i > 0 ? _posAt(i-1) : 0;
+        return (cur < 0 && cur !== prev) ? spyPrices[i] : null;
+    });
+    const buyExits = labels.map((dt, i) => {
+        if (i === 0) return null;
+        const cur = _posAt(i); const prev = _posAt(i-1);
+        return (prev > 0 && cur === 0) ? spyPrices[i] : null;
+    });
+    const sellExits = labels.map((dt, i) => {
+        if (i === 0) return null;
+        const cur = _posAt(i); const prev = _posAt(i-1);
+        return (prev < 0 && cur === 0) ? spyPrices[i] : null;
+    });
+    // 持倉中(每天標,讓 SPY 線在持倉時段「染色」)
+    const buyHold = labels.map((dt, i) => _posAt(i) > 0 ? spyPrices[i] : null);
+    const sellHold = labels.map((dt, i) => _posAt(i) < 0 ? spyPrices[i] : null);
 
     chart = new Chart(ctx, {
         type: 'line',
@@ -470,6 +617,52 @@ function buildChart(data) {
                     borderWidth: 1.5,
                     yAxisID: 'y2',
                     order: 2,
+                },
+                {
+                    label: '🟢 CTA BUY 進場',
+                    data: buyEntries,
+                    borderColor: '#16a34a', backgroundColor: '#22c55e',
+                    pointStyle: 'triangle', pointRotation: 0,
+                    pointRadius: 11, pointHoverRadius: 13, pointBorderWidth: 2,
+                    showLine: false, yAxisID: 'y2', order: 0,
+                },
+                {
+                    label: '🔴 CTA SELL 進場',
+                    data: sellEntries,
+                    borderColor: '#dc2626', backgroundColor: '#ef4444',
+                    pointStyle: 'triangle', pointRotation: 180,
+                    pointRadius: 11, pointHoverRadius: 13, pointBorderWidth: 2,
+                    showLine: false, yAxisID: 'y2', order: 0,
+                },
+                {
+                    label: '⬇ CTA BUY 出場',
+                    data: buyExits,
+                    borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.15)',
+                    pointStyle: 'triangle', pointRotation: 180,
+                    pointRadius: 8, pointHoverRadius: 10, pointBorderWidth: 2,
+                    showLine: false, yAxisID: 'y2', order: 0,
+                },
+                {
+                    label: '⬆ CTA SELL 出場',
+                    data: sellExits,
+                    borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.15)',
+                    pointStyle: 'triangle', pointRotation: 0,
+                    pointRadius: 8, pointHoverRadius: 10, pointBorderWidth: 2,
+                    showLine: false, yAxisID: 'y2', order: 0,
+                },
+                {
+                    label: '🟢 持多中',
+                    data: buyHold,
+                    borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.6)',
+                    pointStyle: 'circle', pointRadius: 2.5, pointHoverRadius: 4,
+                    showLine: false, yAxisID: 'y2', order: 4,
+                },
+                {
+                    label: '🔴 持空中',
+                    data: sellHold,
+                    borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.6)',
+                    pointStyle: 'circle', pointRadius: 2.5, pointHoverRadius: 4,
+                    showLine: false, yAxisID: 'y2', order: 4,
                 }
             ]
         },
@@ -494,6 +687,12 @@ function buildChart(data) {
                             if (ctx.datasetIndex === 3) {
                                 return 'SPY: $' + (ctx.raw ? ctx.raw.toFixed(2) : '-');
                             }
+                            if (ctx.datasetIndex === 4 && ctx.raw != null) return '🟢 CTA BUY 進場 @ $' + ctx.raw.toFixed(2);
+                            if (ctx.datasetIndex === 5 && ctx.raw != null) return '🔴 CTA SELL 進場 @ $' + ctx.raw.toFixed(2);
+                            if (ctx.datasetIndex === 6 && ctx.raw != null) return '⬇ CTA BUY 出場(平多) @ $' + ctx.raw.toFixed(2);
+                            if (ctx.datasetIndex === 7 && ctx.raw != null) return '⬆ CTA SELL 出場(平空) @ $' + ctx.raw.toFixed(2);
+                            if (ctx.datasetIndex === 8 && ctx.raw != null) return '🟢 持多中 @ $' + ctx.raw.toFixed(2);
+                            if (ctx.datasetIndex === 9 && ctx.raw != null) return '🔴 持空中 @ $' + ctx.raw.toFixed(2);
                             return null;
                         }
                     }

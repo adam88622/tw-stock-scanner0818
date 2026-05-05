@@ -1,0 +1,23 @@
+{
+  "experiment": "#7 dynamic_network_markers",
+  "n_stocks": 99,
+  "date_range": [
+    "2025-04-02",
+    "2026-04-28"
+  ],
+  "markers_computed": 200,
+  "warning_sr_q90": 28,
+  "warning_mc_red": 0,
+  "warning_mod_breakdown": 17,
+  "warning_any": 39,
+  "gt1_regime_abnormal_episodes": 1,
+  "gt1_sr_hit_rate": 0.0,
+  "gt1_any_hit_rate": 0.0,
+  "gt2_market_stress_episodes": 11,
+  "gt2_sr_hit_rate": 0.18181818181818182,
+  "gt2_any_hit_rate": 0.36363636363636365,
+  "gt2_sr_lead_mean": 17.5,
+  "gt2_any_lead_mean": 17.75,
+  "paper_claim": "spectral_radius leads market stress by 5-10 days",
+  "verdict": "PARTIAL: direction confirmed (warnings precede stress events) but lead time longer than paper (17d vs 5-10d), and only 18% hit rate on -3.5%+ drops; ineffective on -2~3% mid-range drops"
+}

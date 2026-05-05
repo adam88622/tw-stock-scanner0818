@@ -1,0 +1,41 @@
+{
+  "paper_id": "2604.26063",
+  "paper_claim": "VP-MACD outperforms vanilla MACD on US indices",
+  "in_sample": "2020-01 ~ 2022-12, top-20 TW stocks",
+  "oos": "2023-01 ~ 2026-04, top-100 TW stocks",
+  "best_sensitivity": 0.0,
+  "in_sample_tuning": {
+    "0.0": -0.22983120667314444,
+    "0.3": -0.406349130262779,
+    "0.7": -0.4820699076561813,
+    "1.0": -0.5614503128918271,
+    "1.5": -0.5833323254486438
+  },
+  "oos_aggregate": {
+    "vanilla_MACD_eq_weight": {
+      "sharpe": 0.3549495624750891,
+      "cagr": 0.060425930483019696,
+      "mdd": -0.43433839994306933
+    },
+    "VP_MACD_eq_weight": {
+      "sharpe": 0.8926738786046218,
+      "cagr": 0.3133277030074102,
+      "mdd": -0.3597374779315967
+    },
+    "buy_hold_eq_weight": {
+      "sharpe": 1.09852224352696,
+      "cagr": 3.6974192008297138,
+      "mdd": -0.3417927838982371
+    }
+  },
+  "win_rate_vs_bh": {
+    "vanilla": 0.07,
+    "vp": 0.04
+  },
+  "n_stocks_oos": 100,
+  "median_sharpe": {
+    "vanilla": 0.1387047333898146,
+    "vp": 0.29310128923168977,
+    "buy_hold": 0.889969036805325
+  }
+}

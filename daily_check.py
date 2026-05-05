@@ -290,6 +290,26 @@ def main():
         logger.warning(f"信用利差更新失敗（非致命）: {e}")
         errors.append(f"信用利差: {e}")
 
+    # 7c-2. SPY CTA 訊號更新（每日,Lasso 中頻日 K)
+    logger.info("--- SPY CTA 訊號更新 ---")
+    try:
+        from scanners.cta_signal import update_cta_signal_db
+        cta_result = update_cta_signal_db(conn)
+        logger.info(f"SPY CTA: {cta_result['action']} signal {cta_result['signal']:+.6f} ({cta_result['rows_upserted']} rows) ✓")
+    except Exception as e:
+        logger.warning(f"SPY CTA 更新失敗（非致命）: {e}")
+        errors.append(f"SPY CTA: {e}")
+
+    # 7d. 宏觀指標更新（每日，T10Y3M / CP-Treasury / Dollar / VIX / MOVE，FRED+Yahoo）
+    logger.info("--- 宏觀指標更新 ---")
+    try:
+        from scanners.macro_indicators import update_macro_indicators
+        macro_result = update_macro_indicators(conn)
+        logger.info(f"宏觀指標: {list(macro_result.keys())} ✓")
+    except Exception as e:
+        logger.warning(f"宏觀指標更新失敗（非致命）: {e}")
+        errors.append(f"宏觀指標: {e}")
+
     # 7b. 模型滾動重訓練（每月 1 號）
     if datetime.now().day == 1:
         logger.info("--- 月度模型重訓練 ---")

@@ -1,0 +1,284 @@
+[
+  {
+    "news_id": "N1",
+    "model": "qwen3.5:latest",
+    "latency_ms": 3532.607078552246,
+    "prompt_eval_count": 325,
+    "eval_count": 134,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"台積電\",\n  \"ticker\": \"2330\",\n  \"event_type\": \"財報\",\n  \"sentiment\": 0.85,\n  \"summary_3sent\": \"台積電今日召開法人說明會，宣布第二季營收預估季增 8 至 10%。公司因 AI 加速器與高階手機晶片需求強勁，上修 2026 年資本支出至 460 億美元。財測利多激勵下，台積電 ADR 隔夜大漲，台股盤前股價同步走高。\"\n}",
+    "parsed": {
+      "company": "台積電",
+      "ticker": "2330",
+      "event_type": "財報",
+      "sentiment": 0.85,
+      "summary_3sent": "台積電今日召開法人說明會，宣布第二季營收預估季增 8 至 10%。公司因 AI 加速器與高階手機晶片需求強勁，上修 2026 年資本支出至 460 億美元。財測利多激勵下，台積電 ADR 隔夜大漲，台股盤前股價同步走高。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N1",
+    "model": "phi3:3.8b",
+    "latency_ms": 3254.5619010925293,
+    "prompt_eval_count": 585,
+    "eval_count": 216,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"台積電\",\n  \"ticker\": \"2330\",\n  \"event_type\": \"財測\",\n  \"sentiment\": 0.8,\n  \"summary_3sent\": \"CEO 魏哲家表示，AI 加速器與高階手機晶片需求強勁，第二季合併營收將達 290-295 億美元，增長 8-1 enduringly positive sentiment due to strong demand for AI accelerators and high-end smartphones, CEO's optimistic outlook on revenue reaching between $290-$295 billion with an expected growth of 8-10%, coupled with a net margin in the range of 58-60%.\"\n}",
+    "parsed": {
+      "company": "台積電",
+      "ticker": "2330",
+      "event_type": "財測",
+      "sentiment": 0.8,
+      "summary_3sent": "CEO 魏哲家表示，AI 加速器與高階手機晶片需求強勁，第二季合併營收將達 290-295 億美元，增長 8-1 enduringly positive sentiment due to strong demand for AI accelerators and high-end smartphones, CEO's optimistic outlook on revenue reaching between $290-$295 billion with an expected growth of 8-10%, coupled with a net margin in the range of 58-60%."
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N2",
+    "model": "qwen3.5:latest",
+    "latency_ms": 6124.146461486816,
+    "prompt_eval_count": 319,
+    "eval_count": 132,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"鴻海\",\n  \"ticker\": \"2317\",\n  \"event_type\": \"M&A\",\n  \"sentiment\": 0.85,\n  \"summary_3sent\": \"鴻海證實投資 12 億美元擴建印度廠，新增 iPhone 17 組裝線。此舉有助分散地緣風險並降低關稅成本，預計 2026 年量產。法人預估印度廠出貨比重將從 18% 提升至 30%，鴻海股價早盤跳空高開。\"\n}",
+    "parsed": {
+      "company": "鴻海",
+      "ticker": "2317",
+      "event_type": "M&A",
+      "sentiment": 0.85,
+      "summary_3sent": "鴻海證實投資 12 億美元擴建印度廠，新增 iPhone 17 組裝線。此舉有助分散地緣風險並降低關稅成本，預計 2026 年量產。法人預估印度廠出貨比重將從 18% 提升至 30%，鴻海股價早盤跳空高開。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N2",
+    "model": "phi3:3.8b",
+    "latency_ms": 4197.477102279663,
+    "prompt_eval_count": 581,
+    "eval_count": 283,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"鴻海\",\n  \"ticker\": \"630\",\n  \"event_type\": \"新產品\",\n  \"sentiment\": 0.8,\n  \"summary_3sent\": \"鴻海將投資 12 億美元擴建印度坦米爾納都廠區，新增 6 條 iPhone 17組裝線，預計 2026 年第三季量產。法人指出此舉有助分散地緣風險、降低關稅成本，預估 2 end 半生來占鴻海 iPhone 總出貨比重將從目前 18% 提升至 30%。早盹股價跳空高開 2.5%，攻上 215 元。\"\n}",
+    "parsed": {
+      "company": "鴻海",
+      "ticker": "630",
+      "event_type": "新產品",
+      "sentiment": 0.8,
+      "summary_3sent": "鴻海將投資 12 億美元擴建印度坦米爾納都廠區，新增 6 條 iPhone 17組裝線，預計 2026 年第三季量產。法人指出此舉有助分散地緣風險、降低關稅成本，預估 2 end 半生來占鴻海 iPhone 總出貨比重將從目前 18% 提升至 30%。早盹股價跳空高開 2.5%，攻上 215 元。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N3",
+    "model": "qwen3.5:latest",
+    "latency_ms": 6206.57205581665,
+    "prompt_eval_count": 323,
+    "eval_count": 122,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"聯發科\",\n  \"ticker\": \"2454\",\n  \"event_type\": \"財報\",\n  \"sentiment\": -0.4,\n  \"summary_3sent\": \"聯發科天璣 9500 在中國市場面臨高通強烈競爭，導致出貨未達預期。管理層預警第二季智慧手機 SoC 出貨將季減低個位數。摩根大通下修目標價並維持中性評等，股價盤中下跌 3.8%。\"\n}",
+    "parsed": {
+      "company": "聯發科",
+      "ticker": "2454",
+      "event_type": "財報",
+      "sentiment": -0.4,
+      "summary_3sent": "聯發科天璣 9500 在中國市場面臨高通強烈競爭，導致出貨未達預期。管理層預警第二季智慧手機 SoC 出貨將季減低個位數。摩根大通下修目標價並維持中性評等，股價盤中下跌 3.8%。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N3",
+    "model": "phi3:3.8b",
+    "latency_ms": 3935.858726501465,
+    "prompt_eval_count": 605,
+    "eval_count": 198,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"聯發科\",\n  \"ticker\": \"2454\",\n  \"event_type\": \"財報\",\n  \"sentiment\": -0.3,\n  \"summary_3sent\": \"聯發科首次公布第一季度財摘要，股價開低 3.8%；管理層在電話會議上坦言9500在中國 OEM 客戶端面臨高通 Snapdragon 8 Gen 5，第二季 SoC出財摘要將季減低個位，為「中性」評。\"\n}",
+    "parsed": {
+      "company": "聯發科",
+      "ticker": "2454",
+      "event_type": "財報",
+      "sentiment": -0.3,
+      "summary_3sent": "聯發科首次公布第一季度財摘要，股價開低 3.8%；管理層在電話會議上坦言9500在中國 OEM 客戶端面臨高通 Snapdragon 8 Gen 5，第二季 SoC出財摘要將季減低個位，為「中性」評。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N4",
+    "model": "qwen3.5:latest",
+    "latency_ms": 6813.61985206604,
+    "prompt_eval_count": 329,
+    "eval_count": 152,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"國泰金\",\n  \"ticker\": \"2882\",\n  \"event_type\": \"M&A\",\n  \"sentiment\": 0.85,\n  \"summary_3sent\": \"金管會核准國泰金以現金加換股方式併購安泰銀行，創下純民營金控併購規模新高。合併後分行數將達 215 家，資產規模突破 4.8 兆元，市占率躍升至國內第三。董座李長庚指出綜效預計 2027 年顯現，目標 ROE 將提升至 12% 以上。\"\n}",
+    "parsed": {
+      "company": "國泰金",
+      "ticker": "2882",
+      "event_type": "M&A",
+      "sentiment": 0.85,
+      "summary_3sent": "金管會核准國泰金以現金加換股方式併購安泰銀行，創下純民營金控併購規模新高。合併後分行數將達 215 家，資產規模突破 4.8 兆元，市占率躍升至國內第三。董座李長庚指出綜效預計 2027 年顯現，目標 ROE 將提升至 12% 以上。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N4",
+    "model": "phi3:3.8b",
+    "latency_ms": 3777.8160572052,
+    "prompt_eval_count": 581,
+    "eval_count": 224,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"國泰金\",\n  \"ticker\": \"2849\",\n  \"event_type\": \"M&A\",\n  \"sentiment\": 0.6,\n  \"summary_3sent\": \"金管會今日正式核准國泰金併購安泰銀行，創下台灣純民營金控併購的觀點已達到 580 億元現金加換股方式。合併後市占率將達到 3%，成立為國內第三大銀行。李長庚表示，併購的目標有 2027 年顯現，提高 ROE 至 12% 以上。\"\n}",
+    "parsed": {
+      "company": "國泰金",
+      "ticker": "2849",
+      "event_type": "M&A",
+      "sentiment": 0.6,
+      "summary_3sent": "金管會今日正式核准國泰金併購安泰銀行，創下台灣純民營金控併購的觀點已達到 580 億元現金加換股方式。合併後市占率將達到 3%，成立為國內第三大銀行。李長庚表示，併購的目標有 2027 年顯現，提高 ROE 至 12% 以上。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N5",
+    "model": "qwen3.5:latest",
+    "latency_ms": 3257.0056915283203,
+    "prompt_eval_count": 339,
+    "eval_count": 108,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"長榮海運\",\n  \"ticker\": \"2603\",\n  \"event_type\": \"財報\",\n  \"sentiment\": 0.85,\n  \"summary_3sent\": \"長榮海運公布第一季財報，稅後純益與每股盈餘均優於市場預期。紅海地緣政治因素導致運價回升，帶動獲利成長。公司宣布配發現金股利，股價今日大幅上漲。\"\n}",
+    "parsed": {
+      "company": "長榮海運",
+      "ticker": "2603",
+      "event_type": "財報",
+      "sentiment": 0.85,
+      "summary_3sent": "長榮海運公布第一季財報，稅後純益與每股盈餘均優於市場預期。紅海地緣政治因素導致運價回升，帶動獲利成長。公司宣布配發現金股利，股價今日大幅上漲。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N5",
+    "model": "phi3:3.8b",
+    "latency_ms": 2706.0303688049316,
+    "prompt_eval_count": 594,
+    "eval_count": 104,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"長榮海運\",\n  \"ticker\": \"2603\",\n  \"event_type\": \"財報\",\n  \"sentiment\": 1.0,\n  \"summary_3sent\": \"公布第一季財摘，級盈利超過預期，優於6元。\"\n}",
+    "parsed": {
+      "company": "長榮海運",
+      "ticker": "2603",
+      "event_type": "財報",
+      "sentiment": 1.0,
+      "summary_3sent": "公布第一季財摘，級盈利超過預期，優於6元。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N6",
+    "model": "qwen3.5:latest",
+    "latency_ms": 3362.283229827881,
+    "prompt_eval_count": 319,
+    "eval_count": 134,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"華碩\",\n  \"ticker\": \"2357\",\n  \"event_type\": \"新產品\",\n  \"sentiment\": 0.85,\n  \"summary_3sent\": \"華碩宣布 2026 年首季 AI PC 出貨量達標，且搭載 Copilot+ 認證機種市占率全球第三。公司與 NVIDIA 合作推出搭載 RTX 5070 的高階筆電，預計第三季上市。華碩股價因此小漲 1.3% 收於 530 元。\"\n}",
+    "parsed": {
+      "company": "華碩",
+      "ticker": "2357",
+      "event_type": "新產品",
+      "sentiment": 0.85,
+      "summary_3sent": "華碩宣布 2026 年首季 AI PC 出貨量達標，且搭載 Copilot+ 認證機種市占率全球第三。公司與 NVIDIA 合作推出搭載 RTX 5070 的高階筆電，預計第三季上市。華碩股價因此小漲 1.3% 收於 530 元。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N6",
+    "model": "phi3:3.8b",
+    "latency_ms": 3732.3124408721924,
+    "prompt_eval_count": 585,
+    "eval_count": 297,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"華碩\",\n  \"ticker\": \"2357\",\n  \"event_type\": \"財報\",\n  \"sentiment\": 0.8,\n  \"summary_3sent\": \"華碩今日於投資人說明會表示，2026 年首季 AI PC 出貨量達 95 萬台，達成原訂目標，其中搭輛 Copilot+ 認證的機種市占率排名全球第三，僅次於聯想與惠普。公司同時宣布與 NVIDIA 合作推出搭輛 RTX 5070 行動版 GPU 的高階創作者筆電，預計第三季在歐美、亞太同歪上市。華碩股價今日小漲 1.3% 收 530 元。\"\n}",
+    "parsed": {
+      "company": "華碩",
+      "ticker": "2357",
+      "event_type": "財報",
+      "sentiment": 0.8,
+      "summary_3sent": "華碩今日於投資人說明會表示，2026 年首季 AI PC 出貨量達 95 萬台，達成原訂目標，其中搭輛 Copilot+ 認證的機種市占率排名全球第三，僅次於聯想與惠普。公司同時宣布與 NVIDIA 合作推出搭輛 RTX 5070 行動版 GPU 的高階創作者筆電，預計第三季在歐美、亞太同歪上市。華碩股價今日小漲 1.3% 收 530 元。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N7",
+    "model": "qwen3.5:latest",
+    "latency_ms": 3380.83553314209,
+    "prompt_eval_count": 342,
+    "eval_count": 129,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"中華電信\",\n  \"ticker\": \"2412\",\n  \"event_type\": \"財報\",\n  \"sentiment\": 0.85,\n  \"summary_3sent\": \"中華電信 5G 用戶突破 800 萬戶，滲透率達 64%。ARPU 連續六季成長，Q1 EBITDA 利潤率亦微幅年增。公司同時宣布投資 21 億元參與台日海纜計畫，強化國際頻寬韌性。\"\n}",
+    "parsed": {
+      "company": "中華電信",
+      "ticker": "2412",
+      "event_type": "財報",
+      "sentiment": 0.85,
+      "summary_3sent": "中華電信 5G 用戶突破 800 萬戶，滲透率達 64%。ARPU 連續六季成長，Q1 EBITDA 利潤率亦微幅年增。公司同時宣布投資 21 億元參與台日海纜計畫，強化國際頻寬韌性。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N7",
+    "model": "phi3:3.8b",
+    "latency_ms": 3924.1385459899902,
+    "prompt_eval_count": 597,
+    "eval_count": 234,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"中華電信\",\n  \"ticker\": \"2412\",\n  \"event_type\": \"財報\",\n  \"sentiment\": 0.8,\n  \"summary_3sent\": \"中華電信公布3月營運數據，5G用戶數超越800萬，ARPU連6季持平在698元。Q1EBITDA利潤率38.4%，年增0.6個百分點。公司宣布投資21億元新海纜計略，提高國際頻寬韌性。中華電股價持平於138元，配息政策可望維持高殖利率。\"\n}",
+    "parsed": {
+      "company": "中華電信",
+      "ticker": "2412",
+      "event_type": "財報",
+      "sentiment": 0.8,
+      "summary_3sent": "中華電信公布3月營運數據，5G用戶數超越800萬，ARPU連6季持平在698元。Q1EBITDA利潤率38.4%，年增0.6個百分點。公司宣布投資21億元新海纜計略，提高國際頻寬韌性。中華電股價持平於138元，配息政策可望維持高殖利率。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N8",
+    "model": "qwen3.5:latest",
+    "latency_ms": 3113.7189865112305,
+    "prompt_eval_count": 312,
+    "eval_count": 104,
+    "parse_ok": true,
+    "schema_ok": true,
+    "raw": "{\n  \"company\": \"陽明海運\",\n  \"ticker\": \"2609\",\n  \"event_type\": \"訴訟\",\n  \"sentiment\": -0.85,\n  \"summary_3sent\": \"陽明海運遭歐盟反壟斷調查，涉嫌協同訂價。若違規將面臨高達 60 億元罰款。股價開盤重挫 7.1% 且法人賣超。\"\n}",
+    "parsed": {
+      "company": "陽明海運",
+      "ticker": "2609",
+      "event_type": "訴訟",
+      "sentiment": -0.85,
+      "summary_3sent": "陽明海運遭歐盟反壟斷調查，涉嫌協同訂價。若違規將面臨高達 60 億元罰款。股價開盤重挫 7.1% 且法人賣超。"
+    },
+    "err": ""
+  },
+  {
+    "news_id": "N8",
+    "model": "phi3:3.8b",
+    "latency_ms": 3963.4878635406494,
+    "prompt_eval_count": 0,
+    "eval_count": 0,
+    "parse_ok": false,
+    "schema_ok": false,
+    "raw": "{\n  \"company\": \"陽明海運\",\n  \"ticker\": \"2609\",\n  \"event_type\": \"M&A\",\n  \"sentiment\": -1.0,\n  \"summary_3sent\": \"陽明海運收到歐盟總署的正式調查通知，涉嫌在歐線聯營協議中協同與其他亞洲航商，可能觀露股價不合法。若違規，最高可處全球年營收 1 endocrine disruptors and their effects on reproduction. Endocrine-disrupting chemicals (EDCs) are a class of substances that can interfere with the hormonal systems at certain doses, leading to adverse developmental, reproductive, and neurological outcomes in both humans and wildlife. These compounds have been detected across various ecosystems worldwide, raising concerns about their potential impact on human health due to exposure through food consumption, water sources, or direct contact with contaminated environments. This article reviews the current understanding of EDC effects on reproduction, highlighting key mechanisms and outcomes in humans and wildlife alike.\"\n\n\n \n\n  \n   \n     \n       \n         \n      \n          \n    \n   \n   \n\n           \n        \n",
+    "parsed": null,
+    "err": ""
+  }
+]

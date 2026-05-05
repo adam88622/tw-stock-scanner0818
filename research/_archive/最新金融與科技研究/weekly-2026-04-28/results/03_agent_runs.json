@@ -1,0 +1,72 @@
+[
+  {
+    "task_id": "backfill-2026-04-13-1332",
+    "agent_name": "backfill-runner",
+    "success": false,
+    "runtime_sec": 0.0,
+    "cost_usd": 0.0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "retried": false,
+    "schema_ok": false,
+    "notes": "empty log file (agent crashed before writing)",
+    "run_id": "fc7ff88339a3",
+    "created_at": "2026-04-28T02:29:19+00:00"
+  },
+  {
+    "task_id": "backfill-2026-04-13-1336",
+    "agent_name": "backfill-runner",
+    "success": true,
+    "runtime_sec": 27896.0,
+    "cost_usd": 0.699,
+    "tokens_in": 149783,
+    "tokens_out": 16642,
+    "retried": true,
+    "schema_ok": true,
+    "notes": "ALL DONE; success_days=4573, failed_days=0",
+    "run_id": "8742d8953433",
+    "created_at": "2026-04-28T02:29:19+00:00"
+  },
+  {
+    "task_id": "backfill-2026-04-13-detached",
+    "agent_name": "backfill-runner",
+    "success": true,
+    "runtime_sec": 27896.0,
+    "cost_usd": 0.7004,
+    "tokens_in": 150079,
+    "tokens_out": 16675,
+    "retried": true,
+    "schema_ok": true,
+    "notes": "ALL DONE; success_days=4573, failed_days=0",
+    "run_id": "8540495f09d1",
+    "created_at": "2026-04-28T02:29:19+00:00"
+  },
+  {
+    "task_id": "clean-2026-04-27",
+    "agent_name": "data-cleaner",
+    "success": true,
+    "runtime_sec": 0.0,
+    "cost_usd": 0.0091,
+    "tokens_in": 1961,
+    "tokens_out": 217,
+    "retried": false,
+    "schema_ok": true,
+    "notes": "no explicit ALL DONE marker; lines=134",
+    "run_id": "65f383cd77ef",
+    "created_at": "2026-04-28T02:29:19+00:00"
+  },
+  {
+    "task_id": "export-2026-04-27",
+    "agent_name": "data-exporter",
+    "success": true,
+    "runtime_sec": 0.0,
+    "cost_usd": 0.0033,
+    "tokens_in": 715,
+    "tokens_out": 79,
+    "retried": false,
+    "schema_ok": true,
+    "notes": "no explicit ALL DONE marker; lines=46",
+    "run_id": "9f10b75c2852",
+    "created_at": "2026-04-28T02:29:19+00:00"
+  }
+]

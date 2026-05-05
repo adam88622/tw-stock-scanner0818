@@ -1,0 +1,72 @@
+{
+  "selected_factors": [
+    {
+      "expr": "delta(close, 1)",
+      "ic_mean_is": -0.030353165524594296,
+      "ic_ir_is": -0.1646356566419547
+    },
+    {
+      "expr": "zscore_xs(delta(close, 1))",
+      "ic_mean_is": -0.030352983646435714,
+      "ic_ir_is": -0.16463523239650416
+    },
+    {
+      "expr": "delta(log(close), 1)",
+      "ic_mean_is": -0.030334678965676393,
+      "ic_ir_is": -0.16056412873443546
+    },
+    {
+      "expr": "ts_rank(ts_rank(close, 10), 10)",
+      "ic_mean_is": -0.02832443980616715,
+      "ic_ir_is": -0.1845834798313632
+    }
+  ],
+  "oos_per_factor": [
+    {
+      "expr": "delta(close, 1)",
+      "ic_is": -0.030353165524594296,
+      "ic_oos": -0.015393079376725039,
+      "ic_oos_consistent_sign": 1,
+      "ann_ret_long_short": 2.152984799111841,
+      "ann_vol_long_short": 4.945093810665779,
+      "sharpe_oos_long_short": 0.43537794863834456
+    },
+    {
+      "expr": "zscore_xs(delta(close, 1))",
+      "ic_is": -0.030352983646435714,
+      "ic_oos": -0.0153912906517176,
+      "ic_oos_consistent_sign": 1,
+      "ann_ret_long_short": 2.1506985127560947,
+      "ann_vol_long_short": 4.945108066103186,
+      "sharpe_oos_long_short": 0.4349143606179824
+    },
+    {
+      "expr": "delta(log(close), 1)",
+      "ic_is": -0.030334678965676393,
+      "ic_oos": -0.015399274708694583,
+      "ic_oos_consistent_sign": 1,
+      "ann_ret_long_short": 2.3941696203336424,
+      "ann_vol_long_short": 5.579240387395549,
+      "sharpe_oos_long_short": 0.42912107277945544
+    },
+    {
+      "expr": "ts_rank(ts_rank(close, 10), 10)",
+      "ic_is": -0.02832443980616715,
+      "ic_oos": -0.029401074263277472,
+      "ic_oos_consistent_sign": 1,
+      "ann_ret_long_short": 1.5650021257946114,
+      "ann_vol_long_short": 3.152190564826655,
+      "sharpe_oos_long_short": 0.49648081028396646
+    }
+  ],
+  "paper_compare": {
+    "paper_oos_sharpe_combined": "1.6 (BTC/ETH, LLM-generated)",
+    "paper_baseline_sharpe": "0.9 (alpha101)",
+    "our_n_factors_selected": 4,
+    "our_oos_combined_sharpe": 0.444,
+    "our_n_factors_with_consistent_sign_oos": 4,
+    "our_pct_consistent_sign": 1.0,
+    "verdict": "[partial]",
+    "interpretation": "LLM-free grammar+IC 在台股 OOS Sharpe = 0.44; 4/4 factors maintain consistent IC sign — LLM 仍可能必要"
+  }
+}

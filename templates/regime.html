@@ -12,17 +12,21 @@
 <div class="content-area">
     <h4 class="page-title">市場體溫 — AE 體制偵測</h4>
 
-    <!-- 體溫儀表板 -->
+    <!-- 體溫儀表板(用體溫範圍判定狀態,而非 regime 旗標) -->
+    {% set _danger = temperature >= 80 %}
+    {% set _warn = temperature >= 50 and temperature < 80 %}
     <div class="regime-dashboard">
         <div class="regime-gauge">
-            <div class="regime-temp-value {{ 'danger' if regime == 'abnormal' else 'safe' }}">
+            <div class="regime-temp-value {{ 'danger' if _danger else ('warning' if _warn else 'safe') }}">
                 {{ temperature }}°
             </div>
-            <div class="regime-status {{ regime }}">
-                {% if regime == 'abnormal' %}
-                    🔴 異常體制 — 建議減碼觀望
+            <div class="regime-status {{ 'danger' if _danger else ('warning' if _warn else 'safe') }}">
+                {% if _danger %}
+                    🔴 發燒 — 強烈建議降低倉位
+                {% elif _warn %}
+                    🟡 偏熱 — 波動加劇,注意風控
                 {% else %}
-                    🟢 正常體制 — 可正常操作
+                    🟢 正常 — 市場波動在預期範圍內
                 {% endif %}
             </div>
             <div class="regime-detail">
@@ -33,7 +37,7 @@
         </div>
     </div>
 
-    <!-- 體溫解讀 -->
+    <!-- 體溫解讀(原體溫 0-100° + 異常嚴重度分級) -->
     <div class="regime-legend">
         <div class="legend-item safe">
             <span class="legend-dot safe"></span>
@@ -48,6 +52,7 @@
             <strong>80° ~ 100°</strong> 發燒 — 強烈建議降低倉位
         </div>
     </div>
+
 
     <!-- 圖表：重建誤差歷史 -->
     <div class="chart-card">
@@ -203,8 +208,10 @@
                         {% endif %}
                     </td>
                     <td class="text-end">
-                        {% set temp = [100, (item.error / tau * 50)]|min %}
-                        {{ "%.1f"|format(temp) }}°
+                        {% set t = item.temperature if item.temperature is defined else 0 %}
+                        <span style="color:{% if t >= 80 %}#ef4444{% elif t >= 50 %}#f59e0b{% else %}#22c55e{% endif %};">
+                            {{ "%.1f"|format(t) }}°
+                        </span>
                     </td>
                 </tr>
                 {% endfor %}
@@ -226,22 +233,40 @@ new Chart(ctx, {
         labels: historyData.map(d => d.date),
         datasets: [
             {
-                label: '重建誤差',
-                data: historyData.map(d => Math.min(d.error, tau * 8)),
-                borderColor: '#818cf8',
-                backgroundColor: historyData.map(d => d.error >= tau ? 'rgba(239,68,68,0.3)' : 'rgba(34,197,94,0.1)'),
+                label: '市場體溫',
+                data: historyData.map(d => d.temperature || 0),
+                borderColor: '#22c55e',
+                backgroundColor: function(context) {
+                    var v = context.raw || 0;
+                    return v >= 80 ? 'rgba(239,68,68,0.2)' : v >= 50 ? 'rgba(245,158,11,0.15)' : 'rgba(34,197,94,0.1)';
+                },
+                segment: {
+                    borderColor: function(ctx) {
+                        var v = ctx.p1.parsed.y;
+                        return v >= 80 ? '#ef4444' : v >= 50 ? '#f59e0b' : '#22c55e';
+                    }
+                },
                 fill: true,
                 tension: 0.3,
-                pointRadius: historyData.map(d => d.error >= tau ? 4 : 1),
-                pointBackgroundColor: historyData.map(d => d.error >= tau ? '#ef4444' : '#818cf8'),
-                borderWidth: 1.5,
+                pointRadius: historyData.map(d => (d.temperature||0) >= 80 ? 4 : (d.temperature||0) >= 50 ? 3 : 1),
+                pointBackgroundColor: historyData.map(d => (d.temperature||0) >= 80 ? '#ef4444' : (d.temperature||0) >= 50 ? '#f59e0b' : '#22c55e'),
+                borderWidth: 2,
             },
             {
-                label: '閾值 τ',
-                data: historyData.map(() => tau),
+                label: '偏熱線 (50°)',
+                data: historyData.map(() => 50),
+                borderColor: '#f59e0b',
+                borderDash: [6, 3],
+                borderWidth: 1,
+                pointRadius: 0,
+                fill: false,
+            },
+            {
+                label: '發燒線 (80°)',
+                data: historyData.map(() => 80),
                 borderColor: '#ef4444',
                 borderDash: [6, 3],
-                borderWidth: 1.5,
+                borderWidth: 1,
                 pointRadius: 0,
                 fill: false,
             }
@@ -251,17 +276,16 @@ new Chart(ctx, {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            legend: {
-                labels: { color: '#94a3b8', font: { size: 13 } }
-            },
+            legend: { labels: { color: '#94a3b8', font: { size: 13 } } },
             tooltip: {
                 callbacks: {
                     label: function(ctx) {
                         if (ctx.datasetIndex === 0) {
-                            const regime = ctx.raw >= tau ? '🔴 異常' : '🟢 正常';
-                            return `誤差: ${ctx.raw.toFixed(4)} ${regime}`;
+                            var v = ctx.raw;
+                            var tag = v >= 80 ? '🔴 發燒' : v >= 50 ? '🟡 偏熱' : '🟢 正常';
+                            return '體溫: ' + v.toFixed(1) + '° ' + tag;
                         }
-                        return `τ: ${ctx.raw.toFixed(4)}`;
+                        return ctx.dataset.label;
                     }
                 }
             }
@@ -272,8 +296,12 @@ new Chart(ctx, {
                 grid: { color: 'rgba(148,163,184,0.1)' }
             },
             y: {
-                max: tau * 8,
-                ticks: { color: '#64748b', font: { size: 11 } },
+                min: 0,
+                max: 100,
+                ticks: {
+                    color: '#64748b', font: { size: 11 },
+                    callback: function(v) { return v + '°'; }
+                },
                 grid: { color: 'rgba(148,163,184,0.1)' }
             }
         }

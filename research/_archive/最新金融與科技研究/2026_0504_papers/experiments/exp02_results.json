@@ -1,0 +1,56 @@
+{
+  "summary_long_horizon": {
+    "stock_id": "0050",
+    "start": "2004-03-01",
+    "end": "2026-05-04",
+    "n_days": 5180,
+    "n_years": 20.56,
+    "annual_sigma": 0.1906,
+    "scenarios": {
+      "k=2.0": {
+        "terminal_actual": 150.6415,
+        "terminal_naive": 319.1164,
+        "annual_drag_empirical_log": 0.036518,
+        "annual_drag_theoretical": 0.036314,
+        "annualized_error_bp": 2.04
+      },
+      "k=-1.0": {
+        "terminal_actual": 0.0265,
+        "terminal_naive": 0.056,
+        "annual_drag_empirical_log": 0.036431,
+        "annual_drag_theoretical": 0.036314,
+        "annualized_error_bp": 1.17
+      },
+      "k=3.0": {
+        "terminal_actual": 594.7656,
+        "terminal_naive": 5700.6398,
+        "annual_drag_empirical_log": 0.109954,
+        "annual_drag_theoretical": 0.108942,
+        "annualized_error_bp": 10.12
+      }
+    }
+  },
+  "validation_per_k": [
+    {
+      "k": 2.0,
+      "slope_no_intercept": 1.3322,
+      "corr": 0.7457,
+      "mae_bp_period": 152.8,
+      "verdict": "✗ deviates"
+    },
+    {
+      "k": -1.0,
+      "slope_no_intercept": 0.8993,
+      "corr": 0.902,
+      "mae_bp_period": 59.25,
+      "verdict": "✓ supports paper"
+    },
+    {
+      "k": 3.0,
+      "slope_no_intercept": 1.578,
+      "corr": 0.6265,
+      "mae_bp_period": 747.78,
+      "verdict": "✗ deviates"
+    }
+  ]
+}

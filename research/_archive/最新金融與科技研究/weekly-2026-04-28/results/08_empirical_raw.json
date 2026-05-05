@@ -1,0 +1,759 @@
+{
+  "results": [
+    {
+      "item_id": "A1",
+      "model": "qwen3.5:latest",
+      "task": "sentiment",
+      "raw": "{\n  \"sentiment_score\": 0.85,\n  \"summary_zh\": [\n    \"鴻海 (2317) 第一季每股盈餘達 3.12 元，年增 28% 並超越市場預期。\",\n    \"公司同步將 2026 年資本支出調升至 1,800 億元，主要用於擴建 AI 伺服器產線。\",\n    \"此舉顯示鴻海積極佈局人工智慧領域，展現強勁成長動能。\"\n  ]\n}",
+      "parsed_sentiment": 0.85,
+      "parsed_summary": [
+        "鴻海 (2317) 第一季每股盈餘達 3.12 元，年增 28% 並超越市場預期。",
+        "公司同步將 2026 年資本支出調升至 1,800 億元，主要用於擴建 AI 伺服器產線。",
+        "此舉顯示鴻海積極佈局人工智慧領域，展現強勁成長動能。"
+      ],
+      "latency_s": 3.3895837999880314,
+      "prompt_chars": 197,
+      "response_chars": 187,
+      "keyword_hits": 2,
+      "keyword_total": 4,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A1",
+      "model": "phi3:3.8b",
+      "task": "sentiment",
+      "raw": "```json\n{\n  \"sentiment_score\": 0.95,\n  \"summary_zh\": [\n    \"鴻海集圖報告了 Q1 EPS 達到 3.12 元，年增 28%，超越了市場預期值 2.85 元；\",\n    \"公司調整全年資本支出數字為 1,80bon億元，主要投入 AI 伺服器產線擴建。\",\n    \"這表明公司正在重新定位其財務方向，推動為進一步的技術專業化和全球市場扩展。\"\n  ]\n}\n```",
+      "parsed_sentiment": 0.95,
+      "parsed_summary": [
+        "鴻海集圖報告了 Q1 EPS 達到 3.12 元，年增 28%，超越了市場預期值 2.85 元；",
+        "公司調整全年資本支出數字為 1,80bon億元，主要投入 AI 伺服器產線擴建。",
+        "這表明公司正在重新定位其財務方向，推動為進一步的技術專業化和全球市場扩展。"
+      ],
+      "latency_s": 2.775496500020381,
+      "prompt_chars": 197,
+      "response_chars": 212,
+      "keyword_hits": 3,
+      "keyword_total": 4,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A2",
+      "model": "qwen3.5:latest",
+      "task": "sentiment",
+      "raw": "{\n  \"sentiment_score\": -0.3,\n  \"summary_zh\": [\n    \"聯電法說會預估第二季晶圓出貨量將較第一季下滑 3% 至 5%。\",\n    \"產能稼動率預計由 78% 降至 72%，主要受消費型 IC 庫存去化未完成的影響。\",\n    \"整體營運表現呈現短期負向調整，反映市場去庫存壓力。\"\n  ]\n}",
+      "parsed_sentiment": -0.3,
+      "parsed_summary": [
+        "聯電法說會預估第二季晶圓出貨量將較第一季下滑 3% 至 5%。",
+        "產能稼動率預計由 78% 降至 72%，主要受消費型 IC 庫存去化未完成的影響。",
+        "整體營運表現呈現短期負向調整，反映市場去庫存壓力。"
+      ],
+      "latency_s": 3.03245350002544,
+      "prompt_chars": 177,
+      "response_chars": 172,
+      "keyword_hits": 3,
+      "keyword_total": 3,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A2",
+      "model": "phi3:3.8b",
+      "task": "sentiment",
+      "raw": "```json\n{\n  \"sentiment_score\": -0.5,\n  \"summary_zh\": [\n    \"聯電表示其第二季度的晶圖庫出貨量可能會下滑3-5%，\",\n    \"其產能稱為78%降至72%\",\n    \"主因消費型IC庫存去化尚未完成\"\n  ]\n}\n```",
+      "parsed_sentiment": -0.5,
+      "parsed_summary": [
+        "聯電表示其第二季度的晶圖庫出貨量可能會下滑3-5%，",
+        "其產能稱為78%降至72%",
+        "主因消費型IC庫存去化尚未完成"
+      ],
+      "latency_s": 2.440695199999027,
+      "prompt_chars": 177,
+      "response_chars": 141,
+      "keyword_hits": 2,
+      "keyword_total": 3,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A3",
+      "model": "qwen3.5:latest",
+      "task": "sentiment",
+      "raw": "{\n  \"sentiment_score\": 0.9,\n  \"summary_zh\": [\n    \"台積電宣布 N2 製程將於 2025 年第四季進入量產階段，初期良率已突破 70%。\",\n    \"蘋果與輝達已確認下單，包下該製程首年 60% 的產能，顯示客戶對其技術進展高度信心。\",\n    \"此消息凸顯台積電在先進製程上的領先地位，對市場預期形成重大利多。\"\n  ]\n}",
+      "parsed_sentiment": 0.9,
+      "parsed_summary": [
+        "台積電宣布 N2 製程將於 2025 年第四季進入量產階段，初期良率已突破 70%。",
+        "蘋果與輝達已確認下單，包下該製程首年 60% 的產能，顯示客戶對其技術進展高度信心。",
+        "此消息凸顯台積電在先進製程上的領先地位，對市場預期形成重大利多。"
+      ],
+      "latency_s": 3.2462805000250228,
+      "prompt_chars": 167,
+      "response_chars": 190,
+      "keyword_hits": 5,
+      "keyword_total": 5,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A3",
+      "model": "phi3:3.8b",
+      "task": "sentiment",
+      "raw": "```json\n{\n  \"sentiment_score\": 0.9,\n  \"summary_zh\": [\n    \"台股研究社區新闻，2330 公司宣布其第二款 N2 型電動車在2025年4季度初期進入量產，初期良率超過70%\",\n    \"同時，蘋果和輝達已下單包合作，首年產能預測60%\",\n    \"2330 的新型電動車進入市場以期望對環gY 來源資源和技術進步促進\"\n  ]\n}\n```",
+      "parsed_sentiment": 0.9,
+      "parsed_summary": [
+        "台股研究社區新闻，2330 公司宣布其第二款 N2 型電動車在2025年4季度初期進入量產，初期良率超過70%",
+        "同時，蘋果和輝達已下單包合作，首年產能預測60%",
+        "2330 的新型電動車進入市場以期望對環gY 來源資源和技術進步促進"
+      ],
+      "latency_s": 2.703979599988088,
+      "prompt_chars": 167,
+      "response_chars": 199,
+      "keyword_hits": 5,
+      "keyword_total": 5,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A4",
+      "model": "qwen3.5:latest",
+      "task": "sentiment",
+      "raw": "{\n  \"sentiment_score\": -0.45,\n  \"summary_zh\": [\n    \"長榮海運公布 4 月營收為 218 億元，較上月減少 12%、較去年同期減少 8%。\",\n    \"由於紅海運價回落速度超出預期，公司決定下修第二季毛利率指引至 18% 至 22%。\",\n    \"此調整顯示營運壓力大於原先預估，對短期獲利表現構成負面影響。\"\n  ]\n}",
+      "parsed_sentiment": -0.45,
+      "parsed_summary": [
+        "長榮海運公布 4 月營收為 218 億元，較上月減少 12%、較去年同期減少 8%。",
+        "由於紅海運價回落速度超出預期，公司決定下修第二季毛利率指引至 18% 至 22%。",
+        "此調整顯示營運壓力大於原先預估，對短期獲利表現構成負面影響。"
+      ],
+      "latency_s": 3.1829371000058018,
+      "prompt_chars": 188,
+      "response_chars": 189,
+      "keyword_hits": 3,
+      "keyword_total": 3,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A4",
+      "model": "phi3:3.8b",
+      "task": "sentiment",
+      "raw": "{\n  \"sentiment_score\": -0.4,\n  \"summary_zh\": [\n    \"長榮海運報告了在第四季度結束的級數為218億元，但是剪下去四倍月減財，以及年減財5%。\",\n    \"此外，公司預計Q2毛利率被影過高一些，促使其設定在18-22%之間。\",\n    \"對於長榮海運的資料分析，對於當地市場上下行表現和未供應量，以及其經濟增長速度，提出了一些重要評論。\"\n  ]\n}",
+      "parsed_sentiment": -0.4,
+      "parsed_summary": [
+        "長榮海運報告了在第四季度結束的級數為218億元，但是剪下去四倍月減財，以及年減財5%。",
+        "此外，公司預計Q2毛利率被影過高一些，促使其設定在18-22%之間。",
+        "對於長榮海運的資料分析，對於當地市場上下行表現和未供應量，以及其經濟增長速度，提出了一些重要評論。"
+      ],
+      "latency_s": 2.8045533999684267,
+      "prompt_chars": 188,
+      "response_chars": 201,
+      "keyword_hits": 1,
+      "keyword_total": 3,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A5",
+      "model": "qwen3.5:latest",
+      "task": "sentiment",
+      "raw": "{\n  \"sentiment_score\": 0.65,\n  \"summary_zh\": [\n    \"中鋼董事會決議配發現金股利每股 0.5 元，殖利率約 1.8%，顯示公司股利政策維持穩定。\",\n    \"公司指出鋼價已見底，預期下半年將溫和回升，對未來營運持樂觀態度。\",\n    \"此消息反映中鋼在鋼價回穩後，財務狀況與獲利能力有望改善。\"\n  ]\n}",
+      "parsed_sentiment": 0.65,
+      "parsed_summary": [
+        "中鋼董事會決議配發現金股利每股 0.5 元，殖利率約 1.8%，顯示公司股利政策維持穩定。",
+        "公司指出鋼價已見底，預期下半年將溫和回升，對未來營運持樂觀態度。",
+        "此消息反映中鋼在鋼價回穩後，財務狀況與獲利能力有望改善。"
+      ],
+      "latency_s": 3.0698887000326067,
+      "prompt_chars": 171,
+      "response_chars": 180,
+      "keyword_hits": 2,
+      "keyword_total": 3,
+      "sentiment_correct": false,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A5",
+      "model": "phi3:3.8b",
+      "task": "sentiment",
+      "raw": "```json\n{\n  \"sentiment_score\": 0.6,\n  \"summary_zh\": [\n    \"中鋼公司通過配發現金股利，創建了穩定的股利政策，殖利約1.8%\",\n    \"公司表示鋼價已落底，預期H2將溫和回升\",\n    \"配發現金股利0.5元\"\n  ]\n}\n```",
+      "parsed_sentiment": 0.6,
+      "parsed_summary": [
+        "中鋼公司通過配發現金股利，創建了穩定的股利政策，殖利約1.8%",
+        "公司表示鋼價已落底，預期H2將溫和回升",
+        "配發現金股利0.5元"
+      ],
+      "latency_s": 2.503816700016614,
+      "prompt_chars": 171,
+      "response_chars": 146,
+      "keyword_hits": 3,
+      "keyword_total": 3,
+      "sentiment_correct": false,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A6",
+      "model": "qwen3.5:latest",
+      "task": "sentiment",
+      "raw": "{\"sentiment_score\": 0.6, \"summary_zh\": [\"金管會公告 2026 年第二季起實施 ETF 發行新規，要求基金公司加強流動性風險揭露。\", \"業內人士認為此舉對既有 ETF 影響有限，主要涉及合規調整。\", \"整體市場情緒偏向正面，預期將促進 ETF 市場更穩健發展。\"]}",
+      "parsed_sentiment": 0.6,
+      "parsed_summary": [
+        "金管會公告 2026 年第二季起實施 ETF 發行新規，要求基金公司加強流動性風險揭露。",
+        "業內人士認為此舉對既有 ETF 影響有限，主要涉及合規調整。",
+        "整體市場情緒偏向正面，預期將促進 ETF 市場更穩健發展。"
+      ],
+      "latency_s": 2.882089700025972,
+      "prompt_chars": 172,
+      "response_chars": 155,
+      "keyword_hits": 4,
+      "keyword_total": 4,
+      "sentiment_correct": false,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A6",
+      "model": "phi3:3.8b",
+      "task": "sentiment",
+      "raw": "```json\n{\n  \"sentiment_score\": -0.5,\n  \"summary_zh\": [\n    \"金管會公開市場新增了一筆2026年第二季度ETF，並提出要求基金公司加強流動性風險揭露，由於既有ETF影響已經有限。\",\n    \"基金人士表示新規上路的影響不太大，但是重要，需要合規調整。\",\n    \"金管會強化了流動性風險控制的要求，以確保市場環境安全。\"\n  ]\n}\n```",
+      "parsed_sentiment": -0.5,
+      "parsed_summary": [
+        "金管會公開市場新增了一筆2026年第二季度ETF，並提出要求基金公司加強流動性風險揭露，由於既有ETF影響已經有限。",
+        "基金人士表示新規上路的影響不太大，但是重要，需要合規調整。",
+        "金管會強化了流動性風險控制的要求，以確保市場環境安全。"
+      ],
+      "latency_s": 2.7281229999498464,
+      "prompt_chars": 172,
+      "response_chars": 201,
+      "keyword_hits": 3,
+      "keyword_total": 4,
+      "sentiment_correct": false,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A7",
+      "model": "qwen3.5:latest",
+      "task": "sentiment",
+      "raw": "{\n  \"sentiment_score\": 0.85,\n  \"summary_zh\": [\n    \"華碩第一季 AI PC 出貨量達 85 萬台，市佔率躍居全球第三。\",\n    \"毛利率達到 16.8%，創下近八季以來新高。\",\n    \"公司樂觀預期 Copilot+ PC 換機潮將延續至 2027 年。\"\n  ]\n}",
+      "parsed_sentiment": 0.85,
+      "parsed_summary": [
+        "華碩第一季 AI PC 出貨量達 85 萬台，市佔率躍居全球第三。",
+        "毛利率達到 16.8%，創下近八季以來新高。",
+        "公司樂觀預期 Copilot+ PC 換機潮將延續至 2027 年。"
+      ],
+      "latency_s": 2.987012400000822,
+      "prompt_chars": 190,
+      "response_chars": 164,
+      "keyword_hits": 4,
+      "keyword_total": 4,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A7",
+      "model": "phi3:3.8b",
+      "task": "sentiment",
+      "raw": "```json\n{\n  \"sentiment_score\": 0.9,\n  \"summary_zh\": [\n    \"华碩首次公開AI PC 供業界使用，市值達到85亿美元，成立於2023年前一半，已成為全球第三大電腕機促進者。\",\n    \"公司的毛利率歷時最高，達到近8.5%，預計在2027年前有更多新機產生成。\",\n    \"對於未來的規模拓展，公司表示持續推進AI PC 市場整合技術，為業界提供更多智能化解問題。\"\n  ]\n}\n```",
+      "parsed_sentiment": 0.9,
+      "parsed_summary": [
+        "华碩首次公開AI PC 供業界使用，市值達到85亿美元，成立於2023年前一半，已成為全球第三大電腕機促進者。",
+        "公司的毛利率歷時最高，達到近8.5%，預計在2027年前有更多新機產生成。",
+        "對於未來的規模拓展，公司表示持續推進AI PC 市場整合技術，為業界提供更多智能化解問題。"
+      ],
+      "latency_s": 2.846434200007934,
+      "prompt_chars": 190,
+      "response_chars": 223,
+      "keyword_hits": 2,
+      "keyword_total": 4,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A8",
+      "model": "qwen3.5:latest",
+      "task": "sentiment",
+      "raw": "{\n  \"sentiment_score\": -0.35,\n  \"summary_zh\": [\n    \"南亞科因 DRAM 現貨價單月下跌 7%，導致 4 月營收月減 9%。\",\n    \"公司指出伺服器 DRAM 需求維持穩定，但消費電子端能見度不佳。\",\n    \"整體營收受價格波動與需求結構影響而下滑。\"\n  ]\n}",
+      "parsed_sentiment": -0.35,
+      "parsed_summary": [
+        "南亞科因 DRAM 現貨價單月下跌 7%，導致 4 月營收月減 9%。",
+        "公司指出伺服器 DRAM 需求維持穩定，但消費電子端能見度不佳。",
+        "整體營收受價格波動與需求結構影響而下滑。"
+      ],
+      "latency_s": 2.95429810002679,
+      "prompt_chars": 173,
+      "response_chars": 163,
+      "keyword_hits": 4,
+      "keyword_total": 4,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "A8",
+      "model": "phi3:3.8b",
+      "task": "sentiment",
+      "raw": "```json\n{\n  \"sentiment_score\": -0.7,\n  \"summary_zh\": [\n    \"南亞科技有限公司（Nanya Technology Corp.），一家台湾受 DRAM 現貨價值下降 7% 並在4 月營收中減 9%，表示其伺服器 DRAM 需求仍穩定，但消費端需求度不佳。\",\n    \"對於其他的貨價值和營收，公司表示遭受到供為市場上的波動影響，且未能完全抵御此外的財政支出增加。\",\n    \"對於未來一年，公司表示保持穩定的需求趨勢，但同時也預言消費端需求可能會有所下跌。\"\n  ]\n}\n```",
+      "parsed_sentiment": -0.7,
+      "parsed_summary": [
+        "南亞科技有限公司（Nanya Technology Corp.），一家台湾受 DRAM 現貨價值下降 7% 並在4 月營收中減 9%，表示其伺服器 DRAM 需求仍穩定，但消費端需求度不佳。",
+        "對於其他的貨價值和營收，公司表示遭受到供為市場上的波動影響，且未能完全抵御此外的財政支出增加。",
+        "對於未來一年，公司表示保持穩定的需求趨勢，但同時也預言消費端需求可能會有所下跌。"
+      ],
+      "latency_s": 3.0100250999676064,
+      "prompt_chars": 173,
+      "response_chars": 269,
+      "keyword_hits": 3,
+      "keyword_total": 4,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "B1",
+      "model": "qwen3.5:latest",
+      "task": "narrative",
+      "raw": "{\n  \"sentiment_score\": 0.75,\n  \"summary_zh\": [\n    \"外資連續五個交易日大舉買超台積電，累計買超 2.1 萬張、金額逾 230 億元，顯示對權值股信心強勁。\",\n    \"同期間外資則賣超聯發科與鴻海，分別達 8,500 張與 6,200 張，呈現明顯的權值股輪動現象。\",\n    \"整體資金流向反映外資偏好台積電的強勢表現，並調整對其他科技大廠的持股部位。\"\n  ]\n}",
+      "parsed_sentiment": 0.75,
+      "parsed_summary": [
+        "外資連續五個交易日大舉買超台積電，累計買超 2.1 萬張、金額逾 230 億元，顯示對權值股信心強勁。",
+        "同期間外資則賣超聯發科與鴻海，分別達 8,500 張與 6,200 張，呈現明顯的權值股輪動現象。",
+        "整體資金流向反映外資偏好台積電的強勢表現，並調整對其他科技大廠的持股部位。"
+      ],
+      "latency_s": 3.3758914999780245,
+      "prompt_chars": 200,
+      "response_chars": 212,
+      "keyword_hits": 4,
+      "keyword_total": 4,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "B1",
+      "model": "phi3:3.8b",
+      "task": "narrative",
+      "raw": "```json\n{\n  \"sentiment_score\": -0.5,\n  \"summary_zh\": [\n    \"外資連 5 個交易日買超台積電 (2330) 累計 2.1 萬張，買超金額逾 230 億元，同期間賣超聯發科 (2454) 8,500 張、呈現明顯的權值股輪動。\",\n    \"外資持有超週五日的台股敘事表示持有超過 2.1 萬張台積電力公司股份，買金額超過 230 億元。\",\n    \"此外，外資持有超週五日的台股敘事表示同期間賣超聯發科 (2454) 8,500 張、呈現明顯的權值股輪動。\"\n  ]\n}\n```",
+      "parsed_sentiment": -0.5,
+      "parsed_summary": [
+        "外資連 5 個交易日買超台積電 (2330) 累計 2.1 萬張，買超金額逾 230 億元，同期間賣超聯發科 (2454) 8,500 張、呈現明顯的權值股輪動。",
+        "外資持有超週五日的台股敘事表示持有超過 2.1 萬張台積電力公司股份，買金額超過 230 億元。",
+        "此外，外資持有超週五日的台股敘事表示同期間賣超聯發科 (2454) 8,500 張、呈現明顯的權值股輪動。"
+      ],
+      "latency_s": 3.013001100043766,
+      "prompt_chars": 200,
+      "response_chars": 269,
+      "keyword_hits": 4,
+      "keyword_total": 4,
+      "sentiment_correct": false,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "B2",
+      "model": "qwen3.5:latest",
+      "task": "narrative",
+      "raw": "{\n  \"sentiment_score\": 0.3,\n  \"summary_zh\": [\n    \"投信於 4 月最後一週展現明顯的防禦性輪動策略，大幅賣出中小型生技股並轉向金融龍頭。\",\n    \"資金從保瑞、藥華藥等生技股撤出，轉而買進富邦金與國泰金，反映市場對景氣循環類股的偏好提升。\",\n    \"整體操作顯示法人正將部位調整至相對穩健的金融板塊以避險。\"\n  ]\n}",
+      "parsed_sentiment": 0.3,
+      "parsed_summary": [
+        "投信於 4 月最後一週展現明顯的防禦性輪動策略，大幅賣出中小型生技股並轉向金融龍頭。",
+        "資金從保瑞、藥華藥等生技股撤出，轉而買進富邦金與國泰金，反映市場對景氣循環類股的偏好提升。",
+        "整體操作顯示法人正將部位調整至相對穩健的金融板塊以避險。"
+      ],
+      "latency_s": 3.206092100008391,
+      "prompt_chars": 217,
+      "response_chars": 189,
+      "keyword_hits": 4,
+      "keyword_total": 5,
+      "sentiment_correct": false,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "B2",
+      "model": "phi3:3.8b",
+      "task": "narrative",
+      "raw": "```json\n{\n  \"sentiment_score\": -0.5,\n  \"summary_zh\": [\n    \"最近一週，小型生技產業賣超敘事中超過12,000張，包括保瑞、藥華藥和台康生技；同期買超金融股龍頭富邦金和國泰金共計9,800張，表明防禦性類賣掉。\",\n    \"小型生技股的賣出量增加，但是由於市場上下跌後期期間，金融賣單不足以維持超過1,000張。\",\n    \"這可能表明市場進入一段更長期的下落，並易容易被風險因素影龈。\"\n  ]\n}\n```",
+      "parsed_sentiment": -0.5,
+      "parsed_summary": [
+        "最近一週，小型生技產業賣超敘事中超過12,000張，包括保瑞、藥華藥和台康生技；同期買超金融股龍頭富邦金和國泰金共計9,800張，表明防禦性類賣掉。",
+        "小型生技股的賣出量增加，但是由於市場上下跌後期期間，金融賣單不足以維持超過1,000張。",
+        "這可能表明市場進入一段更長期的下落，並易容易被風險因素影龈。"
+      ],
+      "latency_s": 2.9153970000334084,
+      "prompt_chars": 217,
+      "response_chars": 235,
+      "keyword_hits": 4,
+      "keyword_total": 5,
+      "sentiment_correct": false,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "B3",
+      "model": "qwen3.5:latest",
+      "task": "narrative",
+      "raw": "{\n  \"sentiment_score\": -0.6,\n  \"summary_zh\": [\n    \"三大法人單週合計賣超航運股超過 4 萬張，呈現明顯的減碼趨勢。\",\n    \"長榮、陽明與萬海同步遭外資與投信減碼，主要受運價走弱及第二季毛利率下修影響。\"\n  ]\n}",
+      "parsed_sentiment": -0.6,
+      "parsed_summary": [
+        "三大法人單週合計賣超航運股超過 4 萬張，呈現明顯的減碼趨勢。",
+        "長榮、陽明與萬海同步遭外資與投信減碼，主要受運價走弱及第二季毛利率下修影響。"
+      ],
+      "latency_s": 2.968390599999111,
+      "prompt_chars": 181,
+      "response_chars": 136,
+      "keyword_hits": 4,
+      "keyword_total": 4,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "B3",
+      "model": "phi3:3.8b",
+      "task": "narrative",
+      "raw": "```json\n{\n  \"sentiment_score\": -0.7,\n  \"summary_zh\": [\n    \"三大法人合計賣於超過4萬張，長榮(2603)、陽明(2609)及萬海(2615)同步遭外資與投信減碼，運價走弱與Q2毛利率下修是主因。\",\n    \"法人買賣活動表現出了不盡收的情感，影並反映出市場的不盡收行為。\",\n    \"對於三大法人，賣出量超過4萬張，其動向表明出現了買賣力，但是由於外部因素影響而有所下調。\",\n    \"僅限在此期間的情緒波动，未能改變法人的基本面或財務健康，但是需要注意其後續行動。\"\n  ]\n}\n```",
+      "parsed_sentiment": -0.7,
+      "parsed_summary": [
+        "三大法人合計賣於超過4萬張，長榮(2603)、陽明(2609)及萬海(2615)同步遭外資與投信減碼，運價走弱與Q2毛利率下修是主因。",
+        "法人買賣活動表現出了不盡收的情感，影並反映出市場的不盡收行為。",
+        "對於三大法人，賣出量超過4萬張，其動向表明出現了買賣力，但是由於外部因素影響而有所下調。"
+      ],
+      "latency_s": 3.1137975999736227,
+      "prompt_chars": 181,
+      "response_chars": 277,
+      "keyword_hits": 2,
+      "keyword_total": 4,
+      "sentiment_correct": true,
+      "reasoning_points": 0,
+      "error": ""
+    },
+    {
+      "item_id": "C1",
+      "model": "qwen3.5:latest",
+      "task": "factor",
+      "raw": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   **Role:** Taiwan Stock Quantitative Researcher (台股量化研究員).\n    *   **Task:** Explain possible reasons for the failure of the Beta-Adjusted Momentum factor in Taiwan stocks in Q3 2024.\n    *   **Format:** Bullet-point reasoning (條列式推理回答), no JSON.\n    *   **Constraints:** At least 3 arguments (論點), each point 1-2 sentences (每點 1-2 句).\n    *   **Language:** Traditional Chinese (繁體中文).\n    *   **Additional Requirement:** Explain under what market structure the factor would return/regain effectiveness (因子在何種市場結構下會回歸).\n\n2.  **Analyze the Subject Matter (Beta-Adjusted Momentum in TAIEX Q3 2024):**\n    *   *Beta-Adjusted Momentum:* This strategy typically involves taking momentum (price trend) but adjusting for the stock's beta (volatility relative to the market) to avoid overexposure to market risk or to normalize returns across different volatility regimes.\n    *   *Taiwan Market Context (Q3 2024):* The market was influenced by global AI hype, semiconductor cycle concerns, geopolitical tensions (US-China), and potentially a rotation from high-beta tech to defensive sectors or a general market correction.\n    *   *Potential Failure Reasons:*\n        1.  **Market Regime Change:** High volatility or specific sector dominance (e.g., TSMC/semis) might make beta adjustment less effective if the market moves in a correlated way regardless of beta.\n        2.  **Sector Concentration:** If the market is dominated by a few large caps (semiconductors), momentum might be driven by macro factors rather than individual stock alpha, making beta adjustment redundant or misleading.\n        3.  **Liquidity/Transaction Costs:** In a sideways or low-volume market, momentum signals might be noisy, and beta adjustment might not compensate for the drag.\n        4.  **Macro Environment:** Interest rate expectations or global risk sentiment might override momentum signals.\n    *   *Market Structure for Return:* Low volatility, high rotation, or a market where idiosyncratic risk (alpha) is more pronounced than systematic risk (beta).\n\n3.  **Drafting the Content (Iterative Process):**\n\n    *   *Point 1: Market Correlation.* In Q3 2024, the TAIEX was heavily driven by semiconductor stocks (TSMC, UMC). These stocks have high correlation. Beta adjustment assumes idiosyncratic risk, but if the whole market moves together, beta adjustment doesn't help.\n        *   *Draft:* 2024 Q3 台股受半導體板塊主導，高相關性導致 Beta 調整無法有效隔離系統性風險。當市場呈現高度連動時，動能因子主要反映宏觀情緒而非個股 Alpha，削弱了調整效果。\n        *   *Refinement:* Keep it 1-2 sentences.\n\n    *   *Point 2: Volatility Regime.* Q3 might have had high volatility or specific policy shifts. Beta adjustment often works better in mean-reverting markets. If the market is trending strongly, beta adjustment might underweight the winners.\n        *   *Draft:* 市場波動率結構改變，高波動環境下 Beta 調整可能過度懲罰高波動個股，錯失動能趨勢。當市場進入單邊上漲或下跌趨勢時，傳統 Beta 調整會誤殺強勢股。\n        *   *Refinement:* Focus on the specific Q3 context (e.g., rotation or correction).\n\n    *   *Point 3: Liquidity/Volume.* Low liquidity in small caps might make beta estimation noisy.\n        *   *Draft:* 小盤股流動性不足導致 Beta 估計不穩定，影響因子表現。\n        *   *Refinement:* Combine with the idea of sector rotation.\n\n    *   *Recovery Condition:* When does it work again? When the market is less correlated, more defensive, or when idiosyncratic alpha is stronger.\n        *   *Draft:* 當市場結構轉向防禦性板塊，或個股 Alpha 貢獻大於 Beta 時，因子會回歸。\n\n4.  **Finalizing the Points (adhering to constraints):**\n\n    *   *Constraint Check:*\n        *   Bullet points? Yes.\n        *   No JSON? Yes.\n        *   At least 3 points? Yes.\n        *   1-2 sentences per point? Yes.\n        *   Traditional Chinese? Yes.\n        *   Include recovery market structure? Yes (need to integrate this or add a concluding section). The prompt asks to \"explain... reasons... and explain under what market structure it would return\". I should integrate the recovery condition into the points or add a specific section. The prompt says \"Please explain... reasons... Please list at least three points, and explain...\". It implies the explanation of the recovery condition should be part of the answer. I will add a specific point or a concluding sentence for the recovery condition to ensure it's clear. Let's make the 3rd point about the recovery condition or add a summary. Actually, the prompt says \"Please explain... reasons... Please list at least three points, and explain...\". It's safer to include the recovery condition in the points or as a separate clear statement. Let's try to embed the recovery logic into the points or add a 4th point? No, \"at least 3 points\". I will make the 3rd point about the recovery condition or add a concluding paragraph. Wait, the instruction says \"Please explain... reasons... Please list at least three points, and explain...\". It might mean the 3 points should cover the reasons, and the recovery condition should be mentioned. I will add a specific sentence about recovery in the conclusion or within the points. Let's put the recovery condition in a dedicated concluding sentence after the 3 points to be safe, or make one point about the recovery. Let's make the 3rd point about the recovery condition to satisfy \"explain under what market structure\".\n        *   Wait, reading carefully: \"請解釋 Beta-Adjusted Momentum 因子在 2024 Q3 台股失效的可能原因。請至少列出三點，並說明因子在何種市場結構下會回歸。\" (Explain reasons... list at least 3 points, AND explain under what market structure it would return).\n        *   Okay, I will list 3 points for reasons, and ensure the recovery condition is clearly stated, perhaps in the 3rd point or a concluding sentence. To be safe on the \"3 points\" constraint, I will make the 3rd point about the recovery condition or add a summary. Let's try to integrate the recovery condition into the 3rd point or add a short summary after the 3 points.\n        *   Actually, a better structure: 3 points for reasons.",
+      "parsed_sentiment": null,
+      "parsed_summary": [],
+      "latency_s": 12.915080500009935,
+      "prompt_chars": 141,
+      "response_chars": 5922,
+      "keyword_hits": 3,
+      "keyword_total": 5,
+      "sentiment_correct": null,
+      "reasoning_points": 39,
+      "error": ""
+    },
+    {
+      "item_id": "C1",
+      "model": "phi3:3.8b",
+      "task": "factor",
+      "raw": "1. Beta-Adjusted Momentum 因子可能在 2024 Q3 的失效原因之一是，由於市場進入了一段長期的買刺期，且投資者個別的飲料消費和生活支出需求可能會增加，因此他們更多地聽見到高為值的公司而不是基于迫切的優化策略。\n\n2. 在一些行業如電動車和科技領域，新的技術或者政策法規制可能引起市場波動，影音促進了投資者的沉定，造成了因子失效。\n\n3. 如果市場上有嚴重的新出品或者公司消息，例如重大的財務報告，可能會引起波動，影音促使回歸，造成了因子失效。\n\n4. 在一些行業中，如為生物技術或者医藥領域，新的公司研究結果或政策法規制可能引入波動，造成了因子失效。\n\n5. 在一些行業中，如電子商品和服務，由於技術革命或者新的競争者出現，影音促使回歸。\n\n6. 在一些行業中，如傳視裝置或者科技服務，新的市場動向或者公司消息可能引入波動，造成了因子失效。",
+      "parsed_sentiment": null,
+      "parsed_summary": [],
+      "latency_s": 3.4572680999990553,
+      "prompt_chars": 141,
+      "response_chars": 384,
+      "keyword_hits": 1,
+      "keyword_total": 5,
+      "sentiment_correct": null,
+      "reasoning_points": 6,
+      "error": ""
+    },
+    {
+      "item_id": "C2",
+      "model": "qwen3.5:latest",
+      "task": "factor",
+      "raw": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   **Role:** Taiwan Stock Quantitative Researcher (台股量化研究員).\n    *   **Task:** Answer a specific question about a Low Volatility factor's performance vs. 0050 (Taiwan 50 ETF).\n    *   **Format:** Bullet-point reasoning (條列式推理回答), NO JSON.\n    *   **Length:** At least 3 arguments/points (至少 3 個論點).\n    *   **Sentence Count:** 1-2 sentences per point (每點 1-2 句).\n    *   **Language:** Traditional Chinese (繁體中文).\n    *   **Question Context:** Low Vol factor: Sharpe 0.3, Max Drawdown -18% (12 months). 0050: Sharpe 0.9 (12 months).\n    *   **Goal:** Determine if the factor still has allocation value and explain the testing steps.\n\n2.  **Evaluate the Data:**\n    *   Low Vol Factor: Sharpe 0.3 (Low), Max DD -18% (Moderate/High for a defensive factor?).\n    *   0050 (Benchmark): Sharpe 0.9 (High), implied DD likely lower or similar but higher return.\n    *   *Observation:* The factor underperforms the benchmark significantly in risk-adjusted terms (Sharpe) and absolute terms (implied). However, Low Vol is usually a defensive factor.\n    *   *Key Consideration:* Is it a bad factor or just a bad period? Need to look at correlation, diversification benefit, and long-term consistency.\n\n3.  **Drafting the Arguments (Iterative Process):**\n\n    *   *Point 1: Risk-Adjusted Performance vs. Diversification.*\n        *   Draft: 雖然夏普值較低，但需檢視與 0050 的相關性。若相關性低，則有分散風險價值。\n        *   Refine (1-2 sentences): 儘管夏普值較 0050 低，但若該因子與 0050 的相關性低於 0.5，則能提供有效的分散化效益，仍具配置價值。\n        *   Check constraint: 1-2 sentences. Looks good.\n\n    *   *Point 2: Drawdown Context & Defensive Nature.*\n        *   Draft: 最大回撤 -18% 不算太差，但要看市場環境。低波動因子在熊市表現好。\n        *   Refine: 需確認 -18% 回撤是否發生在市場上漲期，若該因子在 0050 大跌時表現抗跌，則其防禦屬性未失效。\n        *   Check constraint: 1-2 sentences. Looks good.\n\n    *   *Point 3: Long-term Consistency & Capacity.*\n        *   Draft: 過去 12 個月可能只是短期表現。要看長期夏普是否穩定。\n        *   Refine: 單一年度表現不足以定論，應檢視過去 3-5 年的夏普值穩定性，確認低波動效應是否持續存在而非僅為短期噪音。\n        *   Check constraint: 1-2 sentences. Looks good.\n\n4.  **Review against Constraints:**\n    *   Role: Quant Researcher (Tone should be professional).\n    *   Format: Bullet points (條列式).\n    *   No JSON.\n    *   At least 3 points.\n    *   1-2 sentences per point.\n    *   Traditional Chinese.\n    *   Content: Determine allocation value + testing steps.\n\n5.  **Final Polish (incorporating \"Testing Steps\" into the reasoning):**\n    *   Point 1 (Correlation/Diversification): Focus on correlation coefficient.\n    *   Point 2 (Drawdown Context): Focus on drawdown timing vs. benchmark.\n    *   Point 3 (Long-term/Regime): Focus on multi-year data and regime change.\n\n    *   *Drafting Point 1:* 首先應計算該因子與 0050 的相關係數，若相關性低於 0.4，則即便夏普值較低，仍能提供有效的資產配置分散化價值。\n    *   *Drafting Point 2:* 其次需檢視 -18% 回撤發生的市場環境，若該回撤發生於 0050 上漲期間，則顯示因子在順勢能力不足，需重新評估其防禦屬性。\n    *   *Drafting Point 3:* 最後應拉長時間週期檢視夏普值穩定性，若過去 3 年夏普值多為負或波動劇烈，則代表低波動效應可能已失效或容量飽和。\n\n    *   *Wait, check sentence count:*\n        *   P1: 2 sentences (First... If...). Actually \"首先應...，若...則...\" is one complex sentence. Let's make it clearer.\n        *   P1: 首先應計算該因子與 0050 的相關係數，若相關性低於 0.4，則即便夏普值較低，仍能提供有效的資產配置分散化價值。 (1 sentence)\n        *   P2: 其次需檢視 -18% 回撤發生的市場環境，若該回撤發生於 0050 上漲期間，則顯示因子在順勢能力不足，需重新評估其防禦屬性。 (1 sentence)\n        *   P3: 最後應拉長時間週期檢視夏普值穩定性，若過去 3 年夏普值多為負或波動劇烈，則代表低波動效應可能已失效或容量飽和。 (1 sentence)\n        *   Wait, the prompt asks for \"1-2 sentences per point\". I can add a concluding sentence or split. Let's ensure it feels complete.\n        *   Let's try to make them slightly more detailed to fit 1-2 sentences naturally.\n\n    *   *Revised P1:* 首先應計算該因子與 0050 的相關係數，若相關性低於 0.4，則即便夏普值較低，仍能提供有效的資產配置分散化價值。\n    *   *Revised P2:* 其次需檢視 -18% 回撤發生的市場環境，若該回撤發生於 0050 上漲期間，則顯示因子在順勢能力不足，需重新評估其防禦屬性。\n    *   *Revised P3:* 最後應拉長時間週期檢視夏普值穩定性，若過去 3 年夏普值多為負或波動劇烈，則代表低波動效應可能已失效或容量飽和。\n\n    *   *Wait, I need to make sure I answer \"Is it still valuable?\"*\n    *   The",
+      "parsed_sentiment": null,
+      "parsed_summary": [],
+      "latency_s": 12.966156699985731,
+      "prompt_chars": 159,
+      "response_chars": 3911,
+      "keyword_hits": 2,
+      "keyword_total": 5,
+      "sentiment_correct": null,
+      "reasoning_points": 54,
+      "error": ""
+    },
+    {
+      "item_id": "C2",
+      "model": "phi3:3.8b",
+      "task": "factor",
+      "raw": "1. 首先，我們需要了解低波動因子的定義和其在配置價值中的意義：低波動因子通常是指股票市僙的波動程度，例如，通过找到一些稱為波動性或者波動指數（比如波動指數）低的公司。在配置價值中，低波動因子的目的是實現低波動的股票，這些股票通常被期望會有更好的回歸基金化。\n2. 然後，我們需要了解夏普值指數是一個多數學俾於量表示股票的適合性和回歸能力，以及在不同市場情緒下的回歸能力。\n3. 然後，我們需要計算夏普值指數，依據公司的每個月份收入、傾向性和波動指數，以及市場情緒的影。\n4. 接著，我們需要計算夏普值指數的平均值，來了解低波動因子在12個月中的夏普值是否符合0.3以上。\n5. 同時，我們需要計算低波動因子最大回歸能力，以及其回歸程度。\n6. 如果低波動因子的平均夏普值是否符合0.3以上，並且低波動因子的最大回歸能力是否超過-18%。\n7. 如果低波動因子的平均夏普值符合要求，且其最大回歸能力超過-18%，我們可以認為此因子是具配置價值。\n8. 如果低波動因子的平均夏普值符合要求，但其最大回歸能力不超過-18%，我們可以認為此因子是具配置價值。\n9. 如果低波動因子的平均夏普值不符合要求，我們可以認為此因子不是具配置價值。\n\n縮字：若一個低波動因子在過去 12 個月夏普值 0.3，但同期 0050 夏普，且其最大回歸能力超過-18%，我將視為此因子是具配置價值。\n\n縮字：若一個低波動因子在過去 12 個月夏普值 0.3，但同期 0050 夏普，且其最大回歸能力不超過-18%，我將視為此因子不是具配置價值。",
+      "parsed_sentiment": null,
+      "parsed_summary": [],
+      "latency_s": 4.814551399962511,
+      "prompt_chars": 159,
+      "response_chars": 660,
+      "keyword_hits": 2,
+      "keyword_total": 5,
+      "sentiment_correct": null,
+      "reasoning_points": 9,
+      "error": ""
+    },
+    {
+      "item_id": "C3",
+      "model": "qwen3.5:latest",
+      "task": "factor",
+      "raw": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   **Role:** Taiwan Stock Quantitative Researcher (台股量化研究員).\n    *   **Task:** Provide a bulleted reasoning answer (條列式推理回答) to a specific question.\n    *   **Constraint:** Do not use JSON (不要 JSON).\n    *   **Length:** At least 3 arguments/points (至少 3 個論點).\n    *   **Sentence Count:** 1-2 sentences per point (每點 1-2 句).\n    *   **Language:** Traditional Chinese (繁體中文).\n    *   **Topic:** Building an NLP sentiment factor based on Taiwan Stock Earnings Conference Call Transcripts (台股法說會逐字稿).\n    *   **Specific Questions to Answer:**\n        1.  How to define labels (標籤如何定義).\n        2.  Main confounders (主要 confounder).\n        3.  How to avoid multicollinearity with existing Earnings Surprise factor (與既有 Earnings Surprise 因子如何避免共線性).\n\n2.  **Drafting Content - Point 1: Label Definition (標籤如何定義)**\n    *   *Context:* NLP sentiment analysis needs clear ground truth.\n    *   *Idea:* Use analyst consensus vs. actual results, or management tone vs. market reaction.\n    *   *Draft:* 標籤定義應結合財報實際獲利與市場預期，將法說會中管理層對未來指引的語氣與最終 EPS 偏差進行回歸分析。\n    *   *Refinement:* Keep it 1-2 sentences. Focus on the label being \"sentiment impact\" rather than just \"positive/negative\".\n    *   *Revised:* 標籤定義應採用「管理層語氣與最終財報結果的偏差」，而非單純的正負向情緒分類，以捕捉隱含的未來指引信心。\n    *   *Check:* 1 sentence. Good.\n\n3.  **Drafting Content - Point 2: Main Confounders (主要 confounder)**\n    *   *Context:* What else affects the stock price besides sentiment?\n    *   *Idea:* Macro news, industry trends, prior expectations, specific stock news.\n    *   *Draft:* 主要混淆變數包括宏觀經濟消息、產業趨勢變化以及公司特定的非財報新聞。\n    *   *Refinement:* Need to be specific to earnings calls. Maybe \"prior expectations\" or \"macro events\".\n    *   *Revised:* 主要混淆變數包含宏觀經濟事件與產業輪動效應，這些因素會同時影響股價與法說會內容，導致情緒因子被誤讀。\n    *   *Check:* 1 sentence. Good.\n\n4.  **Drafting Content - Point 3: Avoiding Multicollinearity with Earnings Surprise (與既有 Earnings Surprise 因子如何避免共線性)**\n    *   *Context:* Earnings Surprise is already a known factor. Sentiment should be orthogonal.\n    *   *Idea:* Use residuals, focus on tone not just numbers, or use interaction terms.\n    *   *Draft:* 透過對 Earnings Surprise 進行殘差分析，只保留無法被財報數字解釋的語氣部分。\n    *   *Refinement:* Make it more technical. Use PLS or residualization.\n    *   *Revised:* 可透過對 Earnings Surprise 進行殘差化處理，僅保留無法被財報數字直接解釋的語氣成分，確保因子獨立性。\n    *   *Check:* 1 sentence. Good.\n\n5.  **Review and Polish:**\n    *   Check constraints: Traditional Chinese? Yes. Bulleted? Yes. No JSON? Yes. 3 points? Yes. 1-2 sentences per point? Yes.\n    *   Tone: Professional, quantitative researcher.\n    *   Content accuracy: Ensure the logic holds for Taiwan stock market context (though general principles apply).\n\n    *   *Point 1 (Labels):* 標籤定義應採用「管理層語氣與最終財報結果的偏差」，而非單純的正負向情緒分類，以捕捉隱含的未來指引信心。 (1 sentence)\n    *   *Point 2 (Confounders):* 主要混淆變數包含宏觀經濟事件與產業輪動效應，這些因素會同時影響股價與法說會內容，導致情緒因子被誤讀。 (1 sentence)\n    *   *Point 3 (Collinearity):* 可透過對 Earnings Surprise 進行殘差化處理，僅保留無法被財報數字直接解釋的語氣成分，確保因子獨立性。 (1 sentence)\n\n    *   *Wait, let's make them slightly more robust (1-2 sentences).*\n    *   *Point 1:* 標籤定義應採用「管理層語氣與最終財報結果的偏差」，而非單純的正負向情緒分類，以捕捉隱含的未來指引信心。此定義能區分單純的獲利超預期與管理層對未來的真實態度。 (2 sentences)\n    *   *Point 2:* 主要混淆變數包含宏觀經濟事件與產業輪動效應，這些因素會同時影響股價與法說會內容，導致情緒因子被誤讀。建議在模型中加入當期市場波動率作為控制變數以淨化干擾。 (2 sentences)\n    *   *Point 3:* 可透過對 Earnings Surprise 進行殘差化處理，僅保留無法被財報數字直接解釋的語氣成分，確保因子獨立性。此外，可將情緒因子與財報數字進行正交化，避免重複計量資訊。 (2 sentences)\n\n    *   *Final check:* Looks good. Professional tone.\n\n6.  **Final Output Generation** (matching the thought process).\n\n    *   Wait, I need to ensure I don't use JSON. Just text.\n    *   Ensure Traditional Chinese.\n\n    *   *Self-Correction on Point 1:* Make sure it sounds like a quant researcher. \"Ground truth\" is key.\n    *   *Self-Correction on Point 2:* Mention \"macro\" and \"industry\".\n    *   *Self-Correction on Point 3:* Mention \"residualization\" or \"orthogonalization\".\n\n    *   *Final Polish:*\n    1.  標籤定義應採用「管理層語氣與最終財報結果的偏差」，而非單純的正負向情緒分類，以捕捉隱含的未來指引信心。此定義能區分單純的獲利超預期與管理層對未來的真實態度，提升預測的經濟意義。\n    2.  主要混淆變數包含宏觀經濟事件與產業輪動效應，這些因素會同時影響股價與法說會內容，導致情緒因子被誤讀。建議在",
+      "parsed_sentiment": null,
+      "parsed_summary": [],
+      "latency_s": 13.067737300007138,
+      "prompt_chars": 159,
+      "response_chars": 4084,
+      "keyword_hits": 5,
+      "keyword_total": 5,
+      "sentiment_correct": null,
+      "reasoning_points": 54,
+      "error": ""
+    },
+    {
+      "item_id": "C3",
+      "model": "phi3:3.8b",
+      "task": "factor",
+      "raw": "1. 標籤定義：在台股法說中，NLP 情感因子的標籤通常是一個由 NLP 技術來源的指數或特性，如文本分析結果，用以反映公司名稱在社交媒體報道中的情感色泽度和趨勤度。\n2. 共線性：由於 NLP 技術依存在語言模式和表達方式的多样性，因此，不同的公司名字可能會有不同的情感色泽度和趨勤度。\n3. Earnings Surprise 因子：由報告中提及的與預期報告相差的財產成績，以此作為其整合的一部分。\n4. 避免共線性：可以通過使用語言特徵量化技術進行，以消除文本分析結果中的公司名字相似度和趨勤度。\n5. 標籤定義：在此方法中，NLP 情感因子的標籤可以是一種特徵量化技術來源出的公司名字相似度指數。\n6. 共線性：由於 NLP 技術在處理語言上存在限制，因此，不同的公司名字可能呈現差異的情感色泽度和趨勤度。\n7. Earnings Surprise 因子：由報告中提及的與預期報告相差的財產成績，以此作為其整合的一部分。\n8. 避免共線性：可以通過使用語言特徵量化技術進行，以消除文本分析結果中的公司名字相似度和趨勤度。\n9. 標籤定義：在此方法中，NLP 情感因子的標籤可以是一種特徵量化技術來源出的公司名字相似度指數。\n1 end.",
+      "parsed_sentiment": null,
+      "parsed_summary": [],
+      "latency_s": 4.045701599970926,
+      "prompt_chars": 159,
+      "response_chars": 522,
+      "keyword_hits": 2,
+      "keyword_total": 5,
+      "sentiment_correct": null,
+      "reasoning_points": 9,
+      "error": ""
+    }
+  ],
+  "aggregate": {
+    "qwen3.5:latest": {
+      "sentiment_total": 11,
+      "sentiment_correct": 8,
+      "keyword_hits": 49,
+      "keyword_total": 58,
+      "reasoning_points_sum": 147,
+      "reasoning_items": 3,
+      "latency_sum": 73.24389250011882,
+      "latency_n": 14,
+      "errors": 0,
+      "response_chars_sum": 15854,
+      "sentiment_acc": 0.7272727272727273,
+      "keyword_coverage": 0.8448275862068966,
+      "avg_latency_s": 5.231706607151344,
+      "avg_reasoning_points": 49.0
+    },
+    "phi3:3.8b": {
+      "sentiment_total": 11,
+      "sentiment_correct": 7,
+      "keyword_hits": 37,
+      "keyword_total": 58,
+      "reasoning_points_sum": 24,
+      "reasoning_items": 3,
+      "latency_sum": 43.17284049990121,
+      "latency_n": 14,
+      "errors": 0,
+      "response_chars_sum": 3939,
+      "sentiment_acc": 0.6363636363636364,
+      "keyword_coverage": 0.6379310344827587,
+      "avg_latency_s": 3.083774321421515,
+      "avg_reasoning_points": 8.0
+    }
+  },
+  "cloud_cost_estimate_monthly_usd": {
+    "monthly_in_tokens": 660000,
+    "monthly_out_tokens": 330000,
+    "by_model": {
+      "claude-sonnet-4-6": 6.93,
+      "deepseek-reasoner": 1.0857,
+      "qwen3-235b-a22b": 0.5676,
+      "qwq-32b": 0.297
+    }
+  },
+  "benchmark_items": [
+    {
+      "id": "A1",
+      "task": "sentiment",
+      "text": "鴻海 (2317) 公布 Q1 EPS 達 3.12 元，年增 28%，超越市場預期 2.85 元；公司同步調升 2026 全年資本支出至 1,800 億元，主要投入 AI 伺服器產線擴建。",
+      "sentiment": 1,
+      "keywords": [
+        "EPS",
+        "超預期",
+        "資本支出",
+        "AI"
+      ]
+    },
+    {
+      "id": "A2",
+      "task": "sentiment",
+      "text": "聯電 (2303) 法說會表示，Q2 晶圓出貨量預估較 Q1 下滑 3-5%，產能稼動率由 78% 降至 72%，主因消費型 IC 庫存去化尚未完成。",
+      "sentiment": -1,
+      "keywords": [
+        "稼動率",
+        "下滑",
+        "庫存"
+      ]
+    },
+    {
+      "id": "A3",
+      "task": "sentiment",
+      "text": "台積電 (2330) 宣布 N2 製程於 2025 Q4 進入量產，初期良率突破 70%，蘋果與輝達已下單包下首年 60% 產能。",
+      "sentiment": 1,
+      "keywords": [
+        "N2",
+        "量產",
+        "良率",
+        "蘋果",
+        "輝達"
+      ]
+    },
+    {
+      "id": "A4",
+      "task": "sentiment",
+      "text": "長榮海運 (2603) 公告 4 月營收 218 億元，月減 12%、年減 8%，紅海運價回落速度超過預期，公司下修 Q2 毛利率指引至 18-22%（原 25-28%）。",
+      "sentiment": -1,
+      "keywords": [
+        "營收",
+        "下修",
+        "毛利率"
+      ]
+    },
+    {
+      "id": "A5",
+      "task": "sentiment",
+      "text": "中鋼 (2002) 董事會通過配發現金股利 0.5 元，殖利率約 1.8%，股利政策維持穩定，公司表示鋼價已落底，預期 H2 將溫和回升。",
+      "sentiment": 0,
+      "keywords": [
+        "股利",
+        "穩定",
+        "落底"
+      ]
+    },
+    {
+      "id": "A6",
+      "task": "sentiment",
+      "text": "金管會公告 2026 年第二季 ETF 發行新規上路，要求基金公司加強流動性風險揭露，業內人士認為對既有 ETF 影響有限，主要為合規調整。",
+      "sentiment": 0,
+      "keywords": [
+        "金管會",
+        "ETF",
+        "合規",
+        "影響有限"
+      ]
+    },
+    {
+      "id": "A7",
+      "task": "sentiment",
+      "text": "華碩 (2357) 第一季 AI PC 出貨量達 85 萬台，市佔躍居全球第三，毛利率 16.8% 為近八季新高，公司樂觀看待 Copilot+ PC 換機潮延續至 2027。",
+      "sentiment": 1,
+      "keywords": [
+        "AI PC",
+        "市佔",
+        "毛利率",
+        "新高"
+      ]
+    },
+    {
+      "id": "A8",
+      "task": "sentiment",
+      "text": "南亞科 (2408) 受 DRAM 現貨價單月下跌 7% 影響，4 月營收月減 9%，公司表示伺服器 DRAM 需求仍穩，但消費端能見度不佳。",
+      "sentiment": -1,
+      "keywords": [
+        "DRAM",
+        "下跌",
+        "營收",
+        "月減"
+      ]
+    },
+    {
+      "id": "B1",
+      "task": "narrative",
+      "text": "外資連 5 個交易日買超台積電 (2330) 累計 2.1 萬張，買超金額逾 230 億元，同期間賣超聯發科 (2454) 8,500 張、鴻海 (2317) 6,200 張，呈現明顯的權值股輪動。",
+      "sentiment": 1,
+      "keywords": [
+        "外資",
+        "買超",
+        "台積電",
+        "輪動"
+      ]
+    },
+    {
+      "id": "B2",
+      "task": "narrative",
+      "text": "投信 4 月最後一週賣超中小型生技股逾 12,000 張，包括保瑞 (6472)、藥華藥 (6446)、台康生技 (6589)；同期買超金融股龍頭富邦金 (2881)、國泰金 (2882) 合計 9,800 張，顯示防禦性類股輪動。",
+      "sentiment": 0,
+      "keywords": [
+        "投信",
+        "賣超",
+        "生技",
+        "金融",
+        "防禦"
+      ]
+    },
+    {
+      "id": "B3",
+      "task": "narrative",
+      "text": "三大法人合計賣超航運股單週超過 4 萬張，長榮 (2603)、陽明 (2609)、萬海 (2615) 同步遭外資與投信減碼，運價走弱與 Q2 毛利率下修是主因。",
+      "sentiment": -1,
+      "keywords": [
+        "法人",
+        "賣超",
+        "航運",
+        "運價"
+      ]
+    },
+    {
+      "id": "C1",
+      "task": "factor",
+      "text": "請解釋 Beta-Adjusted Momentum 因子在 2024 Q3 台股失效的可能原因。請至少列出三點，並說明因子在何種市場結構下會回歸。",
+      "sentiment": 0,
+      "keywords": [
+        "市場結構",
+        "風格輪動",
+        "波動",
+        "反轉",
+        "流動性"
+      ]
+    },
+    {
+      "id": "C2",
+      "task": "factor",
+      "text": "若一個低波動因子 (Low Volatility) 在過去 12 個月夏普值 0.3、最大回撤 -18%，但同期 0050 夏普 0.9，請判斷此因子是否仍具配置價值，並說明檢驗步驟。",
+      "sentiment": 0,
+      "keywords": [
+        "夏普",
+        "回撤",
+        "檢驗",
+        "回歸",
+        "顯著"
+      ]
+    },
+    {
+      "id": "C3",
+      "task": "factor",
+      "text": "在台股法說會逐字稿之上建構 NLP 情感因子，請說明：(1) 標籤如何定義；(2) 主要 confounder；(3) 與既有 Earnings Surprise 因子如何避免共線性。",
+      "sentiment": 0,
+      "keywords": [
+        "標籤",
+        "confounder",
+        "共線",
+        "正交",
+        "回歸"
+      ]
+    }
+  ],
+  "models": [
+    "qwen3.5:latest",
+    "phi3:3.8b"
+  ]
+}

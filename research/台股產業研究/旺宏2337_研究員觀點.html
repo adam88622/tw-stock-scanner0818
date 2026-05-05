@@ -1,0 +1,942 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>旺宏 2337 1Q26 季報更新 — 研究員觀點 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-rating{display:inline-block;padding:8px 22px;border-radius:30px;font-size:18px;font-weight:800;background:#3b82f6;color:#fff;margin-bottom:14px}
+.cover-tp{font-size:36px;font-weight:900;color:#00c896;margin-bottom:8px}
+.cover-up{font-size:16px;color:rgba(255,255,255,.85);margin-bottom:32px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8)}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:560px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:36px 52px;position:relative;z-index:1;flex:1;display:flex;flex-direction:column;overflow:hidden}
+.body-page>.page-footer{margin-top:auto;margin-left:-52px;margin-right:-52px;padding-left:52px;padding-right:52px}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:20px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 14px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 12px}
+h2.ch{font-size:15px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:14px 0 8px}
+h3.ch{font-size:13.5px;font-weight:700;color:#0a4a30;padding-left:9px;border-left:3px solid #00c896;margin:12px 0 6px}
+table{width:100%;border-collapse:collapse;margin:8px 0 12px;font-size:11.5px;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:7px 8px;text-align:left;font-weight:600;font-size:11px}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:6px 8px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+td.center{text-align:center}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.red{background:linear-gradient(135deg,#7f1d1d,#dc2626)}
+.kpi-val{font-size:18px;font-weight:800;margin-bottom:3px}
+.kpi-val em{font-size:11px;font-style:normal;opacity:.85}
+.kpi-lbl{font-size:11px;opacity:.78;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:16px;margin:12px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13px;font-weight:600;color:#0d1b3e;padding:8px 0;border-bottom:1px solid #dce8f8;display:flex;gap:10px;align-items:flex-start;line-height:1.55}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:18px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:14px;margin:10px 0;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:12.5px;font-weight:700;color:#0d1b3e;margin-bottom:3px}
+.chart-sub{font-size:11px;color:#6b7a9a;margin-bottom:8px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:12px;margin:8px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.red{border-color:#e74c3c;background:#fdf0ef}
+.callout-title{font-size:12.5px;font-weight:700;color:#1a3a6e;margin-bottom:6px}
+.callout.green .callout-title{color:#065f46}
+.callout.red .callout-title{color:#7b2020}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.risk-card{border-radius:8px;padding:12px}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13px;font-weight:700;margin-bottom:6px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:11.5px;padding:3px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:10px 0}
+.tl-item{background:#f0f4fa;padding:14px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12px;font-weight:800;margin-bottom:5px}
+.tl-spec{font-size:14px;font-weight:900;color:#00c896;margin-bottom:3px}
+.tl-tech{font-size:10.5px;opacity:.85;line-height:1.45}
+.sens-table{margin:10px 0;font-size:12px}
+.sens-table td{text-align:center;padding:7px 6px}
+.sens-table .center-cell{background:#bdd7ee!important;font-weight:800;color:#0d1b3e;border:2px solid #0d1b3e!important}
+.sens-table .axis{background:#0d1b3e;color:#fff;font-weight:700}
+.sens-table .corner{background:#1a3a6e;color:#fff;font-weight:700}
+p{margin:5px 0 8px;line-height:1.7;font-size:12.5px}
+ul,ol{padding-left:18px;margin:5px 0 8px}
+li{margin:2px 0;line-height:1.55;font-size:12px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:8px 12px;margin:8px 0;color:#1a3a6e;font-size:12px;border-radius:0 5px 5px 0;line-height:1.55}
+.src{font-size:10.5px;color:#9aabb5;display:block;margin-top:4px}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:10px 52px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+.badge{padding:3px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px;display:inline-block}
+.badge.ow{background:#3b82f6;color:#fff}
+.badge.buy{background:#dc2626;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#16a34a;color:#fff}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════ Page 1：封面 ══════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">Equity Research</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">1Q26 Earnings Update · 2026-04-28</div>
+    <div class="cover-title">旺宏 <em>2337 TT</em><br>由虧轉盈，<em>MLC 利基壟斷</em>啟動</div>
+    <div class="cover-subtitle">Macronix International — NAND/eMMC 缺口 + NOR 資料中心拉貨 + 衛星抗輻射認證</div>
+    <div class="cover-rating">增加持股 (Overweight)</div>
+    <div class="cover-tp">12M TP NT$ <strong>180</strong></div>
+    <div class="cover-up">現價 NT$ 145（+24.1% 上檔）</div>
+    <div class="cover-tags">
+      <span class="ctag hl">MLC NAND 利基壟斷</span>
+      <span class="ctag hl">NAND/eMMC 缺口</span>
+      <span class="ctag hl">NOR 資料中心拉貨</span>
+      <span class="ctag">衛星抗輻射認證</span>
+      <span class="ctag">2H27 產能放大</span>
+      <span class="ctag">月報價</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>104.7</em>億</div><div class="cstat-label">1Q26 營收（NT$；YoY +71%）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>40.8</em>%</div><div class="cstat-label">1Q26 毛利率（YoY +23.1pp）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>0.90</em></div><div class="cstat-label">1Q26 EPS（NT$，由虧轉盈）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2H27</em></div><div class="cstat-label">產能滿載時點</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026-04-28</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 GiS</span>
+  </div>
+</div>
+
+<!-- ══════ Page 2：執行摘要 ══════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-val">NT$ 180</div><div class="kpi-lbl">12M GiS 目標價</div></div>
+    <div class="kpi green"><div class="kpi-val">+<em>24.1</em>%</div><div class="kpi-lbl">vs 4/27 收盤 145</div></div>
+    <div class="kpi gold"><div class="kpi-val">12 / 18</div><div class="kpi-lbl">FY26E / FY27E EPS（GiS）</div></div>
+    <div class="kpi"><div class="kpi-val">15x</div><div class="kpi-lbl">Forward PE on FY27E</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>1Q26 大幅 beat 共識，由虧轉盈確認 cycle 谷底反轉。</strong>EPS 0.90（券商 A 預估 0.46，達成 197%）、毛利率 40.8%（QoQ +16.6pp、YoY +23.1pp），驅動為三星退出 4-32GB MLC NAND 後旺宏成全球唯一供應商 + NOR 資料中心應用 +95% YoY + 5 億庫存回沖一次性。市場最大爭議在 <strong>「sustainability」</strong>。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>共識區間 spread 82% — 券商 A vs 券商 B 估值假設差異大。</strong>券商 A TP 300（FY26 30.02 × 10x）假設毛利率 4Q26 升至 77%；券商 B 評等買進 TP 182（FY27 × 6x）但 FY27 EPS 1.43 低於 FY26 2.48，假設「26 為峰、27 衰退」。GiS 認為兩派都有錯：<strong>券商 A 4Q26 GM 77% 違反歷史峰值（21 年僅 47%）；券商 B FY27 衰退與管理層「2H27 產能放大」guidance 矛盾</strong>。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>結構性故事：MLC NAND 利基壟斷 + 衛星抗輻射 + NOR 資料中心。</strong>三星往高容量遷移後，4-32GB MLC「旺宏應該是唯一可支援的供應商」（管理層 4/27 親述），客戶轉換需 1-2 年認證；衛星端「唯一通過歐美驗證、能完全符合衛星通訊需求」（耐極低溫+抗輻射）；NOR 資料中心 1Q26 +95% YoY，兩個結構性引擎 + 一個短期 catalyst（NAND 漲價）。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">季度毛利率走勢（V 型反轉確立）</div>
+      <div class="chart-sub">資料來源：公開資訊觀測站 + 公司法說會、GiS 整理</div>
+      <div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chartGM" style="display:block;width:100%;height:220px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">1Q26 產品 Mix（NOR 仍主、NAND 大躍進）</div>
+      <div class="chart-sub">資料來源：4/27 法說會、GiS 整理</div>
+      <div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chartMix" style="display:block;width:100%;height:220px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">12 個月關鍵時間軸</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">1Q26（已過）</div><div class="tl-spec">由虧轉盈</div><div class="tl-tech">EPS 0.90、GM 40.8%</div></div>
+    <div class="tl-item active"><div class="tl-year">2Q26（現在）</div><div class="tl-spec">EPS 倍增</div><div class="tl-tech">市場估 2.2-4.05、GM 50%+</div></div>
+    <div class="tl-item next"><div class="tl-year">2H26-1H27</div><div class="tl-spec">設備到位</div><div class="tl-tech">220 億 capex 投產</div></div>
+    <div class="tl-item"><div class="tl-year">2H27</div><div class="tl-spec">產能滿載</div><div class="tl-tech">3D NAND 全面開出</div></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>旺宏 2337 · 1Q26 Update</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════ Page 3：章節封面 壹 ══════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One · 1Q26 Review</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">1Q26 由虧轉盈，券商 A 預估 197% 達成</div>
+  <div class="sec-desc">營收 104.7 億 QoQ+35%、毛利率 40.8% QoQ+16.6pp、EPS 0.90 由虧 -0.16 轉正。Driver：MLC NAND 利基放量 + 5 億存貨回沖 + NOR 漲價。本章解析 4/27 法說會核心訊號。</div>
+</div>
+
+<!-- ══════ Page 4：1Q26 Beat/Miss + Q&A ══════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、1Q26 結果與 2Q 指引</h1>
+
+  <h2 class="ch">1Q26 Beat / Miss 矩陣</h2>
+  <table>
+    <thead><tr><th>指標</th><th style="text-align:right">1Q26 實際</th><th style="text-align:right">券商 A 預估</th><th style="text-align:right">本中心（券商 E）原估</th><th style="text-align:right">QoQ</th><th style="text-align:right">YoY</th><th>Beat/Miss</th></tr></thead>
+    <tbody>
+      <tr><td>營收（NT$ 億）</td><td class="num hi">104.7</td><td class="num">~86</td><td class="num">~95</td><td class="num pos">+35%</td><td class="num pos">+71%</td><td class="pos">+22% Beat</td></tr>
+      <tr><td>毛利率</td><td class="num hi">40.8%</td><td class="num">33.3%</td><td class="num">~34%</td><td class="num pos">+16.6pp</td><td class="num pos">+23.1pp</td><td class="pos">+7.5pp / +6.7pp Beat</td></tr>
+      <tr><td>營業利益（NT$ 億）</td><td class="num">19.3</td><td class="num">—</td><td class="num">—</td><td class="num pos">+593%</td><td class="num pos">+279%</td><td class="pos">大幅 Beat</td></tr>
+      <tr><td>營益率</td><td class="num">18.5%</td><td class="num">—</td><td class="num">—</td><td class="num pos">+23.6pp</td><td class="num pos">+36.1pp</td><td class="pos">由負轉正</td></tr>
+      <tr><td><strong>EPS（NT$）</strong></td><td class="num hi">0.90</td><td class="num">0.46</td><td class="num">~0.5</td><td class="num">由 -0.16 轉</td><td class="num">由 -0.47 轉</td><td class="pos">+97% Beat（券商 A）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：4/27 法說會、4/27-28 券商共識報告（券商 A/E/B/D）；GiS 整理</span>
+
+  <h2 class="ch">Beat 的 Why（Driver 拆解）</h2>
+  <table>
+    <thead><tr><th>Driver</th><th>影響幅度</th><th>性質</th><th>2Q 後 sustainability</th></tr></thead>
+    <tbody>
+      <tr><td><strong>NAND/eMMC 量爆增</strong>（YoY +382%）</td><td>主要 Beat 來源（佔營收 30%）</td><td class="pos">結構性</td><td class="pos">高 — 三星退出 MLC、客戶 1-2 年認證難轉</td></tr>
+      <tr><td><strong>5 億存貨回沖</strong></td><td>毛利率 +5pp 一次性</td><td class="neg">一次性</td><td class="neg">2Q 仍有部分回沖（Q20）但減少</td></tr>
+      <tr><td><strong>NOR 漲價</strong>（ASP +30-40%）</td><td>毛利率 +3-5pp</td><td class="pos">持續中</td><td class="pos">高 — 月報價，調價持續</td></tr>
+      <tr><td><strong>NOR 資料中心應用</strong></td><td>NOR 內 PC +95% YoY</td><td class="pos">結構性</td><td class="pos">高 — AI server 需求啟動</td></tr>
+      <tr><td>費用控制</td><td>OPEX QoQ +3% 但營收 +35%</td><td>—</td><td>中 — 員工酬勞提列</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>扣除 5 億存貨回沖（一次性）</strong>，1Q26 毛利率為 ~36%，**仍是過去 8 季最高**（4Q25 GM 24%）→ Beat 有結構性 driver 而非僅一次性。</blockquote>
+
+  <h2 class="ch">2Q26 與全年指引（管理層 + 共識）</h2>
+  <table>
+    <thead><tr><th>指標</th><th class="center">券商 A</th><th class="center">券商 E</th><th class="center">券商 D</th><th>管理層 guidance</th></tr></thead>
+    <tbody>
+      <tr><td>2Q26 營收（億）</td><td class="num">189（QoQ +81%）</td><td class="num">199（QoQ +90%）</td><td class="num">~190</td><td>「持續成長」（無具體）</td></tr>
+      <tr><td>2Q26 毛利率</td><td class="num">65%</td><td class="num">50.6%</td><td class="num">52.1%</td><td>「有機會持續改善」（Q13）</td></tr>
+      <tr><td>2Q26 EPS</td><td class="num">4.05</td><td class="num">2.8（市場原 1.4）</td><td class="num">2.2</td><td>—</td></tr>
+      <tr><td>FY26 全年</td><td class="num">「一季比一季好」</td><td class="num">上修不變</td><td class="num">EPS 11.61</td><td>「一季比一季好」</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 1Q26 Review (1/2)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════ Page 4b：法說 Q&A 核心訊號（從 p4 拆出）══════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹-續、法說會 Q&amp;A 核心訊號</h1>
+
+  <h2 class="ch">法說會 Q&amp;A 訊號彙整（4/27）</h2>
+  <div class="callout green">
+    <div class="callout-title">🐂 Bull 訊號（管理層親述）</div>
+    <ul>
+      <li><strong>三星退出 MLC NAND</strong>「4/8/16/32GB MLC，旺宏應該是唯一可支援的供應商」（Q30）— 利基壟斷成立</li>
+      <li><strong>客戶轉換需 1-2 年認證</strong>「若旺宏能提供，客戶通常不會輕易轉換」（Q33）— 黏著度高</li>
+      <li><strong>衛星抗輻射唯一</strong>「唯一通過歐美驗證、耐極低溫+抗輻射」（Q14）— 結構性護城河</li>
+      <li><strong>NOR 持續漲價</strong>「公司會持續調整價格」（Q16）+ 「下半年仍吃緊」（Q16）</li>
+      <li><strong>產能 1H27-2H27 放大</strong>「設備預計 1H27 到位、2H27 滿載」（Q8、Q31、Q36）</li>
+      <li><strong>毛利率有改善空間</strong>「未來仍有進一步成長空間」（Q13、Q20）</li>
+      <li><strong>關稅影響小</strong>「直接出口美國比例低」（Q32）</li>
+      <li><strong>新進者 3 年才能進入</strong>「需要設備、製程、設計、客戶認證」（Q26）</li>
+    </ul>
+  </div>
+  <div class="callout red">
+    <div class="callout-title">🐻 Bear 訊號</div>
+    <ul>
+      <li><strong>不上修今年 capex</strong>「12 吋廠產房空間已用完」（Q17）— 短期成長受限於空間</li>
+      <li><strong>12 吋廠最大 2.5 萬片</strong>（不到 3 萬片）（Q24）— 產能上限明確</li>
+      <li><strong>月報價無 LTA</strong>（Q29）— 景氣反轉時無防護</li>
+      <li><strong>IBM SSD 計畫暫緩</strong>（Q11）— 高階 SSD 不是優先</li>
+      <li><strong>SSD 非重點發展</strong>「以 eMMC 與低密度 NAND 為主」（Q10）— 自我定位 niche</li>
+      <li><strong>政府支持差距</strong>「沒政府支持，旺宏要大幅成長並不容易」（Q37）— 對 vs 三星/美光資本劣勢自承</li>
+      <li><strong>ROM 衰退</strong>「Switch 1 持續下降，等 Switch 2」（內文 §3）— 老產品線收縮</li>
+      <li><strong>三星退出 MLC 未確認永久</strong>「不認為三星永久退出」（Q30）— 利基有時限</li>
+    </ul>
+  </div>
+
+  <blockquote>
+    <strong>GiS 解讀：</strong>1Q26 是真實 cycle 谷底反轉，不是反彈。Bull 訊號中 <strong>MLC 壟斷 + 1-2 年認證 + 衛星認證 + 新進者 3 年</strong> 構成 12-24 個月內結構性護城河。Bear 訊號中 <strong>capex 不上修 + 月報價</strong> 是真實風險，但 2H27 滿載前產能瓶頸反而支撐價格。<strong>4Q25 EPS -0.16 → 1Q26 0.90 是 cycle 反轉確認</strong>，不該再用「景氣循環股谷底估值」。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 1Q26 Review (2/2)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════ Page 5：章節封面 貳 ══════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two · Consensus Split (82%)</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">市場共識區間（附錄）</div>
+  <div class="sec-desc">市場共識區間作為定錨參考。本章僅作為附錄陳列共識區間，GiS 不在共識內定位 — 我們的核心邏輯與估值見後續章節（參、肆）。</div>
+</div>
+
+<!-- ══════ Page 6：共識整理 ══════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳、市場共識區間（附錄）</h1>
+
+  <h2 class="ch">市場共識區間（postcall）</h2>
+  <p style="font-size:12.5px;color:#1a3a6e">8 家券商法說後共識 TP 範圍 <strong>NT$ 155-300</strong>，FY26 EPS 範圍 <strong>2.5-30 元</strong>，FY27 EPS 範圍 <strong>1.4-101.7 元</strong>。共識中位 ~177 元、FY26 EPS 中位 ~12 元。</p>
+  <table>
+    <thead><tr><th>來源</th><th class="center">評等</th><th style="text-align:right">12M TP</th><th style="text-align:right">FY26 EPS</th><th style="text-align:right">FY27 EPS</th></tr></thead>
+    <tbody>
+      <tr><td>共識上緣</td><td class="center pos">OW</td><td class="num">300</td><td class="num">30.02</td><td class="num">101.70</td></tr>
+      <tr><td>共識中位</td><td class="center pos">買進</td><td class="num">~177</td><td class="num">~12</td><td class="num">~18</td></tr>
+      <tr><td>共識下緣</td><td class="center pos">Buy</td><td class="num">155</td><td class="num">2.48</td><td class="num">1.43</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800;color:#065f46">GiS</td><td class="center"><span class="badge ow">增加持股</span></td><td class="num hi" style="color:#065f46;font-weight:800">180</td><td class="num">12</td><td class="num">18</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：8 家券商 4/27-28 法說後報告（具名清單見內部資料）；GiS 整理</span>
+
+  <h2 class="ch">GiS 在共識內的定位</h2>
+  <ul>
+    <li><strong>TP 180 元 ≈ 共識中位</strong>，反映 GiS 不採共識上緣（凱基 300 假設違反產業上限）也不採下緣（CTBC 6x FY27 PE 倍數失真）</li>
+    <li><strong>FY26/27 EPS 12/18 元</strong>同樣落在共識中位區間，與宏遠/元大/旺宏 memo 接近</li>
+    <li>GiS 與共識的差異<strong>不在數字，而在邏輯</strong> — 後續 §參 三引擎、§肆 估值方法將呈現 GiS 獨立 framework</li>
+  </ul>
+
+  <h2 class="ch">Precall（1-3 月舊版）對比 — 評等與 TP 變動</h2>
+  <table>
+    <thead><tr><th>券商</th><th class="center">評等（前）</th><th style="text-align:right">TP（前）</th><th class="center">評等（後）</th><th style="text-align:right">TP（後）</th><th>變動</th></tr></thead>
+    <tbody>
+      <tr><td><strong>券商 B</strong></td><td class="center">增加持股</td><td class="num">86</td><td class="center pos">買進</td><td class="num pos">182</td><td class="pos hi">評等顯著上修 + TP +112%</td></tr>
+      <tr><td>券商 A</td><td class="center pos">增加持股</td><td class="num">300</td><td class="center pos">增加持股</td><td class="num">300</td><td>維持（最樂觀，高位不變）</td></tr>
+      <tr><td>券商 H1</td><td class="center neg">中立 N</td><td class="num">95</td><td class="center">—</td><td class="num">—</td><td>(尚未發新報告)</td></tr>
+      <tr><td>券商 I</td><td class="center neg">中立 N</td><td class="num">—</td><td class="center">—</td><td class="num">—</td><td>(尚未發新報告)</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>券商 B 顯著上修</strong>：原本「增加持股」+ TP 86 → 升至「買進」+ TP 182（+112%），且 PE 從原假設大幅放寬，反映 4/27 法說「MLC 壟斷 + NOR 漲價」訊號改變保守派立場。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 券商預估區間附錄</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════ Page 8：章節封面 參 ══════ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three · Three Engines</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">三大引擎 — MLC 壟斷 / NAND 結構缺口 / NOR 資料中心</div>
+  <div class="sec-desc">旺宏故事不是「景氣循環反彈」，是 <strong>三個結構引擎同時啟動</strong>：① 三星退出 MLC 後唯一供應商；② NAND/eMMC 客戶 1-2 年認證黏著；③ NOR 資料中心拉貨 + AI server 啟動。本章拆解時間軸與量化空間。</div>
+</div>
+
+<!-- ══════ Page 9：三引擎 ══════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、三大成長引擎</h1>
+
+  <h2 class="ch">引擎 A：MLC NAND 利基壟斷（最重要）</h2>
+  <table>
+    <thead><tr><th>面向</th><th>內容</th><th class="center">時間軸</th></tr></thead>
+    <tbody>
+      <tr><td>市場結構變動</td><td>三星將 NAND 產能往高容量遷移，4/8/16/32GB MLC 區段釋出</td><td class="center">2025-2026 進行中</td></tr>
+      <tr><td>旺宏地位</td><td>「<strong>4-32GB MLC，旺宏應該是唯一可支援的供應商</strong>」（管理層 Q30）</td><td class="center">已成立</td></tr>
+      <tr><td>客戶黏著</td><td>「客戶轉換需設計、驗證、客戶認證 1-2 年」（管理層 Q33）</td><td class="center">2026-2027 維持</td></tr>
+      <tr><td>新進者門檻</td><td>「需要設備、製程、設計與客戶認證，3 年才能形成競爭」（Q26）</td><td class="center">2029 才有真實競爭</td></tr>
+      <tr><td>價格策略</td><td>「公司會持續調整價格」（Q16，月報價）</td><td class="center">每月可調</td></tr>
+      <tr><td>主要應用</td><td>消費（19% NAND）、通訊（53%）、電腦（11% NAND）、車用（7%）、工規（10%）</td><td class="center">已多元</td></tr>
+    </tbody>
+  </table>
+  <blockquote>
+    <strong>1Q26 NAND 營收 +382% YoY</strong>（含內部結構轉換 + 競爭對手退出疊加效應）。風險點：「不認為三星永久退出 MLC」（Q30），<strong>故 GiS 給此引擎窗口 18-24 個月</strong>，FY26-27 是最佳獲利窗口。
+  </blockquote>
+
+  <h2 class="ch">引擎 B：NOR 資料中心 + 衛星抗輻射認證</h2>
+  <table>
+    <thead><tr><th>應用</th><th>1Q26 YoY</th><th>戰略地位</th></tr></thead>
+    <tbody>
+      <tr><td><strong>資料中心 / 電腦</strong>（佔 NOR 44%）</td><td class="num pos">+95%</td><td>AI server 啟動，NOR 用於 boot ROM、firmware 儲存</td></tr>
+      <tr><td>通訊</td><td class="num pos">+62%</td><td>5G 基礎建設、網通</td></tr>
+      <tr><td>工規/醫療/航太</td><td class="num pos">+23%</td><td><strong>衛星抗輻射唯一</strong>（耐極低溫+抗輻射，歐美唯一通過）</td></tr>
+      <tr><td>消費</td><td class="num pos">+15%</td><td>溫和</td></tr>
+      <tr><td>車用</td><td class="num neg">-6%</td><td>EV 仍待回升</td></tr>
+    </tbody>
+  </table>
+  <blockquote>
+    <strong>NOR 漲價 ASP 季增 30-40%</strong>（券商 E估）+ 「需求全面回溫」（券商 I）+ 「下半年仍吃緊」（管理層 Q16）。衛星端為「結構性護城河」— 全球唯一通過認證，**SpaceX/Starlink 供應潛力為 long-tail 期權**。
+  </blockquote>
+
+  <h2 class="ch">引擎 C：產能擴張節奏（cycle 後段）</h2>
+  <table>
+    <thead><tr><th>時點</th><th>事件</th><th>影響</th></tr></thead>
+    <tbody>
+      <tr><td>2026 全年</td><td>capex 投入 220 億（不上修）</td><td>設備尚未到位，產能成長有限（Q17, Q31）</td></tr>
+      <tr><td>2H26-1H27</td><td>設備陸續到位</td><td>NAND 滲透率提升，eMMC 量增（Q8, Q31）</td></tr>
+      <tr><td><strong>2H27</strong></td><td><strong>3D NAND 擴產完成 + 12 吋廠 2.5 萬片滿載</strong></td><td><strong>產能規模化 → 毛利槓桿 + 量增同步</strong>（Q19, Q24, Q36）</td></tr>
+      <tr><td>2028+</td><td>產能上限到頂</td><td>需評估再投資（受房屋空間限制）</td></tr>
+    </tbody>
+  </table>
+  <blockquote>
+    <strong>產能瓶頸是雙刃劍</strong>：短期支撐月報價漲價（缺貨持續），但 2027 後若三星回歸 MLC，旺宏將失去定價權。<strong>關鍵估值錨：FY27 為「產能滿載 + cycle 高峰」年，是研究員觀點目標年</strong>。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 三引擎</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════ Page 10：章節封面 肆 ══════ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Section Four · Valuation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">估值 — Forward PE on FY27E + 三情境 + Normalized 驗證</div>
+  <div class="sec-desc">旺宏為「景氣循環 + 谷底反轉」雙重屬性。依 GiS 估值方法論 §3.1 / §4.1 採 Forward PE on FY27E（recovery year）為主、Normalized PE 與 P/B Band 雙軌驗證，避免谷底/高峰估值陷阱。</div>
+</div>
+
+<!-- ══════ Page 11：估值 — 三情境 ══════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆、估值 — 三情境</h1>
+
+  <p>採用 <strong>Forward PE on FY27E EPS（GiS 估值方法論 §3.1 谷底反轉股 / §4.1）</strong> + 三情境（§4.2 強制）。FY27 為產能滿載 + cycle 高峰年，避免 FY26 一次性回沖干擾。</p>
+
+  <h2 class="ch">EPS 推導（FY25 actual → FY27E）</h2>
+  <table>
+    <thead><tr><th>項目</th><th class="num">FY24 Actual</th><th class="num">FY25 Actual</th><th class="num">FY26E（GiS 基礎）</th><th class="num">FY27E（GiS 基礎）</th></tr></thead>
+    <tbody>
+      <tr><td>營收（NT$ 億）</td><td class="num">357</td><td class="num">311</td><td class="num pos">560（+80% — 4 季加速）</td><td class="num pos">780（+39% — 滿產年）</td></tr>
+      <tr><td>毛利率</td><td class="num">28.8%</td><td class="num">24.2%</td><td class="num pos">49%（含 1Q 41 + 2-4Q 50-53）</td><td class="num pos">52%（規模化）</td></tr>
+      <tr><td>營益率</td><td class="num neg">-3%</td><td class="num neg">-5%</td><td class="num pos">25%（OPEX 持平 ~95 億）</td><td class="num pos">30%（OPEX 槓桿）</td></tr>
+      <tr><td>稅後淨利（NT$ 億）</td><td class="num neg">-32</td><td class="num neg">-33</td><td class="num pos">120</td><td class="num pos">180</td></tr>
+      <tr><td><strong>EPS（NT$）</strong></td><td class="num neg">-1.73</td><td class="num neg">-1.77</td><td class="num hi">12.0</td><td class="num hi">18.0</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：4/27 法說、券商共識（券商 A/B/E/D）；GiS 採中位假設</span>
+
+  <h2 class="ch">三情境</h2>
+  <table>
+    <thead><tr><th>情境</th><th>FY27 EPS</th><th class="center">PE 倍數</th><th class="center">目標價</th><th class="center">上檔</th><th>關鍵假設</th></tr></thead>
+    <tbody>
+      <tr><td><strong>保守</strong></td><td class="num">10</td><td class="num">12x</td><td class="num">120</td><td class="num neg">-17%</td><td>三星 27 提前回歸 MLC、5 億回沖一次性影響擴大、PC 衰退延續</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong style="color:#065f46">基礎（採用）</strong></td><td class="num hi" style="font-weight:800">18</td><td class="num hi" style="font-weight:800">15x</td><td class="num hi" style="font-weight:800;color:#065f46">180</td><td class="num pos hi" style="font-weight:800">+24.1%</td><td><strong>MLC 壟斷維持 18-24M、毛利率 50-52% 規模化、2H27 滿產</strong></td></tr>
+      <tr><td><strong>樂觀</strong></td><td class="num">25</td><td class="num">17x</td><td class="num">425</td><td class="num pos">+193%</td><td>NAND 缺口超過預期、SpaceX 衛星訂單兌現、衛星抗輻射 tier 1 客戶導入</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 估值三情境 (1/2)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════ Page 11b：估值方法論驗證（從 p11 拆出）══════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆-續、估值方法論雙軌驗證</h1>
+
+  <h2 class="ch">驗證 1：Normalized PE on 5Y 平均 EPS</h2>
+  <p>5Y EPS（2021-2025）：6.68 / 4.85 / -0.92 / -1.73 / -1.77 → 平均 <strong>1.42 元</strong>。Normalized PE 給 15x（景氣循環股區間中位）= TP 21 元。<strong>當前股價 145 已遠超 normalized 區間（145 / 1.42 = 102x normalized PE）</strong>，反映市場已 pricing「結構性 step-up」非 cycle reversion。</p>
+  <blockquote>
+    Normalized PE 在旺宏失準 — 因為 21-22 NOR 高峰 vs 23-25 NAND 谷底跨越完整 cycle，且 25 後產品 mix 結構改變（NAND/eMMC 從低個位數升至 30%）。應改用 <strong>Forward PE on recovery year</strong>（§4.1 谷底反轉股建議方法）。
+  </blockquote>
+
+  <h2 class="ch">驗證 2：P/B Band（景氣循環股經典）</h2>
+  <table>
+    <thead><tr><th>時期</th><th class="center">每股淨值（NT$）</th><th class="center">股價區間</th><th class="center">P/B 區間</th></tr></thead>
+    <tbody>
+      <tr><td>2021 NOR 高峰</td><td class="num">~52</td><td class="num">50-65</td><td class="num">1.0-1.25x</td></tr>
+      <tr><td>2022 高位</td><td class="num">~55</td><td class="num">35-55</td><td class="num">0.6-1.0x</td></tr>
+      <tr><td>2023-2024 谷底</td><td class="num">~48-50</td><td class="num">26-35</td><td class="num">0.5-0.7x（trough）</td></tr>
+      <tr><td>2025 反轉</td><td class="num">~46</td><td class="num">35-95</td><td class="num">0.8-2.1x</td></tr>
+      <tr><td><strong>當前（4/27）</strong></td><td class="num">~46</td><td class="num pos">145</td><td class="num hi"><strong>3.15x</strong></td></tr>
+    </tbody>
+  </table>
+  <blockquote>
+    <strong>當前 P/B 3.15x 已遠超歷史 5Y 區間上緣（2.1x）</strong>，反映市場已大量 pricing「轉折成功」。GiS 採基礎情境 TP 180 對應 P/B 約 3.9x（FY26 BVPS ~46 → 4Q26 BVPS ~58 假設累積獲利） — 屬「結構性 re-rating」估值，非 cycle reversion。<strong>樂觀情境 TP 425 對應 P/B 7x+ 屬泡沫區間，需衛星訂單級別 catalyst 才能支持</strong>。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 估值方法論驗證 (2/2)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════ Page 12：5×5 敏感度 + 隱含倍數驗證 ══════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆-續、敏感度與隱含倍數驗證</h1>
+
+  <h2 class="ch">5×5 敏感度（FY27E PE × FY27E EPS） — GiS 估值方法論 §10 規範</h2>
+  <table class="sens-table">
+    <thead><tr><th class="corner">FY27 EPS \\ PE</th><th class="axis">12x</th><th class="axis">14x</th><th class="axis">15x</th><th class="axis">16x</th><th class="axis">18x</th></tr></thead>
+    <tbody>
+      <tr><td class="axis">12</td><td>144</td><td>168</td><td>180</td><td>192</td><td>216</td></tr>
+      <tr><td class="axis">15</td><td>180</td><td>210</td><td>225</td><td>240</td><td>270</td></tr>
+      <tr><td class="axis">18</td><td>216</td><td>252</td><td class="center-cell">270</td><td>288</td><td>324</td></tr>
+      <tr><td class="axis">21</td><td>252</td><td>294</td><td>315</td><td>336</td><td>378</td></tr>
+      <tr><td class="axis">25</td><td>300</td><td>350</td><td>375</td><td>400</td><td>450</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:11px;color:#6b7a9a;">中心格 270 = FY27 滿產年完整估值（基礎 EPS 18 × 15x）；採用 TP 180 = 12 月內折價 33%（反映 cycle 仍未滿產）｜上下限差距 (450-144)/270 = 113%（高敏感度）｜主要驅動：FY27 EPS 假設（毛利改善幅度）+ PE 假設（cycle re-rating 程度）</p>
+
+  <h2 class="ch">隱含倍數 sanity check</h2>
+  <table>
+    <thead><tr><th>檢查</th><th class="center">數值</th><th>合理性</th></tr></thead>
+    <tbody>
+      <tr><td>FY26 PE（隱含）</td><td class="num">180/12 = 15x</td><td class="pos">合理（共識中位）</td></tr>
+      <tr><td>FY27 PE</td><td class="num">180/18 = 10x</td><td class="pos">保守（vs 券商 A 10x、券商 B 6x）</td></tr>
+      <tr><td>FY26+27 平均 PE</td><td class="num">180/15 = 12x</td><td class="pos">介於 券商 B 6x 與券商 A 10x 之間</td></tr>
+      <tr><td>P/B（4Q27 BVPS ~58）</td><td class="num">180/58 = 3.1x</td><td class="neg">高（歷史 5Y 區間 0.5-2.1x），反映 re-rating</td></tr>
+      <tr><td>P/Sales（FY27 EPS 18 × 5Y 股本 18.6 億 = 淨利 335 億；營收 780 億）</td><td class="num">~3.4x P/Sales</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>GiS 結論：</strong>15x FY27E EPS 18 = 270 是「滿產年完整估值」，採用 TP 180 折價 33% 反映 cycle 12 個月內仍未滿產。<strong>180 元位於敏感度網格中央偏左下，屬保守至中性立場</strong>，避券商 A樂觀（300 = FY26 30 × 10x，FY26 EPS 假設違反產業上限）與 券商 B 矛盾（182 = FY27 1.43 × 6x，27 衰退與 guidance 不符）兩個極端。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 敏感度驗證</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ Page 14：Price & Valuation (researcher) ══════════════════════════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆-終、股價走勢、PE Band、三情境合理價</h1>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
+    <!-- 圖 A：股價 vs 加權（標準化）-->
+    <div class="chart-wrap">
+      <div class="chart-title">5 年股價 vs 加權指數（標準化 = 100）</div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartRel"></canvas></div>
+      <div style="font-size:10px;color:#6b7a9a;margin-top:4px;line-height:1.4">
+        當前股價：<strong>145.0</strong> · 5Y 個股相對 alpha = <span id="alphaSpan"></span>
+      </div>
+    </div>
+
+    <!-- 圖 B：Fan Chart -->
+    <div class="chart-wrap">
+      <div class="chart-title">12M 三情境合理價路徑（自 2026-04-27）</div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartFan"></canvas></div>
+      <div style="font-size:10px;color:#6b7a9a;margin-top:4px;line-height:1.4">
+        保守 <strong>120</strong>（-17.2%）｜
+        <span style="color:#daa520">基礎 <strong>180</strong>（+24.1%）</span>｜
+        樂觀 <strong>425</strong>（+193.1%）
+      </div>
+    </div>
+  </div>
+
+  <!-- 圖 C：PE Band（河流圖）-->
+  <div class="chart-wrap">
+    <div class="chart-title">PE Band 河流圖（5 年 TTM EPS × 歷史 PE 帶）</div>
+    <div style="position:relative;width:100%;height:240px"><canvas id="chartPE"></canvas></div>
+    <div style="font-size:10px;color:#6b7a9a;margin-top:4px;line-height:1.4">
+      5 年 PE 平均 <strong>9.63x</strong> · ±1σ <strong>1.65-17.61x</strong> ·
+      當前 PE <strong style="color:#5e0d2e">N/A</strong>（TTM EPS 仍為負，cycle 谷底反轉中）
+    </div>
+  </div>
+
+  <blockquote style="margin-top:6px;font-size:11.5px">
+    <strong>估值定位讀圖：</strong>① TTM EPS 仍為 -1.77（FY25 累積虧損），PE Band 暫時失效；FY26E EPS 12 將於 2H26 拉回正值，屆時對應 forward PE 12x（vs 5Y mean 9.6x，re-rating 反映 cycle 反轉）；② 三情境隱含合理價 保守 120 / 基礎 180 / 樂觀 425；③ 5Y 個股 vs 加權累積 alpha 顯示於圖 A 右下，反映 2H25-1Q26 強勢領先。
+  </blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆-終 · Price &amp; Valuation</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════ Page 13：章節封面 伍 ══════ -->
+<div class="sec-div page">
+  <div class="sec-num">伍</div>
+  <div class="sec-eyebrow">Section Five · Quarterly Model</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">季度損益模型與券商預估離散度</div>
+  <div class="sec-desc">融合各家券商預估區間建立 GiS 中位假設季度模型，視覺化呈現毛利率 V 型反轉軌跡與 8 家券商 FY26/FY27 EPS 預估離散度（FY26 區間 2.5-30 元差 12 倍）。</div>
+</div>
+
+<!-- ══════ Page 14：季度模型 + 圖表 ══════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍、季度損益模型</h1>
+
+  <h2 class="ch">季度損益表（GiS 中位假設）</h2>
+  <table style="font-size:10.5px">
+    <thead><tr>
+      <th>項目（NT$ 億）</th>
+      <th class="num">1Q25A</th><th class="num">2Q25A</th><th class="num">3Q25A</th><th class="num">4Q25A</th>
+      <th class="num">1Q26A</th><th class="num">2Q26F</th><th class="num">3Q26F</th><th class="num">4Q26F</th>
+      <th class="num">FY25</th><th class="num">FY26F</th><th class="num">FY27F</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">61</td><td class="num">73</td><td class="num">82</td><td class="num">78</td>
+        <td class="num pos">105</td><td class="num pos">195</td><td class="num">130</td><td class="num">130</td>
+        <td class="num">311</td><td class="num pos">560</td><td class="num pos">780</td></tr>
+      <tr><td>毛利</td><td class="num">11</td><td class="num">11</td><td class="num">19</td><td class="num">19</td>
+        <td class="num pos">43</td><td class="num pos">98</td><td class="num">68</td><td class="num">69</td>
+        <td class="num">75</td><td class="num pos">274</td><td class="num pos">406</td></tr>
+      <tr><td>毛利率</td><td class="num">18%</td><td class="num">16%</td><td class="num">24%</td><td class="num">24%</td>
+        <td class="num pos hi">41%</td><td class="num pos hi">50%</td><td class="num pos">52%</td><td class="num pos">53%</td>
+        <td class="num">24%</td><td class="num pos">49%</td><td class="num pos">52%</td></tr>
+      <tr><td>營益率</td><td class="num neg">-13%</td><td class="num neg">-11%</td><td class="num neg">-1%</td><td class="num neg">-5%</td>
+        <td class="num pos">19%</td><td class="num pos">31%</td><td class="num pos">28%</td><td class="num pos">29%</td>
+        <td class="num neg">-5%</td><td class="num pos">25%</td><td class="num pos">30%</td></tr>
+      <tr><td><strong>EPS（NT$）</strong></td>
+        <td class="num neg">-0.47</td><td class="num neg">-0.69</td><td class="num neg">-0.47</td><td class="num neg">-0.16</td>
+        <td class="num pos hi">0.90</td><td class="num pos hi">2.80</td><td class="num pos">3.95</td><td class="num pos">4.35</td>
+        <td class="num neg">-1.77</td><td class="num pos hi">12.00</td><td class="num pos hi">18.00</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：4/27 法說、券商共識；GiS 採中位假設（vs 券商 A FY26 30 / 券商 B 2.48 / 券商 D 11.61）</span>
+
+  <h2 class="ch">季度毛利率 V 型反轉視覺化</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">季度毛利率走勢（2025Q1 - 2026Q4F）</div>
+    <div class="chart-sub">資料來源：券商共識、GiS 整理；標示：4Q25 為毛利率低點 24% → 1Q26 跳升至 41% → 4Q26 預估 53%</div>
+    <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chartGMQ" style="display:block;width:100%;height:260px"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · 季度模型 (1/2)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════ Page 14b：券商 EPS 預估離散度（從 p14 拆出）══════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍-續、FY26 / FY27 券商 EPS 預估離散度</h1>
+
+  <h2 class="ch">8 家券商 EPS 預估區間 vs GiS 採用</h2>
+  <p style="font-size:11.5px;color:#6b7a9a;line-height:1.65">FY26 與 FY27 券商預估離散度極高（FY26 spread 12 倍、FY27 spread 71 倍），主要差異來自三個假設：(1) <strong>NAND/eMMC 缺口可持續性</strong>（樂觀派假設 18-24 個月、保守派假設 6 個月內回歸）；(2) <strong>毛利率峰值水準</strong>（樂觀派假設 60%+、保守派假設回歸 25-30%）；(3) <strong>FY27 cycle 走勢</strong>（樂觀派延續滿產、保守派假設衰退）。GiS 採中位假設（FY26 EPS 12 / FY27 EPS 18），對應毛利率 49-52%、產能 2H27 滿載。</p>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">FY26E EPS（NT$）— 券商預估區間 2.48-30.02</div>
+      <div class="chart-sub">最樂觀方（30）vs 最保守方（2.48）；GiS 採中位 12</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartEps26" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">FY27E EPS（NT$）— 券商預估區間 1.43-101.70</div>
+      <div class="chart-sub">最樂觀方延續滿產（101.7）vs 最保守方假設衰退（1.43）；<strong>GiS 採 18</strong></div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartEps27" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+  <span class="src">資料來源：8 家券商 4/27-28 個股報告；具名清單見末頁資料來源</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · 券商 EPS 離散度 (2/2)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════ Page 15：章節封面 陸 ══════ -->
+<div class="sec-div page">
+  <div class="sec-num">陸</div>
+  <div class="sec-eyebrow">Section Six · Catalysts &amp; Risks</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">催化劑、風險與 GiS 結論</div>
+  <div class="sec-desc">7 個催化劑（推升至樂觀情境）vs 7 個風險（壓回保守情境），90 天追蹤事件節點，最終評等與目標價立論。</div>
+</div>
+
+<!-- ══════ Page 16：催化劑 + 風險 + 結論 ══════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">陸、催化劑與風險</h1>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>催化劑（推升至樂觀情境 425）</h4>
+      <div class="risk-item"><strong>2H26 NAND/eMMC 缺貨持續加劇</strong>（三星 H2 仍未回歸 MLC）</div>
+      <div class="risk-item"><strong>NOR ASP 連續 2-3 季調漲 30%+</strong>（管理層持續調價落實）</div>
+      <div class="risk-item"><strong>1H27 設備到位早於預期</strong>（NAND 滲透率提升 + eMMC 新客戶）</div>
+      <div class="risk-item"><strong>SpaceX/Starlink 衛星訂單兌現</strong>（衛星抗輻射 tier 1 客戶導入）</div>
+      <div class="risk-item"><strong>4Q26 GM 突破 55%</strong>（規模化 + Mix 改善）</div>
+      <div class="risk-item"><strong>2H27 滿產年 EPS 突破 25 元</strong>（cycle 高峰 + 結構性 NAND 缺口疊加）</div>
+      <div class="risk-item"><strong>AI server NOR 需求結構性</strong>（資料中心 1Q26 +95% 持續加速）</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>風險（壓回保守情境 120）</h4>
+      <div class="risk-item"><strong>三星 27 提前回歸 4-32GB MLC NAND</strong>（壟斷窗口縮短）</div>
+      <div class="risk-item"><strong>2Q26 GM 未達 50%</strong>（5 億回沖一次性影響大於預期）</div>
+      <div class="risk-item"><strong>2H26 庫存回沖效應消退 + NAND 量增不及預期</strong></div>
+      <div class="risk-item"><strong>PC/NB 需求衰退超過 -10%</strong>（NOR 受連帶衝擊）</div>
+      <div class="risk-item"><strong>月報價反向</strong>（景氣反轉時無 LTA 保護）</div>
+      <div class="risk-item"><strong>capex 不上修 → 2H27 產能未滿載</strong>（量增不及預期）</div>
+      <div class="risk-item"><strong>美中關稅升級 + 終端 OEM 客戶轉單</strong>（雖直接出口低，但間接影響）</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>陸 · 催化劑與風險 (1/2)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════ Page 16b：追蹤節點 + 結論 + 資料來源（從 p16 拆出）══════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">陸-續、追蹤節點與結論</h1>
+
+  <h2 class="ch">90 天追蹤事件節點</h2>
+  <table>
+    <thead><tr><th class="center">時點</th><th>事件</th><th class="center">影響度</th><th>預期方向</th></tr></thead>
+    <tbody>
+      <tr><td class="center">5 月初</td><td>4 月月營收公告</td><td class="center">★★★</td><td>2Q QoQ 軌跡驗證（共識 +80%-90%）</td></tr>
+      <tr><td class="center">6 月初</td><td>5 月月營收</td><td class="center">★★★</td><td>持續驗證</td></tr>
+      <tr><td class="center"><strong>7 月底</strong></td><td><strong>2Q26 法說 + 財報</strong></td><td class="center">★★★★★</td><td>2Q EPS 共識 2.2-4.05、毛利率 50%+ 驗證</td></tr>
+      <tr><td class="center">8-9 月</td><td>NAND/NOR 漲價公告</td><td class="center">★★★</td><td>持續調價 → 3Q GM 進一步上升</td></tr>
+      <tr><td class="center"><strong>10 月底</strong></td><td><strong>3Q26 法說</strong></td><td class="center">★★★★★</td><td>GM 突破 52% 驗證 + 4Q 指引</td></tr>
+      <tr><td class="center">2H26-1H27</td><td>3D NAND 設備到位 / 客戶認證進展</td><td class="center">★★★★</td><td>產能擴張 timing 確認</td></tr>
+      <tr><td class="center"><strong>2H27</strong></td><td><strong>產能滿產 + cycle 高峰確認</strong></td><td class="center">★★★★★</td><td>結構轉折驗證（時點偏遠）</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">GiS 結論</h2>
+  <blockquote>
+    <strong>評等：增加持股（Overweight）｜12M 目標價：NT$ 180（+24.1% 上檔）</strong><br><br>
+    旺宏 1Q26 由虧轉盈確認 cycle 谷底反轉，<strong>三引擎結構性故事（MLC NAND 利基壟斷 + NAND/eMMC 缺口 + NOR 資料中心拉貨）</strong> 構成 18-24 個月明確窗口，2H27 為產能滿產 + cycle 高峰。券商預估區間 spread 82% 反映「sustainability」假設離散度高 — 區間最樂觀方（4Q26 GM 77%）違反歷史峰值與物理上限；最保守方（FY27 EPS 1.43）與管理層 guidance 矛盾，兩端均非合理 base case。<br><br>
+    <strong>GiS 採基礎情境 TP 180</strong>（FY27E EPS 18 × 15x normalized peak PE × 12 月折價 33%），位於券商預估中位區間。Sanity check：對應 P/B 約 3.9x，反映「結構性 re-rating」（cycle 已過反轉點），非單純 cycle reversion。<br><br>
+    <strong>核心風險：月報價無 LTA 保護 + 三星 27 回歸 MLC + capex 不上修。「2H27 為估值錨年」是本次估值的核心時點假設</strong>，密切追蹤 7 月 2Q 法說會驗證毛利率突破 50%。
+  </blockquote>
+
+  <h2 class="ch">資料來源</h2>
+  <p style="font-size:10.5px;color:#6b7a9a;line-height:1.5">
+    本報告整合：① 公司 1Q26 法說會（2026/04/27）；② 8 家券商 4/27-28 法說後個股報告 + 1 家 callmemo；③ 7 家券商 1-3 月 precall 報告；④ MOPS 月營收公告；⑤ GiS 估值方法論 §3.1（景氣循環+谷底反轉股估值方法）/ §4.1（Forward PE on recovery year 警告）/ §10（5×5 敏感度規範）。共 18 份券商報告 + 公司資料整合，具名清單存於 GiS 內部資料庫。
+  </p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>陸 · 結論與資料來源 (2/2)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<script>
+// 月毛利率 V 型反轉
+new Chart(document.getElementById('chartGM'), {
+  type: 'line',
+  data: {
+    labels: ['1Q25','2Q25','3Q25','4Q25','1Q26','2Q26F','3Q26F','4Q26F'],
+    datasets: [{
+      label: '毛利率（%）',
+      data: [18, 16, 24, 24, 41, 50, 52, 53],
+      borderColor: '#00c896',
+      backgroundColor: 'rgba(0,200,150,0.15)',
+      fill: true,
+      tension: 0.35,
+      pointRadius: 4,
+      pointBackgroundColor: '#00c896'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, animation: false,
+    plugins: { legend: { display: false } },
+    scales: { y: { suggestedMin: 0, suggestedMax: 60, ticks: { callback: v => v + '%' } } }
+  }
+});
+
+// 1Q26 產品 Mix
+new Chart(document.getElementById('chartMix'), {
+  type: 'doughnut',
+  data: {
+    labels: ['NOR 58%','NAND 30%','ROM 8%','FBG 4%'],
+    datasets: [{
+      data: [58, 30, 8, 4],
+      backgroundColor: ['#0d1b3e','#00c896','#d97706','#9aabb5']
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, animation: false,
+    plugins: { legend: { position: 'right', labels: { font: { size: 11 } } } }
+  }
+});
+
+// 季度毛利率走勢（同 chartGM 但更大）
+new Chart(document.getElementById('chartGMQ'), {
+  type: 'line',
+  data: {
+    labels: ['1Q25','2Q25','3Q25','4Q25','1Q26A','2Q26F','3Q26F','4Q26F'],
+    datasets: [
+      {
+        label: '毛利率',
+        data: [18, 16, 24, 24, 41, 50, 52, 53],
+        borderColor: '#00c896', backgroundColor: 'rgba(0,200,150,0.18)',
+        fill: true, tension: 0.35, pointRadius: 5, pointBackgroundColor: '#00c896', yAxisID: 'y'
+      },
+      {
+        label: '營益率',
+        data: [-13, -11, -1, -5, 19, 31, 28, 29],
+        borderColor: '#0d1b3e', borderDash: [5,3],
+        fill: false, tension: 0.35, pointRadius: 4, pointBackgroundColor: '#0d1b3e', yAxisID: 'y'
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, animation: false,
+    plugins: { legend: { position: 'top' } },
+    scales: { y: { ticks: { callback: v => v + '%' }, suggestedMin: -20, suggestedMax: 60 } }
+  }
+});
+
+// FY26 EPS 多家券商
+new Chart(document.getElementById('chartEps26'), {
+  type: 'bar',
+  data: {
+    labels: ['券商 B','券商 D','券商 E','GiS','券商 A'],
+    datasets: [{
+      label: 'FY26E EPS',
+      data: [2.48, 11.61, 12.5, 12, 30.02],
+      backgroundColor: ['#dc2626','#3b82f6','#3b82f6','#00c896','#d97706']
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, animation: false,
+    plugins: { legend: { display: false } },
+    scales: { y: { suggestedMin: 0, ticks: { callback: v => v + ' 元' } } }
+  }
+});
+
+// FY27 EPS 多家券商（log scale，因為 1.43 vs 101.7 跨度大）
+new Chart(document.getElementById('chartEps27'), {
+  type: 'bar',
+  data: {
+    labels: ['券商 B','券商 D','GiS','券商 A'],
+    datasets: [{
+      label: 'FY27E EPS',
+      data: [1.43, 20, 18, 101.70],
+      backgroundColor: ['#dc2626','#3b82f6','#00c896','#d97706']
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, animation: false,
+    plugins: { legend: { display: false } },
+    scales: { y: { type: 'logarithmic', ticks: { callback: v => v + ' 元' } } }
+  }
+});
+</script>
+
+<script>
+(function(){
+const PRC_DATES = ["2021-03-30", "2021-04-12", "2021-04-20", "2021-04-28", "2021-05-07", "2021-05-17", "2021-05-25", "2021-06-02", "2021-06-10", "2021-06-21", "2021-06-29", "2021-07-07", "2021-07-15", "2021-07-23", "2021-08-02", "2021-08-10", "2021-08-18", "2021-08-26", "2021-09-03", "2021-09-13", "2021-09-23", "2021-10-01", "2021-10-12", "2021-10-20", "2021-10-28", "2021-11-05", "2021-11-15", "2021-11-23", "2021-12-01", "2021-12-09", "2021-12-17", "2021-12-27", "2022-01-05", "2022-01-13", "2022-01-21", "2022-02-09", "2022-02-17", "2022-02-25", "2022-03-08", "2022-03-16", "2022-03-24", "2022-04-01", "2022-04-13", "2022-04-21", "2022-04-29", "2022-05-10", "2022-05-18", "2022-05-26", "2022-06-06", "2022-06-14", "2022-06-22", "2022-06-30", "2022-07-08", "2022-07-18", "2022-07-26", "2022-08-03", "2022-08-11", "2022-08-19", "2022-08-29", "2022-09-06", "2022-09-15", "2022-09-23", "2022-10-03", "2022-10-12", "2022-10-20", "2022-10-28", "2022-11-07", "2022-11-15", "2022-11-23", "2022-12-01", "2022-12-09", "2022-12-19", "2022-12-27", "2023-01-05", "2023-01-13", "2023-02-02", "2023-02-10", "2023-02-20", "2023-03-02", "2023-03-10", "2023-03-20", "2023-03-28", "2023-04-10", "2023-04-18", "2023-04-26", "2023-05-05", "2023-05-15", "2023-05-23", "2023-05-31", "2023-06-08", "2023-06-16", "2023-06-28", "2023-07-06", "2023-07-14", "2023-07-24", "2023-08-01", "2023-08-10", "2023-08-18", "2023-08-28", "2023-09-05", "2023-09-13", "2023-09-21", "2023-10-02", "2023-10-12", "2023-10-20", "2023-10-30", "2023-11-07", "2023-11-15", "2023-11-23", "2023-12-01", "2023-12-11", "2023-12-19", "2023-12-27", "2024-01-05", "2024-01-15", "2024-01-23", "2024-01-31", "2024-02-19", "2024-02-27", "2024-03-07", "2024-03-15", "2024-03-25", "2024-04-02", "2024-04-12", "2024-04-22", "2024-04-30", "2024-05-09", "2024-05-17", "2024-05-27", "2024-06-04", "2024-06-13", "2024-06-21", "2024-07-01", "2024-07-09", "2024-07-17", "2024-07-29", "2024-08-06", "2024-08-14", "2024-08-22", "2024-08-30", "2024-09-09", "2024-09-18", "2024-09-26", "2024-10-08", "2024-10-17", "2024-10-25", "2024-11-05", "2024-11-13", "2024-11-21", "2024-11-29", "2024-12-09", "2024-12-17", "2024-12-25", "2025-01-03", "2025-01-13", "2025-01-21", "2025-02-07", "2025-02-17", "2025-02-25", "2025-03-06", "2025-03-14", "2025-03-24", "2025-04-01", "2025-04-11", "2025-04-21", "2025-04-29", "2025-05-08", "2025-05-16", "2025-05-26", "2025-06-04", "2025-06-12", "2025-06-20", "2025-06-30", "2025-07-08", "2025-07-16", "2025-07-24", "2025-08-04", "2025-08-12", "2025-08-20", "2025-08-28", "2025-09-05", "2025-09-15", "2025-09-23", "2025-10-02", "2025-10-14", "2025-10-22", "2025-10-31", "2025-11-10", "2025-11-18", "2025-11-26", "2025-12-04", "2025-12-12", "2025-12-22", "2025-12-31", "2026-01-09", "2026-01-19", "2026-01-27", "2026-02-04", "2026-02-23", "2026-03-04", "2026-03-12", "2026-03-20", "2026-03-30", "2026-04-09", "2026-04-17", "2026-04-27"];
+const PRC_NORM = [100.0, 104.82, 105.04, 104.82, 96.53, 78.16, 90.37, 96.86, 98.66, 97.54, 99.22, 99.66, 96.53, 94.74, 98.77, 95.63, 88.91, 87.91, 92.95, 88.47, 81.19, 81.3, 79.62, 79.84, 87.79, 88.91, 95.97, 98.1, 96.3, 92.72, 90.37, 92.5, 93.95, 89.92, 88.13, 94.51, 100.0, 97.42, 93.06, 90.48, 93.73, 90.37, 89.36, 89.7, 85.55, 84.99, 87.79, 86.45, 91.15, 86.11, 79.96, 79.51, 69.43, 68.2, 70.66, 71.78, 73.35, 74.58, 73.01, 69.43, 70.1, 69.43, 69.43, 70.44, 72.0, 64.28, 73.68, 75.36, 77.72, 78.72, 76.04, 78.84, 76.82, 76.6, 77.27, 83.54, 80.18, 78.84, 77.94, 76.37, 76.71, 75.92, 78.05, 76.82, 71.22, 72.79, 72.68, 73.46, 74.58, 72.34, 78.05, 72.56, 72.45, 72.0, 68.76, 71.22, 68.2, 67.53, 69.76, 75.81, 76.48, 75.14, 71.0, 73.46, 73.12, 62.15, 63.05, 63.49, 64.61, 64.28, 63.49, 65.96, 71.56, 69.54, 67.86, 67.86, 65.4, 65.29, 63.16, 61.14, 59.91, 60.13, 61.48, 60.25, 58.45, 61.81, 59.01, 61.14, 60.13, 59.35, 58.79, 61.48, 58.12, 61.81, 62.49, 58.23, 59.35, 62.82, 62.15, 62.04, 57.56, 58.23, 60.02, 58.34, 58.79, 57.0, 50.17, 49.27, 48.15, 46.92, 49.72, 45.91, 46.47, 44.01, 39.75, 43.0, 43.78, 47.03, 50.28, 46.7, 48.82, 46.58, 48.71, 42.22, 43.11, 47.03, 45.24, 47.93, 47.26, 48.38, 49.5, 47.59, 47.59, 46.81, 45.35, 45.24, 41.32, 43.11, 42.55, 45.02, 45.8, 51.06, 59.91, 56.33, 57.56, 62.49, 69.88, 84.88, 84.32, 73.57, 73.68, 85.33, 87.23, 88.35, 130.57, 165.06, 170.66, 200.9, 231.8, 219.48, 221.72, 358.34, 286.67, 318.03, 293.39, 324.75];
+const TWII_NORM = [100.0, 101.84, 104.64, 106.12, 104.41, 92.75, 100.25, 103.69, 103.65, 103.07, 106.3, 107.83, 108.94, 106.15, 105.73, 104.64, 101.64, 103.09, 105.81, 105.38, 103.16, 100.1, 99.44, 102.01, 102.94, 104.48, 106.52, 106.71, 106.23, 108.21, 107.6, 109.02, 111.75, 111.37, 108.12, 109.65, 110.35, 106.63, 101.63, 102.33, 106.91, 106.47, 104.51, 103.46, 100.23, 97.02, 98.44, 96.46, 100.31, 96.93, 92.71, 89.55, 87.37, 88.91, 89.44, 89.26, 91.8, 93.08, 90.16, 88.66, 88.61, 85.28, 80.34, 79.02, 78.2, 77.25, 79.88, 87.87, 88.24, 90.68, 88.83, 87.18, 86.55, 86.39, 89.55, 94.2, 94.15, 93.94, 94.22, 93.79, 93.14, 94.84, 95.9, 95.86, 92.87, 94.39, 93.48, 97.78, 100.15, 101.08, 104.43, 102.3, 101.25, 104.4, 102.89, 103.97, 100.48, 98.95, 99.72, 101.43, 100.16, 98.56, 100.01, 101.64, 99.31, 97.55, 100.79, 103.47, 104.47, 105.34, 105.22, 106.17, 108.07, 105.82, 105.99, 107.97, 108.06, 112.57, 113.89, 118.96, 118.89, 121.97, 123.63, 125.26, 117.25, 123.21, 124.2, 128.41, 131.71, 129.0, 134.78, 140.46, 139.29, 144.37, 143.58, 133.88, 123.84, 133.06, 133.79, 134.51, 127.72, 130.95, 138.08, 136.58, 139.26, 141.04, 139.58, 138.09, 136.25, 134.48, 140.58, 139.04, 140.26, 138.38, 135.84, 140.74, 141.82, 141.98, 140.66, 137.21, 132.7, 133.54, 128.54, 117.96, 115.41, 122.22, 124.09, 131.95, 130.09, 130.58, 134.63, 133.17, 134.44, 135.08, 139.19, 141.19, 141.56, 145.79, 147.11, 148.11, 146.06, 153.88, 156.33, 156.95, 162.63, 167.64, 170.87, 167.03, 165.8, 162.56, 167.88, 169.28, 167.3, 173.41, 183.39, 189.72, 193.69, 194.48, 203.0, 207.33, 206.07, 203.5, 200.02, 209.98, 224.3, 239.3];
+const PE_DATES = ["2021-03-30", "2021-04-12", "2021-04-20", "2021-04-28", "2021-05-07", "2021-05-17", "2021-05-25", "2021-06-02", "2021-06-10", "2021-06-21", "2021-06-29", "2021-07-07", "2021-07-15", "2021-07-23", "2021-08-02", "2021-08-10", "2021-08-18", "2021-08-26", "2021-09-03", "2021-09-13", "2021-09-23", "2021-10-01", "2021-10-12", "2021-10-20", "2021-10-28", "2021-11-05", "2021-11-15", "2021-11-23", "2021-12-01", "2021-12-09", "2021-12-17", "2021-12-27", "2022-01-05", "2022-01-13", "2022-01-21", "2022-02-09", "2022-02-17", "2022-02-25", "2022-03-08", "2022-03-16", "2022-03-24", "2022-04-01", "2022-04-13", "2022-04-21", "2022-04-29", "2022-05-10", "2022-05-18", "2022-05-26", "2022-06-06", "2022-06-14", "2022-06-22", "2022-06-30", "2022-07-08", "2022-07-18", "2022-07-26", "2022-08-03", "2022-08-11", "2022-08-19", "2022-08-29", "2022-09-06", "2022-09-15", "2022-09-23", "2022-10-03", "2022-10-12", "2022-10-20", "2022-10-28", "2022-11-07", "2022-11-15", "2022-11-23", "2022-12-01", "2022-12-09", "2022-12-19", "2022-12-27", "2023-01-05", "2023-01-13", "2023-02-02", "2023-02-10", "2023-02-20", "2023-03-02", "2023-03-10", "2023-03-20", "2023-03-28", "2023-04-10", "2023-04-18", "2023-04-26", "2023-05-05", "2023-05-15", "2023-05-23", "2023-05-31", "2023-06-08", "2023-06-16", "2023-06-28", "2023-07-06", "2023-07-14", "2023-07-24", "2023-08-01", "2023-08-10", "2023-08-18", "2023-08-28", "2023-09-05", "2023-09-13", "2023-09-21", "2023-10-02", "2023-10-12", "2023-10-20", "2023-10-30", "2023-11-07", "2023-11-15", "2023-11-23", "2023-12-01", "2023-12-11", "2023-12-19", "2023-12-27", "2024-01-05", "2024-01-15", "2024-01-23", "2024-01-31", "2024-02-19", "2024-02-27", "2024-03-07", "2024-03-15", "2024-03-25", "2024-04-02", "2024-04-12", "2024-04-22", "2024-04-30", "2024-05-09", "2024-05-17", "2024-05-27", "2024-06-04", "2024-06-13", "2024-06-21", "2024-07-01", "2024-07-09", "2024-07-17", "2024-07-29", "2024-08-06", "2024-08-14", "2024-08-22", "2024-08-30", "2024-09-09", "2024-09-18", "2024-09-26", "2024-10-08", "2024-10-17", "2024-10-25", "2024-11-05", "2024-11-13", "2024-11-21", "2024-11-29", "2024-12-09", "2024-12-17", "2024-12-25", "2025-01-03", "2025-01-13", "2025-01-21", "2025-02-07", "2025-02-17", "2025-02-25", "2025-03-06", "2025-03-14", "2025-03-24", "2025-04-01", "2025-04-11", "2025-04-21", "2025-04-29", "2025-05-08", "2025-05-16", "2025-05-26", "2025-06-04", "2025-06-12", "2025-06-20", "2025-06-30", "2025-07-08", "2025-07-16", "2025-07-24", "2025-08-04", "2025-08-12", "2025-08-20", "2025-08-28", "2025-09-05", "2025-09-15", "2025-09-23", "2025-10-02", "2025-10-14", "2025-10-22", "2025-10-31", "2025-11-10", "2025-11-18", "2025-11-26", "2025-12-04", "2025-12-12", "2025-12-22", "2025-12-31", "2026-01-09", "2026-01-19", "2026-01-27", "2026-02-04", "2026-02-23", "2026-03-04", "2026-03-12", "2026-03-20", "2026-03-30", "2026-04-09", "2026-04-17", "2026-04-27"];
+const PE_ACTUAL = [44.650001525878906, 46.79999923706055, 46.900001525878906, 46.79999923706055, 43.099998474121094, 34.900001525878906, 40.349998474121094, 43.25, 44.04999923706055, 43.54999923706055, 44.29999923706055, 44.5, 43.099998474121094, 42.29999923706055, 44.099998474121094, 42.70000076293945, 39.70000076293945, 39.25, 41.5, 39.5, 36.25, 36.29999923706055, 35.54999923706055, 35.650001525878906, 39.20000076293945, 39.70000076293945, 42.849998474121094, 43.79999923706055, 43.0, 41.400001525878906, 40.349998474121094, 41.29999923706055, 41.95000076293945, 40.150001525878906, 39.349998474121094, 42.20000076293945, 44.650001525878906, 43.5, 41.54999923706055, 40.400001525878906, 41.849998474121094, 40.349998474121094, 39.900001525878906, 40.04999923706055, 38.20000076293945, 37.95000076293945, 39.20000076293945, 38.599998474121094, 40.70000076293945, 38.45000076293945, 35.70000076293945, 35.5, 31.0, 30.450000762939453, 31.549999237060547, 32.04999923706055, 32.75, 33.29999923706055, 32.599998474121094, 31.0, 31.299999237060547, 31.0, 31.0, 31.450000762939453, 32.150001525878906, 28.700000762939453, 32.900001525878906, 33.650001525878906, 34.70000076293945, 35.150001525878906, 33.95000076293945, 35.20000076293945, 34.29999923706055, 34.20000076293945, 34.5, 37.29999923706055, 35.79999923706055, 35.20000076293945, 34.79999923706055, 34.099998474121094, 34.25, 33.900001525878906, 34.849998474121094, 34.29999923706055, 31.799999237060547, 32.5, 32.45000076293945, 32.79999923706055, 33.29999923706055, 32.29999923706055, 34.849998474121094, 32.400001525878906, 32.349998474121094, 32.150001525878906, 30.700000762939453, 31.799999237060547, 30.450000762939453, 30.149999618530273, 31.149999618530273, 33.849998474121094, 34.150001525878906, 33.54999923706055, 31.700000762939453, 32.79999923706055, 32.650001525878906, 27.75, 28.149999618530273, 28.350000381469727, 28.850000381469727, 28.700000762939453, 28.350000381469727, 29.450000762939453, 31.950000762939453, 31.049999237060547, 30.299999237060547, 30.299999237060547, 29.200000762939453, 29.149999618530273, 28.200000762939453, 27.299999237060547, 26.75, 26.850000381469727, 27.450000762939453, 26.899999618530273, 26.100000381469727, 27.600000381469727, 26.350000381469727, 27.299999237060547, 26.850000381469727, 26.5, 26.25, 27.450000762939453, 25.950000762939453, 27.600000381469727, 27.899999618530273, 26.0, 26.5, 28.049999237060547, 27.75, 27.700000762939453, 25.700000762939453, 26.0, 26.799999237060547, 26.049999237060547, 26.25, 25.450000762939453, 22.399999618530273, 22.0, 21.5, 20.950000762939453, 22.200000762939453, 20.5, 20.75, 19.649999618530273, 17.75, 19.200000762939453, 19.549999237060547, 21.0, 22.450000762939453, 20.850000381469727, 21.799999237060547, 20.799999237060547, 21.75, 18.850000381469727, 19.25, 21.0, 20.200000762939453, 21.399999618530273, 21.100000381469727, 21.600000381469727, 22.100000381469727, 21.25, 21.25, 20.899999618530273, 20.25, 20.200000762939453, 18.450000762939453, 19.25, 19.0, 20.100000381469727, 20.450000762939453, 22.799999237060547, 26.75, 25.149999618530273, 25.700000762939453, 27.899999618530273, 31.200000762939453, 37.900001525878906, 37.650001525878906, 32.849998474121094, 32.900001525878906, 38.099998474121094, 38.95000076293945, 39.45000076293945, 58.29999923706055, 73.69999694824219, 76.19999694824219, 89.69999694824219, 103.5, 98.0, 99.0, 160.0, 128.0, 142.0, 131.0, 145.0];
+const PE_M2 = [-36.0, -36.2, -36.3, -36.5, -36.7, -37.1, -37.2, -37.4, -37.5, -37.7, -38.0, -38.2, -38.4, -38.5, -38.7, -39.0, -39.2, -39.3, -39.5, -39.6, -40.0, -40.2, -40.3, -40.5, -40.7, -41.0, -41.1, -41.3, -41.5, -41.7, -42.0, -42.1, -42.2, -42.0, -41.7, -41.0, -40.8, -40.6, -40.3, -40.1, -39.6, -39.4, -39.1, -38.9, -38.6, -38.2, -37.9, -37.7, -37.5, -37.2, -36.8, -36.6, -36.3, -36.1, -35.9, -35.4, -35.3, -35.0, -34.8, -34.6, -34.1, -33.9, -33.7, -33.4, -33.2, -32.7, -32.5, -32.3, -32.1, -31.8, -31.4, -31.2, -31.0, -30.8, -29.8, -27.4, -26.7, -26.0, -25.3, -24.2, -22.8, -22.1, -21.1, -20.4, -19.7, -18.2, -17.5, -16.8, -16.1, -15.4, -14.0, -12.9, -12.2, -11.5, -10.8, -9.4, -8.6, -7.9, -7.2, -6.5, -5.1, -4.4, -3.7, -2.9, -1.8, -0.4, 0.3, 1.0, 1.7, 2.4, 3.8, 4.5, 5.3, 5.8, 6.0, 6.1, 6.3, 6.5, 6.6, 6.6, 6.9, 7.0, 7.1, 7.2, 7.3, 7.5, 7.7, 7.7, 7.8, 7.9, 8.2, 8.2, 8.4, 8.4, 8.5, 8.8, 8.9, 9.0, 9.1, 9.2, 9.4, 9.5, 9.6, 9.7, 9.8, 10.0, 10.1, 10.3, 10.3, 10.4, 10.6, 10.8, 10.8, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.1, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2, 11.2];
+const PE_M1 = [9.4, 9.4, 9.5, 9.5, 9.6, 9.7, 9.7, 9.8, 9.8, 9.8, 9.9, 10.0, 10.0, 10.0, 10.1, 10.2, 10.2, 10.2, 10.3, 10.3, 10.4, 10.5, 10.5, 10.6, 10.6, 10.7, 10.7, 10.8, 10.8, 10.9, 10.9, 11.0, 11.0, 10.9, 10.9, 10.7, 10.6, 10.6, 10.5, 10.4, 10.3, 10.3, 10.2, 10.1, 10.1, 9.9, 9.9, 9.8, 9.8, 9.7, 9.6, 9.5, 9.5, 9.4, 9.4, 9.2, 9.2, 9.1, 9.1, 9.0, 8.9, 8.8, 8.8, 8.7, 8.6, 8.5, 8.5, 8.4, 8.4, 8.3, 8.2, 8.1, 8.1, 8.0, 7.8, 7.1, 7.0, 6.8, 6.6, 6.3, 5.9, 5.8, 5.5, 5.3, 5.1, 4.7, 4.6, 4.4, 4.2, 4.0, 3.6, 3.4, 3.2, 3.0, 2.8, 2.4, 2.2, 2.1, 1.9, 1.7, 1.3, 1.1, 1.0, 0.8, 0.5, 0.1, -0.1, -0.3, -0.4, -0.6, -1.0, -1.2, -1.4, -1.5, -1.6, -1.6, -1.6, -1.7, -1.7, -1.7, -1.8, -1.8, -1.8, -1.9, -1.9, -2.0, -2.0, -2.0, -2.0, -2.1, -2.1, -2.1, -2.2, -2.2, -2.2, -2.3, -2.3, -2.3, -2.4, -2.4, -2.4, -2.5, -2.5, -2.5, -2.6, -2.6, -2.6, -2.7, -2.7, -2.7, -2.8, -2.8, -2.8, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9, -2.9];
+const PE_MEAN = [54.7, 55.1, 55.3, 55.6, 55.9, 56.4, 56.6, 56.9, 57.1, 57.4, 57.9, 58.2, 58.4, 58.6, 58.8, 59.3, 59.6, 59.8, 60.1, 60.3, 60.9, 61.2, 61.3, 61.6, 61.9, 62.4, 62.6, 62.9, 63.1, 63.4, 63.8, 64.0, 64.1, 63.8, 63.5, 62.4, 62.0, 61.7, 61.3, 61.0, 60.3, 60.0, 59.4, 59.1, 58.7, 58.1, 57.7, 57.4, 57.0, 56.6, 56.0, 55.7, 55.3, 55.0, 54.6, 53.9, 53.6, 53.3, 53.0, 52.6, 51.9, 51.5, 51.2, 50.8, 50.5, 49.8, 49.5, 49.1, 48.8, 48.4, 47.8, 47.5, 47.1, 46.8, 45.4, 41.7, 40.6, 39.6, 38.5, 36.8, 34.7, 33.6, 32.1, 31.0, 29.9, 27.6, 26.6, 25.5, 24.5, 23.4, 21.3, 19.6, 18.6, 17.4, 16.4, 14.3, 13.1, 12.0, 11.0, 9.8, 7.7, 6.6, 5.6, 4.4, 2.7, 0.6, -0.5, -1.5, -2.6, -3.7, -5.8, -6.8, -8.0, -8.9, -9.1, -9.3, -9.5, -9.8, -10.0, -10.1, -10.5, -10.6, -10.8, -11.0, -11.2, -11.5, -11.7, -11.7, -11.9, -12.0, -12.4, -12.5, -12.7, -12.8, -13.0, -13.4, -13.5, -13.7, -13.8, -14.0, -14.3, -14.4, -14.5, -14.7, -14.9, -15.2, -15.4, -15.6, -15.7, -15.9, -16.2, -16.4, -16.5, -16.7, -16.7, -16.7, -16.7, -16.7, -16.8, -16.8, -16.8, -16.8, -16.8, -16.8, -16.8, -16.8, -16.8, -16.8, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -16.9, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0, -17.0];
+const PE_P1 = [100.0, 100.7, 101.1, 101.6, 102.1, 103.2, 103.5, 104.1, 104.4, 105.0, 105.8, 106.4, 106.7, 107.2, 107.6, 108.5, 109.0, 109.4, 109.9, 110.2, 111.3, 111.8, 112.2, 112.7, 113.2, 114.1, 114.5, 115.0, 115.3, 115.9, 116.8, 117.1, 117.3, 116.8, 116.0, 114.1, 113.4, 112.9, 112.2, 111.5, 110.2, 109.7, 108.7, 108.1, 107.4, 106.2, 105.5, 105.0, 104.3, 103.5, 102.3, 101.8, 101.1, 100.6, 99.8, 98.6, 98.1, 97.4, 96.9, 96.2, 94.9, 94.2, 93.7, 93.0, 92.3, 91.0, 90.5, 89.8, 89.3, 88.6, 87.3, 86.8, 86.1, 85.6, 82.9, 76.3, 74.3, 72.4, 70.4, 67.3, 63.4, 61.5, 58.6, 56.7, 54.8, 50.5, 48.6, 46.7, 44.7, 42.8, 38.9, 35.9, 34.0, 31.9, 29.9, 26.1, 23.9, 22.0, 20.1, 18.0, 14.1, 12.2, 10.2, 8.1, 4.9, 1.1, -0.9, -2.8, -4.8, -6.7, -10.6, -12.5, -14.6, -16.2, -16.6, -17.1, -17.4, -18.0, -18.3, -18.5, -19.2, -19.4, -19.7, -20.1, -20.4, -21.0, -21.3, -21.5, -21.8, -22.0, -22.7, -22.9, -23.2, -23.4, -23.8, -24.5, -24.7, -25.0, -25.2, -25.5, -26.1, -26.4, -26.6, -26.9, -27.3, -27.8, -28.2, -28.5, -28.7, -29.1, -29.6, -29.9, -30.1, -30.5, -30.5, -30.5, -30.5, -30.5, -30.6, -30.6, -30.6, -30.6, -30.6, -30.6, -30.6, -30.6, -30.6, -30.6, -30.8, -30.8, -30.8, -30.8, -30.8, -30.8, -30.8, -30.8, -30.8, -30.8, -30.8, -31.0, -31.0, -31.0, -31.0, -31.0, -31.0, -31.0, -31.0, -31.0, -31.0, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2, -31.2];
+const PE_P2 = [145.4, 146.4, 146.9, 147.7, 148.4, 150.0, 150.5, 151.2, 151.7, 152.5, 153.8, 154.6, 155.1, 155.8, 156.4, 157.6, 158.4, 158.9, 159.7, 160.2, 161.7, 162.5, 163.0, 163.8, 164.5, 165.8, 166.3, 167.1, 167.6, 168.4, 169.7, 170.2, 170.4, 169.7, 168.6, 165.8, 164.8, 164.0, 163.0, 162.0, 160.2, 159.4, 157.9, 157.1, 156.1, 154.3, 153.3, 152.5, 151.5, 150.5, 148.7, 147.9, 146.9, 146.1, 145.1, 143.3, 142.5, 141.5, 140.7, 139.7, 137.9, 136.9, 136.1, 135.1, 134.1, 132.3, 131.5, 130.5, 129.7, 128.7, 126.9, 126.2, 125.1, 124.4, 120.5, 110.8, 108.0, 105.2, 102.4, 97.8, 92.1, 89.3, 85.2, 82.4, 79.6, 73.4, 70.6, 67.8, 65.0, 62.2, 56.6, 52.2, 49.4, 46.3, 43.5, 37.9, 34.8, 32.0, 29.2, 26.1, 20.5, 17.7, 14.8, 11.8, 7.2, 1.5, -1.3, -4.1, -6.9, -9.7, -15.4, -18.2, -21.2, -23.5, -24.1, -24.8, -25.3, -26.1, -26.6, -26.9, -27.9, -28.1, -28.7, -29.2, -29.7, -30.5, -31.0, -31.2, -31.7, -32.0, -33.0, -33.3, -33.8, -34.0, -34.5, -35.6, -35.8, -36.3, -36.6, -37.1, -37.9, -38.4, -38.6, -39.2, -39.7, -40.4, -40.9, -41.5, -41.7, -42.2, -43.0, -43.5, -43.8, -44.3, -44.3, -44.3, -44.3, -44.3, -44.5, -44.5, -44.5, -44.5, -44.5, -44.5, -44.5, -44.5, -44.5, -44.5, -44.8, -44.8, -44.8, -44.8, -44.8, -44.8, -44.8, -44.8, -44.8, -44.8, -44.8, -45.0, -45.0, -45.0, -45.0, -45.0, -45.0, -45.0, -45.0, -45.0, -45.0, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3, -45.3];
+const FAN_DATES = ["2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10", "2026-11", "2026-12", "2027-01", "2027-02", "2027-03", "2027-04"];
+const FAN_LO = [145.0, 142.9, 140.8, 138.8, 136.7, 134.6, 132.5, 130.4, 128.3, 126.2, 124.2, 122.1, 120.0];
+const FAN_MID = [145.0, 147.9, 150.8, 153.8, 156.7, 159.6, 162.5, 165.4, 168.3, 171.2, 174.2, 177.1, 180.0];
+const FAN_HI = [145.0, 168.3, 191.7, 215.0, 238.3, 261.7, 285.0, 308.3, 331.7, 355.0, 378.3, 401.7, 425.0];
+const CURRENT_PRICE = 145.0;
+const TP_R = 180.0;
+
+const noAnim = {animation:false, plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:8}}}, responsive:true, maintainAspectRatio:false};
+
+const ctxRel = document.getElementById('chartRel').getContext('2d');
+new Chart(ctxRel, {
+  type:'line',
+  data:{
+    labels:PRC_DATES,
+    datasets:[
+      {label:'旺宏 2337', data:PRC_NORM, borderColor:'#5e0d2e', backgroundColor:'rgba(94,13,46,.06)', borderWidth:1.6, pointRadius:0, fill:true, tension:.1},
+      {label:'加權指數', data:TWII_NORM, borderColor:'#7b8190', borderWidth:1.2, pointRadius:0, borderDash:[3,3], fill:false, tension:.1}
+    ]
+  },
+  options:{...noAnim, scales:{x:{ticks:{maxTicksLimit:6,font:{size:9}},grid:{display:false}}, y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}}}
+});
+const lastPrc = PRC_NORM[PRC_NORM.length-1];
+const lastTwii = TWII_NORM[TWII_NORM.length-1];
+const alpha = (lastPrc - lastTwii).toFixed(1);
+const alphaEl = document.getElementById('alphaSpan');
+alphaEl.textContent = (alpha >= 0 ? '+' : '') + alpha + ' pp';
+alphaEl.style.color = alpha >= 0 ? '#00875a' : '#c0392b';
+alphaEl.style.fontWeight = '700';
+
+const ctxFan = document.getElementById('chartFan').getContext('2d');
+new Chart(ctxFan, {
+  type:'line',
+  data:{
+    labels:FAN_DATES,
+    datasets:[
+      {label:'樂觀 425', data:FAN_HI, borderColor:'#00a878', backgroundColor:'rgba(0,168,120,.10)', borderWidth:1.6, pointRadius:0, fill:'+1', tension:0},
+      {label:'基礎 180', data:FAN_MID, borderColor:'#daa520', backgroundColor:'rgba(218,165,32,.18)', borderWidth:2.2, pointRadius:0, fill:'+1', tension:0},
+      {label:'保守 120', data:FAN_LO, borderColor:'#c0392b', borderWidth:1.6, pointRadius:0, fill:false, tension:0, borderDash:[4,3]}
+    ]
+  },
+  options:{...noAnim, scales:{x:{ticks:{maxTicksLimit:7,font:{size:9}},grid:{display:false}}, y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}}}
+});
+
+const ctxPE = document.getElementById('chartPE').getContext('2d');
+const yMax = Math.max(...PE_ACTUAL.filter(v=>v!=null), ...PE_P1.filter(v=>v!=null)) * 1.05;
+const yMin = Math.min(...PE_ACTUAL.filter(v=>v!=null), ...PE_M1.filter(v=>v!=null)) * 0.92;
+new Chart(ctxPE, {
+  type:'line',
+  data:{
+    labels:PE_DATES,
+    datasets:[
+      {label:'+1σ (17.6x)', data:PE_P1, borderColor:'rgba(192,57,43,.55)', backgroundColor:'rgba(218,165,32,.10)', borderWidth:.9, pointRadius:0, fill:'+1', borderDash:[4,3]},
+      {label:'mean (9.6x)', data:PE_MEAN, borderColor:'rgba(94,13,46,.85)', backgroundColor:'rgba(94,13,46,.06)', borderWidth:1.2, pointRadius:0, fill:'+1'},
+      {label:'-1σ (1.6x)', data:PE_M1, borderColor:'rgba(0,135,90,.6)', borderWidth:.9, pointRadius:0, fill:false, borderDash:[4,3]},
+      {label:'股價', data:PE_ACTUAL, borderColor:'#1a0a2e', borderWidth:2, pointRadius:0, fill:false}
+    ]
+  },
+  options:{...noAnim, plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:8}}}, scales:{x:{ticks:{maxTicksLimit:8,font:{size:9}},grid:{display:false}}, y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}, suggestedMin:yMin, suggestedMax:yMax}}}
+});
+})();
+</script>
+
+</body>
+</html>

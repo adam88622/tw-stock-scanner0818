@@ -1,0 +1,92 @@
+{
+  "experiment": "#1 cross_stock_predictability (correlation-network proxy)",
+  "note": "Used correlation network as proxy for LLM semantic network (no Chinese news text available yet)",
+  "n_stocks": 197,
+  "date_range": [
+    "2025-04-02",
+    "2026-04-28"
+  ],
+  "ic_1d": [
+    {
+      "mean_ic": 0.0004960790956339516,
+      "ic_std": 0.1567714099010224,
+      "ir": 0.0031643467131357117,
+      "ic_t_stat": 0.044638603630329024,
+      "n_days": 199,
+      "signal": "neighbor_lag",
+      "horizon": "1d"
+    },
+    {
+      "mean_ic": 0.020684572417592466,
+      "ic_std": 0.18214046574272164,
+      "ir": 0.11356384937990653,
+      "ic_t_stat": 1.7556545060887467,
+      "n_days": 239,
+      "signal": "momentum_20d",
+      "horizon": "1d"
+    },
+    {
+      "mean_ic": 0.010122637290163583,
+      "ic_std": 0.1432235024697194,
+      "ir": 0.07067720810907924,
+      "ic_t_stat": 1.1352440612010604,
+      "n_days": 258,
+      "signal": "reversal_1d",
+      "horizon": "1d"
+    }
+  ],
+  "ic_5d": [
+    {
+      "mean_ic": 0.0029269223346969626,
+      "ic_std": 0.1635995369245377,
+      "ir": 0.017890773957673498,
+      "ic_t_stat": 0.2498310621137628,
+      "n_days": 195,
+      "signal": "neighbor_lag",
+      "horizon": "5d"
+    },
+    {
+      "mean_ic": 0.06490800879139788,
+      "ic_std": 0.1620794241974447,
+      "ir": 0.4004703811899475,
+      "ic_t_stat": 6.139094693800474,
+      "n_days": 235,
+      "signal": "momentum_20d",
+      "horizon": "5d"
+    },
+    {
+      "mean_ic": 0.0012068674917017365,
+      "ic_std": 0.15711975485811336,
+      "ir": 0.007681195103643049,
+      "ic_t_stat": 0.12241810563776262,
+      "n_days": 254,
+      "signal": "reversal_1d",
+      "horizon": "5d"
+    }
+  ],
+  "long_short": [
+    {
+      "sharpe_ls": 1.2818289829974712,
+      "mean_ann": 1.0275235458864636,
+      "win_rate": 0.49748743718592964,
+      "n_days": 199,
+      "signal": "neighbor_lag"
+    },
+    {
+      "sharpe_ls": 0.9134102141229314,
+      "mean_ann": 1.0177389712810974,
+      "win_rate": 0.5439330543933054,
+      "n_days": 239,
+      "signal": "momentum_20d"
+    },
+    {
+      "sharpe_ls": -1.3821542228531412,
+      "mean_ann": -0.9068904442521903,
+      "win_rate": 0.4806201550387597,
+      "n_days": 258,
+      "signal": "reversal_1d"
+    }
+  ],
+  "verdict": "PAPER_REJECTED",
+  "next_step": "Replace correlation with text-embedding-3-large on news headlines for full implementation"
+}

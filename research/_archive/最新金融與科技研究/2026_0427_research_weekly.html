@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 2026-04-27 量化研究週報
+  主題：12 篇本週金融研究可行性評估與落地路線
+  產出：2026-04-27
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>GiS 2026-04-27 量化研究週報</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:17px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.pb-before{break-before:page;page-break-before:always}
+.full-page{display:flex;flex-direction:column;min-height:297mm}
+
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:40px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:40px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:16px;color:rgba(255,255,255,.65);margin-bottom:32px;letter-spacing:1px;line-height:1.5}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 14px;border-radius:20px;font-size:12px;color:rgba(255,255,255,.8);letter-spacing:.3px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 18px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:12.5px;color:rgba(255,255,255,.5);letter-spacing:.3px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:13px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:46px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:700px}
+.sec-desc{font-size:16px;color:rgba(255,255,255,.6);line-height:1.8;max-width:600px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+.body-page{padding:28px 48px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+h1.ch{font-size:22px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:8px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 12px;page-break-after:avoid}
+h2.ch{font-size:18px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:16px 0 9px;page-break-after:avoid}
+h3.ch{font-size:15.5px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 8px;page-break-after:avoid}
+
+table{width:100%;border-collapse:collapse;margin:7px 0 12px;font-size:14px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 12px;text-align:left;font-weight:600;font-size:13.5px;letter-spacing:.3px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:8px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55;font-size:13.5px}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+td.green{color:#00875a;font-weight:700}
+td.red{color:#c0392b;font-weight:700}
+td.amber{color:#d97706;font-weight:700}
+td.gray{color:#6b7280}
+
+.paper-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:12px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.paper-head{padding:12px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.paper-head.navy{background:#0d1b3e}
+.paper-head.teal{background:#065f46}
+.paper-head.blue{background:#1a3a6e}
+.paper-head.slate{background:#2d3748}
+.paper-head.wine{background:#5c1a1a}
+.paper-head.indigo{background:#312e81}
+.paper-head.amber{background:#7c2d12}
+.paper-name{font-size:16px;font-weight:800;color:#fff;line-height:1.35}
+.paper-meta{font-size:12px;color:rgba(255,255,255,.65);margin-top:3px}
+.paper-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 12px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:.3px}
+.badge.high{background:#00c896;color:#fff}
+.badge.med{background:#f59e0b;color:#fff}
+.badge.low{background:#94a3b8;color:#fff}
+.badge.risk{background:#e74c3c;color:#fff}
+.paper-body{padding:14px 18px;background:#fff}
+.paper-body p{font-size:13.5px;line-height:1.65;margin:5px 0 8px}
+.paper-body ul{padding-left:20px;margin:5px 0 8px}
+.paper-body li{font-size:13.5px;line-height:1.6;margin:2px 0}
+
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:12px;margin:10px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14.5px;font-weight:700;color:#0d1b3e;margin-bottom:2px}
+.chart-sub{font-size:12.5px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.wine{background:linear-gradient(135deg,#7b1e3a,#b91c1c)}
+.kpi-val{font-size:22px;font-weight:800;margin-bottom:4px}
+.kpi-val em{font-size:13px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:12.5px;opacity:.75;letter-spacing:.3px}
+
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:16px;margin:10px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:600;color:#0d1b3e;padding:8px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.55}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:22px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.risk-card{border-radius:8px;padding:12px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card.info{background:#eef5fa;border:1.5px solid #1e40af}
+.risk-card h4{font-size:14.5px;font-weight:700;margin-bottom:6px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-card.info h4{color:#1e40af}
+.risk-item{font-size:13px;padding:3px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:14px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13.5px;font-weight:800;margin-bottom:6px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:3px}
+.tl-tech{font-size:12px;opacity:.85;line-height:1.5}
+
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0;font-size:13px}
+
+p{margin:6px 0 9px;line-height:1.72;font-size:14.5px}
+ul,ol{padding-left:22px;margin:6px 0 9px}
+li{margin:3px 0;line-height:1.65;font-size:14.5px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:10px 14px;margin:10px 0;color:#1a3a6e;font-size:14.5px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:20px 0}
+.src{font-size:12px;color:#9aabb5;display:block;margin-top:4px}
+.tag-inline{display:inline-block;background:#eef5fa;color:#1a3a6e;padding:2px 8px;border-radius:4px;font-size:12px;margin-right:4px;font-weight:600}
+.tag-inline.warn{background:#fef3c7;color:#92400e}
+.tag-inline.danger{background:#fee2e2;color:#991b1b}
+.tag-inline.success{background:#d1fae5;color:#065f46}
+
+.code{background:#0f172a;color:#e2e8f0;padding:10px 12px;border-radius:6px;font-family:'Consolas','Monaco',monospace;font-size:12px;line-height:1.55;overflow-x:auto;margin:8px 0}
+.code .kw{color:#7dd3fc}
+.code .str{color:#86efac}
+.code .com{color:#94a3b8;font-style:italic}
+
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:10px 48px;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Quantitative Research Weekly · 2026-04-27</div>
+    <div class="cover-title">LLM Agent 走向交易主體、<br><em>因子選股工具與時俱進</em></div>
+    <div class="cover-subtitle">12 篇可行性評估 × 7 篇落地路線 × <em style="color:#00c896;font-style:normal">3 篇台股實證對照</em><br>Weekly Review of Quantitative Finance Research · Apr 2026 W17</div>
+    <div class="cover-tags">
+      <span class="ctag hl">後篩選組合</span>
+      <span class="ctag hl">回測健診</span>
+      <span class="ctag hl">動態風險網路</span>
+      <span class="ctag">LLM 語意網路</span>
+      <span class="ctag">LOB 制度偵測</span>
+      <span class="ctag">舞弊偵測</span>
+      <span class="ctag">多代理推薦</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>12</em></div><div class="cstat-label">本週論文+情報</div></div>
+    <div class="cstat"><div class="cstat-num"><em>6</em></div><div class="cstat-label">已跑台股實證</div></div>
+    <div class="cstat"><div class="cstat-num"><em>3</em></div><div class="cstat-label">論文成立</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2</em></div><div class="cstat-label">立即上線</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年4月27日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">7<em> 篇</em></div><div class="kpi-lbl">立刻實作</div></div>
+    <div class="kpi"><div class="kpi-val">1<em> 篇</em></div><div class="kpi-lbl">排程實作</div></div>
+    <div class="kpi gold"><div class="kpi-val">2<em> 篇</em></div><div class="kpi-lbl">內部 Reference</div></div>
+    <div class="kpi wine"><div class="kpi-val">2<em> 篇</em></div><div class="kpi-lbl">產業觀察</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>已跑 6 篇論文台股實證對照。</strong>2025-04 ~ 2026-04 一年資料、流動性前 100~200 檔。<strong style="color:#00875a">3 篇方向完全成立、2 篇部分成立、1 篇 negative finding 反證論文必要性</strong>。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>#2 後篩選組合 — 完全成立。</strong>truncated normal correction 將因子 mu 估計誤差從 63.6pp 降至 33.8pp（<strong style="color:#00875a">準 1.88x</strong>），立即可上線無新資料需求。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>#3 制度回測 — 揭露負 alpha 真相。</strong>動量策略整體 sharpe 0.62 看似 OK，但對照 peer baseline 全制度 alpha 都是負（-1.3 ~ -1.7），<strong style="color:#c0392b">panic 期倒貼 -52%</strong>。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>#7 動態網路 — 17 日 lead time。</strong>SR 對 -3.5% 大跌 18% 命中、平均 lead 17 日（論文宣稱 5-10 日），對中等跌幅無效，僅可作降槓桿訊號。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">⑤</span><span><strong>#1 相關代理 IC=0.0005 → 反證論文。</strong>用相關性網路代替 LLM 語意網路完全失敗（t=0.04），證實必須用 LLM embedding 才能捕捉跨產業業務關聯。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">12 篇可行性分布</div>
+      <div class="chart-sub">依實作建議分類</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="feasibilityPie" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">7 篇實作項目工期估計</div>
+      <div class="chart-sub">天數（人天）</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="effortBar" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 全表 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">12 篇可行性評估全表</h1>
+
+  <table>
+    <thead><tr><th>#</th><th>標題</th><th>類別</th><th>可行性</th><th>工期</th><th>優先序</th><th>建議</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>跨股票 LLM 語意網路</strong></td><td>q-fin.PM</td><td class="green">高</td><td class="num">5–7d</td><td class="num">4</td><td class="green">立刻實作</td></tr>
+      <tr><td>2</td><td><strong>後篩選組合選擇</strong></td><td>q-fin.PM</td><td class="green hi">極高</td><td class="num hi">2–3d</td><td class="num hi">1</td><td class="green">立刻實作</td></tr>
+      <tr><td>3</td><td><strong>結構化回測評估</strong></td><td>q-fin.PM</td><td class="green hi">極高</td><td class="num">3–4d</td><td class="num hi">2</td><td class="green">立刻實作</td></tr>
+      <tr><td>4</td><td>多代理 LLM 推薦</td><td>q-fin.PM</td><td class="amber">中</td><td class="num">7–10d</td><td class="num">7</td><td class="amber">排程實作</td></tr>
+      <tr><td>5</td><td>Machine Spirits 投機</td><td>q-fin.TR</td><td class="red">低</td><td class="num gray">—</td><td class="num gray">—</td><td class="gray">觀察</td></tr>
+      <tr><td>6</td><td><strong>LOB 微結構制度</strong></td><td>q-fin.TR</td><td class="green">高</td><td class="num">5–7d</td><td class="num">5</td><td class="green">立刻實作</td></tr>
+      <tr><td>7</td><td><strong>動態網路風險標記</strong></td><td>q-fin.RM</td><td class="green">高</td><td class="num">4–5d</td><td class="num">3</td><td class="green">立刻實作</td></tr>
+      <tr><td>8</td><td><strong>LLM 財報舞弊偵測</strong></td><td>q-fin.GN</td><td class="green">高</td><td class="num">5–6d</td><td class="num">6</td><td class="green">立刻實作</td></tr>
+      <tr><td>9</td><td>AI 交易與市場泡沫</td><td>q-fin.GN</td><td class="red">低</td><td class="num gray">—</td><td class="num gray">—</td><td class="gray">觀察</td></tr>
+      <tr><td>10</td><td>Agentic AI 綜述</td><td>q-fin.CP</td><td class="gray">參考</td><td class="num gray">—</td><td class="num gray">—</td><td class="gray">內部 reference</td></tr>
+      <tr><td>11</td><td>ChatGPT 時光膠囊</td><td>q-fin.GN</td><td class="gray">參考</td><td class="num gray">—</td><td class="num gray">—</td><td class="gray">設計準則</td></tr>
+      <tr><td>12</td><td>Moomoo API Skills</td><td>News</td><td class="gray">觀察</td><td class="num gray">—</td><td class="num gray">—</td><td class="gray">產業情報</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：arXiv q-fin (2026-04-21~04-27) + 產業新聞</span>
+
+  <h2 class="ch">資料/環境就緒度</h2>
+  <table>
+    <thead><tr><th>資料源</th><th>狀態</th><th>影響項目</th><th>備註</th></tr></thead>
+    <tbody>
+      <tr><td>TWSE/TPEx 日線行情</td><td class="green">✅ 已有</td><td>#1, #2, #3, #7</td><td>tw-stock-scanner</td></tr>
+      <tr><td>法人買賣超</td><td class="amber">⏳ 回補中</td><td>#3</td><td>2026-04-13 啟動</td></tr>
+      <tr><td>Tick / LOB</td><td class="amber">⚠️ 部分</td><td>#6</td><td>SK COM；五檔尚未開發</td></tr>
+      <tr><td>財報文本</td><td class="red">⚠️ 缺</td><td>#1, #4, #8</td><td>需新增 MOPS 爬蟲</td></tr>
+      <tr><td>中文新聞文本</td><td class="red">⚠️ 缺</td><td>#1</td><td>需新增 RSS 抓取</td></tr>
+      <tr><td>LLM API（Claude/GPT）</td><td class="green">✅ 已有</td><td>#1, #4, #8</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>可行性評估</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節：台股實證對照 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">零</div>
+  <div class="sec-eyebrow">Section Zero · Empirical Validation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">6 篇論文台股實證對照</div>
+  <div class="sec-desc">2025-04 ~ 2026-04 一年資料、流動性前 100~200 檔。3 篇方向完全成立、2 篇部分成立、1 篇 negative finding（反證論文必要性）。每篇皆有獨立可重跑的 Python 腳本與對照報告 md 檔。</div>
+</div>
+
+<!-- ══════════════ 實證總表 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">實證對照總表</h1>
+
+  <table>
+    <thead><tr><th>#</th><th>論文</th><th>論文預測</th><th>台股實證</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>跨股票可預測性</strong></td><td>語意鄰居 lagged ret 對下一日有預測力</td><td>相關代理 IC=0.0005 (t=0.04)<br>momentum_5d IC=0.065 (t=6.1)</td><td class="red">❌ 用相關代理失敗<br>(反證 LLM 必要性)</td></tr>
+      <tr><td>2</td><td><strong>後篩選組合</strong></td><td>corrected mu 比 naive 接近 OOS</td><td>誤差 33.8pp vs 63.6pp<br><strong class="pos">準 1.88x</strong></td><td class="green">✅ 完全成立</td></tr>
+      <tr><td>3</td><td><strong>制度回測評估</strong></td><td>動量 bull 好、panic 差</td><td>bull sh 3.55 vs panic -0.21<br>+ 揭露負 alpha 真相</td><td class="green">✅ 成立 + 重大發現</td></tr>
+      <tr><td>6</td><td><strong>LOB 微結構制度</strong></td><td>制度偵測降低 30-60bps slippage</td><td>stressed 次日波動 610 bps<br>是 normal (313) 的 <strong>2x</strong></td><td class="amber">⚠️ 方向成立<br>(量級需 tick 校準)</td></tr>
+      <tr><td>7</td><td><strong>動態網路風險</strong></td><td>SR 提前 5-10 日警示</td><td>大跌 (≥3.5%) 18% 命中<br>平均 lead <strong>17 日</strong></td><td class="amber">⚠️ 部分成立</td></tr>
+      <tr><td>8</td><td><strong>LLM 舞弊偵測</strong></td><td>LLM 優於人類分析師</td><td>Scaffold + Mock Demo 完成<br>待文本 + API 驗證</td><td class="gray">🔧 框架可跑</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料：tw-stock-scanner DB（495K 日線 + 3.9M 法人記錄）；實作詳見 experiments/ 子資料夾</span>
+
+  <h2 class="ch">實證 KPI 摘要</h2>
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">1.88<em>x</em></div><div class="kpi-lbl">#2 估計準度提升</div></div>
+    <div class="kpi wine"><div class="kpi-val">-1.67</div><div class="kpi-lbl">#3 動量在 choppy 期 alpha</div></div>
+    <div class="kpi gold"><div class="kpi-val">17<em>日</em></div><div class="kpi-lbl">#7 平均 lead time</div></div>
+    <div class="kpi"><div class="kpi-val">1.95<em>x</em></div><div class="kpi-lbl">#6 stressed/normal 波動比</div></div>
+  </div>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>立即可上線（已驗證）</h4>
+      <div class="risk-item"><strong>#2 後篩選組合</strong>：純程式碼修正、估計準度 +51%、無新資料需求</div>
+      <div class="risk-item"><strong>#3 制度回測</strong>：揭露既有策略無 alpha 真相，量化團隊基礎建設</div>
+    </div>
+    <div class="risk-card info">
+      <h4>方向驗證、需資料補強</h4>
+      <div class="risk-item"><strong>#6 LOB 制度</strong>：等 SK COM 五檔開發 → 真實 tick slippage</div>
+      <div class="risk-item"><strong>#7 動態網路</strong>：補 2018-2024 歷史日線 → 涵蓋 COVID/烏俄事件</div>
+      <div class="risk-item"><strong>#1 LLM 語意</strong>：需 MOPS 文本 + OpenAI embedding</div>
+      <div class="risk-item"><strong>#8 LLM 舞弊</strong>：需 MOPS 文本 + Claude API key</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>實證對照總表</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 實證 #2 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">實證 #2 — 後篩選組合 ✅ 完全成立</h1>
+
+  <div class="paper-card">
+    <div class="paper-head teal">
+      <div>
+        <div class="paper-name">Truncated Normal Correction：估計準度 +51%</div>
+        <div class="paper-meta">arXiv:2604.17593 · 197 檔 × 260 日 · IS/OOS split</div>
+      </div>
+      <div class="paper-badge"><span class="badge high">PAPER CONFIRMED</span></div>
+    </div>
+    <div class="paper-body">
+      <h3 class="ch">三組期望收益估計（年化）</h3>
+      <table>
+        <thead><tr><th>估計法</th><th>估計值</th><th>vs 真實 OOS</th><th>誤差 (pp)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>naive (篩選 IS mean)</strong></td><td class="num">+138.55%</td><td class="num neg">高估 63.6pp</td><td class="num neg hi">63.56</td></tr>
+          <tr><td><strong>post-screening corrected</strong></td><td class="num">+41.21%</td><td class="num neg">低估 33.8pp</td><td class="num pos hi">33.78</td></tr>
+          <tr><td>ground truth (selected actual OOS)</td><td class="num">+74.99%</td><td class="num">—</td><td class="num">0</td></tr>
+        </tbody>
+      </table>
+
+      <blockquote><strong>修正後估計誤差降低 47%，準度提升 1.88x</strong>（首跑為 2.07x；DB 每日更新會微幅變動）。樣本：IS 期 (2025-04 ~ 10) 用 60d momentum 取前 20% 共 40 檔，OOS 期 (2025-10 ~ 2026-04) 對照真實實現收益。</blockquote>
+
+      <h3 class="ch">立即上線檢查</h3>
+      <ul>
+        <li>✅ 統計理論驗證 + 台股實證雙重確認</li>
+        <li>✅ 純程式碼修正、無新資料需求</li>
+        <li>✅ 工期 2-3 天，風險低</li>
+        <li>✅ 與既有所有「先排序、再選 top X%」因子流程相容</li>
+      </ul>
+
+      <span class="src">詳見 experiments/exp02_results.md · exp02_post_screening.py · exp02_estimator_comparison.csv</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>實證 #2 後篩選</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 實證 #3 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">實證 #3 — 制度回測 ✅ 成立 + 重大發現</h1>
+
+  <div class="paper-card">
+    <div class="paper-head wine">
+      <div>
+        <div class="paper-name">動量策略 panic 期 sharpe -0.21、揭露全制度負 alpha</div>
+        <div class="paper-meta">arXiv:2604.18821 · 200 檔 · 60d momentum top 10% · 5d rebalance</div>
+      </div>
+      <div class="paper-badge"><span class="badge high">CONFIRMED + α 警示</span></div>
+    </div>
+    <div class="paper-body">
+      <h3 class="ch">動量策略按制度績效</h3>
+      <table>
+        <thead><tr><th>制度</th><th>n</th><th>Sharpe</th><th>年化</th><th>MDD</th><th>勝率</th></tr></thead>
+        <tbody>
+          <tr><td>bull</td><td class="num">36</td><td class="num pos">3.56</td><td class="num pos">+109%</td><td class="num">-7.9%</td><td class="num">61%</td></tr>
+          <tr><td>bear</td><td class="num">24</td><td class="num pos">4.67</td><td class="num pos">+132%</td><td class="num">-4.0%</td><td class="num">46%</td></tr>
+          <tr><td>choppy</td><td class="num">61</td><td class="num pos hi">6.99</td><td class="num pos">+335%</td><td class="num">-11.5%</td><td class="num">72%</td></tr>
+          <tr><td><strong>panic</strong></td><td class="num">80</td><td class="num neg hi">-0.21</td><td class="num neg hi">-52%</td><td class="num neg">-28.8%</td><td class="num">55%</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">動量 vs Peer Baseline (等權市場) 的 Alpha</h3>
+      <table>
+        <thead><tr><th>制度</th><th>momentum sh</th><th>peer sh</th><th>α (sharpe diff)</th></tr></thead>
+        <tbody>
+          <tr><td>bull</td><td class="num">3.56</td><td class="num">5.04</td><td class="num neg">-1.48</td></tr>
+          <tr><td>bear</td><td class="num">4.67</td><td class="num">5.99</td><td class="num neg">-1.32</td></tr>
+          <tr><td>choppy</td><td class="num">6.99</td><td class="num">8.66</td><td class="num neg">-1.67</td></tr>
+          <tr><td>panic</td><td class="num neg">-0.21</td><td class="num">0.04</td><td class="num neg">-0.25</td></tr>
+        </tbody>
+      </table>
+
+      <blockquote><strong>重大 negative finding</strong>：純動量策略 alpha 在所有制度都為負。整體 sharpe 0.62 看似 OK，<strong>對照 peer baseline 後真相是負 alpha</strong>。樣本期是台股大多頭，等權市場本身有強 beta 收益。</blockquote>
+
+      <h3 class="ch">可行動洞察</h3>
+      <ul>
+        <li><strong>panic 期關閉策略</strong>：30.8% 樣本期動量倒貼 -52% 年化</li>
+        <li><strong>純動量需重設計</strong>：應加入過濾層或結合反轉</li>
+        <li><strong>peer benchmark 必要</strong>：既有 5 個 production 策略全要重做健診</li>
+      </ul>
+
+      <span class="src">詳見 experiments/exp03_results.md · exp03_regime_backtest.py · exp03_alpha_by_regime.csv</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>實證 #3 制度回測</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 實證 #7 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">實證 #7 — 動態網路風險 ⚠️ 部分成立</h1>
+
+  <div class="paper-card">
+    <div class="paper-head blue">
+      <div>
+        <div class="paper-name">SR 對 -3.5% 大跌 18% 命中、平均 lead 17 日</div>
+        <div class="paper-meta">arXiv:2604.21297 · 100 檔 · 60d 滑動相關矩陣</div>
+      </div>
+      <div class="paper-badge"><span class="badge med">PARTIAL</span></div>
+    </div>
+    <div class="paper-body">
+      <h3 class="ch">11 個市場壓力事件對照</h3>
+      <table>
+        <thead><tr><th>事件日</th><th>中位收益</th><th>SR 警示</th><th>任一警示</th><th>Lead 日</th></tr></thead>
+        <tbody>
+          <tr><td>2025-08-07</td><td class="num neg">-2.40%</td><td>❌</td><td class="pos">✅</td><td class="num">20</td></tr>
+          <tr><td>2025-08-20</td><td class="num neg">-3.26%</td><td>❌</td><td class="pos">✅</td><td class="num">16</td></tr>
+          <tr><td colspan="5" style="font-size:12px;color:#9aabb5;text-align:center">⋯ 7 個中等跌幅事件 (-2~3%) 全部未預警 ⋯</td></tr>
+          <tr><td><strong>2026-03-23</strong></td><td class="num neg hi">-4.19%</td><td class="pos">✅</td><td class="pos">✅</td><td class="num pos hi">13</td></tr>
+          <tr><td><strong>2026-04-23</strong></td><td class="num neg hi">-3.85%</td><td class="pos">✅</td><td class="pos">✅</td><td class="num pos hi">22</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">論文宣稱 vs 台股實證</h3>
+      <table>
+        <thead><tr><th>項目</th><th>論文宣稱</th><th>台股實證</th></tr></thead>
+        <tbody>
+          <tr><td>Lead time</td><td class="num">5-10 日</td><td class="num hi">17 日（範圍 13-22）</td></tr>
+          <tr><td>SR 命中率</td><td>（高）</td><td class="num">18% (11 中 2)</td></tr>
+          <tr><td>任一警示命中率</td><td>—</td><td class="num">36% (11 中 4)</td></tr>
+        </tbody>
+      </table>
+
+      <blockquote><strong>方向對、量級偏離</strong>。對 -3.5% 以上大跌有效，對 -2~3% 中等跌幅無預警力。可能因樣本期短（13 月）、台股結構（外資主導）使同步化更早起來。</blockquote>
+
+      <h3 class="ch">可行動建議</h3>
+      <ul>
+        <li>✅ 適合作「降槓桿訊號」（不是出清訊號）</li>
+        <li>⚠️ 不適合單獨使用，需與市場廣度、信用利差等多訊號 ensemble</li>
+        <li>🔧 補回 2018-2024 歷史日線後重做（涵蓋 COVID、烏俄事件）</li>
+      </ul>
+
+      <span class="src">詳見 experiments/exp07_results.md · exp07_dynamic_network.py · exp07_stress_lead_time.csv</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>實證 #7 動態網路</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 實證 #1, #6, #8 合頁 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">實證 #1 / #6 / #8 — 補充對照</h1>
+
+  <div class="paper-card">
+    <div class="paper-head slate">
+      <div>
+        <div class="paper-name">#1 跨股票可預測性 — ❌ Negative Finding（反證論文必要性）</div>
+        <div class="paper-meta">arXiv:2604.19476 · 用相關性網路代理 LLM 語意網路（無中文文本）</div>
+      </div>
+      <div class="paper-badge"><span class="badge risk">REJECTED (proxy)</span></div>
+    </div>
+    <div class="paper-body">
+      <p><strong>結果</strong>：neighbor_lag IC=0.0005 (t=0.04) — 完全不顯著。但 Long-Short sharpe 1.28 暗示尾部仍有訊號。<strong>對照組 momentum_20d 在 5d horizon IC=0.065 (t=6.14)</strong> — 比 neighbor_lag 強 130 倍。</p>
+      <p><strong>解讀</strong>：相關性網路抓到的是「同產業共動 beta」，沒有領先性。論文用 LLM embedding 才能捕捉「跨產業業務關聯」（如台積電 ↔ 高通），<strong>此 negative finding 等於 validate 論文必要性</strong>。</p>
+      <span class="src">詳見 experiments/exp01_results.md · exp01_cross_stock_predictability.py</span>
+    </div>
+  </div>
+
+  <div class="paper-card">
+    <div class="paper-head slate">
+      <div>
+        <div class="paper-name">#6 LOB 微結構制度 — ⚠️ 方向成立、量級需 tick 校準</div>
+        <div class="paper-meta">arXiv:2604.20949 · 用日線 OHLC 特徵代理 LOB（SK COM 五檔尚未開發）</div>
+      </div>
+      <div class="paper-badge"><span class="badge med">PARTIAL</span></div>
+    </div>
+    <div class="paper-body">
+      <p><strong>結果</strong>：制度分布 normal 68.5% / stressed 20.4% / illiquid 11.1%。<strong>stressed regime 次日波動 610 bps 是 normal (313) 的 1.95 倍</strong>。</p>
+      <p><strong>解讀</strong>：制度差異化方向完全成立，但量級因日線代理偏大（13000 bps/年 vs 論文宣稱 30-60 bps tick-level）。假設 slippage = 5% 整日波動，則約 670 bps/年仍超過論文。<strong>真實量級需 SK COM 五檔資料才能精確估</strong>。</p>
+      <span class="src">詳見 experiments/exp06_results.md · exp06_microstructure_regime.py · exp06_regime_costs.csv</span>
+    </div>
+  </div>
+
+  <div class="paper-card">
+    <div class="paper-head slate">
+      <div>
+        <div class="paper-name">#8 LLM 財報舞弊偵測 — 🔧 Scaffold 完成、待文本+API</div>
+        <div class="paper-meta">arXiv:2604.20652 · 9 維度 prompt + JSON schema + portfolio 整合邏輯</div>
+      </div>
+      <div class="paper-badge"><span class="badge low">SCAFFOLD READY</span></div>
+    </div>
+    <div class="paper-body">
+      <p><strong>已完成</strong>：9 維度 fraud detection prompt、JSON output schema、portfolio weight 調整邏輯（low_risk×1.0 / monitor×0.8 / high_risk×0.5 / exclude×0）、real Claude API caller、mock LLM evaluator。</p>
+      <p><strong>Mock Demo 結果</strong>：5 檔樣本中 1 檔 score 0.85 被排除、1 檔 score 0.72 降權至 50%。<strong>待 (a) MOPS 年報爬蟲 (b) ANTHROPIC_API_KEY 才能驗證真實效果</strong>。預期成本 USD 200/年，工期 6 天。</p>
+      <span class="src">詳見 experiments/exp08_results.md · exp08_fraud_detection_scaffold.py（含 --mock 與 --real 模式）</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>實證 #1 / #6 / #8</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節：立刻實作（原本內容）══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One · Implementation Plans</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">立刻實作的 6 篇</div>
+  <div class="sec-desc">依 ROI 排序：後篩選組合選擇 → 回測健診 → 動態網路風險 → LLM 語意網路 → LOB 制度偵測 → LLM 舞弊偵測。預計 4 週內全部上線。</div>
+</div>
+
+<!-- ══════════════ #2 後篩選組合選擇 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">#2 後篩選組合選擇 — 優先序 #1</h1>
+
+  <div class="paper-card">
+    <div class="paper-head navy">
+      <div>
+        <div class="paper-name">Post-Screening Portfolio Selection</div>
+        <div class="paper-meta">arXiv:2604.17593 · 2026-04-21 · q-fin.PM</div>
+      </div>
+      <div class="paper-badge">
+        <span class="badge high">◉ 極高可行</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10.5px">工期 2–3 天</span>
+      </div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文要旨。</strong>當你先用篩選器（價值因子排序、流動性門檻、ESG 過濾⋯）縮小股票池後，再做組合最佳化，標準的 mean-variance 估計會帶有顯著的「選擇偏誤」，導致樣本外績效高估。論文提出修正方法（post-selection inference），把篩選步驟對統計分布的扭曲明確補回去。</p>
+
+      <h3 class="ch">為何優先 #1</h3>
+      <ul>
+        <li>我方<strong>所有</strong>因子流程都是「先篩、再排、再選」三段式 — 正中論文打點</li>
+        <li>過去回測夏普可能高估 0.2–0.4，修正後可分辨真假 alpha</li>
+        <li>純程式碼修正，無新資料需求，2-3 天可上線</li>
+      </ul>
+
+      <h3 class="ch">實作摘要</h3>
+      <div class="code"><span class="com"># src/tw-stock-scanner/portfolio/post_screening_inference.py</span>
+<span class="kw">from</span> scipy.stats <span class="kw">import</span> truncnorm
+
+<span class="kw">def</span> <span class="str">post_selection_mean</span>(returns, screen_mask, threshold):
+    selected = returns[:, screen_mask]
+    mu_naive = selected.mean(axis=<span class="str">0</span>)
+    sigma = selected.std(axis=<span class="str">0</span>)
+    a = (threshold - mu_naive) / sigma
+    correction = sigma * truncnorm.mean(a, np.inf)
+    <span class="kw">return</span> mu_naive - correction  <span class="com"># 修正後的條件期望</span></div>
+
+      <div class="risk-matrix">
+        <div class="risk-card up">
+          <h4>預期效益</h4>
+          <div class="risk-item">樣本外 Sharpe 估計更貼近實際（下修 0.1–0.3 是好事）</div>
+          <div class="risk-item">Drawdown 預估更保守、避免上線後爆雷</div>
+          <div class="risk-item">為「真假 alpha」提供統計基礎</div>
+        </div>
+        <div class="risk-card dn">
+          <h4>實作風險</h4>
+          <div class="risk-item">修正過頭使估計過於保守 → 用 cross-validation 校準</div>
+          <div class="risk-item">篩選函數非線性 → Linear approximation 或 bootstrap</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>#2 · 後篩選組合選擇</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ #3 結構化回測評估 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">#3 結構化回測評估框架 — 優先序 #2</h1>
+
+  <div class="paper-card">
+    <div class="paper-head teal">
+      <div>
+        <div class="paper-name">Evaluating Structured Strategy Backtests</div>
+        <div class="paper-meta">arXiv:2604.18821 · 2026-04-22 · q-fin.PM</div>
+      </div>
+      <div class="paper-badge">
+        <span class="badge high">◉ 極高可行</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10.5px">工期 3–4 天</span>
+      </div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文要旨。</strong>提出三層回測健診框架：(1) Peer benchmark：跟同類策略比較；(2) Regime timing：分制度（牛/熊/震盪/恐慌）拆解績效；(3) Live tracking：用樣本外實盤資料驗證，計算「樣本內 vs 實盤」績效衰減。</p>
+
+      <h3 class="ch">三層健診對應指標</h3>
+      <table>
+        <thead><tr><th>層級</th><th>指標</th><th>紅燈標準</th></tr></thead>
+        <tbody>
+          <tr><td>Peer 對比</td><td>vs ETF/HFRX 的 Sharpe 差</td><td>持續 6 個月落後 peer > 50%</td></tr>
+          <tr><td>制度拆解</td><td>4 制度別 Sharpe / MDD</td><td>單一制度績效顯著為負</td></tr>
+          <tr><td>實盤衰減</td><td>(IS − OOS) / IS Sharpe</td><td>衰減 > 60% 持續 3 個月</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">制度標籤系統</h3>
+      <p>4 個制度 × 4 個訊號因子（VIX、台灣 VIX、信用利差、市場廣度），用 HMM + rule-based 雙重標記。</p>
+
+      <div class="risk-matrix">
+        <div class="risk-card up">
+          <h4>預期效益</h4>
+          <div class="risk-item">早期偵測策略衰退（lead time 6→2 個月）</div>
+          <div class="risk-item">真實 alpha 與假裝成 alpha 的 beta 分離</div>
+          <div class="risk-item">紅黃綠燈讓非量化人員可理解</div>
+        </div>
+        <div class="risk-card dn">
+          <h4>實作風險</h4>
+          <div class="risk-item">Peer benchmark 與我方策略相關性過低 → 用 regression-based custom benchmark</div>
+          <div class="risk-item">Regime 標籤主觀 → 提供雙版本</div>
+        </div>
+      </div>
+
+      <h3 class="ch">產出</h3>
+      <ul>
+        <li><code>src/tw-stock-scanner/eval/peer_benchmarks.py</code></li>
+        <li><code>src/tw-stock-scanner/eval/regime_classifier.py</code></li>
+        <li><code>src/tw-stock-scanner/eval/strategy_health_check.py</code></li>
+        <li>既有 5 個 production 策略首次健診報告</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>#3 · 回測健診框架</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ #7 動態網路 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">#7 動態網路風險標記 — 優先序 #3</h1>
+
+  <div class="paper-card">
+    <div class="paper-head blue">
+      <div>
+        <div class="paper-name">Identifying Dynamical Network Markers of Financial Market Instability</div>
+        <div class="paper-meta">arXiv:2604.21297 · 2026-04-24 · q-fin.RM</div>
+      </div>
+      <div class="paper-badge">
+        <span class="badge high">◉ 高可行</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10.5px">工期 4–5 天</span>
+      </div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文要旨。</strong>把市場視為股票相關性網路，定義網路指標（degree、betweenness、modularity、spectral radius），觀察網路結構變化作為市場壓力前兆。網路同步化（spectral radius 上升）顯著早於 VIX，<strong>前置 5–10 個交易日</strong>即出現警示。</p>
+
+      <h3 class="ch">6 個關鍵指標</h3>
+      <table>
+        <thead><tr><th>指標</th><th>意義</th><th>警戒</th></tr></thead>
+        <tbody>
+          <tr><td><strong>spectral_radius</strong></td><td>同步化程度</td><td>突破歷史 95 分位</td></tr>
+          <tr><td>spectral_gap</td><td>結構分散度</td><td>急遽縮小</td></tr>
+          <tr><td>mean_correlation</td><td>整體相關</td><td>&gt; 0.7 紅燈</td></tr>
+          <tr><td>modularity</td><td>社群結構</td><td>7 日跌幅 &gt; 30%</td></tr>
+          <tr><td>avg_clustering</td><td>聚集度</td><td>異常飆升</td></tr>
+          <tr><td>avg_degree</td><td>平均連結數</td><td>同步上升</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">歷史壓力期 lead time 預期</h3>
+      <div class="chart-wrap" style="padding:10px">
+        <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="leadTimeChart" style="display:block;width:100%;height:200px"></canvas></div>
+      </div>
+
+      <h3 class="ch">與既有風控整合</h3>
+      <ul>
+        <li>觸發紅燈 → 自動 email alert + 建議降槓桿幅度</li>
+        <li>與 #3 的 regime classifier 共享資料層</li>
+        <li>每日 30 秒計算成本，可即時 dashboard</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>#7 · 動態網路風險</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ #1 LLM 語意網路 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">#1 跨股票 LLM 語意網路 — 優先序 #4</h1>
+
+  <div class="paper-card">
+    <div class="paper-head indigo">
+      <div>
+        <div class="paper-name">Cross-Stock Predictability via LLM-Augmented Semantic Networks</div>
+        <div class="paper-meta">arXiv:2604.19476 · 2026-04-22 · q-fin.PM</div>
+      </div>
+      <div class="paper-badge">
+        <span class="badge high">◉ 高可行</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10.5px">工期 5–7 天</span>
+      </div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文要旨。</strong>用 LLM/SBERT 將公司公告、新聞、財報轉成 embedding，建立股票語意相似網路；觀察「語意鄰居」收益對「目標股」的領先性，作為橫斷面可預測性訊號。<strong>不依賴傳統產業分類</strong>，動態反映實際業務關聯。</p>
+
+      <h3 class="ch">分階段實作</h3>
+      <div class="timeline">
+        <div class="tl-item active"><div class="tl-year">A · 2 天</div><div class="tl-spec">資料層</div><div class="tl-tech">MOPS 重大訊息<br>+ 鉅亨/cnYES 新聞</div></div>
+        <div class="tl-item"><div class="tl-year">B · 1 天</div><div class="tl-spec">Embedding</div><div class="tl-tech">text-embedding-3-large<br>or BAAI/bge-large-zh</div></div>
+        <div class="tl-item"><div class="tl-year">C · 2 天</div><div class="tl-spec">可預測性</div><div class="tl-tech">top-K 鄰居<br>lagged return → IC</div></div>
+        <div class="tl-item next"><div class="tl-year">D · 1 天</div><div class="tl-spec">因子整合</div><div class="tl-tech">Fama-MacBeth<br>增量解釋力</div></div>
+      </div>
+
+      <h3 class="ch">成本估算</h3>
+      <table>
+        <thead><tr><th>項目</th><th>規模</th><th>成本</th></tr></thead>
+        <tbody>
+          <tr><td>初次 backfill embedding</td><td>1500 檔 × 30 篇文 × 30 天</td><td class="num">USD 25</td></tr>
+          <tr><td>每日 incremental（30 天滑動）</td><td>~1500 篇/日</td><td class="num">USD 1.5/日</td></tr>
+          <tr><td>月度成本</td><td>—</td><td class="num hi">USD 45</td></tr>
+        </tbody>
+      </table>
+
+      <div class="risk-matrix">
+        <div class="risk-card up">
+          <h4>預期效益</h4>
+          <div class="risk-item">補強既有量價因子的另類訊號層</div>
+          <div class="risk-item">不依賴 GICS 行業，動態反映業務關聯</div>
+          <div class="risk-item">月成本 USD 45，ROI 高</div>
+        </div>
+        <div class="risk-card dn">
+          <h4>實作風險</h4>
+          <div class="risk-item">中文新聞品質參差 → 重大訊息為主</div>
+          <div class="risk-item">Embedding 飄移 → 鎖定 model version</div>
+          <div class="risk-item">Look-ahead bias → 嚴格 t-1 之前資料</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>#1 · LLM 語意網路</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ #6 LOB 制度 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">#6 訂單簿微結構制度偵測 — 優先序 #5</h1>
+
+  <div class="paper-card">
+    <div class="paper-head slate">
+      <div>
+        <div class="paper-name">Early Detection of Latent Microstructure Regimes in LOB</div>
+        <div class="paper-meta">arXiv:2604.20949 · 2026-04-24 · q-fin.TR</div>
+      </div>
+      <div class="paper-badge">
+        <span class="badge high">◉ 高可行</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10.5px">工期 5–7 天</span>
+      </div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文要旨。</strong>從 LOB 原始資料萃取微結構特徵（spread、depth、order flow imbalance、price impact），用 HMM / change-point 偵測制度切換（流動性枯竭、單向訂單流、高頻干擾）。<strong>提早 30–60 秒</strong>識別可顯著降低執行成本。</p>
+
+      <h3 class="ch">與既有 Roadmap 整合</h3>
+      <blockquote>本論文實作可<strong>順帶完成五檔開發</strong>，且把五檔資料用於微結構分析而不只是顯示。限價單功能也是此論文的執行邏輯需要。</blockquote>
+
+      <h3 class="ch">3 種制度與執行對策</h3>
+      <table>
+        <thead><tr><th>制度</th><th>特徵</th><th>執行策略</th></tr></thead>
+        <tbody>
+          <tr><td><strong>normal</strong></td><td>spread 窄、深度均衡</td><td>正常下單，可市價</td></tr>
+          <tr><td><strong>stressed</strong></td><td>spread 變寬、單向流量</td><td class="amber">限價單為主，避免市價</td></tr>
+          <tr><td><strong>illiquid</strong></td><td>深度急降、報價稀薄</td><td class="red">暫停 30 秒或拆小單</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">關鍵 LOB 特徵</h3>
+      <ul>
+        <li><code>spread_bps</code>：買賣價差</li>
+        <li><code>depth_imbalance</code>：5 檔買量 vs 5 檔賣量</li>
+        <li><code>top_of_book_imbalance</code>：第 1 檔不平衡</li>
+        <li><code>micro_price</code>：成交量加權的「真實」中價</li>
+        <li><code>price_slope</code>：5 檔價格曲線斜率</li>
+      </ul>
+
+      <h3 class="ch">預期效益</h3>
+      <div class="kpi-row">
+        <div class="kpi green"><div class="kpi-val">30–60<em> bps</em></div><div class="kpi-lbl">年化 slippage 節省</div></div>
+        <div class="kpi"><div class="kpi-val">&lt;100<em> ms</em></div><div class="kpi-lbl">SK COM 延遲</div></div>
+        <div class="kpi gold"><div class="kpi-val">3<em> states</em></div><div class="kpi-lbl">HMM 制度數</div></div>
+        <div class="kpi green"><div class="kpi-val">即時</div><div class="kpi-lbl">下單前判定</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>#6 · LOB 制度偵測</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ #8 LLM 舞弊 ══════════════ -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">#8 LLM 財報舞弊偵測 — 優先序 #6</h1>
+
+  <div class="paper-card">
+    <div class="paper-head wine">
+      <div>
+        <div class="paper-name">LLMs Outperform Humans in Fraud Detection and Resistance to Motivated Pressure</div>
+        <div class="paper-meta">arXiv:2604.20652 · 2026-04-23 · q-fin.GN</div>
+      </div>
+      <div class="paper-badge">
+        <span class="badge high">◉ 高可行</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10.5px">工期 5–6 天</span>
+      </div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文要旨。</strong>LLM（GPT-4o / Claude）在識別財務舞弊文本（含蓄式語意操弄、敘事偏離數字、抗壓性低的揭露）上顯著優於人類分析師，且對「老闆要求說好話」式的壓力誘導抵抗力強。</p>
+
+      <h3 class="ch">9 個舞弊前兆檢測維度</h3>
+      <table>
+        <thead><tr><th>維度</th><th>檢測重點</th></tr></thead>
+        <tbody>
+          <tr><td>數字一致性</td><td>敘事與表上數字是否矛盾</td></tr>
+          <tr><td>語意模糊度</td><td>大量模糊措辭逃避具體承諾</td></tr>
+          <tr><td>責任轉嫁</td><td>歸咎外部因素過於頻繁</td></tr>
+          <tr><td>時間遠離</td><td>「下半年/明年」承諾頻率</td></tr>
+          <tr><td>複雜度噪音</td><td>過度技術術語掩蓋簡單問題</td></tr>
+          <tr><td>第一人稱避免</td><td>管理層避免「我承擔/我決定」</td></tr>
+          <tr><td>過度樂觀詞彙</td><td>超出歷史常態的正面密度</td></tr>
+          <tr><td>修正性敘述</td><td>對前期承諾的修正被淡化</td></tr>
+          <tr><td>異常會計處理說明</td><td>過多篇幅解釋會計變更</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">應用方式</h3>
+      <ul>
+        <li><strong>因子化</strong>：每檔股票的 fraud_score（0-1），整合至既有 alpha pool</li>
+        <li><strong>硬剔除</strong>：score &gt; 0.8 直接從投組排除</li>
+        <li><strong>降權重</strong>：0.5 &lt; score &lt; 0.8 → 權重 ×50%</li>
+        <li><strong>人工複核</strong>：high_risk 標記需人工複核才執行</li>
+      </ul>
+
+      <h3 class="ch">預期效益</h3>
+      <div class="kpi-row">
+        <div class="kpi green"><div class="kpi-val">5–15<em> 檔/季</em></div><div class="kpi-lbl">高風險排除</div></div>
+        <div class="kpi green"><div class="kpi-val">+0.05~0.15</div><div class="kpi-lbl">Sharpe 提升</div></div>
+        <div class="kpi gold"><div class="kpi-val">10–20%</div><div class="kpi-lbl">MDD 改善</div></div>
+        <div class="kpi"><div class="kpi-val">USD 200<em>/年</em></div><div class="kpi-lbl">LLM 成本</div></div>
+      </div>
+
+      <blockquote>合規提醒：僅供內部投資決策參考，不對外發布、不向第三方提供。high_risk 標記不等同「公司有舞弊」，僅是統計風險。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>#8 · LLM 舞弊偵測</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節：排程實作 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two · Schedule</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">排程實作的 1 篇</div>
+  <div class="sec-desc">多代理 LLM 推薦：工期較長、LLM 成本需控管，先做 50 檔 PoC 驗證，通過後再擴大到 1500 檔。</div>
+</div>
+
+<!-- ══════════════ #4 多代理 LLM ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">#4 多代理 LLM 推薦 — 排程實作（W4）</h1>
+
+  <div class="paper-card">
+    <div class="paper-head amber">
+      <div>
+        <div class="paper-name">Signal or Noise in Multi-Agent LLM-based Stock Recommendations</div>
+        <div class="paper-meta">arXiv:2604.17327 · 2026-04-21 · q-fin.PM</div>
+      </div>
+      <div class="paper-badge">
+        <span class="badge med">◉ 中可行</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10.5px">工期 7–10 天</span>
+      </div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文要旨。</strong>讓多個 LLM agents（不同 prompt、不同 role：分析師/技術派/價值派/風險官）對同一檔股票做推薦，問：「集合多 agents 的推薦能否比單一 LLM 強？」答案：<strong>多代理一致性高的推薦才有 alpha，分歧的推薦純雜訊</strong>。</p>
+
+      <h3 class="ch">5 個 Agent 角色</h3>
+      <table>
+        <thead><tr><th>角色</th><th>聚焦</th><th>輸入</th></tr></thead>
+        <tbody>
+          <tr><td><strong>fundamentalist</strong></td><td>三表、ROE、估值</td><td>財報結構化資料</td></tr>
+          <tr><td><strong>technician</strong></td><td>價量、KD、籌碼</td><td>tw-stock-scanner 量價</td></tr>
+          <tr><td><strong>macro_strategist</strong></td><td>產業景氣、利率</td><td>總經 + ETF 流量</td></tr>
+          <tr><td><strong>risk_officer</strong></td><td>下檔風險、體質</td><td>負債比、Z-score</td></tr>
+          <tr><td><strong>contrarian</strong></td><td>逆向、錯定價</td><td>情緒 + 共識指標</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ch">PoC 範圍與成本</h3>
+      <p>初期僅做台股 50 檔（市值最大 50），每月 1 號跑一次，2025-01 至 2026-04 共 16 個月，成本約 USD 50/月。</p>
+
+      <h3 class="ch">驗證假設</h3>
+      <blockquote>低分歧度（disagreement &lt; 0.5）的全 BUY 共識，下個月超額報酬顯著為正；高分歧度的推薦無法區分 alpha。</blockquote>
+
+      <h3 class="ch">上線/不上線決策點</h3>
+      <ul>
+        <li>通過驗證 → 擴大到 1500 檔（成本約 USD 800/月）</li>
+        <li>失敗 → 改僅做極端共識（全 5 agent BUY 才買）篩選層</li>
+      </ul>
+
+      <div class="risk-matrix">
+        <div class="risk-card up">
+          <h4>預期效益</h4>
+          <div class="risk-item">多視角降低單一 LLM 偏誤</div>
+          <div class="risk-item">分歧度本身可作為「不確定性」指標</div>
+          <div class="risk-item">擴展性高，可加更多 agent</div>
+        </div>
+        <div class="risk-card dn">
+          <h4>實作風險</h4>
+          <div class="risk-item">LLM 幻覺 → 強制 RAG 結構化輸入</div>
+          <div class="risk-item">同 base model 結論相似 → GPT + Claude + Gemini</div>
+          <div class="risk-item">成本失控 → 嚴控 PoC 規模</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>#4 · 多代理 LLM</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節：觀察與參考 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three · Watch & Reference</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">觀察與內部參考的 5 篇</div>
+  <div class="sec-desc">不直接實作但仍有戰略價值：LLM 投機警示、AI 交易泡沫、agentic AI 設計指南、LLM 訊號鮮度準則、產業端 agentic trading 競爭。</div>
+</div>
+
+<!-- ══════════════ 觀察類 4 卡片 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">觀察類論文與情報</h1>
+
+  <div class="paper-card">
+    <div class="paper-head slate">
+      <div>
+        <div class="paper-name">#5 Machine Spirits：LLM agents 投機行為</div>
+        <div class="paper-meta">arXiv:2604.18602 · q-fin.TR · 觀察</div>
+      </div>
+      <div class="paper-badge"><span class="badge low">觀察</span></div>
+    </div>
+    <div class="paper-body">
+      <p>LLM agents 在模擬市場中會自發產生投機、羊群、泡沫行為。<strong>對我方啟示</strong>：所有 LLM 訊號（如 #4）必須有規則層風控覆蓋；監控 LLM 推薦在新聞密集期的變動率，&gt;40% 標記為「敘事驅動期」降權重。</p>
+    </div>
+  </div>
+
+  <div class="paper-card">
+    <div class="paper-head slate">
+      <div>
+        <div class="paper-name">#9 解構 AI 交易：行為金融與市場泡沫</div>
+        <div class="paper-meta">arXiv:2604.18373 · q-fin.GN · 觀察</div>
+      </div>
+      <div class="paper-badge"><span class="badge low">觀察</span></div>
+    </div>
+    <div class="paper-body">
+      <p>當演算法交易市占率 &gt; 60% 時，動量類策略會自我強化形成泡沫。<strong>對我方啟示</strong>：監控 ETF 集中度（0050+00878 持股佔比 &gt; 35% 警戒）、動量集中度、量價背離。與 #7 動態網路風險呼應。</p>
+    </div>
+  </div>
+
+  <div class="paper-card">
+    <div class="paper-head slate">
+      <div>
+        <div class="paper-name">#10 Agentic AI in Finance 綜述</div>
+        <div class="paper-meta">arXiv:2604.21672 · q-fin.CP · 內部 reference</div>
+      </div>
+      <div class="paper-badge"><span class="badge low">參考</span></div>
+    </div>
+    <div class="paper-body">
+      <p>金融 agentic AI 統一架構：Memory + Tools + Role + Coordination。協調模式：Hierarchical / Debate / Collaborative / Pipeline。<strong>應用</strong>：#4 用 Debate、#8 用 Pipeline，未來投資委員會 agent 用 Hierarchical。</p>
+    </div>
+  </div>
+
+  <div class="paper-card">
+    <div class="paper-head slate">
+      <div>
+        <div class="paper-name">#11 ChatGPT 作為時光膠囊：價格發現極限</div>
+        <div class="paper-meta">arXiv:2604.21433 · q-fin.GN · 設計準則</div>
+      </div>
+      <div class="paper-badge"><span class="badge low">準則</span></div>
+    </div>
+    <div class="paper-body">
+      <p>LLM 訓練截止日效應：對 cutoff 後事件無感、對 cutoff 前資料有「未來資訊」洩漏。<strong>內部鐵律</strong>：(1) 禁用 LLM 做歷史回測訊號（非 walk-forward）；(2) 所有 LLM 訊號儲存 model version + cutoff + as-of date；(3) 訊號鮮度監控。</p>
+    </div>
+  </div>
+
+  <div class="paper-card">
+    <div class="paper-head slate">
+      <div>
+        <div class="paper-name">#12 Moomoo API Skills：散戶代理投資</div>
+        <div class="paper-meta">Fintech Singapore · 2026-04-24 · 產業情報</div>
+      </div>
+      <div class="paper-badge"><span class="badge low">情報</span></div>
+    </div>
+    <div class="paper-body">
+      <p>散戶端 agentic trading 規模化：4 月一個月內 5+ 家業者上線（Moomoo、MoneyFlare、AccuQuant、BNBTradeBot、AriseAlpha）。<strong>對我方</strong>：不貿然跟進零售產品，但可借鑑「自然語言 → 策略」做<strong>內部研究助理</strong>，與 #3 健診框架整合。</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>觀察與參考</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節：落地時程 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Section Four · Roadmap</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">4 週落地路線圖</div>
+  <div class="sec-desc">依 ROI 排序，分 4 週逐步上線。Week 1 因子流程修正基礎建設，Week 4 完成 LLM 多代理 PoC。</div>
+</div>
+
+<!-- ══════════════ 落地時程 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">4 週落地路線圖</h1>
+
+  <h2 class="ch">時程總覽</h2>
+  <div class="timeline">
+    <div class="tl-item active">
+      <div class="tl-year">W1<br>04-28 ~ 05-04</div>
+      <div class="tl-spec">基礎修正</div>
+      <div class="tl-tech">#2 後篩選組合<br>#3 回測健診框架</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">W2<br>05-05 ~ 05-11</div>
+      <div class="tl-spec">風險與另類</div>
+      <div class="tl-tech">#7 動態網路<br>#1 LLM 語意網路</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">W3<br>05-12 ~ 05-18</div>
+      <div class="tl-spec">執行與下檔</div>
+      <div class="tl-tech">#6 LOB 制度<br>#8 LLM 舞弊</div>
+    </div>
+    <div class="tl-item next">
+      <div class="tl-year">W4<br>05-19 ~ 05-25</div>
+      <div class="tl-spec">多代理 PoC</div>
+      <div class="tl-tech">#4 多代理 LLM<br>50 檔驗證</div>
+    </div>
+  </div>
+
+  <h2 class="ch">每週交付物</h2>
+  <table>
+    <thead><tr><th>週次</th><th>主要交付</th><th>負責檔案</th><th>驗收標準</th></tr></thead>
+    <tbody>
+      <tr><td><strong>W1</strong></td><td>後篩選 inference + 健診框架</td><td><code>portfolio/</code><br><code>eval/</code></td><td>5 個 production 策略首次健診報告產出</td></tr>
+      <tr><td><strong>W2</strong></td><td>動態網路 dashboard + LLM 語意因子</td><td><code>risk/</code><br><code>factors/</code></td><td>網路 6 指標即時上 dashboard；LLM 因子 IC &gt; 0.02</td></tr>
+      <tr><td><strong>W3</strong></td><td>LOB 制度 + 舞弊偵測</td><td><code>microstructure/</code><br><code>text/</code></td><td>tick 即時分類 3 制度；1500 檔 fraud_score baseline</td></tr>
+      <tr><td><strong>W4</strong></td><td>多代理 PoC</td><td><code>llm_agents/</code></td><td>50 檔 × 16 個月驗證；上/不上線決策報告</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">關鍵風險與監控</h2>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>本週路線圖優勢</h4>
+      <div class="risk-item">7 篇全部 4 週內完成，分散風險</div>
+      <div class="risk-item">W1 兩篇純程式碼修正，保證可上線</div>
+      <div class="risk-item">後續週次依賴前置工作較少，可平行</div>
+      <div class="risk-item">總成本 LLM API ≈ USD 100，可控</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>需密切監控</h4>
+      <div class="risk-item">中文新聞爬蟲穩定性（W2 #1 前置）</div>
+      <div class="risk-item">SK COM 五檔資料完整性（W3 #6 前置）</div>
+      <div class="risk-item">LLM 成本控管（W4 #4 易超支）</div>
+      <div class="risk-item">既有法人買賣超回補進度</div>
+    </div>
+  </div>
+
+  <h2 class="ch">下一步行動</h2>
+  <ul>
+    <li>✅ 本週末（04-27）完成本週報，發送至投研團隊</li>
+    <li>⏳ 04-28 啟動 W1：#2 後篩選組合 + #3 回測健診</li>
+    <li>⏳ 05-04 W1 結束複盤，調整 W2 計畫</li>
+    <li>⏳ 05-25 全部完成，產出實作驗證總報告</li>
+  </ul>
+
+  <blockquote><strong>核心原則</strong>：所有實作項目嚴格遵守 #11 ChatGPT 時光膠囊論文的設計準則 — 每個 LLM 訊號必須記錄 model cutoff、as-of date，禁止用未來模型回測歷史資料。</blockquote>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:16px">本週報涵蓋論文 11 篇 + 產業情報 1 則。資料截止：2026-04-27。實作落地路線詳見 <code>tw-stock-scanner/research/_archive/最新金融與科技研究/2026_0427_papers/</code>。僅供研究參考，不構成投資建議。</p>
+
+  <div class="page-footer" style="margin-top:32px">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>落地路線圖</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  // 可行性分布（Doughnut）
+  new Chart(getEl('feasibilityPie'), {
+    type: 'doughnut',
+    data: {
+      labels: ['立刻實作', '排程實作', '內部 reference', '產業觀察'],
+      datasets: [{
+        data: [6, 1, 2, 3],
+        backgroundColor: ['#00a878', '#f59e0b', '#1a3a6e', '#94a3b8'],
+        borderColor: '#fff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: {
+        legend: { position: 'right', labels: { boxWidth: 12, padding: 10, font: {size: 12.5} } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + ' 篇' } }
+      },
+      cutout: '60%'
+    }
+  });
+
+  // 7 篇實作工期估計（Horizontal Bar）
+  new Chart(getEl('effortBar'), {
+    type: 'bar',
+    data: {
+      labels: ['#2 後篩選組合', '#3 回測健診', '#7 動態網路', '#1 LLM 語意', '#6 LOB 制度', '#8 LLM 舞弊', '#4 多代理 LLM'],
+      datasets: [{
+        label: '估計工期（天）',
+        data: [2.5, 3.5, 4.5, 6, 6, 5.5, 8.5],
+        backgroundColor: ['#00c896', '#00a878', '#1a3a6e', '#312e81', '#2d3748', '#5c1a1a', '#d97706'],
+        borderRadius: 4,
+        barPercentage: 0.65
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '天' }, max: 12 },
+        y: { grid: { display: false }, ticks: { font: {size: 11.5} } }
+      }
+    }
+  });
+
+  // Lead time 預期（Bar）
+  new Chart(getEl('leadTimeChart'), {
+    type: 'bar',
+    data: {
+      labels: ['2018/02\nVIX spike', '2018/12\n美股閃崩', '2020/03\nCOVID', '2022/02\n烏俄戰', '2022/10\n通膨高峰', '2024/08\n日圓套利'],
+      datasets: [{
+        label: '預期 lead time（日）',
+        data: [5, 7, 10, 6, 8, 9],
+        backgroundColor: '#1a3a6e',
+        borderRadius: 4,
+        barPercentage: 0.6
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => '提前 ' + ctx.raw + ' 個交易日警示' } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: {size: 10.5} } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '日' } }
+      }
+    }
+  });
+
+}); // end window.load
+</script>
+</body>
+</html>

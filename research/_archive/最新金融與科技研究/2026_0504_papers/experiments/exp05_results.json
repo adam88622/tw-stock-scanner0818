@@ -1,0 +1,259 @@
+{
+  "per_stock": {
+    "0050": {
+      "stock_id": "0050",
+      "n_is": 3649,
+      "n_oos": 287,
+      "normal": {
+        "mu": 0.0005091257878870923,
+        "sigma": 0.010774870329735068,
+        "ll_is": 11354.728926271191,
+        "ll_oos": 669.22426969141,
+        "var": {
+          "var95_estimate": -0.01721,
+          "n_oos": 287,
+          "n_breaches": 23,
+          "coverage": 0.0801,
+          "ideal": 0.05,
+          "wilson_ci": [
+            0.054,
+            0.1174
+          ],
+          "abs_dev_from_ideal_pp": 3.01
+        }
+      },
+      "asym_laplace": {
+        "mu": 0.0004999999999954796,
+        "sigma": 0.00756156509685999,
+        "kappa": 0.999834820785004,
+        "ll_is": 11645.900005581167,
+        "ll_oos": 746.4604831691928,
+        "var": {
+          "var95_estimate": -0.01691,
+          "n_oos": 287,
+          "n_breaches": 23,
+          "coverage": 0.0801,
+          "ideal": 0.05,
+          "wilson_ci": [
+            0.054,
+            0.1174
+          ],
+          "abs_dev_from_ideal_pp": 3.01
+        }
+      },
+      "compare": {
+        "ll_oos_improvement_pct": 11.54,
+        "normal_var_coverage": 0.0801,
+        "alaplace_var_coverage": 0.0801,
+        "normal_breach_excess_pp": 3.01,
+        "alaplace_breach_excess_pp": 3.01
+      }
+    },
+    "2330": {
+      "stock_id": "2330",
+      "n_is": 3649,
+      "n_oos": 318,
+      "normal": {
+        "mu": 0.0009240887914497122,
+        "sigma": 0.015636121415693996,
+        "ll_is": 9995.961336465141,
+        "ll_oos": 741.3096049406549,
+        "var": {
+          "var95_estimate": -0.0248,
+          "n_oos": 318,
+          "n_breaches": 20,
+          "coverage": 0.0629,
+          "ideal": 0.05,
+          "wilson_ci": [
+            0.0411,
+            0.0951
+          ],
+          "abs_dev_from_ideal_pp": 1.29
+        }
+      },
+      "asym_laplace": {
+        "mu": -1.2028922640563497e-15,
+        "sigma": 0.011453183920652808,
+        "kappa": 0.9604705439970674,
+        "ll_is": 10127.90105794599,
+        "ll_oos": 770.2954151259737,
+        "var": {
+          "var95_estimate": -0.02488,
+          "n_oos": 318,
+          "n_breaches": 20,
+          "coverage": 0.0629,
+          "ideal": 0.05,
+          "wilson_ci": [
+            0.0411,
+            0.0951
+          ],
+          "abs_dev_from_ideal_pp": 1.29
+        }
+      },
+      "compare": {
+        "ll_oos_improvement_pct": 3.91,
+        "normal_var_coverage": 0.0629,
+        "alaplace_var_coverage": 0.0629,
+        "normal_breach_excess_pp": 1.29,
+        "alaplace_breach_excess_pp": 1.29
+      }
+    },
+    "2317": {
+      "stock_id": "2317",
+      "n_is": 3642,
+      "n_oos": 317,
+      "normal": {
+        "mu": 0.000414607358594179,
+        "sigma": 0.01640155976003737,
+        "ll_is": 9802.725602283663,
+        "ll_oos": 648.130468154487,
+        "var": {
+          "var95_estimate": -0.02656,
+          "n_oos": 317,
+          "n_breaches": 29,
+          "coverage": 0.0915,
+          "ideal": 0.05,
+          "wilson_ci": [
+            0.0645,
+            0.1283
+          ],
+          "abs_dev_from_ideal_pp": 4.15
+        }
+      },
+      "asym_laplace": {
+        "mu": -7.888728155996677e-17,
+        "sigma": 0.011450712702413247,
+        "kappa": 0.9820598644482439,
+        "ll_is": 10111.620285086778,
+        "ll_oos": 698.2677351876764,
+        "var": {
+          "var95_estimate": -0.02569,
+          "n_oos": 317,
+          "n_breaches": 30,
+          "coverage": 0.0946,
+          "ideal": 0.05,
+          "wilson_ci": [
+            0.0671,
+            0.1319
+          ],
+          "abs_dev_from_ideal_pp": 4.46
+        }
+      },
+      "compare": {
+        "ll_oos_improvement_pct": 7.74,
+        "normal_var_coverage": 0.0915,
+        "alaplace_var_coverage": 0.0946,
+        "normal_breach_excess_pp": 4.15,
+        "alaplace_breach_excess_pp": 4.46
+      }
+    },
+    "2454": {
+      "stock_id": "2454",
+      "n_is": 3648,
+      "n_oos": 318,
+      "normal": {
+        "mu": 0.0007738760964912281,
+        "sigma": 0.022488346800354084,
+        "ll_is": 8667.48950214012,
+        "ll_oos": 666.4579440810618,
+        "var": {
+          "var95_estimate": -0.03622,
+          "n_oos": 318,
+          "n_breaches": 16,
+          "coverage": 0.0503,
+          "ideal": 0.05,
+          "wilson_ci": [
+            0.0312,
+            0.0802
+          ],
+          "abs_dev_from_ideal_pp": 0.03
+        }
+      },
+      "asym_laplace": {
+        "mu": -1.287485492381725e-17,
+        "sigma": 0.016274278009616616,
+        "kappa": 0.976506556083654,
+        "ll_is": 8845.450187053259,
+        "ll_oos": 705.939689438176,
+        "var": {
+          "var95_estimate": -0.03621,
+          "n_oos": 318,
+          "n_breaches": 16,
+          "coverage": 0.0503,
+          "ideal": 0.05,
+          "wilson_ci": [
+            0.0312,
+            0.0802
+          ],
+          "abs_dev_from_ideal_pp": 0.03
+        }
+      },
+      "compare": {
+        "ll_oos_improvement_pct": 5.92,
+        "normal_var_coverage": 0.0503,
+        "alaplace_var_coverage": 0.0503,
+        "normal_breach_excess_pp": 0.03,
+        "alaplace_breach_excess_pp": 0.03
+      }
+    },
+    "2412": {
+      "stock_id": "2412",
+      "n_is": 3626,
+      "n_oos": 318,
+      "normal": {
+        "mu": 0.00033811362382790954,
+        "sigma": 0.0066502536679062,
+        "ll_is": 13032.930492038187,
+        "ll_oos": 1120.8292813832045,
+        "var": {
+          "var95_estimate": -0.0106,
+          "n_oos": 318,
+          "n_breaches": 18,
+          "coverage": 0.0566,
+          "ideal": 0.05,
+          "wilson_ci": [
+            0.0361,
+            0.0877
+          ],
+          "abs_dev_from_ideal_pp": 0.66
+        }
+      },
+      "asym_laplace": {
+        "mu": 6.162980885728337e-18,
+        "sigma": 0.004658701364495151,
+        "kappa": 0.9643697792374419,
+        "ll_is": 13326.323707825317,
+        "ll_oos": 1138.2289099376117,
+        "var": {
+          "var95_estimate": -0.01018,
+          "n_oos": 318,
+          "n_breaches": 18,
+          "coverage": 0.0566,
+          "ideal": 0.05,
+          "wilson_ci": [
+            0.0361,
+            0.0877
+          ],
+          "abs_dev_from_ideal_pp": 0.66
+        }
+      },
+      "compare": {
+        "ll_oos_improvement_pct": 1.55,
+        "normal_var_coverage": 0.0566,
+        "alaplace_var_coverage": 0.0566,
+        "normal_breach_excess_pp": 0.66,
+        "alaplace_breach_excess_pp": 0.66
+      }
+    }
+  },
+  "aggregate": {
+    "mean_oos_loglik_improvement_pct": 6.13,
+    "paper_loglik_range_pct": "3 ~ 8",
+    "n_stocks": 5,
+    "mean_normal_breach_excess_pp": 1.83,
+    "mean_alaplace_breach_excess_pp": 1.89,
+    "coverage_dominance": "Normal better",
+    "verdict": "[OK] supports paper (LL claim)",
+    "note": "Verdict 以論文主要 claim（OOS LogLik 改善 3-8%）為主。Coverage 為補充：5 個樣本中 Laplace 與 Normal 表現相近，可能因 OOS 期較短（13-16 個月）導致 5% 分位數差異未顯著。"
+  }
+}

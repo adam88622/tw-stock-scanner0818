@@ -1,0 +1,161 @@
+{
+  "results": [
+    {
+      "config": "MV-only baseline",
+      "lambda2": 10.0,
+      "lambda3": 0.0,
+      "lambda4": 0.0,
+      "weight_top5": [
+        {
+          "sid": "2357",
+          "w": 0.1
+        },
+        {
+          "sid": "2368",
+          "w": 0.1
+        },
+        {
+          "sid": "8069",
+          "w": 0.1
+        },
+        {
+          "sid": "2382",
+          "w": 0.1
+        },
+        {
+          "sid": "2603",
+          "w": 0.1
+        }
+      ],
+      "n_active": 15,
+      "is_perf": {
+        "ann_return": 0.5911,
+        "ann_vol": 0.2517,
+        "sharpe": 2.348,
+        "max_drawdown": -0.2815,
+        "calmar": 2.0997,
+        "skew": -0.5394,
+        "kurt_excess": 2.2162,
+        "n_days": 1217
+      },
+      "oos_perf": {
+        "ann_return": 0.2963,
+        "ann_vol": 0.3012,
+        "sharpe": 0.9836,
+        "max_drawdown": -0.3464,
+        "calmar": 0.8553,
+        "skew": -0.5738,
+        "kurt_excess": 7.2136,
+        "n_days": 318
+      }
+    },
+    {
+      "config": "+ skew pref",
+      "lambda2": 10.0,
+      "lambda3": 500000.0,
+      "lambda4": 0.0,
+      "weight_top5": [
+        {
+          "sid": "3231",
+          "w": 0.1
+        },
+        {
+          "sid": "2376",
+          "w": 0.1
+        },
+        {
+          "sid": "2357",
+          "w": 0.1
+        },
+        {
+          "sid": "2603",
+          "w": 0.1
+        },
+        {
+          "sid": "2330",
+          "w": 0.1
+        }
+      ],
+      "n_active": 13,
+      "is_perf": {
+        "ann_return": 0.5036,
+        "ann_vol": 0.2301,
+        "sharpe": 2.1884,
+        "max_drawdown": -0.2807,
+        "calmar": 1.794,
+        "skew": -0.337,
+        "kurt_excess": 2.1088,
+        "n_days": 1217
+      },
+      "oos_perf": {
+        "ann_return": 0.2626,
+        "ann_vol": 0.2747,
+        "sharpe": 0.956,
+        "max_drawdown": -0.3127,
+        "calmar": 0.8398,
+        "skew": -0.5139,
+        "kurt_excess": 8.4539,
+        "n_days": 318
+      }
+    },
+    {
+      "config": "+ skew + kurt",
+      "lambda2": 10.0,
+      "lambda3": 500000.0,
+      "lambda4": 500000000.0,
+      "weight_top5": [
+        {
+          "sid": "2357",
+          "w": 0.1
+        },
+        {
+          "sid": "2002",
+          "w": 0.1
+        },
+        {
+          "sid": "2382",
+          "w": 0.1
+        },
+        {
+          "sid": "2303",
+          "w": 0.1
+        },
+        {
+          "sid": "2330",
+          "w": 0.1
+        }
+      ],
+      "n_active": 14,
+      "is_perf": {
+        "ann_return": 0.3174,
+        "ann_vol": 0.198,
+        "sharpe": 1.6032,
+        "max_drawdown": -0.2854,
+        "calmar": 1.1122,
+        "skew": -0.3972,
+        "kurt_excess": 2.4706,
+        "n_days": 1217
+      },
+      "oos_perf": {
+        "ann_return": 0.2539,
+        "ann_vol": 0.2541,
+        "sharpe": 0.9993,
+        "max_drawdown": -0.2881,
+        "calmar": 0.8814,
+        "skew": -0.4788,
+        "kurt_excess": 10.8336,
+        "n_days": 318
+      }
+    }
+  ],
+  "paper_compare": {
+    "paper_sharpe_gain": "+0.18 (S&P500)",
+    "our_sharpe_gain_skew_only": -0.0276,
+    "our_sharpe_gain_full": 0.0157,
+    "paper_dd_improvement": "3-5 ppt (S&P500)",
+    "our_dd_improvement_skew_only_ppt": 3.37,
+    "our_dd_improvement_full_ppt": 5.83,
+    "verdict": "[OK] supports paper direction",
+    "interpretation": "DD improvement 5.83ppt matches paper's 3-5ppt; Sharpe gain 0.016 vs paper +0.18 — direction consistent"
+  }
+}

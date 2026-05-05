@@ -1,0 +1,99 @@
+{
+  "experiment": "#8 llm_fraud_detection (scaffold + mock)",
+  "mode": "mock",
+  "n_samples": 5,
+  "n_evaluated": 5,
+  "evaluations": [
+    {
+      "stock_id": "2330",
+      "fraud_score": 0.1,
+      "primary_concerns": [
+        "敘事一致、數字明確"
+      ],
+      "specific_quotes": [
+        "[mock] 第1段疑似可疑原文...",
+        "[mock] 第2段疑似可疑原文...",
+        "[mock] 第3段疑似可疑原文..."
+      ],
+      "audit_recommendation": "low_risk",
+      "_evaluator": "mock"
+    },
+    {
+      "stock_id": "XXXX1",
+      "fraud_score": 0.85,
+      "primary_concerns": [
+        "異常會計處理說明",
+        "管理層第一人稱避免",
+        "敘事與數字嚴重背離"
+      ],
+      "specific_quotes": [
+        "[mock] 第1段疑似可疑原文...",
+        "[mock] 第2段疑似可疑原文...",
+        "[mock] 第3段疑似可疑原文..."
+      ],
+      "audit_recommendation": "exclude",
+      "_evaluator": "mock"
+    },
+    {
+      "stock_id": "2454",
+      "fraud_score": 0.18,
+      "primary_concerns": [
+        "敘事一致、數字明確"
+      ],
+      "specific_quotes": [
+        "[mock] 第1段疑似可疑原文...",
+        "[mock] 第2段疑似可疑原文...",
+        "[mock] 第3段疑似可疑原文..."
+      ],
+      "audit_recommendation": "low_risk",
+      "_evaluator": "mock"
+    },
+    {
+      "stock_id": "YYYY1",
+      "fraud_score": 0.72,
+      "primary_concerns": [
+        "大量責任轉嫁",
+        "過度樂觀詞彙密度高",
+        "修正性敘述被淡化"
+      ],
+      "specific_quotes": [
+        "[mock] 第1段疑似可疑原文...",
+        "[mock] 第2段疑似可疑原文...",
+        "[mock] 第3段疑似可疑原文..."
+      ],
+      "audit_recommendation": "high_risk",
+      "_evaluator": "mock"
+    },
+    {
+      "stock_id": "2317",
+      "fraud_score": 0.22,
+      "primary_concerns": [
+        "敘事一致、數字明確"
+      ],
+      "specific_quotes": [
+        "[mock] 第1段疑似可疑原文...",
+        "[mock] 第2段疑似可疑原文...",
+        "[mock] 第3段疑似可疑原文..."
+      ],
+      "audit_recommendation": "low_risk",
+      "_evaluator": "mock"
+    }
+  ],
+  "portfolio_changes": {
+    "excluded": [
+      "XXXX1"
+    ],
+    "downweighted": [
+      "YYYY1"
+    ],
+    "expected_savings_pp_annual": 3.0
+  },
+  "production_requirements": {
+    "data": "MOPS annual reports + 法說會逐字稿（需新增 scraper）",
+    "api": "ANTHROPIC_API_KEY (Claude Opus 4.7) or OpenAI key",
+    "cost_estimate_usd_per_year": 200,
+    "eta_days_to_full_impl": 6
+  },
+  "paper_claim": "LLM outperforms humans in fraud detection; resistant to motivated pressure",
+  "verdict": "SCAFFOLD_READY_AWAITING_DATA_AND_API"
+}

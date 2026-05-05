@@ -1,0 +1,86 @@
+{
+  "n_news": 8,
+  "models": [
+    "qwen3.5:latest",
+    "phi3:3.8b"
+  ],
+  "summary": [
+    {
+      "model": "qwen3.5:latest",
+      "n": 8,
+      "parse_rate": 1.0,
+      "schema_rate": 1.0,
+      "avg_lat_ms": 4473.848611116409,
+      "p50_lat_ms": 3456.721305847168,
+      "avg_in_tok": 326.0,
+      "avg_out_tok": 126.875
+    },
+    {
+      "model": "phi3:3.8b",
+      "n": 8,
+      "parse_rate": 0.875,
+      "schema_rate": 0.875,
+      "avg_lat_ms": 3686.4603757858276,
+      "p50_lat_ms": 3850.977301597595,
+      "avg_in_tok": 516.0,
+      "avg_out_tok": 194.5
+    }
+  ],
+  "pairs": [
+    {
+      "news_id": "N1",
+      "title": "台積電法說財測上修 Q2 營收估季增 8-10%",
+      "qwen35": 0.85,
+      "phi3": 0.8
+    },
+    {
+      "news_id": "N2",
+      "title": "鴻海印度廠擴產 蘋果 iPhone 17 在地化加速",
+      "qwen35": 0.85,
+      "phi3": 0.8
+    },
+    {
+      "news_id": "N3",
+      "title": "聯發科天璣 9500 出貨不如預期 高通競爭加劇",
+      "qwen35": -0.4,
+      "phi3": -0.3
+    },
+    {
+      "news_id": "N4",
+      "title": "金管會核准國泰金併購安泰銀 創純民營金控併購最大案",
+      "qwen35": 0.85,
+      "phi3": 0.6
+    },
+    {
+      "news_id": "N5",
+      "title": "長榮海運 Q1 EPS 6.8 元優於預期 紅海航線運價回升",
+      "qwen35": 0.85,
+      "phi3": 1.0
+    },
+    {
+      "news_id": "N6",
+      "title": "華碩 AI PC 出貨量達標 Copilot+ 機種市占衝第三",
+      "qwen35": 0.85,
+      "phi3": 0.8
+    },
+    {
+      "news_id": "N7",
+      "title": "中華電信 5G 用戶突破 800 萬 ARPU 連 6 季成長",
+      "qwen35": 0.85,
+      "phi3": 0.8
+    }
+  ],
+  "consistency": {
+    "n_pairs": 7,
+    "pearson": 0.9635293180817431,
+    "direction_agree_rate": 1.0,
+    "avg_abs_diff": 0.09999999999999996
+  },
+  "monthly_cost_usd_54M_in_10M_out": {
+    "deepseek-v4-flash": 10.360000000000001,
+    "deepseek-v4-pro": 128.76,
+    "claude-sonnet-4.6": 312.0,
+    "claude-opus-4.6": 1560.0,
+    "ollama-local": 0.0
+  }
+}

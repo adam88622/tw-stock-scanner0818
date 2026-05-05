@@ -389,6 +389,16 @@ def breakout():
         conn.close()
 
 
+def _calc_regime_temperatures(errors):
+    """temperature = percentile rank × 100(相對整段歷史窗的位置)。
+    比線性 (error/tau)*50 公式更穩,不會卡 100°。
+    回傳 list[float],對齊 errors 順序。"""
+    if not errors:
+        return []
+    n = len(errors)
+    return [round(sum(1 for x in errors if x <= e) / n * 100, 1) for e in errors]
+
+
 @app.route('/regime')
 def regime():
     model_info = get_model_info() if get_model_info else {}
@@ -404,9 +414,13 @@ def regime():
                 tau = latest['tau']
                 current_error = latest['recon_error']
                 regime_val = latest['regime']
-                temperature = round(min(100.0, (current_error / tau) * 50), 1)
-                history = [{'date': r['date'], 'error': r['recon_error'], 'regime': r['regime']}
-                           for r in reversed(rows)]
+                # ASC 順序的 errors,給 percentile rank
+                errors_asc = [r['recon_error'] for r in reversed(rows)]
+                temps_asc = _calc_regime_temperatures(errors_asc)
+                temperature = temps_asc[-1] if temps_asc else 0.0
+                history = [{'date': r['date'], 'error': r['recon_error'],
+                            'regime': r['regime'], 'temperature': t}
+                           for r, t in zip(reversed(rows), temps_asc)]
                 return render_template('regime.html',
                                        temperature=temperature,
                                        current_error=current_error,
@@ -425,14 +439,21 @@ def regime():
     # DB 沒資料，走即時計算
     try:
         result = get_market_temperature(lookback_days=120)
+        # 統一用 percentile rank 重算 temperature(覆蓋 live 的線性公式)
+        hist = result.get('history') or []
+        errors_asc = [h.get('error', 0) for h in hist]
+        temps_asc = _calc_regime_temperatures(errors_asc)
+        for h, t in zip(hist, temps_asc):
+            h['temperature'] = t
+        latest_temp = temps_asc[-1] if temps_asc else result['temperature']
         return render_template('regime.html',
-                               temperature=result['temperature'],
+                               temperature=latest_temp,
                                current_error=result['current_error'],
                                tau=result['tau'],
                                regime=result['regime'],
                                latest_date=result['latest_date'],
-                               history=result['history'],
-                               history_json=json.dumps(result['history']),
+                               history=hist,
+                               history_json=json.dumps(hist),
                                model_info=model_info,
                                data_source='live')
     except Exception as e:
@@ -472,12 +493,75 @@ def api_regime_retrain():
 
 # ===== 持股水位投票系統 =====
 
+# Staleness-aware 滾動抓取：頁面載入時若指標超過 2 天沒更新就即時補抓
+# 用 module-level lock + timestamp 節流，避免 1 小時內重複打 FRED/Yahoo
+_macro_refresh_lock = threading.Lock()
+_macro_last_refresh = 0.0
+MACRO_STALE_DAYS = 2          # 指標超過 N 天沒更新視為 stale
+MACRO_REFRESH_THROTTLE = 3600  # 同一 process 內至少間隔 N 秒才再抓一次
+
+def _macro_is_stale(conn):
+    row = conn.execute(
+        "SELECT MAX(date) as d FROM macro_indicators "
+        "WHERE indicator IN ('T10Y3M','CP_SPREAD','DOLLAR','COR3M','MOVE')"
+    ).fetchone()
+    if not row or not row['d']:
+        return True
+    try:
+        latest = datetime.strptime(row['d'], '%Y-%m-%d').date()
+    except Exception:
+        return True
+    return (datetime.now().date() - latest).days > MACRO_STALE_DAYS
+
+def _credit_is_stale(conn):
+    row = conn.execute(
+        "SELECT MAX(date) as d FROM credit_spread_history"
+    ).fetchone()
+    if not row or not row['d']:
+        return True
+    try:
+        latest = datetime.strptime(row['d'], '%Y-%m-%d').date()
+    except Exception:
+        return True
+    return (datetime.now().date() - latest).days > MACRO_STALE_DAYS
+
+def _rolling_refresh_macro(conn):
+    """若 DB 過期且未被節流，即時抓 FRED + Yahoo 補齊。失敗不擋頁面。"""
+    global _macro_last_refresh
+    now = time.time()
+    if now - _macro_last_refresh < MACRO_REFRESH_THROTTLE:
+        return
+    if not _macro_is_stale(conn) and not _credit_is_stale(conn):
+        return
+    if not _macro_refresh_lock.acquire(blocking=False):
+        return  # 已有另一個請求在抓，直接放行
+    try:
+        _macro_last_refresh = now
+        if _macro_is_stale(conn):
+            logger.info("[rolling] macro indicators 過期，即時補抓...")
+            try:
+                from scanners.macro_indicators import update_macro_indicators
+                update_macro_indicators(conn)
+            except Exception as e:
+                logger.warning(f"[rolling] macro 補抓失敗: {e}")
+        if _credit_is_stale(conn):
+            logger.info("[rolling] credit spread 過期，即時補抓...")
+            try:
+                from scanners.credit_spread import update_credit_spread_db
+                update_credit_spread_db(conn)
+            except Exception as e:
+                logger.warning(f"[rolling] credit 補抓失敗: {e}")
+    finally:
+        _macro_refresh_lock.release()
+
+
 @app.route('/position-vote')
 def position_vote():
     from scanners.position_vote import compute_position_vote
     from scanners.indicator_correlation import run_correlation_analysis
     conn = get_conn()
     try:
+        _rolling_refresh_macro(conn)
         data = compute_position_vote(conn)
         corr = run_correlation_analysis(conn)
         return render_template('position_vote.html', data=data, corr=corr)
@@ -493,6 +577,7 @@ def api_position_vote():
     from scanners.position_vote import compute_position_vote
     conn = get_conn()
     try:
+        _rolling_refresh_macro(conn)
         return jsonify(compute_position_vote(conn))
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -602,6 +687,9 @@ def credit_spread():
         # Backtest: compute from DB data (simple version)
         backtest = _compute_backtest_from_db(conn)
 
+        # SPY CTA 訊號(由 cta_signal scanner 寫入 DB)
+        cta_data = _build_cta_payload(conn)
+
         return render_template('credit_spread.html',
                                signal=signal,
                                indicator_value=value,
@@ -617,7 +705,8 @@ def credit_spread():
                                yellow_high=CREDIT_SPREAD_YELLOW_HIGH,
                                trend5d=latest_trend,
                                avg5d=avg5d,
-                               avg5d_signal=avg5d_signal)
+                               avg5d_signal=avg5d_signal,
+                               cta=cta_data)
     except Exception as e:
         logger.error(f"Credit spread error: {e}")
         import traceback
@@ -630,6 +719,54 @@ def credit_spread():
                                error=str(e))
     finally:
         conn.close()
+
+
+def _build_cta_payload(conn):
+    """從 cta_signal_history 讀整段歷史,算回測 + 勝率,塞給 template。
+    DB 沒資料就回 None,template 會略過 CTA 區塊。"""
+    from models.database import get_cta_signal_all
+    try:
+        rows = get_cta_signal_all(conn)
+    except Exception:
+        return None
+    if not rows or len(rows) < 200:
+        return None
+
+    import pandas as pd
+    df = pd.DataFrame([dict(r) for r in rows])
+    df["date"] = pd.to_datetime(df["date"])
+    df = df.sort_values("date").set_index("date")
+
+    # 用 scanners.cta_signal 的回測邏輯(避免重複)
+    from scanners.cta_signal import compute_backtest, compute_trades
+    bt = compute_backtest(df)
+    tr = compute_trades(df)
+
+    # 整段時間序列(供 chart 疊圖)
+    history = []
+    for dt, row in df.iterrows():
+        history.append({
+            "date": dt.strftime("%Y-%m-%d"),
+            "spy": float(row["close"]),
+            "signal": float(row["signal_raw"]),
+            "pos": int(row["raw_pos"]) if pd.notna(row["raw_pos"]) else 0,
+        })
+
+    # 最新狀態
+    last = df.iloc[-1]
+    pos = int(last["raw_pos"]) if pd.notna(last["raw_pos"]) else 0
+    action = "BUY" if pos > 0 else ("SELL" if pos < 0 else "HOLD")
+
+    return {
+        "action": action,
+        "signal": float(last["signal_raw"]),
+        "close": float(last["close"]),
+        "date": str(df.index[-1].date()),
+        "history": history,
+        "history_json": json.dumps(history),
+        "backtest": bt,
+        "trades": tr,
+    }
 
 
 def _compute_backtest_from_db(conn):
@@ -1665,12 +1802,11 @@ def _get_stock_detail_data(conn, stock_id):
     stock_name = stock_row['name']
     stock_market = stock_row['market']
 
-    # K線資料：最近 60 個交易日
+    # K線資料：全歷史（圖表預設顯示最近 250 根，可拖曳到完整歷史）
     price_rows = conn.execute("""
         SELECT date, open_price, high_price, low_price, close_price, volume, change_pct
-        FROM daily_prices WHERE stock_id = ? ORDER BY date DESC LIMIT 60
+        FROM daily_prices WHERE stock_id = ? ORDER BY date ASC
     """, (stock_id,)).fetchall()
-    price_rows = list(reversed(price_rows))  # 時間正序
 
     kline_data = []
     closes = []
@@ -1855,6 +1991,326 @@ def api_health():
 
     http_code = 200 if status['status'] == 'ok' else 503
     return jsonify(status), http_code
+
+
+# ===== 資料健康儀表板（不掛在側邊欄，僅 URL 直連使用） =====
+
+_data_health_cache = {"data": None, "ts": 0}
+_data_health_lock = threading.Lock()
+_DATA_HEALTH_TTL = 60  # 60 秒快取，避免重壓 DB
+
+
+def _build_data_health():
+    """蒐集資料健康指標：每張表的覆蓋、落後、缺漏、品質問題、檔案狀態。"""
+    import pandas as pd
+
+    today_str = datetime.now().strftime('%Y-%m-%d')
+    project_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # 交易日曆（檔案可能落後實際資料，僅用於缺漏比對）
+    cal_path = os.path.join(project_dir, 'data', 'trading_calendar.parquet')
+    trading_days = []
+    cal_latest = None
+    try:
+        cal = pd.read_parquet(cal_path)
+        cal['date'] = pd.to_datetime(cal['date']).dt.strftime('%Y-%m-%d')
+        trading_days = cal['date'].tolist()
+        if trading_days:
+            cal_latest = trading_days[-1]
+    except Exception as e:
+        logger.warning(f"data-health: 無法讀取 trading_calendar.parquet: {e}")
+
+    trading_set = set(trading_days)
+    # latest_trading_day 與 expected_recent 改在拿到 daily_prices 實際日期後決定
+    latest_trading_day = None
+    expected_recent = []
+
+    def _trading_lag(table_max_date):
+        """從表內最大日期到 latest_trading_day 之間相差幾個交易日。"""
+        if not table_max_date or not latest_trading_day:
+            return None
+        if table_max_date >= latest_trading_day:
+            return 0
+        # 計算 (table_max_date, latest_trading_day] 之間的交易日數
+        lag = 0
+        for d in trading_days:
+            if d > table_max_date and d <= latest_trading_day:
+                lag += 1
+        return lag
+
+    def _status_from_lag(lag):
+        if lag is None:
+            return 'unknown'
+        if lag <= 1:
+            return 'ok'
+        if lag <= 3:
+            return 'warn'
+        return 'error'
+
+    result = {
+        'generated_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'today': today_str,
+        'latest_trading_day': None,
+        'calendar_latest': cal_latest,
+        'tables': [],
+        'recent_coverage': {'expected_dates': [], 'by_table': {}},
+        'gaps': {},
+        'quality': [],
+        'macro': [],
+        'files': [],
+        'stock_universe': {},
+        'watchlist_count': 0,
+    }
+
+    conn = get_conn()
+    try:
+        # 先以 daily_prices 實際存在的最近 10 個交易日當基準
+        recent_dp_dates = [
+            r['date'] for r in conn.execute(
+                "SELECT DISTINCT date FROM daily_prices ORDER BY date DESC LIMIT 10"
+            ).fetchall()
+        ]
+        if recent_dp_dates:
+            latest_trading_day = recent_dp_dates[0]
+            expected_recent = recent_dp_dates  # 已是新→舊
+        elif trading_days:
+            past = [d for d in trading_days if d <= today_str]
+            latest_trading_day = past[-1] if past else None
+            expected_recent = past[-10:][::-1]
+        result['latest_trading_day'] = latest_trading_day
+        result['recent_coverage']['expected_dates'] = expected_recent
+
+        # 每張表概覽
+        TABLE_DEFS = [
+            ('daily_prices', 'date', '日線行情'),
+            ('breakouts', 'date', 'N日高點突破'),
+            ('institutional', 'date', '法人買賣超'),
+            ('broker_trades', 'date', '券商分點進出'),
+            ('credit_spread_history', 'date', '信用利差'),
+            ('macro_indicators', 'date', '總經指標'),
+            ('regime_history', 'date', 'AE 體制偵測'),
+        ]
+
+        for tbl, col, label in TABLE_DEFS:
+            try:
+                row = conn.execute(
+                    f"SELECT COUNT(*) AS cnt, MIN({col}) AS dmin, MAX({col}) AS dmax, "
+                    f"COUNT(DISTINCT {col}) AS distinct_dates FROM {tbl}"
+                ).fetchone()
+                rows = row['cnt'] or 0
+                dmin = row['dmin']
+                dmax = row['dmax']
+                distinct_dates = row['distinct_dates'] or 0
+                # 最新一天的筆數
+                latest_count = 0
+                if dmax:
+                    r2 = conn.execute(
+                        f"SELECT COUNT(*) AS c FROM {tbl} WHERE {col} = ?", (dmax,)
+                    ).fetchone()
+                    latest_count = r2['c'] or 0
+                lag = _trading_lag(dmax)
+                result['tables'].append({
+                    'name': tbl,
+                    'label': label,
+                    'rows': rows,
+                    'date_min': dmin,
+                    'date_max': dmax,
+                    'distinct_dates': distinct_dates,
+                    'latest_row_count': latest_count,
+                    'lag_trading_days': lag,
+                    'status': _status_from_lag(lag),
+                })
+            except Exception as e:
+                result['tables'].append({
+                    'name': tbl, 'label': label, 'error': str(e), 'status': 'error',
+                })
+
+        # 最近 10 個交易日，每張主表的覆蓋筆數
+        # breakouts 不放入熱圖（本來就只記錄突破的個股，列數天然稀疏，不適合用同一閾值）
+        COVERAGE_TABLES = ['daily_prices', 'institutional', 'broker_trades']
+        GAP_TABLES = ['daily_prices', 'institutional', 'broker_trades', 'breakouts']
+        if expected_recent:
+            placeholders = ','.join(['?'] * len(expected_recent))
+            for tbl in COVERAGE_TABLES:
+                try:
+                    rows = conn.execute(
+                        f"SELECT date, COUNT(DISTINCT stock_id) AS n FROM {tbl} "
+                        f"WHERE date IN ({placeholders}) GROUP BY date",
+                        expected_recent,
+                    ).fetchall()
+                    by_date = {r['date']: r['n'] for r in rows}
+                    result['recent_coverage']['by_table'][tbl] = [
+                        {'date': d, 'count': by_date.get(d, 0)} for d in expected_recent
+                    ]
+                except Exception as e:
+                    result['recent_coverage']['by_table'][tbl] = {'error': str(e)}
+
+        # 缺漏的交易日（與 trading_calendar 比對，限定在表內 [min,max] 範圍內）
+        for tbl in GAP_TABLES:
+            try:
+                rmm = conn.execute(
+                    f"SELECT MIN(date) AS dmin, MAX(date) AS dmax FROM {tbl}"
+                ).fetchone()
+                dmin, dmax = rmm['dmin'], rmm['dmax']
+                if not dmin or not dmax or not trading_set:
+                    result['gaps'][tbl] = []
+                    continue
+                expected_in_range = {d for d in trading_days if dmin <= d <= dmax}
+                actual = {
+                    r['date'] for r in conn.execute(
+                        f"SELECT DISTINCT date FROM {tbl} WHERE date BETWEEN ? AND ?",
+                        (dmin, dmax),
+                    ).fetchall()
+                }
+                missing = sorted(expected_in_range - actual, reverse=True)
+                result['gaps'][tbl] = {
+                    'missing_count': len(missing),
+                    'missing_recent': missing[:20],
+                }
+            except Exception as e:
+                result['gaps'][tbl] = {'error': str(e)}
+
+        # 品質檢查
+        QUALITY_CHECKS = [
+            ('daily_prices.null_close',
+             "SELECT COUNT(*) FROM daily_prices WHERE close_price IS NULL", 'OK 應為 0'),
+            ('daily_prices.zero_or_negative_close',
+             "SELECT COUNT(*) FROM daily_prices WHERE close_price <= 0", 'OK 應為 0'),
+            ('daily_prices.zero_volume',
+             "SELECT COUNT(*) FROM daily_prices WHERE volume = 0 OR volume IS NULL", '停牌或缺資料'),
+            ('daily_prices.extreme_change_pct',
+             "SELECT COUNT(*) FROM daily_prices dp WHERE ABS(dp.change_pct) > 11 "
+             "AND (SELECT COUNT(*) FROM daily_prices WHERE stock_id=dp.stock_id AND date<=dp.date) > 5",
+             '上市第 6 日後仍漲跌超過 ±11%（已豁免 IPO 前 5 日無漲跌限）'),
+            ('daily_prices.high_lt_low',
+             "SELECT COUNT(*) FROM daily_prices WHERE high_price < low_price", 'OK 應為 0'),
+            ('institutional.zero_total',
+             "SELECT COUNT(*) FROM institutional WHERE total_buy = 0 AND foreign_buy = 0 AND sitc_buy = 0 AND dealer_buy = 0",
+             '全為 0 的列'),
+            ('stocks.duplicates',
+             "SELECT COUNT(*) - COUNT(DISTINCT stock_id) FROM stocks", 'OK 應為 0'),
+            ('orphan.daily_prices_not_in_stocks',
+             "SELECT COUNT(DISTINCT dp.stock_id) FROM daily_prices dp "
+             "LEFT JOIN stocks s ON dp.stock_id = s.stock_id WHERE s.stock_id IS NULL",
+             '行情中存在、但 stocks 名冊查不到的代號'),
+            ('orphan.institutional_recent_not_in_stocks',
+             "SELECT COUNT(*) FROM (SELECT i.stock_id FROM institutional i "
+             "LEFT JOIN stocks s ON i.stock_id = s.stock_id WHERE s.stock_id IS NULL "
+             "GROUP BY i.stock_id HAVING MAX(i.date) >= date('now','-6 months'))",
+             '近 6 個月仍有法人資料、但 stocks 名冊缺收（疑似新上市未收錄）'),
+            ('orphan.institutional_historical_delisted',
+             "SELECT COUNT(*) FROM (SELECT i.stock_id FROM institutional i "
+             "LEFT JOIN stocks s ON i.stock_id = s.stock_id WHERE s.stock_id IS NULL "
+             "GROUP BY i.stock_id HAVING MAX(i.date) < date('now','-6 months'))",
+             '已下市超過 6 個月的歷史法人資料（保留正常）'),
+        ]
+        for name, sql, hint in QUALITY_CHECKS:
+            try:
+                cnt = conn.execute(sql).fetchone()[0]
+                severity = 'ok' if cnt == 0 else ('warn' if cnt < 100 else 'error')
+                # 預期非 0 的檢查（zero_volume / extreme_change_pct / zero_total）降一級
+                if name in ('daily_prices.zero_volume', 'daily_prices.extreme_change_pct',
+                            'institutional.zero_total'):
+                    severity = 'ok' if cnt == 0 else ('info' if cnt < 1000 else 'warn')
+                # 歷史下市股的 orphan 永遠標 info（保留是正常的）
+                if name == 'orphan.institutional_historical_delisted':
+                    severity = 'info' if cnt > 0 else 'ok'
+                result['quality'].append({
+                    'check': name, 'count': int(cnt), 'hint': hint, 'severity': severity,
+                })
+            except Exception as e:
+                result['quality'].append({
+                    'check': name, 'error': str(e), 'severity': 'error',
+                })
+
+        # macro_indicators 各 series
+        try:
+            for r in conn.execute(
+                "SELECT indicator, MAX(date) AS dmax, COUNT(*) AS cnt "
+                "FROM macro_indicators GROUP BY indicator ORDER BY indicator"
+            ).fetchall():
+                lag = _trading_lag(r['dmax']) if r['dmax'] else None
+                result['macro'].append({
+                    'indicator': r['indicator'],
+                    'latest': r['dmax'],
+                    'rows': r['cnt'],
+                    'lag_trading_days': lag,
+                    'status': _status_from_lag(lag),
+                })
+        except Exception as e:
+            result['macro'] = [{'error': str(e)}]
+
+        # 股票名冊
+        try:
+            for r in conn.execute(
+                "SELECT market, COUNT(*) AS c FROM stocks GROUP BY market"
+            ).fetchall():
+                result['stock_universe'][r['market']] = r['c']
+        except Exception:
+            pass
+
+        # 自選股
+        try:
+            row = conn.execute("SELECT COUNT(*) AS c FROM watchlist").fetchone()
+            result['watchlist_count'] = row['c'] or 0
+        except Exception:
+            pass
+
+    finally:
+        conn.close()
+
+    # 重要檔案的大小與更新時間
+    FILES_TO_CHECK = [
+        'db/scanner.db',
+        'data/institutional_clean.parquet',
+        'data/institutional_full.parquet',
+        'data/trading_calendar.parquet',
+        'data/stocks_index.parquet',
+        'data/data_quality_report.txt',
+        'data/institutional_summary.txt',
+        'backfill_institutional.log',
+        'backfill_broker.log',
+        'watchdog.log',
+    ]
+    for rel in FILES_TO_CHECK:
+        full = os.path.join(project_dir, rel)
+        try:
+            if os.path.exists(full):
+                st = os.stat(full)
+                result['files'].append({
+                    'path': rel,
+                    'size_kb': round(st.st_size / 1024, 1),
+                    'mtime': datetime.fromtimestamp(st.st_mtime).strftime('%Y-%m-%d %H:%M:%S'),
+                    'exists': True,
+                })
+            else:
+                result['files'].append({'path': rel, 'exists': False})
+        except Exception as e:
+            result['files'].append({'path': rel, 'error': str(e)})
+
+    return result
+
+
+@app.route('/api/data-health')
+def api_data_health():
+    """回傳資料健康儀表板的 JSON。預設 60 秒快取，?force=1 可強制重新計算。"""
+    force = request.args.get('force') == '1'
+    now = time.time()
+    with _data_health_lock:
+        if (not force and _data_health_cache['data'] is not None
+                and now - _data_health_cache['ts'] < _DATA_HEALTH_TTL):
+            data = _data_health_cache['data']
+        else:
+            data = _build_data_health()
+            _data_health_cache['data'] = data
+            _data_health_cache['ts'] = now
+    return jsonify(data)
+
+
+@app.route('/data-health')
+def data_health_page():
+    """資料健康儀表板頁面。刻意不放在側邊欄，僅供直接以 URL 訪問。"""
+    return render_template('data_health.html')
 
 
 @app.route('/api/stock')

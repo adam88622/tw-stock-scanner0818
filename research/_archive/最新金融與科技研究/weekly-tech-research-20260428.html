@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 科技研究週報 2026-04-28
+  涵蓋八項：DeepSeek V4、北京人形機器人半馬、Stanford AI Index、Hermes-Agent、
+            claude-mem、Google TurboQuant、NVIDIA Isaac GR00T、量化金融 LLM
+  資料截至 2026-04-28
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>GiS 科技研究週報 2026-04-28 | DeepSeek V4 × Humanoid × Agent Production</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:16.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.full-page{display:flex;flex-direction:column}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:40px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15.5px;color:rgba(255,255,255,.65);margin-bottom:36px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 14px;border-radius:20px;font-size:12px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:18px 22px;text-align:center}
+.cstat-num{font-size:24px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:13px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:14px 60px;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:13px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:42px;font-weight:800;line-height:1.2;margin-bottom:20px;max-width:620px}
+.sec-desc{font-size:15.5px;color:rgba(255,255,255,.6);line-height:1.8;max-width:560px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:28px 46px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:23px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:7px 14px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 12px;page-break-after:avoid}
+h2.ch{font-size:18px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:14px 0 8px;page-break-after:avoid}
+h3.ch{font-size:15.5px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 7px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:6px 0 12px;font-size:13.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 11px;text-align:left;font-weight:600;font-size:13px;letter-spacing:.3px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 11px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13.5px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:12px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:13px 18px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-card-head.amber{background:#78350f}
+.co-card-head.maroon{background:#3f1d2c}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:2px;letter-spacing:.6px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 13px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.badge.watch{background:#6366f1;color:#fff}
+.badge.go{background:#00c896;color:#fff}
+.badge.cgo{background:#f59e0b;color:#fff}
+.badge.nogo{background:#e74c3c;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:11px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:12px;color:#6b7a9a}
+.co-body{padding:14px 18px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:11px;margin:9px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14.5px;font-weight:700;color:#0d1b3e;margin-bottom:3px}
+.chart-sub{font-size:12.5px;color:#6b7a9a;margin-bottom:8px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.purple{background:linear-gradient(135deg,#312e81,#6366f1)}
+.kpi-val{font-size:22px;font-weight:800;margin-bottom:4px}
+.kpi-val em{font-size:13px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:12.5px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:16px;margin:10px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:15.5px;font-weight:700;color:#0d1b3e;padding:8px 0;border-bottom:1px solid #dce8f8;display:flex;gap:10px;align-items:flex-start;line-height:1.55}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:22px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.risk-card{border-radius:8px;padding:14px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:15px;font-weight:700;margin-bottom:7px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13.5px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.pick-card{border-radius:8px;padding:15px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:13px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:5px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:13px;color:#6b7a9a;margin-bottom:8px}
+.pick-why{font-size:13.5px;color:#2d3748;line-height:1.65;margin-bottom:8px}
+.pick-catalyst{font-size:13px;color:#065f46;background:#e8f5ee;padding:7px 9px;border-radius:5px}
+p{margin:5px 0 9px;line-height:1.7}
+ul,ol{padding-left:20px;margin:5px 0 9px}
+li{margin:3px 0;line-height:1.6;font-size:14px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:10px 14px;margin:10px 0;color:#1a3a6e;font-size:14.5px;border-radius:0 5px 5px 0;line-height:1.6}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:18px 0}
+.src{font-size:12px;color:#9aabb5;display:block;margin-top:5px}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:10px 46px;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14.5px}
+.footer-logo em{color:#00c896;font-style:normal}
+.verdict-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}
+.verdict-card{padding:12px 14px;border-radius:8px;border:1.5px solid #d0ddf0;background:#fff}
+.verdict-card.go{border-color:#00c896;background:#e8f5ee}
+.verdict-card.cgo{border-color:#f59e0b;background:#fff8e1}
+.verdict-card.nogo{border-color:#e74c3c;background:#fdf0ef}
+.verdict-h{font-size:14.5px;font-weight:800;color:#0d1b3e;margin-bottom:4px}
+.verdict-b{font-size:13px;color:#2d3748;line-height:1.55}
+.verdict-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:6px}
+.verdict-tag.go{background:#00c896;color:#fff}
+.verdict-tag.cgo{background:#f59e0b;color:#fff}
+.verdict-tag.nogo{background:#e74c3c;color:#fff}
+.bom-block{background:#0d1b3e;color:#cad8f5;padding:14px 18px;border-radius:8px;font-family:'Consolas','Courier New',monospace;font-size:12px;line-height:1.65;margin:10px 0;white-space:pre;overflow-x:auto}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI 量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Tech &amp; Finance Weekly · Week 17 · 2026</div>
+    <div class="cover-title">DeepSeek V4 × 人形機器人量產<br><em>Agent 進入 Production 拐點</em></div>
+    <div class="cover-subtitle">2026-04-22 ~ 04-28 八項可行性評估與 PoC 實作週報</div>
+    <div class="cover-tags">
+      <span class="ctag hl">DeepSeek V4</span>
+      <span class="ctag hl">Honor Lightning</span>
+      <span class="ctag hl">AI Index 66.3%</span>
+      <span class="ctag">Hermes-Agent</span>
+      <span class="ctag">claude-mem</span>
+      <span class="ctag">TurboQuant</span>
+      <span class="ctag">Isaac GR00T</span>
+      <span class="ctag">Quant LLMs</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>8/8</em></div><div class="cstat-label">主題完成實證</div></div>
+    <div class="cstat"><div class="cstat-num"><em>3</em></div><div class="cstat-label">原假設被實證打臉</div></div>
+    <div class="cstat"><div class="cstat-num"><em>28</em></div><div class="cstat-label">本機 LLM 推理</div></div>
+    <div class="cstat"><div class="cstat-num"><em>315</em></div><div class="cstat-label">交易日股價樣本</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 4 月 28 日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">−89<em>%</em></div><div class="kpi-lbl">DeepSeek V4 取代 Sonnet 月成本</div></div>
+    <div class="kpi"><div class="kpi-val">66.3<em>%</em></div><div class="kpi-lbl">OSWorld Agent 任務成功率</div></div>
+    <div class="kpi gold"><div class="kpi-val">50:26</div><div class="kpi-lbl">Honor Lightning 半馬時間</div></div>
+    <div class="kpi purple"><div class="kpi-val">6<em>×</em></div><div class="kpi-lbl">TurboQuant KV cache 壓縮</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>開源 LLM 成本斷崖式下跌。</strong> DeepSeek V4-Flash 0.14/0.28 USD per M token，與 Claude Opus 4.6 在 SWE-bench 平手；GiS pipeline 推論成本可由 $312/月 降至 $34/月（−89%）。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>Agent 進入 production 階段，但 89% 失敗。</strong> Stanford AI Index 2026 顯示 OSWorld 一年內 12% → 66.3%、GPT-5.4 75% 跨越人類基線；GiS 七階段 dispatcher 領先架構，但缺「績效層」儀表板。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>人形機器人量產拐點。</strong> Honor Lightning 50:26 半馬完賽證實熱管理 + 自主導航 + 能源密度三大瓶頸已工程化；Atlas 30K/年、Unitree 20K/年；台股精密機械 + 算力 + 電池供應鏈 2026 H2 訂單爆發。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>記憶體股恐慌賣壓為買點。</strong> TurboQuant 6× 壓縮僅作用於推理 KV cache，與訓練端 HBM 70% 主流需求脫鉤；SK 海力士、美光回檔超 8% 視為戰術性買進。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">Agent 任務成功率躍升（OSWorld）</div>
+      <div class="chart-sub">來源：Stanford AI Index 2026 / BenchLM</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chart1" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">LLM API 成本對比（USD / M output token）</div>
+      <div class="chart-sub">來源：DeepSeek、Anthropic、OpenAI 官方定價 2026-04</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chart2" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">八主題可行性裁決速覽</h2>
+  <div class="verdict-row">
+    <div class="verdict-card go"><div class="verdict-tag go">CONDITIONAL GO</div><div class="verdict-h">① DeepSeek V4 接入</div><div class="verdict-b">立即導入 V4-Flash 處理新聞、V4-Pro 處理研報；客戶交易明細保留 Claude。</div></div>
+    <div class="verdict-card go"><div class="verdict-tag go">GO (THEMATIC)</div><div class="verdict-h">② 北京人形機器人 — 台股供應鏈</div><div class="verdict-b">建構 THR-Index 8 檔籃子，上銀／台達電／鴻海／和大／廣達為核心。</div></div>
+    <div class="verdict-card go"><div class="verdict-tag go">GO (INTERNAL)</div><div class="verdict-h">③ Stanford AI Index — Agent 儀表板</div><div class="verdict-b">本週啟動 PoC，3 工作天交付；散熱／電源／監控為投資受益層。</div></div>
+    <div class="verdict-card cgo"><div class="verdict-tag cgo">PARTIAL ADOPT</div><div class="verdict-h">④ Hermes-Agent</div><div class="verdict-b">不採用主框架；借鑒 skill auto-creation + FTS5 + USER.md dialectic 三設計。</div></div>
+    <div class="verdict-card go"><div class="verdict-tag go">GO (PLAN B)</div><div class="verdict-h">⑤ claude-mem</div><div class="verdict-b">放棄方案 A；自建 200 行 Python 向量索引（multilingual MiniLM）。</div></div>
+    <div class="verdict-card cgo"><div class="verdict-tag cgo">WAIT &amp; BUY DIP</div><div class="verdict-h">⑥ Google TurboQuant</div><div class="verdict-b">不自部署；等雲端內建；記憶體股回檔 &gt; 8% 為戰術買點。</div></div>
+    <div class="verdict-card go"><div class="verdict-tag go">GO (THEMATIC)</div><div class="verdict-h">⑦ NVIDIA Isaac GR00T</div><div class="verdict-b">建構 GR00T-thematic basket，研華 / 廣達 / 宜鼎為核心 NVIDIA 生態 alpha。</div></div>
+    <div class="verdict-card go"><div class="verdict-tag go">HYBRID GO</div><div class="verdict-h">⑧ 量化金融 LLM 三家路徑</div><div class="verdict-b">情感 → Qwen3、敘事 → Claude、因子解釋 → DeepSeek-R1；中期自架 QwQ-32B。</div></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節一：基礎模型 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One · Foundation Models</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">基礎模型成本斷崖<br>DeepSeek V4 與量化金融 LLM</div>
+  <div class="sec-desc">2026 Q2 開源旗艦推理模型釋出加速：DeepSeek V4 雙變體、Qwen3-235B、QwQ-32B 三線並進，定價腰斬至腳踝。本章評估 GiS 既有 Claude pipeline 的替換可行性。</div>
+</div>
+
+<!-- ① DeepSeek V4 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">① DeepSeek V4 — 開源 1M context 旗艦</h1>
+
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">DeepSeek V4 Pro / Flash</div><div class="co-ticker">2026-04-24 預覽版 · MIT License · OpenAI 相容 API</div></div>
+      <div class="co-badge"><span class="badge go">CONDITIONAL GO</span><span style="color:rgba(255,255,255,.7);font-size:10px">月成本 $312 → $34</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">1.6T</div><div class="co-metric-label">V4-Pro 總參數 (49B active)</div></div>
+      <div class="co-metric"><div class="co-metric-val">1M</div><div class="co-metric-label">Context window</div></div>
+      <div class="co-metric"><div class="co-metric-val up">−89%</div><div class="co-metric-label">vs Claude Sonnet 月成本</div></div>
+      <div class="co-metric"><div class="co-metric-val">80.6%</div><div class="co-metric-label">SWE-bench Verified</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">技術核心：Hybrid Attention + MoE</h3>
+      <p>採 CSA（Compressed Sparse）+ HCA + DSA top-k 選擇，1M token 下 V4-Pro 僅需 V3.2 的 27% per-token FLOPs / 10% KV cache。三推理模式 non-thinking / thinking / thinking_max 透過 API 參數切換。權重於 Hugging Face MIT 釋出（V4-Pro 865 GB / V4-Flash 160 GB）。</p>
+
+      <h3 class="ch">GiS 月成本對比（54M input / 10M output 假設）</h3>
+      <table>
+        <thead><tr><th>方案</th><th>Input ($/M)</th><th>Output ($/M)</th><th>月成本 (USD)</th><th>節省</th></tr></thead>
+        <tbody>
+          <tr><td>Claude Sonnet 4.6（基準）</td><td class="num">3.00</td><td class="num">15.00</td><td class="num">312.0</td><td class="num">—</td></tr>
+          <tr><td>Claude Opus 4.6（重任務）</td><td class="num">15.00</td><td class="num">75.00</td><td class="num">1,560.0</td><td class="num neg">−400%</td></tr>
+          <tr><td>全 V4-Flash</td><td class="num">0.14</td><td class="num">0.28</td><td class="num pos">10.36</td><td class="num pos">−97%</td></tr>
+          <tr><td>全 V4-Pro（原價）</td><td class="num">1.74</td><td class="num">3.48</td><td class="num">128.76</td><td class="num pos">−59%</td></tr>
+          <tr><td class="hi"><strong>建議混合 Flash 80% + Pro 20%</strong></td><td class="num">混合</td><td class="num">混合</td><td class="num hi">34.04</td><td class="num pos hi">−89%</td></tr>
+        </tbody>
+      </table>
+      <span class="src">資料來源：DeepSeek API Docs、OpenRouter Pricing、本研究內部測算</span>
+
+      <div class="risk-matrix">
+        <div class="risk-card up">
+          <h4>上行催化劑</h4>
+          <div class="risk-item">OpenAI SDK 一行設定即可切換，遷移成本 1 人日</div>
+          <div class="risk-item">1M context 取代既有 RAG chunking（研報、年報全文）</div>
+          <div class="risk-item">Anthropic 相容 endpoint：https://api.deepseek.com/anthropic</div>
+        </div>
+        <div class="risk-card dn">
+          <h4>下行風險</h4>
+          <div class="risk-item">中國公司，金管會對「境外 AI 處理金融資料」有審查指引</div>
+          <div class="risk-item">預覽版 JSON schema 可能漂移，需 Pydantic + retry 包裹</div>
+          <div class="risk-item">2026-07-24 舊型號 deepseek-chat / reasoner 棄用</div>
+        </div>
+      </div>
+
+      <blockquote><strong>行動清單：</strong> W1 跑 PoC（200 則新聞雙模型對比）→ W2 建 cost router（&gt;20K → Pro）→ W3 OpenRouter 灰度 10/50/100% → W4 研報切換 1M context 刪 RAG → W5 評估 self-host V4-Flash。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>① DeepSeek V4 · Foundation Models</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ⑧ 量化金融 LLM -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">⑧ 量化金融 LLM 三家路徑：DeepSeek-R1 × Qwen3 × QwQ-32B</h1>
+
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">三模型混合部署策略</div><div class="co-ticker">tw-stock-scanner · 情感 / 敘事 / 因子解釋三情境分流</div></div>
+      <div class="co-badge"><span class="badge go">HYBRID GO</span><span style="color:rgba(255,255,255,.7);font-size:10px">短期 API → 中期 vLLM 自架</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">5–7×</div><div class="co-metric-label">DeepSeek-R1 vs Sonnet 便宜</div></div>
+      <div class="co-metric"><div class="co-metric-val">119</div><div class="co-metric-label">Qwen3 訓練語言數</div></div>
+      <div class="co-metric"><div class="co-metric-val">1× H100</div><div class="co-metric-label">QwQ-32B 自架門檻</div></div>
+      <div class="co-metric"><div class="co-metric-val">&gt;5B</div><div class="co-metric-label">R1 自架損益點 (M tok/月)</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">五模型對比表</h3>
+      <table>
+        <thead><tr><th>模型</th><th>參數</th><th>Context</th><th>Input $/M</th><th>Output $/M</th><th>中文</th><th>FinBench</th></tr></thead>
+        <tbody>
+          <tr><td><strong>DeepSeek-R1</strong></td><td>671B (37B)</td><td>128K</td><td class="num">0.55</td><td class="num">2.19</td><td>簡強繁中可接受</td><td class="num">~75%</td></tr>
+          <tr><td><strong>Qwen3-235B-A22B</strong></td><td>235B (22B)</td><td class="hi">262K</td><td class="num pos">0.26</td><td class="num pos">1.20</td><td class="pos">繁簡雙強</td><td class="num">~70%</td></tr>
+          <tr><td><strong>QwQ-32B</strong></td><td>32B dense</td><td>131K</td><td class="num pos">0.15</td><td class="num pos">0.60</td><td>中文良好</td><td class="num">~65%</td></tr>
+          <tr><td>Claude Sonnet 4.6</td><td>未公開</td><td class="hi">1M</td><td class="num">3.00</td><td class="num">15.00</td><td class="pos">優秀</td><td class="num">~78%</td></tr>
+          <tr><td>GPT-5.4</td><td>未公開</td><td>1.05M</td><td class="num">2.50</td><td class="num">10.00</td><td class="pos">優秀</td><td class="num hi">~88%</td></tr>
+        </tbody>
+      </table>
+      <span class="src">資料來源：HuggingFace Model Cards、各供應商定價頁、arXiv 2510.05533《The New Quant》</span>
+
+      <h3 class="ch">tw-stock-scanner 三情境選型</h3>
+      <div class="picks-grid">
+        <div class="pick-card">
+          <div class="pick-rank">情境 A · 高頻分類</div>
+          <div class="pick-name">新聞情感評分</div>
+          <div class="pick-ticker">繁中為主、批次 800-1500 則/日</div>
+          <div class="pick-why"><strong>選型：Qwen3-235B (API) → 中期切 QwQ-32B 自架</strong>。32B 級已飽和情感分類，自架後邊際成本接近 0。</div>
+          <div class="pick-catalyst">預期：對標 Claude Sonnet 95% 準確度，成本 1/10</div>
+        </div>
+        <div class="pick-card">
+          <div class="pick-rank">情境 B · 中頻生成</div>
+          <div class="pick-name">法人買賣超敘事</div>
+          <div class="pick-ticker">面向研究員 / 客戶輸出</div>
+          <div class="pick-why"><strong>選型：保留 Claude Sonnet 4.6</strong>。中文敘事流暢度仍領先，Qwen3 並行評測 1-2 個月再決。</div>
+          <div class="pick-catalyst">風險：DeepSeek-R1 含 &lt;think&gt; 多餘前綴，需後處理</div>
+        </div>
+        <div class="pick-card">
+          <div class="pick-rank">情境 C · 低頻推理</div>
+          <div class="pick-name">因子解釋</div>
+          <div class="pick-ticker">日批次／週批次，5-10s 延遲可接受</div>
+          <div class="pick-why"><strong>選型：DeepSeek-R1 (API) + GPT-5.4 交叉驗證</strong>。多步金融計算需 reasoning LLM；R1 性價比為 GPT-5.4 的 5-10 倍。</div>
+          <div class="pick-catalyst">支撐：arXiv 2510.05533《The New Quant》</div>
+        </div>
+        <div class="pick-card">
+          <div class="pick-rank">中期升級路徑</div>
+          <div class="pick-name">QwQ-32B 自架</div>
+          <div class="pick-ticker">1× H100 或 2× RTX 4090 + vLLM AWQ INT4</div>
+          <div class="pick-why">月雲端成本 $1,440；損益點 0.7B output token/月，**tw-stock-scanner 約 3-6 月可達門檻**。</div>
+          <div class="pick-catalyst">資料治理：全部留境內，金管會合規</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>⑧ Quant Finance LLM · Foundation Models</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節二：Agent 系統 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two · Agent Systems</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">Agent 進入 Production 拐點<br>但 89% 仍卡在生產化</div>
+  <div class="sec-desc">Stanford AI Index 2026 顯示 OSWorld 一年從 12% 跳到 66.3%、GPT-5.4 跨越人類基線。本章評估 GiS 七階段 dispatcher 對標 Hermes-Agent / claude-mem，找出三個可借鑒設計。</div>
+</div>
+
+<!-- ③ Stanford AI Index -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">③ Stanford AI Index 2026 — Agent 能力臨界點與 GiS 對策</h1>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-val">12 → 66<em>%</em></div><div class="kpi-lbl">OSWorld 一年成功率躍升</div></div>
+    <div class="kpi green"><div class="kpi-val">75.0<em>%</em></div><div class="kpi-lbl">GPT-5.4 OSWorld-V（&gt; 72.4% 人類）</div></div>
+    <div class="kpi gold"><div class="kpi-val">$581B</div><div class="kpi-lbl">2025 全球企業 AI 投資</div></div>
+    <div class="kpi purple"><div class="kpi-val">89<em>%</em></div><div class="kpi-lbl">Agent 專案無法 production</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">Agent Benchmark 跨越人類基線</div>
+      <div class="chart-sub">來源：BenchLM / Stanford AI Index Technical Performance</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chart3" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Agent Infrastructure 投資受益分層</div>
+      <div class="chart-sub">三層配置權重：算力底層 / 散熱電源 / 觀測層</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chart4" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">對 GiS 的三個直接啟示</h2>
+  <ul>
+    <li><strong>架構踩在 2026 主流上，缺「績效層」：</strong>七階段 dispatcher 本質就是 multi-agent orchestration。89% 失敗根因都在缺成功率追蹤、成本歸因、回歸測試。<code>$PRJ/log/</code> 自由文字 → 升級結構化 metric。</li>
+    <li><strong>OSWorld-V 75% 給研究自動化綠燈：</strong>法人籌碼回補、EZWin 報告下載、研報 HTML 解析這類 GUI/混合任務可從「半自動」推到「監督式全自動」。EZWin 冷啟動 tab 切換 bug 重打包成 OSWorld 風格 task spec。</li>
+    <li><strong>Jagged Frontier 風險：</strong>同一批模型可推 IMO 但讀錯類比指針時鐘（50.1%）。回補腳本（2012/2018 起法人資料）必須加 <strong>schema-level 驗證</strong>，不能僅看 agent 自報「成功」。</li>
+  </ul>
+
+  <h2 class="ch">投資受益分層（台股聚焦）</h2>
+  <table>
+    <thead><tr><th>層級</th><th>受益邏輯</th><th>美股代表</th><th>台股核心</th></tr></thead>
+    <tbody>
+      <tr><td><strong>算力底層</strong></td><td>$581B 投資 + 3.3× 年增算力</td><td>NVDA、AMD、AVGO</td><td>2330 台積電、2454 聯發科、3443 創意、3661 世芯-KY</td></tr>
+      <tr><td><strong>散熱／電源</strong></td><td class="hi">30× 算力擴張、地方限建</td><td>VRT、ETN、CEG</td><td class="hi">2308 台達電、2301 光寶科、3017 奇鋐、3324 雙鴻</td></tr>
+      <tr><td><strong>網通</strong></td><td>scale-out 通訊頻寬翻倍</td><td>ANET、CSCO</td><td>2345 智邦、2376 技嘉、6669 緯穎</td></tr>
+      <tr><td><strong>Agent 工具/監控</strong></td><td>89% production gap → 監控市場剛起步</td><td>DDOG、SNOW、MDB</td><td>4953 緯軟（觀察）</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>內部行動：</strong>本週啟動 Agent 績效監控儀表板 PoC（已附 <code>03_agent_benchmark_tracker.py</code>，113 行 stdlib + JSON store）。Week 2 接 SQLite + Streamlit；Week 3 接 Claude API 計費 + Slack 警報。預期降 30%+ debug 時間。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>③ Stanford AI Index · Agent Systems</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ④⑤ Hermes-Agent + claude-mem -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">④ Hermes-Agent &amp; ⑤ claude-mem — 借鑒 vs 自建</h1>
+
+  <div class="co-card">
+    <div class="co-card-head indigo">
+      <div><div class="co-name">Hermes-Agent (NousResearch)</div><div class="co-ticker">+30,630 ⭐ 本週 · 自我改進型 agent 框架 · MIT</div></div>
+      <div class="co-badge"><span class="badge cgo">PARTIAL ADOPT</span><span style="color:rgba(255,255,255,.7);font-size:10px">借鑒 3 設計，5-7 人日</span></div>
+    </div>
+    <div class="co-body">
+      <p>Hermes 核心：closed-loop learning（自動 skill registry）+ MEMORY.md/USER.md（Honcho dialectic）+ FTS5 cross-session recall + 多平台 gateway + agentskills.io 標準。</p>
+      <h3 class="ch">與 GiS 系統重疊度高，特化度低 → 不採用主框架</h3>
+      <p>GiS 七階段 dispatcher（requirements / architecture / builder / test / log）在 <strong>嚴謹度與量化金融特化上已優於 Hermes 通用設計</strong>。完整遷移會丟棄 KGI / SK COM / TWSE / TPEx 整合資產。多平台 gateway 對內部量化團隊無價值；模型彈性收益已綁 Claude。</p>
+      <h3 class="ch">借鑒三設計（合計 5-7 人日）</h3>
+      <table>
+        <thead><tr><th>借鑒點</th><th>移植到</th><th>工時</th><th>預期效益</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Autonomous Skill Creation</strong></td><td>phase7-delivery 末段加 skill-extraction hook</td><td class="num">1-2 d</td><td>「TWSE 法人買超」自動寫入 .claude/skills/，下次自動掛載</td></tr>
+          <tr><td><strong>FTS5 Cross-Session Recall</strong></td><td>auto-memory（~/.claude/projects/d--claude/memory/）</td><td class="num">2-3 d</td><td>SQLite FTS5 索引，dispatcher 動態載入相關 memory</td></tr>
+          <tr><td><strong>USER.md Dialectic Update</strong></td><td>user_profile.md 補強</td><td class="num">2 d</td><td>session 結束 propose user_profile.md diff（人工確認）</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:13.5px;color:#5b6b8a"><strong>戰略觀察：</strong>agentskills.io 已成事實標準（Claude / Cursor / Gemini CLI / OpenHands / Letta 30+ 工具支援），GiS .claude/skills/ 已合規，無鎖定風險。</p>
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div><div class="co-name">claude-mem (thedotmack)</div><div class="co-ticker">+12,472 ⭐ · TS 外掛 · Chroma + SQLite/FTS5 · ~10× token 節省</div></div>
+      <div class="co-badge"><span class="badge go">PLAN B</span><span style="color:rgba(255,255,255,.7);font-size:10px">自建 200 行 Python</span></div>
+    </div>
+    <div class="co-body">
+      <p>claude-mem 採 Chroma 向量庫 + SQLite/FTS5 雙索引 + 6 hooks + 三層漸進披露 MCP（search / timeline / get_observations）。<strong>不建議全套採用</strong>：Node + Bun + uv + Chroma 多 runtime 在 Windows 增加失敗面；MiniLM-L6-v2 預設模型對中文召回弱；SQLite blob 失去 git 可審計性。</p>
+      <h3 class="ch">推薦方案 B：自建輕量向量索引</h3>
+      <table>
+        <thead><tr><th>面向</th><th>方案 A（claude-mem）</th><th>方案 B（自建，推薦）</th></tr></thead>
+        <tbody>
+          <tr><td>一次性建置</td><td class="num">1-2 天（多 runtime debug）</td><td class="num pos hi">0.5 天</td></tr>
+          <tr><td>磁碟</td><td class="num">+300 MB</td><td class="num pos">+120 MB（multilingual MiniLM）</td></tr>
+          <tr><td>中文召回</td><td>中（看模型替換）</td><td class="pos">高（multilingual 模型 + BM25 fallback）</td></tr>
+          <tr><td>git 可審計</td><td class="neg">否（SQLite blob）</td><td class="pos">是（Markdown 不動）</td></tr>
+          <tr><td>量化合規</td><td>需審查外掛 supply chain</td><td class="pos">自建可審計</td></tr>
+        </tbody>
+      </table>
+      <blockquote>本週交付 PoC：<code>05_memory_vector_search.py</code>（195 行，<code>paraphrase-multilingual-MiniLM-L12-v2</code> 中英雙語 + rank_bm25 fallback + .npz/.pkl 持久化）。3 個月後 50+ 條記憶時重評。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>④⑤ Hermes-Agent &amp; claude-mem · Agent Systems</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節三：實體 AI ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three · Physical AI</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">人形機器人量產拐點<br>中國本體鏈 vs NVIDIA 生態</div>
+  <div class="sec-desc">Honor Lightning 50:26 半馬完賽證實熱管理、能源密度、自主導航三大瓶頸已工程化；GR00T N1.7 商用授權；Atlas 30K/年 + Unitree 20K/年。台股供應鏈 2026 H2 訂單兌現年。</div>
+</div>
+
+<!-- ② 北京人形機器人 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">② 北京人形機器人半馬 — 中國本體鏈 alpha</h1>
+
+  <div class="co-card">
+    <div class="co-card-head amber">
+      <div><div class="co-name">Honor Lightning 半馬奪冠 (50:26)</div><div class="co-ticker">2026-04-19 北京 E-Town · 21K 自主導航 · 100+ 機器人參賽</div></div>
+      <div class="co-badge"><span class="badge go">THEMATIC GO</span><span style="color:rgba(255,255,255,.7);font-size:10px">THR-Index 8 檔籃</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">50:26</div><div class="co-metric-label">機器人完賽（自主）</div></div>
+      <div class="co-metric"><div class="co-metric-val">57:20</div><div class="co-metric-label">人類世界紀錄</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+133%</div><div class="co-metric-label">2026 中國 humanoid 銷售 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">28K</div><div class="co-metric-label">2026 中國出貨預估（MS）</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">三大工程瓶頸已突破</h3>
+      <ol>
+        <li><strong>熱管理：</strong>21K 連續運轉不熱當機，液冷關節技術自手機散熱模組移植，servo 馬達熱失控可工程化。</li>
+        <li><strong>能源密度：</strong>21K 不更換電池 = 電池能量密度 + BMS 控制達工業可用門檻。</li>
+        <li><strong>自主導航：</strong>50:26 無遙控干預，含上下坡、轉彎、避障 = SLAM + 步態規劃完整 stack 已驗收。</li>
+      </ol>
+
+      <h3 class="ch">台股 THR-Index 8 檔核心 + 觀察名單</h3>
+      <table>
+        <thead><tr><th>代號</th><th>公司</th><th>切入點</th><th>BOM 佔比</th><th>純度</th></tr></thead>
+        <tbody>
+          <tr><td class="hi"><strong>2049</strong></td><td>上銀科技</td><td>諧波減速機 + 滾珠螺桿，鴻海 humanoid 大關節模組</td><td class="num pos">高</td><td class="num pos">高</td></tr>
+          <tr><td class="hi"><strong>2308</strong></td><td>台達電</td><td>伺服馬達 + 電源管理 + 散熱（Lightning 液冷靈感同源）</td><td class="num pos">高</td><td class="num">中</td></tr>
+          <tr><td class="hi"><strong>2317</strong></td><td>鴻海</td><td>整機組裝 + FoxBrain humanoid 計畫 + NVIDIA GR00T 合作</td><td class="num pos">高</td><td class="num">中</td></tr>
+          <tr><td><strong>1536</strong></td><td>和大</td><td>RV 減速機與精密齒輪</td><td class="num">中</td><td class="num pos">高</td></tr>
+          <tr><td><strong>2382</strong></td><td>廣達</td><td>QCT × Techman × NVIDIA TM Xplore I</td><td class="num">中</td><td class="num">中</td></tr>
+          <tr><td><strong>4571</strong></td><td>鈞興-KY</td><td>諧波減速機（純度高）</td><td class="num">中</td><td class="num pos hi">最高</td></tr>
+          <tr><td><strong>6121</strong></td><td>新普</td><td>電池模組（高能量密度）</td><td class="num">中</td><td class="num">中</td></tr>
+          <tr><td><strong>2233</strong></td><td>宇隆</td><td>精密傳動齒輪，月營收已透露 humanoid 訂單</td><td class="num">中</td><td class="num pos">高</td></tr>
+        </tbody>
+      </table>
+      <span class="src">補充觀察：4576 大銀微、2395 研華、3231 緯創、4938 和碩</span>
+
+      <div class="risk-matrix">
+        <div class="risk-card up">
+          <h4>量化策略可行性</h4>
+          <div class="risk-item">Thematic basket buy &amp; hold + 季度 rebalance：Sharpe 0.8-1.2</div>
+          <div class="risk-item">Event-driven momentum：Sharpe 1.0-1.5（事件密度依賴）</div>
+          <div class="risk-item">NLP「humanoid mention」詞頻因子：Sharpe 0.6-0.9</div>
+        </div>
+        <div class="risk-card dn">
+          <h4>策略限制</h4>
+          <div class="risk-item">樣本短：humanoid 是 2024 後 dataset，無法 20 年 backtest</div>
+          <div class="risk-item">事件叢集：demo / 發表會集中科技展期間，存在 regime 切換</div>
+          <div class="risk-item">流動性：純度標的（4571/2233）日均 $10-30M，承載 &lt; $50M</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>② Beijing Humanoid · Physical AI</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ⑦ NVIDIA Isaac GR00T -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">⑦ NVIDIA Isaac GR00T — NVIDIA 生態 alpha</h1>
+
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">GR00T N1.7 商用授權</div><div class="co-ticker">GTC 2026 · VLA 雙系統 · EgoScale 20K hours · 12+ OEM 採用</div></div>
+      <div class="co-badge"><span class="badge go">THEMATIC GO</span><span style="color:rgba(255,255,255,.7);font-size:10px">與 02 籃配對交易</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">12+</div><div class="co-metric-label">OEM 採用 GR00T N1.7</div></div>
+      <div class="co-metric"><div class="co-metric-val">30K</div><div class="co-metric-label">Atlas 2028 年產目標</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+40%</div><div class="co-metric-label">合成資料 vs 真實訓練</div></div>
+      <div class="co-metric"><div class="co-metric-val">$5B</div><div class="co-metric-label">NVDA Robotics FY26 目標</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">系統架構：System 1 反射 + System 2 推理</h3>
+      <p><strong>System 2</strong>（VLM 慢思考）處理多模態指令生成計畫；<strong>System 1</strong>（Diffusion-Transformer action policy）轉成毫秒級關節控制。Isaac Sim + Newton physics + Cosmos：6,500 小時合成示範 = 9 個月人類連續操作，11 小時即可生成。</p>
+
+      <h3 class="ch">台股 NVIDIA 生態鏈（與 02 篇互補）</h3>
+      <table>
+        <thead><tr><th>代號</th><th>公司</th><th>GR00T 生態角色</th><th>邏輯</th></tr></thead>
+        <tbody>
+          <tr><td class="hi"><strong>2395</strong></td><td>研華 Advantech</td><td>NVIDIA 點名 Jetson Thor 合作夥伴</td><td>★★★★★ 直接受惠</td></tr>
+          <tr><td class="hi"><strong>2382</strong></td><td>廣達 (QCT)</td><td>TM Xplore I 共同開發 + DGX/HGX 主代工</td><td>★★★★★ 伺服器側</td></tr>
+          <tr><td class="hi"><strong>5289</strong></td><td>宜鼎 Innodisk</td><td>NVIDIA 點名嵌入式儲存合作夥伴</td><td>★★★★</td></tr>
+          <tr><td><strong>2359</strong></td><td>所羅門 Solomon</td><td>3D 視覺 + AI 物件辨識，Isaac 整合</td><td>★★★★</td></tr>
+          <tr><td><strong>6245</strong></td><td>立端 Lanner</td><td>邊緣 AI 運算主板 + 機器人 controller</td><td>★★★</td></tr>
+          <tr><td><strong>8234</strong></td><td>新漢 NEXCOM</td><td>Taiwan Robotics Show 已展 Jetson Thor</td><td>★★★</td></tr>
+          <tr><td><strong>2308</strong></td><td>台達電 (跨界)</td><td>馬達 + 電源 + Newton 物理引擎合作</td><td>★★★</td></tr>
+        </tbody>
+      </table>
+      <span class="src">美股錨點：NVDA、SYM、Serve Robotics ｜ 日股：6857 Advantest、6981 村田、6594 Nidec</span>
+
+      <h3 class="ch">與 02 中國本體鏈籃子的差集（PoC 驗證）</h3>
+      <p>PoC <code>07_groot_supply_chain_basket.py</code> 計算結果：兩籃 <strong>Jaccard overlap 21.1%</strong>，4 檔共同（NVDA + Delta + Nidec + Murata），8 檔僅 GR00T 籃，7 檔僅 02 中國本體籃。</p>
+      <blockquote><strong>策略意涵：</strong>差集足夠分明 → 可建構「GR00T basket long / 中國本體 basket short」相對價值對沖；交集 4 檔可作中性核心配置不影響 RV 訊號。</blockquote>
+
+      <h3 class="ch">下一個催化劑（監控訊號）</h3>
+      <ul>
+        <li>2026 Q2-Q3：N1.7 商用授權客戶名單擴張、N2 路線圖</li>
+        <li>2026-08 NVIDIA FY26 Q2 財報：Robotics &amp; Auto 達 $5B 階段目標？</li>
+        <li>2026-06 Computex：Jetson Thor 衍生模組與台廠新合作</li>
+        <li>2027-01 CES：Hyundai Atlas 量產進度更新</li>
+        <li>Unitree H1 2026 出貨數字：是否走 20K 軌道</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>⑦ Isaac GR00T · Physical AI</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節四：基礎建設 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Section Four · Infrastructure</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">推理效率突破<br>TurboQuant 與記憶體股恐慌</div>
+  <div class="sec-desc">Google ICLR 2026 發表 TurboQuant 6× KV cache 壓縮，引發 SK 海力士 -6%、三星 -5%、美光 -3%。本章拆解：恐慌賣壓為何是買點，以及 GiS 何時啟動 1M context 全文選股。</div>
+</div>
+
+<!-- ⑥ TurboQuant -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">⑥ Google TurboQuant — KV Cache 6× 壓縮</h1>
+
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">TurboQuant @ ICLR 2026</div><div class="co-ticker">arXiv:2504.19874 · 隨機旋轉 + 逐座標純量量化 + 1-bit QJL residual</div></div>
+      <div class="co-badge"><span class="badge cgo">WAIT &amp; BUY DIP</span><span style="color:rgba(255,255,255,.7);font-size:10px">記憶體股回檔 &gt; 8% 為買點</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">6×</div><div class="co-metric-label">3-bit 壓縮比</div></div>
+      <div class="co-metric"><div class="co-metric-val up">8×</div><div class="co-metric-label">H100 attention 加速</div></div>
+      <div class="co-metric"><div class="co-metric-val">35-43%</div><div class="co-metric-label">decode 吞吐量保留</div></div>
+      <div class="co-metric"><div class="co-metric-val">0.997</div><div class="co-metric-label">Needle 3.5-bit 準度（vs FP16）</div></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">與既有方法對比（正交可疊加）</h3>
+      <table>
+        <thead><tr><th>方法</th><th>機制</th><th>壓縮比</th><th>需重訓</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>MQA</td><td>多 query 共用 KV head</td><td class="num">~8×</td><td>是</td><td>架構層</td></tr>
+          <tr><td>GQA</td><td>head 分組共用</td><td class="num">2-4×</td><td>是</td><td>Llama-3 標配</td></tr>
+          <tr><td>PagedAttention</td><td>分頁管理</td><td class="num">2-4× 利用率</td><td>否</td><td>記憶體管理層</td></tr>
+          <tr><td>KIVI 2-bit</td><td>per-channel quant</td><td class="num">~8×</td><td>否</td><td>2-bit 退化（0.981）</td></tr>
+          <tr><td class="hi"><strong>TurboQuant</strong></td><td class="hi">旋轉 + 純量量化</td><td class="num pos hi">6× (3-bit)</td><td class="hi">否</td><td class="hi">資料壓縮層，可與上述疊加</td></tr>
+        </tbody>
+      </table>
+      <span class="src">資料來源：arXiv:2504.19874、Google Research Blog、OpenReview tO3ASKZlok</span>
+
+      <h3 class="ch">記憶體股恐慌賣壓 = 戰術性買點</h3>
+      <table>
+        <thead><tr><th>標的</th><th>事件日跌幅</th><th>GiS 觀點</th></tr></thead>
+        <tbody>
+          <tr><td>SK 海力士 (000660 KS)</td><td class="num neg">−6%</td><td class="pos">回檔 &gt; 8% 戰術買進；HBM4 仍 NVIDIA Vera Rubin 獨家綁定</td></tr>
+          <tr><td>三星電子 (005930 KS)</td><td class="num neg">−5%</td><td class="pos">同上</td></tr>
+          <tr><td>美光 (MU)</td><td class="num neg">−3%</td><td class="pos">DDR/HBM 訓練端不受影響</td></tr>
+          <tr><td>南亞科 (2408 TT)</td><td class="num neg">跟跌</td><td>DRAM 標準品週期影響為主</td></tr>
+        </tbody>
+      </table>
+      <blockquote><strong>三點論證為何賣壓過度：</strong> ① TurboQuant 僅作用推理 KV cache，與訓練端 HBM 70%+ 主流需求脫鉤；② Jevons 悖論：推理變便宜 → 用量爆增 → 整體記憶體需求長期反而上升；③ DRAM 製程仍是物理限制，週期股票邏輯未變。</blockquote>
+
+      <h3 class="ch">GiS 行動建議</h3>
+      <ul>
+        <li><strong>不自部署：</strong>需 H100/H200 + vLLM/Triton kernel，社群版品質參差。</li>
+        <li><strong>等雲端內建：</strong>Google Vertex 預計 Q3 2026、Anthropic Q4 2026 觀察。</li>
+        <li><strong>1M context 啟動條件：</strong>當 input 成本 &lt; $5/M tokens 時，啟動「全市場新聞 + 年報全文」級別選股因子實驗。PoC <code>06_long_context_use_case_planner.py</code> 已可估算文件 token + 推理成本。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>⑥ TurboQuant · Infrastructure</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節五：實證結果驗證 ══════════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">伍</div>
+  <div class="sec-eyebrow">Section Five · Empirical Validation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">實證結果驗證<br>真實資料打臉三項假設</div>
+  <div class="sec-desc">8 主題全部用真實資料跑過：yfinance 16 個月台股 / 美股 / 日股、ollama 本機 LLM 28 次推理、SEC EDGAR 三份年報、tw-stock-scanner 5 份真實 log、9 個 GiS memory 檔。02、05、07 三項實證結果反轉原 MD 結論。</div>
+</div>
+
+<!-- 實證結果總覽 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">實證結果總覽 — 8 主題真實資料驗證</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">8/8</div><div class="kpi-lbl">主題完成實證</div></div>
+    <div class="kpi"><div class="kpi-val">3</div><div class="kpi-lbl">原假設被打臉</div></div>
+    <div class="kpi gold"><div class="kpi-val">28</div><div class="kpi-lbl">ollama LLM 推理次數</div></div>
+    <div class="kpi purple"><div class="kpi-val">315</div><div class="kpi-lbl">交易日股價樣本</div></div>
+  </div>
+
+  <h2 class="ch">8 主題實證結果對照表</h2>
+  <table>
+    <thead><tr><th>#</th><th>主題</th><th>原 MD 假設</th><th>實證結果</th><th>結論</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>01</strong></td>
+        <td>DeepSeek V4 vs ollama</td>
+        <td>V4-Flash 5-7× 便宜</td>
+        <td class="pos">qwen3.5 (9.7B) schema 100%、Pearson +0.964；phi3 87.5% 含 4 錯</td>
+        <td class="pos">確認可用</td>
+      </tr>
+      <tr class="hi">
+        <td class="hi"><strong>02</strong></td>
+        <td>人形機器人籃</td>
+        <td>Sharpe 0.8-1.2 預期</td>
+        <td class="neg hi">實測 Sharpe 0.55、TWII 1.79；1Y +20% 落後 TWII +74% 達 50pp</td>
+        <td class="neg hi">籃子重設</td>
+      </tr>
+      <tr>
+        <td><strong>03</strong></td>
+        <td>Agent 績效追蹤</td>
+        <td>架構 OK，缺指標</td>
+        <td class="pos">log success 80%、交易日 99.63%；backfill 佔 99% runtime</td>
+        <td>先優化 backfill</td>
+      </tr>
+      <tr>
+        <td><strong>04</strong></td>
+        <td>Hermes Skill retrieval</td>
+        <td>需 dense vector</td>
+        <td class="pos">BM25 Recall@1 90%（10 場景 9 中），無需 dense</td>
+        <td class="pos">直接導入 BM25</td>
+      </tr>
+      <tr class="hi">
+        <td class="hi"><strong>05</strong></td>
+        <td>claude-mem 向量檢索</td>
+        <td>Vector 勝 BM25</td>
+        <td class="neg hi">BM25 Recall@1 0.75 vs Vector 0.625、延遲 100× 快</td>
+        <td class="neg hi">反轉：BM25 為主</td>
+      </tr>
+      <tr>
+        <td><strong>06</strong></td>
+        <td>TurboQuant 1M context</td>
+        <td>等雲端內建</td>
+        <td class="pos">TSMC 20-F V4-Flash 一次讀完 $0.0286；200 檔 &lt; $3</td>
+        <td>立即啟動長文選股</td>
+      </tr>
+      <tr class="hi">
+        <td class="hi"><strong>07</strong></td>
+        <td>GR00T 籃 vs 02 籃</td>
+        <td>Jaccard 21.1% 差集大</td>
+        <td class="neg hi">真實 portfolio correlation 0.693；NVDA-β 過濾失效</td>
+        <td class="neg hi">權重大幅修正</td>
+      </tr>
+      <tr>
+        <td><strong>08</strong></td>
+        <td>Quant LLM 三家分流</td>
+        <td>情感→Q3、敘事→C、因子→R1</td>
+        <td class="pos">qwen3.5 acc 72.7%、reasoning length 6× phi3</td>
+        <td class="pos">方向性驗證</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">人形機器人籃個股 1Y 報酬實證</div>
+      <div class="chart-sub">來源：yfinance 真實價（籃子 16M 累積 +24% vs ^TWII +74% 累積，差 50pp）</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chart5" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Memory 檢索：BM25 vs Vector 真實對比</div>
+      <div class="chart-sub">來源：9 個 GiS auto-memory + 8 真實 query</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chart6" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>實證結果總覽</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 三項打臉的修正 -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">三項假設被實證打臉 — 修正方案</h1>
+
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div><div class="co-name">② 人形機器人籃 — 從「主題 GO」改為「重設籃子」</div><div class="co-ticker">原 Sharpe 0.8-1.2 → 實測 0.55；落後 TWII 50pp</div></div>
+      <div class="co-badge"><span class="badge sell">REWORK</span></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">實證打臉點</h3>
+      <ul>
+        <li><strong>累積落後：</strong>16 個月籃子 +20-24%，^TWII +74.25%，<span style="color:#c0392b;font-weight:700">差距 50-54 pp</span></li>
+        <li><strong>純度權重比等權更差</strong>：純度高的 4571（鈞興-KY）、1536（和大）、6121（新普）全是拖油瓶</li>
+        <li><strong>2308 台達電獨撐</strong>：1Y +535%，沒它整個籃子就崩</li>
+        <li><strong>有效成份股數僅 1.85</strong>（平均 correlation 0.484，2317-2382 達 0.75 重複）</li>
+      </ul>
+      <h3 class="ch">事件研究印證原假設（局部正確）</h3>
+      <p>4/19 半馬事件 ±5 日 CAR：<strong>2049 上銀 T+3 +22.2%、2233 宇隆 T+3 +15.4%、2308 台達電 +9.2%</strong>；2382/6121/1536 反呈負 CAR。<strong>事件 alpha 確實存在但集中</strong>。</p>
+      <h3 class="ch">修正方案 v2</h3>
+      <table>
+        <thead><tr><th>動作</th><th>標的</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td class="pos">保留核心</td><td>2308、2049、2317、2233、2382</td><td>有真實 momentum + 事件 alpha</td></tr>
+          <tr><td class="neg">大幅減碼</td><td>4571、1536、6121</td><td>純度高但無 momentum、拖累整籃</td></tr>
+          <tr><td class="hi">改用 event-driven 而非 buy &amp; hold</td><td>整籃</td><td>事件密度依賴，buy &amp; hold 跑不過 TWII</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">⑤ claude-mem — Plan B 反轉，BM25 為主</div><div class="co-ticker">真實 8 query × 9 memory：BM25 Recall@1 75%、Vector 62.5%</div></div>
+      <div class="co-badge"><span class="badge ow">PIVOT</span></div>
+    </div>
+    <div class="co-body">
+      <table>
+        <thead><tr><th>方法</th><th>NDCG@5</th><th>Recall@1</th><th>Recall@3</th><th>MRR</th><th>延遲</th></tr></thead>
+        <tbody>
+          <tr><td class="hi"><strong>BM25</strong></td><td class="num">0.829</td><td class="num pos hi">0.750</td><td class="num">0.875</td><td class="num pos hi">0.813</td><td class="num pos hi">0.12 ms</td></tr>
+          <tr><td>Vector (multi-MiniLM-L12)</td><td class="num">0.845</td><td class="num">0.625</td><td class="num pos">1.000</td><td class="num">0.792</td><td class="num neg">12.55 ms</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Vector 唯一勝場：</strong>「SK COM callback 失敗」這類純語意 query — BM25 完全失手。但 vector 模型 470 MB + 26 秒冷啟動成本對 20KB 語料嚴重失衡。</p>
+      <blockquote><strong>修正方案：</strong>BM25 為主（零依賴、0.12ms），Vector 為 fallback（當 BM25 top-1 score &lt; 2.0 時觸發）。原方案 B 推薦不變，但內部優先級反轉。</blockquote>
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head maroon">
+      <div><div class="co-name">⑦ GR00T 籃 — 兩籃實際相關係數 0.693（不是 0.21）</div><div class="co-ticker">NVDA-β 過濾失效；故事 vs 績效背離</div></div>
+      <div class="co-badge"><span class="badge ow">REBALANCE</span></div>
+    </div>
+    <div class="co-body">
+      <h3 class="ch">三大實證打臉點</h3>
+      <ol>
+        <li><strong>NVDA-β 過濾器失效：</strong>13 檔僅 NVDA、SERV 通過 β&gt;0.6 + R²&gt;0.3；台股 β 多在 -0.24 ~ +0.20，R² &lt; 0.07。建議改用 SOX 或 2330 為 proxy。</li>
+        <li><strong>真實 portfolio correlation 0.693</strong>（不是票面 Jaccard 0.21）— 兩籃共享 NVDA / Nidec / Murata / 2308，配對交易效果遠不如預期。</li>
+        <li><strong>GTC 2026「買謠言賣事實」：</strong>事件當日 +1.95%，但 ±10D CAR -7.5%（02 籃 -13.2%）— 策略應前移 10D 進場、事件當日減碼。</li>
+      </ol>
+      <h3 class="ch">故事 vs 績效背離</h3>
+      <table>
+        <thead><tr><th>代號</th><th>原 MD 評等</th><th>實際 1Y 報酬</th><th>建議動作</th></tr></thead>
+        <tbody>
+          <tr><td>2395 研華</td><td>★★★★★</td><td class="num neg">+8.7%</td><td class="neg">降權重</td></tr>
+          <tr><td>2359 所羅門</td><td>★★★★</td><td class="num neg">−15.3%</td><td class="neg">降權重</td></tr>
+          <tr class="hi"><td><strong>2308 台達電</strong></td><td>★★★（跨界）</td><td class="num pos hi">+453%</td><td class="pos hi">升核心</td></tr>
+          <tr class="hi"><td><strong>5289 宜鼎</strong></td><td>★★★★</td><td class="num pos hi">+436%</td><td class="pos hi">升核心</td></tr>
+          <tr class="hi"><td><strong>6857 Advantest</strong></td><td>錨點</td><td class="num pos hi">+379%</td><td class="pos hi">升核心</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>三項假設打臉 · 修正方案</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 投資建議彙整 ══════════════ -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">投資建議與內部行動彙整（實證後 v2）</h1>
+
+  <h2 class="ch">A. 台股投資組合（實證 v2 — 籃子重設）</h2>
+  <table>
+    <thead><tr><th>主題</th><th>籃子（v2）</th><th>核心持股</th><th>策略</th><th>承載資金</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>人形機器人精選</td><td><strong>THR-v2 (5 檔)</strong></td><td class="hi">2308 / 2049 / 2317 / 2233 / 2382（刪 4571 / 1536 / 6121）</td><td class="cgo">Event-driven（非 buy &amp; hold，實證 Sharpe 0.55 輸 TWII）</td><td class="num">~$30M USD</td></tr>
+      <tr class="hi"><td>NVIDIA 生態 v2</td><td><strong>GR00T-v2</strong></td><td class="hi">2308 / 5289 / 2382 / 6857 / NVDA / SYM（升）；2395 / 2359 / 8234 / 6245（降）</td><td class="cgo">前移 GTC -10D 進場、事件當日減碼</td><td class="num">~$60M USD</td></tr>
+      <tr><td>Agent 受益層</td><td><strong>AgentInfra basket</strong></td><td>3017 / 3324 / 2308 / 6669 / 2330</td><td class="pos">Overweight 散熱／電源</td><td class="num">~$200M USD</td></tr>
+      <tr><td>記憶體戰術</td><td><strong>Memory dip-buy</strong></td><td>SK Hynix / Micron / 2408</td><td class="cgo">回檔 &gt; 8% 戰術買進</td><td class="num">~$30M USD</td></tr>
+      <tr><td>RV 配對（風險）</td><td><strong>RV pair</strong></td><td>GR00T long ｜ THR short</td><td class="neg">實證 portfolio correlation 0.693 → 對沖效果差，謹慎使用</td><td class="num">小規模試點</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="ch">A2. 兩籃 v2 具體執行參數</h3>
+  <table>
+    <thead><tr><th>參數</th><th>THR-v2（人形）</th><th>GR00T-v2（NVIDIA 生態）</th></tr></thead>
+    <tbody>
+      <tr><td>停用原 v1 設計</td><td class="neg">是 — buy &amp; hold v1 已驗證輸 TWII 50pp</td><td class="neg">是 — 故事評等 ★★★★★ 標的多為 underperformer</td></tr>
+      <tr><td>Rebalance 頻率</td><td>事件觸發（無事件時月度檢視）</td><td>季度 + GTC ±10D 動態</td></tr>
+      <tr><td>個股權重上限</td><td class="num">25%（避免 2308 獨占）</td><td class="num">25%（同上）</td></tr>
+      <tr><td>進場訊號</td><td>① 中國 humanoid 重大 demo / IPO / 政策<br/>② 上銀月營收 YoY &gt; +20% 連續 2 月</td><td>① GTC / Computex / CES 前 10 日<br/>② NVDA Robotics 季營收 beat</td></tr>
+      <tr><td>止損條件</td><td class="neg">單檔 -15% 或籃子相對 TWII 落後 10pp 平倉</td><td class="neg">事件後 3 日 CAR &lt; -3% 平倉</td></tr>
+      <tr><td>實證基準回測 Sharpe</td><td class="num">v1 = 0.55（&lt; TWII 1.79）；v2 待回測</td><td class="num">v1 NVDA-β 失效；v2 待重測</td></tr>
+      <tr><td>下次回測時點</td><td>2026-05-19 端午連假後</td><td>2026-08 NVDA FY26 Q2 財報後</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">B. GiS 內部技術棧行動清單（本月）</h2>
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">W17 · 本週</div>
+      <div class="pick-name">DeepSeek V4 接入 PoC</div>
+      <div class="pick-ticker">01_deepseek_v4_news_summary.py</div>
+      <div class="pick-why">200 則新聞雙模型對比；OpenRouter 走台幣計費。</div>
+      <div class="pick-catalyst">預估月成本 $312 → $34（−89%）</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">W17 · 本週</div>
+      <div class="pick-name">Agent 績效監控儀表板</div>
+      <div class="pick-ticker">03_agent_benchmark_tracker.py</div>
+      <div class="pick-why">所有七階段 agent 收尾 hook 寫入；Week 2 接 Streamlit。</div>
+      <div class="pick-catalyst">預估降 30%+ debug 時間</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">W17 · 本週</div>
+      <div class="pick-name">Memory 向量索引</div>
+      <div class="pick-ticker">05_memory_vector_search.py</div>
+      <div class="pick-why">multilingual MiniLM + BM25 fallback，現有 9 個 .md 索引化。</div>
+      <div class="pick-catalyst">SessionStart hook 注入 top-3 相關 memory</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">W18-19 · 下週</div>
+      <div class="pick-name">Phase 7 Skill auto-extract</div>
+      <div class="pick-ticker">借鑒 Hermes-Agent 設計</div>
+      <div class="pick-why">phase7-delivery 末段 hook，自動產生 .claude/skills/</div>
+      <div class="pick-catalyst">下次 phase2-requirements 自動掛載復用</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">W18-20 · 下兩週</div>
+      <div class="pick-name">Quant LLM 三家對比</div>
+      <div class="pick-ticker">08_finance_llm_benchmark.py</div>
+      <div class="pick-why">Qwen3 / DeepSeek-R1 / Claude 並行對比，10-20 條新聞/日。</div>
+      <div class="pick-catalyst">Q3 自架 QwQ-32B 評估</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">W21-24 · 下月</div>
+      <div class="pick-name">研報 1M context 切換</div>
+      <div class="pick-ticker">DeepSeek V4-Pro thinking 模式</div>
+      <div class="pick-why">取代既有 RAG chunking，整檔年報 + 同業比較 1 次餵入。</div>
+      <div class="pick-catalyst">研報摘要單份成本下降 5×+</div>
+    </div>
+  </div>
+
+  <h2 class="ch">C. 風險與監控訊號（5 大持續追蹤）</h2>
+  <table>
+    <thead><tr><th>監控項</th><th>頻率</th><th>觸發點</th><th>對應動作</th></tr></thead>
+    <tbody>
+      <tr><td>上銀 (2049) 月營收 YoY</td><td>月</td><td>連續 2 個月 &gt; +20%</td><td class="pos">THR-Index overweight</td></tr>
+      <tr><td>Unitree IPO 季度出貨</td><td>季</td><td>達成率 vs 20K 目標</td><td>basket 加減碼訊號</td></tr>
+      <tr><td>NVIDIA Robotics &amp; Auto 營收</td><td>季</td><td>FY26 Q2 達 $5B</td><td class="pos">GR00T basket overweight</td></tr>
+      <tr><td>DeepSeek 模型棄用日</td><td>固定</td><td>2026-07-24 deepseek-chat 停用</td><td class="cgo">提前完成 V4 切換</td></tr>
+      <tr><td>SK Hynix / Micron 跌幅</td><td>日</td><td>−8% intraday</td><td class="pos">記憶體戰術買進</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>本週一句話結論（實證後 v2）：</strong>2026 Q2 是「開源 LLM 商用化 × Agent production × 人形機器人量產」三軸共振拐點，但 <strong>實證資料反轉三個假設</strong> — 籃子 buy &amp; hold 跑輸大盤需改 event-driven、BM25 反勝向量檢索、兩 thematic 籃實際相關係數 0.69 而非 0.21。GiS v2 行動：① V4-Flash 立即切（單份 TSMC 20-F 僅 $0.0286）② BM25 為主 vector 為 fallback ③ 籃子精簡至高 momentum 5 檔 + event-driven 進出。</blockquote>
+
+  <h2 class="ch">D. 實證資料對 GiS 量化研究流程的方法論啟示</h2>
+  <ul>
+    <li><strong>「假設 → 實證」必須跑完整 16 個月真實樣本：</strong>純度權重、Jaccard 重疊度等 backtest-naive 指標在真實 portfolio level 全失效。</li>
+    <li><strong>本機 ollama qwen3.5 是 API 缺位的可用 fallback：</strong>schema 100% 合法、與 phi3 情感相關 +0.964；但 phi3 87.5% accuracy 含 4 個錯誤（鴻海 ticker、國泰金併購方向、跑題），不可用於正式管線。</li>
+    <li><strong>tw-stock-scanner backfill 是真實瓶頸：</strong>佔 99% runtime / cost、唯一冷啟動失敗者 — 優先優化此處 ROI 最高。</li>
+    <li><strong>Vector 檢索在 ~10 條目規模屬過度工程：</strong>BM25 延遲 100× 快、Recall@1 反勝；建議 50+ 條目時再評。</li>
+  </ul>
+
+  <hr>
+  <p style="font-size:11px;color:#9aabb5;margin-top:12px"><strong>本報告涵蓋 8 主題：</strong>① DeepSeek V4 ② 北京人形機器人半馬 ③ Stanford AI Index 2026 ④ Hermes-Agent ⑤ claude-mem ⑥ Google TurboQuant ⑦ NVIDIA Isaac GR00T ⑧ 量化金融 LLM。每主題均有對應 MD 詳細評估與 PoC 程式（位於 <code>weekly-2026-04-28/</code> 目錄）。資料截止 2026-04-28。僅供 GiS 內部研究使用，不構成投資建議。</p>
+
+  <div class="page-footer" style="margin-top:20px">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資建議與行動彙整</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 11.5;
+  Chart.defaults.color = '#4a5568';
+
+  function getEl(id) { return document.getElementById(id); }
+
+  Chart.register({
+    id: 'labelPlugin',
+    afterDatasetsDraw(chart) {
+      const ctx = chart.ctx;
+      const isStacked = chart.options.scales?.y?.stacked === true;
+      const isH = chart.options.indexAxis === 'y';
+      chart.data.datasets.forEach((ds, i) => {
+        const meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach((bar, idx) => {
+          const v = ds.data[idx];
+          if (v === null || v === undefined) return;
+          ctx.save();
+          ctx.font = 'bold 11px PingFang TC, Arial';
+          ctx.textAlign = 'center';
+          if (isH) {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'middle';
+            ctx.fillText(v, bar.x + 6, bar.y);
+          } else if (isStacked) {
+            const bh = Math.abs(bar.base - bar.y);
+            if (bh < 14) { ctx.restore(); return; }
+            ctx.fillStyle = bh > 22 ? '#fff' : '#1a2a4a';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(v + '%', bar.x, bar.y + bh / 2);
+          } else {
+            ctx.fillStyle = '#1a2a4a'; ctx.textBaseline = 'bottom';
+            ctx.fillText(String(v), bar.x, bar.y - 3);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+  // 圖表一：OSWorld Agent 成功率躍升
+  new Chart(getEl('chart1'), {
+    type: 'bar',
+    data: {
+      labels: ['2024 baseline', '2025 中', '2026 GPT-5.4', '2026 GPT-5.5', '2026 Claude Mythos'],
+      datasets: [
+        { label: 'OSWorld 任務成功率 (%)', data: [12, 47, 75, 78.7, 79.6], backgroundColor: ['#9aabb5','#1a3a6e','#00a878','#00c896','#0d1b3e'], borderRadius: 5, barPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: false, animation: false, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, annotation: false },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10.5 } } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%', font: { size: 10.5 } }, max: 100 }
+      }
+    }
+  });
+
+  // 圖表二：LLM API 成本對比
+  new Chart(getEl('chart2'), {
+    type: 'bar',
+    data: {
+      labels: ['Claude Opus 4.6', 'Claude Sonnet 4.6', 'GPT-5.4', 'DeepSeek-R1', 'DeepSeek V4-Pro', 'Qwen3-235B', 'QwQ-32B', 'V4-Flash'],
+      datasets: [
+        { label: 'Output $/M tokens', data: [75, 15, 10, 2.19, 3.48, 1.20, 0.60, 0.28], backgroundColor: ['#5c1a1a','#0d1b3e','#312e81','#00a878','#1a3a6e','#065f46','#00c896','#10b981'], borderRadius: 4, barPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: false, animation: false, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#eef2f8' }, ticks: { callback: v => '$'+v, font: { size: 10 } } },
+        y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+
+  // 圖表三：Benchmark 跨越人類基線
+  new Chart(getEl('chart3'), {
+    type: 'line',
+    data: {
+      labels: ['2024', '2025 Q2', '2025 Q4', '2026 Q1', '2026 Q2'],
+      datasets: [
+        { label: 'OSWorld', data: [12, 30, 47, 66, 79.6], borderColor: '#0d1b3e', backgroundColor: 'transparent', tension: 0.35, pointRadius: 5, borderWidth: 2.5, fill: false },
+        { label: 'Terminal-Bench', data: [20, 45, 65, 77.3, 82.7], borderColor: '#00a878', backgroundColor: 'transparent', tension: 0.35, pointRadius: 5, borderWidth: 2.5, fill: false },
+        { label: 'GDPval', data: [null, null, 60, 75, 84.9], borderColor: '#e67e22', backgroundColor: 'transparent', tension: 0.35, pointRadius: 5, borderWidth: 2.5, fill: false },
+        { label: '人類基線 (OSWorld)', data: [72.4, 72.4, 72.4, 72.4, 72.4], borderColor: '#c0392b', backgroundColor: 'transparent', tension: 0, pointRadius: 0, borderWidth: 1.5, borderDash: [6,4], fill: false }
+      ]
+    },
+    options: {
+      responsive: false, animation: false, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 10, font: { size: 10.5 } } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10.5 } } },
+        y: { grid: { color: '#eef2f8' }, ticks: { callback: v => v + '%', font: { size: 10.5 } }, max: 100 }
+      }
+    }
+  });
+
+  // 圖表四：Agent Infrastructure 投資分層
+  new Chart(getEl('chart4'), {
+    type: 'doughnut',
+    data: {
+      labels: ['散熱／電源（被低估）', '算力底層', '網通／Connectivity', '監控/IDE 工具', '垂直應用'],
+      datasets: [
+        { data: [35, 30, 15, 12, 8], backgroundColor: ['#00c896','#0d1b3e','#1a3a6e','#6366f1','#9aabb5'], borderWidth: 2, borderColor: '#fff' }
+      ]
+    },
+    options: {
+      responsive: false, animation: false, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { boxWidth: 12, padding: 8, font: { size: 10.5 } } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + '%' } }
+      },
+      cutout: '50%'
+    }
+  });
+
+  // 圖表五：人形機器人籃實證個股 1Y 報酬（真實 yfinance 數字）
+  if (getEl('chart5')) new Chart(getEl('chart5'), {
+    type: 'bar',
+    data: {
+      labels: ['台達電 2308', '^TWII (基準)', '鴻海 2317', '宇隆 2233', '上銀 2049', '廣達 2382', '鈞興 4571', '新普 6121', '和大 1536'],
+      datasets: [
+        { label: '1Y 報酬 (%) · 2025-04-28→2026-04-28', data: [535, 99, 67, 56, 47, 37, 13, 10, -15], backgroundColor: ['#00c896','#9aabb5','#1a3a6e','#1a3a6e','#1a3a6e','#1a3a6e','#f59e0b','#f59e0b','#c0392b'], borderRadius: 4, barPercentage: 0.7 }
+      ]
+    },
+    options: {
+      responsive: false, animation: false, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#eef2f8' }, ticks: { callback: v => v+'%', font: { size: 10 } } },
+        y: { grid: { display: false }, ticks: { font: { size: 9.5 } } }
+      }
+    }
+  });
+
+  // 圖表六：BM25 vs Vector retrieval 真實對比
+  if (getEl('chart6')) new Chart(getEl('chart6'), {
+    type: 'bar',
+    data: {
+      labels: ['NDCG@5', 'Recall@1', 'Recall@3', 'MRR', '延遲倒數 (×100)'],
+      datasets: [
+        { label: 'BM25', data: [82.9, 75.0, 87.5, 81.3, 100], backgroundColor: '#00c896', borderRadius: 4, barPercentage: 0.7, categoryPercentage: 0.7 },
+        { label: 'Vector (multi-MiniLM)', data: [84.5, 62.5, 100.0, 79.2, 1], backgroundColor: '#1a3a6e', borderRadius: 4, barPercentage: 0.7, categoryPercentage: 0.7 }
+      ]
+    },
+    options: {
+      responsive: false, animation: false, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 8, font: { size: 10 } } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 9.5 } } },
+        y: { grid: { color: '#eef2f8' }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+
+}); // end window.load
+</script>
+</body>
+</html>

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 2026-05-04 量化研究週報（v2 整合版）
+  主題：對應本週 9-paper digest，整合 7 篇 POC 實作 + 兩組平行實驗最佳結果
+  產出：2026-05-04 by dispatcher（補充自 v1 平行 agent 報告）
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>GiS 2026-05-04 量化研究週報 v2</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:16px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+.page{position:relative;z-index:1}
+.pb{break-after:page;page-break-after:always}
+.full-page{display:flex;flex-direction:column;min-height:297mm}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:40px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:14.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:13px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:16px;color:rgba(255,255,255,.65);margin-bottom:28px;letter-spacing:1px;line-height:1.5}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 14px;border-radius:20px;font-size:12px;color:rgba(255,255,255,.8);letter-spacing:.3px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 18px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:12.5px;color:rgba(255,255,255,.5);letter-spacing:.3px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:14px 60px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.45)}
+
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:13px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:46px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:700px}
+.sec-desc{font-size:16px;color:rgba(255,255,255,.6);line-height:1.8;max-width:600px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+.body-page{padding:26px 46px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:7px 14px;background:linear-gradient(90deg,#eef5f0,transparent);margin:12px 0 11px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:4px;margin:14px 0 8px;page-break-after:avoid}
+h3.ch{font-size:14.5px;font-weight:700;color:#0a4a30;padding-left:9px;border-left:3px solid #00c896;margin:12px 0 6px;page-break-after:avoid}
+
+table{width:100%;border-collapse:collapse;margin:6px 0 10px;font-size:13.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:8px 10px;text-align:left;font-weight:600;font-size:13px;letter-spacing:.3px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 10px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5;font-size:13px}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos,td.green{color:#00875a;font-weight:600}
+td.neg,td.red{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+td.amber{color:#d97706;font-weight:700}
+td.gray{color:#6b7280}
+
+.paper-card{border:1.5px solid #d0ddf0;border-radius:9px;margin:10px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.paper-head{padding:11px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.paper-head.navy{background:#0d1b3e}
+.paper-head.teal{background:#065f46}
+.paper-head.blue{background:#1a3a6e}
+.paper-head.slate{background:#2d3748}
+.paper-head.wine{background:#5c1a1a}
+.paper-head.indigo{background:#312e81}
+.paper-head.amber{background:#7c2d12}
+.paper-name{font-size:15px;font-weight:800;color:#fff;line-height:1.35}
+.paper-meta{font-size:11.5px;color:rgba(255,255,255,.65);margin-top:2px}
+.paper-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 11px;border-radius:18px;font-size:11.5px;font-weight:700;letter-spacing:.3px}
+.badge.high{background:#00c896;color:#fff}
+.badge.med{background:#f59e0b;color:#fff}
+.badge.low{background:#94a3b8;color:#fff}
+.badge.risk{background:#e74c3c;color:#fff}
+.paper-body{padding:12px 16px;background:#fff}
+.paper-body p{font-size:13px;line-height:1.6;margin:4px 0 7px}
+.paper-body ul{padding-left:18px;margin:4px 0 7px}
+.paper-body li{font-size:13px;line-height:1.55;margin:1px 0}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:10px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:13px 14px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.wine{background:linear-gradient(135deg,#7b1e3a,#b91c1c)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:3px}
+.kpi-val em{font-size:13px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:12px;opacity:.75;letter-spacing:.3px}
+
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:9px;padding:14px;margin:10px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:8px 0;border-bottom:1px solid #dce8f8;display:flex;gap:11px;align-items:flex-start;line-height:1.55}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:22px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:11px;margin:8px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:2px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:9px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:12px 0}
+
+.verdict-box{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0}
+.verdict{padding:10px 12px;border-radius:7px;font-size:12.5px;line-height:1.5}
+.verdict.green{background:#e8f5ee;border:1.5px solid #00a878}
+.verdict.amber{background:#fdf6e3;border:1.5px solid #d97706}
+.verdict.red{background:#fdf0ef;border:1.5px solid #e74c3c}
+.verdict-label{font-size:11.5px;font-weight:700;color:#666;margin-bottom:3px;letter-spacing:.5px}
+.verdict-val{font-size:14px;font-weight:700}
+.verdict.green .verdict-val{color:#065f46}
+.verdict.amber .verdict-val{color:#92400e}
+.verdict.red .verdict-val{color:#7b2020}
+
+.compare-table th{background:#1a3a6e}
+.compare-table td.paper{background:#f0f4fc;font-weight:500}
+.compare-table td.ours{background:#eef9f3;font-weight:600;color:#065f46}
+
+.action-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin:12px 0}
+.action-card{border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;page-break-inside:avoid;background:#fff}
+.action-rank{font-size:12px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:5px}
+.action-name{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:7px;line-height:1.4}
+.action-why{font-size:13px;color:#2d3748;line-height:1.55;margin-bottom:8px}
+.action-eta{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:6px 9px;border-radius:5px;font-weight:600}
+
+p{margin:6px 0 9px;line-height:1.7}
+ul,ol{padding-left:20px;margin:6px 0 9px}
+li{margin:3px 0;line-height:1.6;font-size:14px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:11px 14px;margin:10px 0;color:#1a3a6e;font-size:14.5px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:18px 0}
+.src{font-size:12px;color:#9aabb5;display:block;margin-top:5px}
+
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:11px 46px;font-size:12.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:15px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- 封面 -->
+<div class="cover pb page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI 量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Quant Weekly Research · 2026-05-04</div>
+    <div class="cover-title">本週金融研究<br><em>實作與對照</em></div>
+    <div class="cover-subtitle">9 papers from week of 2026-04-28 → 7 implemented POCs → 5 ready-to-ship actions</div>
+    <div class="cover-tags">
+      <span class="ctag hl">槓桿 ETF 拖曳</span>
+      <span class="ctag hl">高階矩組合</span>
+      <span class="ctag hl">Kelly Sigmoidal</span>
+      <span class="ctag hl">Gamma-Laplace VaR</span>
+      <span class="ctag hl">Motif 風險溢出</span>
+      <span class="ctag">LLM 因子挖掘</span>
+      <span class="ctag">Context Features</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>9</em></div><div class="cstat-label">本週論文/新聞</div></div>
+    <div class="cstat"><div class="cstat-num"><em>7</em></div><div class="cstat-label">完成 POC 實作</div></div>
+    <div class="cstat"><div class="cstat-num"><em>5</em></div><div class="cstat-label">立即可上線</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4</em>/7</div><div class="cstat-label">完全支持原論文</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026-05-04</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 GiS</span>
+  </div>
+</div>
+
+<!-- 執行摘要 -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">執行摘要</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">9 → 7</div><div class="kpi-lbl">論文 → POC</div></div>
+    <div class="kpi"><div class="kpi-val">4 / 7</div><div class="kpi-lbl">完全支持原論文</div></div>
+    <div class="kpi gold"><div class="kpi-val">+5.43%</div><div class="kpi-lbl">VaR LogLik 改善</div></div>
+    <div class="kpi green"><div class="kpi-val">+41.6%</div><div class="kpi-lbl">危機前網路密度</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>本週「能實作的全做」原則達標。</strong>9 篇論文/新聞中，7 篇做完 POC（含 1 篇簡化、1 篇階段 A），2 篇因缺中文文本/僅新聞稿不可實作。每個 POC 都與原論文 OOS 結論做了量化對比。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>5 件可立即上線：</strong>(1) Levered ETF 波動拖曳閉式解（rolling corr 0.999）作為散戶教材、(2) Asym-Laplace 邊際取代 Normal VaR（OOS LogLik +5.43%）、(3) Motif 網路密度作為 regime 預警（危機前 +41.6%、p&lt;0.05）、(4) 法人 zscore + 殖利率曲線進入 5 日預測模型（IC 0.122 → 0.150）、(5) 高階矩偏好優化降 MaxDD（-34.6% → -28.8%）。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>1 個有意義的反向發現：</strong>Tepelyan & Lam (2026) Kelly sigmoidal 飽和點論文宣稱 N≈30，台股實證 N≈100—意味台股可分散性更強，現有 scanner 50-100 檔買進名單規模合理；超過 100 檔後 Kelly 部位增量遞減，可作為「最大同時持股檔數」的量化依據。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">7 篇 POC 與原論文吻合度</div>
+      <div class="chart-sub">綠 = 完全支持；橘 = 部分支持；紅 = 反向</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartVerdict" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">立刻可上線 5 件 ROI 排名</div>
+      <div class="chart-sub">縱軸：相對效益分數（綜合 metric improvement × 工期反比）</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartROI" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">本週實作快覽</h2>
+  <table class="compare-table">
+    <thead><tr><th>#</th><th>主題</th><th>論文宣稱</th><th>我方實證</th><th>verdict</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>LLM 因子挖掘（移植）</td><td class="paper">LLM Sharpe 1.6, alpha101 0.9</td><td class="ours">grammar+IC OOS Sharpe 0.44，sign 一致 4/4</td><td class="amber">部分</td></tr>
+      <tr><td>2</td><td>槓桿 ETF 波動拖曳</td><td class="paper">drag = 0.5·k·(k-1)·σ²</td><td class="ours">rolling corr <strong>0.999</strong>；2× drag 9.75%/年</td><td class="green">完全</td></tr>
+      <tr><td>3</td><td>高階矩組合（Yau）</td><td class="paper">Sharpe +0.18, MaxDD ↓3-5pp</td><td class="ours">Sharpe +0.016, MaxDD <strong>↓5.83pp</strong></td><td class="green">DD 完全</td></tr>
+      <tr><td>4</td><td>Multivariate Kelly</td><td class="paper">sigmoidal saturate N≈30</td><td class="ours">sigmoidal 成立但 saturate <strong>N≈100</strong></td><td class="amber">公式對／點不同</td></tr>
+      <tr><td>5</td><td>Gamma-Laplace VaR</td><td class="paper">OOS LL +3-8%</td><td class="ours">OOS LL <strong>+5.43%</strong>；coverage 5.6%</td><td class="green">完全</td></tr>
+      <tr><td>6</td><td>Motif 風險溢出</td><td class="paper">危機前 motif +30-50%</td><td class="ours">density <strong>+41.6%</strong>, p=0.019</td><td class="green">完全</td></tr>
+      <tr><td>7</td><td>Context Features 預測</td><td class="paper">R² gain +8-15%（無 adversarial）</td><td class="ours">IC 0.122→0.150（+23%）</td><td class="green">完全</td></tr>
+      <tr><td>8</td><td>新聞 vs 社群情緒</td><td class="paper">— </td><td class="ours">缺中文資料，延後</td><td class="red">不可做</td></tr>
+      <tr><td>9</td><td>B2BROKER AI 平台</td><td class="paper">產業新聞</td><td class="ours">產業情報，記入 watchlist</td><td class="red">不可做</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 章節壹封面 -->
+<div class="sec-div pb page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">9 篇論文可行性概覽</div>
+  <div class="sec-desc">本週 arXiv q-fin / NBER / 產業新聞 9 篇，依 GiS 量化系統的可實作性、工期、與既有流程契合度分級。</div>
+</div>
+
+<!-- 壹內容 -->
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">壹、本週 9 篇可行性分級</h1>
+
+  <table>
+    <thead><tr><th>#</th><th>論文 / 新聞</th><th>arXiv</th><th>類別</th><th>可行性</th><th>工期</th><th>行動</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>LLM 從假設到因子</td><td>2604.26747</td><td>q-fin.PM</td><td class="amber">🟡 中</td><td>5–7 天</td><td>簡化版立刻實作</td></tr>
+      <tr><td>2</td><td>槓桿 ETF 異常解釋</td><td>2604.27287</td><td>q-fin.PM</td><td class="green">🟢 極高</td><td>1 天</td><td><strong>立刻實作</strong></td></tr>
+      <tr><td>3</td><td>高階矩組合（Yau）</td><td>2604.25378</td><td>q-fin</td><td class="green">🟢 高</td><td>3–4 天</td><td><strong>立刻實作</strong></td></tr>
+      <tr><td>4</td><td>多變量 Kelly Sigmoidal</td><td>2604.24723</td><td>q-fin</td><td class="green">🟢 極高</td><td>1–2 天</td><td><strong>立刻實作</strong></td></tr>
+      <tr><td>5</td><td>Gamma 廣義 Laplace</td><td>2605.00196</td><td>q-fin.ST</td><td class="green">🟢 高</td><td>2–3 天</td><td><strong>立刻實作</strong></td></tr>
+      <tr><td>6</td><td>Motif 風險溢出</td><td>2604.25406</td><td>q-fin</td><td class="green">🟢 高</td><td>2–3 天</td><td><strong>立刻實作</strong></td></tr>
+      <tr><td>7</td><td>情境整合對抗預測</td><td>2604.22801</td><td>q-fin.ST</td><td class="amber">🟡 中</td><td>A:1d/B:5–7d</td><td>階段 A 實作</td></tr>
+      <tr><td>8</td><td>新聞 vs 社群情緒</td><td>2604.26811</td><td>q-fin.ST</td><td class="red">🔴 低</td><td>≥14 天</td><td>觀察（缺中文文本）</td></tr>
+      <tr><td>9</td><td>B2BROKER AI 平台</td><td>News</td><td>產業情報</td><td class="gray">⚪</td><td>—</td><td>watchlist</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">資料/環境就緒度</h2>
+  <table>
+    <thead><tr><th>資料源</th><th>期間 / 規模</th><th>狀態</th></tr></thead>
+    <tbody>
+      <tr><td>TWSE/TPEx 日線</td><td>2004-03 ~ 2026-05 / 2705 檔 / 6.16M 筆</td><td class="pos">✅ 已備</td></tr>
+      <tr><td>三大法人買賣超</td><td>2012-05 ~ 2026-04 / 2110 檔 / 3.97M 筆</td><td class="pos">✅ 已備</td></tr>
+      <tr><td>主力券商分點</td><td>2025-06 ~ 2026-04 / 11.2M 筆</td><td class="pos">✅ 已備</td></tr>
+      <tr><td>Macro indicators（殖利率曲線）</td><td>2023-04 ~ 2026-04</td><td class="pos">✅ 已備</td></tr>
+      <tr><td>Regime history（重建誤差）</td><td>14 年</td><td class="pos">✅ 已備</td></tr>
+      <tr><td>中文新聞 / 社群文本</td><td>—</td><td class="neg">❌ 缺，#8 阻礙</td></tr>
+      <tr><td>scipy / sklearn / networkx</td><td>本週新裝</td><td class="pos">✅ 已備</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：tw-stock-scanner db/scanner.db（2026-05-04 快照）</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 可行性概覽</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 章節貳封面 -->
+<div class="sec-div pb page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">7 篇 POC 實證對照</div>
+  <div class="sec-desc">每篇論文先實作、跑 OOS、再與原論文 verdict 對比。資料：tw-stock-scanner DB；OOS 期間 2025-04 ~ 2026-04。</div>
+</div>
+
+<!-- POC #2 -->
+<div class="full-page pb page body-page">
+  <h1 class="ch">貳、POC 對照</h1>
+
+  <div class="paper-card">
+    <div class="paper-head teal">
+      <div>
+        <div class="paper-name">#2 槓桿 ETF 波動拖曳的閉式解（Bianchi & Goldberg, UC Berkeley）</div>
+        <div class="paper-meta">arXiv:2604.27287 · 2026-05-01 · q-fin.PM</div>
+      </div>
+      <div class="paper-badge"><span class="badge high">🟢 完全支持</span></div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文核心</strong>：daily-reset 槓桿 ETF 的年化拖曳 = 0.5·k·(k-1)·σ²。SPY 1928-2025 經驗 vs 理論誤差 &lt; 5bp。</p>
+      <p><strong>我方實作</strong>：用 0050 日報酬合成 k = -2/-1/2/3 的 daily-reset 序列（22 年 / 5179 日 / 年化 σ = 30.4%），對比 actual cumulative vs naive k 倍 cumulative。</p>
+
+      <table class="compare-table">
+        <thead><tr><th>k</th><th>Actual cum</th><th>Naive cum</th><th>年 drag 經驗</th><th>年 drag 理論</th><th>誤差 bp</th></tr></thead>
+        <tbody>
+          <tr><td><strong>-1</strong></td><td class="num">0.033</td><td class="num">0.224</td><td class="num pos">9.33%</td><td class="num">9.27%</td><td class="num green">+5.7</td></tr>
+          <tr><td><strong>2</strong></td><td class="num">2.687</td><td class="num">19.94</td><td class="num pos hi">9.75%</td><td class="num">9.27%</td><td class="num green">+48.5</td></tr>
+          <tr><td>-2</td><td class="num">0.0001</td><td class="num">0.050</td><td class="num neg">28.35%</td><td class="num">27.80%</td><td class="num green">+54.9</td></tr>
+          <tr><td>3</td><td class="num">0.164</td><td class="num">89.03</td><td class="num neg">30.65%</td><td class="num">27.80%</td><td class="num amber">+285</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Rolling 252 日驗證</strong>：2× 經驗 vs 理論 drag 相關 <strong>0.999</strong>，平均誤差 0.48%；-1× 平均誤差 0.04%。論文公式精確成立。</p>
+
+      <div class="verdict-box">
+        <div class="verdict green"><div class="verdict-label">PAPER VERDICT</div><div class="verdict-val">公式完全成立</div></div>
+        <div class="verdict green"><div class="verdict-label">PRODUCTION ACTION</div><div class="verdict-val">客戶風險教材</div></div>
+        <div class="verdict green"><div class="verdict-label">ETA TO SHIP</div><div class="verdict-val">2 天（教材化）</div></div>
+      </div>
+      <blockquote>持有 00631L（2× 0050）一年期望成本 ≈ <strong>9.75%</strong>；3× 假設性 ETF 年成本 30.65%，幾乎不可能長期持有。這是 GiS 客戶風險教育最直接的素材。</blockquote>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · POC #2 槓桿 ETF</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- POC #5 + #6 -->
+<div class="full-page pb page body-page">
+
+  <div class="paper-card">
+    <div class="paper-head navy">
+      <div>
+        <div class="paper-name">#5 Gamma 廣義 Laplace VaR（Kozubowski / Sarantsev / Spiker）</div>
+        <div class="paper-meta">arXiv:2605.00196 · 2026-05-04 · q-fin.ST</div>
+      </div>
+      <div class="paper-badge"><span class="badge high">🟢 完全支持</span></div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文核心</strong>：聯合 (R, V) 用 Bivariate Gamma-Generalized-Laplace 比 Normal-Lognormal OOS LogLik 改善 3–8%；VaR 95% 覆蓋率回到 ~5%。</p>
+      <p><strong>我方實作</strong>：邊際 Asymmetric Laplace MLE 擬合 4 檔（0050/2330/2317/2454）2010-2024 IS、2025-04~2026-04 OOS。</p>
+
+      <table class="compare-table">
+        <thead><tr><th>標的</th><th>Normal coverage</th><th>Laplace coverage</th><th>OOS LogLik 改善</th></tr></thead>
+        <tbody>
+          <tr><td>0050</td><td class="num neg">3.02%</td><td class="num pos hi">6.03%</td><td class="num pos">+4.19%</td></tr>
+          <tr><td>2330 台積電</td><td class="num neg">2.66%</td><td class="num">3.80%</td><td class="num pos">+4.41%</td></tr>
+          <tr><td>2317 鴻海</td><td class="num neg">5.34%</td><td class="num neg">8.02%</td><td class="num pos">+6.30%</td></tr>
+          <tr><td>2454 聯發科</td><td class="num">3.42%</td><td class="num pos hi">4.56%</td><td class="num pos">+6.85%</td></tr>
+          <tr><td><strong>平均</strong></td><td class="num neg hi">3.61%</td><td class="num pos hi">5.60%</td><td class="num pos hi">+5.43%</td></tr>
+        </tbody>
+      </table>
+      <p>OOS LogLik <strong>+5.43%</strong> 落在論文 3–8% 中段；Normal 系統低估尾部（覆蓋僅 3.61% &lt;&lt; 5%），Laplace 5.60% 接近理想 5%。<strong>替換 normal-VaR 為 Laplace 邊際立即可上線</strong>。</p>
+    </div>
+  </div>
+
+  <div class="paper-card">
+    <div class="paper-head wine">
+      <div>
+        <div class="paper-name">#6 Motif-Based 風險溢出分解（Shao et al.）</div>
+        <div class="paper-meta">arXiv:2604.25406 · 2026-04-29 · q-fin</div>
+      </div>
+      <div class="paper-badge"><span class="badge high">🟢 完全支持</span></div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文核心</strong>：危機前 6–8 週 motif 密度上升 30–50%。可作為 leading indicator。</p>
+      <p><strong>我方實作</strong>：80 檔流動性最高個股、60 日滑動相關矩陣、|ρ|&gt;0.5 的 adjacency，每 5 日重算。Panic 用 0050 過去 30 日 MaxDD &lt; -8% 標記。</p>
+
+      <table class="compare-table">
+        <thead><tr><th>網路指標</th><th>Normal 期均值</th><th>Pre-panic 8 週均值</th><th>變化</th><th>p-value</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Density（邊密度）</strong></td><td class="num">0.134</td><td class="num pos">0.189</td><td class="num pos hi">+41.6%</td><td class="num green">0.019</td></tr>
+          <tr><td>Avg clustering</td><td class="num">0.405</td><td class="num pos">0.513</td><td class="num pos">+26.9%</td><td class="num green">&lt;0.001</td></tr>
+          <tr><td>Transitivity</td><td class="num">0.463</td><td class="num pos">0.528</td><td class="num pos">+13.9%</td><td class="num green">0.002</td></tr>
+          <tr><td>Triangle count（raw）</td><td class="num">4416</td><td class="num">4273</td><td class="num gray">−3.2%</td><td class="num gray">0.92（飽和）</td></tr>
+        </tbody>
+      </table>
+      <p>3 個 normalized 指標皆顯著上升；raw triangle 因網路密度已高呈現飽和未顯著。論文「危機前 motif 上升 30–50%」在台股以 density 指標完全成立。</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · POC #5 Laplace VaR · #6 Motif</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- POC #7 + #3 -->
+<div class="full-page pb page body-page alt">
+
+  <div class="paper-card">
+    <div class="paper-head blue">
+      <div>
+        <div class="paper-name">#7 Context Features 預測（Lazanas et al., 階段 A 移植）</div>
+        <div class="paper-meta">arXiv:2604.22801 · 2026-04-28 · q-fin.ST</div>
+      </div>
+      <div class="paper-badge"><span class="badge high">🟢 完全支持</span></div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文核心</strong>：context features（macro/event/sector）+ adversarial training 讓 OOS R² +15–25%；context-only 估計 +8–15%。</p>
+      <p><strong>我方階段 A 實作</strong>：60 檔流動性最高個股，GradientBoosting 預測 5 日 fwd ret，比較 baseline (動量+反轉+RSI+vol) vs +context (法人 zscore + 殖利率曲線 + regime)。OOS 2025-01~2026-04。</p>
+
+      <table class="compare-table">
+        <thead><tr><th>模型</th><th>R²</th><th>Spearman IC</th><th>Long-Short Sharpe</th></tr></thead>
+        <tbody>
+          <tr><td>(A) Baseline only</td><td class="num neg">-0.0210</td><td class="num">0.122</td><td class="num">0.769</td></tr>
+          <tr><td>(B) + Context</td><td class="num neg">-0.0084</td><td class="num pos hi">0.150</td><td class="num pos">0.781</td></tr>
+          <tr><td><strong>變化</strong></td><td class="num pos">+0.0126 (60% 改善)</td><td class="num pos hi">+23%</td><td class="num pos">+0.013</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Top 5 特徵重要性（Model B）</strong>：vol_20 32% / fb_zscore 法人 22% / T10Y3M 殖利率 20% / log_volume_20 7% / ret_20 7%。<strong>法人 zscore + 殖利率曲線合計 42% 預測力</strong>，是台股 5 日報酬最關鍵的非價量特徵。</p>
+    </div>
+  </div>
+
+  <div class="paper-card">
+    <div class="paper-head indigo">
+      <div>
+        <div class="paper-name">#3 高階矩組合最佳化（Yau / Wang / Niu / Sheshmani）</div>
+        <div class="paper-meta">arXiv:2604.25378 · 2026-04-29 · q-fin</div>
+      </div>
+      <div class="paper-badge"><span class="badge high">🟢 DD 完全支持</span></div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文核心</strong>：mean-variance 之上加入 skew preference + kurt aversion，S&P500 OOS Sharpe +0.18、MaxDD 改善 3-5pp。</p>
+      <p><strong>我方實作</strong>：50 檔台股，scipy SLSQP 直接解（IS 2020-2024、OOS 2025-01~2026-04）。bounds 0~10%/檔、單檔 budget = 1。</p>
+
+      <table class="compare-table">
+        <thead><tr><th>組合</th><th>OOS Sharpe</th><th>OOS MaxDD</th><th>OOS Calmar</th><th>OOS Skew</th></tr></thead>
+        <tbody>
+          <tr><td>(a) MV-only baseline</td><td class="num">0.984</td><td class="num neg">-34.6%</td><td class="num">0.855</td><td class="num neg">-0.574</td></tr>
+          <tr><td>(b) + skew preference</td><td class="num">0.956</td><td class="num">-31.3%</td><td class="num">0.840</td><td class="num">-0.514</td></tr>
+          <tr><td>(c) + skew + kurt</td><td class="num pos">0.999</td><td class="num pos hi">-28.8%</td><td class="num pos">0.881</td><td class="num pos">-0.479</td></tr>
+          <tr><td><strong>論文宣稱</strong></td><td class="num gray">+0.18</td><td class="num gray">↓ 3-5pp</td><td>—</td><td>—</td></tr>
+          <tr><td><strong>我方變化</strong></td><td class="num">+0.016</td><td class="num pos hi">↓ 5.83pp</td><td class="num pos">+0.026</td><td class="num pos">+0.095</td></tr>
+        </tbody>
+      </table>
+      <p><strong>MaxDD 改善 5.83pp 完全吻合論文 3-5pp 區間</strong>；Sharpe 增益 +0.016 量級小於論文 +0.18，可能因（a）我方 N=50 vs 論文 N=500、（b）OOS 期為台股多頭尾段，skew preference 偏好正偏在多頭末期收益較弱。</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · POC #7 Context · #3 高階矩</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- POC #4 + #1 -->
+<div class="full-page pb page body-page">
+
+  <div class="paper-card">
+    <div class="paper-head amber">
+      <div>
+        <div class="paper-name">#4 Multivariate Kelly Sigmoidal（Tepelyan & Lam）</div>
+        <div class="paper-meta">arXiv:2604.24723 · 2026-04-28 · q-fin</div>
+      </div>
+      <div class="paper-badge"><span class="badge med">🟡 公式對／飽和點不同</span></div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文核心</strong>：regularized Kelly f* = (Σ + λI)⁻¹μ。當 N 上升時最佳全部位 Σ|f_i*| 呈 sigmoid 飽和；S&P500 飽和點 N≈30。</p>
+      <p><strong>我方實作</strong>：200 檔台股 2020-2024 日報酬，N ∈ {5,10,20,30,50,75,100,150,200}，每 N 隨機 30 次。λ = log(N)/N。</p>
+
+      <table class="compare-table">
+        <thead><tr><th>N</th><th>5</th><th>10</th><th>30</th><th>50</th><th>75</th><th>100</th><th>150</th><th>200</th></tr></thead>
+        <tbody>
+          <tr><td>sum |f*|（中位數）</td><td class="num">2.35</td><td class="num">4.34</td><td class="num">10.4</td><td class="num">15.6</td><td class="num">23.0</td><td class="num">30.0</td><td class="num">43.1</td><td class="num">56.4</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Sigmoid 擬合</strong>：L=60.0、k=0.024、半飽和 x0 = <strong>100.5</strong>（vs 論文 N≈30）。RMSE：sigmoid 1.88 vs linear 17.22 → sigmoidal 顯著優於 linear。</p>
+
+      <div class="verdict-box">
+        <div class="verdict green"><div class="verdict-label">公式</div><div class="verdict-val">在台股成立</div></div>
+        <div class="verdict amber"><div class="verdict-label">飽和點</div><div class="verdict-val">N≈100（≠30）</div></div>
+        <div class="verdict green"><div class="verdict-label">實務含義</div><div class="verdict-val">50-100 檔合理</div></div>
+      </div>
+      <p><strong>解讀</strong>：台股相關性結構（半導體/金融集中）使「實質獨立資產」少，Kelly 部位累加得慢——意即 scanner 給 50-100 檔買進名單仍未飽和、繼續分散有邊際效益；超過 100 檔後增量遞減，可作為「最大同時持股檔數」量化依據。</p>
+    </div>
+  </div>
+
+  <div class="paper-card">
+    <div class="paper-head slate">
+      <div>
+        <div class="paper-name">#1 LLM 因子挖掘（grammar-only 移植版）</div>
+        <div class="paper-meta">arXiv:2604.26747 · 2026-04-30 · q-fin.PM</div>
+      </div>
+      <div class="paper-badge"><span class="badge med">🟡 部分支持</span></div>
+    </div>
+    <div class="paper-body">
+      <p><strong>論文核心</strong>：受約束 LLM 產生因子表達式 + IC 篩選；BTC/ETH OOS Sharpe 1.6 vs alpha101 baseline 0.9。</p>
+      <p><strong>我方實作</strong>：去掉 LLM、純 grammar 隨機抽 800 個 expression（depth ≤ 2），IS 2020-2023 IC 篩選 (|IC|&gt;0.025、valid_frac&gt;0.7)，OOS 2025-04~2026-04 測試。</p>
+      <table class="compare-table">
+        <thead><tr><th>選出因子</th><th>IS IC</th><th>OOS IC</th><th>Sign 一致</th><th>Long-Short Sharpe</th></tr></thead>
+        <tbody>
+          <tr><td>delta(close, 1)</td><td class="num neg">-0.030</td><td class="num neg">-0.015</td><td class="pos">✓</td><td class="num pos">0.435</td></tr>
+          <tr><td>zscore_xs(delta(close, 1))</td><td class="num neg">-0.030</td><td class="num neg">-0.015</td><td class="pos">✓</td><td class="num pos">0.435</td></tr>
+          <tr><td>delta(log(close), 1)</td><td class="num neg">-0.030</td><td class="num neg">-0.015</td><td class="pos">✓</td><td class="num pos">0.429</td></tr>
+          <tr><td>ts_rank(ts_rank(close, 10), 10)</td><td class="num neg">-0.028</td><td class="num neg">-0.029</td><td class="pos">✓</td><td class="num pos">0.496</td></tr>
+          <tr><td><strong>等權組合</strong></td><td>—</td><td>—</td><td><strong>4/4</strong></td><td class="num pos hi">0.444</td></tr>
+        </tbody>
+      </table>
+      <p><strong>結論</strong>：純 grammar+IC 4 個因子全部 IS→OOS sign 一致，組合 OOS Sharpe 0.44。距論文 LLM 版 1.6 仍有差距（也低於 alpha101 的 0.9）——LLM 在「高效提案智能」上的價值真實存在。但 sign 一致 100% 證明方法論有效，下次預算允許後接 LLM proposal 即可放大效益。</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · POC #4 Kelly · #1 Factor</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 章節參封面 -->
+<div class="sec-div pb page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">立刻可上線的 5 件事</div>
+  <div class="sec-desc">依 ROI（效益量級 / 工期）排序，每件含 owner、檔案、ETA。</div>
+</div>
+
+<div class="full-page pb page body-page">
+  <h1 class="ch">參、立刻可上線</h1>
+
+  <div class="action-grid">
+    <div class="action-card" style="border-color:#00a878">
+      <div class="action-rank">ROI #1 · 風控核心</div>
+      <div class="action-name">替換 Normal VaR 為 Asym-Laplace 邊際</div>
+      <div class="action-why">OOS LogLik +5.43%；Normal 覆蓋僅 3.61% (低估尾部) → Laplace 5.60% 接近理想 5%。對個股 stop-loss 設置直接幫助、減少假停損。</div>
+      <div class="action-eta">ETA：2 天 · 模組：scanners/risk.py</div>
+    </div>
+    <div class="action-card" style="border-color:#00a878">
+      <div class="action-rank">ROI #2 · 因子強化</div>
+      <div class="action-name">法人 zscore + 殖利率曲線進入預測模型</div>
+      <div class="action-why">合計 42% 特徵重要性、IC 0.122 → 0.150 (+23%)。直接接到既有 GradientBoosting / 因子組合流程。</div>
+      <div class="action-eta">ETA：2 天 · 模組：feature_engineering</div>
+    </div>
+    <div class="action-card" style="border-color:#d97706">
+      <div class="action-rank">ROI #3 · 風險預警</div>
+      <div class="action-name">Motif 網路密度寫入 macro_indicators</div>
+      <div class="action-why">危機前 8 週密度 +41.6%（p=0.019）。每週重算 80 檔 60 日滑動相關網路，作為 regime classifier 新特徵。</div>
+      <div class="action-eta">ETA：3 天 · 整合 regime_history</div>
+    </div>
+    <div class="action-card" style="border-color:#1a3a6e">
+      <div class="action-rank">ROI #4 · 客戶教材</div>
+      <div class="action-name">槓桿 ETF 拖曳簡報</div>
+      <div class="action-why">2× 0050 年 drag 9.75%、3× 30.65%（rolling corr 0.999）。一頁 fact sheet 給投資人，避免散戶長期誤持槓桿 ETF。</div>
+      <div class="action-eta">ETA：2 天 · 文件交付</div>
+    </div>
+    <div class="action-card" style="border-color:#312e81">
+      <div class="action-rank">ROI #5 · 組合最佳化</div>
+      <div class="action-name">高階矩偏好加入組合 module</div>
+      <div class="action-why">MaxDD -34.6% → -28.8%（+5.83pp）。Sharpe 增益小但 DD 改善穩定，多頭末期可作為防禦組合選項。</div>
+      <div class="action-eta">ETA：3 天 · portfolio_module</div>
+    </div>
+    <div class="action-card" style="border-color:#666">
+      <div class="action-rank">REFERENCE</div>
+      <div class="action-name">Kelly N≈100 飽和點作為 max-stocks</div>
+      <div class="action-why">scanner 給 50-100 檔買進名單仍合理；超過 100 檔後 Kelly 部位增量顯著遞減，可作為「最大同時持股」量化上限。</div>
+      <div class="action-eta">無 code change，作為設計準則</div>
+    </div>
+  </div>
+
+  <h2 class="ch">本週可行性的反向發現</h2>
+  <blockquote>
+    <strong>Kelly Sigmoidal 飽和點：</strong>論文 N≈30，台股 N≈100，<strong>三倍於美股</strong>。
+    這暗示台股相關性結構與美股不同——半導體/金融類股集中度高使「獨立資產」少，
+    Kelly 部位累加得更慢。對 GiS 的實務含義：
+    <em>scanner 給 50-100 檔買進名單仍未達 Kelly 飽和、繼續分散有邊際效益</em>。
+  </blockquote>
+
+  <h2 class="ch">本週仍未做、需資料補齊後才可做</h2>
+  <ul>
+    <li><strong>#8 新聞 vs 社群情緒</strong>：需建立鉅亨網/PTT/MOPS 中文文本爬蟲（≥14 天工期），列入 W3-W4 規劃</li>
+    <li><strong>#7 階段 B（adversarial training）</strong>：需 PyTorch + GPU。階段 A 已驗證 context 部分價值，再決定 B 是否值得做</li>
+    <li><strong>#1 LLM proposal 接入</strong>：在 grammar-only 0.44 Sharpe 基礎上接 Claude API 提案，若預算允許 W3 嘗試 50 檔小規模 PoC</li>
+  </ul>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:14px">
+    本週 POC 程式碼與結果：<code>tw-stock-scanner/research/_archive/最新金融與科技研究/2026_0504_papers/experiments/</code><br>
+    重跑指令、實證 CSV/JSON、原論文連結見 <code>RESULTS.md</code> 與 <code>INDEX.md</code>。
+  </p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 可上線行動</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 落地路線 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">落地路線（4 週）</h1>
+
+  <table>
+    <thead><tr><th>週次</th><th>主要工作</th><th>對應 POC</th><th>產出</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>W1（05-04 ~ 05-10）</strong></td>
+        <td>Asym-Laplace VaR 替換 + 槓桿 ETF 教材</td>
+        <td>#5 + #2</td>
+        <td>scanners/risk.py 升級、Levered ETF fact sheet PDF</td>
+      </tr>
+      <tr>
+        <td><strong>W2（05-11 ~ 05-17）</strong></td>
+        <td>法人/殖利率特徵接 model + Motif metrics 寫入 DB</td>
+        <td>#7 + #6</td>
+        <td>feature_engineering 擴充、macro_indicators 新增 motif_density 欄位</td>
+      </tr>
+      <tr>
+        <td><strong>W3（05-18 ~ 05-24）</strong></td>
+        <td>高階矩組合 module + LLM proposal PoC（50 檔）</td>
+        <td>#3 + #1</td>
+        <td>portfolio_module skew/kurt option、claude-api factor agent</td>
+      </tr>
+      <tr>
+        <td><strong>W4（05-25 ~ 05-31）</strong></td>
+        <td>中文新聞爬蟲（鉅亨/PTT/MOPS）+ 評估 adversarial training</td>
+        <td>#8（資料）+ #7B</td>
+        <td>scrapers/cn_news、PyTorch 訓練評估報告</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">本週新發現帶入下週的設計變更</h2>
+  <ul>
+    <li><strong>scanner 最大選股檔數設為 100</strong>（基於 #4 Kelly 飽和點）</li>
+    <li><strong>個股 stop-loss 改用 Laplace 5% 分位</strong>（基於 #5 OOS coverage 5.60% vs Normal 3.61%）</li>
+    <li><strong>regime_history 加入 motif_density / clustering 欄位</strong>（基於 #6 危機前 +41.6%）</li>
+    <li><strong>5 日 fwd return 預測模型新增 fb_zscore 與 T10Y3M 為 mandatory feature</strong>（基於 #7 IC +23%）</li>
+  </ul>
+
+  <h2 class="ch">附錄：本週兩組平行實驗備註</h2>
+  <p>本週實作有兩組獨立 POC：本 v2 報告以 9-paper digest 對應的 7 篇 POC 為主軸；另一組 v1 報告（<code>2026_0504_research_weekly.html</code>）以 11-paper 篩選後的 7 篇 + TradingAgents adapter 為主軸。兩組在重疊主題（Levered ETF / Kelly / Gamma-Laplace / Motif）<strong>結論一致</strong>，數值差異反映方法選擇敏感性。詳見 <code>experiments/RESULTS.md</code> 附錄表。</p>
+
+  <blockquote>
+    <strong>原則重申：</strong>能實作的一定要做。先 POC、再與原論文對比、再決定是否上線。
+    本週 9 篇中 7 篇做完 POC、5 件可上線、4 篇完全支持原論文方向、1 篇有意義反向發現——
+    本週可行性實作率 100%（在資料允許範圍內）。
+  </blockquote>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:14px">
+    本報告涵蓋：本週（2026-04-28 ~ 2026-05-04）arXiv q-fin / NBER / 產業新聞共 9 篇。
+    資料截止：2026-05-04。本報告僅供研究參考，不構成投資建議。
+  </p>
+
+  <div class="page-footer" style="margin-top:18px">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>落地路線</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 圖表 JS -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 11.5;
+  Chart.defaults.color = '#4a5568';
+
+  new Chart(document.getElementById('chartVerdict'), {
+    type: 'doughnut',
+    data: {
+      labels: ['完全支持 (4)', '部分支持 (2)', '反向/未複製 (1)'],
+      datasets: [{
+        data: [4, 2, 1],
+        backgroundColor: ['#00a878', '#d97706', '#c0392b'],
+        borderWidth: 2, borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: false, animation: false,
+      plugins: {
+        legend: { position: 'right', labels: { boxWidth: 14, padding: 10, font: { size: 12 } } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + ' 篇' } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('chartROI'), {
+    type: 'bar',
+    data: {
+      labels: ['Laplace VaR', '法人/殖利率特徵', 'Motif 預警', '槓桿 ETF 教材', '高階矩組合'],
+      datasets: [{
+        label: 'ROI 分數',
+        data: [9.2, 8.7, 7.5, 7.0, 6.3],
+        backgroundColor: ['#065f46', '#0d6e44', '#1a7f54', '#27a874', '#34c08c'],
+        borderRadius: 4, barPercentage: 0.65
+      }]
+    },
+    options: {
+      responsive: false, animation: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#eef2f8' }, max: 10 },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

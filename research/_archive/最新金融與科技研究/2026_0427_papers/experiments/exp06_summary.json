@@ -1,0 +1,38 @@
+{
+  "experiment": "#6 microstructure_regime (daily-OHLC proxy)",
+  "note": "Used daily HL/volume features as proxy for LOB; full impl requires tick data via SK COM",
+  "n_stocks_sampled": 20,
+  "regime_distribution": {
+    "normal": 3281,
+    "stressed": 975,
+    "illiquid": 523
+  },
+  "cost_by_regime_bps": [
+    {
+      "regime": "normal",
+      "mean_bps": 313.34826151400733,
+      "median_bps": 292.6116065717441,
+      "std_bps": 94.26719045538468,
+      "n_stocks": 20
+    },
+    {
+      "regime": "stressed",
+      "mean_bps": 610.8454844709303,
+      "median_bps": 551.7007323755699,
+      "std_bps": 241.65201092608015,
+      "n_stocks": 20
+    },
+    {
+      "regime": "illiquid",
+      "mean_bps": 246.77087235057633,
+      "median_bps": 258.7777869816233,
+      "std_bps": 78.51189617316044,
+      "n_stocks": 20
+    }
+  ],
+  "avg_savings_bps_per_year": 13511.334432231557,
+  "median_savings_bps_per_year": 11902.508924018799,
+  "paper_claim_bps": "30-60",
+  "verdict": "PARTIAL",
+  "next_step": "Move to tick-level via SK COM 5-depth data when implemented"
+}

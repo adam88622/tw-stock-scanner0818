@@ -171,6 +171,12 @@ def fetch_twse_institutional(conn, date_str):
             sitc_buy = _safe_int(row[10]) // 1000     # 投信買賣超
             dealer_buy = _safe_int(row[11]) // 1000   # 自營商買賣超(合計)
 
+            name = (row[1] or '').strip() if len(row) > 1 else ''
+            if name:
+                conn.execute(
+                    "INSERT OR IGNORE INTO stocks (stock_id, name, market, sector) VALUES (?, ?, 'twse', '')",
+                    (stock_id, name),
+                )
             upsert_institutional(conn, stock_id, iso_date, foreign_buy, sitc_buy, dealer_buy)
             count += 1
         except Exception as e:

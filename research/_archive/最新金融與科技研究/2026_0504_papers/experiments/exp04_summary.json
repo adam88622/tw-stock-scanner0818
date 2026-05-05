@@ -1,0 +1,9 @@
+{
+  "paper": "2604.25406",
+  "n_signals": 49,
+  "base_rate_2pct_drop": 0.35918367346938773,
+  "signal_precision_2pct_drop": 0.42857142857142855,
+  "no_signal_precision_2pct_drop": 0.30612244897959184,
+  "avg_fwd_cum_ret_signal": 0.02268685107954981,
+  "avg_fwd_cum_ret_nosig": 0.009548375208430923
+}

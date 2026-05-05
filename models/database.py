@@ -131,6 +131,15 @@ def init_db():
             PRIMARY KEY (date, indicator)
         );
 
+        CREATE TABLE IF NOT EXISTS cta_signal_history (
+            date TEXT PRIMARY KEY,
+            close REAL NOT NULL,
+            signal_raw REAL NOT NULL,
+            raw_pos REAL NOT NULL,
+            position REAL NOT NULL,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );
+
         CREATE INDEX IF NOT EXISTS idx_macro_date ON macro_indicators(date);
         CREATE INDEX IF NOT EXISTS idx_macro_indicator ON macro_indicators(indicator);
         CREATE INDEX IF NOT EXISTS idx_daily_prices_date ON daily_prices(date);
@@ -146,6 +155,52 @@ def init_db():
             added_at TEXT DEFAULT (datetime('now', 'localtime')),
             FOREIGN KEY (stock_id) REFERENCES stocks(stock_id)
         );
+
+        CREATE TABLE IF NOT EXISTS holder_distribution (
+            stock_id   TEXT NOT NULL,
+            sca_date   TEXT NOT NULL,
+            band       INTEGER NOT NULL,
+            band_label TEXT NOT NULL,
+            holders    INTEGER,
+            shares     INTEGER,
+            pct        REAL,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (stock_id, sca_date, band)
+        );
+        CREATE INDEX IF NOT EXISTS idx_holder_dist_date ON holder_distribution(sca_date);
+        CREATE INDEX IF NOT EXISTS idx_holder_dist_stock ON holder_distribution(stock_id);
+
+        CREATE TABLE IF NOT EXISTS notice_announcements (
+            announce_date TEXT NOT NULL,
+            stock_id      TEXT NOT NULL,
+            name          TEXT,
+            cumulative    INTEGER,
+            reason        TEXT,
+            close_price   REAL,
+            is_real_stock INTEGER DEFAULT 0,
+            updated_at    TEXT DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (announce_date, stock_id, reason)
+        );
+        CREATE INDEX IF NOT EXISTS idx_notice_date  ON notice_announcements(announce_date);
+        CREATE INDEX IF NOT EXISTS idx_notice_stock ON notice_announcements(stock_id);
+
+        CREATE TABLE IF NOT EXISTS disposition_announcements (
+            announce_date TEXT NOT NULL,
+            stock_id      TEXT NOT NULL,
+            name          TEXT,
+            cumulative    INTEGER,
+            condition     TEXT,
+            period_start  TEXT,
+            period_end    TEXT,
+            action        TEXT,
+            content       TEXT,
+            is_real_stock INTEGER DEFAULT 0,
+            updated_at    TEXT DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (announce_date, stock_id, period_start)
+        );
+        CREATE INDEX IF NOT EXISTS idx_disp_date     ON disposition_announcements(announce_date);
+        CREATE INDEX IF NOT EXISTS idx_disp_stock    ON disposition_announcements(stock_id);
+        CREATE INDEX IF NOT EXISTS idx_disp_period   ON disposition_announcements(period_start, period_end);
     """)
 
     conn.commit()
@@ -200,6 +255,61 @@ def upsert_institutional(conn, stock_id, date, foreign_buy, sitc_buy, dealer_buy
         (stock_id, date, foreign_buy, sitc_buy, dealer_buy, total_buy)
         VALUES (?, ?, ?, ?, ?, ?)
     """, (stock_id, date, foreign_buy, sitc_buy, dealer_buy, total))
+
+
+def upsert_holder_distribution(conn, stock_id, sca_date, rows):
+    """
+    寫入單支股票某週的 17 行持股分佈。
+    rows: list[dict] from scrapers.tdcc.parse_holder_table
+    """
+    for r in rows:
+        conn.execute("""
+            INSERT OR REPLACE INTO holder_distribution
+            (stock_id, sca_date, band, band_label, holders, shares, pct, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        """, (
+            stock_id, sca_date, r['band'], r['band_label'],
+            r.get('holders'), r.get('shares'), r.get('pct'),
+        ))
+
+
+def get_latest_holder_date(conn):
+    """取得 holder_distribution 最新一筆 sca_date"""
+    row = conn.execute("SELECT MAX(sca_date) AS d FROM holder_distribution").fetchone()
+    return row['d'] if row and row['d'] else None
+
+
+def upsert_notice(conn, rec):
+    """寫入單筆注意股紀錄 (rec from scrapers.disposition.fetch_notice)"""
+    if not rec.get('announce_date') or not rec.get('stock_id'):
+        return
+    conn.execute("""
+        INSERT OR REPLACE INTO notice_announcements
+        (announce_date, stock_id, name, cumulative, reason, close_price, is_real_stock, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+    """, (
+        rec['announce_date'], rec['stock_id'], rec.get('name'),
+        rec.get('cumulative'), rec.get('reason'), rec.get('close_price'),
+        1 if rec.get('is_real_stock') else 0,
+    ))
+
+
+def upsert_disposition(conn, rec):
+    """寫入單筆處置股紀錄 (rec from scrapers.disposition.fetch_punish)"""
+    if not rec.get('announce_date') or not rec.get('stock_id'):
+        return
+    conn.execute("""
+        INSERT OR REPLACE INTO disposition_announcements
+        (announce_date, stock_id, name, cumulative, condition,
+         period_start, period_end, action, content, is_real_stock, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+    """, (
+        rec['announce_date'], rec['stock_id'], rec.get('name'),
+        rec.get('cumulative'), rec.get('condition'),
+        rec.get('period_start'), rec.get('period_end'),
+        rec.get('action'), rec.get('content'),
+        1 if rec.get('is_real_stock') else 0,
+    ))
 
 
 def get_trading_dates(conn, limit=240):
@@ -422,6 +532,42 @@ def get_credit_spread_history(conn, limit=500):
         ORDER BY date DESC
         LIMIT ?
     """, (limit,)).fetchall()
+    return rows
+
+
+# ===== CTA Signal (SPY Lasso 中頻) =====
+
+def upsert_cta_signal(conn, date, close, signal_raw, raw_pos, position):
+    conn.execute("""
+        INSERT INTO cta_signal_history (date, close, signal_raw, raw_pos, position)
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT(date) DO UPDATE SET
+            close=excluded.close,
+            signal_raw=excluded.signal_raw,
+            raw_pos=excluded.raw_pos,
+            position=excluded.position,
+            updated_at=CURRENT_TIMESTAMP
+    """, (date, close, signal_raw, raw_pos, position))
+
+
+def get_cta_signal_history(conn, limit=500):
+    """取最近 N 筆,DESC 排序。"""
+    rows = conn.execute("""
+        SELECT date, close, signal_raw, raw_pos, position
+        FROM cta_signal_history
+        ORDER BY date DESC
+        LIMIT ?
+    """, (limit,)).fetchall()
+    return rows
+
+
+def get_cta_signal_all(conn):
+    """取全部,ASC 排序(供回測/勝率用)。"""
+    rows = conn.execute("""
+        SELECT date, close, signal_raw, raw_pos, position
+        FROM cta_signal_history
+        ORDER BY date ASC
+    """).fetchall()
     return rows
 
 

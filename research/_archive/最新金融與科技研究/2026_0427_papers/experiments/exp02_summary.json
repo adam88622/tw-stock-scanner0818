@@ -1,0 +1,29 @@
+{
+  "experiment": "#2 post_screening_portfolio",
+  "n_stocks": 197,
+  "n_selected": 40,
+  "is_period": [
+    "2025-04-02",
+    "2025-10-08"
+  ],
+  "oos_period": [
+    "2025-10-09",
+    "2026-04-28"
+  ],
+  "mu_naive_annual_pct": 138.551640874681,
+  "mu_corrected_annual_pct": 41.208124324749384,
+  "mu_oos_actual_annual_pct": 74.98678485648281,
+  "mu_estimation_error_naive_pp": 63.56485601819818,
+  "mu_estimation_error_corrected_pp": 33.77866053173343,
+  "mu_correction_better": true,
+  "sharpe_naive_estimate": 1.3102439711334197,
+  "sharpe_corrected_estimate": 0.3896936630801459,
+  "sharpe_oos_actual": 2.1070854585196064,
+  "sharpe_naive_error": -0.7968414873861867,
+  "sharpe_corrected_error": -1.7173917954394604,
+  "baseline_sharpe_no_screen": {
+    "IS": 0.48395739047949643,
+    "OOS": 2.71150016161095
+  },
+  "verdict": "PAPER_CONFIRMED"
+}

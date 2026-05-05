@@ -1,0 +1,64 @@
+{
+  "summary_per_metric": {
+    "density": {
+      "normal_mean": 0.13347138139790862,
+      "prepanic_mean": 0.18899622473906286,
+      "panic_mean": 0.34783001808318265,
+      "prepanic_uplift_vs_normal_pct": 41.60056092895451,
+      "t_stat": 2.373786816458179,
+      "p_value": 0.01930608876419604,
+      "n_normal": 230,
+      "n_prepanic": 57
+    },
+    "n_triangles": {
+      "normal_mean": 4415.521739130435,
+      "prepanic_mean": 4273.035087719299,
+      "panic_mean": 13976.857142857143,
+      "prepanic_uplift_vs_normal_pct": -3.2269493806001908,
+      "t_stat": -0.1018661433963075,
+      "p_value": 0.9190129557723289,
+      "n_normal": 230,
+      "n_prepanic": 57
+    },
+    "triangles_per_node": {
+      "normal_mean": 55.194021739130434,
+      "prepanic_mean": 53.412938596491216,
+      "panic_mean": 174.71071428571426,
+      "prepanic_uplift_vs_normal_pct": -3.2269493806002165,
+      "t_stat": -0.10186614339630834,
+      "p_value": 0.9190129557723282,
+      "n_normal": 230,
+      "n_prepanic": 57
+    },
+    "transitivity": {
+      "normal_mean": 0.4630652694091583,
+      "prepanic_mean": 0.5275284721114735,
+      "panic_mean": 0.6460001736995773,
+      "prepanic_uplift_vs_normal_pct": 13.920975499753215,
+      "t_stat": 3.243978440998284,
+      "p_value": 0.0015818063009529716,
+      "n_normal": 230,
+      "n_prepanic": 57
+    },
+    "avg_clustering": {
+      "normal_mean": 0.4044831160514056,
+      "prepanic_mean": 0.5131030716430601,
+      "panic_mean": 0.6388502029938595,
+      "prepanic_uplift_vs_normal_pct": 26.85401473663738,
+      "t_stat": 4.650702386286089,
+      "p_value": 9.885384895222801e-06,
+      "n_normal": 230,
+      "n_prepanic": 57
+    }
+  },
+  "paper_compare": {
+    "paper_pre_crisis_motif_uplift_pct": "30-50% (Shao 2026)",
+    "our_density_uplift_pre_panic_pct": 41.6,
+    "our_clustering_uplift_pre_panic_pct": 26.85,
+    "our_transitivity_uplift_pre_panic_pct": 13.92,
+    "our_triangle_count_uplift_pct": -3.23,
+    "n_significant_metrics_at_p05": 3,
+    "verdict": "[OK] supports paper",
+    "note": "Raw triangle count not informative because of density saturation effect; density / clustering / transitivity rise meaningfully in 8-week pre-panic window."
+  }
+}

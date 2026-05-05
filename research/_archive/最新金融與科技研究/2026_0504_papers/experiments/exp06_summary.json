@@ -1,0 +1,43 @@
+{
+  "paper": "2604.27287",
+  "sample": "2004-03-02 ~ 2026-05-04",
+  "n_days": 5179,
+  "annual_sigma": 0.3044235491957335,
+  "full_period": {
+    "-2": {
+      "actual_cum": 0.00014784705141197184,
+      "naive_cum": 0.050153464073254654,
+      "empirical_drag": 5.826664562252001,
+      "theoretical_drag": 5.713774742169259,
+      "annual_drag": 0.2835140895322464,
+      "annual_theory": 0.27802109191478147
+    },
+    "-1": {
+      "actual_cum": 0.03290127158075724,
+      "naive_cum": 0.2239496909425299,
+      "empirical_drag": 1.9179101257279862,
+      "theoretical_drag": 1.9045915807230862,
+      "annual_drag": 0.093321751628394,
+      "annual_theory": 0.09267369730492715
+    },
+    "2": {
+      "actual_cum": 2.6868628490310136,
+      "naive_cum": 19.93880220395923,
+      "empirical_drag": 2.0042934068016525,
+      "theoretical_drag": 1.9045915807230862,
+      "annual_drag": 0.0975249929550138,
+      "annual_theory": 0.09267369730492715
+    },
+    "3": {
+      "actual_cum": 0.16358052605853843,
+      "naive_cum": 89.03250600634202,
+      "empirical_drag": 6.2994514348466115,
+      "theoretical_drag": 5.713774742169259,
+      "annual_drag": 0.30651897308000503,
+      "annual_theory": 0.27802109191478147
+    }
+  },
+  "rolling_corr_2x": 0.9992108376612561,
+  "rolling_err_2x_pct": 0.004760979228115271,
+  "rolling_err_inv_pct": 0.0004492382552607734
+}

@@ -1,0 +1,102 @@
+{
+  "experiment": "#3 structured_backtest_eval",
+  "n_stocks": 197,
+  "date_range": [
+    "2025-04-02",
+    "2026-04-28"
+  ],
+  "regime_distribution": {
+    "panic": 80,
+    "choppy": 61,
+    "unknown": 59,
+    "bull": 36,
+    "bear": 24
+  },
+  "overall": {
+    "momentum": {
+      "sharpe": 0.6279448568117181,
+      "mean_ann": 0.9039514920514129,
+      "vol_ann": 1.4395396064569603,
+      "mdd": -0.9865925015653865,
+      "win_rate": 0.4653846153846154,
+      "n_days": 260.0
+    },
+    "equal_weight (peer)": {
+      "sharpe": 0.795615448294862,
+      "mean_ann": 0.680099760729808,
+      "vol_ann": 0.8548096472829638,
+      "mdd": -0.5593385413094938,
+      "win_rate": 0.6615384615384615,
+      "n_days": 260.0
+    },
+    "market (median)": {
+      "sharpe": -0.22821325316705457,
+      "mean_ann": -0.10855772413494286,
+      "vol_ann": 0.47568545046539185,
+      "mdd": -0.3432453752260354,
+      "win_rate": 0.5,
+      "n_days": 260.0
+    }
+  },
+  "momentum_by_regime": {
+    "bull": {
+      "n_days": 36,
+      "sharpe": 3.5552114856986416,
+      "mean_ann": 1.0932267196827687,
+      "vol_ann": 0.30749977155520375,
+      "mdd": -0.07901728366190153,
+      "win_rate": 0.6111111111111112
+    },
+    "bear": {
+      "n_days": 24,
+      "sharpe": 4.6730521808397745,
+      "mean_ann": 1.3197163545631028,
+      "vol_ann": 0.28240993327105157,
+      "mdd": -0.04008172350160821,
+      "win_rate": 0.4583333333333333
+    },
+    "choppy": {
+      "n_days": 61,
+      "sharpe": 6.986713943816522,
+      "mean_ann": 3.3473237326755694,
+      "vol_ann": 0.47909843734736907,
+      "mdd": -0.1146217355830389,
+      "win_rate": 0.7213114754098361
+    },
+    "panic": {
+      "n_days": 80,
+      "sharpe": -0.1966554949059046,
+      "mean_ann": -0.5023589272242067,
+      "vol_ann": 2.5545125370871262,
+      "mdd": -0.28809741704503866,
+      "win_rate": 0.55
+    }
+  },
+  "alpha_by_regime": {
+    "bull": {
+      "momentum_sharpe": 3.5552114856986416,
+      "peer_sharpe": 5.0384999118430045,
+      "alpha_sharpe": -1.4832884261443628,
+      "alpha_return_ann": 0.2937591241404539
+    },
+    "bear": {
+      "momentum_sharpe": 4.6730521808397745,
+      "peer_sharpe": 5.992245317139059,
+      "alpha_sharpe": -1.3191931362992841,
+      "alpha_return_ann": 0.5077663924371134
+    },
+    "choppy": {
+      "momentum_sharpe": 6.986713943816522,
+      "peer_sharpe": 8.656189859477898,
+      "alpha_sharpe": -1.6694759156613763,
+      "alpha_return_ann": 1.617088076843705
+    },
+    "panic": {
+      "momentum_sharpe": -0.1966554949059046,
+      "peer_sharpe": 0.05835039936706694,
+      "alpha_sharpe": -0.25500589427297154,
+      "alpha_return_ann": -0.5888404335933513
+    }
+  },
+  "verdict": "PAPER_CONFIRMED"
+}

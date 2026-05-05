@@ -1,0 +1,533 @@
+{
+  "memory_dir": "C:\\Users\\User\\.claude\\projects\\d--claude\\memory",
+  "n_files": 10,
+  "files": [
+    "feedback_auto_restart.md",
+    "feedback_research_rigor.md",
+    "feedback_skcom_inner_class.md",
+    "MEMORY.md",
+    "project_ezwin_report.md",
+    "project_institutional_backfill.md",
+    "project_kgi_api_setup.md",
+    "project_terminal_status.md",
+    "project_trading_terminal.md",
+    "user_profile.md"
+  ],
+  "bm25": {
+    "method": "BM25",
+    "per_query": [
+      {
+        "query": "凱基證券 API 串接進度",
+        "gt": "project_kgi_api_setup.md",
+        "top5": [
+          [
+            "project_kgi_api_setup.md",
+            11.273142150202878
+          ],
+          [
+            "MEMORY.md",
+            7.5841735380302335
+          ],
+          [
+            "project_ezwin_report.md",
+            2.8047632310482866
+          ],
+          [
+            "project_terminal_status.md",
+            1.5234643063980247
+          ],
+          [
+            "feedback_auto_restart.md",
+            0.5384982714345896
+          ]
+        ],
+        "ndcg5": 1.0,
+        "recall1": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "latency_ms": 0.6145000224933028
+      },
+      {
+        "query": "我之前對量化研究嚴謹度的偏好",
+        "gt": "feedback_research_rigor.md",
+        "top5": [
+          [
+            "feedback_research_rigor.md",
+            8.945281025868379
+          ],
+          [
+            "user_profile.md",
+            5.23974880880849
+          ],
+          [
+            "project_ezwin_report.md",
+            3.8716085032526397
+          ],
+          [
+            "project_kgi_api_setup.md",
+            2.730638646508363
+          ],
+          [
+            "project_terminal_status.md",
+            1.8467348380901312
+          ]
+        ],
+        "ndcg5": 1.0,
+        "recall1": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "latency_ms": 0.089899986051023
+      },
+      {
+        "query": "SK COM 事件處理 callback 失敗",
+        "gt": "feedback_skcom_inner_class.md",
+        "top5": [
+          [
+            "project_trading_terminal.md",
+            6.723450575550653
+          ],
+          [
+            "MEMORY.md",
+            2.839420010989476
+          ],
+          [
+            "project_kgi_api_setup.md",
+            2.2717682423445154
+          ],
+          [
+            "project_ezwin_report.md",
+            2.2025896584474474
+          ],
+          [
+            "feedback_auto_restart.md",
+            0.0
+          ]
+        ],
+        "ndcg5": 0.0,
+        "recall1": 0.0,
+        "recall3": 0.0,
+        "mrr": 0.0,
+        "latency_ms": 0.0646000262349844
+      },
+      {
+        "query": "EZWin 報告下載排程",
+        "gt": "project_ezwin_report.md",
+        "top5": [
+          [
+            "project_ezwin_report.md",
+            9.360518053385208
+          ],
+          [
+            "MEMORY.md",
+            6.123403831837831
+          ],
+          [
+            "feedback_research_rigor.md",
+            1.585933927080405
+          ],
+          [
+            "project_terminal_status.md",
+            1.019402368063421
+          ],
+          [
+            "project_trading_terminal.md",
+            0.9859711603495672
+          ]
+        ],
+        "ndcg5": 1.0,
+        "recall1": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "latency_ms": 0.04139996599406004
+      },
+      {
+        "query": "trading terminal K 棒不顯示",
+        "gt": "project_terminal_status.md",
+        "top5": [
+          [
+            "project_terminal_status.md",
+            4.544992106434835
+          ],
+          [
+            "project_trading_terminal.md",
+            4.355798434536796
+          ],
+          [
+            "MEMORY.md",
+            3.4434072777446065
+          ],
+          [
+            "project_ezwin_report.md",
+            1.5443804586672232
+          ],
+          [
+            "project_kgi_api_setup.md",
+            0.8815254733030646
+          ]
+        ],
+        "ndcg5": 1.0,
+        "recall1": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "latency_ms": 0.04090002039447427
+      },
+      {
+        "query": "auto restart bot",
+        "gt": "feedback_auto_restart.md",
+        "top5": [
+          [
+            "feedback_auto_restart.md",
+            6.423456994983635
+          ],
+          [
+            "MEMORY.md",
+            2.6144290803359027
+          ],
+          [
+            "project_institutional_backfill.md",
+            0.6206576942761816
+          ],
+          [
+            "project_ezwin_report.md",
+            0.4078455526025179
+          ],
+          [
+            "feedback_research_rigor.md",
+            0.0
+          ]
+        ],
+        "ndcg5": 1.0,
+        "recall1": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "latency_ms": 0.02080004196614027
+      },
+      {
+        "query": "user works in quant trading",
+        "gt": "user_profile.md",
+        "top5": [
+          [
+            "project_institutional_backfill.md",
+            3.2140359167463806
+          ],
+          [
+            "user_profile.md",
+            2.430895721965722
+          ],
+          [
+            "feedback_skcom_inner_class.md",
+            1.6314684206159529
+          ],
+          [
+            "MEMORY.md",
+            0.5376789591189829
+          ],
+          [
+            "project_ezwin_report.md",
+            0.2620512750332146
+          ]
+        ],
+        "ndcg5": 0.6309297535714575,
+        "recall1": 0.0,
+        "recall3": 1.0,
+        "mrr": 0.5,
+        "latency_ms": 0.030800001695752144
+      },
+      {
+        "query": "法人買賣超 backfill",
+        "gt": "project_institutional_backfill.md",
+        "top5": [
+          [
+            "project_institutional_backfill.md",
+            5.796972603936213
+          ],
+          [
+            "MEMORY.md",
+            4.98116974946934
+          ],
+          [
+            "feedback_research_rigor.md",
+            1.2198920870488732
+          ],
+          [
+            "project_kgi_api_setup.md",
+            0.8113693085154027
+          ],
+          [
+            "project_trading_terminal.md",
+            0.5446052380407354
+          ]
+        ],
+        "ndcg5": 1.0,
+        "recall1": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "latency_ms": 0.03470003139227629
+      }
+    ],
+    "avg_ndcg5": 0.8288662191964322,
+    "avg_recall1": 0.75,
+    "avg_recall3": 0.875,
+    "avg_mrr": 0.8125,
+    "avg_latency_ms": 0.11720001202775165
+  },
+  "vector": {
+    "method": "Vector(MiniLM-L12-v2)",
+    "per_query": [
+      {
+        "query": "凱基證券 API 串接進度",
+        "gt": "project_kgi_api_setup.md",
+        "top5": [
+          [
+            "user_profile.md",
+            0.4368934631347656
+          ],
+          [
+            "MEMORY.md",
+            0.4082830846309662
+          ],
+          [
+            "project_kgi_api_setup.md",
+            0.39514750242233276
+          ],
+          [
+            "project_ezwin_report.md",
+            0.3043825626373291
+          ],
+          [
+            "project_institutional_backfill.md",
+            0.2827986478805542
+          ]
+        ],
+        "ndcg5": 0.5,
+        "recall1": 0.0,
+        "recall3": 1.0,
+        "mrr": 0.3333333333333333,
+        "latency_ms": 12.166300031822175
+      },
+      {
+        "query": "我之前對量化研究嚴謹度的偏好",
+        "gt": "feedback_research_rigor.md",
+        "top5": [
+          [
+            "feedback_research_rigor.md",
+            0.3916478753089905
+          ],
+          [
+            "project_institutional_backfill.md",
+            0.23292525112628937
+          ],
+          [
+            "user_profile.md",
+            0.23148185014724731
+          ],
+          [
+            "MEMORY.md",
+            0.19809848070144653
+          ],
+          [
+            "project_kgi_api_setup.md",
+            0.03893512114882469
+          ]
+        ],
+        "ndcg5": 1.0,
+        "recall1": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "latency_ms": 10.676999983843416
+      },
+      {
+        "query": "SK COM 事件處理 callback 失敗",
+        "gt": "feedback_skcom_inner_class.md",
+        "top5": [
+          [
+            "project_trading_terminal.md",
+            0.5063230395317078
+          ],
+          [
+            "feedback_skcom_inner_class.md",
+            0.40849602222442627
+          ],
+          [
+            "project_terminal_status.md",
+            0.3708229064941406
+          ],
+          [
+            "project_institutional_backfill.md",
+            0.3079042136669159
+          ],
+          [
+            "project_kgi_api_setup.md",
+            0.2924654483795166
+          ]
+        ],
+        "ndcg5": 0.6309297535714575,
+        "recall1": 0.0,
+        "recall3": 1.0,
+        "mrr": 0.5,
+        "latency_ms": 9.423899988178164
+      },
+      {
+        "query": "EZWin 報告下載排程",
+        "gt": "project_ezwin_report.md",
+        "top5": [
+          [
+            "project_ezwin_report.md",
+            0.6199848055839539
+          ],
+          [
+            "project_terminal_status.md",
+            0.34275370836257935
+          ],
+          [
+            "project_institutional_backfill.md",
+            0.27251067757606506
+          ],
+          [
+            "project_kgi_api_setup.md",
+            0.27204129099845886
+          ],
+          [
+            "project_trading_terminal.md",
+            0.263609379529953
+          ]
+        ],
+        "ndcg5": 1.0,
+        "recall1": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "latency_ms": 14.034299994818866
+      },
+      {
+        "query": "trading terminal K 棒不顯示",
+        "gt": "project_terminal_status.md",
+        "top5": [
+          [
+            "project_trading_terminal.md",
+            0.6318404078483582
+          ],
+          [
+            "project_terminal_status.md",
+            0.5656054019927979
+          ],
+          [
+            "project_kgi_api_setup.md",
+            0.2758501470088959
+          ],
+          [
+            "project_institutional_backfill.md",
+            0.1860482096672058
+          ],
+          [
+            "project_ezwin_report.md",
+            0.1773657649755478
+          ]
+        ],
+        "ndcg5": 0.6309297535714575,
+        "recall1": 0.0,
+        "recall3": 1.0,
+        "mrr": 0.5,
+        "latency_ms": 14.395800011698157
+      },
+      {
+        "query": "auto restart bot",
+        "gt": "feedback_auto_restart.md",
+        "top5": [
+          [
+            "feedback_auto_restart.md",
+            0.695929765701294
+          ],
+          [
+            "MEMORY.md",
+            0.34050536155700684
+          ],
+          [
+            "project_terminal_status.md",
+            0.22626644372940063
+          ],
+          [
+            "project_ezwin_report.md",
+            0.2184416651725769
+          ],
+          [
+            "project_trading_terminal.md",
+            0.17633704841136932
+          ]
+        ],
+        "ndcg5": 1.0,
+        "recall1": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "latency_ms": 15.775700041558594
+      },
+      {
+        "query": "user works in quant trading",
+        "gt": "user_profile.md",
+        "top5": [
+          [
+            "user_profile.md",
+            0.4993981122970581
+          ],
+          [
+            "MEMORY.md",
+            0.3449678421020508
+          ],
+          [
+            "project_trading_terminal.md",
+            0.3036976456642151
+          ],
+          [
+            "project_institutional_backfill.md",
+            0.28534016013145447
+          ],
+          [
+            "project_terminal_status.md",
+            0.22327029705047607
+          ]
+        ],
+        "ndcg5": 1.0,
+        "recall1": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "latency_ms": 12.201200006529689
+      },
+      {
+        "query": "法人買賣超 backfill",
+        "gt": "project_institutional_backfill.md",
+        "top5": [
+          [
+            "project_institutional_backfill.md",
+            0.5655622482299805
+          ],
+          [
+            "MEMORY.md",
+            0.2707636058330536
+          ],
+          [
+            "project_ezwin_report.md",
+            0.22579795122146606
+          ],
+          [
+            "project_trading_terminal.md",
+            0.1981678158044815
+          ],
+          [
+            "feedback_research_rigor.md",
+            0.17840120196342468
+          ]
+        ],
+        "ndcg5": 1.0,
+        "recall1": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "latency_ms": 11.714699969161302
+      }
+    ],
+    "avg_ndcg5": 0.8452324383928644,
+    "avg_recall1": 0.625,
+    "avg_recall3": 1.0,
+    "avg_mrr": 0.7916666666666666,
+    "avg_latency_ms": 12.548612503451295
+  },
+  "st_load_seconds": 26.228293099964503
+}

@@ -1,0 +1,204 @@
+{
+  "per_log": [
+    {
+      "n_lines": 0,
+      "n_chars": 0,
+      "levels": {},
+      "retry_count": 0,
+      "success_days": 0,
+      "failed_days": 0,
+      "explicit_all_done": false,
+      "first_ts": "",
+      "last_ts": "",
+      "runtime_sec": 0.0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0.0,
+      "success": false,
+      "schema_ok": false,
+      "top_errors": [],
+      "notes": "empty log file (agent crashed before writing)",
+      "filename": "20260413-133245-backfill-institutional.log",
+      "agent_name": "backfill-runner",
+      "task_id": "backfill-2026-04-13-1332"
+    },
+    {
+      "n_lines": 5374,
+      "n_chars": 332852,
+      "levels": {
+        "INFO": 4831,
+        "WARNING": 542
+      },
+      "retry_count": 17,
+      "success_days": 4573,
+      "failed_days": 0,
+      "explicit_all_done": true,
+      "first_ts": "2026-04-13T13:36:01",
+      "last_ts": "2026-04-13T21:20:57",
+      "runtime_sec": 27896.0,
+      "tokens_in": 149783,
+      "tokens_out": 16642,
+      "cost_usd": 0.698979,
+      "success": true,
+      "schema_ok": true,
+      "top_errors": [
+        [
+          "請求失敗 (第 1 次): Expecting value: line 1 column 1 (char 0)",
+          15
+        ],
+        [
+          "TWSE 法人買賣超無資料: 20120503",
+          1
+        ],
+        [
+          "TWSE 法人買賣超無資料: 20120508",
+          1
+        ],
+        [
+          "TWSE 法人買賣超無資料: 20120528",
+          1
+        ],
+        [
+          "請求失敗 (第 2 次): Expecting value: line 1 column 1 (char 0)",
+          1
+        ]
+      ],
+      "notes": "ALL DONE; success_days=4573, failed_days=0",
+      "filename": "20260413-133601-backfill-institutional.log",
+      "agent_name": "backfill-runner",
+      "task_id": "backfill-2026-04-13-1336"
+    },
+    {
+      "n_lines": 5385,
+      "n_chars": 333509,
+      "levels": {
+        "INFO": 4831,
+        "WARNING": 542
+      },
+      "retry_count": 17,
+      "success_days": 4573,
+      "failed_days": 0,
+      "explicit_all_done": true,
+      "first_ts": "2026-04-13T13:36:01",
+      "last_ts": "2026-04-13T21:20:57",
+      "runtime_sec": 27896.0,
+      "tokens_in": 150079,
+      "tokens_out": 16675,
+      "cost_usd": 0.7003619999999999,
+      "success": true,
+      "schema_ok": true,
+      "top_errors": [
+        [
+          "請求失敗 (第 1 次): Expecting value: line 1 column 1 (char 0)",
+          15
+        ],
+        [
+          "TWSE 法人買賣超無資料: 20120503",
+          1
+        ],
+        [
+          "TWSE 法人買賣超無資料: 20120508",
+          1
+        ],
+        [
+          "TWSE 法人買賣超無資料: 20120528",
+          1
+        ],
+        [
+          "請求失敗 (第 2 次): Expecting value: line 1 column 1 (char 0)",
+          1
+        ]
+      ],
+      "notes": "ALL DONE; success_days=4573, failed_days=0",
+      "filename": "backfill_detached.log",
+      "agent_name": "backfill-runner",
+      "task_id": "backfill-2026-04-13-detached"
+    },
+    {
+      "n_lines": 134,
+      "n_chars": 4359,
+      "levels": {},
+      "retry_count": 0,
+      "success_days": 0,
+      "failed_days": 0,
+      "explicit_all_done": false,
+      "first_ts": "",
+      "last_ts": "",
+      "runtime_sec": 0.0,
+      "tokens_in": 1961,
+      "tokens_out": 217,
+      "cost_usd": 0.009138,
+      "success": true,
+      "schema_ok": true,
+      "top_errors": [],
+      "notes": "no explicit ALL DONE marker; lines=134",
+      "filename": "clean_institutional_20260427_123517.log",
+      "agent_name": "data-cleaner",
+      "task_id": "clean-2026-04-27"
+    },
+    {
+      "n_lines": 46,
+      "n_chars": 1589,
+      "levels": {},
+      "retry_count": 0,
+      "success_days": 0,
+      "failed_days": 0,
+      "explicit_all_done": false,
+      "first_ts": "",
+      "last_ts": "",
+      "runtime_sec": 0.0,
+      "tokens_in": 715,
+      "tokens_out": 79,
+      "cost_usd": 0.0033300000000000005,
+      "success": true,
+      "schema_ok": true,
+      "top_errors": [],
+      "notes": "no explicit ALL DONE marker; lines=46",
+      "filename": "export_institutional_20260427_123436.log",
+      "agent_name": "data-exporter",
+      "task_id": "export-2026-04-27"
+    }
+  ],
+  "overall": {
+    "agent": "ALL",
+    "n_runs": 5,
+    "success_rate": 0.8,
+    "retry_rate": 0.4,
+    "schema_violation_rate": 0.2,
+    "avg_runtime_sec": 11158.4,
+    "avg_cost_usd": 0.28236,
+    "total_cost_usd": 1.4118
+  },
+  "by_agent": {
+    "data-cleaner": {
+      "agent": "data-cleaner",
+      "n_runs": 1,
+      "success_rate": 1.0,
+      "retry_rate": 0.0,
+      "schema_violation_rate": 0.0,
+      "avg_runtime_sec": 0.0,
+      "avg_cost_usd": 0.0091,
+      "total_cost_usd": 0.0091
+    },
+    "backfill-runner": {
+      "agent": "backfill-runner",
+      "n_runs": 3,
+      "success_rate": 0.6666666666666666,
+      "retry_rate": 0.6666666666666666,
+      "schema_violation_rate": 0.3333333333333333,
+      "avg_runtime_sec": 18597.333333333332,
+      "avg_cost_usd": 0.46646666666666664,
+      "total_cost_usd": 1.3994
+    },
+    "data-exporter": {
+      "agent": "data-exporter",
+      "n_runs": 1,
+      "success_rate": 1.0,
+      "retry_rate": 0.0,
+      "schema_violation_rate": 0.0,
+      "avg_runtime_sec": 0.0,
+      "avg_cost_usd": 0.0033,
+      "total_cost_usd": 0.0033
+    }
+  }
+}

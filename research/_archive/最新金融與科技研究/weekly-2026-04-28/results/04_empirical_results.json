@@ -1,0 +1,228 @@
+{
+  "rows": [
+    {
+      "idx": 1,
+      "query": "幫我準備一個新專案的目錄結構，從零開始",
+      "gold": "phase0-init",
+      "top3": [
+        [
+          "phase0-init",
+          8.03795877066981
+        ],
+        [
+          "phase5-build",
+          1.7797352861252123
+        ],
+        [
+          "phase7-delivery",
+          0.9668158144266006
+        ]
+      ],
+      "hit@1": true,
+      "hit@3": true,
+      "rr": 1.0
+    },
+    {
+      "idx": 2,
+      "query": "幫我做新聞情緒因子的需求分析，產出規格書",
+      "gold": "phase2-requirements",
+      "top3": [
+        [
+          "phase2-requirements",
+          15.72296387163361
+        ],
+        [
+          "phase4-review",
+          2.3050651441810954
+        ],
+        [
+          "phase3-architecture",
+          1.539715095621602
+        ]
+      ],
+      "hit@1": true,
+      "hit@3": true,
+      "rr": 1.0
+    },
+    {
+      "idx": 3,
+      "query": "我要建立法人買賣超 PoC，先把功能需求拆解清楚",
+      "gold": "phase2-requirements",
+      "top3": [
+        [
+          "phase2-requirements",
+          6.229929493591471
+        ],
+        [
+          "phase3-architecture",
+          4.391351871720303
+        ],
+        [
+          "phase4-review",
+          2.3050651441810954
+        ]
+      ],
+      "hit@1": true,
+      "hit@3": true,
+      "rr": 1.0
+    },
+    {
+      "idx": 4,
+      "query": "請規劃這個量化回測系統的整體架構與 function 拆解",
+      "gold": "phase3-architecture",
+      "top3": [
+        [
+          "phase3-architecture",
+          14.611039237994829
+        ],
+        [
+          "phase6-test",
+          2.892316236610888
+        ],
+        [
+          "phase4-review",
+          2.731161943956511
+        ]
+      ],
+      "hit@1": true,
+      "hit@3": true,
+      "rr": 1.0
+    },
+    {
+      "idx": 5,
+      "query": "請審查現在的架構設計，看跟需求有沒有對齊",
+      "gold": "phase4-review",
+      "top3": [
+        [
+          "phase4-review",
+          8.276610793776644
+        ],
+        [
+          "phase5-build",
+          3.81986865456558
+        ],
+        [
+          "phase2-requirements",
+          3.2340540377421574
+        ]
+      ],
+      "hit@1": true,
+      "hit@3": true,
+      "rr": 1.0
+    },
+    {
+      "idx": 6,
+      "query": "依照架構文件並行開發所有 function 模組",
+      "gold": "phase5-build",
+      "top3": [
+        [
+          "phase5-build",
+          19.253175351630738
+        ],
+        [
+          "phase3-architecture",
+          5.011144343182827
+        ],
+        [
+          "phase6-test",
+          1.9106917046998662
+        ]
+      ],
+      "hit@1": true,
+      "hit@3": true,
+      "rr": 1.0
+    },
+    {
+      "idx": 7,
+      "query": "把因子計算和訊號產生的程式碼都寫出來",
+      "gold": "phase5-build",
+      "top3": [
+        [
+          "phase3-architecture",
+          0.5017537047511996
+        ],
+        [
+          "phase2-requirements",
+          0.4729330597846373
+        ],
+        [
+          "phase7-delivery",
+          0.46231103384295025
+        ]
+      ],
+      "hit@1": false,
+      "hit@3": false,
+      "rr": 0.0
+    },
+    {
+      "idx": 8,
+      "query": "跑完整測試，把環境也建好，所有 API 都驗證一次",
+      "gold": "phase6-test",
+      "top3": [
+        [
+          "phase6-test",
+          12.70378389013512
+        ],
+        [
+          "phase5-build",
+          4.558011611430169
+        ],
+        [
+          "phase7-delivery",
+          2.406791869584381
+        ]
+      ],
+      "hit@1": true,
+      "hit@3": true,
+      "rr": 1.0
+    },
+    {
+      "idx": 9,
+      "query": "交付這個專案，產出總結報告與執行說明",
+      "gold": "phase7-delivery",
+      "top3": [
+        [
+          "phase7-delivery",
+          17.060182117162334
+        ],
+        [
+          "phase6-test",
+          2.808995135991408
+        ],
+        [
+          "phase2-requirements",
+          1.5664243074955815
+        ]
+      ],
+      "hit@1": true,
+      "hit@3": true,
+      "rr": 1.0
+    },
+    {
+      "idx": 10,
+      "query": "我需要一份系統架構規劃文件，含介面與依賴關係",
+      "gold": "phase3-architecture",
+      "top3": [
+        [
+          "phase3-architecture",
+          14.721424357744333
+        ],
+        [
+          "phase5-build",
+          3.232061704463318
+        ],
+        [
+          "phase4-review",
+          2.0705652875836216
+        ]
+      ],
+      "hit@1": true,
+      "hit@3": true,
+      "rr": 1.0
+    }
+  ],
+  "recall@1": 0.9,
+  "recall@3": 0.9,
+  "mrr": 0.9,
+  "saved_dispatch": 9
+}

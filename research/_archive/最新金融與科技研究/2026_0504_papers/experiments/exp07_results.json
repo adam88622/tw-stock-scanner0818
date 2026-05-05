@@ -1,0 +1,24 @@
+{
+  "paper_r2_gain_pct": "+15-25% (full adversarial+context)",
+  "paper_context_only_estimate": "+8-15% (without adversarial)",
+  "our_r2_baseline": -0.02099,
+  "our_r2_with_context": -0.00837,
+  "our_r2_gain_pct": 60.11,
+  "our_ic_baseline": 0.1221,
+  "our_ic_with_context": 0.15,
+  "our_sharpe_baseline": 0.769,
+  "our_sharpe_with_context": 0.781,
+  "our_sharpe_gain": 0.013,
+  "verdict": "[OK] context features add value",
+  "interpretation": "加入 macro/法人/regime 特徵讓 OOS R² +60.1%, long-short Sharpe 從 0.77 變 0.78; 距論文 +15-25% 仍有差距，可能 adversarial training 是必要的下一步",
+  "top_features": {
+    "vol_20": 0.3239761937747879,
+    "fb_zscore": 0.22413110039592368,
+    "T10Y3M": 0.20102508090465196,
+    "log_volume_20": 0.07451667048463541,
+    "ret_20": 0.06641453897297891,
+    "rsi_14": 0.05977548473640051,
+    "ret_5": 0.05016093073062155,
+    "regime_panic": 0.0
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "n_grid": [
+    5,
+    10,
+    20,
+    30,
+    50,
+    75,
+    100,
+    150,
+    200
+  ],
+  "summary": [
+    {
+      "N": 5,
+      "sum_abs_f_reg_med": 1.5777858400935776,
+      "sum_abs_f_un_med": 3.06383230202165,
+      "n_active_5pct_med": 5.0,
+      "n_active_2pct_med": 5.0
+    },
+    {
+      "N": 10,
+      "sum_abs_f_reg_med": 3.617490430741158,
+      "sum_abs_f_un_med": 7.320508431420863,
+      "n_active_5pct_med": 9.0,
+      "n_active_2pct_med": 10.0
+    },
+    {
+      "N": 20,
+      "sum_abs_f_reg_med": 7.516062326205149,
+      "sum_abs_f_un_med": 14.147074415218176,
+      "n_active_5pct_med": 19.0,
+      "n_active_2pct_med": 19.0
+    },
+    {
+      "N": 30,
+      "sum_abs_f_reg_med": 12.574330510048199,
+      "sum_abs_f_un_med": 22.973005656650187,
+      "n_active_5pct_med": 28.0,
+      "n_active_2pct_med": 29.0
+    },
+    {
+      "N": 50,
+      "sum_abs_f_reg_med": 21.62940988975752,
+      "sum_abs_f_un_med": 40.770013677062295,
+      "n_active_5pct_med": 46.0,
+      "n_active_2pct_med": 49.0
+    },
+    {
+      "N": 75,
+      "sum_abs_f_reg_med": 36.43691748321911,
+      "sum_abs_f_un_med": 60.45104166455084,
+      "n_active_5pct_med": 70.0,
+      "n_active_2pct_med": 73.0
+    },
+    {
+      "N": 100,
+      "sum_abs_f_reg_med": 51.97428648666422,
+      "sum_abs_f_un_med": 84.05031699804564,
+      "n_active_5pct_med": 94.0,
+      "n_active_2pct_med": 97.0
+    },
+    {
+      "N": 150,
+      "sum_abs_f_reg_med": 83.87536915685244,
+      "sum_abs_f_un_med": 127.99843935750644,
+      "n_active_5pct_med": 141.5,
+      "n_active_2pct_med": 146.0
+    },
+    {
+      "N": 200,
+      "sum_abs_f_reg_med": 118.46130626452846,
+      "sum_abs_f_un_med": 180.6359700577135,
+      "n_active_5pct_med": 184.0,
+      "n_active_2pct_med": 195.0
+    }
+  ],
+  "sigmoid_fit": {
+    "L": 132.79346165518848,
+    "k": 0.024671484552183067,
+    "x0_saturation_point": 121.15607693636241,
+    "rmse": 3.6219101238554927
+  },
+  "linear_fit_rmse": 2.711922017468663,
+  "loglog_slope": 1.168297481021869,
+  "verdict_sigmoidal": "[X] not sigmoidal / saturation not yet reached at N=200",
+  "interpretation": "Sigmoid RMSE 3.62 vs Linear RMSE 2.71; saturation point N≈121（paper claimed N≈30）— 台股相關性結構使 Kelly 部位累加飽和點更高。"
+}

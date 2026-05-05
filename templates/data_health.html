@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+{% block title %}資料健康儀表板{% endblock %}
+
+{% block content %}
+<style>
+    .dh-wrap { padding: 16px; max-width: 1400px; }
+    .dh-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; }
+    .dh-title { font-size: 20px; font-weight: 700; color: var(--text-heading); margin: 0; }
+    .dh-meta { color: var(--text-secondary); font-size: 13px; }
+    .dh-actions button {
+        background: var(--bg-secondary); color: var(--text-primary);
+        border: 1px solid var(--border-light); padding: 6px 12px; border-radius: 6px;
+        cursor: pointer; font-size: 13px;
+    }
+    .dh-actions button:hover { background: var(--hover-bg); }
+
+    .dh-section { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 16px; margin-bottom: 14px; }
+    .dh-section h3 { margin: 0 0 10px 0; font-size: 15px; color: var(--text-heading); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; }
+
+    .dh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+    .dh-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px 12px; }
+    .dh-card .name { font-weight: 700; color: var(--text-heading); font-size: 14px; }
+    .dh-card .label { color: var(--text-muted); font-size: 12px; margin-left: 6px; }
+    .dh-card .stats { color: var(--text-secondary); font-size: 12px; margin-top: 4px; }
+    .dh-card .stats span { display: inline-block; margin-right: 12px; }
+
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+    .dot.ok    { background: #22c55e; }
+    .dot.warn  { background: #f59e0b; }
+    .dot.error { background: #ef4444; }
+    .dot.info  { background: #38bdf8; }
+    .dot.unknown { background: #64748b; }
+
+    table.dh-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    table.dh-table th, table.dh-table td { padding: 6px 8px; border-bottom: 1px solid var(--border-color); text-align: left; }
+    table.dh-table th { color: var(--text-secondary); font-weight: 600; background: var(--bg-thead); }
+    table.dh-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+    .heat td { padding: 4px 6px; text-align: center; font-size: 12px; font-variant-numeric: tabular-nums; }
+    .heat .row-label { text-align: left; font-weight: 600; color: var(--text-heading); }
+    .heat .cell-ok    { background: rgba(34,197,94,0.18); }
+    .heat .cell-warn  { background: rgba(245,158,11,0.22); }
+    .heat .cell-bad   { background: rgba(239,68,68,0.25); }
+    .heat .cell-zero  { background: rgba(100,116,139,0.25); color: var(--text-muted); }
+
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .pill.ok    { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .pill.warn  { background: rgba(245,158,11,0.18); color: #f59e0b; }
+    .pill.error { background: rgba(239,68,68,0.18); color: #ef4444; }
+    .pill.info  { background: rgba(56,189,248,0.18); color: #38bdf8; }
+    .pill.unknown { background: rgba(100,116,139,0.20); color: #94a3b8; }
+
+    .muted { color: var(--text-muted); }
+    .mono { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; }
+    .gap-list { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+</style>
+
+<div class="dh-wrap">
+    <div class="dh-header">
+        <h2 class="dh-title">資料健康儀表板</h2>
+        <div class="dh-meta">
+            <span id="dh-generated">載入中…</span>
+            <span class="muted"> · 60 秒快取</span>
+        </div>
+        <div class="dh-actions">
+            <button id="dh-refresh">強制重新檢查</button>
+        </div>
+    </div>
+
+    <div id="dh-error" style="display:none;color:#ef4444;padding:10px;border:1px solid #ef4444;border-radius:6px;margin-bottom:12px;"></div>
+
+    <div class="dh-section">
+        <h3>資料表概覽（與最新交易日比對）</h3>
+        <div id="dh-tables" class="dh-grid"></div>
+    </div>
+
+    <div class="dh-section">
+        <h3>最近 10 個交易日覆蓋率（DISTINCT stock_id 數）</h3>
+        <div style="overflow-x:auto;">
+            <table id="dh-coverage" class="dh-table heat"></table>
+        </div>
+        <div class="muted" style="margin-top:6px;font-size:12px;">
+            底色：<span class="dot ok"></span>≥1900 充足
+            <span class="dot warn"></span>1500-1899 偏低
+            <span class="dot error"></span>&lt;1500 異常
+            <span class="dot unknown"></span>0 缺資料
+        </div>
+    </div>
+
+    <div class="dh-section">
+        <h3>交易日缺漏（與 trading_calendar 比對，限定在表內 [min,max] 範圍）</h3>
+        <table id="dh-gaps" class="dh-table"></table>
+    </div>
+
+    <div class="dh-section">
+        <h3>資料品質檢查</h3>
+        <table id="dh-quality" class="dh-table"></table>
+    </div>
+
+    <div class="dh-section">
+        <h3>總經指標（macro_indicators）</h3>
+        <table id="dh-macro" class="dh-table"></table>
+    </div>
+
+    <div class="dh-section">
+        <h3>檔案狀態</h3>
+        <table id="dh-files" class="dh-table"></table>
+    </div>
+
+    <div class="dh-section">
+        <h3>股票名冊與自選</h3>
+        <div id="dh-misc" class="dh-grid"></div>
+    </div>
+</div>
+
+<script>
+(function() {
+    var elGenerated = document.getElementById('dh-generated');
+    var elError = document.getElementById('dh-error');
+    var btnRefresh = document.getElementById('dh-refresh');
+
+    function fmtInt(n) {
+        if (n === null || n === undefined) return '—';
+        return Number(n).toLocaleString();
+    }
+
+    function pillStatus(status) {
+        var cls = ({ok:'ok', warn:'warn', error:'error', info:'info'})[status] || 'unknown';
+        var txt = ({ok:'OK', warn:'警告', error:'異常', info:'提示', unknown:'未知'})[status] || status;
+        return '<span class="pill ' + cls + '">' + txt + '</span>';
+    }
+
+    function classifyCoverage(n) {
+        if (n === 0) return 'cell-zero';
+        if (n >= 1900) return 'cell-ok';
+        if (n >= 1500) return 'cell-warn';
+        return 'cell-bad';
+    }
+
+    function renderTables(data) {
+        var box = document.getElementById('dh-tables');
+        var html = '';
+        (data.tables || []).forEach(function(t) {
+            if (t.error) {
+                html += '<div class="dh-card"><div class="name">' + t.name + '</div>'
+                     + '<div class="stats" style="color:#ef4444;">' + t.error + '</div></div>';
+                return;
+            }
+            html += '<div class="dh-card">';
+            html += '<div><span class="dot ' + (t.status||'unknown') + '"></span>'
+                 +  '<span class="name">' + t.name + '</span>'
+                 +  '<span class="label">' + (t.label || '') + '</span></div>';
+            html += '<div class="stats">';
+            html += '<span>列數 <b>' + fmtInt(t.rows) + '</b></span>';
+            html += '<span>日數 <b>' + fmtInt(t.distinct_dates) + '</b></span>';
+            html += '<span>最新日筆數 <b>' + fmtInt(t.latest_row_count) + '</b></span>';
+            html += '</div>';
+            html += '<div class="stats">';
+            html += '<span class="mono">' + (t.date_min||'—') + ' → ' + (t.date_max||'—') + '</span>';
+            html += '</div>';
+            html += '<div class="stats">';
+            var lag = t.lag_trading_days;
+            html += '<span>落後交易日 <b>' + (lag === null || lag === undefined ? '?' : lag) + '</b></span>';
+            html += pillStatus(t.status);
+            html += '</div>';
+            html += '</div>';
+        });
+        box.innerHTML = html || '<div class="muted">無資料</div>';
+    }
+
+    function renderCoverage(data) {
+        var rc = data.recent_coverage || {};
+        var dates = rc.expected_dates || [];
+        var byTable = rc.by_table || {};
+        var tables = Object.keys(byTable);
+        if (!dates.length || !tables.length) {
+            document.getElementById('dh-coverage').innerHTML = '<tr><td class="muted">無資料</td></tr>';
+            return;
+        }
+        var html = '<thead><tr><th>表</th>';
+        dates.forEach(function(d) { html += '<th class="mono">' + d.slice(5) + '</th>'; });
+        html += '</tr></thead><tbody>';
+        tables.forEach(function(tbl) {
+            html += '<tr><td class="row-label">' + tbl + '</td>';
+            var rows = byTable[tbl];
+            if (Array.isArray(rows)) {
+                var byDate = {};
+                rows.forEach(function(r) { byDate[r.date] = r.count; });
+                dates.forEach(function(d) {
+                    var n = byDate[d] || 0;
+                    html += '<td class="' + classifyCoverage(n) + '">' + fmtInt(n) + '</td>';
+                });
+            } else {
+                html += '<td colspan="' + dates.length + '" style="color:#ef4444;">' + (rows.error || 'error') + '</td>';
+            }
+            html += '</tr>';
+        });
+        html += '</tbody>';
+        document.getElementById('dh-coverage').innerHTML = html;
+    }
+
+    function renderGaps(data) {
+        var gaps = data.gaps || {};
+        var html = '<thead><tr><th>表</th><th class="num">缺漏交易日數</th><th>最近缺漏日（最多 20 個）</th></tr></thead><tbody>';
+        var keys = Object.keys(gaps);
+        if (!keys.length) {
+            html += '<tr><td colspan="3" class="muted">無資料</td></tr>';
+        } else {
+            keys.forEach(function(tbl) {
+                var g = gaps[tbl] || {};
+                if (g.error) {
+                    html += '<tr><td>' + tbl + '</td><td colspan="2" style="color:#ef4444;">' + g.error + '</td></tr>';
+                    return;
+                }
+                var cnt = g.missing_count || 0;
+                var pill = cnt === 0 ? '<span class="pill ok">無缺漏</span>'
+                         : cnt < 5 ? '<span class="pill info">少量</span>'
+                         : '<span class="pill warn">' + cnt + ' 天</span>';
+                var list = (g.missing_recent || []).join(', ') || '<span class="muted">—</span>';
+                html += '<tr><td>' + tbl + '</td>'
+                     + '<td class="num">' + pill + '</td>'
+                     + '<td><div class="gap-list">' + list + '</div></td></tr>';
+            });
+        }
+        html += '</tbody>';
+        document.getElementById('dh-gaps').innerHTML = html;
+    }
+
+    function renderQuality(data) {
+        var rows = data.quality || [];
+        var html = '<thead><tr><th>檢查項</th><th class="num">命中數</th><th>說明</th><th>狀態</th></tr></thead><tbody>';
+        rows.forEach(function(r) {
+            if (r.error) {
+                html += '<tr><td class="mono">' + r.check + '</td><td colspan="3" style="color:#ef4444;">' + r.error + '</td></tr>';
+                return;
+            }
+            html += '<tr><td class="mono">' + r.check + '</td>'
+                 +  '<td class="num"><b>' + fmtInt(r.count) + '</b></td>'
+                 +  '<td class="muted">' + (r.hint || '') + '</td>'
+                 +  '<td>' + pillStatus(r.severity) + '</td></tr>';
+        });
+        html += '</tbody>';
+        document.getElementById('dh-quality').innerHTML = html;
+    }
+
+    function renderMacro(data) {
+        var rows = data.macro || [];
+        var html = '<thead><tr><th>指標</th><th>最新</th><th class="num">列數</th><th class="num">落後交易日</th><th>狀態</th></tr></thead><tbody>';
+        rows.forEach(function(r) {
+            if (r.error) {
+                html += '<tr><td colspan="5" style="color:#ef4444;">' + r.error + '</td></tr>';
+                return;
+            }
+            html += '<tr><td>' + r.indicator + '</td>'
+                 +  '<td class="mono">' + (r.latest || '—') + '</td>'
+                 +  '<td class="num">' + fmtInt(r.rows) + '</td>'
+                 +  '<td class="num">' + (r.lag_trading_days === null ? '?' : r.lag_trading_days) + '</td>'
+                 +  '<td>' + pillStatus(r.status) + '</td></tr>';
+        });
+        html += '</tbody>';
+        document.getElementById('dh-macro').innerHTML = html;
+    }
+
+    function renderFiles(data) {
+        var rows = data.files || [];
+        var html = '<thead><tr><th>檔案</th><th class="num">大小 KB</th><th>最後修改</th></tr></thead><tbody>';
+        rows.forEach(function(r) {
+            if (!r.exists && !r.error) {
+                html += '<tr><td class="mono">' + r.path + '</td><td colspan="2" class="muted">不存在</td></tr>';
+                return;
+            }
+            if (r.error) {
+                html += '<tr><td class="mono">' + r.path + '</td><td colspan="2" style="color:#ef4444;">' + r.error + '</td></tr>';
+                return;
+            }
+            html += '<tr><td class="mono">' + r.path + '</td>'
+                 +  '<td class="num">' + fmtInt(r.size_kb) + '</td>'
+                 +  '<td class="mono">' + r.mtime + '</td></tr>';
+        });
+        html += '</tbody>';
+        document.getElementById('dh-files').innerHTML = html;
+    }
+
+    function renderMisc(data) {
+        var u = data.stock_universe || {};
+        var html = '';
+        html += '<div class="dh-card"><div class="name">stocks 名冊</div>'
+             +  '<div class="stats">'
+             +  '<span>上市 <b>' + fmtInt(u.twse) + '</b></span>'
+             +  '<span>上櫃 <b>' + fmtInt(u.tpex) + '</b></span>'
+             +  '<span>合計 <b>' + fmtInt((u.twse||0) + (u.tpex||0)) + '</b></span>'
+             +  '</div></div>';
+        html += '<div class="dh-card"><div class="name">自選股</div>'
+             +  '<div class="stats"><span>數量 <b>' + fmtInt(data.watchlist_count) + '</b></span></div></div>';
+        html += '<div class="dh-card"><div class="name">最新交易日</div>'
+             +  '<div class="stats mono">' + (data.latest_trading_day || '—') + '</div></div>';
+        document.getElementById('dh-misc').innerHTML = html;
+    }
+
+    function load(force) {
+        elError.style.display = 'none';
+        elGenerated.textContent = '載入中…';
+        var url = '/api/data-health' + (force ? '?force=1' : '');
+        fetch(url)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                elGenerated.textContent = '產生於 ' + (data.generated_at || '');
+                renderTables(data);
+                renderCoverage(data);
+                renderGaps(data);
+                renderQuality(data);
+                renderMacro(data);
+                renderFiles(data);
+                renderMisc(data);
+            })
+            .catch(function(e) {
+                elError.style.display = 'block';
+                elError.textContent = '載入失敗：' + e;
+                elGenerated.textContent = '—';
+            });
+    }
+
+    btnRefresh.addEventListener('click', function() { load(true); });
+    load(false);
+})();
+</script>
+{% endblock %}
