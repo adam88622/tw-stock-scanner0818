@@ -472,7 +472,7 @@ def api_research(filepath):
 
 
 # ===== 每日券商報告 =====
-BROKER_REPORTS_DIR = r'P:\2026年報告'
+BROKER_REPORTS_DIR = os.environ.get('BROKER_REPORTS_DIR', r'P:\2026年報告')
 BROKER_RATING_CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'broker_ratings.json')
 MAX_EXTRACT_PER_REQ = 80
 
@@ -3611,7 +3611,9 @@ def weekly():
     """研究週報頁面 — 自動彙整量化研究與科技研究週報。"""
     import glob, re
 
-    base_src = os.path.join(os.path.dirname(__file__), '..', 'src')
+    base_src = os.environ.get('RESEARCH_SRC_DIR', '')
+    if not base_src or not os.path.isdir(base_src):
+        base_src = os.path.join(os.path.dirname(__file__), '..', 'src')
     if not os.path.isdir(base_src):
         base_src = r'D:\claude\src'
 
@@ -3805,7 +3807,9 @@ def weekly():
 def api_weekly_report(filepath):
     """動態載入週報 HTML 內容。"""
     import re
-    base_src = os.path.join(os.path.dirname(__file__), '..', 'src')
+    base_src = os.environ.get('RESEARCH_SRC_DIR', '')
+    if not base_src or not os.path.isdir(base_src):
+        base_src = os.path.join(os.path.dirname(__file__), '..', 'src')
     if not os.path.isdir(base_src):
         base_src = r'D:\claude\src'
 
