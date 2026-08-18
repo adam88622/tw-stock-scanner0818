@@ -14,11 +14,17 @@ TPEX_INSTITUTIONAL_URL = 'https://www.tpex.org.tw/web/stock/3insti/daily_trade/3
 # 突破天數
 BREAKOUT_DAYS = [5, 10, 20, 60, 120, 240]
 
-# 請求設定
+# 請求設定（瀏覽器化以降低被擋機率）
 REQUEST_HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+    'Accept': 'application/json, text/javascript, */*; q=0.01',
     'Accept-Language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+    'Referer': 'https://mis.twse.com.tw/stock/index.jsp',
+    'X-Requested-With': 'XMLHttpRequest',
 }
 REQUEST_TIMEOUT = 30
 REQUEST_RETRY = 3
 REQUEST_RETRY_DELAY = 30
+
+# 群益個股期報價服務（本機常駐服務，提供個股期即時報價）
+CAPITAL_QUOTE_URL = os.environ.get('CAPITAL_QUOTE_URL', 'http://127.0.0.1:8891')

@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>世芯-KY (3661 TT) 首次覆蓋 — 買進 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto;position:relative;z-index:1}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45);position:relative;z-index:1}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:36px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:20px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:9px 14px;background:linear-gradient(90deg,#eef5f0,transparent);margin:18px 0 14px;page-break-after:avoid}
+h2.ch{font-size:16px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:6px;margin:20px 0 11px;page-break-after:avoid}
+h3.ch{font-size:14px;font-weight:700;color:#0a4a30;padding-left:9px;border-left:3px solid #00c896;margin:14px 0 8px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:10px 0 14px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 11px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.4px}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 11px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5;font-size:12.5px}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:17px;font-weight:800;color:#fff}
+.co-ticker{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:3px 12px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:16px 20px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:16px;margin:12px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13.5px;font-weight:700;color:#0d1b3e;margin-bottom:3px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:4px}
+.kpi-val em{font-size:11px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.5px;font-weight:700;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:11px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:19px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:15px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12px;font-weight:800;margin-bottom:6px}
+.tl-spec{font-size:14px;font-weight:900;color:#00c896;margin-bottom:3px}
+.tl-tech{font-size:10.5px;opacity:.8;line-height:1.4}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.risk-card{border-radius:8px;padding:14px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13px;font-weight:700;margin-bottom:6px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+p{margin:6px 0 10px;line-height:1.7}
+ul,ol{padding-left:18px;margin:6px 0 10px}
+li{margin:3px 0;line-height:1.65;font-size:13px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:8px 12px;margin:11px 0;color:#1a3a6e;font-size:12.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:20px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:5px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:6px}
+.callout.green .callout-title{color:#065f46}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+.bull-bear{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.bb-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.bb-card.bull{background:#e8f5ee;border:1.5px solid #00a878}
+.bb-card.bear{background:#fff4e6;border:1.5px solid #f59e0b}
+.bb-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.bb-card.bull h4{color:#065f46}
+.bb-card.bear h4{color:#7b3a08}
+.bb-card li{font-size:12px;margin-bottom:5px;line-height:1.55}
+
+/* ── 緊縮 override（修溢出）── */
+.full-page > *, .body-page > * { flex-shrink: 0 !important; }
+.body-page { padding: 26px 42px !important; }
+.co-card { margin: 11px 0 !important; }
+.co-card-head { padding: 11px 16px !important; }
+.co-name { font-size: 16px !important; }
+.co-metric { padding: 9px 11px !important; }
+.co-metric-val { font-size: 15px !important; }
+.kpi-row { margin: 9px 0 !important; gap: 8px !important; }
+.kpi { padding: 10px 12px !important; }
+.kpi-val { font-size: 16px !important; }
+.exec-sum { padding: 13px 16px !important; margin: 9px 0 !important; }
+.exec-thesis { padding: 6px 0 !important; font-size: 12px !important; line-height:1.5 !important; }
+.chart-grid { margin: 9px 0 !important; gap: 11px !important; }
+.chart-wrap { padding: 11px !important; margin: 7px 0 !important; }
+.chart-wrap .chart-container { height: 200px !important; }
+h1.ch { margin: 10px 0 9px !important; padding: 6px 11px !important; font-size: 17px !important; }
+h2.ch { margin: 11px 0 7px !important; padding-bottom: 5px !important; font-size: 14.5px !important; }
+h3.ch { margin: 9px 0 6px !important; font-size: 13px !important; }
+table { margin: 7px 0 9px !important; font-size: 11px !important; }
+th { padding: 6px 8px !important; font-size: 10.5px !important; }
+td { padding: 5px 8px !important; font-size: 11px !important; line-height: 1.4 !important; }
+ul, ol { margin: 5px 0 7px !important; }
+li { margin: 2px 0 !important; line-height: 1.4 !important; font-size: 11.5px !important; }
+p { margin: 5px 0 8px !important; line-height: 1.55 !important; font-size: 12px !important; }
+blockquote { margin: 8px 0 !important; padding: 7px 11px !important; font-size: 11px !important; }
+.callout { padding: 10px !important; margin: 7px 0 !important; }
+.timeline { margin: 9px 0 !important; }
+.tl-item { padding: 10px 9px !important; }
+.tl-spec { font-size: 12px !important; }
+.tl-tech { font-size: 9.5px !important; }
+.risk-matrix { gap: 9px !important; margin: 10px 0 !important; }
+.risk-card { padding: 10px !important; }
+.risk-card h4 { font-size: 12.5px !important; }
+.risk-item { font-size: 11px !important; padding: 3px 0 !important; line-height:1.45 !important; }
+.bull-bear { gap: 11px !important; margin: 10px 0 !important; }
+.bb-card { padding: 11px !important; }
+.bb-card h4 { font-size: 13px !important; }
+.bb-card li { font-size: 10.5px !important; margin-bottom: 4px !important; line-height: 1.4 !important; }
+.page-footer { padding: 8px 22px !important; font-size: 10px !important; }
+.footer-logo { font-size: 11.5px !important; }
+</style>
+</head>
+<body>
+
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ━━━━━━ 封面 ━━━━━━ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI 量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Initiating Coverage · Q2 2026</div>
+    <div class="cover-title">世芯-KY (3661 TT)<br><em>Trainium 3 量產在即，營運觸底反轉</em></div>
+    <div class="cover-subtitle">Alchip Technologies — AI ASIC 設計服務龍頭，AWS 獨家後段供應</div>
+    <div class="cover-tags">
+      <span class="ctag hl">買進 BUY</span>
+      <span class="ctag hl">TP NT$5,800</span>
+      <span class="ctag">上檔 +25.9%</span>
+      <span class="ctag">AI ASIC</span>
+      <span class="ctag">AWS Trainium 3</span>
+      <span class="ctag">N2 Roadmap</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>5,800</em></div><div class="cstat-label">12M 目標價 (NT$)</div></div>
+    <div class="cstat"><div class="cstat-num"><em>+25.9</em>%</div><div class="cstat-label">上檔空間</div></div>
+    <div class="cstat"><div class="cstat-num"><em>30</em>x</div><div class="cstat-label">目標 PE (2027E)</div></div>
+    <div class="cstat"><div class="cstat-num"><em>224</em></div><div class="cstat-label">2027E EPS (元)</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 5 月 15 日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ━━━━━━ P2 投資摘要 ━━━━━━ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資摘要 — Initiating Coverage</h1>
+
+  <div class="co-card">
+    <div class="co-card-head">
+      <div><div class="co-name">世芯-KY (3661 TT)</div><div class="co-ticker">Alchip Technologies · 半導體業 · TWSE 上市</div></div>
+      <div class="co-badge"><span class="badge buy">買進 BUY</span><span style="font-size:11px;color:rgba(255,255,255,.7)">12M TP NT$5,800</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+25.9%</div><div class="co-metric-label">上檔空間</div></div>
+      <div class="co-metric"><div class="co-metric-val">NT$4,605</div><div class="co-metric-label">5/15 收盤</div></div>
+      <div class="co-metric"><div class="co-metric-val">+93.7%</div><div class="co-metric-label">2026E EPS YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">8.15 億</div><div class="co-metric-label">股本</div></div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">NT$134<em> 元</em></div><div class="kpi-lbl">2026E EPS</div></div>
+    <div class="kpi"><div class="kpi-val">NT$224<em> 元</em></div><div class="kpi-lbl">2027E EPS</div></div>
+    <div class="kpi gold"><div class="kpi-val">+126%</div><div class="kpi-lbl">2026E 營收 YoY</div></div>
+    <div class="kpi green"><div class="kpi-val">50.2%</div><div class="kpi-lbl">1Q26 毛利率</div></div>
+  </div>
+
+  <h2 class="ch">三大投資論點</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">①</span>
+      <span><strong>AWS Trainium 3 量產 6 月啟動，營運從谷底反轉。</strong>1Q26 已是營收谷底（NT$41.87 億），2H26 將佔全年 80%。月營收將從 4 月的 21 億跳升至 8 月預估 50-60 億單月水準，季 EPS 從 17.55 跳升至 3Q26 估計 41 元。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">②</span>
+      <span><strong>管理層公開背書 CSP 3/4 代僅有世芯，護城河獲強化。</strong>AWS Trainium 3（N3）與 Trainium 4（N2）已確定獨家後段供應；N2 整合度提升、單顆 ASP 較 N3 高 30-50%，2028 年量產接力。Trainium 4 設計進度按計畫 2026 年底前 tape-out。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">③</span>
+      <span><strong>5/11 法說後股價回落 18%，提供 entry 機會。</strong>5/11 高點 5,640 跌至 5/15 收 4,605，市場對 2H26 量產執行存有疑慮，但 1Q26 GM 跳升至 50.2%（vs 共識 32-42%）已驗證 NRE 結構強勁。GiS 2027 EPS 預估 224 高於共識 170 約 32%。</span>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 1 — 股價走勢（過去 12 個月）</div>
+      <div class="chart-sub">資料來源：TWSE / Yahoo Finance / GiS</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartPriceHist" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 2 — 歷史 / 預估 EPS 趨勢</div>
+      <div class="chart-sub">資料來源：MOPS / 券商共識 / GiS 預估</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartEpsHist" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資摘要 · P2</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ━━━━━━ P3 Bull / Bear 分析 ━━━━━━ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">Bull / Bear 投資論點</h1>
+
+  <div class="bull-bear">
+    <div class="bb-card bull">
+      <h4>🐂 Bull Thesis — 為何看好</h4>
+      <ul>
+        <li><strong>AWS Trainium 3 量產啟動：</strong>5月底/6月初開始 ramp，3Q26 中旬達單月峰值</li>
+        <li><strong>2H26 營收占全年 80%：</strong>管理層明確指引，季 EPS 路徑清晰</li>
+        <li><strong>Trainium 4（N2）接棒：</strong>2026 底 tape-out、2028 年量產，CSP 客戶綁定到 2029</li>
+        <li><strong>NRE 結構轉佳：</strong>1Q26 GM 50.2% 證明高單價設計案密集</li>
+        <li><strong>車用業務啟動：</strong>Li Auto ADAS 1Q26 量產，提供第二成長曲線</li>
+        <li><strong>客戶集中度公開背書：</strong>「3/4 代僅有世芯」護城河獲管理層強化</li>
+      </ul>
+    </div>
+    <div class="bb-card bear">
+      <h4>🐻 Bear Thesis — 主要風險</h4>
+      <ul>
+        <li><strong>CoWoS / N3 wafer 供給緊：</strong>2H26 上檔受限（外資 5/8 報告明確點出）</li>
+        <li><strong>客戶集中度過高：</strong>AWS 估佔 65%+，單一客戶風險</li>
+        <li><strong>季度營收波動大：</strong>量產延後 1 個月可能讓季 EPS miss 20-30%</li>
+        <li><strong>5/11 法說後股價回落 18%：</strong>市場對 2H 執行存疑</li>
+        <li><strong>估值已部分反映利多：</strong>2027E PE 28x 相對歷史 PE 中位偏高</li>
+        <li><strong>下一代 ASIC 招標：</strong>2027 年後 Marvell / GUC 可能重新爭取</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="ch">券商共識（5/11 法說後 8 家券商）</h2>
+  <table>
+    <thead><tr><th>觀點分類</th><th>數量</th><th>TP 區間（NT$）</th><th>TP 中位數</th><th>備註</th></tr></thead>
+    <tbody>
+      <tr><td>外資 Buy / OW</td><td class="num">3 家</td><td class="num">6,000 - 6,200</td><td class="num">6,000</td><td>進取方</td></tr>
+      <tr><td>本土券商 Buy / 增加</td><td class="num">5 家</td><td class="num">6,000 - 7,000</td><td class="num">6,185</td><td>最樂觀達 7,000</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>共識中位數</strong></td><td class="num hi">8 家全 Buy/OW</td><td class="num">6,000 - 7,000</td><td class="num hi">6,185</td><td>對應上檔 +34%</td></tr>
+      <tr><td><strong>GiS TP（本報告）</strong></td><td class="num">—</td><td class="num">—</td><td class="num hi">5,800</td><td>較共識保守 -6%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：5/8-5/15 期間 8 家券商研究報告（券商名稱依匿名化規範僅列總體共識，詳列於附錄資料來源段）</span>
+
+  <h2 class="ch">GiS 與共識不同之處</h2>
+  <blockquote>
+    GiS 2027E EPS 224 高於共識中位 170，主因假設 2027 N3 全年穩定量產 + GM 25.5%（券商共識 22%）。但 GiS 採用 PE 30x 較共識隱含 36x 保守 17%。<strong>淨結果：GiS TP 5,800 略低於共識 6,185，但評等共識 Buy 一致。</strong>
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>Bull/Bear 與共識 · P3</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ━━━━━━ 章節壹 公司基本面 ━━━━━━ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One · Company Fundamentals</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">公司 101 — 商業模式與護城河</div>
+  <div class="sec-desc">世芯為先進製程 ASIC 設計服務龍頭，提供從 RTL 到量產 turnkey 的完整解決方案。本章節剖析其 NRE / Turnkey 雙模式商業結構、AWS 客戶綁定深度、與技術門檻。</div>
+</div>
+
+<!-- P5 公司基本資料 -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹、公司簡介與營運模式</h1>
+
+  <p>世芯電子股份有限公司（英文：Alchip Technologies Ltd.，股票代號 3661.TW）為一家專注於高階先進製程客製化 IC 設計服務（ASIC Turnkey Solution）的無晶圓廠（fabless）設計公司，總部設於台北市內湖區。公司於 2003 年 2 月成立，2014 年 10 月在台灣證券交易所上市，採用開曼群島（Cayman Islands）控股架構（KY 後綴），現有發行股數約 8,153 萬股、股本約新台幣 8.15 億元。</p>
+
+  <h2 class="ch">營收結構（1Q26）— 應用 × 模式 雙拆解</h2>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 3 — 1Q26 營收應用拆解</div>
+      <div class="chart-sub">資料來源：公司法說會 / GiS 整理</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartRevAppMix" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 4 — 1Q26 NRE / Turnkey 拆解（估）</div>
+      <div class="chart-sub">資料來源：管理層揭露 + GiS 估算</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartNreTurnkey" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">商業模式雙引擎</h2>
+  <table>
+    <thead><tr><th>模式</th><th>1Q26 占比</th><th>毛利率</th><th>認列方式</th><th>戰略意義</th></tr></thead>
+    <tbody>
+      <tr><td><strong>NRE</strong>（一次性工程設計）</td><td class="num">35-40%</td><td class="num pos">60-70%</td><td>按里程碑認列</td><td>先期綁定客戶</td></tr>
+      <tr><td><strong>Turnkey</strong>（量產代工）</td><td class="num">60-65%</td><td class="num">10-15%</td><td>晶圓+封測代購</td><td>後期收割規模</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>結構性 GM 變化</strong></td><td class="num hi">隨 NRE 比重</td><td class="num hi">19% ~ 50%</td><td colspan="2">2024 年 19.6% → 2025 26.4% → 1Q26 50.2%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">技術護城河 — 五大競爭優勢</h2>
+  <ol>
+    <li><strong>TSMC VCA 認證 + N7/N5/N3 設計實績：</strong>先進製程後段設計需累積數十顆 tape-out 經驗，新進入者需 5-7 年達當前水準</li>
+    <li><strong>AWS 三代晶片連續中標：</strong>Trainium 1（N5）→ T2（N5）→ T3（N3）→ T4（N2）唯一台灣後段供應，客戶 lock-in 強</li>
+    <li><strong>CoWoS 整合經驗：</strong>與台積電 CoWoS 團隊密切合作 7 年以上</li>
+    <li><strong>大型 SoC 整合能力：</strong>單顆 AI 加速器內含 200-400 億顆電晶體，整合 HBM3E + PCIe Gen5</li>
+    <li><strong>NRE / Turnkey 二段模式：</strong>先期 NRE 鎖定客戶、量產 Turnkey 持續收割</li>
+  </ol>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 公司基本面 · P5</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P6 管理層 + 股東結構 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳、管理層與股東結構</h1>
+
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">沈翔霖（Johnny Shen）</div><div class="co-ticker">董事長兼總經理 · 創辦人</div></div>
+      <div class="co-badge"><span class="badge ow">創辦人</span><span style="font-size:11px;color:rgba(255,255,255,.7)">持股 ~2.4%（家族 + 個人）</span></div>
+    </div>
+    <div class="co-body">
+      <p><strong>學經歷：</strong>交通大學電子工程系、UCLA 電機工程碩士。早年任職 Sony 半導體事業群擔任 IC 設計工程主管，2003 年共同創辦世芯。</p>
+      <p><strong>關鍵成就：</strong>率領公司從 ASIC 委外設計商轉型為先進製程龍頭、成功切入 AWS 自研晶片供應鏈、2014 年 IPO、2024 年營收破 500 億。</p>
+      <p><strong>作風：</strong>低調務實，法說會以分析師背景管理人聞名，券商普遍稱讚對技術細節與客戶 roadmap 的掌握度。</p>
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div><div class="co-name">王德善（Te-Sun Wang）</div><div class="co-ticker">發言人 · 財務長</div></div>
+      <div class="co-badge"><span style="font-size:11px;color:rgba(255,255,255,.7)">投資人關係主負責人</span></div>
+    </div>
+    <div class="co-body">
+      <p><strong>學經歷：</strong>政治大學會計、財務金融背景，曾任四大會計師事務所（勤業眾信）。</p>
+      <p><strong>責任：</strong>投資人關係（IR）、財務報告、外部券商溝通。法說會 Q&A 段由王與沈共同主答，券商給予「資訊透明度高」「願意分享 design pipeline」正評。</p>
+    </div>
+  </div>
+
+  <h2 class="ch">股東結構（1Q26 末）</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 5 — 股東結構分佈</div>
+    <div class="chart-sub">資料來源：公司 1Q26 公告</div>
+    <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartShareholders" style="display:block;width:100%;height:240px"></canvas></div>
+  </div>
+
+  <table>
+    <thead><tr><th>股東類別</th><th>持股比例</th><th>趨勢觀察</th></tr></thead>
+    <tbody>
+      <tr><td>外資（含 AWS 相關投資基金）</td><td class="num">54.6%</td><td>高度集中，與業務深度連動</td></tr>
+      <tr><td>投信</td><td class="num">7.4%</td><td>近年加碼</td></tr>
+      <tr><td>董監事 + 員工持股信託</td><td class="num">2.4%</td><td>KY 公司常態水位</td></tr>
+      <tr><td>自然人 + 其他</td><td class="num">35.6%</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <span class="src">公司無單一大股東或產業集團控股，屬專業經理人主導 + 外資高度持股的 KY 公司型態</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 管理層 · P6</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P7 重大里程碑 + 客戶結構演化 -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、重大里程碑與客戶結構演化</h1>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-year">2003-2013</div>
+      <div class="tl-spec">創業期</div>
+      <div class="tl-tech">日系 ASIC 委外、TSMC VCA 認證</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2014-2020</div>
+      <div class="tl-spec">SiByte 期</div>
+      <div class="tl-tech">Bitmain 礦機 ASIC、上市</div>
+    </div>
+    <div class="tl-item active">
+      <div class="tl-year">2021-2026 ← 現在</div>
+      <div class="tl-spec">AWS 期</div>
+      <div class="tl-tech">Trainium 1-3 / Inferentia 2</div>
+    </div>
+    <div class="tl-item next">
+      <div class="tl-year">2027-2029</div>
+      <div class="tl-spec">N2 大躍進</div>
+      <div class="tl-tech">Trainium 4 (N2) + 新客戶</div>
+    </div>
+  </div>
+
+  <h2 class="ch">關鍵里程碑詳列</h2>
+  <table>
+    <thead><tr><th>年度</th><th>事件</th><th>意義</th></tr></thead>
+    <tbody>
+      <tr><td>2003</td><td>公司成立、承接日系 ASIC</td><td>創業期</td></tr>
+      <tr><td>2008</td><td>成為 TSMC VCA 認證夥伴</td><td>取得先進製程 entry ticket</td></tr>
+      <tr><td>2014/10</td><td>TWSE 上市，IPO 價 ~NT$80</td><td>取得公開籌資管道</td></tr>
+      <tr><td>2018-2020</td><td>SiByte 礦機 ASIC，營收破百億</td><td>第一次大成長期</td></tr>
+      <tr><td>2021-2023</td><td>切入 AWS Inferentia 2 / Trainium 1-2</td><td>取得 hyperscaler 客戶 ticket</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>2024</strong></td><td><strong>營收 NT$519.7 億、EPS 79.84 創新高</strong></td><td class="hi">Trainium 2 量產年</td></tr>
+      <tr><td>2025</td><td>EPS 69.22（-13% YoY），世代交替谷底</td><td>新舊產品空窗期</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>2026/5/8</strong></td><td><strong>1Q26 法說：宣告最具挑戰時期已過</strong></td><td class="pos">Trainium 3 量產起跑</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">客戶集中度演化（估算）</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 6 — AWS 占比與客戶結構演化（2024-2028）</div>
+    <div class="chart-sub">資料來源：券商估算 + GiS 整理</div>
+    <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chartCustomerMix" style="display:block;width:100%;height:260px"></canvas></div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 核心觀察：</strong>AWS 占比於 2026-2028 期間將維持 65-72%（單一客戶風險主要來源），但 Li Auto 車用業務從 5% 升至 12%、Networking 從 10% 升至 18%，提供第二、第三曲線多元化。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 里程碑 · P7</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ━━━━━━ 章節貳 產業與競爭 ━━━━━━ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two · Industry & Competition</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">AI ASIC 產業地位與競爭格局</div>
+  <div class="sec-desc">全球 AI ASIC 設計服務 TAM 預計 2024-2030 年 CAGR 38%。世芯位居 N3/N2 先進製程 + AWS 客戶交集，與 Broadcom（Google）、Marvell（Microsoft）、GUC（Meta）形成「四強分工」格局。</div>
+</div>
+
+<!-- P9 產業 TAM + 市佔率 -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆、產業 TAM 與市場結構</h1>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 7 — AI ASIC 子市場 TAM 預估（USD B）</div>
+      <div class="chart-sub">資料來源：IBS / Gartner / GiS 整理</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartTAM" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 8 — 全球 ASIC 設計服務市佔率（2024）</div>
+      <div class="chart-sub">資料來源：券商估算 / GiS 整理</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartMarketShare" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">產業 TAM 量化（2024-2030）</h2>
+  <table>
+    <thead><tr><th>應用</th><th>2024 TAM (USD B)</th><th>2030 TAM (USD B)</th><th>CAGR</th><th>世芯參與度</th></tr></thead>
+    <tbody>
+      <tr><td>AI 加速器（GPU+ASIC）</td><td class="num">90</td><td class="num">350</td><td class="num">25%</td><td>透過 ASIC 切入</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>AI ASIC 子市場</strong></td><td class="num hi">18</td><td class="num hi">90</td><td class="num pos hi">38%</td><td><strong>主戰場</strong></td></tr>
+      <tr><td>高速網通 ASIC</td><td class="num">8</td><td class="num">22</td><td class="num">18%</td><td>新業務開發中</td></tr>
+      <tr><td>車用 ADAS / AI ASIC</td><td class="num">3</td><td class="num">18</td><td class="num">35%</td><td>Li Auto 切入</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>ASIC 設計服務總 TAM</strong></td><td class="num">18-20</td><td class="num">70-90</td><td class="num pos hi">25-32%</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">SAM 與滲透率</h2>
+  <p>世芯目前可服務市場（SAM）：</p>
+  <ul>
+    <li><strong>2024 SAM ~USD 4.0B</strong>（佔 AI ASIC 整體 20-25%）</li>
+    <li><strong>2030 SAM ~USD 20B</strong></li>
+    <li><strong>2024 世芯滲透率約 41%</strong>（營收 USD 1.65B / SAM 4.0B）— 已屬高滲透</li>
+    <li>若維持當前份額，AI ASIC TAM 38% CAGR 即可提供內生 25%+ 成長</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 產業 TAM · P9</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P10 競爭分析 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">伍、競爭格局 — 全球 ASIC 四強分工</h1>
+
+  <h2 class="ch">四強分工格局</h2>
+  <table>
+    <thead><tr><th>公司</th><th>主力客戶</th><th>主戰場製程</th><th>2024 ASIC 營收（USD B）</th><th>與世芯重疊度</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Broadcom (AVGO)</strong></td><td>Google TPU v4-v6</td><td>N5 / N3</td><td class="num">~5.0</td><td>低（客戶不重疊）</td></tr>
+      <tr style="background:#fdf0ef!important"><td><strong>Marvell (MRVL)</strong></td><td>Microsoft Maia, AWS（部分）</td><td>N5 / N3</td><td class="num">~1.5</td><td class="neg"><strong>極高 — 直接對手</strong></td></tr>
+      <tr><td><strong>GUC (3443 TT)</strong></td><td>Meta MTIA</td><td>N5 / N3 / N2</td><td class="num">~0.75</td><td>中高（爭 N2 產能）</td></tr>
+      <tr><td>智原 (3035 TT)</td><td>工業、中國 IC</td><td>N12 / N7</td><td class="num">~0.66</td><td>低（不同層級）</td></tr>
+      <tr><td>Alphawave (AWE)</td><td>chiplet 客戶</td><td>多製程 IP</td><td class="num">~0.31</td><td>低（錯位）</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>世芯 (3661 TT)</strong></td><td><strong>AWS Trainium + Li Auto</strong></td><td><strong>N5 / N3 / N2</strong></td><td class="num hi">~1.65</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">同業 2024 GM / OPM 對比</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 9 — 全球 ASIC 同業毛利率 / 營益率對比（2024）</div>
+    <div class="chart-sub">資料來源：各公司 10-K / 年報 / 法說會</div>
+    <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chartGMComps" style="display:block;width:100%;height:260px"></canvas></div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 觀察：</strong>世芯 GM 24% 為同業最低（Marvell 50%、Broadcom 75%、GUC 35%），結構差異來自 Turnkey 模式下晶圓代採購比重高、毛利率被稀釋。但 Revenue CAGR 45%（2025-2028）為同業最高，估值應反映此「高成長補償低 GM」邏輯。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 競爭格局 · P10</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ━━━━━━ 章節參 財務分析 ━━━━━━ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three · Financial Analysis</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">財務歷史與 2026-2028 預估</li></div>
+  <div class="sec-desc">2024 為高峰、2025 為谷底、2026 起 V 型反轉。GiS 預估 2026E 營收 700 億（+126%）、EPS 134；2027E 營收 1,080 億、EPS 224（高於券商共識 32%）。</div>
+</div>
+
+<!-- P12 歷史財務 -->
+<div class="full-page page body-page">
+  <h1 class="ch">陸、5 年歷史財務（2021-2025）</h1>
+
+  <table>
+    <thead><tr><th>項目</th><th class="num">2021A</th><th class="num">2022A</th><th class="num">2023A</th><th class="num">2024A</th><th class="num">2025A</th></tr></thead>
+    <tbody>
+      <tr><td>營收（NT$ M）</td><td class="num">9,650</td><td class="num">13,725</td><td class="num">30,482</td><td class="num pos hi">51,969</td><td class="num">30,926</td></tr>
+      <tr><td>YoY %</td><td class="num pos">+85%</td><td class="num pos">+42%</td><td class="num pos">+122%</td><td class="num pos">+71%</td><td class="num neg">-41%</td></tr>
+      <tr><td>毛利（NT$ M）</td><td class="num">2,170</td><td class="num">4,430</td><td class="num">6,794</td><td class="num">10,201</td><td class="num">8,154</td></tr>
+      <tr><td>GM%</td><td class="num">22.5%</td><td class="num">32.3%</td><td class="num">22.3%</td><td class="num">19.6%</td><td class="num">26.4%</td></tr>
+      <tr><td>營益（NT$ M）</td><td class="num">1,560</td><td class="num">2,311</td><td class="num">3,761</td><td class="num">6,496</td><td class="num">5,017</td></tr>
+      <tr><td>OPM%</td><td class="num">16.2%</td><td class="num">16.8%</td><td class="num">12.3%</td><td class="num">12.5%</td><td class="num">16.2%</td></tr>
+      <tr><td>稅後淨利</td><td class="num">3,179</td><td class="num">2,758</td><td class="num">3,378</td><td class="num">6,446</td><td class="num">5,598</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>EPS（元）</strong></td><td class="num hi">38.96</td><td class="num hi">33.81</td><td class="num hi">41.41</td><td class="num hi pos">79.84</td><td class="num hi">69.22</td></tr>
+      <tr><td>YoY %</td><td class="num pos">+120%</td><td class="num neg">-13%</td><td class="num pos">+22%</td><td class="num pos">+93%</td><td class="num neg">-13%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：MOPS 合併損益表（公司年報）/ EPS 已 stock split adjusted</span>
+
+  <h2 class="ch">季度 EPS 與月營收趨勢</h2>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 10 — 季 EPS 趨勢（2023Q1-2026Q1）</div>
+      <div class="chart-sub">資料來源：MOPS / 券商整理</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartQuarterlyEps" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 11 — 月營收 18 個月趨勢（NT$ M）</div>
+      <div class="chart-sub">資料來源：MOPS 月營收公告</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartMonthlyRev" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>觀察：</strong>2025-09 月營收觸底（1,700M），2026-02 進一步創低（800M）為極端 NRE/Turnkey 認列空窗。2026-03 反彈至 1,900M、2026-04 持續至 2,100M，2026-05 / 06 將是 Trainium 3 量產關鍵觀察點，月營收應跳升至 4-6B 區間。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 歷史財務 · P12</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P13 預估財務 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">柒、2026-2028 預估財務（Base case）</h1>
+
+  <table>
+    <thead><tr><th>項目</th><th class="num">2025A</th><th class="num">2026E</th><th class="num">2027E</th><th class="num">2028E</th></tr></thead>
+    <tbody>
+      <tr><td>營收（NT$ M）</td><td class="num">30,926</td><td class="num pos hi">70,000</td><td class="num pos hi">108,000</td><td class="num pos hi">145,000</td></tr>
+      <tr><td>YoY %</td><td class="num neg">-41%</td><td class="num pos">+126%</td><td class="num pos">+54%</td><td class="num pos">+34%</td></tr>
+      <tr><td>毛利</td><td class="num">8,154</td><td class="num">16,800</td><td class="num">27,500</td><td class="num">39,500</td></tr>
+      <tr><td>GM%</td><td class="num">26.4%</td><td class="num">24.0%</td><td class="num">25.5%</td><td class="num">27.2%</td></tr>
+      <tr><td>研發費用</td><td class="num">2,200</td><td class="num">3,650</td><td class="num">5,400</td><td class="num">7,250</td></tr>
+      <tr><td>銷管費</td><td class="num">937</td><td class="num">1,500</td><td class="num">2,160</td><td class="num">2,900</td></tr>
+      <tr><td>營益</td><td class="num">5,017</td><td class="num">11,650</td><td class="num">19,940</td><td class="num">29,350</td></tr>
+      <tr><td>OPM%</td><td class="num">16.2%</td><td class="num">16.6%</td><td class="num">18.5%</td><td class="num pos">20.2%</td></tr>
+      <tr><td>業外（淨）</td><td class="num">600</td><td class="num">700</td><td class="num">800</td><td class="num">900</td></tr>
+      <tr><td>稅後淨利</td><td class="num">5,598</td><td class="num">10,930</td><td class="num">18,250</td><td class="num">26,620</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>EPS（元）</strong></td><td class="num hi">69.22</td><td class="num hi pos">134.1</td><td class="num hi pos">224.0</td><td class="num hi pos">326.6</td></tr>
+      <tr><td>YoY %</td><td class="num neg">-13%</td><td class="num pos">+94%</td><td class="num pos">+67%</td><td class="num pos">+46%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">GiS 預估 / 資料來源：管理層 1Q26 法說指引 + 券商共識交叉驗證</span>
+
+  <h2 class="ch">三情境 EPS 路徑</h2>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 12 — 三情境 EPS 預估（2025-2028）</div>
+      <div class="chart-sub">機率：Bull 25% / Base 50% / Bear 25%</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartScenarioEps" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 13 — 三情境營收成長</div>
+      <div class="chart-sub">2025-2028 預估</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartScenarioRev" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>情境</th><th class="num">機率</th><th class="num">2026E EPS</th><th class="num">2027E EPS</th><th class="num">2028E EPS</th><th>觸發條件</th></tr></thead>
+    <tbody>
+      <tr style="background:#e8f5ee!important"><td><strong>Bull</strong></td><td class="num">25%</td><td class="num pos">158</td><td class="num pos">268</td><td class="num pos">425</td><td>T3 順 + 新客戶 + N2 提前</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>Base</strong></td><td class="num hi">50%</td><td class="num hi">134</td><td class="num hi">224</td><td class="num hi">327</td><td>按計畫量產、GM 25.5%</td></tr>
+      <tr style="background:#fdf0ef!important"><td><strong>Bear</strong></td><td class="num">25%</td><td class="num neg">105</td><td class="num neg">160</td><td class="num neg">220</td><td>CoWoS 緊 + AWS 砍量</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 預估 · P13</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P14 現金流 + 配息 -->
+<div class="full-page page body-page">
+  <h1 class="ch">捌、現金流與配息政策</h1>
+
+  <table>
+    <thead><tr><th>項目（NT$ M）</th><th class="num">2025A</th><th class="num">2026E</th><th class="num">2027E</th><th class="num">2028E</th></tr></thead>
+    <tbody>
+      <tr><td>稅後淨利</td><td class="num">5,598</td><td class="num">10,930</td><td class="num">18,250</td><td class="num">26,620</td></tr>
+      <tr><td>(+) 折舊攤銷</td><td class="num">800</td><td class="num">1,000</td><td class="num">1,300</td><td class="num">1,650</td></tr>
+      <tr><td>(-) 營運資金增加</td><td class="num neg">500</td><td class="num neg">3,500</td><td class="num neg">4,000</td><td class="num neg">3,500</td></tr>
+      <tr><td><strong>營業現金流（CFO）</strong></td><td class="num hi">5,898</td><td class="num hi">8,430</td><td class="num hi">15,550</td><td class="num hi">24,770</td></tr>
+      <tr><td>(-) CapEx</td><td class="num neg">650</td><td class="num neg">1,200</td><td class="num neg">1,800</td><td class="num neg">2,200</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>自由現金流（FCF）</strong></td><td class="num hi">5,248</td><td class="num hi">7,230</td><td class="num hi">13,750</td><td class="num hi">22,570</td></tr>
+      <tr><td>配息</td><td class="num">-3,330</td><td class="num">-4,800</td><td class="num">-7,300</td><td class="num">-10,650</td></tr>
+      <tr><td>配息率</td><td class="num">60%</td><td class="num">44%</td><td class="num">40%</td><td class="num">40%</td></tr>
+      <tr><td>期末現金</td><td class="num">~18,000</td><td class="num">~20,400</td><td class="num">~26,900</td><td class="num">~38,800</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-wrap">
+    <div class="chart-title">圖 14 — 營業現金流 / FCF / 配息趨勢</div>
+    <div class="chart-sub">2025A-2028E 預估</div>
+    <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chartFCF" style="display:block;width:100%;height:260px"></canvas></div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 觀察：</strong>世芯為 fabless 模式、CapEx 偏輕（占營收 1-2%）；1Q26 業外利息收入 NT$4.16 億顯示現金部位充足（估 160 億+）。配息率從 60% 降至 40% 反映保留現金支援研發投入，符合高成長公司常態。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 現金流 · P14</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ━━━━━━ 章節肆 估值 ━━━━━━ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Section Four · Valuation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">PE / DCF / Comps 三方法加權</div>
+  <div class="sec-desc">GiS 12M TP NT$5,800（PE 50% + DCF 25% + Comps 25%）。對應 5/15 收 4,605 → 上檔 +25.9% → 適用 Buy（>15%）。三情境機率分配 Bull 25% / Base 50% / Bear 25%。</div>
+</div>
+
+<!-- P16 PE 估值 -->
+<div class="full-page page body-page">
+  <h1 class="ch">玖、PE-based 估值（主軸）</h1>
+
+  <h2 class="ch">歷史 PE Band（TTM 基礎）</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 15 — 歷史 PE Band（過去 5 年）</div>
+    <div class="chart-sub">PE 均值 45.5x / Std 4.1 / 當前 65.8x（已 >+2σ）</div>
+    <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chartPEBand" style="display:block;width:100%;height:260px"></canvas></div>
+  </div>
+
+  <blockquote>
+    <strong>TTM PE Band 誤判風險：</strong>5/14 收盤對應 TTM PE 65.8x 已遠高於 +2σ（53.8x），但若改用 Forward 2026E EPS 134 → forward PE = 34.4x，落於 -2σ 與 -1σ 之間（合理區間）；2027E EPS 224 → forward PE 20.6x，遠低於 5 年平均。<strong>本報告以 forward 1-2 年 PE 為主</strong>。
+  </blockquote>
+
+  <h2 class="ch">PE 三情境 TP（以 2027E EPS 為錨點）</h2>
+  <table>
+    <thead><tr><th>情境</th><th class="num">2027E EPS</th><th class="num">目標 PE</th><th class="num">目標價</th><th class="num">機率</th></tr></thead>
+    <tbody>
+      <tr style="background:#e8f5ee!important"><td><strong>Bull</strong></td><td class="num">268</td><td class="num">32x</td><td class="num pos hi">8,576</td><td class="num">25%</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>Base</strong></td><td class="num">224</td><td class="num">30x</td><td class="num hi">6,720</td><td class="num">50%</td></tr>
+      <tr style="background:#fdf0ef!important"><td><strong>Bear</strong></td><td class="num">160</td><td class="num">25x</td><td class="num neg hi">4,000</td><td class="num">25%</td></tr>
+      <tr><td><strong>加權平均</strong></td><td colspan="2">8,576×25% + 6,720×50% + 4,000×25%</td><td class="num hi pos">6,504</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">PE × EPS 敏感度（中心 = 6,720）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>PE \ EPS</th><th class="num">EPS=160</th><th class="num">EPS=200</th><th class="num">EPS=224</th><th class="num">EPS=250</th><th class="num">EPS=268</th></tr></thead>
+    <tbody>
+      <tr><td>PE=22x</td><td class="num">3,520</td><td class="num">4,400</td><td class="num">4,928</td><td class="num">5,500</td><td class="num">5,896</td></tr>
+      <tr><td>PE=26x</td><td class="num">4,160</td><td class="num">5,200</td><td class="num">5,824</td><td class="num">6,500</td><td class="num">6,968</td></tr>
+      <tr><td>PE=30x</td><td class="num">4,800</td><td class="num">6,000</td><td class="num hi pos">6,720</td><td class="num">7,500</td><td class="num">8,040</td></tr>
+      <tr><td>PE=34x</td><td class="num">5,440</td><td class="num">6,800</td><td class="num">7,616</td><td class="num">8,500</td><td class="num">9,112</td></tr>
+      <tr><td>PE=38x</td><td class="num">6,080</td><td class="num">7,600</td><td class="num">8,512</td><td class="num">9,500</td><td class="num">10,184</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · PE 估值 · P16</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P17 DCF 估值 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">拾、DCF 估值（交叉驗證）</h1>
+
+  <h2 class="ch">WACC 計算（Base case）</h2>
+  <table>
+    <thead><tr><th>項目</th><th class="num">值</th><th>依據</th></tr></thead>
+    <tbody>
+      <tr><td>無風險利率（Rf）</td><td class="num">4.0%</td><td>美 10Y 公債利率（4.3% 5/14）扣除 0.3% 為基準偏保守</td></tr>
+      <tr><td>市場風險溢價（ERP）</td><td class="num">6.5%</td><td>台灣股市長期 ERP（Damodaran 2025）</td></tr>
+      <tr><td>Beta（β）</td><td class="num">1.40</td><td>5 年週 Beta vs TWII</td></tr>
+      <tr><td>股本成本（Ke）</td><td class="num">13.10%</td><td>Rf + β × ERP</td></tr>
+      <tr><td>稅後負債成本</td><td class="num">2.5%</td><td>公司 net cash</td></tr>
+      <tr><td>負債占比 D/V</td><td class="num">5%</td><td>近 zero debt</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>WACC</strong></td><td class="num hi">12.57%</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">5 年 Unlevered FCF Schedule（Base）</h2>
+  <table>
+    <thead><tr><th>年度</th><th class="num">2026E</th><th class="num">2027E</th><th class="num">2028E</th><th class="num">2029E</th><th class="num">2030E</th></tr></thead>
+    <tbody>
+      <tr><td>NOPAT</td><td class="num">10,310</td><td class="num">17,547</td><td class="num">25,828</td><td class="num">33,495</td><td class="num">40,020</td></tr>
+      <tr><td>(+) D&A</td><td class="num">1,000</td><td class="num">1,300</td><td class="num">1,650</td><td class="num">2,000</td><td class="num">2,300</td></tr>
+      <tr><td>(-) 營運資金增</td><td class="num">3,500</td><td class="num">4,000</td><td class="num">3,500</td><td class="num">3,000</td><td class="num">2,500</td></tr>
+      <tr><td>(-) CapEx</td><td class="num">1,200</td><td class="num">1,800</td><td class="num">2,200</td><td class="num">2,500</td><td class="num">2,700</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>Unlevered FCF</strong></td><td class="num hi">6,610</td><td class="num hi">13,047</td><td class="num hi">21,778</td><td class="num hi">29,995</td><td class="num hi">37,120</td></tr>
+      <tr><td>折現因子（@12.57%）</td><td class="num">0.943</td><td class="num">0.838</td><td class="num">0.745</td><td class="num">0.661</td><td class="num">0.588</td></tr>
+      <tr><td>PV</td><td class="num">6,233</td><td class="num">10,933</td><td class="num">16,224</td><td class="num">19,827</td><td class="num">21,826</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · DCF · P17</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P17B DCF 結論 + 敏感度 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">拾、DCF 估值（續）— 結論與敏感度</h1>
+
+  <h2 class="ch">DCF 結論（Base case）</h2>
+  <table>
+    <thead><tr><th>項目</th><th class="num">值</th></tr></thead>
+    <tbody>
+      <tr><td>PV (FCF 5Y)</td><td class="num">75,043</td></tr>
+      <tr><td>TV at 2030 末 = FCF₂₀₃₁ / (WACC - g)</td><td class="num">419,749</td></tr>
+      <tr><td>PV of TV</td><td class="num">246,808</td></tr>
+      <tr><td>EV</td><td class="num">321,851</td></tr>
+      <tr><td>(+) Cash</td><td class="num pos">16,000</td></tr>
+      <tr><td>(-) Debt</td><td class="num">0</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>Equity Value</strong></td><td class="num hi">337,851</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>每股 DCF 價值</strong></td><td class="num hi pos">NT$4,145</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-wrap">
+    <div class="chart-title">圖 16 — DCF 5×5 敏感度熱力圖（WACC × Terminal g）</div>
+    <div class="chart-sub">中心格 = Base 4,145；WACC 對敏感度遠大於 g</div>
+    <div class="chart-container" style="height:280px;width:100%;position:relative"><canvas id="chartDCFSens" style="display:block;width:100%;height:280px"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · DCF 結論 · P17B</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P18 Comps + Football Field -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾壹、同業比較與綜合估值</h1>
+
+  <h2 class="ch">同業 Comps 表（2026 預估）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>指標</th><th class="num">Marvell</th><th class="num">Broadcom</th><th class="num">GUC</th><th class="num">智原</th><th class="num">3661</th></tr></thead>
+    <tbody>
+      <tr><td>Forward PE（2027E）</td><td class="num">24x</td><td class="num">26x</td><td class="num">33x</td><td class="num">20x</td><td class="num pos hi">20.6x</td></tr>
+      <tr><td>EV/Sales（2026E）</td><td class="num">5.2x</td><td class="num">14.5x</td><td class="num">12.0x</td><td class="num">5.5x</td><td class="num">6.5x</td></tr>
+      <tr><td>EV/EBIT（2026E）</td><td class="num">22x</td><td class="num">30x</td><td class="num">28x</td><td class="num">23x</td><td class="num">34x</td></tr>
+      <tr><td>GM%</td><td class="num">50%</td><td class="num">75%</td><td class="num">35%</td><td class="num">32%</td><td class="num neg">24%</td></tr>
+      <tr><td>OPM%</td><td class="num">25%</td><td class="num">50%</td><td class="num">18%</td><td class="num">15%</td><td class="num">17%</td></tr>
+      <tr><td>Revenue CAGR（25-28）</td><td class="num">18%</td><td class="num">12%</td><td class="num">28%</td><td class="num">10%</td><td class="num pos hi">45%</td></tr>
+      <tr><td>ROE</td><td class="num">18%</td><td class="num">28%</td><td class="num">22%</td><td class="num">12%</td><td class="num pos">22%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">同業 PE 統計（2027E）</h2>
+  <table>
+    <thead><tr><th>統計</th><th class="num">值</th></tr></thead>
+    <tbody>
+      <tr><td>Max</td><td class="num">33x（GUC）</td></tr>
+      <tr><td>75th percentile</td><td class="num">28x</td></tr>
+      <tr><td>Median</td><td class="num">25x</td></tr>
+      <tr><td>25th percentile</td><td class="num">22x</td></tr>
+      <tr><td>Min</td><td class="num">20x（智原）</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>3661 隱含 PE（GiS Base）</strong></td><td class="num hi">20.6x</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">Football Field — 估值區間圖</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 17 — 綜合估值區間（Football Field）</div>
+    <div class="chart-sub">資料來源：GiS 三方法加權 + 券商共識區間 + 目前股價</div>
+    <div class="chart-container" style="height:280px;width:100%;position:relative"><canvas id="chartFootball" style="display:block;width:100%;height:280px"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · Comps + Football · P18</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P19 估值結論 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">拾貳、估值結論與目標價</h1>
+
+  <h2 class="ch">三方法加權目標價</h2>
+  <table>
+    <thead><tr><th>估值方法</th><th class="num">加權目標價</th><th class="num">權重</th><th class="num">加權貢獻</th></tr></thead>
+    <tbody>
+      <tr style="background:#eefaf4!important"><td><strong>PE-based（主軸）</strong></td><td class="num pos hi">6,504</td><td class="num">50%</td><td class="num">3,252</td></tr>
+      <tr><td>DCF（交叉驗證）</td><td class="num">4,168</td><td class="num">25%</td><td class="num">1,042</td></tr>
+      <tr><td>Comps（同業對照）</td><td class="num">5,910</td><td class="num">25%</td><td class="num">1,478</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>加總</strong></td><td colspan="2">—</td><td class="num hi pos">5,772</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">三情境機率加權</h2>
+  <table>
+    <thead><tr><th>情境</th><th class="num">PE</th><th class="num">DCF</th><th class="num">Comps</th><th class="num">加權 TP</th><th class="num">機率</th></tr></thead>
+    <tbody>
+      <tr style="background:#e8f5ee!important"><td>Bull</td><td class="num">8,576</td><td class="num">5,202</td><td class="num">8,576</td><td class="num pos hi">7,732</td><td class="num">25%</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>Base</strong></td><td class="num">6,720</td><td class="num">4,145</td><td class="num">6,272</td><td class="num hi">5,964</td><td class="num">50%</td></tr>
+      <tr style="background:#fdf0ef!important"><td>Bear</td><td class="num">4,000</td><td class="num">3,178</td><td class="num">3,520</td><td class="num neg">3,675</td><td class="num">25%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">NT$5,800</div><div class="kpi-lbl">12M 目標價</div></div>
+    <div class="kpi"><div class="kpi-val">NT$4,605</div><div class="kpi-lbl">5/15 收盤</div></div>
+    <div class="kpi gold"><div class="kpi-val">+25.9%</div><div class="kpi-lbl">上檔空間</div></div>
+    <div class="kpi green"><div class="kpi-val">BUY</div><div class="kpi-lbl">GiS 評等</div></div>
+  </div>
+
+  <div class="callout green">
+    <div class="callout-title">最終結論</div>
+    <p style="margin:0">GiS 給予 <strong>世芯-KY（3661 TT）「買進」評等</strong>，12 個月目標價 <strong>NT$5,800</strong>，較 5/15 收盤 NT$4,605 上檔空間 <strong>+25.9%</strong>。依方法論 §4.3 五級制（>15% = Buy），達 Buy 門檻。本估值對標 2027E EPS 224 元 × 目標 PE 30x，並以 DCF 4,168 與 Comps 5,910 交叉驗證。GiS 評等與券商共識（8/8 家 Buy/OW）一致，TP 略低於共識中位 6,185（-6%），主因 DCF 偏保守。</p>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 估值結論 · P19</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ━━━━━━ 章節伍 風險 ━━━━━━ -->
+<div class="sec-div page">
+  <div class="sec-num">伍</div>
+  <div class="sec-eyebrow">Section Five · Risks</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">風險矩陣與下行風險量化</div>
+  <div class="sec-desc">12 項風險分產業 / 公司 / 財務 / 估值四類；前三大風險為 R5 客戶集中度、R2 CoWoS 緊俏、R6 量產執行。Bear 情境下 TP 可能落至 3,675（下檔 -20%）。</div>
+</div>
+
+<!-- P21 風險矩陣 -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾參、12 項風險矩陣</h1>
+
+  <h2 class="ch">產業風險</h2>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>⚠️⚠️⚠️ R2：CoWoS / N3 / N2 晶圓產能緊（高）</h4>
+      <div class="risk-item">2026 年 CoWoS 月產能估 100K wpm，需求估 150K wpm，供需缺口</div>
+      <div class="risk-item">外資 5/8 報告明確點出「wafer supply tightness capping H226 upside」</div>
+      <div class="risk-item">觀察：TSMC CoWoS capacity 指引、CoWoS-L vs -S 占比</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>⚠️⚠️ R1：AI ASIC 委外趨勢逆轉（中）</h4>
+      <div class="risk-item">Hyperscaler 自建內部 ASIC 設計團隊風險</div>
+      <div class="risk-item">緩衝：先進製程後段設計需 5-7 年累積經驗</div>
+      <div class="risk-item">觀察：Annapurna Labs 員工數變化</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>⚠️⚠️ R3：AI 訓練需求成長放緩（中）</h4>
+      <div class="risk-item">若 hyperscaler 砍 capex，ASIC 訂單延後</div>
+      <div class="risk-item">觀察：MAG7 capex guidance、Nvidia GPU 能見度</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>⚠️ R4：中美科技戰升級（中低）</h4>
+      <div class="risk-item">美國對中國 AI 晶片管制可能波及 Li Auto</div>
+      <div class="risk-item">緩衝：北美客戶占 75%+，中國有限</div>
+    </div>
+  </div>
+
+  <h2 class="ch">公司風險</h2>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>⚠️⚠️⚠️ R5：客戶集中度過高（高）</h4>
+      <div class="risk-item">AWS 估占 2024 營收 60%+，砍單即重創營運</div>
+      <div class="risk-item">緩衝：管理層已開發 Li Auto、Networking 新客戶</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>⚠️⚠️ R6：量產 / 良率執行（中）</h4>
+      <div class="risk-item">1Q26 量產延後（5 月底-6 月初）顯示 ramp 執行風險</div>
+      <div class="risk-item">觀察：5/6/7 月營收 MoM 變化</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>⚠️⚠️ R8：競爭對手切入 AWS（中）</h4>
+      <div class="risk-item">Marvell / GUC 重新爭取 Trainium 5/6</div>
+      <div class="risk-item">緩衝：T3/T4 已綁定到 2028 年</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>⚠️ R7：核心人才流失（中低）</h4>
+      <div class="risk-item">ASIC 後段設計工程師為稀缺資源</div>
+      <div class="risk-item">緩衝：員工持股信託 + ESOP 設計</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · 風險矩陣 · P21</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P22 財務與估值風險 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">拾肆、財務 / 估值風險與下行情境</h1>
+
+  <h2 class="ch">財務風險</h2>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>⚠️⚠️ R9：營收季度波動劇烈（高機率）</h4>
+      <div class="risk-item">2025-2026 QoQ ±50% 波動，預期管理挑戰</div>
+      <div class="risk-item">緩衝：管理層已給予全年 back-loaded 結構指引</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>⚠️ R10：應收帳款週轉風險（低）</h4>
+      <div class="risk-item">KY 公司架構下海外應收帳款受匯率影響</div>
+      <div class="risk-item">觀察：應收帳款週轉天數</div>
+    </div>
+  </div>
+
+  <h2 class="ch">估值風險</h2>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>⚠️⚠️ R11：當前估值已反映多重利多（中）</h4>
+      <div class="risk-item">2027E PE 28x 相對歷史 PE band 中位偏高</div>
+      <div class="risk-item">觀察：相對台積電 / GUC PE 溢價</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>⚠️⚠️ R12：市場情緒短期波動（高機率）</h4>
+      <div class="risk-item">5/11 後 -18% 顯示 AI 概念股波動率高</div>
+      <div class="risk-item">觀察：SOX 指數、AI 概念股板塊輪動</div>
+    </div>
+  </div>
+
+  <h2 class="ch">Bear 情境下行風險量化</h2>
+  <table>
+    <thead><tr><th>情境</th><th class="num">2027E EPS</th><th class="num">目標 PE</th><th class="num">Bear TP</th><th class="num">下檔 vs 5/15 收盤</th></tr></thead>
+    <tbody>
+      <tr style="background:#fdf0ef!important"><td><strong>Bear（25% 機率）</strong></td><td class="num neg">160</td><td class="num">25x</td><td class="num neg hi">3,675</td><td class="num neg hi">-20%</td></tr>
+      <tr><td>觸發條件</td><td colspan="4">CoWoS 缺料導致 ramp 延後 1 季 + AWS 砍量 10% + GM 壓力</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>下行風險評估：</strong>Bear 情境下 TP 跌至 3,675 元，較 5/15 收盤 4,605 下檔 -20%。但 Bear 機率僅 25%，加權後預期報酬仍正面。重點觀察：（1）5/6/7 月營收 MoM、（2）TSMC CoWoS capacity 指引、（3）AWS T3 出貨 guidance。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · 下行風險 · P22</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P23 持續監控指標 + 結論 -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾伍、持續監控指標與結論</h1>
+
+  <h2 class="ch">六大持續監控指標</h2>
+  <table>
+    <thead><tr><th>指標</th><th>頻率</th><th>關鍵觀察點</th><th>意義</th></tr></thead>
+    <tbody>
+      <tr><td>世芯月營收公告</td><td>每月 10 日前</td><td>5/6/7 月 MoM 變化</td><td>T3 量產 ramp 第一手</td></tr>
+      <tr><td>世芯季度法說會</td><td>季</td><td>8 月初 2Q26、11 月初 3Q26</td><td>毛利率 / 全年指引調整</td></tr>
+      <tr><td>AWS 法說會</td><td>季</td><td>capex / Trainium 出貨指引</td><td>需求端可靠度</td></tr>
+      <tr><td>TSMC 法說會</td><td>季</td><td>CoWoS 產能、N3/N2 wafer allocation</td><td>產能瓶頸監控</td></tr>
+      <tr><td>同業財報</td><td>季</td><td>Marvell / GUC custom compute YoY</td><td>份額變動</td></tr>
+      <tr><td>SOX 指數</td><td>每日</td><td>相對 TWII 表現</td><td>板塊輪動 sentiment</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">最終結論摘要</h2>
+  <div class="callout green">
+    <div class="callout-title">GiS 研究員觀點 — 世芯-KY (3661 TT)</div>
+    <p style="margin:0;font-size:13px;line-height:1.8">
+    <strong>評等：買進（Buy）</strong>｜<strong>12M 目標價：NT$5,800</strong>｜<strong>上檔空間：+25.9%</strong>
+    <br><br>
+    <strong>核心論述：</strong>世芯為 AI ASIC 設計服務龍頭，已通過 2025 年世代交替谷底，2H26 將迎接 AWS Trainium 3（N3 製程）量產 ramp，全年營收 80% 集中下半年。管理層公開背書「CSP 3/4 代僅有世芯」護城河，並 commit Trainium 4（N2）2026 年底前 tape-out、2028 年量產接力。GiS 預估 2026E EPS 134（+94% YoY）、2027E EPS 224（+67% YoY），對標 PE 30x 得出 TP 5,800。
+    <br><br>
+    <strong>主要風險：</strong>R5 客戶集中度（AWS 65%+）、R2 CoWoS 緊俏（2H26 上檔受限）、R6 量產執行（量產延後 1 季可能讓季 EPS miss 20-30%）。Bear 情境下 TP 跌至 3,675，下檔 -20%（機率 25%）。
+    <br><br>
+    <strong>5/11 法說後股價回落 18%</strong>（5,640→4,605）提供 entry 機會，當前估值 forward 2027 PE 20.6x 為同業最低，相對 45% Revenue CAGR 顯著低估。
+    </p>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · 結論 · P23</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P24 附錄 - 資料來源 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">附錄、資料來源</h1>
+
+  <h2 class="ch">券商研究報告（2026 年 5/8 - 5/15 期間）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>券商</th><th>評等</th><th class="num">12M TP</th><th class="num">2026E EPS</th><th class="num">2027E EPS</th><th>日期</th></tr></thead>
+    <tbody>
+      <tr><td>Citigroup</td><td>Buy</td><td class="num">6,200</td><td class="num">—</td><td class="num">—</td><td>5/8</td></tr>
+      <tr><td>Morgan Stanley</td><td>OW</td><td class="num">未明示 TP</td><td class="num">—</td><td class="num">—</td><td>5/8</td></tr>
+      <tr><td>UBS</td><td>Buy</td><td class="num">6,000</td><td class="num">—</td><td class="num">—</td><td>5/9</td></tr>
+      <tr><td>Nomura</td><td>Buy</td><td class="num">6,000</td><td class="num">—</td><td class="num">—</td><td>5/9</td></tr>
+      <tr><td>元大投顧</td><td>買進</td><td class="num">6,200</td><td class="num">132.95</td><td class="num">153.56</td><td>5/11</td></tr>
+      <tr><td>統一投顧</td><td>買進</td><td class="num">6,000</td><td class="num">133.4</td><td class="num">169.5</td><td>5/11</td></tr>
+      <tr><td>CTBC (中信)</td><td>買進</td><td class="num pos hi">7,000</td><td class="num">—</td><td class="num pos">200</td><td>5/11</td></tr>
+      <tr><td>凱基投顧</td><td>增加持股</td><td class="num">6,185</td><td class="num">128.95</td><td class="num">171.78</td><td>5/10</td></tr>
+      <tr><td>CLSA</td><td>O-PF</td><td class="num">略下修</td><td class="num">—</td><td class="num">—</td><td>4/16</td></tr>
+      <tr><td>宏遠投顧</td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>5/11</td></tr>
+      <tr><td>兆豐證券</td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>5/11</td></tr>
+      <tr><td>合庫投顧</td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>5/11</td></tr>
+      <tr><td>永豐投顧</td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>5/11</td></tr>
+      <tr><td>群益證券</td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>5/11</td></tr>
+      <tr><td>康和投顧</td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>4/22</td></tr>
+      <tr><td>華南投顧</td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>5/11</td></tr>
+      <tr><td>富邦投顧</td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>2025 年</td></tr>
+      <tr><td>國票投顧</td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>2025 年</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>附錄 · 券商共識 · P24</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P25 附錄 - 公司/產業/同業/GiS 資料 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">附錄、資料來源（續）</h1>
+
+  <h2 class="ch">公司資料來源</h2>
+  <ul>
+    <li><strong>MOPS（公開資訊觀測站）：</strong>https://mops.twse.com.tw — 合併損益表 5 年、月營收公告、季度財報</li>
+    <li><strong>Alchip 投資人專區：</strong>www.alchip.com — 年報、法說會簡報、重大訊息</li>
+    <li><strong>1Q26 法說會：</strong>2026-05-08 召開，依券商 memo 整合</li>
+    <li><strong>公司基本資料：</strong>MOPS 公司治理段、董監事資料</li>
+  </ul>
+
+  <h2 class="ch">產業資料</h2>
+  <ul>
+    <li>IBS（International Business Strategies）半導體設計服務市場研究</li>
+    <li>Gartner 半導體市場規模預測</li>
+    <li>TSMC 法說會（每季）CoWoS / 先進製程進度</li>
+  </ul>
+
+  <h2 class="ch">同業財報</h2>
+  <ul>
+    <li>Broadcom (AVGO) — 10-K, 10-Q</li>
+    <li>Marvell (MRVL) — 10-K, 10-Q</li>
+    <li>GUC (3443 TT) — 季報、年報</li>
+    <li>智原 (3035 TT) — 季報、年報</li>
+    <li>Alphawave (AWE LN) — 半年報</li>
+  </ul>
+
+  <h2 class="ch">GiS 內部資料</h2>
+  <ul>
+    <li>tw-stock-scanner SQLite 資料庫（daily_prices / quarterly_eps / monthly_revenue）</li>
+    <li>fetch_chart_data.py PE 統計與股價歷史</li>
+    <li>GiS 估值方法論模板 §3.1, §4.2, §4.3, §7.6, §10, §11.2C</li>
+    <li>GiS 報告樣板 v1（2026 年 Q1 版）</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>附錄 · 資料來源 · P24</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ━━━━━━ Chart.js 全部圖表 ━━━━━━ -->
+<script>
+// 全域樣式
+Chart.defaults.font.family = "'PingFang TC','Heiti TC','Microsoft JhengHei',sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.plugins.legend.labels.font = {size:11};
+
+const colors = {
+  navy: '#0d1b3e', teal: '#00c896', blue: '#1a3a6e', green: '#00875a',
+  red: '#c0392b', gold: '#f59e0b', purple: '#5b21b6', gray: '#6b7a9a',
+  lite: '#e0e8f4', white: '#ffffff'
+};
+
+// === 圖1: 股價歷史 ===
+new Chart(document.getElementById('chartPriceHist'), {
+  type: 'line',
+  data: {
+    labels: ['2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05'],
+    datasets: [{
+      label: '世芯-KY 收盤價',
+      data: [2300,2400,2500,2800,3100,3050,3200,3260,3400,3500,3650,4250,4605],
+      borderColor: colors.teal,
+      backgroundColor: 'rgba(0,200,150,.08)',
+      tension: 0.3, fill: true, pointRadius: 3
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{title:{display:true,text:'NT$'}},
+      x:{ticks:{maxRotation:45,minRotation:45}}
+    }
+  }
+});
+
+// === 圖2: EPS 趨勢 ===
+new Chart(document.getElementById('chartEpsHist'), {
+  type: 'bar',
+  data: {
+    labels: ['2021','2022','2023','2024','2025','2026E','2027E','2028E'],
+    datasets: [{
+      label: 'EPS (元)',
+      data: [38.96, 33.81, 41.41, 79.84, 69.22, 134.1, 224.0, 326.6],
+      backgroundColor: ['#1a3a6e','#1a3a6e','#1a3a6e','#1a3a6e','#1a3a6e','#00c896','#00c896','#00c896'],
+      borderRadius: 4
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{y:{title:{display:true,text:'NT$ 元'}}}
+  }
+});
+
+// === 圖3: 1Q26 應用拆解 ===
+new Chart(document.getElementById('chartRevAppMix'), {
+  type: 'doughnut',
+  data: {
+    labels: ['HPC / AI (AWS)', 'Consumer / Auto (Li Auto)', 'Networking', 'Niche'],
+    datasets: [{
+      data: [70, 17, 10, 3],
+      backgroundColor: [colors.navy, colors.teal, colors.blue, colors.gold]
+    }]
+  },
+  options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right'}}}
+});
+
+// === 圖4: NRE / Turnkey ===
+new Chart(document.getElementById('chartNreTurnkey'), {
+  type: 'doughnut',
+  data: {
+    labels: ['NRE（毛利率 60-70%）', 'Turnkey（毛利率 10-15%）'],
+    datasets: [{
+      data: [38, 62],
+      backgroundColor: [colors.teal, colors.gray]
+    }]
+  },
+  options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right'}}}
+});
+
+// === 圖5: 股東結構 ===
+new Chart(document.getElementById('chartShareholders'), {
+  type: 'doughnut',
+  data: {
+    labels: ['外資', '投信', '董監事+員工持股', '自然人+其他'],
+    datasets: [{
+      data: [54.6, 7.4, 2.4, 35.6],
+      backgroundColor: [colors.navy, colors.teal, colors.gold, colors.gray]
+    }]
+  },
+  options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right'}}}
+});
+
+// === 圖6: 客戶結構演化 ===
+new Chart(document.getElementById('chartCustomerMix'), {
+  type: 'bar',
+  data: {
+    labels: ['2024','2025','2026E','2027E','2028E'],
+    datasets: [
+      {label:'AWS Trainium', data:[70,55,65,70,72], backgroundColor:colors.navy, stack:'a'},
+      {label:'Li Auto ADAS', data:[5,8,12,10,8], backgroundColor:colors.teal, stack:'a'},
+      {label:'Networking', data:[10,12,13,15,18], backgroundColor:colors.blue, stack:'a'},
+      {label:'其他', data:[15,25,10,5,2], backgroundColor:colors.gray, stack:'a'}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom'}},
+    scales:{
+      x:{stacked:true},
+      y:{stacked:true, max:100, title:{display:true,text:'%'}}
+    }
+  }
+});
+
+// === 圖7: AI ASIC TAM ===
+new Chart(document.getElementById('chartTAM'), {
+  type: 'line',
+  data: {
+    labels: ['2024','2025','2026','2027','2028','2029','2030'],
+    datasets: [
+      {label:'AI ASIC 子市場', data:[18,25,34,46,60,75,90], borderColor:colors.teal, backgroundColor:'rgba(0,200,150,.15)', fill:true, tension:0.3},
+      {label:'ASIC 設計服務總 TAM', data:[19,24,30,38,48,60,75], borderColor:colors.navy, backgroundColor:'rgba(13,27,62,.1)', fill:false, tension:0.3}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{position:'top'}},
+    scales:{y:{title:{display:true,text:'USD B'}}}
+  }
+});
+
+// === 圖8: 市佔率 ===
+new Chart(document.getElementById('chartMarketShare'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Broadcom (Google)', 'Marvell', '世芯 (AWS)', 'GUC (Meta)', '其他'],
+    datasets: [{
+      data: [28, 9, 9, 4, 50],
+      backgroundColor: [colors.navy, colors.red, colors.teal, colors.blue, colors.gray]
+    }]
+  },
+  options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right'}}}
+});
+
+// === 圖9: 同業 GM/OPM 對比 ===
+new Chart(document.getElementById('chartGMComps'), {
+  type: 'bar',
+  data: {
+    labels: ['Broadcom','Marvell','GUC','智原','Alphawave','世芯'],
+    datasets: [
+      {label:'GM%', data:[75,50,35,32,60,24], backgroundColor:colors.teal},
+      {label:'OPM%', data:[50,25,18,15,20,17], backgroundColor:colors.navy}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{position:'top'}},
+    scales:{y:{title:{display:true,text:'%'},max:80}}
+  }
+});
+
+// === 圖10: 季 EPS 趨勢 ===
+new Chart(document.getElementById('chartQuarterlyEps'), {
+  type: 'bar',
+  data: {
+    labels: ['23Q1','23Q2','23Q3','23Q4','24Q1','24Q2','24Q3','24Q4','25Q1','25Q2','25Q3','25Q4','26Q1','26Q2E','26Q3E','26Q4E'],
+    datasets: [{
+      label:'EPS (元)',
+      data: [8.09,10.16,12.03,15.16,15.83,20.05,22.46,22.91,18.13,16.37,16.40,18.33,17.55,22.25,41.40,47.76],
+      backgroundColor: function(ctx){
+        const i = ctx.dataIndex;
+        if (i >= 12) return colors.teal;
+        return colors.navy;
+      },
+      borderRadius:3
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{y:{title:{display:true,text:'NT$ 元'}}}
+  }
+});
+
+// === 圖11: 月營收 ===
+new Chart(document.getElementById('chartMonthlyRev'), {
+  type: 'line',
+  data: {
+    labels: ['24/11','24/12','25/01','25/02','25/03','25/04','25/05','25/06','25/07','25/08','25/09','25/10','25/11','25/12','26/01','26/02','26/03','26/04'],
+    datasets: [{
+      label:'月營收 (NT$ M)',
+      data: [4400,4500,3300,3600,3600,3200,2900,3100,2600,2300,1700,1700,1700,1400,1400,800,1900,2100],
+      borderColor: colors.red,
+      backgroundColor:'rgba(192,57,43,.1)',
+      tension: 0.3, fill: true, pointRadius: 2
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{title:{display:true,text:'NT$ M'}},
+      x:{ticks:{maxRotation:45,minRotation:45,font:{size:9}}}
+    }
+  }
+});
+
+// === 圖12: 三情境 EPS ===
+new Chart(document.getElementById('chartScenarioEps'), {
+  type: 'line',
+  data: {
+    labels: ['2025A','2026E','2027E','2028E'],
+    datasets: [
+      {label:'Bull (25%)', data:[69.22,158,268,425], borderColor:colors.teal, tension:0.2, pointRadius:4},
+      {label:'Base (50%)', data:[69.22,134,224,327], borderColor:colors.navy, tension:0.2, pointRadius:5, borderWidth:3},
+      {label:'Bear (25%)', data:[69.22,105,160,220], borderColor:colors.red, tension:0.2, pointRadius:4}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{position:'top'}},
+    scales:{y:{title:{display:true,text:'EPS (NT$)'}}}
+  }
+});
+
+// === 圖13: 三情境營收 ===
+new Chart(document.getElementById('chartScenarioRev'), {
+  type: 'bar',
+  data: {
+    labels: ['2026E','2027E','2028E'],
+    datasets: [
+      {label:'Bull', data:[78,125,175], backgroundColor:colors.teal},
+      {label:'Base', data:[70,108,145], backgroundColor:colors.navy},
+      {label:'Bear', data:[60,92,118], backgroundColor:colors.red}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{position:'top'}},
+    scales:{y:{title:{display:true,text:'NT$ B'}}}
+  }
+});
+
+// === 圖14: FCF 趨勢 ===
+new Chart(document.getElementById('chartFCF'), {
+  type: 'bar',
+  data: {
+    labels: ['2025A','2026E','2027E','2028E'],
+    datasets: [
+      {label:'CFO', data:[5898,8430,15550,24770], backgroundColor:colors.navy},
+      {label:'FCF', data:[5248,7230,13750,22570], backgroundColor:colors.teal},
+      {label:'配息', data:[3330,4800,7300,10650], backgroundColor:colors.gold}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{position:'top'}},
+    scales:{y:{title:{display:true,text:'NT$ M'}}}
+  }
+});
+
+// === 圖15: 歷史 PE Band ===
+new Chart(document.getElementById('chartPEBand'), {
+  type: 'line',
+  data: {
+    labels: ['2021','2022','2023','2024','2025','2026E'],
+    datasets: [
+      {label:'PE +2σ (53.8x)', data:[53.8,53.8,53.8,53.8,53.8,53.8], borderColor:colors.red, borderDash:[5,5], pointRadius:0},
+      {label:'PE +1σ (49.6x)', data:[49.6,49.6,49.6,49.6,49.6,49.6], borderColor:colors.gold, borderDash:[3,3], pointRadius:0},
+      {label:'PE Mean (45.5x)', data:[45.5,45.5,45.5,45.5,45.5,45.5], borderColor:colors.navy, pointRadius:0},
+      {label:'PE -1σ (41.4x)', data:[41.4,41.4,41.4,41.4,41.4,41.4], borderColor:colors.gold, borderDash:[3,3], pointRadius:0},
+      {label:'PE -2σ (37.3x)', data:[37.3,37.3,37.3,37.3,37.3,37.3], borderColor:colors.green, borderDash:[5,5], pointRadius:0},
+      {label:'實際 PE (TTM)', data:[18.5,35,30,40,55,65.8], borderColor:colors.teal, backgroundColor:'rgba(0,200,150,.15)', fill:true, tension:0.3, pointRadius:4}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{position:'right',labels:{font:{size:10}}}},
+    scales:{y:{title:{display:true,text:'PE (x)'}}}
+  }
+});
+
+// === 圖16: DCF 敏感度 ===
+new Chart(document.getElementById('chartDCFSens'), {
+  type: 'line',
+  data: {
+    labels: ['WACC 11.0%','WACC 11.8%','WACC 12.57%','WACC 13.3%','WACC 14.0%'],
+    datasets: [
+      {label:'g=2.0%', data:[4520,4180,3860,3580,3340], borderColor:colors.red, tension:0.3},
+      {label:'g=2.5%', data:[4820,4380,4000,3680,3420], borderColor:colors.gold, tension:0.3},
+      {label:'g=3.0% (Base)', data:[5200,4640,4145,3790,3510], borderColor:colors.navy, tension:0.3, borderWidth:3},
+      {label:'g=3.5%', data:[5640,4940,4330,3920,3620], borderColor:colors.blue, tension:0.3},
+      {label:'g=4.0%', data:[6180,5290,4540,4070,3740], borderColor:colors.teal, tension:0.3}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{position:'right',labels:{font:{size:10}}}},
+    scales:{y:{title:{display:true,text:'每股 DCF 價值 (NT$)'}}}
+  }
+});
+
+// === 圖17: Football Field ===
+new Chart(document.getElementById('chartFootball'), {
+  type: 'bar',
+  data: {
+    labels: ['PE-based','DCF','Comps','券商共識','當前股價'],
+    datasets: [
+      {label:'區間下緣', data:[4000,3178,3520,6000,4605], backgroundColor:'rgba(0,0,0,0)', stack:'a'},
+      {label:'估值區間', data:[4576,2462,5056,1000,1], backgroundColor:colors.teal, stack:'a'}
+    ]
+  },
+  options:{
+    indexAxis:'y',
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{
+        label:function(ctx){
+          const ranges = ['4,000-8,576','3,178-5,640','3,520-8,576','6,000-7,000','4,605'];
+          return ranges[ctx.dataIndex];
+        }
+      }}
+    },
+    scales:{
+      x:{title:{display:true,text:'目標價 NT$'}},
+    }
+  }
+});
+
+</script>
+
+</body>
+</html>

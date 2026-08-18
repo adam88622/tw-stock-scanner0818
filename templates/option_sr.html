@@ -1,0 +1,423 @@
+{% extends "base.html" %}
+{% block title %}選擇權支撐壓力{% endblock %}
+
+{% block content %}
+<div class="content-area">
+<style>
+    .os-head { display:flex; flex-wrap:wrap; gap:12px; margin:16px 0; }
+    .os-stat { flex:1 1 150px; background:#0f172a; border:1.5px solid #1e293b; border-radius:10px;
+               padding:16px; text-align:center; }
+    .os-stat .lbl { font-size:13px; color:#94a3b8; margin-bottom:6px; }
+    .os-stat .num { font-size:30px; font-weight:800; line-height:1; }
+    .os-stat .sub { font-size:12px; color:#64748b; margin-top:6px; }
+    .os-stat.resistance .num { color:#22c55e; }        /* 壓力（Call OI 最大）綠 */
+    .os-stat.resistance { border-color:rgba(34,197,94,.4); }
+    .os-stat.support .num { color:#ef4444; }           /* 支撐（Put OI 最大）紅 */
+    .os-stat.support { border-color:rgba(239,68,68,.4); }
+    .os-stat.maxpain .num { color:#f59e0b; }           /* Max Pain 橘 */
+    .os-stat.maxpain { border-color:rgba(245,158,11,.4); }
+    .os-stat.pcratio .num { color:#818cf8; }
+    .os-stat.quote .num { color:#e2e8f0; }
+
+    .os-meta { color:#94a3b8; font-size:13px; margin:4px 0 12px; display:flex; flex-wrap:wrap;
+               gap:8px 18px; align-items:center; }
+
+    .os-controls { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center; }
+    .os-select { padding:6px 12px; border-radius:6px; border:1px solid #334155; background:#1e293b;
+                 color:#cbd5e1; font-size:13px; }
+    .os-ctl-label { color:#94a3b8; font-size:13px; margin-right:2px; }
+    .os-btn { padding:6px 14px; border-radius:6px; border:1px solid #334155; background:#1e293b;
+              color:#cbd5e1; cursor:pointer; font-size:13px; }
+    .os-btn.active { background:#6366f1; border-color:#6366f1; color:#fff; }
+    .os-view-group { margin-left:auto; display:flex; gap:6px; }
+
+    /* 圖例 */
+    .os-legend { display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:#94a3b8; margin-bottom:8px; }
+    .os-legend .dot { width:10px; height:10px; border-radius:2px; display:inline-block; margin-right:5px;
+                      vertical-align:middle; }
+    .os-legend .dot.call { background:#22c55e; }
+    .os-legend .dot.put { background:#ef4444; }
+    .os-legend .dot.res { background:rgba(34,197,94,.25); border:1px solid #22c55e; }
+    .os-legend .dot.sup { background:rgba(239,68,68,.25); border:1px solid #ef4444; }
+    .os-legend .dot.mp { background:rgba(245,158,11,.25); border:1px solid #f59e0b; }
+
+    .os-wrap { max-height:70vh; overflow:auto; border:1px solid #1e293b; border-radius:8px; }
+
+    /* ===== OI 長條圖（純 CSS）===== */
+    .os-bars { width:100%; border-collapse:collapse; font-size:13px; }
+    .os-bars th { color:#94a3b8; padding:8px 10px; position:sticky; top:0; background:#0b1220;
+                  border-bottom:1px solid #1e293b; }
+    .os-bars td { padding:2px 6px; border-bottom:1px solid #131c2e; }
+    .os-bar-cell { width:42%; }
+    .os-bar-cell.call { text-align:right; }
+    .os-bar-cell.put  { text-align:left; }
+    .os-strike-cell { text-align:center; white-space:nowrap; font-weight:700; color:#e2e8f0; width:16%; }
+    .os-bar { height:18px; border-radius:3px; display:inline-block; vertical-align:middle; }
+    .os-bar.call { background:#22c55e; }
+    .os-bar.put  { background:#ef4444; }
+    .os-bar-val { font-size:12px; color:#94a3b8; }
+    .os-bar-cell.call .os-bar-val { margin-right:6px; }
+    .os-bar-cell.put  .os-bar-val { margin-left:6px; }
+    /* 長條圖列的支撐/壓力/MaxPain 標記 */
+    .os-bars tr.is-resistance .os-strike-cell { background:rgba(34,197,94,.16); }
+    .os-bars tr.is-support    .os-strike-cell { background:rgba(239,68,68,.16); }
+    .os-bars tr.is-maxpain    .os-strike-cell { background:rgba(245,158,11,.16); }
+    .os-tag { display:inline-block; padding:0 6px; border-radius:6px; font-size:10px; font-weight:700;
+              margin-left:4px; vertical-align:middle; }
+    .os-tag.res { background:#22c55e; color:#052e16; }
+    .os-tag.sup { background:#ef4444; color:#450a0a; }
+    .os-tag.mp  { background:#f59e0b; color:#451a03; }
+
+    /* ===== T字報價表 ===== */
+    .os-table { width:100%; border-collapse:collapse; font-size:14px; }
+    .os-table th, .os-table td { padding:8px 10px; border-bottom:1px solid #1e293b; white-space:nowrap;
+                                 text-align:right; }
+    .os-table th { color:#94a3b8; position:sticky; top:0; background:#0b1220; }
+    .os-table thead tr.grp th { text-align:center; border-bottom:1px solid #1e293b; }
+    .os-table th.call-side, .os-table td.call-side { background:rgba(34,197,94,.04); }
+    .os-table th.put-side,  .os-table td.put-side  { background:rgba(239,68,68,.04); }
+    .os-table td.os-strike-cell, .os-table th.os-strike-cell { text-align:center; }
+    .os-table tbody tr:hover { background:rgba(99,102,241,.08); }
+    .os-table td.pos { color:#ef4444; }   /* 漲 紅（台股慣例：紅漲綠跌）*/
+    .os-table td.neg { color:#22c55e; }   /* 跌 綠 */
+    .os-table td.muted { color:#64748b; }
+    .os-table tr.is-resistance td.os-strike-cell { background:rgba(34,197,94,.18); }
+    .os-table tr.is-support    td.os-strike-cell { background:rgba(239,68,68,.18); }
+    .os-table tr.is-maxpain    td.os-strike-cell { background:rgba(245,158,11,.18); }
+
+    .os-error { background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.4); color:#fca5a5;
+                padding:14px 16px; border-radius:8px; margin:16px 0; }
+    .os-empty { text-align:center; color:#64748b; padding:32px; }
+    h4.os-title { margin:8px 0 0; }
+</style>
+
+<h4 class="os-title">台指選擇權支撐壓力表</h4>
+<div class="os-meta" id="os-meta">載入中...</div>
+
+<div id="os-error-box"></div>
+
+<!-- 摘要卡：壓力 / 支撐 / Max Pain / P/C Ratio / 指數期貨價 -->
+<div class="os-head" id="os-head">
+    <div class="os-stat quote"><div class="lbl">指數 / 期貨價</div><div class="num" id="st-quote">--</div><div class="sub" id="st-quote-sub"></div></div>
+    <div class="os-stat resistance"><div class="lbl">壓力（Call OI 最大）</div><div class="num" id="st-res">--</div><div class="sub" id="st-res-sub"></div></div>
+    <div class="os-stat support"><div class="lbl">支撐（Put OI 最大）</div><div class="num" id="st-sup">--</div><div class="sub" id="st-sup-sub"></div></div>
+    <div class="os-stat maxpain"><div class="lbl">Max Pain</div><div class="num" id="st-mp">--</div><div class="sub" id="st-mp-sub"></div></div>
+    <div class="os-stat pcratio"><div class="lbl">P/C Ratio (OI)</div><div class="num" id="st-pc">--</div><div class="sub" id="st-pc-sub"></div></div>
+</div>
+
+<div class="os-controls">
+    <span class="os-ctl-label">日期</span>
+    <select class="os-select" id="os-date"></select>
+    <span class="os-ctl-label">契約</span>
+    <select class="os-select" id="os-contract"></select>
+    <div class="os-view-group">
+        <button class="os-btn" data-view="bars" id="btn-bars">OI 長條圖</button>
+        <button class="os-btn active" data-view="table" id="btn-table">T字報價表</button>
+    </div>
+</div>
+
+<div class="os-legend">
+    <span><span class="dot call"></span>Call OI</span>
+    <span><span class="dot put"></span>Put OI</span>
+    <span><span class="dot res"></span>壓力</span>
+    <span><span class="dot sup"></span>支撐</span>
+    <span><span class="dot mp"></span>Max Pain</span>
+</div>
+
+<!-- OI 長條圖 -->
+<div class="os-wrap" id="os-bars-wrap">
+    <table class="os-bars">
+        <thead>
+            <tr>
+                <th style="text-align:right;">Call OI</th>
+                <th style="text-align:center;">履約價</th>
+                <th style="text-align:left;">Put OI</th>
+            </tr>
+        </thead>
+        <tbody id="os-bars-body">
+            <tr><td colspan="3" class="os-empty">載入中...</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- T字報價表 -->
+<div class="os-wrap" id="os-table-wrap" style="display:none;">
+    <table class="os-table">
+        <thead>
+            <tr class="grp">
+                <th class="call-side" colspan="4">Call（買權）</th>
+                <th class="os-strike-cell" rowspan="2">履約價</th>
+                <th class="put-side" colspan="4">Put（賣權）</th>
+            </tr>
+            <tr>
+                <th class="call-side">成交價</th>
+                <th class="call-side">漲跌</th>
+                <th class="call-side">成交量</th>
+                <th class="call-side">未平倉</th>
+                <th class="put-side">成交價</th>
+                <th class="put-side">漲跌</th>
+                <th class="put-side">成交量</th>
+                <th class="put-side">未平倉</th>
+            </tr>
+        </thead>
+        <tbody id="os-table-body">
+            <tr><td colspan="9" class="os-empty">載入中...</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+(function() {
+    var data = null;          // 最近一次成功回傳
+    var view = 'table';       // 'bars' | 'table'（預設 T字報價表，紅漲綠跌可見）
+    var curDate = '';         // 目前選定日期（'' = 走預設）
+    var curContract = '';     // 目前選定契約（'' = 走預設）
+
+    function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+    }
+
+    function fmt(v, d) {
+        if (v === null || v === undefined || v === '') return '--';
+        return Number(v).toLocaleString(undefined, {minimumFractionDigits: d, maximumFractionDigits: d});
+    }
+
+    // 漲跌 class（綠正紅負，比照 futures_basis）
+    function chgCls(v) {
+        if (v === null || v === undefined) return 'muted';
+        return v < 0 ? 'neg' : (v > 0 ? 'pos' : '');
+    }
+
+    function fillSelect(el, items, valueOf, labelOf, current) {
+        el.innerHTML = '';
+        items.forEach(function(it) {
+            var opt = document.createElement('option');
+            opt.value = valueOf(it);
+            opt.textContent = labelOf(it);
+            if (valueOf(it) === current) opt.selected = true;
+            el.appendChild(opt);
+        });
+    }
+
+    function updateSummary() {
+        // 指數 / 期貨價（API 契約未強制提供，若後端附帶則顯示）
+        var spot = (data.index != null) ? data.index
+                 : (data.spot != null) ? data.spot : null;
+        var fut = (data.futures != null) ? data.futures
+                : (data.future != null) ? data.future : null;
+        var qEl = document.getElementById('st-quote');
+        var qSub = document.getElementById('st-quote-sub');
+        if (spot != null || fut != null) {
+            qEl.textContent = (spot != null ? fmt(spot, 0) : fmt(fut, 0));
+            qSub.textContent = (spot != null && fut != null)
+                ? ('期貨 ' + fmt(fut, 0)) : (fut != null ? '期貨' : '指數');
+        } else {
+            qEl.textContent = '--';
+            qSub.textContent = data.contract_label || '';
+        }
+
+        var res = data.resistance || {};
+        document.getElementById('st-res').textContent = res.strike != null ? fmt(res.strike, 0) : '--';
+        document.getElementById('st-res-sub').textContent = res.call_oi != null ? ('Call OI ' + fmt(res.call_oi, 0)) : '';
+
+        var sup = data.support || {};
+        document.getElementById('st-sup').textContent = sup.strike != null ? fmt(sup.strike, 0) : '--';
+        document.getElementById('st-sup-sub').textContent = sup.put_oi != null ? ('Put OI ' + fmt(sup.put_oi, 0)) : '';
+
+        var mp = data.max_pain || {};
+        document.getElementById('st-mp').textContent = mp.strike != null ? fmt(mp.strike, 0) : '--';
+        document.getElementById('st-mp-sub').textContent = mp.pain != null ? ('痛苦值 ' + fmt(mp.pain, 0)) : '';
+
+        var stats = data.stats || {};
+        document.getElementById('st-pc').textContent = stats.pc_ratio != null ? fmt(stats.pc_ratio, 2) : '--';
+        document.getElementById('st-pc-sub').textContent =
+            'Call ' + fmt(stats.total_call_oi, 0) + ' / Put ' + fmt(stats.total_put_oi, 0);
+    }
+
+    function rowFlagClass(r) {
+        var c = [];
+        if (r.is_resistance) c.push('is-resistance');
+        if (r.is_support) c.push('is-support');
+        if (r.is_max_pain) c.push('is-maxpain');
+        return c.join(' ');
+    }
+
+    function strikeTags(r) {
+        var t = '';
+        if (r.is_resistance) t += '<span class="os-tag res">壓</span>';
+        if (r.is_support) t += '<span class="os-tag sup">撐</span>';
+        if (r.is_max_pain) t += '<span class="os-tag mp">MP</span>';
+        return t;
+    }
+
+    // ===== OI 長條圖 =====
+    function renderBars() {
+        var body = document.getElementById('os-bars-body');
+        var rows = (data && data.rows) || [];
+        if (!rows.length) {
+            body.innerHTML = '<tr><td colspan="3" class="os-empty">該日 / 契約無資料</td></tr>';
+            return;
+        }
+        var maxOi = 0;
+        rows.forEach(function(r) {
+            var co = (r.call && r.call.oi) || 0;
+            var po = (r.put && r.put.oi) || 0;
+            if (co > maxOi) maxOi = co;
+            if (po > maxOi) maxOi = po;
+        });
+        if (maxOi <= 0) maxOi = 1;
+
+        // 履約價由高到低（高履約價在上，符合看盤習慣）
+        var sorted = rows.slice().sort(function(a, b) { return b.strike - a.strike; });
+        var html = '';
+        sorted.forEach(function(r) {
+            var co = (r.call && r.call.oi) || 0;
+            var po = (r.put && r.put.oi) || 0;
+            var cw = (co / maxOi * 100).toFixed(1);
+            var pw = (po / maxOi * 100).toFixed(1);
+            html += '<tr class="' + rowFlagClass(r) + '">'
+                + '<td class="os-bar-cell call">'
+                    + '<span class="os-bar-val">' + fmt(co, 0) + '</span>'
+                    + '<span class="os-bar call" style="width:' + cw + '%;"></span>'
+                + '</td>'
+                + '<td class="os-strike-cell">' + fmt(r.strike, 0) + strikeTags(r) + '</td>'
+                + '<td class="os-bar-cell put">'
+                    + '<span class="os-bar put" style="width:' + pw + '%;"></span>'
+                    + '<span class="os-bar-val">' + fmt(po, 0) + '</span>'
+                + '</td>'
+                + '</tr>';
+        });
+        body.innerHTML = html;
+    }
+
+    // ===== T字報價表 =====
+    function renderTable() {
+        var body = document.getElementById('os-table-body');
+        var rows = (data && data.rows) || [];
+        if (!rows.length) {
+            body.innerHTML = '<tr><td colspan="9" class="os-empty">該日 / 契約無資料</td></tr>';
+            return;
+        }
+        // 履約價由高到低
+        var sorted = rows.slice().sort(function(a, b) { return b.strike - a.strike; });
+        var html = '';
+        sorted.forEach(function(r) {
+            var c = r.call || {}, p = r.put || {};
+            html += '<tr class="' + rowFlagClass(r) + '">'
+                + '<td class="call-side">' + fmt(c.close, 1) + '</td>'
+                + '<td class="call-side ' + chgCls(c.change) + '">' + fmt(c.change, 1) + '</td>'
+                + '<td class="call-side">' + fmt(c.volume, 0) + '</td>'
+                + '<td class="call-side">' + fmt(c.oi, 0) + '</td>'
+                + '<td class="os-strike-cell">' + fmt(r.strike, 0) + strikeTags(r) + '</td>'
+                + '<td class="put-side">' + fmt(p.close, 1) + '</td>'
+                + '<td class="put-side ' + chgCls(p.change) + '">' + fmt(p.change, 1) + '</td>'
+                + '<td class="put-side">' + fmt(p.volume, 0) + '</td>'
+                + '<td class="put-side">' + fmt(p.oi, 0) + '</td>'
+                + '</tr>';
+        });
+        body.innerHTML = html;
+    }
+
+    function applyView() {
+        document.getElementById('os-bars-wrap').style.display = (view === 'bars') ? '' : 'none';
+        document.getElementById('os-table-wrap').style.display = (view === 'table') ? '' : 'none';
+        if (view === 'bars') renderBars(); else renderTable();
+    }
+
+    function updateMeta() {
+        var meta = document.getElementById('os-meta');
+        var parts = [];
+        parts.push('<span style="color:#e2e8f0;font-weight:600;">資料日期：' + escapeHtml(data.date || '--') + '</span>');
+        parts.push('<span>契約：' + escapeHtml(data.contract_label || data.contract || '--') + '</span>');
+        var n = (data.rows || []).length;
+        parts.push('<span>履約價檔數：' + n + '</span>');
+        meta.innerHTML = parts.join('');
+    }
+
+    function render() {
+        var errBox = document.getElementById('os-error-box');
+        if (!data || !data.ok) {
+            // 仍用回傳的可選清單填下拉（讓使用者可切到有資料的日期）
+            if (data) {
+                fillSelect(document.getElementById('os-date'), data.available_dates || [],
+                    function(d) { return d; }, function(d) { return d; }, data.date || curDate);
+                fillSelect(document.getElementById('os-contract'), data.available_contracts || [],
+                    function(c) { return c.code; }, function(c) { return c.label; }, data.contract || curContract);
+            }
+            errBox.innerHTML = '<div class="os-error">' +
+                escapeHtml((data && data.error) || '該日 / 契約無資料') + '</div>';
+            document.getElementById('os-meta').textContent = '該日無資料';
+            document.getElementById('os-bars-body').innerHTML =
+                '<tr><td colspan="3" class="os-empty">該日 / 契約無資料</td></tr>';
+            document.getElementById('os-table-body').innerHTML =
+                '<tr><td colspan="9" class="os-empty">該日 / 契約無資料</td></tr>';
+            return;
+        }
+        errBox.innerHTML = '';
+
+        // 填兩個下拉（以回傳的實際 date/contract 為選定值）
+        fillSelect(document.getElementById('os-date'), data.available_dates || [],
+            function(d) { return d; }, function(d) { return d; }, data.date);
+        fillSelect(document.getElementById('os-contract'), data.available_contracts || [],
+            function(c) { return c.code; }, function(c) { return c.label; }, data.contract);
+
+        curDate = data.date || curDate;
+        curContract = data.contract || curContract;
+
+        updateMeta();
+        updateSummary();
+        applyView();
+    }
+
+    function buildQuery() {
+        var qs = [];
+        if (curDate) qs.push('date=' + encodeURIComponent(curDate));
+        if (curContract) qs.push('contract=' + encodeURIComponent(curContract));
+        return qs.length ? ('?' + qs.join('&')) : '';
+    }
+
+    function load() {
+        document.getElementById('os-meta').textContent = '載入中...';
+        fetch('/api/option-sr' + buildQuery())
+            .then(function(r) { return r.json(); })
+            .then(function(json) {
+                data = json;
+                render();
+            })
+            .catch(function(e) {
+                document.getElementById('os-error-box').innerHTML =
+                    '<div class="os-error">載入失敗：' + escapeHtml(String(e)) + '</div>';
+                document.getElementById('os-meta').textContent = '載入失敗';
+            });
+    }
+
+    // 下拉：切日期（換日期時清空契約，讓後端回傳該日最近到期契約）
+    document.getElementById('os-date').addEventListener('change', function() {
+        curDate = this.value;
+        curContract = '';
+        load();
+    });
+
+    // 下拉：切契約
+    document.getElementById('os-contract').addEventListener('change', function() {
+        curContract = this.value;
+        load();
+    });
+
+    // 檢視切換（純前端，不重新 fetch）
+    document.querySelectorAll('.os-btn[data-view]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.os-btn[data-view]').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            view = btn.getAttribute('data-view');
+            applyView();
+        });
+    });
+
+    load();
+})();
+</script>
+</div>
+{% endblock %}

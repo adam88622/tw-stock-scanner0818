@@ -1,0 +1,916 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>川湖 2059 首次覆蓋 — 增持 | GiS Research</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:520px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:38px 54px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 16px}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:20px 0 11px}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 8px}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 11px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.3px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 11px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:16px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.ow{background:#3b82f6;color:#fff}
+.badge.buy{background:#00c896;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:16px 22px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:16px;margin:12px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:15px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.75;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:16px 13px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12.5px;font-weight:800;margin-bottom:7px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:10.5px;opacity:.85;line-height:1.45}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:15px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+p{margin:6px 0 10px;line-height:1.72}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+li{margin:4px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:11px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:18px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:6px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.gold{border-color:#d97706;background:#fffbeb}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:7px}
+.callout.green .callout-title{color:#065f46}
+.callout.gold .callout-title{color:#92400e}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:13px 54px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13.5px}
+.footer-logo em{color:#00c896;font-style:normal}
+.heat td{text-align:center;font-weight:700;color:#1a1a2e;border:1px solid #fff}
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ═══ 封面 ═══ -->
+<div class="cover page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">研究部 · Equity Research</div></div>
+    </div>
+    <div class="cover-eyebrow">Initiating Coverage · 首次覆蓋深度報告</div>
+    <div class="cover-title">川湖科技 2059<br><em>AI 伺服器導軌的隱形霸主</em></div>
+    <div class="cover-subtitle">King Slide Works — The Invisible Standard-Setter of AI Rack Rails</div>
+    <div class="cover-tags">
+      <span class="ctag hl">評等：增加持股 OW</span>
+      <span class="ctag hl">12M 目標價 NT$6,950</span>
+      <span class="ctag">上檔 +12.5%</span>
+      <span class="ctag">AI 機櫃導軌</span>
+      <span class="ctag">市占 80%+</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">$<em>6,950</em></div><div class="cstat-label">12M 目標價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>OW</em></div><div class="cstat-label">投資評等</div></div>
+    <div class="cstat"><div class="cstat-num"><em>76</em>%</div><div class="cstat-label">2025 毛利率</div></div>
+    <div class="cstat"><div class="cstat-num"><em>+172</em>%</div><div class="cstat-label">5 月營收 YoY</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 6 月 8 日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ═══ P2 投資摘要 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資摘要 — 增加持股（OW），12M 目標價 NT$6,950</h1>
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">6,950<em> 元</em></div><div class="kpi-lbl">12M 目標價（PE 法）</div></div>
+    <div class="kpi"><div class="kpi-val">6,180<em> 元</em></div><div class="kpi-lbl">現價（6/8 漲停）</div></div>
+    <div class="kpi gold"><div class="kpi-val">+12.5%</div><div class="kpi-lbl">上檔空間 → OW</div></div>
+    <div class="kpi green"><div class="kpi-val">24.7x</div><div class="kpi-lbl">2027E forward PE</div></div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">川湖科技 King Slide</div><div class="co-ticker">2059.TW · 電子零組件 · 上市</div></div>
+      <div class="co-badge"><span class="badge ow">增加持股 OW</span><span style="color:rgba(255,255,255,.7);font-size:11px">12M TP 6,950</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">~5,890 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+172%</div><div class="co-metric-label">5 月營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">39.9%</div><div class="co-metric-label">2025 ROE</div></div>
+      <div class="co-metric"><div class="co-metric-val">~1.5%</div><div class="co-metric-label">現金殖利率</div></div>
+    </div>
+    <div class="co-body">
+      <p style="margin:0">川湖是全球 AI 伺服器導軌（rail kit）事實上的規格制定者，業界估市占 <strong>80%+</strong>。靠 20 年 Server Kit 累積的專利、製程與「客戶今日提需求、下週即可給樣品」的開發速度，把過去被視為「便宜五金」的機構件，做成毛利率 <strong>76–78%</strong>、營益率 <strong>69%</strong>、ROE <strong>40–54%</strong> 的高獲利結構。2025–2027 正逢 AI 機櫃「數量 × 單價」雙升的黃金擴張期。</p>
+    </div>
+  </div>
+
+  <h2 class="ch">核心結論：好公司、好題材，但今日漲停已吃掉大半安全邊際</h2>
+  <p>基本面爆發力幾無爭議——5 月單月營收 37.91 億（+172% YoY）首破 30 億，GB300 放量＋VR200 接棒，能見度延伸至 2029。但股價於 6/8 因 5 月營收鎖漲停創高（6,180），<strong>即便最樂觀賣方目標價（6,635–6,650）也僅剩 ~7–8% 上檔</strong>。GiS 以 2027E EPS 250 × 目標 PE 27x 推得 12M 目標價 6,950，上檔 +12.5%，落於估值方法論 §4.3 之「增加持股（OW）」格（5%~15%）。<strong>標的品質支持 OW，但進場時機（而非品質）才是當前主要決策變數</strong>。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>投資摘要 · 川湖 2059</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ═══ P3 摘要圖表 + Top5 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">五大要點（Top-5 Takeaways）</h1>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>結構性成長，非短期泡沫。</strong>北美四大 CSP 2026 capex 估年增 64–86%，約半數投入資料中心；GB300 機櫃 2026 估出貨 5.5 萬櫃（+129%），VR200 H2 接棒。導軌是 AI 機櫃量價齊升的直接受益鏈。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>高毛利結構由 ASP 與專利支撐。</strong>AI 導軌 ASP 為傳統 2–3 倍，毛利率站上 76–78%；公司「不主動降價」且以專利組合防禦仿冒，毛利結構已被市場接受。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>淡季不淡、稼動率仍有空間。</strong>1Q26 季增 10.1%（過去 Q1 多為淡季）；管理層稱現稼動率未破 80%，二廠滿載單月營收可遠超 33 億，產能尚未見天花板。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>業外匯損會干擾帳面 EPS。</strong>240 億美元部位現金使單季業外大幅波動——2Q25 台幣急升匯損 −20.68 億，把 EPS 砍到 6.45。須與營運獲利切割看待，這也是市場誤判的來源。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">⑤</span><span><strong>估值是唯一的真議題。</strong>6/8 漲停後 forward PE 約 29x（2026E）／25x（2027E），賣方 TP 離散度極大（4,386–6,650）。GiS 給 OW 而非 Buy，反映「品質無虞、但價格已大幅反映」。</span></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">年度營收與 EPS 軌跡</div>
+      <div class="chart-sub">資料來源：MOPS／公告，2026F 為 GiS 預估</div>
+      <div class="chart-container" style="height:230px"><canvas id="chSummary1"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">毛利率 / 營益率 / ROE 趨勢</div>
+      <div class="chart-sub">資料來源：公告，GiS 整理</div>
+      <div class="chart-container" style="height:230px"><canvas id="chSummary2"></canvas></div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>投資摘要</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P4 投資論點 Bull/Bear ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資論點 — 多空對辯</h1>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>看多論點（Bull）</h4>
+      <div class="risk-item"><strong>1. AI 機櫃量價雙升的純度最高標的。</strong>滑軌較 ODM 系統廠更早出貨，月營收是 AI 拉貨領先指標；GB300 單櫃導軌產值比 GB200 高 30–50%。</div>
+      <div class="risk-item"><strong>2. 80%+ 市占＋規格制定權。</strong>幾乎所有 2029 後新專案的設計夥伴，後進者在更短設計週期下難追上。</div>
+      <div class="risk-item"><strong>3. 獲利品質頂尖。</strong>76–78% 毛利、69% 營益、40–54% ROE，且費用率僅 ~7%，自由現金流爆發。</div>
+      <div class="risk-item"><strong>4. 多平台、多機櫃滲透。</strong>從運算機櫃擴展到網路／CPO switch／電源／儲存機櫃，TAM 隨資料中心整體機櫃數放大。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>看空論點（Bear）</h4>
+      <div class="risk-item"><strong>1. 估值已大幅反映。</strong>6/8 漲停創高，forward PE ~25–29x，連最樂觀賣方 TP 也僅剩個位數上檔。</div>
+      <div class="risk-item"><strong>2. AI Capex 週期風險。</strong>擴產多綁美系 CSP，一旦 capex 放緩，需求與稼動率波動會被放大。</div>
+      <div class="risk-item"><strong>3. Second source 與仿冒。</strong>ODM 基於供應安全要求第二供應商；中國仿冒與價格戰為結構性風險。</div>
+      <div class="risk-item"><strong>4. 匯損干擾＋低殖利率。</strong>業外大幅波動使帳面 EPS 失真；殖利率僅 ~1%，價值型資金支撐薄弱。</div>
+    </div>
+  </div>
+  <h2 class="ch">GiS 綜合判斷</h2>
+  <blockquote><strong>GiS 觀點：</strong>看多論點在「基本面」維度幾乎全勝，看空論點則集中在「估值與週期」維度。換言之，這不是「公司好不好」的問題，而是「現價是否還留有風險報酬」的問題。在 6/8 漲停價 6,180，我們認為品質溢價合理、但安全邊際已薄，故給予<strong>增加持股（OW）</strong>而非買進，並對進場時機高度敏感（見估值章評等敏感度）。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>投資論點</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P5 評等與目標價 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">評等與目標價 — 三情境</h1>
+  <p>GiS 以 <strong>PE-based 為主方法</strong>（捕捉高成長），DCF 為保守交叉驗證，Comps 為相對定位，12M 估值錨定 2027E EPS。目標 PE 採 PEG ≈ 1.0（對應 2025–28 營益 CAGR ~30%）得 27x，介於保守方 20x（PEG 0.8）與積極方 34x（PEG 1.2）之間。</p>
+  <table>
+    <thead><tr><th>情境</th><th>機率</th><th>2026E EPS</th><th>2027E EPS</th><th>目標 PE</th><th>目標價</th><th>vs 6,180</th></tr></thead>
+    <tbody>
+      <tr><td>保守</td><td class="num">25%</td><td class="num">182</td><td class="num">210</td><td class="num">22x</td><td class="num">4,620</td><td class="num neg">−25.2%</td></tr>
+      <tr><td>基礎</td><td class="num">50%</td><td class="num">210</td><td class="num">250</td><td class="num">27x</td><td class="num hi">6,750</td><td class="num pos">+9.2%</td></tr>
+      <tr><td>樂觀</td><td class="num">25%</td><td class="num">245</td><td class="num">300</td><td class="num">32x</td><td class="num">9,600</td><td class="num pos">+55.3%</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">機率加權</td><td class="num">100%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num hi" style="color:#00875a;font-weight:800">6,950</td><td class="num pos" style="font-weight:800">+12.5%</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap">
+    <div class="chart-title">三情境 2027E EPS 與目標價</div>
+    <div class="chart-sub">GiS 預估</div>
+    <div class="chart-container" style="height:215px"><canvas id="chScenEPS"></canvas></div>
+  </div>
+  <div class="callout gold"><div class="callout-title">⚠ 評等高度價格敏感</div>本評等錨定 6/8 漲停價 6,180。若續漲至 <strong>~6,620 以上</strong>，上檔壓縮至 &lt;5% → 降為<strong>中立（N）</strong>；若回測 <strong>~6,000 以下</strong>，上檔回升 &gt;15% → 升為<strong>買進（Buy）</strong>。</div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>評等與目標價</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ 章節封面 壹 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div><div class="sec-eyebrow">Company &amp; Business Model</div><div class="sec-line"></div>
+  <div class="sec-title">公司與商業模式</div>
+  <div class="sec-desc">從 1986 年家具五金，到全球 AI 伺服器導軌龍頭——一家把機構件做成 76% 毛利率的公司，它的護城河來自哪裡？</div>
+</div>
+
+<!-- ═══ P7 公司簡介 + 里程碑 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹之一、公司簡介</h1>
+  <p>川湖科技（King Slide Works，2059.TW）成立於 <strong>1986 年</strong>，總部與主力廠房位於高雄市路竹區，<strong>2008 年</strong>上市。以家具五金（抽屜滑軌、鉸鏈）起家，自有品牌 King Slide 行銷全球，再從工業滑軌一路升級為伺服器導軌與高階機構件大廠。股本僅 9.53 億元（95.3 百萬股），為台股典型「小股本、高股價」千金股。</p>
+  <p><strong>廠房分布：</strong>路竹廠（鋼珠滑軌、烤漆滑軌、鉸鏈）；川益廠（伺服器導軌、高階功能性導軌——AI 主力產線，二廠已貢獻營收、投資約 20 億）；美國德州休士頓廠（2026 年 6 月認證、9–10 月量產，主攻在地供應與備援）。</p>
+  <h2 class="ch">關鍵里程碑</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">1986 / 2008</div><div class="tl-spec">起家 → 上市</div><div class="tl-tech">家具五金起家，2008 掛牌切入伺服器滑軌</div></div>
+    <div class="tl-item"><div class="tl-year">2018–2023</div><div class="tl-spec">伺服器轉型</div><div class="tl-tech">Server rail 占比升至 6–7 成；2023 庫存修正營收 −26%</div></div>
+    <div class="tl-item active"><div class="tl-year">2024–2026 ← 現在</div><div class="tl-spec">AI 加速期</div><div class="tl-tech">GB 系列放量，毛利率躍升 76–78%，5 月營收首破 30 億</div></div>
+    <div class="tl-item next"><div class="tl-year">2027–2029</div><div class="tl-spec">VR / ASIC 擴張</div><div class="tl-tech">VR200 放量、美台新廠開出、機櫃多元滲透</div></div>
+  </div>
+  <h2 class="ch">產品組合（伺服器導軌占壓倒性比重）</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">營收 by 產品線（NT$ 億元，堆疊）</div>
+    <div class="chart-sub">資料來源：券商整理、GiS 彙編（2026F 為 GiS 預估）</div>
+    <div class="chart-container" style="height:215px"><canvas id="chRevMix"></canvas></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>壹 · 公司簡介</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P8 商業模式 收入/成本 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹之二、商業模式：收入與成本結構</h1>
+  <h2 class="ch">收入結構</h2>
+  <p>收入引擎壓倒性集中在伺服器導軌：2025 年 Server rail 占約 88%，2026Q1 升至 92–93%，廚具退到 7–8%。AI 伺服器導軌 <strong>ASP 約傳統伺服器的 2–3 倍</strong>，因此「組合往 AI 傾斜」本身即是毛利與營收的雙重推升力。最終需求為美系 CSP／ODM，台灣為主力製造基地，美國廠 2026H2 起補充在地供應。</p>
+  <table>
+    <thead><tr><th>產品（NT$ 百萬）</th><th>2024</th><th>2025E</th><th>2026F</th><th>2025 占比</th></tr></thead>
+    <tbody>
+      <tr><td>伺服器導軌 Server rail</td><td class="num">8,400</td><td class="num">15,380</td><td class="num pos">20,273</td><td class="num hi">88%</td></tr>
+      <tr><td>廚具導軌 Kitchen</td><td class="num">1,362</td><td class="num">1,750</td><td class="num">1,847</td><td class="num">10%</td></tr>
+      <tr><td>鉸鏈 Hinges</td><td class="num">164</td><td class="num">153</td><td class="num">157</td><td class="num">1%</td></tr>
+      <tr><td>其他</td><td class="num">203</td><td class="num">218</td><td class="num">159</td><td class="num">1%</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">合計（億元）</td><td class="num">101.3</td><td class="num">175.0</td><td class="num" style="font-weight:800">224.4+</td><td class="num">100%</td></tr>
+    </tbody>
+  </table>
+  <h2 class="ch">成本結構 — 76% 毛利率怎麼來的</h2>
+  <ul>
+    <li><strong>高 ASP 組合</strong>：AI 導軌 ASP 2–3 倍於傳統，組合升級直接推升毛利率至 76–78%。</li>
+    <li><strong>高度自動化＋自製設備與模具</strong>：壓低單位成本，折舊具優勢。</li>
+    <li><strong>低費用率（~7%）</strong>：研發為主；1Q26 因春節急單空運費一次性增約 2 億，營益率短暫降至 67.1%（長期目標 ~69%）。</li>
+    <li><strong>業外＝匯率變數</strong>：240 億美元現金部位使單季業外大幅波動，須與營運獲利切割（見財務章）。</li>
+  </ul>
+  <blockquote><strong>GiS 核心觀點：</strong>川湖的毛利結構不是「省成本」省出來的，而是「訂價權」賺出來的——只要 AI 導軌的技術門檻與規格主導權維持，76% 毛利率就具備結構性而非週期性。這是它與一般機構件廠（毛利 20–30%）最本質的差別。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>壹 · 商業模式</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P9 護城河 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹之三、競爭優勢（Moat）</h1>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>技術與專利壁壘。</strong>AI 導軌需同時滿足高承重（GB300→VR200 機櫃功耗由 ~1.4kW 升至 ~2.3kW）、高精度、長滑動壽命、各平台機構整合與液冷兼容。公司以專利組合為主護城河，並於中國對競爭者提侵權訴訟、法院已認定其專利價值，歷史提告勝訴。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>規格制定權。</strong>「川湖技術開到哪裡，全球規格就到哪裡」；為幾乎所有 2029 年後新專案設計夥伴，構成事實上的標準制定。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>客戶 lock-in。</strong>終端已習慣其介面、早期 design-in、高客製化形成「產品＋設計」雙鎖定；與大客戶合作強調 IP 不外流，提升新平台優先共同開發意願。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>開發速度。</strong>「客戶今日提需求、最快下週給樣品」——在 GB200→GB300→VR200→ASIC 快速迭代下，速度即市占。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">⑤</span><span><strong>規模與市占。</strong>業界估 AI 導軌市占 80%+，規模帶來製造與營運效率，後進者在更短設計週期下難追。</span></div>
+  </div>
+  <h2 class="ch">護城河的可持續性檢驗</h2>
+  <p>GiS 認為川湖護城河的真正考驗不在「技術能否維持領先」（短期無虞），而在「<strong>客戶為了供應安全是否願意扶植 second source</strong>」。公司主張對手不能直接使用其專利技術，但長期市占仍可能被部分分食。我們在保守情境中已假設市占被稀釋 5–8%（見估值章）。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>壹 · 競爭優勢</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P10 管理層治理 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹之四、管理層與公司治理</h1>
+  <table>
+    <thead><tr><th>職務</th><th>姓名</th><th>角色與觀察</th></tr></thead>
+    <tbody>
+      <tr><td>董事長</td><td>林聰吉</td><td>核心經營家族代表，主導由家具五金轉型伺服器導軌的長期策略；堅持自製設備／模具、高研發、「不主動降價」的高毛利路線。</td></tr>
+      <tr><td>總經理</td><td>林淑珍</td><td>同屬經營家族，負責整體營運；2026/02 法說親自溝通市場疑慮（RVL 事件／仿冒謠言），強調核心競爭力未受動搖。</td></tr>
+      <tr><td>發言人</td><td>王俊強</td><td>對外 IR 窗口，負責法人說明與資訊揭露。</td></tr>
+      <tr><td>簽證會計師</td><td>勤業眾信（Deloitte）</td><td>四大會計師事務所。</td></tr>
+    </tbody>
+  </table>
+  <h2 class="ch">治理觀察（雙面刃）</h2>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>正面</h4>
+      <div class="risk-item">家族長期經營、策略一致性高，敢於投入研發與自製設備建立壁壘。</div>
+      <div class="risk-item">低配息（配發率 ~49%）＝高內部再投資率，支撐美台擴廠與長期成長。</div>
+      <div class="risk-item">財務體質極佳：現金 240 億、近乎無有息負債。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>負面 / 折價因子</h4>
+      <div class="risk-item">董監持股僅 14.09%，家族控股＋低持股的代理結構。</div>
+      <div class="risk-item">對外揭露相對保守（未提供明確財測數字），透明度折價。</div>
+      <div class="risk-item">殖利率僅 ~1%，管理層明言配發率「差不多就這樣」，對價值型資金不友善。</div>
+    </div>
+  </div>
+  <p class="src">資料來源：公司年報、MOPS 公司基本資料、法說會揭露。高階經理人公開資訊有限，本節以公開可查資料整理。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>壹 · 管理層治理</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ 章節封面 貳 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div><div class="sec-eyebrow">Industry &amp; Competition</div><div class="sec-line"></div>
+  <div class="sec-title">產業與競爭格局</div>
+  <div class="sec-desc">AI 資料中心大擴產，使高階導軌從「附屬零件」變成「隱形關鍵零組件」。產業天花板有多高？川湖的 80% 市占能守多久？</div>
+</div>
+
+<!-- ═══ P12 產業洞察 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳之一、產業洞察 — AI Capex 驅動需求質變</h1>
+  <p>導軌需求 ≈ <strong>AI 機櫃出貨量 × 單櫃導軌價值</strong>。兩者在 2025–2027 同步放大：四大 CSP 2026 capex 估年增 64–86%、約半數投入資料中心；GB300 機櫃估出貨 5.5 萬櫃（+129%），單櫃導軌產值比 GB200 高 30–50%；應用更從運算機櫃擴展到網路／CPO switch／電源／儲存機櫃。</p>
+  <div class="chart-wrap">
+    <div class="chart-title">GB300 機櫃量與單櫃導軌產值（指數化示意）</div>
+    <div class="chart-sub">資料來源：產業訪談、券商整理、GiS 彙編</div>
+    <div class="chart-container" style="height:210px"><canvas id="chRack"></canvas></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>需求面向</th><th>方向</th><th>對導軌的含意</th></tr></thead>
+    <tbody>
+      <tr><td>CSP Capex</td><td class="pos">+64–86%（2026）</td><td>導軌需求穩定高成長，為 AI capex 領先指標</td></tr>
+      <tr><td>平台迭代</td><td>GB300 → VR200 / ASIC</td><td>功耗／重量抬升，ASP 與技術門檻同步升級</td></tr>
+      <tr><td>機櫃架構</td><td>Rack-level、水冷、CPO</td><td>導軌延伸到全資料中心機櫃族群</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">通用伺服器</td><td class="pos" style="font-weight:700">+10–23%（2026）</td><td style="font-weight:700;color:#00875a">儲存型最強，導軌需求與 AI＋一般伺服器雙週期綁定</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 核心觀點：</strong>導軌產業已不只是「跟著 GPU 伺服器成長」，而是「跟著整體 AI 資料中心機櫃數一起放大」。這個從「單一族群曝險」到「全機櫃滲透」的質變，是我們認為產業 3–5 年仍處高成長＋高毛利黃金期的根本理由。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>貳 · 產業洞察</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P13 平台 roadmap ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳之二、平台藍圖與 ASP 升級</h1>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2024–2025</div><div class="tl-spec">GB200</div><div class="tl-tech">AI 機櫃放量起點，導軌 ASP 數倍於傳統</div></div>
+    <div class="tl-item active"><div class="tl-year">2025–2026 ← 現在</div><div class="tl-spec">GB300</div><div class="tl-tech">5.5 萬櫃(+129%)；單櫃導軌產值比 GB200 高 30–50%</div></div>
+    <div class="tl-item next"><div class="tl-year">2026H2–2027</div><div class="tl-spec">VR200 (Vera Rubin)</div><div class="tl-tech">功耗 ~2.3kW；承重/精度要求再升，ASP 仍有上行</div></div>
+    <div class="tl-item"><div class="tl-year">2027+</div><div class="tl-spec">ASIC 百花齊放</div><div class="tl-tech">各家自研平台導入，多客戶多架構覆蓋</div></div>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-title">機櫃功耗與導軌 ASP 升級（相對指數，傳統伺服器 = 1）</div>
+    <div class="chart-sub">資料來源：產業訪談、GiS 彙編（示意數量級）</div>
+    <div class="chart-container" style="height:225px"><canvas id="chASP"></canvas></div>
+  </div>
+  <p>GPU 功耗從 GB300 約 1.4kW 拉高到 VR200 約 2.3kW，機櫃整體重量暴增，導軌需承受更大重量與長期滑動壽命，技術門檻明顯拉高。伺服器設計往整機櫃（Rack-level）與液冷架構轉型，使高階導軌單價顯著優於傳統產品——這是「產品升級帶動結構性毛利抬升」的核心機制。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>貳 · 平台藍圖</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P14 競爭分析 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳之三、競爭分析</h1>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">AI 伺服器導軌市占（業界估）</div>
+      <div class="chart-sub">GiS 彙編</div>
+      <div class="chart-container" style="height:200px"><canvas id="chShare"></canvas></div>
+    </div>
+    <div class="callout green" style="align-self:center">
+      <div class="callout-title">為何 80% 市占可持續</div>
+      <ul style="margin:0">
+        <li>專利＋客製化＋早期設計介入三重綁定</li>
+        <li>開發速度（樣品週級）後進者難複製</li>
+        <li>更短設計週期使對手追趕窗口縮小</li>
+        <li>客戶 IP 信任＝新平台優先共同開發</li>
+      </ul>
+    </div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>對手</th><th>區域</th><th>定位</th><th>對川湖威脅</th></tr></thead>
+    <tbody>
+      <tr><td>Accuride</td><td>美國</td><td>老牌工業/伺服器滑軌</td><td class="pos">低（高階迭代落後）</td></tr>
+      <tr><td>General Devices</td><td>美國</td><td>利基型滑軌</td><td class="pos">低（規模小）</td></tr>
+      <tr><td>Jonathan</td><td>美國</td><td>客製化機構件</td><td class="pos">低（偏防衛/工控）</td></tr>
+      <tr><td>Repon 等</td><td>台灣</td><td>產業景氣對照樣本</td><td>中（追蹤對手）</td></tr>
+      <tr><td>中國仿冒者</td><td>中國</td><td>低價切入</td><td class="neg">中（價格戰/訴訟）</td></tr>
+      <tr><td>Blum / Hettich / Grass</td><td>歐洲</td><td>家具五金龍頭</td><td>—（僅廚具區塊）</td></tr>
+    </tbody>
+  </table>
+  <p class="src">註：內文競爭比較以匿名／產業地圖具名為原則；同業公司名稱於產業地圖必要時具名。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>貳 · 競爭分析</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ 章節封面 參 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div><div class="sec-eyebrow">Financial Analysis</div><div class="sec-line"></div>
+  <div class="sec-title">財務分析與預估</div>
+  <div class="sec-desc">營收從月十幾億躍升至單月近 38 億，毛利率自 69% 台階拉到 76–78%。但帳面 EPS 為何被匯損干擾？三情境又怎麼展開？</div>
+</div>
+
+<!-- ═══ P16 歷史財務 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參之一、歷史財務（公告，2023–2025）</h1>
+  <table>
+    <thead><tr><th>項目（NT$ 百萬）</th><th>2023</th><th>2024</th><th>2025</th></tr></thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">5,763</td><td class="num">10,129</td><td class="num">17,501</td></tr>
+      <tr><td>營收 YoY</td><td class="num neg">−26.1%</td><td class="num pos">+75.8%</td><td class="num pos">+72.8%</td></tr>
+      <tr><td>毛利率</td><td class="num">61.3%</td><td class="num">69.1%</td><td class="num hi">76.05%</td></tr>
+      <tr><td>營業利益</td><td class="num">2,888</td><td class="num">6,101</td><td class="num">12,089</td></tr>
+      <tr><td>營益率</td><td class="num">50.1%</td><td class="num">60.2%</td><td class="num hi">69.07%</td></tr>
+      <tr><td>業外淨額</td><td class="num">+538</td><td class="num">+1,688</td><td class="num neg">+335（2Q −2,068）</td></tr>
+      <tr><td>稅後淨利</td><td class="num">2,704</td><td class="num">6,156</td><td class="num">9,837</td></tr>
+      <tr><td>EPS（公告）</td><td class="num">28.38</td><td class="num">64.59</td><td class="num hi">103.23</td></tr>
+      <tr><td>ROE</td><td class="num">16.9%</td><td class="num">32.6%</td><td class="num">39.9%</td></tr>
+      <tr><td>現金股利</td><td class="num">14.19</td><td class="num">32.20</td><td class="num">51.00</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap">
+    <div class="chart-title">季營收與毛利率（1Q25–4Q26F）</div>
+    <div class="chart-sub">資料來源：公告，2Q26F 起為 GiS 預估</div>
+    <div class="chart-container" style="height:215px"><canvas id="chQtr"></canvas></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>參 · 歷史財務</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P17 季度趨勢 + 匯損 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參之二、季度趨勢與 2Q25 匯損事件</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>季</th><th>營收</th><th>毛利率</th><th>營益率</th><th>業外</th><th>稅後</th><th>EPS</th></tr></thead>
+    <tbody>
+      <tr><td>1Q25</td><td class="num">3,954</td><td class="num">76.0%</td><td class="num">68.9%</td><td class="num pos">+412</td><td class="num">2,511</td><td class="num">26.35</td></tr>
+      <tr><td>2Q25</td><td class="num">4,229</td><td class="num">77.5%</td><td class="num">70.1%</td><td class="num neg">−2,068</td><td class="num">614</td><td class="num neg hi">6.45</td></tr>
+      <tr><td>3Q25</td><td class="num">4,369</td><td class="num">74.6%</td><td class="num">68.1%</td><td class="num pos">+1,021</td><td class="num">3,197</td><td class="num">33.55</td></tr>
+      <tr><td>4Q25</td><td class="num">4,949</td><td class="num">76.1%</td><td class="num">69.2%</td><td class="num pos">+970</td><td class="num">3,514</td><td class="num">36.88</td></tr>
+      <tr><td>1Q26</td><td class="num">5,450</td><td class="num hi">77.7%</td><td class="num">67.1%</td><td class="num pos">+697</td><td class="num">3,486</td><td class="num">36.58</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><div class="callout-title">為什麼 2Q25 EPS 只有 6.45？——這不是營運出問題</div>2Q25 營業利益 29.66 億（+93% YoY，營益率 70.1%，營運其實創高），但業外淨損達 <strong>−20.68 億</strong>，把稅後砍到 6.14 億、EPS 6.45。原因是公司帳上約 240 億美元部位現金，遭遇 2025 年中<strong>台幣急升</strong>產生大額匯兌損失。這是純會計性、非現金的業外波動，<strong>須與營運獲利切割看待</strong>。反之，1Q26 匯兌利益貢獻 EPS 約 4 元。市場對「帳面 EPS」與「營運獲利」的混淆，正是估值錯位的來源之一。</div>
+  <div class="chart-wrap">
+    <div class="chart-title">月營收與 YoY（2025-01 ~ 2026-05）</div>
+    <div class="chart-sub">資料來源：公司月營收公告</div>
+    <div class="chart-container" style="height:200px"><canvas id="chMonthly"></canvas></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>參 · 季度趨勢</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P18 財務預估 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參之三、財務預估（GiS 三情境）</h1>
+  <p>5 月營收 +172% 後，2 月基期券商原估（2026 營收 26.7–29.3 億）已明顯偏低。GiS 以 4–5 月實績與管理層「Q2&gt;Q1、H2&gt;H1、VR200 Q4 放量」指引重建模型：2Q26 推估營收約 100 億（4 月 25.96＋5 月 37.91 已 63.87 億，6 月即使持平 Q2 即逾 100 億），全年動能顯著上修。</p>
+  <table style="font-size:12px">
+    <thead><tr><th>2026F（NT$ 百萬）</th><th>保守</th><th>基礎</th><th>樂觀</th></tr></thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">32,500</td><td class="num hi">37,500</td><td class="num">42,000</td></tr>
+      <tr><td>營收 YoY</td><td class="num pos">+86%</td><td class="num pos">+114%</td><td class="num pos">+140%</td></tr>
+      <tr><td>毛利率</td><td class="num">75.0%</td><td class="num">76.0%</td><td class="num">77.0%</td></tr>
+      <tr><td>稅後淨利</td><td class="num">17,350</td><td class="num">20,000</td><td class="num">23,350</td></tr>
+      <tr><td>EPS</td><td class="num">182</td><td class="num hi">210</td><td class="num">245</td></tr>
+    </tbody>
+  </table>
+  <table style="font-size:12px">
+    <thead><tr><th>2027F（NT$ 百萬）</th><th>保守</th><th>基礎</th><th>樂觀</th></tr></thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">39,000</td><td class="num hi">47,000</td><td class="num">56,000</td></tr>
+      <tr><td>EPS</td><td class="num">210</td><td class="num hi">250</td><td class="num">300</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap">
+    <div class="chart-title">三情境營收路徑（NT$ 億元）</div>
+    <div class="chart-sub">GiS 預估</div>
+    <div class="chart-container" style="height:190px"><canvas id="chScenRev"></canvas></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>參 · 財務預估</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P19 現金流配息 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參之四、現金流與配息政策</h1>
+  <p>2025 年營運現金流入逾 100 億、每股現金流量約 118.9 元（vs 2024 年 54.4 元），現金及約當現金約 240 億。CapEx 集中於川益二廠與美國休士頓廠，公司強調對毛利率／費用率影響有限。自由現金流 GiS 估 2026F ~190 億、2027F ~250 億。配息政策保守（配發率 ~49%、2026F 現金股利估 ~95 元、殖利率 ~1.5%），管理層明言優先壯大公司。</p>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">營運現金流 vs 自由現金流（NT$ 億元）</div>
+      <div class="chart-sub">公告／GiS 預估</div>
+      <div class="chart-container" style="height:205px"><canvas id="chFCF"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">ROE 趨勢</div>
+      <div class="chart-sub">公告／GiS 預估</div>
+      <div class="chart-container" style="height:205px"><canvas id="chROE"></canvas></div>
+    </div>
+  </div>
+  <blockquote><strong>GiS 觀點：</strong>低殖利率對估值是減分，但 40%+ ROE 下的高再投資率，意味保留盈餘能持續複利擴張產能與技術領先——這是成長股而非價值股的邏輯，定價權重應放在 EPS 成長而非股利。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>參 · 現金流</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ 章節封面 肆 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div><div class="sec-eyebrow">Valuation</div><div class="sec-line"></div>
+  <div class="sec-title">估值分析</div>
+  <div class="sec-desc">PE、DCF、Comps 三法交叉。為什麼 trailing PE 54x 是假象、forward PE 25x 才是真相？為什麼 GiS 給 OW 而非 Buy？</div>
+</div>
+
+<!-- ═══ P21 PE 估值 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之一、PE 估值（主方法）</h1>
+  <div class="callout gold"><div class="callout-title">⚠ Trailing PE 54x 是假象</div>目前 trailing PE 約 54x，係用 2025 年受匯損壓低的 EPS 103.23 計算所致，<strong>不具參考性</strong>。應看 forward：6,180 ÷ 2026E EPS 210 ≈ <strong>29.4x</strong>；÷ 2027E EPS 250 ≈ <strong>24.7x</strong>。</div>
+  <p>歷史上（2010–24）川湖本益比約 17–18x（對應營益 CAGR ~14%、PEG ~1.2），2022 谷底 8x、2025 後因 AI 重評至 30x+。GiS 目標本益比以 2025–28 營益 CAGR ~30% 為基礎、採 <strong>PEG ≈ 1.0 → 27x</strong>，介於保守方 20x（PEG 0.8）與積極方 34x（PEG 1.2）之間，反映 AI 能見度真實、但週期性與已大幅重評的折衷。</p>
+  <table>
+    <thead><tr><th>情境</th><th>2027E EPS</th><th>目標 PE</th><th>目標價</th><th>vs 6,180</th></tr></thead>
+    <tbody>
+      <tr><td>保守</td><td class="num">210</td><td class="num">22x</td><td class="num">4,620</td><td class="num neg">−25.2%</td></tr>
+      <tr><td>基礎</td><td class="num">250</td><td class="num">27x</td><td class="num hi">6,750</td><td class="num pos">+9.2%</td></tr>
+      <tr><td>樂觀</td><td class="num">300</td><td class="num">32x</td><td class="num">9,600</td><td class="num pos">+55.3%</td></tr>
+    </tbody>
+  </table>
+  <h3 class="ch">PE 敏感度（2027E EPS × 目標 PE）→ 目標價</h3>
+  <table class="heat" style="font-size:11.5px">
+    <thead><tr><th>EPS ＼ PE</th><th>22x</th><th>25x</th><th>27x</th><th>30x</th><th>32x</th></tr></thead>
+    <tbody>
+      <tr><td style="background:#0d1b3e;color:#fff">210</td><td style="background:#fde8e6">4,620</td><td style="background:#fdf0e6">5,250</td><td style="background:#fff8e1">5,670</td><td style="background:#eef7f0">6,300</td><td style="background:#e3f3ea">6,720</td></tr>
+      <tr><td style="background:#0d1b3e;color:#fff">250</td><td style="background:#fdf0e6">5,500</td><td style="background:#fff8e1">6,250</td><td style="background:#d7eede;font-weight:800">6,750</td><td style="background:#cfeada">7,500</td><td style="background:#c3e6d2">8,000</td></tr>
+      <tr><td style="background:#0d1b3e;color:#fff">300</td><td style="background:#eef7f0">6,600</td><td style="background:#d7eede">7,500</td><td style="background:#cfeada">8,100</td><td style="background:#bce2cd">9,000</td><td style="background:#aedcc3">9,600</td></tr>
+    </tbody>
+  </table>
+  <p class="src">中心格（基礎情境 250×27x=6,750）以黃底標示；綠愈深＝目標價愈高。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>肆 · PE 估值</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P22 DCF ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆之二、DCF 估值（保守交叉驗證）</h1>
+  <table style="font-size:12px">
+    <thead><tr><th>DCF 假設</th><th>值</th><th>FCF schedule（NT$ 百萬）</th><th>值</th></tr></thead>
+    <tbody>
+      <tr><td>無風險利率 Rf</td><td class="num">1.5%</td><td>2026F</td><td class="num">19,000</td></tr>
+      <tr><td>Beta β</td><td class="num">1.25</td><td>2027F</td><td class="num">25,000</td></tr>
+      <tr><td>風險溢酬 ERP</td><td class="num">6.5%</td><td>2028F</td><td class="num">30,000</td></tr>
+      <tr><td>權益成本 Ke / WACC</td><td class="num">~9.5%</td><td>2029F</td><td class="num">33,000</td></tr>
+      <tr><td>永續成長 g</td><td class="num">4.0%</td><td>2030F</td><td class="num">35,000</td></tr>
+      <tr><td>淨現金</td><td class="num">+24,000</td><td>終值（折現後）</td><td class="num">~398,700</td></tr>
+    </tbody>
+  </table>
+  <p><strong>結果：</strong>EV ≈ 504,900 ＋ 淨現金 24,000 → 權益價值 ≈ 528,900；÷ 95.3M 股 → <strong>每股約 5,550</strong>。</p>
+  <h3 class="ch">DCF 敏感度（WACC × g）→ 每股價值</h3>
+  <table class="heat" style="font-size:11.5px">
+    <thead><tr><th>WACC ＼ g</th><th>3.0%</th><th>3.5%</th><th>4.0%</th><th>4.5%</th><th>5.0%</th></tr></thead>
+    <tbody>
+      <tr><td style="background:#0d1b3e;color:#fff">8.5%</td><td style="background:#d7eede">5,800</td><td style="background:#cfeada">6,200</td><td style="background:#c3e6d2">6,700</td><td style="background:#b5dec8">7,300</td><td style="background:#a6d8bd">8,000</td></tr>
+      <tr><td style="background:#0d1b3e;color:#fff">9.0%</td><td style="background:#eef7f0">5,300</td><td style="background:#e3f3ea">5,650</td><td style="background:#d7eede">6,050</td><td style="background:#cfeada">6,500</td><td style="background:#c3e6d2">7,050</td></tr>
+      <tr><td style="background:#0d1b3e;color:#fff">9.5%</td><td style="background:#fff8e1">4,900</td><td style="background:#f4f9ec">5,200</td><td style="background:#e3f3ea;font-weight:800">5,550</td><td style="background:#d7eede">5,900</td><td style="background:#cfeada">6,350</td></tr>
+      <tr><td style="background:#0d1b3e;color:#fff">10.5%</td><td style="background:#fde8e6">4,300</td><td style="background:#fdf0e6">4,500</td><td style="background:#fff3e0">4,750</td><td style="background:#fff8e1">5,050</td><td style="background:#f4f9ec">5,350</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 觀點：</strong>保守 DCF（5,550，中心格黃底）低於現價 6,180，誠實反映「市場已對長期高成長持續性給予溢價」。DCF 是估值的<strong>下檔風險錨點</strong>而非主方法——對一家成長動能由 AI capex 長週期驅動的公司，DCF 的終值假設主導性過強、可靠度低於 forward PE。我們以 PE 法為主、DCF 為風險提醒。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>肆 · DCF</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P23 Comps ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之三、Comps（相對定位）</h1>
+  <p>川湖在 76% 毛利率、40%+ ROE 上幾無同質可比；以「AI 伺服器機構／散熱／連接器」台廠作相對成長—估值定位（同業具名於產業地圖，研究觀點匿名）。</p>
+  <div class="chart-wrap">
+    <div class="chart-title">同業群：2027E PE vs 毛利率（氣泡＝相對市值）</div>
+    <div class="chart-sub">GiS 彙編；川湖以紅點標示</div>
+    <div class="chart-container" style="height:230px"><canvas id="chComps"></canvas></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>群組統計（2027E PE）</th><th>Max</th><th>75th</th><th>Median</th><th>25th</th><th>Min</th></tr></thead>
+    <tbody>
+      <tr><td>同業 PE 倍數</td><td class="num">28x</td><td class="num">25x</td><td class="num">22x</td><td class="num">19x</td><td class="num">15x</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">川湖 2059</td><td class="num hi" colspan="5" style="text-align:left;font-weight:700;color:#00875a">24.7x（落 Median–75th）；但毛利率 76%、ROE 40%+ 為全群最高 → 目標 27x（≈75th–Max）質量溢價合理</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 觀點：</strong>川湖不該與低毛利的系統 ODM 同倍數比較。在獲利品質（毛利／ROE／訂價權）為全群之冠的前提下，給予 75th–Max 之間的目標倍數（27x）具相對合理性。但 Comps 同時提醒：若 AI 題材降溫使整體群組 de-rating，川湖再高的品質也難獨善其身。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>肆 · Comps</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P24 Football Field + 結論 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆之四、Football Field 與採用結論</h1>
+  <div class="chart-wrap">
+    <div class="chart-title">綜合估值區間（NT$）</div>
+    <div class="chart-sub">各法下緣—上緣；藍線＝現價 6,180，綠線＝GiS 目標價 6,950</div>
+    <div class="chart-container" style="height:240px"><canvas id="chFootball"></canvas></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>方法</th><th>下緣</th><th>中心</th><th>上緣</th><th>權重/角色</th></tr></thead>
+    <tbody>
+      <tr><td>PE（主）</td><td class="num">4,620</td><td class="num hi">6,750</td><td class="num">9,600</td><td>主方法</td></tr>
+      <tr><td>DCF（保守）</td><td class="num">4,500</td><td class="num">5,550</td><td class="num">7,600</td><td>下檔錨點</td></tr>
+      <tr><td>Comps</td><td class="num">4,750</td><td class="num">6,250</td><td class="num">7,000</td><td>相對定位</td></tr>
+      <tr><td>賣方 TP 光譜</td><td class="num">4,386</td><td class="num">—</td><td class="num">6,650</td><td>外部參照</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">GiS 12M 目標價</td><td class="num" colspan="3" style="text-align:center;font-weight:800;color:#00875a">6,950（機率加權）</td><td style="font-weight:700">增加持股 OW</td></tr>
+    </tbody>
+  </table>
+  <div class="callout green"><div class="callout-title">採用結論（依方法論 §4.3 五級制）</div>機率加權目標價 = 0.25×4,620 + 0.50×6,750 + 0.25×9,600 = <strong>6,930 ≈ 6,950</strong>。上檔空間 <strong>+12.5%</strong>（自 6/8 漲停價 6,180），落於 5%~15% → <strong>增加持股（OW）</strong>。</div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>肆 · 結論</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P25 價格三圖（注入）═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之五、股價、估值區間與三情境路徑</h1>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">5 年股價 vs 加權指數（標準化＝100）</div>
+      <div class="chart-sub">當前股價 6,180 · 5Y 相對 alpha = <span id="alphaSpan"></span></div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartRel"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">12M 三情境 Fan Chart</div>
+      <div class="chart-sub">保守 4,620 / 基礎 6,750 / 樂觀 9,600</div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartFan"></canvas></div>
+    </div>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-title">PE Band 河流圖（5 年 TTM EPS × 歷史 PE 帶）</div>
+    <div class="chart-sub">5Y PE 平均 23.8x · ±1σ 14.2–33.4x</div>
+    <div style="position:relative;width:100%;height:235px"><canvas id="chartPE"></canvas></div>
+  </div>
+  <div class="callout gold"><div class="callout-title">⚠ PE Band 讀圖更正（避免誤判）</div>圖中「當前 PE 54.4x」係以 <strong>trailing 2025 EPS 103（受匯損壓低）</strong>計算，位於歷史 +2σ 之上看似極貴，<strong>實為假象</strong>。以 forward 2026E EPS 210 計，PE 僅約 29x、2027E 約 25x，落在歷史平均上緣而非極端高檔。本圖僅供觀察歷史重評軌跡，估值判斷以 forward PE 為準。</div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>肆 · 股價與估值</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ 章節封面 伍 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">伍</div><div class="sec-eyebrow">Risks &amp; Appendix</div><div class="sec-line"></div>
+  <div class="sec-title">風險與附錄</div>
+  <div class="sec-desc">12 項風險矩陣、催化劑日曆、財報明細與資料來源。</div>
+</div>
+
+<!-- ═══ P27 風險矩陣 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍之一、風險矩陣（12 項）</h1>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>產業風險</h4>
+      <div class="risk-item"><strong>AI Capex 放緩／週期反轉</strong>（最大系統性風險）：擴產綁美系 CSP，capex 放緩將放大需求與稼動率波動。</div>
+      <div class="risk-item"><strong>CPU 缺料</strong>：2026Q2 通用伺服器可能受抑（由 ASIC／GB 接棒）。</div>
+      <div class="risk-item"><strong>規格標準化使 ASP 下修</strong>：雙向風險，VR200 後規格再升則 ASP 仍有上行。</div>
+      <div class="risk-item"><strong>地緣／關稅</strong>：在地化要求牽動產地與資本支出節奏。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>公司風險</h4>
+      <div class="risk-item"><strong>Second source 稀釋市占</strong>：CSP/ODM 供應安全要求第二供應商。</div>
+      <div class="risk-item"><strong>美國廠爬坡與量產滑動</strong>：時點已多次調整，初期爬坡慢。</div>
+      <div class="risk-item"><strong>仿冒與專利訴訟成本</strong>：耗管理資源、帶不確定性。</div>
+      <div class="risk-item"><strong>家族治理與透明度折價</strong>：董監持股低、揭露保守。</div>
+    </div>
+  </div>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>財務風險</h4>
+      <div class="risk-item"><strong>匯率業外大幅波動</strong>：240 億美元現金部位，單季業外可大起大落（2Q25 −20.68 億）。</div>
+      <div class="risk-item"><strong>低配息率／低殖利率</strong>：~1% 殖利率，價值型支撐薄弱。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>估值風險</h4>
+      <div class="risk-item"><strong>高基期＋高 PE</strong>：6/8 漲停創高，連最樂觀賣方 TP 也僅剩 ~7–8% 上檔。</div>
+      <div class="risk-item"><strong>賣方估值離散度極大</strong>：2027E EPS 196–223、目標 PE 20–34x、TP 4,386–6,650，估值錨點本身不穩固。</div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>伍 · 風險矩陣</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P28 催化劑 + 敏感度 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">伍之二、催化劑日曆與評等敏感度</h1>
+  <div class="timeline">
+    <div class="tl-item active"><div class="tl-year">2026 Q2–Q3</div><div class="tl-spec">月營收續創高</div><div class="tl-tech">6–8 月營收是否守住 30 億＋；2Q26 法說</div></div>
+    <div class="tl-item next"><div class="tl-year">2026 Q3</div><div class="tl-spec">美國廠量產</div><div class="tl-tech">9–10 月量產認證，產能 +20%</div></div>
+    <div class="tl-item next"><div class="tl-year">2026 Q4</div><div class="tl-spec">VR200 放量</div><div class="tl-tech">下一波成長曲線啟動</div></div>
+    <div class="tl-item"><div class="tl-year">2027 中</div><div class="tl-spec">台灣二廠投產</div><div class="tl-tech">川益二廠滿載＋三/四廠規劃</div></div>
+  </div>
+  <h2 class="ch">評等敏感度（對價格）</h2>
+  <table>
+    <thead><tr><th>股價情境</th><th>上檔空間（vs TP 6,950）</th><th>對應評等</th></tr></thead>
+    <tbody>
+      <tr><td>≤ 6,000</td><td class="num pos">≥ +15.8%</td><td class="pos">買進 Buy</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:700">6,180（現價）</td><td class="num hi">+12.5%</td><td style="font-weight:700">增加持股 OW</td></tr>
+      <tr><td>6,620</td><td class="num">+5.0%</td><td>OW/N 邊界</td></tr>
+      <tr><td>≥ 6,620</td><td class="num neg">&lt; +5%</td><td class="neg">中立 N</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 觀點：</strong>本標的評等對價格高度敏感。基本面支持 OW，但 6/8 漲停已大幅吃掉安全邊際。建議將「進場時機」與「標的品質」分開決策——品質可長期持有，時機則宜等待回檔或營運再超預期重建邊際。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>伍 · 催化劑</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P29 財報明細附錄 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍之三、財報明細附錄</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>年度（NT$ 百萬）</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026F</th><th>2027F</th></tr></thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">7,799</td><td class="num">5,763</td><td class="num">10,129</td><td class="num">17,501</td><td class="num">37,500</td><td class="num">47,000</td></tr>
+      <tr><td>營業毛利</td><td class="num">4,466</td><td class="num">3,532</td><td class="num">7,002</td><td class="num">13,309</td><td class="num">28,500</td><td class="num">35,500</td></tr>
+      <tr><td>毛利率</td><td class="num">57.3%</td><td class="num">61.3%</td><td class="num">69.1%</td><td class="num">76.1%</td><td class="num">76.0%</td><td class="num">75.5%</td></tr>
+      <tr><td>營業利益</td><td class="num">3,753</td><td class="num">2,888</td><td class="num">6,101</td><td class="num">12,089</td><td class="num">25,600</td><td class="num">32,000</td></tr>
+      <tr><td>稅後淨利</td><td class="num">4,056</td><td class="num">2,704</td><td class="num">6,156</td><td class="num">9,837</td><td class="num">20,000</td><td class="num">23,800</td></tr>
+      <tr><td>EPS（元）</td><td class="num">42.56</td><td class="num">28.38</td><td class="num">64.59</td><td class="num">103.23</td><td class="num">210</td><td class="num">250</td></tr>
+      <tr><td>ROE</td><td class="num">28.7%</td><td class="num">16.9%</td><td class="num">32.6%</td><td class="num">39.9%</td><td class="num">~50%</td><td class="num">~45%</td></tr>
+      <tr><td>現金股利（元）</td><td class="num">20.00</td><td class="num">14.19</td><td class="num">32.20</td><td class="num">51.00</td><td class="num">~95</td><td class="num">~115</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px">股本 9.53 億元（95.3 百萬股）；BVPS（1Q26）約 330.85 元；外資持股 ~24.6%、董監 14.09%、投信 ~4.5%；現金及約當現金 ~240 億。2022 稅後 &gt; 營業利益係當年台幣貶值之匯兌利益；2025 稅後 &lt; 營業利益係 2Q25 匯損。2026F/2027F 為 GiS 預估。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>伍 · 財報明細</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P30 資料來源 + 免責 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">資料來源與免責聲明</h1>
+  <h2 class="ch">資料來源（具名）</h2>
+  <p style="font-size:12.5px">公開資訊觀測站（MOPS）合併損益表與公司基本資料；公司月營收／季報公告、法說會 Memo（2026/02、2026/05）與企業日資料；Bloomberg；公司投資人關係（IR）。券商研究觀點（含 Morgan Stanley、Goldman Sachs、CTBC 中信投顧、兆豐國際、宏遠、統一、華南、國票、Daiwa、凱基、元大等）作為共識交叉驗證之用；本報告內文比較時採匿名化處理（保守方／積極方／外資／本土），此段為來源完整列名。tw-stock-scanner 資料庫提供日線收盤價、法人買賣超、月營收與季報 EPS 等公告級數據（健檢 2026-06-08 通過）。</p>
+  <h2 class="ch">方法論聲明</h2>
+  <p style="font-size:12.5px">本報告依 GiS 估值方法論模板撰寫：評等採五級制（§4.3：買進 &gt;15% / 增加持股 5–15% / 中立 ±5% / 減碼 &lt;−5%）；歷史 EPS 以 MOPS／公告為準（§7.6）；估值以 PE 為主、DCF 與 Comps 交叉驗證；三情境含機率加權與 5×5 敏感度。本報告為<strong>研究員（Research Analyst）</strong>觀點，估值方法論驅動、中立、12 個月目標價導向。</p>
+  <h2 class="ch">免責聲明</h2>
+  <p style="font-size:12px;color:#5a6a7a">本報告由 Genesis International Capital 研究部製作，僅供內部研究與專業投資人參考，不構成任何證券之買賣要約或投資建議。報告內容基於本公司認為可靠之來源，但不保證其完整性與準確性。預估數字含重大不確定性，實際結果可能顯著不同。投資人應自行評估風險並承擔投資決策之全部後果。本公司及關係人可能持有報告所述證券之部位。© 2026 Genesis International Capital. 版權所有。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>資料來源與免責</span><span>© 2026 GiS</span></div>
+</div>
+
+<script>
+window.addEventListener('load', function(){
+  const gridX={grid:{display:false},ticks:{font:{size:10}}};
+  const gridY={grid:{color:'#eef2f8'},ticks:{font:{size:10}}};
+  const baseOpt={responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{labels:{boxWidth:12,font:{size:10},padding:10}}}};
+  const C={navy:'#0d1b3e',blue:'#1a3a6e',teal:'#00a878',green:'#00c896',gold:'#d97706',red:'#c0392b',slate:'#6b7a9a',wine:'#5e0d2e'};
+
+  new Chart(chSummary1,{data:{labels:['2022','2023','2024','2025','2026F','2027F'],
+    datasets:[
+      {type:'bar',label:'營收(億)',data:[78,57.6,101.3,175,375,470],backgroundColor:C.blue,yAxisID:'y',borderRadius:4,order:2},
+      {type:'line',label:'EPS(元)',data:[42.56,28.38,64.59,103.23,210,250],borderColor:C.gold,backgroundColor:C.gold,borderWidth:2.4,yAxisID:'y1',tension:.2,order:1}
+    ]},
+    options:{...baseOpt,scales:{x:gridX,y:{...gridY,position:'left',title:{display:true,text:'營收(億)',font:{size:9}}},y1:{...gridY,position:'right',grid:{display:false},title:{display:true,text:'EPS',font:{size:9}}}}}});
+
+  new Chart(chSummary2,{type:'line',data:{labels:['2022','2023','2024','2025','2026F','2027F'],
+    datasets:[
+      {label:'毛利率%',data:[57.3,61.3,69.1,76.1,76.0,75.5],borderColor:C.teal,borderWidth:2.2,tension:.2},
+      {label:'營益率%',data:[48.1,50.1,60.2,69.1,68.3,68.0],borderColor:C.blue,borderWidth:2.2,tension:.2},
+      {label:'ROE%',data:[28.7,16.9,32.6,39.9,50,45],borderColor:C.gold,borderWidth:2,borderDash:[4,3],tension:.2}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,ticks:{callback:v=>v+'%',font:{size:10}}}}}});
+
+  new Chart(chRevMix,{type:'bar',data:{labels:['2023','2024','2025','2026F','2027F'],
+    datasets:[
+      {label:'伺服器導軌',data:[43.3,84,153.8,202.7,260],backgroundColor:C.green,borderRadius:4},
+      {label:'廚具導軌',data:[11.6,13.6,17.5,18.5,19],backgroundColor:C.slate,borderRadius:4},
+      {label:'鉸鏈+其他',data:[2.7,3.6,3.7,3.2,3],backgroundColor:'#c8d4e6',borderRadius:4}
+    ]},options:{...baseOpt,scales:{x:{...gridX,stacked:true},y:{...gridY,stacked:true,ticks:{callback:v=>v+'億',font:{size:10}}}}}});
+
+  new Chart(chQtr,{data:{labels:['1Q25','2Q25','3Q25','4Q25','1Q26','2Q26F','3Q26F','4Q26F'],
+    datasets:[
+      {type:'bar',label:'營收(億)',data:[39.5,42.3,43.7,49.5,54.5,100,108,113],backgroundColor:C.blue,yAxisID:'y',borderRadius:4,order:2},
+      {type:'line',label:'毛利率%',data:[76.0,77.5,74.6,76.1,77.7,76.0,75.8,75.5],borderColor:C.gold,borderWidth:2.4,yAxisID:'y1',tension:.2,order:1}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,position:'left'},y1:{position:'right',grid:{display:false},min:60,max:85,ticks:{callback:v=>v+'%',font:{size:9}}}}}});
+
+  new Chart(chMonthly,{data:{labels:['25/01','25/04','25/07','25/10','26/01','26/02','26/03','26/04','26/05'],
+    datasets:[
+      {type:'bar',label:'月營收(億)',data:[12.3,14.5,14.1,15.7,17.7,17.6,19.2,26.0,37.9],backgroundColor:C.teal,yAxisID:'y',borderRadius:4,order:2},
+      {type:'line',label:'YoY%',data:[88,82,59,63,44,31,39,79,172],borderColor:C.red,borderWidth:2.2,yAxisID:'y1',tension:.2,order:1}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,position:'left',ticks:{callback:v=>v+'億',font:{size:9}}},y1:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%',font:{size:9}}}}}});
+
+  new Chart(chRack,{type:'bar',data:{labels:['GB200 機櫃量','GB300 機櫃量','GB200 單櫃產值','GB300 單櫃產值'],
+    datasets:[{label:'指數化',data:[100,229,100,140],backgroundColor:[C.slate,C.green,C.slate,C.gold],borderRadius:4}]},
+    options:{...baseOpt,plugins:{legend:{display:false}},scales:{x:gridX,y:gridY}}});
+
+  new Chart(chASP,{type:'bar',data:{labels:['傳統伺服器','GB200','GB300','VR200'],
+    datasets:[
+      {label:'導軌 ASP(相對)',data:[1,2.2,2.8,3.5],backgroundColor:C.green,borderRadius:4,yAxisID:'y'},
+      {label:'機櫃功耗(kW)',data:[0.5,1.0,1.4,2.3],backgroundColor:C.gold,borderRadius:4,yAxisID:'y1'}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,position:'left',title:{display:true,text:'ASP(x)',font:{size:9}}},y1:{position:'right',grid:{display:false},title:{display:true,text:'kW',font:{size:9}}}}}});
+
+  new Chart(chShare,{type:'doughnut',data:{labels:['川湖','其他'],datasets:[{data:[80,20],backgroundColor:[C.green,'#dde5f0'],borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:c=>c.label+': '+c.raw+'%'}}}}});
+
+  new Chart(chScenEPS,{type:'bar',data:{labels:['保守','基礎','樂觀'],
+    datasets:[
+      {label:'2027E EPS',data:[210,250,300],backgroundColor:[C.slate,C.green,C.gold],borderRadius:4,yAxisID:'y'},
+      {label:'目標價',data:[4620,6750,9600],type:'line',borderColor:C.wine,borderWidth:2.4,yAxisID:'y1',tension:.1}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,position:'left',title:{display:true,text:'EPS',font:{size:9}}},y1:{position:'right',grid:{display:false},title:{display:true,text:'TP',font:{size:9}}}}}});
+
+  new Chart(chScenRev,{type:'bar',data:{labels:['2025','2026F','2027F'],
+    datasets:[
+      {label:'保守',data:[175,325,390],backgroundColor:C.slate,borderRadius:3},
+      {label:'基礎',data:[175,375,470],backgroundColor:C.green,borderRadius:3},
+      {label:'樂觀',data:[175,420,560],backgroundColor:C.gold,borderRadius:3}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,ticks:{callback:v=>v+'億',font:{size:10}}}}}});
+
+  new Chart(chFCF,{type:'bar',data:{labels:['2024','2025','2026F','2027F'],
+    datasets:[
+      {label:'營運現金流',data:[52,113,210,260],backgroundColor:C.blue,borderRadius:4},
+      {label:'自由現金流',data:[49,103,190,250],backgroundColor:C.green,borderRadius:4}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,ticks:{callback:v=>v+'億',font:{size:10}}}}}});
+
+  new Chart(chROE,{type:'line',data:{labels:['2022','2023','2024','2025','2026F','2027F'],
+    datasets:[{label:'ROE%',data:[28.7,16.9,32.6,39.9,50,45],borderColor:C.gold,backgroundColor:'rgba(217,119,6,.1)',borderWidth:2.4,fill:true,tension:.2}]},
+    options:{...baseOpt,plugins:{legend:{display:false}},scales:{x:gridX,y:{...gridY,ticks:{callback:v=>v+'%',font:{size:10}}}}}});
+
+  new Chart(chComps,{type:'bubble',data:{datasets:[
+      {label:'川湖 2059',data:[{x:76,y:24.7,r:20}],backgroundColor:'rgba(192,57,43,.7)'},
+      {label:'散熱 A',data:[{x:33,y:23,r:12}],backgroundColor:'rgba(0,168,120,.6)'},
+      {label:'連接器 B',data:[{x:35,y:25,r:11}],backgroundColor:'rgba(26,58,110,.6)'},
+      {label:'機構 C',data:[{x:18,y:17,r:10}],backgroundColor:'rgba(107,122,154,.6)'},
+      {label:'ODM D',data:[{x:10,y:20,r:16}],backgroundColor:'rgba(217,119,6,.6)'}
+    ]},options:{...baseOpt,scales:{x:{...gridY,title:{display:true,text:'毛利率%',font:{size:10}},ticks:{callback:v=>v+'%',font:{size:9}}},y:{...gridY,title:{display:true,text:'2027E PE',font:{size:10}},ticks:{callback:v=>v+'x',font:{size:9}}}}}});
+
+  new Chart(chFootball,{type:'bar',data:{labels:['PE 法(主)','DCF(保守)','Comps','賣方 TP'],
+    datasets:[{label:'估值區間',data:[[4620,9600],[4500,7600],[4750,7000],[4386,6650]],backgroundColor:['rgba(0,200,150,.6)','rgba(107,122,154,.55)','rgba(26,58,110,.55)','rgba(217,119,6,.5)'],borderRadius:4,barPercentage:.6}]},
+    options:{...baseOpt,indexAxis:'y',plugins:{legend:{display:false},
+      annotation:false,
+      tooltip:{callbacks:{label:c=>'區間 '+c.raw[0]+' – '+c.raw[1]}}},
+      scales:{x:{...gridY,min:4000,max:10000,ticks:{font:{size:9}}},y:gridX}}});
+});
+</script>
+<script>
+(function(){
+const PRC_DATES = ["2021-05","2021-08","2021-11","2022-02","2022-05","2022-08","2022-11","2023-02","2023-05","2023-08","2023-11","2024-02","2024-05","2024-08","2024-11","2025-02","2025-05","2025-08","2025-11","2026-02","2026-05"];
+const PRC_NORM = [100,98,125,126,119,118,108,103,112,184,232,278,326,331,370,407,495,816,1010,955,1356];
+const TWII_NORM = [100,101,103,104,95,84,83,90,90,91,98,100,103,108,118,128,131,141,160,183,238];
+const FAN_DATES = ["26/06","26/08","26/10","26/12","27/02","27/04","27/06"];
+const FAN_LO = [6180,5920,5660,5400,5140,4880,4620];
+const FAN_MID = [6180,6275,6370,6465,6560,6655,6750];
+const FAN_HI = [6180,6750,7320,7890,8460,9030,9600];
+const PE_DATES=["2022-01","2022-07","2023-01","2023-07","2024-01","2024-07","2025-01","2025-07","2026-01","2026-05"];
+const PE_ACTUAL=[490,406,388,628,1040,1325,1570,2240,3920,5620];
+const PE_M1=[311,438,393,463,648,1037,1466,1466,1466,1466];
+const PE_MEAN=[521,752,1011,775,1146,1305,2035,2455,2455,2455];
+const PE_P1=[731,1055,1419,1088,1644,2107,3008,3446,3446,3446];
+const noAnim={animation:false,plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:8}}},responsive:true,maintainAspectRatio:false};
+window.addEventListener('load',function(){
+  new Chart(document.getElementById('chartRel'),{type:'line',data:{labels:PRC_DATES,datasets:[
+    {label:'川湖 2059',data:PRC_NORM,borderColor:'#5e0d2e',backgroundColor:'rgba(94,13,46,.06)',borderWidth:1.6,pointRadius:0,fill:true,tension:.2},
+    {label:'加權指數',data:TWII_NORM,borderColor:'#7b8190',borderWidth:1.2,pointRadius:0,borderDash:[3,3],fill:false,tension:.2}]},
+    options:{...noAnim,scales:{x:{ticks:{maxTicksLimit:6,font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}}}});
+  var a=document.getElementById('alphaSpan');if(a){var d=(PRC_NORM[PRC_NORM.length-1]-TWII_NORM[TWII_NORM.length-1]).toFixed(0);a.textContent='+'+d+' pp';a.style.color='#00875a';a.style.fontWeight='700';}
+  new Chart(document.getElementById('chartFan'),{type:'line',data:{labels:FAN_DATES,datasets:[
+    {label:'樂觀 9600',data:FAN_HI,borderColor:'#00a878',backgroundColor:'rgba(0,168,120,.10)',borderWidth:1.6,pointRadius:0,fill:'+1',tension:0},
+    {label:'基礎 6750',data:FAN_MID,borderColor:'#daa520',backgroundColor:'rgba(218,165,32,.18)',borderWidth:2.2,pointRadius:0,fill:'+1',tension:0},
+    {label:'保守 4620',data:FAN_LO,borderColor:'#c0392b',borderWidth:1.6,pointRadius:0,fill:false,tension:0,borderDash:[4,3]}]},
+    options:{...noAnim,scales:{x:{ticks:{maxTicksLimit:7,font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}}}});
+  new Chart(document.getElementById('chartPE'),{type:'line',data:{labels:PE_DATES,datasets:[
+    {label:'+1σ (33.4x)',data:PE_P1,borderColor:'rgba(192,57,43,.55)',backgroundColor:'rgba(218,165,32,.10)',borderWidth:.9,pointRadius:0,fill:'+1',borderDash:[4,3]},
+    {label:'mean (23.8x)',data:PE_MEAN,borderColor:'rgba(94,13,46,.85)',backgroundColor:'rgba(94,13,46,.06)',borderWidth:1.2,pointRadius:0,fill:'+1'},
+    {label:'-1σ (14.2x)',data:PE_M1,borderColor:'rgba(0,135,90,.6)',borderWidth:.9,pointRadius:0,fill:false,borderDash:[4,3]},
+    {label:'股價',data:PE_ACTUAL,borderColor:'#1a0a2e',borderWidth:2,pointRadius:0,fill:false}]},
+    options:{...noAnim,scales:{x:{ticks:{maxTicksLimit:8,font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}}}});
+});
+})();
+</script>
+</body>
+</html>

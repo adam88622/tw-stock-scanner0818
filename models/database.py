@@ -201,6 +201,102 @@ def init_db():
         CREATE INDEX IF NOT EXISTS idx_disp_date     ON disposition_announcements(announce_date);
         CREATE INDEX IF NOT EXISTS idx_disp_stock    ON disposition_announcements(stock_id);
         CREATE INDEX IF NOT EXISTS idx_disp_period   ON disposition_announcements(period_start, period_end);
+
+        CREATE TABLE IF NOT EXISTS intraday_snapshot (
+            stock_id    TEXT NOT NULL,
+            snapshot_ts TIMESTAMP NOT NULL,
+            cum_volume  INTEGER NOT NULL,
+            last_price  REAL,
+            PRIMARY KEY (stock_id, snapshot_ts)
+        );
+        CREATE INDEX IF NOT EXISTS idx_intraday_snapshot_ts ON intraday_snapshot(snapshot_ts);
+
+        CREATE TABLE IF NOT EXISTS volume_anomaly_cache (
+            id         INTEGER PRIMARY KEY CHECK (id = 1),
+            payload    TEXT NOT NULL,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS taiex_trend (
+            snapshot_ts        TEXT PRIMARY KEY,
+            minute_idx         INTEGER,
+            rvol_forecast      REAL,
+            forecast_eod_value REAL,
+            level              TEXT,
+            ci_low             REAL,
+            ci_high            REAL
+        );
+
+        CREATE TABLE IF NOT EXISTS te_tf_strength_intraday (
+            date        TEXT NOT NULL,
+            ts          TEXT NOT NULL,
+            strength    REAL NOT NULL,
+            te_chg_pct  REAL NOT NULL,
+            tf_chg_pct  REAL NOT NULL,
+            te_close    REAL,
+            tf_close    REAL,
+            base_source TEXT,
+            updated_at  TEXT DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (date, ts)
+        );
+        CREATE INDEX IF NOT EXISTS idx_te_tf_intraday_date ON te_tf_strength_intraday(date);
+
+        CREATE TABLE IF NOT EXISTS te_tf_strength_history (
+            date           TEXT PRIMARY KEY,
+            strength_close REAL NOT NULL,
+            te_chg_pct     REAL NOT NULL,
+            tf_chg_pct     REAL NOT NULL,
+            strength_high  REAL,
+            strength_low   REAL,
+            updated_at     TEXT DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS option_daily (
+            date        TEXT    NOT NULL,               -- ISO 'YYYY-MM-DD'
+            contract    TEXT    NOT NULL,               -- '202607W1' / '202607F1' / '202607'(月選=YYYYMM)
+            strike      REAL    NOT NULL,               -- 履約價
+            cp          TEXT    NOT NULL CHECK(cp IN ('C','P')),
+            close       REAL,                           -- 收盤價（'-'→NULL）
+            settlement  REAL,                           -- 結算價
+            change      REAL,                           -- 漲跌價
+            change_pct  REAL,                           -- 漲跌%（去 % 後 float）
+            volume      INTEGER DEFAULT 0,              -- 成交量
+            oi          INTEGER DEFAULT 0,              -- 未沖銷契約數（OI）
+            expiry      TEXT,                           -- 契約到期日 'YYYYMMDD'
+            updated_at  TEXT    DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (date, contract, strike, cp)    -- 唯一鍵，避免重複列
+        );
+        CREATE INDEX IF NOT EXISTS idx_option_daily_date          ON option_daily(date);
+        CREATE INDEX IF NOT EXISTS idx_option_daily_date_contract ON option_daily(date, contract);
+
+        -- 期貨大額交易人未沖銷部位（僅「到期月份 999999 = 所有月份合計」層級）
+        CREATE TABLE IF NOT EXISTS futures_large_trader (
+            date         TEXT    NOT NULL,           -- ISO 'YYYY-MM-DD'
+            product_code TEXT    NOT NULL,           -- 期貨商品代碼 'CD'(台積電) / 'QF'(小型台積電)
+            trader_type  INTEGER NOT NULL,           -- 0=整體十大(含造市者) 1=特定法人
+            top5_buy     INTEGER DEFAULT 0,          -- 前五大交易人買方部位(口)
+            top5_sell    INTEGER DEFAULT 0,          -- 前五大交易人賣方部位(口)
+            top10_buy    INTEGER DEFAULT 0,          -- 前十大交易人買方部位(口)
+            top10_sell   INTEGER DEFAULT 0,          -- 前十大交易人賣方部位(口)
+            market_oi    INTEGER DEFAULT 0,          -- 全市場未沖銷部位數(口)
+            updated_at   TEXT    DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (date, product_code, trader_type)
+        );
+        CREATE INDEX IF NOT EXISTS idx_flt_date    ON futures_large_trader(date);
+        CREATE INDEX IF NOT EXISTS idx_flt_product ON futures_large_trader(product_code, date);
+
+        -- 股票期貨商品代碼 ↔ 標的股票對照（含大小型與「張/口」換算）
+        CREATE TABLE IF NOT EXISTS stock_futures_map (
+            product_code      TEXT PRIMARY KEY,      -- 'CD' / 'QF'
+            stock_id          TEXT NOT NULL,         -- '2330'
+            stock_name        TEXT,                  -- '台積電'
+            product_name      TEXT,                  -- '台積電期貨' / '小型台積電期貨'
+            is_mini           INTEGER DEFAULT 0,     -- 1=小型契約
+            is_etf            INTEGER DEFAULT 0,     -- 1=標的為 ETF
+            lots_per_contract REAL    DEFAULT 2,     -- 張/口：股票 2 / 小型股票 0.1 / ETF 10 / 小型ETF 1
+            updated_at        TEXT    DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE INDEX IF NOT EXISTS idx_sfm_stock ON stock_futures_map(stock_id);
     """)
 
     conn.commit()
@@ -231,6 +327,15 @@ def upsert_daily_price(conn, stock_id, date, open_price, high_price, low_price,
         (stock_id, date, open_price, high_price, low_price, close_price, volume, trade_value, change_pct)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (stock_id, date, open_price, high_price, low_price, close_price, volume, trade_value, change_pct))
+
+
+def upsert_intraday_snapshot(conn, stock_id, snapshot_ts, cum_volume, last_price):
+    """寫入盤中快照（保留歷史，供爆量預估使用）"""
+    conn.execute("""
+        INSERT OR REPLACE INTO intraday_snapshot
+        (stock_id, snapshot_ts, cum_volume, last_price)
+        VALUES (?, ?, ?, ?)
+    """, (stock_id, snapshot_ts, cum_volume, last_price))
 
 
 def upsert_breakout(conn, stock_id, date, breaks, close_price, change_pct):
@@ -600,3 +705,164 @@ def get_macro_history(conn, indicator, limit=500):
         ORDER BY date DESC LIMIT ?
     """, (indicator, limit)).fetchall()
     return rows
+
+
+# ===== TE/TF 強弱指標 =====
+
+def upsert_te_tf_intraday(conn, date, ts, strength, te_chg_pct, tf_chg_pct,
+                          te_close, tf_close, base_source):
+    """寫入 TE/TF 強弱盤中快照（僅 conn.execute，不自 commit）。"""
+    conn.execute("""
+        INSERT OR REPLACE INTO te_tf_strength_intraday
+        (date, ts, strength, te_chg_pct, tf_chg_pct, te_close, tf_close, base_source)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, (date, ts, strength, te_chg_pct, tf_chg_pct, te_close, tf_close, base_source))
+
+
+def get_te_tf_intraday_series(conn, date):
+    """取得某日 TE/TF 強弱盤中序列（ts 升冪）。"""
+    rows = conn.execute("""
+        SELECT ts, strength, te_chg_pct, tf_chg_pct
+        FROM te_tf_strength_intraday
+        WHERE date = ?
+        ORDER BY ts ASC
+    """, (date,)).fetchall()
+    return rows
+
+
+def upsert_te_tf_history(conn, date, strength_close, te_chg_pct, tf_chg_pct,
+                         strength_high, strength_low):
+    """寫入或更新 TE/TF 強弱日線收盤紀錄（僅 conn.execute，不自 commit）。"""
+    conn.execute("""
+        INSERT INTO te_tf_strength_history
+        (date, strength_close, te_chg_pct, tf_chg_pct, strength_high, strength_low)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ON CONFLICT(date) DO UPDATE SET
+            strength_close=excluded.strength_close,
+            te_chg_pct=excluded.te_chg_pct,
+            tf_chg_pct=excluded.tf_chg_pct,
+            strength_high=excluded.strength_high,
+            strength_low=excluded.strength_low,
+            updated_at=CURRENT_TIMESTAMP
+    """, (date, strength_close, te_chg_pct, tf_chg_pct, strength_high, strength_low))
+
+
+# ===== 選擇權支撐壓力（option_daily） =====
+
+def upsert_option_daily(conn, rows):
+    """
+    寫入選擇權每日行情（僅 conn.execute，commit 由呼叫端負責）。
+    rows: list[dict]（FN-001 fetch_txo_daily 輸出），每筆含
+          {date, contract, strike, cp, close, settlement, change,
+           change_pct, volume, oi, expiry}
+    以 INSERT OR REPLACE 逐列寫入，唯一鍵 (date, contract, strike, cp) 防重複。
+    回傳: int（寫入列數）
+    """
+    n = 0
+    for r in rows:
+        conn.execute("""
+            INSERT OR REPLACE INTO option_daily
+            (date, contract, strike, cp, close, settlement, change,
+             change_pct, volume, oi, expiry, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        """, (
+            r['date'], r['contract'], r['strike'], r['cp'],
+            r.get('close'), r.get('settlement'), r.get('change'),
+            r.get('change_pct'), r.get('volume', 0), r.get('oi', 0),
+            r.get('expiry'),
+        ))
+        n += 1
+    return n
+
+
+def upsert_large_trader(conn, rows):
+    """
+    寫入期貨大額交易人未沖銷部位（僅 conn.execute，commit 由呼叫端負責）。
+    rows: list[dict]（scrapers.taifex_large_trader.fetch_large_trader 輸出），每筆含
+          {date, product_code, trader_type, top5_buy, top5_sell,
+           top10_buy, top10_sell, market_oi}
+    以 INSERT OR REPLACE 逐列寫入，唯一鍵 (date, product_code, trader_type)。
+    回傳: int（寫入列數）
+    """
+    n = 0
+    for r in rows:
+        conn.execute("""
+            INSERT OR REPLACE INTO futures_large_trader
+            (date, product_code, trader_type, top5_buy, top5_sell,
+             top10_buy, top10_sell, market_oi, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        """, (
+            r['date'], r['product_code'], r['trader_type'],
+            r.get('top5_buy', 0), r.get('top5_sell', 0),
+            r.get('top10_buy', 0), r.get('top10_sell', 0),
+            r.get('market_oi', 0),
+        ))
+        n += 1
+    return n
+
+
+def upsert_stock_futures_map(conn, rows):
+    """
+    寫入股票期貨商品代碼對照表（僅 conn.execute，commit 由呼叫端負責）。
+    rows: list[dict]（scrapers.taifex_stock_futures.fetch_stock_futures_list 輸出）。
+    回傳: int（寫入列數）
+    """
+    n = 0
+    for r in rows:
+        conn.execute("""
+            INSERT OR REPLACE INTO stock_futures_map
+            (product_code, stock_id, stock_name, product_name,
+             is_mini, is_etf, lots_per_contract, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        """, (
+            r['product_code'], r['stock_id'], r.get('stock_name'),
+            r.get('product_name'), r.get('is_mini', 0), r.get('is_etf', 0),
+            r.get('lots_per_contract', 2.0),
+        ))
+        n += 1
+    return n
+
+
+def get_option_dates(conn, limit=250):
+    """取得 option_daily 有資料的日期列表（DISTINCT date，DESC）。"""
+    rows = conn.execute(
+        "SELECT DISTINCT date FROM option_daily ORDER BY date DESC LIMIT ?",
+        (limit,)
+    ).fetchall()
+    return [r['date'] for r in rows]
+
+
+def get_option_contracts(conn, date):
+    """
+    取得某日出現的所有契約（DISTINCT），依 expiry 升冪。
+    回傳: list[dict] {contract, expiry}（供前端下拉）。
+    """
+    rows = conn.execute("""
+        SELECT contract, MAX(expiry) AS expiry
+        FROM option_daily
+        WHERE date = ?
+        GROUP BY contract
+        ORDER BY expiry ASC
+    """, (date,)).fetchall()
+    return [{'contract': r['contract'], 'expiry': r['expiry']} for r in rows]
+
+
+def get_option_rows(conn, date, contract):
+    """
+    取得某日某契約的全部 strike/cp 列（含 close/change/change_pct/volume/oi）。
+    回傳: list[sqlite3.Row]，依 strike、cp 升冪。
+    """
+    rows = conn.execute("""
+        SELECT date, contract, strike, cp, close, settlement, change,
+               change_pct, volume, oi, expiry
+        FROM option_daily
+        WHERE date = ? AND contract = ?
+        ORDER BY strike ASC, cp ASC
+    """, (date, contract)).fetchall()
+    return rows
+
+
+def get_latest_option_date(conn):
+    """取得 option_daily 最新一筆有資料的日期。"""
+    row = conn.execute("SELECT MAX(date) AS d FROM option_daily").fetchone()
+    return row['d'] if row and row['d'] else None

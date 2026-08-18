@@ -186,6 +186,11 @@ a:hover { color: var(--link-hover); }
     margin-bottom: 14px;
 }
 
+/* Toggle button only used on mobile; hidden on desktop */
+.filter-bar-toggle {
+    display: none;
+}
+
 .filter-group {
     display: flex;
     align-items: center;
@@ -246,6 +251,44 @@ a:hover { color: var(--link-hover); }
     top: 0;
     z-index: 1;
     padding: 10px 8px;
+}
+
+/* ===== Sortable column indicators ===== */
+.data-table thead th.sortable {
+    user-select: none;
+}
+.data-table thead th .sort-indicator {
+    display: inline-block;
+    width: 10px;
+    margin-left: 4px;
+    opacity: 0.45;
+    font-size: 10px;
+    line-height: 1;
+    color: var(--text-muted);
+}
+.data-table thead th .sort-indicator::before {
+    content: '\25B4\25BE'; /* ▲▼ unsorted */
+    letter-spacing: -2px;
+}
+.data-table thead th.sort-asc .sort-indicator {
+    opacity: 1;
+    color: var(--link-color);
+}
+.data-table thead th.sort-asc .sort-indicator::before {
+    content: '\25B2'; /* ▲ */
+}
+.data-table thead th.sort-desc .sort-indicator {
+    opacity: 1;
+    color: var(--link-color);
+}
+.data-table thead th.sort-desc .sort-indicator::before {
+    content: '\25BC'; /* ▼ */
+}
+.data-table thead th.no-sort {
+    cursor: default;
+}
+.data-table thead th.no-sort .sort-indicator {
+    display: none;
 }
 
 .data-table tbody tr:hover {
@@ -545,27 +588,7 @@ a:hover { color: var(--link-hover); }
     color: #f59e0b !important;
 }
 
-/* ===== Mobile hamburger & overlay ===== */
-.mobile-toggle {
-    display: none;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 1001;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-light);
-    color: var(--text-primary);
-    font-size: 24px;
-    width: 40px;
-    height: 40px;
-    border-radius: 6px;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    padding: 0;
-}
-
+/* ===== Mobile sidebar overlay ===== */
 .sidebar-overlay {
     display: none;
     position: fixed;
@@ -628,6 +651,22 @@ a:hover { color: var(--link-hover); }
     font-size: 20px;
     line-height: 1;
     margin-bottom: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.tab-icon svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+.theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.theme-toggle-btn svg {
+    display: block;
 }
 .tab-label {
     font-size: 10px;
@@ -658,6 +697,35 @@ a:hover { color: var(--link-hover); }
     background: var(--link-color);
     color: #fff;
 }
+
+/* ===== 側欄個股查詢 ===== */
+.sidebar-search {
+    position: relative;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+.sidebar-search input {
+    width: 100%;
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+}
+.sidebar-search input::placeholder { color: var(--text-muted); }
+.sidebar-search input:focus { border-color: var(--link-color); }
+/* 下拉結果沿用 .search-results / .search-result-item，只調位置 */
+.sidebar-search .search-results {
+    left: 12px;
+    right: 12px;
+    top: calc(100% - 4px);
+    max-height: 320px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
+}
+.search-result-item.active { background: var(--border-light); }
 
 /* ===== Mobile Search Bar ===== */
 .mobile-search {
@@ -827,9 +895,6 @@ a:hover { color: var(--link-hover); }
     .content-area {
         overflow-x: hidden;
     }
-    .mobile-toggle {
-        display: none !important;
-    }
     .mobile-tabbar {
         display: flex;
     }
@@ -848,9 +913,58 @@ a:hover { color: var(--link-hover); }
     .top-bar {
         padding: 8px 12px;
     }
-    /* Hide desktop filter bar on mobile, use segment tabs instead */
+    /* Mobile: filter bar becomes a collapsible accordion (collapsed by default) */
     .filter-bar {
-        display: none !important;
+        padding: 8px 10px;
+        margin-bottom: 10px;
+    }
+    .filter-bar-toggle {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 4px 0;
+    }
+    .filter-bar-toggle::after {
+        content: '\25BE'; /* down triangle */
+        font-size: 12px;
+        color: var(--text-muted);
+        transition: transform 0.2s;
+    }
+    .filter-bar.collapsed .filter-bar-toggle::after {
+        transform: rotate(-90deg);
+    }
+    .filter-bar.collapsed .filter-bar-body {
+        display: none;
+    }
+    .filter-bar-body {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        margin-top: 8px;
+    }
+    .filter-bar-body .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+    }
+    .filter-bar-body .filter-group label {
+        font-size: 12px;
+    }
+    .filter-bar-body .filter-group .form-select-sm {
+        font-size: 13px;
+        min-width: 0;
+        width: 100%;
+    }
+    .filter-bar-body .form-check-label {
+        font-size: 13px;
     }
     /* 表格可橫向滾動 */
     .table-responsive,

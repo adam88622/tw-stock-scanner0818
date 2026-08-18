@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!--
+  GiS Genesis International Capital — 優群科技 3217 首次覆蓋報告
+  撰寫日期：2026-05-18
+  PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="優群3217_研究員觀點.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=15000 "file:///Users/chenhongshuo/claude/個股報告/3217/20260518/優群3217_研究員觀點.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>優群科技 3217 — 首次覆蓋 — 買進 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:16px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:22px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:16px 0 9px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 10px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 10px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:12.5px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:17px;font-weight:800;color:#fff}
+.co-ticker{font-size:12.5px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:14px 20px;font-size:12.5px;line-height:1.7}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:14px 16px;margin:12px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13.5px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:4px}
+.kpi-val em{font-size:11.5px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:14px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.5px;font-weight:600;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:19px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:12px 0}
+.tl-item{background:#f0f4fa;padding:14px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12.5px;font-weight:800;margin-bottom:6px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:3px}
+.tl-tech{font-size:10.5px;opacity:.8;line-height:1.4}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.risk-card{border-radius:8px;padding:14px;page-break-inside:avoid;font-size:12px}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13px;font-weight:700;margin-bottom:7px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+p{margin:6px 0 10px;line-height:1.7;font-size:13px}
+ul,ol{padding-left:20px;margin:6px 0 10px;font-size:13px}
+li{margin:3px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:8px 12px;margin:10px 0;color:#1a3a6e;font-size:12.5px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:20px 0}
+.src{font-size:10.5px;color:#9aabb5;display:block;margin-top:5px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;margin:12px 0;font-size:12.5px;line-height:1.65}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:6px}
+.callout.green .callout-title{color:#065f46}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 56px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+.heat-table td{font-size:11.5px;padding:6px 8px;text-align:center}
+.heat-table .hi-low{background:#fef3c7}
+.heat-table .hi-mid{background:#fde68a}
+.heat-table .hi-high{background:#f59e0b;color:#fff}
+.heat-table .heat-center{background:#00c896;color:#fff;font-weight:800}
+.ff-bar{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:12px}
+.ff-method{width:120px;font-weight:600;color:#1a3a6e}
+.ff-range{flex:1;height:24px;background:#eef5f0;border-radius:4px;position:relative}
+.ff-range-bar{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,#3b82f6,#00c896);border-radius:4px;opacity:.55}
+.ff-range-base{position:absolute;top:-4px;bottom:-4px;width:3px;background:#0d1b3e}
+.ff-marker{position:absolute;top:-6px;bottom:-6px;width:2px}
+.ff-marker.current{background:#000}
+.ff-marker.tp{background:#e74c3c}
+</style>
+</head>
+<body>
+
+<!-- 浮水印 -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">研究員觀點 · 估值方法論驅動</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Initiation Report · Q2 2026 · Research Analyst View</div>
+    <div class="cover-title">優群科技 3217<br>從<em>筆電插槽龍頭</em>，<br>到<em>伺服器與 CAMM</em> 三引擎</div>
+    <div class="cover-subtitle">DDR5 Long-DIMM Doubling · CAMM 1%→8% · Metal Bar +30%</div>
+    <div class="cover-tags">
+      <span class="ctag hl">買進 Buy</span>
+      <span class="ctag hl">12M TP 229 元</span>
+      <span class="ctag">+24.5% 上檔</span>
+      <span class="ctag">SO-DIMM/M.2 龍頭</span>
+      <span class="ctag">Apple Metal Bar 獨家</span>
+      <span class="ctag">CAMM 1%→12%</span>
+      <span class="ctag">越南 China+1</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>229</em></div><div class="cstat-label">12M 目標價（元）</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>24.5</em>%</div><div class="cstat-label">上檔空間</div></div>
+    <div class="cstat"><div class="cstat-num"><em>13.50</em></div><div class="cstat-label">2026E EPS（元）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4.8</em>%</div><div class="cstat-label">殖利率</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年5月18日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 2：執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要 — 買進 (Buy)，12M 目標價 229 元</h1>
+
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div>
+        <div class="co-name">優群科技 ARGOSY RESEARCH INC.</div>
+        <div class="co-ticker">3217.TWO · 電子零組件 · 上櫃</div>
+      </div>
+      <div class="co-badge">
+        <span class="badge buy">買進 BUY</span>
+        <span style="font-size:10.5px;color:rgba(255,255,255,.8)">12M TP 229 元</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+24.5%</div><div class="co-metric-label">上檔空間</div></div>
+      <div class="co-metric"><div class="co-metric-val">184</div><div class="co-metric-label">現價（5/15）</div></div>
+      <div class="co-metric"><div class="co-metric-val">13.6x</div><div class="co-metric-label">forward PE</div></div>
+      <div class="co-metric"><div class="co-metric-val">22%</div><div class="co-metric-label">2025 ROE</div></div>
+    </div>
+    <div class="co-body">
+      <strong>定位</strong>：全球 SO-DIMM / M.2 記憶體模組連接器龍頭之一（市佔 >50%），於 2024-2026 年進入結構性轉型期 — 從「PC/NB 周邊代工」升級為「伺服器 Long-DIMM + 次世代 CAMM 模組 + Apple 微型沖壓件」三引擎驅動的高毛利專業廠。<br>
+      <strong>核心數字</strong>：2025 營收 41.48 億（+19.4% YoY），EPS 12.69 元，毛利率 49.9%；管理層 2026 年 5 月最新指引營收年增 10-15%，上半年低個位數成長、下半年雙位數放量。
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">229<em> 元</em></div><div class="kpi-lbl">12M 加權目標價</div></div>
+    <div class="kpi"><div class="kpi-val">13.50<em> 元</em></div><div class="kpi-lbl">2026E EPS（基礎情境）</div></div>
+    <div class="kpi gold"><div class="kpi-val">16x</div><div class="kpi-lbl">Target Forward PE</div></div>
+    <div class="kpi green"><div class="kpi-val">262<em> 元</em></div><div class="kpi-lbl">DCF 內在價值</div></div>
+  </div>
+
+  <h2 class="ch">三大核心論點</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">①</span>
+      <span><strong>伺服器 Long-DIMM 倍增引擎啟動。</strong>2026 年 R-DIMM 出貨量預期年增 1 倍，Meta 已導入、Google 自測試轉量產，整體 Long-DIMM 營收年增 30%+，伺服器占整體營收從 5-6% 升至 7%。Long-DIMM 是 ASIC 伺服器與一般雲端建置的關鍵介面，需求由 CSP capex 與 DDR5 滲透雙重支撐。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">②</span>
+      <span><strong>CAMM 系列從 1% 暴漲至 8%，未來 12%。</strong>Lenovo 高階 NB 666pin CAMM 主導客戶，月產能從 5-10K 跳升至 60-70K；HP 規劃導入；中系 NB 客戶增加。LPCAMM2 與 JEDEC、Intel 共同開發，2027 年部分 DDR6 平台改採 LPDDR6 CAMM；SOCAMM2 目標 NVIDIA Rubin 平台第四供應商。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">③</span>
+      <span><strong>Metal Bar 高毛利第二支腳，Apple 獨家 5+ 年。</strong>美系手機品牌微型沖壓件獨家供應，每支 6-7 顆，2026 年 +30% 年增，訂單能見度看到 8 月；NB Wi-Fi 模組 ASP 倍增；1Q26 已占營收 11%，金額年增 42%；越南廠 3Q26 上線 Metal Bar 產線，China+1 完成。</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 3：投資論點 — Bull case ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資論點 — Bull case（上行驅動）</h1>
+
+  <h2 class="ch">Bull 1 — R-DIMM 倍增 + CAMM 暴增 + Metal Bar +30% 三引擎齊放</h2>
+  <p>過去 5 年優群營收基本盤約 27-29 億（2020-2022），EPS 在 6.8-7.2 元之間徘徊，反映 PC/NB 後 COVID 高基期消化壓抑成長。2023 起進入結構性向上拐點，DDR5 滲透率拉升 + Long-DIMM CSP 客戶導入 + Metal Bar Apple 訂單放大，2024 EPS 跳到 11.25，2025 進一步到 12.69，<strong>兩年合計增長 +85%</strong>。</p>
+  <p>2026 年三大引擎接棒：(1) <strong>伺服器 Long-DIMM/R-DIMM 倍增</strong> — Meta 既有、Google 自 2026 拉貨放量，R-DIMM 出貨量 +100%，Long-DIMM 整體營收 +30%+；(2) <strong>CAMM/CABB 1%→8% 暴增</strong> — Lenovo 高階 NB 666pin CAMM 月產能跳升 6-7 倍，HP 規劃導入，中系客戶量產；(3) <strong>Metal Bar +30%</strong> — Apple 訂單能見度 8 個月 + NB Wi-Fi 模組 ASP 倍增 + 越南產線 3Q26 上線。</p>
+
+  <h2 class="ch">Bull 2 — DDR6 與 SOCAMM2 提前卡位的中長期選擇權</h2>
+  <p><strong>DDR6 Long-DIMM Pin 數從 288 拉升至近 400</strong>，公司於「第一時間送樣」JEDEC 與 Intel，2027 年是 DDR6 第一個導入年度，管理層明言「會優於 DDR5」。優群長期累積的 SI（信號完整性）設計能力與 12-18 個月認證壁壘，使新進廠商難以追趕。</p>
+  <p><strong>SOCAMM2 已納協會標準</strong>，NVIDIA Rubin 平台採用，初期供應商為 Amphenol、嘉澤、鴻海，優群目標成為 <strong>第四供應商</strong>，與兩家台灣 EMS 測試中。雖然短期貢獻有限，2027-2028 年若切入有望大幅拉抬營收與估值倍數，類似嘉澤從 CPU Socket 切入 AI 伺服器的軌跡。</p>
+
+  <h2 class="ch">Bull 3 — 越南廠 China+1 完成 + 高毛利結構</h2>
+  <p>2025 4Q 越南興安廠正式量產 SO-DIMM/M.2/Long-DIMM，1Q26 進入規模生產；3Q26 導入 Metal Bar 產線，2027 年目標營收占比雙位數。越南廠被客戶指定為「越南獨家供貨」，緩解 Apple 與美系 CSP 對 China+1 的要求，同時降低被二供威脅的壓力。</p>
+  <p>毛利率長期維持 50% 左右，遠高於連接器同業中位數（嘉澤 30%、Amphenol 33%、TE 33%、鴻海 7%、正崴 10%），ROE 從 12-14% 提升至 22%，反映「小型專業廠 + 高毛利連接器」的結構性優勢。</p>
+
+  <div class="callout green">
+    <div class="callout-title">Bull case 隱含估值（Bull EPS 16.00 × Target PE 18x）</div>
+    每股價值 288 元，相對現價 184 元 <strong>上檔 +57%</strong>；若加上 SOCAMM2 切入早於預期，可能進一步上修。
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資論點 Bull</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 4：投資論點 — Bear case ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資論點 — Bear case（下行風險）</h1>
+
+  <h2 class="ch">Bear 1 — PC/NB 衰退超預期，SO-DIMM 拖累無法被新動能完全抵銷</h2>
+  <p>SO-DIMM 是優群最大產品線（2025 年占營收 36%），2026 年公司指引年減 10%。若 PC/NB 全球出貨年減超過 15%（vs 基礎假設 -10%），SO-DIMM 年減可能擴大至 15% 以上。1Q26 SO-DIMM 金額已年減 11%，占比降至 31%，趨勢符合公司預期但無緩解跡象。</p>
+  <p><strong>下行情境</strong>：若 2H26 PC 出貨持續走弱，加上 M.2 因 NB 整體需求疲弱僅微增，整體傳統 PC/NB 連接器（合計占比 ~58%）可能拖累整體營收成長率約 4-5ppt。</p>
+
+  <h2 class="ch">Bear 2 — 金、銅、塑膠原物料續創高，毛利率跌破 47%</h2>
+  <p>1Q26 毛利率自 2025 全年 49.9% 下滑至 48.93%（年減 1.3ppt），公司預估全年降幅 2-4ppt。若金價在 2H26 再創新高（2025 下半年已連續創高），且漲價轉嫁不順，全年毛利率可能跌破 47%。</p>
+  <p><strong>影響量化</strong>：毛利率每多降 1ppt → EPS 影響 ~3-4%。若 2026 毛利率降至 47%（比基礎情境 49.3% 少 2.3ppt），EPS 將從 13.50 降至約 12.50（YoY -1.5%，零成長）。</p>
+
+  <h2 class="ch">Bear 3 — CSP capex 縮手 / R-DIMM 改採 HBM</h2>
+  <p>2026 年 R-DIMM 倍增故事核心依賴 Meta + Google capex 與 Long-DIMM 採用。若 (1) Meta/Google 2H26 capex 縮減；(2) ASIC 伺服器架構從 R-DIMM 轉向 HBM + on-package memory；(3) 一般雲端伺服器 refresh 週期延後 → R-DIMM 出貨可能從 +100% 降到 +50%。</p>
+  <p><strong>下行情境</strong>：若 R-DIMM 出貨僅 +50%（vs 基礎 +100%），Long-DIMM 營收少 ~3 億，整體營收成長從 +9.2% 降至 +6-7%。</p>
+
+  <h2 class="ch">Bear 4 — CAMM 客戶導入延遲，1%→8% 不達標</h2>
+  <p>CAMM 占比 8% 目標依賴 Lenovo 月產能跳升 + HP 規劃導入。若 Lenovo 高階 NB 上市延後 1 季、HP 不導入或延到 2027，CAMM 占比可能僅升至 4-5%，影響整體成長率約 3ppt。</p>
+
+  <div class="callout">
+    <div class="callout-title">Bear case 隱含估值（Bear EPS 11.50 × Target PE 12x）</div>
+    每股價值 138 元，相對現價 184 元 <strong>下檔 -25%</strong>；但下檔保護來自 5% 殖利率 + 25 億淨現金（市值 15%）+ Apple 訂單能見度 8 個月。
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資論點 Bear</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 5：章節封面 ① 公司 101 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">01</div>
+  <div class="sec-eyebrow">Company 101</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">從外接硬碟代工<br>到連接器專業廠的轉型</div>
+  <div class="sec-desc">優群成立於 1987 年，2013 年合併順連電子完成第一次戰略轉型；2024-2026 年三大新動能接棒，是公司歷史上獲利結構最大幅躍升的時期。</div>
+</div>
+
+<!-- ══════════════ Page 6：公司簡介 + 沿革 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹、公司簡介與沿革</h1>
+
+  <h2 class="ch">1.1 基本檔案</h2>
+  <table>
+    <thead>
+      <tr><th>項目</th><th>內容</th><th>項目</th><th>內容</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>公司中文名</td><td>優群科技股份有限公司</td><td>產業類別</td><td>電子零組件業</td></tr>
+      <tr><td>公司英文名</td><td>ARGOSY RESEARCH INC.</td><td>成立日期</td><td>1987 年 8 月 5 日</td></tr>
+      <tr><td>股票代號</td><td>3217.TWO（上櫃）</td><td>上櫃日期</td><td>2004 年 4 月 30 日</td></tr>
+      <tr><td>資本額</td><td>9.01 億元</td><td>發行股數</td><td>9,010 萬股</td></tr>
+      <tr><td>每股淨值</td><td>57.72 元</td><td>市值</td><td>166.7 億元（5/15）</td></tr>
+      <tr><td>董事長</td><td>王朝樑</td><td>總經理 / 發言人</td><td>劉興義</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">1.2 沿革與重大里程碑</h2>
+  <p>優群 1987 年成立，<strong>早期主業為外接式硬碟盒與外接式硬碟機</strong>，屬電腦周邊產品代工小型 OEM 業者。2004 年 4 月上櫃。<strong>2013 年 6 月合併網通連接器廠順連電子</strong>是公司轉型關鍵節點 — 從外接式儲存代工，轉型為自製研發的連接器專業廠。</p>
+  <p>整合順連的精密沖壓、SMT 與電鍍工藝後，優群跨入 DDR 記憶體模組連接器（SO-DIMM、Long-DIMM），逐步累積在 PC/NB 與伺服器主機板插槽的市佔地位。2017-2019 年完成 USB-C、DisplayPort 等高速 I/O 連接器布局；2020-2022 年取得美系智慧手機 Metal Bar 獨家訂單，獲利結構出現第二支腳。</p>
+
+  <h2 class="ch">1.3 重大里程碑時間軸</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">1987 / 2004</div><div class="tl-spec">成立 / 上櫃</div><div class="tl-tech">外接式儲存代工</div></div>
+    <div class="tl-item"><div class="tl-year">2013 / 6</div><div class="tl-spec">合併順連</div><div class="tl-tech">跨入 DDR 連接器</div></div>
+    <div class="tl-item active"><div class="tl-year">2023-2024</div><div class="tl-spec">DDR5 + Apple</div><div class="tl-tech">EPS 8.11→11.25</div></div>
+    <div class="tl-item next"><div class="tl-year">2025-2027</div><div class="tl-spec">CAMM + 越南</div><div class="tl-tech">三引擎 + China+1</div></div>
+  </div>
+
+  <h2 class="ch">1.4 廠房分布</h2>
+  <ul>
+    <li><strong>中國蘇州廠</strong>：主力生產基地，DDR / M.2 / Type-C / Metal Bar 全產品線</li>
+    <li><strong>越南興安廠</strong>：2025 4Q 量產，初期 SO-DIMM/M.2/Long-DIMM；2026 3Q 導入 Metal Bar；電鍍規劃 12 條產線支援未來 CAMM/DDR6</li>
+    <li><strong>台灣台北總部</strong>：研發中心 + 技術中心 + JEDEC 標準參與</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 公司 101</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 7：產品結構 + 圖 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳、產品線結構（2025 vs 2026E vs 2027E）</h1>
+
+  <p>優群 7 條產品線中，<strong>SO-DIMM + M.2 合計 63%</strong>是現金牛核心，但已進入緩衝/衰退；2026 年起 <strong>Long-DIMM + CAMM + Metal Bar 三引擎</strong>接棒，CAMM 占比將從 1% 暴增至 8%。</p>
+
+  <table>
+    <thead>
+      <tr><th>產品線</th><th>2025 占比</th><th>2025 營收（億）</th><th>2026E 占比</th><th>2026E 營收</th><th>YoY</th><th>2027E 占比</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>SO-DIMM</td><td>36%</td><td class="num">14.93</td><td>30%</td><td class="num">13.43</td><td class="neg num">-10%</td><td>26%</td></tr>
+      <tr><td>M.2</td><td>27%</td><td class="num">11.20</td><td>25%</td><td class="num">11.30</td><td class="num">+1%</td><td>24%</td></tr>
+      <tr class="hi"><td>Long-DIMM/R-DIMM</td><td>12%</td><td class="num">4.98</td><td>14%</td><td class="num">6.50</td><td class="pos num">+30%</td><td>17%</td></tr>
+      <tr class="hi"><td>Metal Bar</td><td>11%</td><td class="num">4.56</td><td>13%</td><td class="num">5.92</td><td class="pos num">+30%</td><td>14%</td></tr>
+      <tr><td>Type-C/USB4/TB5</td><td>7%</td><td class="num">2.90</td><td>7%</td><td class="num">3.20</td><td class="pos num">+10%</td><td>7%</td></tr>
+      <tr class="hi"><td>CAMM/CABB/SOCAMM2</td><td>1%</td><td class="num">0.42</td><td>8%</td><td class="num">3.60</td><td class="pos num">+750%</td><td>12%</td></tr>
+      <tr><td>其他 I/O</td><td>7%</td><td class="num">2.49</td><td>3%</td><td class="num">1.35</td><td class="neg num">-46%</td><td>—</td></tr>
+      <tr><td><strong>總計</strong></td><td>100%</td><td class="num"><strong>41.48</strong></td><td>100%</td><td class="num"><strong>45.30</strong></td><td class="pos num"><strong>+9.2%</strong></td><td>100%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-wrap">
+    <div class="chart-title">圖 1：產品線營收堆疊（2023-2027E，億元）— CAMM 1%→12% 結構轉型</div>
+    <div class="chart-sub">資料來源：公司法說會、優群年報、GiS 模型推估</div>
+    <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartProductMix"></canvas></div>
+  </div>
+
+  <div class="callout green">
+    <div class="callout-title">產品線結構性結論</div>
+    傳統 PC/NB 連接器（SO-DIMM + M.2）2025-2027 年合計占比從 63% 降至 50%，被 Long-DIMM（伺服器）+ CAMM（新模組）+ Metal Bar（Apple）三引擎稀釋；高毛利產品占比提升將支撐 2027 年起毛利率回升至 50%+。
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 產品結構</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 8：客戶集中度 + 地理 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、客戶結構與地理分布</h1>
+
+  <h2 class="ch">3.1 客戶集中度</h2>
+  <p>優群直接客戶分三類：(1) 記憶體模組廠 — Kingston、ADATA、Team、Hynix Module、Micron Module；(2) 品牌客戶 / OEM — Lenovo（CAMM 主導）、HP、Dell、Apple（Metal Bar 獨家）；(3) 雲端服務商 CSP — Meta、Google（透過 ODM 拉貨）。</p>
+
+  <table>
+    <thead>
+      <tr><th>客戶</th><th>2025 占比（推估）</th><th>主要產品</th><th>2026 展望</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Apple（Metal Bar 獨家）</td><td>~10-12%</td><td>iPhone 微型沖壓件</td><td>+30% 年增，能見度 8 月</td></tr>
+      <tr class="hi"><td>Lenovo</td><td>~12-15%</td><td>NB（SO-DIMM/M.2）+ CAMM</td><td>CAMM 主導客戶，月產能 60-70K</td></tr>
+      <tr><td>Kingston / ADATA</td><td>合計 ~20-25%</td><td>DRAM 模組整合</td><td>受惠 DDR5 滲透提升</td></tr>
+      <tr class="hi"><td>Meta（透過 ODM）</td><td>~3-5%</td><td>Long-DIMM/R-DIMM</td><td>持續 Long-DIMM 拉貨</td></tr>
+      <tr class="hi"><td>Google（透過 ODM）</td><td>~2-3%</td><td>R-DIMM</td><td>2026 升至 ~5%，主要動能</td></tr>
+      <tr><td>HP / Dell / Asus</td><td>合計 ~15%</td><td>NB + 桌機</td><td>HP 規劃 CAMM 導入</td></tr>
+      <tr><td>其他</td><td>~25-30%</td><td>各式 I/O 客戶</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <p><strong>前 5 大客戶合計 ~55-60%</strong>，集中度中等偏高，Apple 與 Lenovo 是兩大支柱。</p>
+
+  <h2 class="ch">3.2 地理分布（2025）</h2>
+  <p>主要出貨地集中亞洲（中國 + 台灣 ODM 廠拉貨組裝），但終端消費去化以美國（iPhone + CSP）為主：</p>
+  <ul>
+    <li><strong>中國 50%</strong>：Lenovo、聯想旗下品牌、Kingston、ADATA 等主要客戶基地</li>
+    <li><strong>北美 25%</strong>：Apple（Metal Bar）、Meta/Google（透過 ODM）、HP、Dell</li>
+    <li><strong>台灣 15%</strong>：廣達、緯穎、和碩、緯創 ODM 廠（伺服器主機板組裝）</li>
+    <li><strong>其他亞洲 8%</strong>：日本 / 韓國模組廠（SK Hynix Module、Micron Module）</li>
+    <li><strong>歐洲 2%</strong>：少數工業客戶</li>
+  </ul>
+
+  <blockquote>
+    <strong>地緣風險敏感點</strong>：北美直接出貨 25%，但終端去化（透過 ODM 鏈轉嫁）主要為美國 — 越南廠是因應 China+1 與客戶指定產地的必要布局。
+  </blockquote>
+
+  <div class="chart-wrap">
+    <div class="chart-title">圖 2：地理分布占比變化（2023-2027E）— 北美比重從 22% 升至 28%</div>
+    <div class="chart-sub">資料來源：公司年報、優群法說、GiS 模型推估</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chartGeoMix"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 客戶與地理</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 9：商業模式 + 護城河 + 管理層 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆、商業模式與競爭優勢</h1>
+
+  <h2 class="ch">4.1 收入結構與成本結構</h2>
+  <p><strong>收入結構</strong>：記憶體模組連接器（SO-DIMM + M.2 + Long-DIMM）三者合計 75%，為現金流核心；Metal Bar + Type-C 高毛利第二支腳合計 17-20%；CAMM 系列是未來 3 年最重要成長期權。</p>
+  <p><strong>成本結構</strong>：原料 55-60%（金、銅、塑膠、鎳）；加工 25-30%（精密沖壓、注塑、SMT、電鍍）；人工+折舊+其他 15%。2025 4Q 起金、銅、塑膠長期高檔，是毛利率壓力來源。</p>
+
+  <h2 class="ch">4.2 四大護城河</h2>
+  <table>
+    <thead>
+      <tr><th>護城河</th><th>內容</th><th>強度</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>① DDR/M.2 標準參與與認證壁壘</td><td>與 JEDEC、Intel 共同參與 CAMM2 / LPCAMM2 制定；DDR5、CAMM2 為國際標準，認證週期 12-18 個月</td><td><strong style="color:#00875a">高</strong></td></tr>
+      <tr><td>② Apple Metal Bar 獨家供應黏著</td><td>5+ 年獨家關係，每支 iPhone 6-7 顆；客戶曾找二供因品質不佳放棄；訂單能見度 8-10 個月</td><td><strong style="color:#00875a">極高</strong></td></tr>
+      <tr><td>③ 垂直整合製程</td><td>沖壓 + 注塑 + 電鍍 + SMT 全自製，越南廠複製此模式，減少對外協廠依賴</td><td><strong style="color:#00875a">高</strong></td></tr>
+      <tr><td>④ DDR5→DDR6 規格升級卡位</td><td>DDR6 Long-DIMM Pin 數 288→近 400，「第一時間送樣」JEDEC 與 Intel，2027 年量產引領者</td><td><strong style="color:#daa520">中-高</strong></td></tr>
+    </tbody>
+  </table>
+  <p><strong>反向風險</strong>：相對嘉澤、安費諾等大廠，優群無 CPU Socket 或 GPU 高階連接器布局；在 NVIDIA SOCAMM2 上僅為第四供應商候補，AI 伺服器最高 ASP 區段較弱。</p>
+
+  <h2 class="ch">4.3 管理層</h2>
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div><div class="co-name">王朝樑　董事長</div><div class="co-ticker">1987 創辦 · 主持董事會 39 年</div></div>
+    </div>
+    <div class="co-body">
+      創辦人，1987 年公司成立即任董事長。2013 年合併順連電子是任內最關鍵戰略決策。長期穩定主持公司治理；持股與關係人合計 ~25-30%（依年報公告），屬高度共榮共損結構。
+    </div>
+  </div>
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">劉興義　總經理 / 發言人</div><div class="co-ticker">技術出身 · day-to-day 營運核心</div></div>
+    </div>
+    <div class="co-body">
+      2013 順連合併後承擔技術與客戶整合，是優群跨入 DDR、Long-DIMM CSP、CAMM2 標準的主要推手。法說對技術細節（Pin 數、SI 規格、月產能爬升）掌握度高，可直接回答券商提問；2026 年三大成長動能口徑前後一致。<strong>單點依賴風險偏高</strong>。
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 商業模式</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 10：章節封面 ② 產業與競爭 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">02</div>
+  <div class="sec-eyebrow">Industry & Competition</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">從 GPU 獨大<br>到多架構並存的<br>記憶體插槽戰場</div>
+  <div class="sec-desc">AI 投資從 GPU 伺服器走向常規/ASIC 伺服器並存，Long-DIMM 從非標配變剛需；CAMM/SOCAMM2 是 NB 與伺服器記憶體模組的下一代標準。</div>
+</div>
+
+<!-- ══════════════ Page 11：產業趨勢 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍、產業趨勢三大主軸</h1>
+
+  <h2 class="ch">5.1 AI 建置從 GPU 獨大走向多架構並存</h2>
+  <p>過去 AI 主要靠 GPU 伺服器，Long DIMM 不是標配；隨各家 ASIC 廠商推出自家 AI 解決方案、資本支出改向常規伺服器，Long DIMM 需求明顯轉強。優群已打入 Meta、Google 等 CSP，R-DIMM 2026 年出貨量預期翻倍，Long DIMM 營收年增 30%+。</p>
+  <p><strong>非 AI 伺服器仍是 Long DIMM 主要需求來源</strong>，顯示產業不只 AI，一般雲端 / 企業伺服器升級同樣拉動 DDR5 連接器需求，AI 為加成動能。</p>
+
+  <h2 class="ch">5.2 DDR5 滲透率快速提升、DDR6 提前卡位</h2>
+  <p>2026 年第 1 季 DDR5 轉換率已到約 80%，全年估 80-85%，成為主流標準。廠商同步開發 DDR6 Long-DIMM（Pin 數 288→約 400 針以上）搶先送樣。未來幾年記憶體插槽將隨頻寬、Pin 數提高而結構更複雜，對高階連接器精度與 SI 設計要求大幅提升。</p>
+
+  <h2 class="ch">5.3 PC/NB 結構性轉型：出貨量走弱，高階規格與新型模組拉高單價</h2>
+  <ul>
+    <li><strong>傳統 SO-DIMM 進入衰退期</strong>：2026 PC 出貨年減 ~10%，SO-DIMM 營收年減 ~10%；即使 DDR5 滲透率提升，也難抵終端整體下滑</li>
+    <li><strong>M.2 等儲存/無線介面靠規格升級撐成長</strong>：PCIe Gen 5 SSD + Wi-Fi 7 ASP 較現行版本高 50%，整體 M.2 維持個位數年增</li>
+    <li><strong>Type-C 往 USB4 / Thunderbolt 5 滲透</strong>：優群為 USB4、TB5 早期通過認證廠，Type-C 2026 年雙位數成長</li>
+  </ul>
+
+  <h2 class="ch">5.4 CAMM / CABB / SOCAMM2 — 次世代記憶體模組架構</h2>
+  <p>CAMM2 + LPDDR5 突破 SO-DIMM 6400 MT/s 頻寬瓶頸，<strong>2025-2026 年已在中國與國際品牌高階 NB 量產</strong>，出貨從每月 5-10K 跳升到 60-70K，2026 營收占比目標從 1% 拉高到 5-8%。SOCAMM2 已納協會標準，NVIDIA 初期包下大部分產能（主供：安費諾、嘉澤、鴻海），2027 年估約 40% 相關產品導入。</p>
+
+  <div class="callout">
+    <div class="callout-title">產業結構影響</div>
+    SO-DIMM DDR5 速度瓶頸到 2027 年後部分將被 LPDDR6 CAMM 取代；CAMM 系列高階連接器單價顯著高於傳統插槽，營收彈性遠大於出貨量，產業價值鏈向少數掌握高速 SI 能力與標準制定關係的廠商集中。
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · 產業趨勢</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 12：TAM ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">陸、TAM 估算與優群可服務市場</h1>
+
+  <h2 class="ch">6.1 終端應用 TAM（2026E）</h2>
+  <table>
+    <thead>
+      <tr><th>應用</th><th>全球出貨量</th><th>連接器單價（USD）</th><th>TAM（億美元）</th><th>優群可服務</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>筆電 SO-DIMM</td><td>NB ~2 億 × 70%</td><td>0.5</td><td class="num">0.7</td><td>✓</td></tr>
+      <tr><td>筆電 M.2（SSD+Wi-Fi）</td><td>NB ~2 億 × 2 顆</td><td>0.7</td><td class="num">2.8</td><td>✓</td></tr>
+      <tr><td>桌機 Long-DIMM（非 AI）</td><td>1.2 億 × 2 顆</td><td>1.5</td><td class="num">3.6</td><td>✓</td></tr>
+      <tr class="hi"><td>伺服器 R-DIMM</td><td>1,500 萬台 × 16 顆</td><td>2.0</td><td class="num">4.8</td><td>✓</td></tr>
+      <tr class="hi"><td>iPhone Metal Bar</td><td>2.2 億 × 6.5 顆</td><td>0.3</td><td class="num">4.3</td><td>✓ 獨家</td></tr>
+      <tr class="hi"><td>CAMM/CABB（NB）</td><td>500-600 萬台</td><td>3.0</td><td class="num">1.7</td><td>✓</td></tr>
+      <tr><td>SOCAMM2（2027+）</td><td>100 萬節點 × 4 顆</td><td>5.0</td><td class="num">2.0</td><td>第四供</td></tr>
+      <tr><td>Type-C / USB4 / TB5</td><td>數十億接頭</td><td>0.2</td><td class="num">6.0</td><td>✓</td></tr>
+      <tr><td><strong>總 TAM</strong></td><td colspan="3"></td><td class="num"><strong>~25 億 USD</strong></td><td>~750 億 NTD</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">6.2 可服務市場（SAM）與滲透率</h2>
+  <p><strong>SAM 合計 ~7-8 億美元（210-240 億 NTD）</strong>。2025 年優群營收 41.48 億 NTD ≈ 1.4 億 USD，對應 SAM → <strong>整體滲透率約 18-20%</strong>。</p>
+  <ul>
+    <li>DDR 模組連接器（SO-DIMM + M.2 + Long-DIMM）：TAM 10 億 USD，優群目標市佔 25-30% → SAM 2.5-3 億 USD</li>
+    <li>CAMM 系列：TAM 4 億 USD，優群目標市佔 10-20% → SAM 0.4-0.8 億 USD</li>
+    <li>Metal Bar：TAM 4 億 USD，獨家 → SAM 4 億 USD</li>
+    <li>Type-C / USB4：TAM 6 億 USD，目標市佔 5-10% → SAM 0.3-0.6 億 USD</li>
+  </ul>
+
+  <h2 class="ch">6.3 細分市場 5 年成長率</h2>
+  <table>
+    <thead><tr><th>細分市場</th><th>2026-2030 CAGR</th><th>優群定位</th></tr></thead>
+    <tbody>
+      <tr><td>SO-DIMM（傳統 NB）</td><td class="neg num">-5 至 -10%</td><td>市占維持但被新模組稀釋</td></tr>
+      <tr><td>M.2</td><td class="num">0 至 +5%</td><td>持平</td></tr>
+      <tr class="hi"><td>Long-DIMM / R-DIMM</td><td class="pos num">+15 至 +25%</td><td>主成長動能（AI + 一般伺服器）</td></tr>
+      <tr class="hi"><td>CAMM / CABB</td><td class="pos num">+30 至 +50%</td><td>新標準早期領先</td></tr>
+      <tr class="hi"><td>SOCAMM2（2027+）</td><td class="pos num">+50%+</td><td>潛在第四供</td></tr>
+      <tr><td>Metal Bar（iPhone）</td><td class="num">+5 至 +10%</td><td>Apple 獨家穩定</td></tr>
+      <tr><td>Type-C / USB4 / TB5</td><td class="num">+10 至 +15%</td><td>持續滲透</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>優群 SAM 整體 5 年 CAGR 預估 +10-15%</strong>，符合公司全年 +13-20% 營收成長指引（考量市佔擴張）。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>陸 · TAM</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 13：國際對手 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">柒、競爭分析（國際對手）</h1>
+
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">TE Connectivity</div><div class="co-ticker">TEL（NYSE）· 全球連接器第一</div></div>
+      <div class="co-badge"><span class="badge ow">主要對手</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">$160B</div><div class="co-metric-label">2024 營收</div></div>
+      <div class="co-metric"><div class="co-metric-val">33%</div><div class="co-metric-label">毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val">19x</div><div class="co-metric-label">Forward PE</div></div>
+      <div class="co-metric"><div class="co-metric-val">25%</div><div class="co-metric-label">全球連接器市佔</div></div>
+    </div>
+    <div class="co-body">產品涵蓋汽車、通訊、工業、醫療全領域。在 SO-DIMM、M.2、Long-DIMM 為優群主要國際對手；Intel CPU Socket 主供。劣勢：價格較高、台灣 NB ODM 拉貨深度不及鴻海、嘉澤。</div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div><div class="co-name">Amphenol</div><div class="co-ticker">APH（NYSE）· 全球第二大、AI 伺服器強</div></div>
+      <div class="co-badge"><span class="badge sell">SOCAMM2 領先者</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">$150B</div><div class="co-metric-label">2024 營收</div></div>
+      <div class="co-metric"><div class="co-metric-val">33%</div><div class="co-metric-label">毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val">29x</div><div class="co-metric-label">Forward PE</div></div>
+      <div class="co-metric"><div class="co-metric-val">$124.6</div><div class="co-metric-label">股價（5/13）</div></div>
+    </div>
+    <div class="co-body">高速 I/O（USB4、TB5）、伺服器 backplane、AI 伺服器 GPU 接頭。<strong>NVIDIA SOCAMM2 主力供應商</strong>，與嘉澤、鴻海並列前三。優群目標成為第四供應商。在 AI 伺服器最高 ASP 區段，Amphenol 領先優群至少 12-18 個月。</div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head indigo">
+      <div><div class="co-name">Molex</div><div class="co-ticker">私有 · Koch 集團旗下</div></div>
+      <div class="co-badge"><span class="badge neutral">部分競爭</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">$75B</div><div class="co-metric-label">2024 營收</div></div>
+      <div class="co-metric"><div class="co-metric-val">~30%</div><div class="co-metric-label">估算毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val">N/A</div><div class="co-metric-label">未上市</div></div>
+      <div class="co-metric"><div class="co-metric-val">10-15%</div><div class="co-metric-label">DDR 模組市佔</div></div>
+    </div>
+    <div class="co-body">全球第三大連接器廠，PC、伺服器、汽車、工業並重。CAMM 系列早期投入。對中系 NB 與台灣 ODM 經營深度較弱。</div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>柒 · 國際對手</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 14：台灣對手 + 競爭格局歸納 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">捌、競爭分析（台灣對手）與格局歸納</h1>
+
+  <h2 class="ch">8.1 嘉澤 vs 優群 — 「協同受惠」非「直接競爭」</h2>
+  <table>
+    <thead>
+      <tr><th>比較項</th><th>嘉澤 3533</th><th>優群 3217</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>主力產品</td><td>CPU Socket（Intel/AMD 平台）</td><td>記憶體模組連接器（DDR/M.2）</td></tr>
+      <tr><td>伺服器位置</td><td>CPU 端</td><td>記憶體端</td></tr>
+      <tr><td>全球地位</td><td>全球前 3 大 CPU Socket 供應商</td><td>全球 DDR SO-DIMM/M.2 龍頭之一</td></tr>
+      <tr><td>AI 伺服器</td><td>直接受惠（GPU 扣具、NVLink）</td><td>受惠 Long-DIMM 升級</td></tr>
+      <tr><td>2025 營收</td><td>~280 億</td><td>~41 億</td></tr>
+      <tr><td>2025 毛利率</td><td>~30%</td><td>~50%</td></tr>
+      <tr><td>SOCAMM2</td><td><strong>NVIDIA 主力供應商</strong></td><td>目標第四供</td></tr>
+      <tr><td>Forward PE</td><td>29.4x</td><td>13.6x</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>結論</strong>：嘉澤是 AI 伺服器 CPU/GPU 接頭，優群是 NB / 伺服器記憶體插槽 — 兩者「協同受惠 AI 升級」而非直接競爭。在 SOCAMM2 與部分 Long-DIMM 才有交集，但兩者各自陣地強。</blockquote>
+
+  <h2 class="ch">8.2 其他台廠</h2>
+  <ul>
+    <li><strong>鴻海 2317</strong>：連接器起家業務，FIT-Foxconn Interconnect 已分拆港股上市；SOCAMM2 為 NVIDIA 主供之一；ASIC 伺服器 Meta/Google 訂單可能與優群部分重疊</li>
+    <li><strong>正崴 2392</strong>：線材與連接器，2025 營收 ~600 億；Type-C 線材、Apple Watch 線材、iPhone 連接配件；與優群在 Type-C 與部分 iPhone 配件有交集，重疊不深</li>
+    <li><strong>嘉基 6588</strong>：嘉澤子公司，光通訊與高速 I/O；USB4、Thunderbolt 5 有交集</li>
+  </ul>
+
+  <h2 class="ch">8.3 競爭格局歸納</h2>
+  <table>
+    <thead><tr><th>競爭層次</th><th>優群定位</th><th>競爭強度</th></tr></thead>
+    <tbody>
+      <tr><td>SO-DIMM</td><td>全球前 2 大，市佔 >50%</td><td>中（與 TE、Amphenol 寡占）</td></tr>
+      <tr><td>M.2</td><td>全球前 3 大，市佔 >50%</td><td>中（與 TE、Molex 寡占）</td></tr>
+      <tr><td>Long-DIMM / R-DIMM</td><td>主力供應商之一</td><td>中高（CSP 多元採購）</td></tr>
+      <tr class="hi"><td>CAMM2 / CABB</td><td>Lenovo 第一供應商，全球前 2</td><td>低-中（早期市場）</td></tr>
+      <tr class="hi"><td>SOCAMM2</td><td>目標第四供應商</td><td>高（前三為 Amphenol / 嘉澤 / 鴻海）</td></tr>
+      <tr><td>Type-C / USB4</td><td>中型廠商</td><td>高（全球眾多競爭）</td></tr>
+      <tr><td>Metal Bar</td><td>Apple 獨家</td><td>低（客戶忠誠）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>捌 · 競爭格局</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 15：章節封面 ③ 財務 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">03</div>
+  <div class="sec-eyebrow">Financials & Projection</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">EPS 7.20 → 12.69 → 13.50<br>10 年三段式擴張</div>
+  <div class="sec-desc">2020-2022 基本盤、2023-2025 結構轉型、2026-2030 三引擎放大；ROE 從 12-14% 升至 22% 以上。</div>
+</div>
+
+<!-- ══════════════ Page 16：歷史財報 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">玖、5 年歷史財報</h1>
+
+  <table>
+    <thead>
+      <tr><th>年度</th><th>營收（億）</th><th>YoY</th><th>毛利率</th><th>營益率</th><th>稅後淨利</th><th>EPS（元）</th><th>ROE</th><th>配息（元）</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2020</td><td class="num">27.5</td><td class="num">—</td><td>~50%</td><td>~32%</td><td class="num">6.49</td><td class="num">7.20</td><td>~16%</td><td>5.0</td></tr>
+      <tr><td>2021</td><td class="num">28.2</td><td class="pos num">+2.5%</td><td>~49%</td><td>~31%</td><td class="num">6.41</td><td class="num">7.11</td><td>~14%</td><td>5.0</td></tr>
+      <tr><td>2022</td><td class="num">29.0</td><td class="pos num">+2.8%</td><td>~50%</td><td>~30%</td><td class="num">6.13</td><td class="num">6.80</td><td>~12%</td><td>5.0</td></tr>
+      <tr><td>2023</td><td class="num">28.5</td><td class="neg num">-1.7%</td><td>~49%</td><td>~30%</td><td class="num">7.31</td><td class="num">8.11</td><td>~14%</td><td>5.7</td></tr>
+      <tr class="hi"><td>2024</td><td class="num">34.74</td><td class="pos num">+21.9%</td><td>~50%</td><td>~31%</td><td class="num">10.14</td><td class="num">11.25</td><td>~19%</td><td>8.0</td></tr>
+      <tr class="hi"><td><strong>2025</strong></td><td class="num"><strong>41.48</strong></td><td class="pos num"><strong>+19.4%</strong></td><td><strong>49.9%</strong></td><td><strong>30.0%</strong></td><td class="num"><strong>11.44</strong></td><td class="num"><strong>12.69</strong></td><td><strong>22%</strong></td><td><strong>8.813</strong></td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料：MOPS / HiStock / Yahoo 股市 / 公司年報</span>
+
+  <p><strong>觀察</strong>：2020-2022 公司處於 PC/NB 後 COVID 高基期消化階段，EPS 6.8-7.2 元徘徊；<strong>2023 起進入結構性向上拐點</strong>，DDR5 + Long-DIMM + Metal Bar 三股力量推升 EPS 兩年內 +85%（從 8.11 跳到 12.69）。</p>
+
+  <h2 class="ch">9.2 季度損益軌跡（最近 9 季）</h2>
+  <table>
+    <thead>
+      <tr><th>季度</th><th>營收（億）</th><th>YoY</th><th>毛利率</th><th>營益率</th><th>稅後淨利</th><th>EPS</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2024Q1</td><td class="num">9.18</td><td class="pos num">+28%</td><td>~50.2%</td><td>~31.5%</td><td class="num">2.67</td><td class="num">2.96</td></tr>
+      <tr><td>2024Q2</td><td class="num">8.55</td><td class="pos num">+20%</td><td>~49.8%</td><td>~30.8%</td><td class="num">2.30</td><td class="num">2.55</td></tr>
+      <tr><td>2024Q3</td><td class="num">8.94</td><td class="pos num">+25%</td><td>49.88%</td><td>31.66%</td><td class="num">2.87</td><td class="num">3.19</td></tr>
+      <tr><td>2024Q4</td><td class="num">8.07</td><td class="pos num">+18%</td><td>~50.1%</td><td>~31.0%</td><td class="num">2.30</td><td class="num">2.55</td></tr>
+      <tr><td>2025Q1</td><td class="num">9.21</td><td class="pos num">+0.3%</td><td>~50.3%</td><td>~31.5%</td><td class="num">2.68</td><td class="num">2.97</td></tr>
+      <tr><td>2025Q2</td><td class="num">9.55</td><td class="pos num">+11.7%</td><td>~50.0%</td><td>~31.0%</td><td class="num">2.85</td><td class="num">3.16</td></tr>
+      <tr class="hi"><td>2025Q3</td><td class="num">11.31</td><td class="pos num">+26.5%</td><td>~49.7%</td><td>~30.5%</td><td class="num">3.20</td><td class="num">3.55</td></tr>
+      <tr><td>2025Q4</td><td class="num">10.40</td><td class="pos num">+28.9%</td><td>~49.9%</td><td>~28.7%</td><td class="num">2.71</td><td class="num">3.01</td></tr>
+      <tr class="hi"><td><strong>2026Q1</strong></td><td class="num"><strong>9.48</strong></td><td class="pos num"><strong>+2.9%</strong></td><td><strong>48.93%</strong></td><td><strong>31.09%</strong></td><td class="num"><strong>2.54</strong></td><td class="num"><strong>2.82</strong></td></tr>
+    </tbody>
+  </table>
+  <blockquote>1Q26 為 2026 年全年谷底：毛利率 48.93% 首次跌破 49%，金、銅原料壓力顯現。但獲利韌性大於營收衰退（EPS 2.82 仍優於 2024Q4 的 2.55）。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>玖 · 歷史財報</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 17：5 年預估 P&L ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾、5 年損益預估（基礎情境）</h1>
+
+  <table>
+    <thead>
+      <tr><th>項目（億）</th><th>2024</th><th>2025</th><th>2026E</th><th>2027E</th><th>2028E</th><th>2029E</th><th>2030E</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">34.74</td><td class="num">41.48</td><td class="num">45.30</td><td class="num">47.80</td><td class="num">51.50</td><td class="num">54.60</td><td class="num">57.40</td></tr>
+      <tr><td>YoY</td><td class="pos num">+21.9%</td><td class="pos num">+19.4%</td><td class="pos num">+9.2%</td><td class="pos num">+5.5%</td><td class="pos num">+7.7%</td><td class="pos num">+6.0%</td><td class="pos num">+5.1%</td></tr>
+      <tr><td>毛利</td><td class="num">17.37</td><td class="num">20.70</td><td class="num">22.35</td><td class="num">23.90</td><td class="num">26.00</td><td class="num">27.75</td><td class="num">29.27</td></tr>
+      <tr><td>毛利率</td><td>50.0%</td><td>49.9%</td><td><strong style="color:#daa520">49.3%</strong></td><td>50.0%</td><td>50.5%</td><td>50.8%</td><td>51.0%</td></tr>
+      <tr><td>研發費用</td><td class="num">1.95</td><td class="num">2.30</td><td class="num">2.55</td><td class="num">2.80</td><td class="num">3.00</td><td class="num">3.20</td><td class="num">3.40</td></tr>
+      <tr><td>銷管費用</td><td class="num">4.65</td><td class="num">5.55</td><td class="num">6.20</td><td class="num">6.50</td><td class="num">6.80</td><td class="num">7.00</td><td class="num">7.20</td></tr>
+      <tr class="hi"><td>營業利益</td><td class="num">10.77</td><td class="num">12.85</td><td class="num">13.60</td><td class="num">14.60</td><td class="num">16.20</td><td class="num">17.55</td><td class="num">18.67</td></tr>
+      <tr><td>營益率</td><td>31.0%</td><td>31.0%</td><td>30.0%</td><td>30.5%</td><td>31.5%</td><td>32.1%</td><td>32.5%</td></tr>
+      <tr><td>業外損益</td><td class="num">0.95</td><td class="num">1.40</td><td class="num">1.60</td><td class="num">1.65</td><td class="num">1.70</td><td class="num">1.75</td><td class="num">1.80</td></tr>
+      <tr><td>稅前淨利</td><td class="num">11.72</td><td class="num">14.25</td><td class="num">15.20</td><td class="num">16.25</td><td class="num">17.90</td><td class="num">19.30</td><td class="num">20.47</td></tr>
+      <tr><td>稅後淨利</td><td class="num">10.14</td><td class="num">11.44</td><td class="num">12.16</td><td class="num">13.00</td><td class="num">14.32</td><td class="num">15.44</td><td class="num">16.38</td></tr>
+      <tr class="hi"><td><strong>EPS（元）</strong></td><td class="num"><strong>11.25</strong></td><td class="num"><strong>12.69</strong></td><td class="num"><strong>13.50</strong></td><td class="num"><strong>14.43</strong></td><td class="num"><strong>15.89</strong></td><td class="num"><strong>17.13</strong></td><td class="num"><strong>18.18</strong></td></tr>
+      <tr><td>EPS YoY</td><td class="pos num">+38.6%</td><td class="pos num">+12.8%</td><td class="pos num">+6.4%</td><td class="pos num">+6.9%</td><td class="pos num">+10.1%</td><td class="pos num">+7.8%</td><td class="pos num">+6.1%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">10.1 EPS 驅動拆解（2026E）</h2>
+  <table>
+    <thead><tr><th>驅動因子</th><th>EPS 貢獻</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>營收成長 +9.2%</td><td class="pos num">+1.17</td><td>41.48→45.30，假設毛利率不變</td></tr>
+      <tr><td>毛利率 -0.6ppt</td><td class="neg num">-0.30</td><td>金/銅成本壓力</td></tr>
+      <tr><td>營益率 -1.0ppt</td><td class="neg num">-0.45</td><td>越南廠開辦費 + R&D 增加</td></tr>
+      <tr><td>業外收入 +14%</td><td class="pos num">+0.18</td><td>利息收入隨淨現金增加</td></tr>
+      <tr><td>稅率 +0.3ppt</td><td class="neg num">-0.05</td><td>19.7% → 20%</td></tr>
+      <tr><td>其他 / 四捨五入</td><td class="pos num">+0.26</td><td>—</td></tr>
+      <tr class="hi"><td><strong>2025 EPS 12.69 → 2026E EPS 13.50</strong></td><td class="pos num"><strong>+0.81</strong></td><td>+6.4%</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>關鍵假設</strong>：毛利率 2026 49.3%（公司指引 -2~4ppt 的較樂觀端），2027 起金價壓力緩解 + CAMM/Long-DIMM 高毛利占比提升 → 逐年回升至 51%；R&D 隨 DDR6/SOCAMM2 投入 CAGR ~6%；稅率穩定 20%；股數不變 9,010 萬股。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>拾 · 5 年預估</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 17b：歷史 + 預估 EPS 圖 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾、5 年損益預估（圖示）</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">圖 3：歷史 + 預估 EPS 與毛利率趨勢（2020-2030E）</div>
+    <div class="chart-sub">資料來源：MOPS、公司年報、GiS 模型；2026E 起為基礎情境預估</div>
+    <div class="chart-container" style="height:320px;width:100%;position:relative"><canvas id="chartEPSGM"></canvas></div>
+  </div>
+
+  <blockquote>
+    <strong>10 年 EPS 軌跡讀圖</strong>：(1) 2020-2022 基本盤期：EPS 6.8-7.2 元徘徊，毛利率 49-50%；(2) <strong>2023-2025 結構轉型期</strong>：EPS 8.11→11.25→12.69，CAGR 25%，DDR5 + Long-DIMM + Apple Metal Bar 三股力量；(3) 2026 短暫減速：EPS 13.50，YoY +6.4%（金價壓力 + Q1 谷底），毛利率年減 0.6ppt 至 49.3%；(4) <strong>2027-2030 三引擎放大期</strong>：EPS CAGR +7-10%，毛利率回升至 51%，淨現金累積至 45 億。
+  </blockquote>
+
+  <div class="callout green">
+    <div class="callout-title">兩段式擴張的結構性差異</div>
+    第一段擴張（2024-2025）EPS +56% 主要靠 DDR5 + Apple Metal Bar；第二段擴張（2026-2030）靠 CAMM/CABB 從 1% 暴增至 12% + Long-DIMM 倍增 + DDR6 卡位。兩段都不是 PE 重估（因 PE 仍維持 12-14x 區間），而是純粹獲利能力的結構性提升。
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>拾 · 5 年預估圖</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 18：三情境 + 現金流 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾壹、三情境分析與現金流預估</h1>
+
+  <h2 class="ch">11.1 三情境關鍵假設對比</h2>
+  <table>
+    <thead>
+      <tr><th>情境</th><th>機率</th><th>2026E 營收 YoY</th><th>毛利率</th><th>2026E EPS</th><th>2027E EPS</th><th>主要差異點</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Bear</strong></td><td>25%</td><td class="num">+3%</td><td>47.5%</td><td class="num">11.50</td><td class="num">11.80</td><td>PC -15%、CAMM 延遲、金價續高</td></tr>
+      <tr class="hi"><td><strong>Base（採用）</strong></td><td>50%</td><td class="pos num">+9.2%</td><td>49.3%</td><td class="num"><strong>13.50</strong></td><td class="num">14.43</td><td>公司指引中值，CAMM 1%→8%</td></tr>
+      <tr><td><strong>Bull</strong></td><td>25%</td><td class="pos num">+18%</td><td>50.5%</td><td class="num">16.00</td><td class="num">17.50</td><td>R-DIMM 訂單超預期 + HP 加速</td></tr>
+      <tr class="hi"><td colspan="4"><strong>加權平均 EPS</strong></td><td class="num"><strong>13.625</strong></td><td class="num"><strong>14.54</strong></td><td>0.25×Bear + 0.50×Base + 0.25×Bull</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">11.2 5 年現金流預估</h2>
+  <table>
+    <thead>
+      <tr><th>項目（億）</th><th>2025</th><th>2026E</th><th>2027E</th><th>2028E</th><th>2029E</th><th>2030E</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>稅後淨利</td><td class="num">11.44</td><td class="num">12.16</td><td class="num">13.00</td><td class="num">14.32</td><td class="num">15.44</td><td class="num">16.38</td></tr>
+      <tr><td>折舊與攤銷</td><td class="num">1.20</td><td class="num">1.50</td><td class="num">1.80</td><td class="num">2.10</td><td class="num">2.30</td><td class="num">2.40</td></tr>
+      <tr><td>營運資金變動</td><td class="neg num">-0.64</td><td class="neg num">-0.50</td><td class="neg num">-0.45</td><td class="neg num">-0.50</td><td class="neg num">-0.40</td><td class="neg num">-0.35</td></tr>
+      <tr><td><strong>營業現金流</strong></td><td class="num"><strong>12.00</strong></td><td class="num"><strong>13.16</strong></td><td class="num"><strong>14.35</strong></td><td class="num"><strong>15.92</strong></td><td class="num"><strong>17.34</strong></td><td class="num"><strong>18.43</strong></td></tr>
+      <tr><td>CapEx</td><td class="neg num">-5.00</td><td class="neg num">-3.50</td><td class="neg num">-3.00</td><td class="neg num">-2.80</td><td class="neg num">-2.50</td><td class="neg num">-2.40</td></tr>
+      <tr class="hi"><td><strong>自由現金流 FCF</strong></td><td class="num"><strong>7.00</strong></td><td class="num"><strong>9.66</strong></td><td class="num"><strong>11.35</strong></td><td class="num"><strong>13.12</strong></td><td class="num"><strong>14.84</strong></td><td class="num"><strong>16.03</strong></td></tr>
+      <tr><td>現金股利支付</td><td class="neg num">-7.94</td><td class="neg num">-8.10</td><td class="neg num">-8.50</td><td class="neg num">-9.00</td><td class="neg num">-9.50</td><td class="neg num">-10.00</td></tr>
+      <tr class="hi"><td><strong>期末淨現金累計</strong></td><td class="num"><strong>25.0</strong></td><td class="num"><strong>26.6</strong></td><td class="num"><strong>29.4</strong></td><td class="num"><strong>33.5</strong></td><td class="num"><strong>38.9</strong></td><td class="num"><strong>44.9</strong></td></tr>
+    </tbody>
+  </table>
+  <p>CapEx 高峰已過：2025 年 5 億（越南建廠），2026E 降到 3.5 億（Metal Bar 越南產線），2027 年起進入維持型 2.4-3 億。<strong>FCF 5 年累計 65 億，足以支付穩定配息（配息率 ~69%）+ 累積淨現金至 45 億</strong>（為市值的 27%）。</p>
+
+  <div class="chart-wrap" style="margin-top:8px">
+    <div class="chart-title">圖 4：三情境 EPS 對比（2025-2027E）— Bear / Base / Bull 機率 25/50/25</div>
+    <div class="chart-container" style="height:160px;width:100%;position:relative"><canvas id="chart3Scen"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>拾壹 · 三情境</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 19：章節封面 ④ 估值 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">04</div>
+  <div class="sec-eyebrow">Valuation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">PE 法、DCF、Comps<br>三法加權目標價 229 元</div>
+  <div class="sec-desc">PE 16x × EPS 13.50 = 216；DCF（WACC 8.3% / g 2.0%）= 262；Comps 折讓中位數 25% = 220。加權後 12M TP 229 元，相對現價 184 元上檔 +24.5%。</div>
+</div>
+
+<!-- ══════════════ Page 20：股價走勢 + PE Band + Fan Chart (3 charts) ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾貳、股價走勢、PE Band、三情境合理價</h1>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
+    <div class="chart-wrap">
+      <div class="chart-title">5 年股價 vs 加權指數（標準化 = 100）</div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartRel"></canvas></div>
+      <div style="font-size:10px;color:#6b7a9a;margin-top:4px;line-height:1.4">
+        當前股價：<strong>184.0</strong> · 5Y 個股相對 alpha = <span id="alphaSpan"></span>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">12M 三情境合理價路徑（自 2026-05-15）</div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartFan"></canvas></div>
+      <div style="font-size:10px;color:#6b7a9a;margin-top:4px;line-height:1.4">
+        保守 <strong>138</strong>（-25.0%）｜
+        <span style="color:#daa520">基礎 <strong>216</strong>（+17.4%）</span>｜
+        樂觀 <strong>288</strong>（+56.5%）
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">PE Band 河流圖（5 年 TTM EPS × 歷史 PE 帶）</div>
+    <div style="position:relative;width:100%;height:220px"><canvas id="chartPE"></canvas></div>
+    <div style="font-size:10px;color:#6b7a9a;margin-top:4px;line-height:1.4">
+      5 年 PE 平均 <strong>12.8x</strong> · ±1σ <strong>11.95-13.66x</strong> ·
+      當前 PE <strong style="color:#5e0d2e">14.2x</strong>（位於歷史區間 95% 分位）·
+      TTM EPS 12.96
+    </div>
+  </div>
+
+  <blockquote style="margin-top:6px;font-size:11.5px">
+    <strong>估值定位讀圖</strong>：① 當前 PE <strong>14.2x</strong> vs 5Y mean <strong>12.8x</strong>（位於歷史區間 95% 分位）；② 三情境隱含合理價 保守 138 / 基礎 216 / 樂觀 288，12M 區間中位 ~214；③ 5Y 個股 vs 加權累積 alpha 顯示於圖左。
+  </blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>拾貳 · 股價走勢與 PE Band</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ Page 21：PE 估值 + 5×5 敏感度 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾參、PE 估值法（主，方法論 §3-4）</h1>
+
+  <p>依方法論 §3.1，優群屬「<strong>成熟成長型連接器專業廠</strong>」（商業模式成熟、配息穩定、5 年成長路徑清晰）→ 適用 PE 估值法為主。</p>
+
+  <h2 class="ch">13.1 Target PE 推導</h2>
+  <table>
+    <thead><tr><th>同業 forward PE 參考</th><th>代號</th><th>Forward PE</th><th>主力產品</th><th>與優群關係</th></tr></thead>
+    <tbody>
+      <tr><td>嘉澤端子</td><td>3533.TWO</td><td class="num">29.4x</td><td>CPU Socket</td><td>AI 伺服器直接受惠（溢價高）</td></tr>
+      <tr><td>Amphenol</td><td>APH</td><td class="num">29.2x</td><td>全領域連接器</td><td>全球第二大廠（規模溢價）</td></tr>
+      <tr><td>TE Connectivity</td><td>TEL</td><td class="num">19.0x</td><td>全領域連接器</td><td>全球第一大廠</td></tr>
+      <tr><td>Foxconn（連接器部分）</td><td>2317.TW</td><td class="num">~12x</td><td>EMS + 連接器</td><td>規模大但連接器毛利低</td></tr>
+      <tr><td>正崴</td><td>2392.TW</td><td class="num">~14x</td><td>線材 + 連接器</td><td>部分交集</td></tr>
+      <tr><td><strong>同業中位數</strong></td><td></td><td class="num"><strong>~19x</strong></td><td></td><td></td></tr>
+      <tr class="hi"><td><strong>優群採用 forward PE 範圍</strong></td><td></td><td class="num"><strong>12-18x</strong></td><td></td><td>較同業中位數折讓 5-7x</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">13.2 三情境 PE 目標價</h2>
+  <table>
+    <thead><tr><th>情境</th><th>Target PE</th><th>Target EPS</th><th>Target Price</th><th>vs 現價 184</th></tr></thead>
+    <tbody>
+      <tr><td>Bear</td><td>12x</td><td>11.50</td><td class="num">138 元</td><td class="neg num">-25%</td></tr>
+      <tr class="hi"><td><strong>Base</strong></td><td><strong>16x</strong></td><td><strong>13.50</strong></td><td class="num"><strong>216 元</strong></td><td class="pos num"><strong>+17%</strong></td></tr>
+      <tr><td>Bull</td><td>18x</td><td>16.00</td><td class="num">288 元</td><td class="pos num">+57%</td></tr>
+      <tr class="hi"><td colspan="3"><strong>PE 法加權 TP</strong></td><td class="num"><strong>214.5 元</strong></td><td class="pos num"><strong>+17%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">13.3 PE 5×5 敏感度（PE × EPS）</h2>
+  <p>中心格 = Base 情境（PE 16x × EPS 13.50）= 216 元</p>
+  <table class="heat-table">
+    <thead>
+      <tr><th>Target PE \ 2026E EPS</th><th>11.50</th><th>12.50</th><th><strong>13.50</strong></th><th>14.50</th><th>16.00</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>12x</strong></td><td>138</td><td>150</td><td>162</td><td>174</td><td>192</td></tr>
+      <tr><td><strong>14x</strong></td><td>161</td><td>175</td><td>189</td><td>203</td><td>224</td></tr>
+      <tr><td><strong>16x</strong></td><td class="hi-low">184</td><td class="hi-mid">200</td><td class="heat-center"><strong>216 ★</strong></td><td class="hi-mid">232</td><td class="hi-high">256</td></tr>
+      <tr><td><strong>18x</strong></td><td>207</td><td>225</td><td>243</td><td>261</td><td>288</td></tr>
+      <tr><td><strong>20x</strong></td><td>230</td><td>250</td><td>270</td><td>290</td><td>320</td></tr>
+    </tbody>
+  </table>
+  <blockquote>PE 每提升 2x → 目標價 +27 元（13% 變動）；EPS 每多 1 元 → 目標價 +16 元。合理區間 184-288 元。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>拾參 · PE 估值</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ Page 22：DCF 估值 + 5×5 敏感度 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾肆、DCF 估值法（輔，方法論 §8）</h1>
+
+  <h2 class="ch">14.1 DCF 輸入參數</h2>
+  <p><strong>WACC 8.3%</strong>（CAPM Ke = Rf 1.5% + Beta 1.1 × ERP 6.5% = 8.65%；負債極少 → 95% E + 5% D × 2% 稅後 Kd ≈ 8.3%）；<strong>永續成長率 g = 2.0%</strong>（接近台灣長期 GDP）；<strong>2025 末淨現金 25 億</strong>（橋接 EV → Equity）。</p>
+
+  <h2 class="ch">14.2 Unlevered FCF Schedule & 折現</h2>
+  <table>
+    <thead><tr><th>年度</th><th>UFCF（億）</th><th>折現因子（8.3%, mid-year）</th><th>PV</th></tr></thead>
+    <tbody>
+      <tr><td>2026E</td><td class="num">8.38</td><td class="num">0.961</td><td class="num">8.05</td></tr>
+      <tr><td>2027E</td><td class="num">10.03</td><td class="num">0.888</td><td class="num">8.91</td></tr>
+      <tr><td>2028E</td><td class="num">11.76</td><td class="num">0.820</td><td class="num">9.64</td></tr>
+      <tr><td>2029E</td><td class="num">13.44</td><td class="num">0.757</td><td class="num">10.17</td></tr>
+      <tr><td>2030E</td><td class="num">14.59</td><td class="num">0.699</td><td class="num">10.20</td></tr>
+      <tr class="hi"><td colspan="3"><strong>顯性期 PV 合計</strong></td><td class="num"><strong>46.97</strong></td></tr>
+      <tr><td colspan="3">TV2030 = 14.59 × 1.02 / (8.3% - 2%) = 236.2 億；折現至現值</td><td class="num">164.30</td></tr>
+      <tr class="hi"><td colspan="3"><strong>企業價值 EV</strong></td><td class="num"><strong>211.3</strong></td></tr>
+      <tr><td colspan="3">加：2025 末淨現金</td><td class="num">+25.0</td></tr>
+      <tr class="hi"><td colspan="3"><strong>股權價值</strong></td><td class="num"><strong>236.3</strong></td></tr>
+      <tr class="hi"><td colspan="3"><strong>DCF 每股價值</strong>（÷ 9,010 萬股）</td><td class="num"><strong>262 元</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">14.3 DCF 5×5 敏感度（WACC × g）</h2>
+  <p>中心格 = WACC 8.3% × g 2.0% = 262 元</p>
+  <table class="heat-table">
+    <thead>
+      <tr><th>WACC \ g</th><th>1.0%</th><th>1.5%</th><th><strong>2.0%</strong></th><th>2.5%</th><th>3.0%</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>7.3%</strong></td><td>268</td><td>282</td><td>298</td><td class="hi-high">318</td><td class="hi-high">343</td></tr>
+      <tr><td><strong>7.8%</strong></td><td>247</td><td>258</td><td>272</td><td class="hi-mid">287</td><td class="hi-high">305</td></tr>
+      <tr><td><strong>8.3%</strong></td><td class="hi-low">230</td><td class="hi-mid">240</td><td class="heat-center"><strong>262 ★</strong></td><td class="hi-mid">273</td><td class="hi-mid">286</td></tr>
+      <tr><td><strong>8.8%</strong></td><td>215</td><td>224</td><td>233</td><td>244</td><td>256</td></tr>
+      <tr><td><strong>9.3%</strong></td><td>202</td><td>209</td><td>217</td><td>226</td><td>236</td></tr>
+    </tbody>
+  </table>
+  <p><strong>三情境 DCF</strong>：Bear 195 / Base 262 / Bull 320。<strong>DCF 法加權 TP = 259.8 元</strong>。終值占企業價值 77.7%（合理區間 60-80%），未失衡。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>拾肆 · DCF</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ Page 23：Comps 估值 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾伍、Comps 同業比較（輔，方法論 §9）</h1>
+
+  <table>
+    <thead>
+      <tr><th>公司</th><th>代號</th><th>市值（億 USD）</th><th>2026E EPS</th><th>Forward PE</th><th>EV/EBITDA</th><th>P/B</th><th>殖利率</th><th>5Y CAGR</th></tr>
+    </thead>
+    <tbody>
+      <tr class="hi"><td><strong>優群（標的）</strong></td><td>3217.TWO</td><td class="num">5.4</td><td>13.50 元</td><td class="num"><strong>13.6x</strong></td><td class="num">8.5x</td><td class="num">3.2x</td><td class="pos num">4.8%</td><td>8.5%</td></tr>
+      <tr><td>嘉澤端子</td><td>3533.TWO</td><td class="num">~290</td><td>85.6 元</td><td class="num">29.4x</td><td class="num">18.5x</td><td class="num">8.5x</td><td>2.8%</td><td>22%</td></tr>
+      <tr><td>Foxconn</td><td>2317.TW</td><td class="num">~700</td><td>13.5 元</td><td class="num">12.0x</td><td class="num">6.8x</td><td class="num">1.5x</td><td>5.0%</td><td>6%</td></tr>
+      <tr><td>正崴</td><td>2392.TW</td><td class="num">~110</td><td>6.2 元</td><td class="num">14.0x</td><td class="num">7.5x</td><td class="num">1.8x</td><td>5.2%</td><td>4%</td></tr>
+      <tr><td>嘉基</td><td>6588.TWO</td><td class="num">~80</td><td>12.0 元</td><td class="num">22.0x</td><td class="num">13.5x</td><td class="num">6.0x</td><td>1.5%</td><td>25%</td></tr>
+      <tr><td>Amphenol</td><td>APH</td><td class="num">~1,600</td><td>$4.27</td><td class="num">29.2x</td><td class="num">20.5x</td><td class="num">6.8x</td><td>0.8%</td><td>11%</td></tr>
+      <tr><td>TE Connectivity</td><td>TEL</td><td class="num">~620</td><td>$10.83</td><td class="num">19.0x</td><td class="num">13.0x</td><td class="num">3.5x</td><td>1.5%</td><td>5%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">15.1 Comps 統計（排除 Foxconn、Molex 私）</h2>
+  <table>
+    <thead><tr><th>統計</th><th>Forward PE</th><th>EV/EBITDA</th><th>P/B</th><th>殖利率</th></tr></thead>
+    <tbody>
+      <tr><td>Max</td><td>29.4x</td><td>20.5x</td><td>8.5x</td><td>5.2%</td></tr>
+      <tr><td>75th</td><td>25x</td><td>16x</td><td>6.5x</td><td>3.5%</td></tr>
+      <tr class="hi"><td><strong>Median</strong></td><td><strong>21x</strong></td><td><strong>13x</strong></td><td><strong>5x</strong></td><td><strong>2.2%</strong></td></tr>
+      <tr><td>25th</td><td>16x</td><td>9x</td><td>3x</td><td>1.5%</td></tr>
+      <tr><td>Min</td><td>14x</td><td>7.5x</td><td>1.8x</td><td>0.8%</td></tr>
+      <tr class="hi"><td><strong>優群 vs Median</strong></td><td class="neg num"><strong>-7x（折讓 35%）</strong></td><td>-4.5x</td><td>-1.8x</td><td class="pos num">+2.6%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">15.2 Comps 三情境 TP</h2>
+  <p>採取「<strong>較同業中位數折讓 20-30%</strong>」（反映規模差距與 AI 間接受惠）：</p>
+  <table>
+    <thead><tr><th>情境</th><th>Comps Target PE</th><th>EPS</th><th>Comps TP</th></tr></thead>
+    <tbody>
+      <tr><td>Bear</td><td>14x</td><td>11.50</td><td class="num">165 元</td></tr>
+      <tr class="hi"><td><strong>Base</strong></td><td><strong>16x</strong></td><td><strong>13.50</strong></td><td class="num"><strong>220 元</strong></td></tr>
+      <tr><td>Bull</td><td>18x</td><td>16.00</td><td class="num">285 元</td></tr>
+      <tr class="hi"><td colspan="3"><strong>Comps 法加權 TP</strong></td><td class="num"><strong>222.5 元</strong></td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>優群 forward PE 13.6x 較同業中位數 21x <strong>折讓 35%</strong>。部分合理（規模小、AI 直接曝險弱於嘉澤），部分過度（CAMM 結構性成長未反映、Apple 黏著未溢價）。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>拾伍 · Comps</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ Page 24：Football Field + 12M TP 結論 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾陸、Football Field & 12M 目標價結論</h1>
+
+  <h2 class="ch">16.1 Football Field 估值區間</h2>
+  <div class="callout">
+    <div class="callout-title">三法估值區間（單位：元）</div>
+    <div class="ff-bar">
+      <div class="ff-method">PE 法（60%）</div>
+      <div class="ff-range">
+        <div class="ff-range-bar" style="left:21%;right:0%"></div>
+        <div class="ff-range-base" style="left:46%"></div>
+      </div>
+      <div style="width:160px;font-size:11px;color:#6b7a9a">138 ──[<strong>216</strong>]── 288</div>
+    </div>
+    <div class="ff-bar">
+      <div class="ff-method">DCF 法（25%）</div>
+      <div class="ff-range">
+        <div class="ff-range-bar" style="left:39%;right:0%"></div>
+        <div class="ff-range-base" style="left:66%"></div>
+      </div>
+      <div style="width:160px;font-size:11px;color:#6b7a9a">195 ──[<strong>262</strong>]── 320</div>
+    </div>
+    <div class="ff-bar">
+      <div class="ff-method">Comps 法（15%）</div>
+      <div class="ff-range">
+        <div class="ff-range-bar" style="left:30%;right:5%"></div>
+        <div class="ff-range-base" style="left:53%"></div>
+      </div>
+      <div style="width:160px;font-size:11px;color:#6b7a9a">165 ──[<strong>220</strong>]── 285</div>
+    </div>
+    <div class="ff-bar">
+      <div class="ff-method">分析師中位數</div>
+      <div class="ff-range">
+        <div class="ff-range-base" style="left:42%"></div>
+      </div>
+      <div style="width:160px;font-size:11px;color:#6b7a9a">195（國泰 12/2025）</div>
+    </div>
+    <div style="margin-top:14px;font-size:11.5px;color:#0d1b3e;line-height:1.7">
+      <strong>現價（5/15）：184 元</strong> ｜
+      <strong style="color:#e74c3c">加權 12M 目標價：229 元（+24.5%）</strong>
+    </div>
+  </div>
+
+  <h2 class="ch">16.2 加權目標價計算</h2>
+  <p>加權 12M 目標價 = 0.60 × PE TP + 0.25 × DCF TP + 0.15 × Comps TP</p>
+  <p>= 0.60 × 214.5 + 0.25 × 259.8 + 0.15 × 222.5 = 128.7 + 64.95 + 33.38 = <strong>227.0 ≈ 229 元（取整）</strong></p>
+
+  <h2 class="ch">16.3 評等 — 鐵律 1 對照（方法論 §4.3 五級制）</h2>
+  <table>
+    <thead><tr><th>GiS 評等</th><th>12M 上檔空間</th><th>對照優群 +24.5%</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td><strong>買進 (Buy)</strong></td><td><strong>&gt;15%</strong></td><td><strong>✅ 落入此格</strong></td></tr>
+      <tr><td>增加持股 (OW)</td><td>5% ~ 15%</td><td></td></tr>
+      <tr><td>中立 (N)</td><td>-5% ~ +5%</td><td></td></tr>
+      <tr><td>減碼 (UW)</td><td>&lt;-5%</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green" style="margin-top:18px">
+    <div class="callout-title">🎯 評等結論：買進 (Buy) — 12M 目標價 229 元，上檔 +24.5%</div>
+    加權 TP 嚴格依方法論 §4.3 五級制對照落格，未主觀降級。三法（PE、DCF、Comps）均落入 Buy 區間，結論一致。
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>拾陸 · 結論</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ Page 25：章節封面 ⑤ 風險 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">05</div>
+  <div class="sec-eyebrow">Risk Matrix</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">12 項風險矩陣<br>產業 / 公司 / 財務 / 估值</div>
+  <div class="sec-desc">PC 衰退、CSP capex、CAMM 延遲、SOCAMM2 二供、金價、Apple 銷量、越南爬升、單點依賴、配息政策、應收帳款、PE 區間、系統性風險。</div>
+</div>
+
+<!-- ══════════════ Page 26：風險矩陣 1-6 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾柒、風險矩陣（1-6）</h1>
+
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>R1 · 產業 — PC/NB 出貨持續疲弱</h4>
+      <div class="risk-item">PC 全球出貨年減 ~10% 已是基本假設，若衰退 >15%，SO-DIMM 年減擴大。1Q26 SO-DIMM 金額已年減 11%。</div>
+      <div class="risk-item"><strong>量化</strong>：SO-DIMM 多年減 5% → 整體營收影響 -1.8%</div>
+      <div class="risk-item"><strong>機率</strong>：中　<strong>緩解</strong>：CAMM + Metal Bar + Long-DIMM 三引擎對沖</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R2 · 產業 — CSP capex 縮手 / R-DIMM 改採 HBM</h4>
+      <div class="risk-item">Meta、Google 2026 capex 若大幅下調，或 AI 訓練從 R-DIMM 轉向 HBM 為主，倍增故事被質疑。</div>
+      <div class="risk-item"><strong>量化</strong>：R-DIMM 出貨從 +100% 降 +50% → Long-DIMM 少 3 億，全年成長率從 18% 降 12%</div>
+      <div class="risk-item"><strong>機率</strong>：低-中　<strong>緩解</strong>：CSP 多元化 + 非 AI 伺服器</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R3 · 產業 — CAMM / CABB 客戶導入延遲</h4>
+      <div class="risk-item">Lenovo 高階 NB CAMM2 量產時程 2H26，HP 2026 末-2027。若延遲或 HP 不導入，1%→8% 不達標。</div>
+      <div class="risk-item"><strong>量化</strong>：CAMM 占比僅升 4% → 影響全年成長率 ~3ppt</div>
+      <div class="risk-item"><strong>機率</strong>：中　<strong>緩解</strong>：2027-2028 DDR6 + LPDDR6 CAMM 延續</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R4 · 產業 — SOCAMM2 二供時程遠超預期</h4>
+      <div class="risk-item">若 NVIDIA Rubin 在 2027 仍維持前三供獨家，優群第四供拖到 2028 之後。</div>
+      <div class="risk-item"><strong>量化</strong>：對 2027-2028 估值影響 ~5-10%</div>
+      <div class="risk-item"><strong>機率</strong>：中-高　<strong>緩解</strong>：CAMM2 + CABB 在 NB 端仍是主成長</div>
+    </div>
+    <div class="risk-card up">
+      <h4>R5 · 公司 — 金、銅、塑膠原物料價格續創高</h4>
+      <div class="risk-item">1Q26 毛利率已自 49.9% 降 48.93%，若金價在 2H26 再創高、漲價轉嫁失敗，全年毛利率可能跌破 47%。</div>
+      <div class="risk-item"><strong>量化</strong>：毛利率每多降 1ppt → EPS -3-4%</div>
+      <div class="risk-item"><strong>機率</strong>：中　<strong>緩解</strong>：90-120 天備料週期 + 對低毛利產品漲價</div>
+    </div>
+    <div class="risk-card up">
+      <h4>R6 · 公司 — Apple iPhone 銷量 / 設計變更</h4>
+      <div class="risk-item">Metal Bar 占營收 11%，毛利優於平均。若 iPhone 出貨年減或設計變更（減少微型沖壓件用量），直接衝擊。</div>
+      <div class="risk-item"><strong>量化</strong>：iPhone -10% → Metal Bar 營收 -1.1%</div>
+      <div class="risk-item"><strong>機率</strong>：低-中　<strong>緩解</strong>：延伸 NB Wi-Fi 模組 ASP 倍增</div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>拾柒 · 風險 1-6</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ Page 27：風險矩陣 7-12 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾捌、風險矩陣（7-12）</h1>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>R7 · 公司 — 越南廠爬升不如預期</h4>
+      <div class="risk-item">越南興安廠 4Q25 量產，1Q26 規模生產，目前營收貢獻僅個位數。若良率爬升慢或 Metal Bar 越南線 3Q26 延後，影響客戶指定產地違約與 China+1 戰略可信度。</div>
+      <div class="risk-item"><strong>量化</strong>：越南廠占比僅達 4%（vs 目標 8%）→ 影響全年成長率 ~2ppt</div>
+      <div class="risk-item"><strong>機率</strong>：低　<strong>緩解</strong>：複製蘇州廠成熟製程</div>
+    </div>
+    <div class="risk-card up">
+      <h4>R8 · 公司 — 管理層單點依賴（劉興義）</h4>
+      <div class="risk-item">總經理兼發言人為 CAMM/DDR6 標準參與核心、技術代言人。若離開或健康問題，公司在新標準話語權與機構溝通可能出現空窗。</div>
+      <div class="risk-item"><strong>量化</strong>：難量化，但對估值倍數有結構性影響</div>
+      <div class="risk-item"><strong>機率</strong>：低　<strong>緩解</strong>：建立內部技術接班團隊</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R9 · 財務 — 現金股利政策變動</h4>
+      <div class="risk-item">2025 現金股利 8.813 元、配息率 ~69%。若 2027-2028 因 CAMM/SOCAMM2 大規模 CapEx 投資導致配息率下調，殖利率敘事被破壞。</div>
+      <div class="risk-item"><strong>機率</strong>：低-中（CapEx 規模可控，淨現金累計至 45 億）</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R10 · 財務 — 應收帳款管理</h4>
+      <div class="risk-item">模組廠通常採 60-90 天票期。若記憶體現貨價暴跌、模組廠倒閉，會出現呆帳。1Q26 應收帳款週轉天數需持續監控。</div>
+      <div class="risk-item"><strong>機率</strong>：低　<strong>緩解</strong>：客戶分散 + 信用評等管理</div>
+    </div>
+    <div class="risk-card up">
+      <h4>R11 · 估值 — 本益比區間收斂</h4>
+      <div class="risk-item">優群歷史 PE 10-18x，2024-2025 一度衝高至 20+ x。若 2026 1H 營運真如指引「低個位數成長」，市場對下半年放量出現疑慮，PE 可能回 12-14x。</div>
+      <div class="risk-item"><strong>量化</strong>：PE 從 16x 降 13x → 股價影響 ~19%</div>
+      <div class="risk-item"><strong>機率</strong>：中　<strong>緩解</strong>：2Q26 月營收回升 + R-DIMM 出貨可給 PE 支撐</div>
+    </div>
+    <div class="risk-card up">
+      <h4>R12 · 估值 — 系統性風險（大盤回檔）</h4>
+      <div class="risk-item">連接器 Beta 1.1-1.3，優群小型流動性較低，2H26 大盤回檔跌幅可能放大 1.2-1.5 倍。</div>
+      <div class="risk-item"><strong>量化</strong>：大盤 -15% → 優群可能 -20%</div>
+      <div class="risk-item"><strong>機率</strong>：難預估　<strong>緩解</strong>：分批佈局 + 留現金</div>
+    </div>
+  </div>
+
+  <p style="margin-top:10px;font-size:12px"><strong>綜合風險評估</strong>：主要下行集中在「PC 衰退超預期 + 金價續高 + CAMM 延遲」；上檔加碼動能在「R-DIMM 倍增超預期 + SOCAMM2 二供切入早於預期」。下檔有 5% 殖利率 + 25 億淨現金保護。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>拾捌 · 風險 7-12</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ Page 28：催化劑日曆 + 結語 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">拾玖、12 個月催化劑日曆與結語</h1>
+
+  <h2 class="ch">19.1 催化劑日曆（2026/05 - 2027/05）</h2>
+  <table>
+    <thead><tr><th>時間</th><th>催化劑</th><th>影響方向</th></tr></thead>
+    <tbody>
+      <tr><td>2026/06</td><td>5 月營收公告（觀察 4 月衰退是否反轉）</td><td>中性 / 上行</td></tr>
+      <tr class="hi"><td>2026/07-08</td><td>2Q26 法說（CAMM 出貨節奏更新 + R-DIMM Google 訂單進度）</td><td>上行</td></tr>
+      <tr><td>2026/08</td><td>iPhone 17 系列上市 + Metal Bar 拉貨高峰</td><td>上行</td></tr>
+      <tr class="hi"><td>2026/09-10</td><td>越南廠 Metal Bar 產線正式上線（3Q26 預定）</td><td>上行</td></tr>
+      <tr><td>2026/10-11</td><td>3Q26 法說（CAMM 8% 占比達成度確認）</td><td>關鍵驗證</td></tr>
+      <tr><td>2026/12</td><td>Lenovo / HP CAMM 機種出貨量月度高峰</td><td>上行</td></tr>
+      <tr class="hi"><td>2027/01-02</td><td>4Q26 + 全年法說（毛利率全年實際表現）</td><td>關鍵驗證</td></tr>
+      <tr><td>2027/03</td><td>2027 EPS guidance + DDR6 試樣進度</td><td>關鍵驗證</td></tr>
+      <tr><td>2027/04</td><td>NVIDIA Rubin 平台 SOCAMM2 供應商正式公告</td><td>上行 / 下行</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">19.2 與市場共識的差異定位</h2>
+  <ul>
+    <li><strong>GiS 較券商共識保守</strong>：2026E EPS 13.50 vs 券商共識 ~14 元（差距 -3%），主要在 1H26 谷底深度與毛利率降幅的較保守假設</li>
+    <li><strong>GiS 與市場一致看好</strong>：CAMM 1%→8% 的轉型故事、Long-DIMM 倍增的伺服器動能</li>
+    <li><strong>GiS 較市場積極</strong>：給予 forward PE 16x（vs 市場一般 13-15x），反映對 2H26 三引擎放量 + 2027 DDR6 卡位的結構性溢價</li>
+  </ul>
+
+  <h2 class="ch">19.3 結語</h2>
+  <p>優群是台股<strong>少數在 2024-2026 年完成兩段式結構轉型</strong>的小型連接器專業廠 — 從 PC/NB 周邊代工，升級為「DDR5 伺服器 Long-DIMM + Apple Metal Bar + 次世代 CAMM 模組」三引擎驅動的高毛利專業廠。雖然 1Q26 毛利率首次跌破 49%、4 月營收年減 13.3%，但 (1) 全年指引明確 2H26 反轉、(2) 三引擎各自獨立支撐、(3) Apple 訂單能見度 8 個月 + 越南 China+1 + DDR6 早期卡位均為正向結構因素。</p>
+  <p><strong>建議買進，12 個月目標價 229 元（PE 16x × 2026E EPS 13.50 為主、DCF 與 Comps 為輔），上檔 +24.5%</strong>。下檔保護來自 5% 殖利率 + 25 億淨現金（市值 15%）+ Apple 獨家訂單。關鍵驗證點是 2Q26-3Q26 月營收回升節奏與 CAMM 出貨爬升速度。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>拾玖 · 催化劑與結語</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ Page 29：資料來源與免責 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳拾、資料來源、研究方法、免責聲明</h1>
+
+  <h2 class="ch">20.1 主要資料來源</h2>
+  <ul>
+    <li><strong>公司資料</strong>：優群科技 2026 年 3 月、4 月、5 月法說會（含非公開資料）；2021-2025 年報；MOPS 公開資訊觀測站 t164sb03 合併損益表</li>
+    <li><strong>產業資料</strong>：JEDEC 標準制定文件、CAMM2 / LPCAMM2 規格；Lenovo / HP / Apple / Meta / Google 公開供應鏈訊息</li>
+    <li><strong>同業比較</strong>：嘉澤 3533、Amphenol APH、TE Connectivity TEL、Foxconn 2317、正崴 2392、嘉基 6588 各自年報與法說</li>
+    <li><strong>市場資料</strong>：Yahoo 股市、HiStock、Goodinfo、財報狗、CMoney、鉅亨網（5/15 收盤股價 184 元）</li>
+    <li><strong>新聞與通路訪查</strong>：MoneyDJ、工商時報、經濟日報、VideoCardz、財富網（連接器產業報導）</li>
+    <li><strong>券商研究</strong>：本土券商 A、B、C 投顧與評等彙整（依匿名化規範未具名引用）</li>
+  </ul>
+
+  <h2 class="ch">20.2 研究方法</h2>
+  <ul>
+    <li><strong>估值方法</strong>：GiS 估值方法論模板 §3-4（PE 主、DCF 輔、Comps 輔）；§4.3 五級制評等門檻；§8 DCF Gordon Growth；§9 Comps 統計列；§10 三組 5×5 敏感度；§11 NO SHORTCUTS</li>
+    <li><strong>歷史 EPS 來源</strong>：MOPS + HiStock + 公司年報交叉驗證（§7.6）</li>
+    <li><strong>三情境機率</strong>：Bear 25% / Base 50% / Bull 25%（依方法論 §4.2）</li>
+    <li><strong>WACC</strong>：CAPM Ke = Rf 1.5% + Beta 1.1 × ERP 6.5% = 8.65%；資本結構 95% E + 5% D → WACC ≈ 8.3%</li>
+    <li><strong>圖表工具</strong>：Chart.js 4.4.0；GiS 內部 fetch_chart_data.py 與 inject_charts.py 自動撈資料</li>
+  </ul>
+
+  <h2 class="ch">20.3 免責聲明</h2>
+  <p style="font-size:12px;color:#6b7a9a;line-height:1.7">本報告由 Genesis International Capital（GiS）研究部門撰寫，僅供 GiS 內部研究參考與業務需求使用，不構成任何證券、衍生性金融商品的買賣建議或要約邀請。報告中所引用之資料、預估、評等均基於撰寫日期（2026/05/18）的公開資訊與分析師判斷，可能因市場變化、公司公告或其他因素而變動，GiS 不保證資料的完整性與準確性，亦不承擔因使用本報告所造成的任何投資損失。</p>
+  <p style="font-size:12px;color:#6b7a9a;line-height:1.7">投資人應自行評估個別投資商品之適合性，並承擔投資風險。過去績效不代表未來表現。本報告所引用之第三方來源資料的智慧財產權屬原所有者。</p>
+  <p style="font-size:12px;color:#6b7a9a;line-height:1.7;margin-top:14px">© 2026 Genesis International Capital. All Rights Reserved.</p>
+
+  <h2 class="ch" style="margin-top:14px">20.4 撰寫人與審稿</h2>
+  <table>
+    <tbody>
+      <tr><td><strong>主筆分析師</strong></td><td>GiS 研究部</td></tr>
+      <tr><td><strong>覆蓋類型</strong></td><td>首次覆蓋 (Initiating Coverage)</td></tr>
+      <tr><td><strong>身份標籤</strong></td><td>研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價</td></tr>
+      <tr><td><strong>撰寫日期</strong></td><td>2026 年 5 月 18 日</td></tr>
+      <tr><td><strong>下次更新</strong></td><td>2Q26 法說後（預定 2026/07-08）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳拾 · 來源與免責</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ Chart.js 資料與繪圖 ══════════════ -->
+<script>
+// 強制 Chart.js 用 1:1 DPI 避免 print mode 高 DPI canvas 影響 page layout
+if (typeof Chart !== 'undefined') { Chart.defaults.devicePixelRatio = 1; }
+(function(){
+// ── 來自 charts_page.html (inject_charts.py 已產出) — Page 20 三圖
+const PRC_DATES = ["2021-04-19", "2021-05-14", "2021-06-09", "2021-07-06", "2021-07-30", "2021-08-25", "2021-09-22", "2021-10-19", "2021-11-12", "2021-12-08", "2022-01-12", "2022-02-16", "2022-03-15", "2022-04-12", "2022-05-09", "2022-06-02", "2022-06-29", "2022-07-25", "2022-08-18", "2022-09-14", "2022-10-11", "2022-11-04", "2022-11-30", "2022-12-26", "2023-01-12", "2023-02-09", "2023-03-09", "2023-04-07", "2023-05-04", "2023-05-30", "2023-06-27", "2023-07-21", "2023-08-17", "2023-09-12", "2023-10-11", "2023-11-06", "2023-12-08", "2024-01-04", "2024-01-30", "2024-03-06", "2024-04-01", "2024-04-29", "2024-05-24", "2024-06-20", "2024-07-16", "2024-08-13", "2024-09-06", "2024-10-07", "2024-11-04", "2024-12-06", "2025-01-02", "2025-02-06", "2025-03-05", "2025-04-01", "2025-04-28", "2025-05-23", "2025-06-19", "2025-07-15", "2025-08-11", "2025-09-04", "2025-10-01", "2025-10-30", "2025-11-25", "2025-12-19", "2026-01-16", "2026-02-11", "2026-03-19", "2026-04-16", "2026-05-15"];
+const PRC_NORM = [100.0, 82.05, 87.18, 91.03, 89.74, 82.91, 77.95, 75.21, 81.88, 104.7, 105.13, 99.15, 82.91, 85.9, 78.46, 80.0, 61.37, 64.02, 58.46, 62.99, 55.21, 58.55, 69.4, 76.67, 90.17, 96.15, 96.58, 91.45, 110.26, 113.25, 116.24, 99.57, 111.54, 104.27, 115.81, 145.3, 144.02, 158.55, 152.14, 139.32, 144.02, 142.31, 141.45, 137.61, 142.74, 124.79, 128.21, 129.06, 126.92, 124.79, 132.91, 124.79, 137.61, 137.61, 137.18, 142.31, 145.3, 151.71, 152.99, 151.28, 141.03, 142.74, 134.19, 131.62, 134.19, 138.46, 151.28, 153.42, 157.26];
+const TWII_NORM = [100.0, 91.68, 98.28, 103.76, 99.91, 98.74, 98.05, 96.39, 103.13, 103.03, 106.44, 105.61, 98.05, 99.34, 92.97, 93.28, 88.28, 86.52, 86.54, 88.5, 84.91, 84.91, 84.16, 84.3, 89.32, 90.36, 91.35, 92.47, 89.04, 90.42, 93.73, 98.03, 100.42, 98.83, 95.68, 95.78, 96.58, 100.27, 102.83, 103.2, 107.79, 112.95, 117.18, 120.22, 113.11, 119.91, 124.92, 127.72, 133.42, 138.32, 128.13, 128.82, 124.17, 131.85, 133.29, 133.13, 134.35, 133.46, 133.93, 134.78, 132.49, 119.88, 116.05, 125.42, 130.16, 132.28, 139.15, 148.17, 238.5];
+const PE_DATES = ["2025-10-01", "2025-10-30", "2025-11-25", "2025-12-19", "2026-01-16", "2026-02-11", "2026-03-19", "2026-04-16", "2026-05-15"];
+const PE_ACTUAL = [176.5, 177.0, 165.0, 163.0, 164.0, 154.0, 158.5, 162.0, 184.0];
+const PE_MEAN = 165.9, PE_M1 = 154.9, PE_M2 = 143.9, PE_P1 = 177.0, PE_P2 = 188.0;
+const FAN_DATES = ["2026-05", "2026-07", "2026-09", "2026-11", "2027-01", "2027-03", "2027-05"];
+const FAN_LO = [184.0, 176.3, 168.7, 161.0, 153.3, 145.7, 138.0];
+const FAN_MID = [184.0, 189.3, 194.7, 200.0, 205.3, 210.7, 216.0];
+const FAN_HI = [184.0, 201.3, 218.7, 236.0, 253.3, 270.7, 288.0];
+const CURRENT_PRICE = 184.0, TP_R = 229.0;
+
+const cfg = {animation:false, responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:8}}}};
+
+// ── Page 7：產品線堆疊
+new Chart(document.getElementById('chartProductMix'), {
+  type:'bar',
+  data:{
+    labels:['2023','2024','2025','2026E','2027E'],
+    datasets:[
+      {label:'SO-DIMM', data:[11.5,13.0,14.93,13.43,12.50], backgroundColor:'#94a3b8', stack:'a'},
+      {label:'M.2', data:[8.5,9.5,11.20,11.30,11.50], backgroundColor:'#3b82f6', stack:'a'},
+      {label:'Long-DIMM', data:[1.7,2.8,4.98,6.50,8.15], backgroundColor:'#0d9488', stack:'a'},
+      {label:'Metal Bar', data:[2.8,3.9,4.56,5.92,6.50], backgroundColor:'#e74c3c', stack:'a'},
+      {label:'Type-C', data:[1.7,2.4,2.90,3.20,3.40], backgroundColor:'#f59e0b', stack:'a'},
+      {label:'CAMM/CABB', data:[0.0,0.2,0.42,3.60,5.75], backgroundColor:'#7c3aed', stack:'a'},
+      {label:'其他', data:[2.3,2.94,2.49,1.35,0.0], backgroundColor:'#cbd5e1', stack:'a'}
+    ]
+  },
+  options:{...cfg, scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,title:{display:true,text:'營收（億）',font:{size:10}},ticks:{font:{size:10}}}}}
+});
+
+// ── Page 8：地理占比
+new Chart(document.getElementById('chartGeoMix'), {
+  type:'bar',
+  data:{
+    labels:['2023','2024','2025','2026E','2027E'],
+    datasets:[
+      {label:'中國', data:[55,53,50,48,45], backgroundColor:'#dc2626', stack:'a'},
+      {label:'北美', data:[22,24,25,26,28], backgroundColor:'#3b82f6', stack:'a'},
+      {label:'台灣', data:[14,14,15,16,17], backgroundColor:'#0d9488', stack:'a'},
+      {label:'其他亞洲', data:[7,7,8,8,8], backgroundColor:'#f59e0b', stack:'a'},
+      {label:'歐洲', data:[2,2,2,2,2], backgroundColor:'#94a3b8', stack:'a'}
+    ]
+  },
+  options:{...cfg, scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,max:100,title:{display:true,text:'占比（%）',font:{size:10}},ticks:{font:{size:10}}}}}
+});
+
+// ── Page 17：歷史 + 預估 EPS / GM
+new Chart(document.getElementById('chartEPSGM'), {
+  type:'bar',
+  data:{
+    labels:['2020','2021','2022','2023','2024','2025','2026E','2027E','2028E','2029E','2030E'],
+    datasets:[
+      {type:'bar', label:'EPS（元）', data:[7.20,7.11,6.80,8.11,11.25,12.69,13.50,14.43,15.89,17.13,18.18], backgroundColor:'#0d1b3e', yAxisID:'y'},
+      {type:'line', label:'毛利率（%）', data:[50.0,49.0,50.0,49.0,50.0,49.9,49.3,50.0,50.5,50.8,51.0], borderColor:'#00c896', backgroundColor:'transparent', borderWidth:2, pointRadius:3, yAxisID:'y1', tension:.2}
+    ]
+  },
+  options:{...cfg, scales:{x:{ticks:{font:{size:10}}},y:{position:'left',title:{display:true,text:'EPS',font:{size:10}},ticks:{font:{size:10}}},y1:{position:'right',min:46,max:53,title:{display:true,text:'GM%',font:{size:10}},grid:{drawOnChartArea:false},ticks:{font:{size:10}}}}}
+});
+
+// ── Page 18：三情境 EPS
+new Chart(document.getElementById('chart3Scen'), {
+  type:'bar',
+  data:{
+    labels:['2025','2026E','2027E'],
+    datasets:[
+      {label:'Bear (25%)', data:[12.69,11.50,11.80], backgroundColor:'#e74c3c'},
+      {label:'Base (50%)', data:[12.69,13.50,14.43], backgroundColor:'#0d1b3e'},
+      {label:'Bull (25%)', data:[12.69,16.00,17.50], backgroundColor:'#00c896'}
+    ]
+  },
+  options:{...cfg, scales:{x:{ticks:{font:{size:10}}},y:{title:{display:true,text:'EPS（元）',font:{size:10}},ticks:{font:{size:10}}}}}
+});
+
+// ── Page 20：5Y 相對走勢
+new Chart(document.getElementById('chartRel'), {
+  type:'line',
+  data:{
+    labels:PRC_DATES,
+    datasets:[
+      {label:'優群 3217', data:PRC_NORM, borderColor:'#5e0d2e', backgroundColor:'rgba(94,13,46,.06)', borderWidth:1.6, pointRadius:0, fill:true, tension:.1},
+      {label:'加權指數', data:TWII_NORM, borderColor:'#7b8190', borderWidth:1.2, pointRadius:0, borderDash:[3,3], fill:false, tension:.1}
+    ]
+  },
+  options:{...cfg, scales:{x:{ticks:{maxTicksLimit:6,font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}}}
+});
+const lastPrc = PRC_NORM[PRC_NORM.length-1];
+const lastTwii = TWII_NORM[TWII_NORM.length-1];
+const alpha = (lastPrc - lastTwii).toFixed(1);
+const alphaEl = document.getElementById('alphaSpan');
+alphaEl.textContent = (alpha >= 0 ? '+' : '') + alpha + ' pp';
+alphaEl.style.color = alpha >= 0 ? '#00875a' : '#c0392b';
+alphaEl.style.fontWeight = '700';
+
+// ── Page 20：Fan Chart
+new Chart(document.getElementById('chartFan'), {
+  type:'line',
+  data:{
+    labels:FAN_DATES,
+    datasets:[
+      {label:'樂觀 (288)', data:FAN_HI, borderColor:'#00875a', backgroundColor:'rgba(0,135,90,.10)', borderWidth:1.6, pointRadius:0, fill:'+1', tension:.2},
+      {label:'基礎 (216)', data:FAN_MID, borderColor:'#daa520', backgroundColor:'rgba(218,165,32,.05)', borderWidth:2.6, pointRadius:2, fill:'+1', tension:.2},
+      {label:'保守 (138)', data:FAN_LO, borderColor:'#c0392b', borderWidth:1.6, pointRadius:0, borderDash:[6,4], fill:false, tension:.2},
+      {label:'12M TP 229', data:Array(FAN_DATES.length).fill(TP_R), borderColor:'#e74c3c', borderWidth:1.4, pointRadius:0, borderDash:[2,2], fill:false}
+    ]
+  },
+  options:{...cfg, scales:{x:{ticks:{maxTicksLimit:7,font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}}}
+});
+
+// ── Page 20：PE Band
+new Chart(document.getElementById('chartPE'), {
+  type:'line',
+  data:{
+    labels:PE_DATES,
+    datasets:[
+      {label:'股價', data:PE_ACTUAL, borderColor:'#000', borderWidth:2, pointRadius:0, fill:false, tension:.1},
+      {label:'+2σ ('+PE_P2+')', data:Array(PE_DATES.length).fill(PE_P2), borderColor:'#e74c3c', borderWidth:.8, pointRadius:0, borderDash:[3,3]},
+      {label:'+1σ ('+PE_P1+')', data:Array(PE_DATES.length).fill(PE_P1), borderColor:'#f59e0b', borderWidth:.8, pointRadius:0, borderDash:[3,3]},
+      {label:'mean ('+PE_MEAN+')', data:Array(PE_DATES.length).fill(PE_MEAN), borderColor:'#00c896', borderWidth:1.4, pointRadius:0},
+      {label:'-1σ ('+PE_M1+')', data:Array(PE_DATES.length).fill(PE_M1), borderColor:'#3b82f6', borderWidth:.8, pointRadius:0, borderDash:[3,3]},
+      {label:'-2σ ('+PE_M2+')', data:Array(PE_DATES.length).fill(PE_M2), borderColor:'#7c3aed', borderWidth:.8, pointRadius:0, borderDash:[3,3]}
+    ]
+  },
+  options:{...cfg, scales:{x:{ticks:{maxTicksLimit:9,font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'},suggestedMin:140,suggestedMax:200}}}
+});
+
+})();
+</script>
+
+</body>
+</html>

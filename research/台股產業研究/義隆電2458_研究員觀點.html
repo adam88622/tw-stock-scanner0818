@@ -1,0 +1,925 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>義隆電 2458 首次覆蓋 | GiS 研究員觀點</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.chart-img{width:100%;height:210px;display:block;border-radius:4px;object-fit:contain}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.28;letter-spacing:1.5px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:14.5px;color:rgba(255,255,255,.65);margin-bottom:38px;letter-spacing:.5px;line-height:1.6}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:44px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:21px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:46px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:620px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:520px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:30px 0 18px;page-break-after:avoid}
+h1.ch:first-child{margin-top:8px}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:24px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:8px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.neutral{background:#9aa5b1;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:18px;margin:14px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:12px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.gray{background:linear-gradient(135deg,#475569,#64748b)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:22px;margin:18px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:16px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12.5px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:10.5px;opacity:.8;line-height:1.5}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+p{margin:7px 0 10px;line-height:1.72}
+ul,ol{padding-left:20px;margin:7px 0 10px}
+li{margin:4px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:22px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:6px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:16px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+.heat td{text-align:center;font-weight:600}
+.h1c{background:#c0392b!important;color:#fff}
+.h2c{background:#e67e22!important;color:#fff}
+.h3c{background:#f1c40f!important}
+.h4c{background:#a9dfbf!important}
+.h5c{background:#27ae60!important;color:#fff}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:13px 56px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13.5px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">研究員 · 首次覆蓋深度報告</div></div>
+    </div>
+    <div class="cover-eyebrow">Initiating Coverage · Semiconductors / IC Design</div>
+    <div class="cover-title">義隆電子 2458<br><em>從 NB 人機介面龍頭</em><br>走向 Edge AI、無人機與光通訊</div>
+    <div class="cover-subtitle">Elan Microelectronics — HMI franchise meets multi-engine growth.<br>世界級觸控龍頭的三軌成長故事，與一次「股價先到、價值後到」的估值取捨。</div>
+    <div class="cover-tags">
+      <span class="ctag hl">中立 Neutral</span>
+      <span class="ctag hl">12M 目標價 NT$185</span>
+      <span class="ctag">Haptic 觸控板</span>
+      <span class="ctag">Edge AI / 無人機</span>
+      <span class="ctag">矽光子 EIC</span>
+      <span class="ctag">LEO RF</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">NT$<em>185</em></div><div class="cstat-label">12M 目標價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>中立</em></div><div class="cstat-label">投資評等</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>2.8</em>%</div><div class="cstat-label">上檔空間</div></div>
+    <div class="cstat"><div class="cstat-num"><em>16.5</em>x</div><div class="cstat-label">目標 PE (2027E)</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年6月25日（收盤後）</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要 — 好公司、但好價格已先行</h1>
+  <div class="kpi-row">
+    <div class="kpi gray"><div class="kpi-val">中立</div><div class="kpi-lbl">GiS 投資評等</div></div>
+    <div class="kpi"><div class="kpi-val">NT$185</div><div class="kpi-lbl">12M 目標價（16.5x 2027E）</div></div>
+    <div class="kpi gold"><div class="kpi-val">+2.8<em>%</em></div><div class="kpi-lbl">距 6/25 收盤 180 上檔</div></div>
+    <div class="kpi green"><div class="kpi-val">9.5<em> / 11.2</em></div><div class="kpi-lbl">GiS 26E / 27E EPS（元）</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>世界級 HMI 現金牛，三引擎打開第二成長曲線。</strong>義隆在筆電觸控板、觸控螢幕晶片市佔逾 50%、指向桿（Pointstick）市場主導、NB 指紋辨識市佔 30–35%，NB 人機介面領域具絕對領先地位，貢獻逾七成營收與穩定逾 48% 毛利。在此現金牛之上，公司正以 <strong>Haptic 觸控板（ASP 約傳統 6 倍）、Edge AI 模組（占比 5%→13%）、矽光子 EIC / 低軌衛星 RF</strong> 三條曲線推動「由量轉價」的結構升級。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>2026 是「量縮價增」的轉骨年，但獲利動能溫和而非爆發。</strong>記憶體與 CPU 缺料壓抑 NB 出貨量（外資估 −9% YoY），卻迫使品牌資源集中中高階／商務機種，反而利多義隆高 ASP 產品；商務機種占比一年由 31% 升至 41%。GiS 估 2026E 營收 +9%、EPS 9.5（+11% YoY），2027E EPS 11.2（+18%），成長確定但非倍增——AI／無人機模組基期仍小，光通訊 2026–27 對 EPS 為稀釋而非放大。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>估值已先行反映復甦：給「中立」是方法論結論，不是看壞公司。</strong>股價 10 個交易日由 151 飆至 180（6/25 漲停 +9.8%），距 52 週低點 115.5 已 +56%。當前本益比 ~19.8x（TTM）已站上歷史 +2σ（均值 15.73x）。GiS 加權三情境目標價 NT$185，距現價僅 +2.8%，落入方法論 §4.3「中立」區間（−5%~+5%）。我們認同基本面論點，但認為 12 個月風險報酬在此價位已趨平衡，宜逢回布局。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">股價走勢 vs 加權指數（近一年，相對報酬）</div>
+      <div class="chart-sub">資料來源：TWSE；GiS 整理。義隆 6/25 收 180，52 週區間 115.5–180</div>
+      <div class="chart-container" style="height:205px;width:100%;position:relative"><canvas id="cPrice" style="display:block;width:100%;height:205px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">年度 EPS 與毛利率：循環回落後的高原期</div>
+      <div class="chart-sub">資料來源：公司年報 / MOPS（實績）、GiS 預估（F）</div>
+      <div class="chart-container" style="height:205px;width:100%;position:relative"><canvas id="cEpsGm" style="display:block;width:100%;height:205px"></canvas></div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>執行摘要 · 義隆電 2458</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 評等與目標價推導 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">評等與目標價推導</h1>
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">義隆電子 Elan Microelectronics</div><div class="co-ticker">2458 · TWSE · 全球 NB 人機介面 IC 龍頭，轉型 Edge AI 平台</div></div>
+      <div class="co-badge"><span class="badge neutral">◐ 中立 Neutral</span><span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$185 | 現價 NT$180（6/25 收盤）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+2.8%</div><div class="co-metric-label">12M 預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">16.5x</div><div class="co-metric-label">目標 PE（2027E）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">11.2 元</div><div class="co-metric-label">基準 EPS（2027E）</div></div>
+      <div class="co-metric"><div class="co-metric-val">47–48%</div><div class="co-metric-label">2026E 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      <p style="font-size:12.5px;line-height:1.7"><strong>方法選擇：</strong>義隆屬具循環性的成熟成長型 IC 設計公司，估值以 <strong>PE 為主、DCF 與 Comps 交叉驗證</strong>（方法論 §3.1）。12 個月目標價採 <strong>2027E EPS（復甦年，NTM 落點）× 目標 PE 16.5x</strong>；16.5x 取「2020 後升級循環均值 ~16x」與本土券商 18x（2026E）之折衷，並對照歷史 PE 區間 7–20x（均值 15.73x、+2σ 19.0x）。</p>
+      <p style="font-size:12.5px;line-height:1.7"><strong>加權目標價：</strong>三情境機率加權（保守 25% / 基礎 50% / 樂觀 25%）得 NT$184，四捨五入採 <strong>NT$185</strong>。對照 6/25 收盤 180，上檔 +2.8%，依方法論 §4.3 五級制落入 <strong>中立（−5%~+5%）</strong>。</p>
+      <p style="font-size:12.5px;line-height:1.7"><strong>為何不是買進：</strong>並非質疑franchise或成長故事，而是股價已於 10 個交易日內 +19% 至漲停，當前 TTM PE ~19.8x 已觸及歷史 +2σ，把 2027 復甦與 AI 題材大致定價完畢。GiS 估值方法論強調「加權 TP 算出後直接對照落格，不主觀升降級」——TP 185 / 現價 180 即為中立。</p>
+    </div>
+  </div>
+
+  <h2 class="ch">三情境機率加權目標價（方法論 §4.2）</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>情境</th><th>機率</th><th style="text-align:right">2027E EPS</th><th style="text-align:right">目標 PE</th><th style="text-align:right">目標價</th><th>關鍵假設差異</th></tr></thead>
+    <tbody>
+      <tr><td><strong>保守 Bear</strong></td><td class="num">25%</td><td class="num">9.8</td><td class="num">13.0x</td><td class="num">127</td><td>NB 衰退延長、缺料壓抑全年；毛利受代工漲價侵蝕；AI／無人機模組遞延，PETA 持續業外虧損</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>基礎 Base</strong></td><td class="num">50%</td><td class="num">11.2</td><td class="num">16.5x</td><td class="num hi">185</td><td>商務機種＋Haptic 撐 ASP，AI 占比穩於雙位數，2027 NB 溫和復甦；本業 OPM 升至 ~25%</td></tr>
+      <tr><td><strong>樂觀 Bull</strong></td><td class="num">25%</td><td class="num">12.8</td><td class="num">18.5x</td><td class="num">237</td><td>Haptic 全面導入主流機種、AI 占比衝 15%+、無人機模組放量，PETA 3.2T 提前認證帶動 re-rating</td></tr>
+      <tr style="background:#fff8e1!important"><td style="font-weight:800">加權目標價</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num hi" style="font-weight:800;color:#0d1b3e">≈ 185</td><td style="font-weight:700">採用 NT$185｜上檔 +2.8%｜中立</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：GiS 預估。EPS 為 GiS 模型；目標 PE 參考歷史區間 7–20x（均值 15.73x、+2σ 19.0x）與升級循環均值 16x。</span>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>評等與目標價</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<!-- ══════════════ 章節封面 壹 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Company &amp; Business Model</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">公司與商業模式</div>
+  <div class="sec-desc">從 1994 年的觸控 IC 設計公司，到今日橫跨晶片、模組與系統方案的人機介面平台。本章拆解義隆的營運模式、產品組合與護城河來源。</div>
+</div>
+
+<!-- 公司簡介 + 里程碑 -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹之一、公司簡介：30 年人機介面專業戶</h1>
+  <p>義隆電子（Elan Microelectronics，2458.TW）成立於 1994 年 5 月，2001 年 9 月於台灣證交所上市，總部設於新竹科學園區，並於台北（中和筆電事業中心）、台南、高雄設研發中心，海外於香港、深圳、上海、蘇州、重慶與美國布點。董事長暨總經理為 <strong>葉儀皓</strong>，發言人蔡淑馨，簽證會計師為安侯建業（KPMG）。實收資本額約 <strong>30.4 億元</strong>，發行股數約 3.04 億股（流通在外約 2.86 億股、自由流通比約 76%）。</p>
+  <p>公司定位為<strong>人機介面（HMI）IC 設計與次系統解決方案供應商</strong>，專精觸控板模組、觸控螢幕晶片、指向裝置（Pointing Stick）與生物辨識晶片（指紋為主、延伸人臉）。採無晶圓廠（fabless）模式，晶圓委由台積電、聯電、Magnachip 等多家代工，封測外包，並對 NB、車用、無人機與通訊系統客戶以「晶片或模組」雙形式供貨。</p>
+
+  <h2 class="ch">發展里程碑</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">1994–2001</div><div class="tl-spec">創立 · 上市</div><div class="tl-tech">觸控與 MCU 起家，2001 上市</div></div>
+    <div class="tl-item"><div class="tl-year">2010–2019</div><div class="tl-spec">NB 觸控龍頭</div><div class="tl-tech">觸控板 / 觸控螢幕全球市佔登頂，指紋切入</div></div>
+    <div class="tl-item active"><div class="tl-year">2020–2026 ← 現在</div><div class="tl-spec">由量轉價</div><div class="tl-tech">2021 EPS 17.64 高峰 → 回落高原；Haptic、AI 模組放量</div></div>
+    <div class="tl-item next"><div class="tl-year">2027–2030</div><div class="tl-spec">多軸成長</div><div class="tl-tech">無人機模組、矽光子 EIC、LEO RF 第二曲線</div></div>
+  </div>
+
+  <h2 class="ch">基本資料速覽</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>項目</th><th>數據</th><th>項目</th><th>數據</th></tr></thead>
+    <tbody>
+      <tr><td>產業別</td><td>半導體 / IC 設計（fabless）</td><td>6/25 收盤</td><td class="num">NT$180（+9.8%）</td></tr>
+      <tr><td>市值</td><td class="num">約 NT$489 億</td><td>52 週區間</td><td class="num">115.5 – 180</td></tr>
+      <tr><td>實收資本</td><td class="num">30.4 億元</td><td>每股淨值</td><td class="num">約 33.8 元</td></tr>
+      <tr><td>發行股數</td><td class="num">3.04 億股（流通 ~2.86 億）</td><td>PBR</td><td class="num">約 4.8x</td></tr>
+      <tr><td>外資持股</td><td class="num">約 23.7%</td><td>投信持股</td><td class="num">約 13.7%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司基本資料 / MOPS、TWSE、本土券商訪談報告；GiS 整理。</span>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 公司簡介</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 商業模式 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹之二、商業模式：IC ＋ 模組 ＋ 系統方案的多層次供貨</h1>
+  <p>義隆的核心是 <strong>IC 設計與解決方案整合</strong>：以觸控、人機介面、AI 影像辨識與 RF 晶片為本，向上延伸至模組與整體方案（Haptic Pad 模組、camera module、無人機 AI box）。關鍵的營運質變在於——產品正由「單一 IC」走向「模組與次系統」，單機價值量與毛利顯著高於傳統 IC，並在無人機、智慧交通、低軌衛星等領域提供從晶片、演算法到模組的 <strong>Total Solution</strong>，提升議價力與客戶黏著度。</p>
+
+  <h2 class="ch">收入結構（2026Q1 產品別占比）</h2>
+  <div class="chart-grid">
+    <div class="chart-wrap" style="padding:12px">
+      <div class="chart-title" style="font-size:13px">2026Q1 營收產品別占比</div>
+      <div class="chart-sub">資料來源：公司法說（6/8）；GiS 整理</div>
+      <div class="chart-container" style="height:215px;width:100%;position:relative"><canvas id="cMix" style="display:block;width:100%;height:215px"></canvas></div>
+    </div>
+    <div class="chart-wrap" style="padding:12px">
+      <div class="chart-title" style="font-size:13px">大類別演進（觸控 / 非觸控 / AI，億元）</div>
+      <div class="chart-sub">資料來源：本土券商 2025 實績與 26F/27F 預估；GiS 整理</div>
+      <div class="chart-container" style="height:215px;width:100%;position:relative"><canvas id="cMixEvo" style="display:block;width:100%;height:215px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 商業模式（收入結構）</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹之二（續）、成本結構與護城河（Moat）</h1>
+  <table style="font-size:12px">
+    <thead><tr><th>構面</th><th>內容</th><th>GiS 評估</th></tr></thead>
+    <tbody>
+      <tr><td>成本結構</td><td>fabless，主要成本為晶圓代工＋封測（外包多源：台積電 / 聯電 / Magnachip），固定資產輕、折舊低</td><td class="pos">高 FCF 轉換、低資本密集</td></tr>
+      <tr><td>技術 moat</td><td>觸控演算法、低延遲（&lt;12ms）防誤觸、Haptic 觸覺回饋、自研 GElanNet on-device AI（算力為開源約半）</td><td class="pos">演算法 + 認證壁壘高</td></tr>
+      <tr><td>規模 / 市佔 moat</td><td>NB 觸控板 / 觸控螢幕市佔 &gt;50%、Pointstick 主導、指紋 30–35%；HMI 供應商近年整併集中</td><td class="pos">寡占定價力（漲價可轉嫁）</td></tr>
+      <tr><td>客戶 lock-in</td><td>與全球前五 NB 品牌 / ODM 長期協同開發；微軟 Advanced Haptic Touchpad 現階段獨家供應</td><td class="pos">設計案綁定、切換成本高</td></tr>
+      <tr><td>地理 / 政治</td><td>無人機與 LEO 鎖定「非紅供應鏈」、100% MIT 算力訴求</td><td>地緣紅利，但量體尚小</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 觀點：</strong>義隆最堅實的護城河仍在 NB HMI 的「寡占 + 認證 + 演算法」三重壁壘，這是它能在 NB 出貨量縮時仍漲價轉嫁、維持 48% 毛利的根本原因。新事業（AI 模組 / 光通訊）是估值的選擇權（option value），而非現階段的獲利基石。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 商業模式</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 產品組合深度 -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹之三、產品組合：七成觸控本業 ＋ 加速崛起的 AI</h1>
+  <table style="font-size:11px">
+    <thead><tr><th>產品線</th><th style="text-align:right">2026Q1 占比</th><th>市佔 / 地位</th><th>成長邏輯</th><th>對公司重要性</th></tr></thead>
+    <tbody>
+      <tr><td><strong>觸控板 / Haptic Pad</strong></td><td class="num hi">42%</td><td>全球 &gt;50%</td><td>Haptic ASP 約傳統 6 倍；商務／AI PC 帶動升級</td><td class="pos">核心關鍵＋升級槓桿</td></tr>
+      <tr><td><strong>觸控螢幕 IC</strong></td><td class="num">22%</td><td>全球 &gt;50%</td><td>DLOC→SLOC 技術轉移帶動單機 IC 數量；含電子書</td><td class="pos">核心關鍵</td></tr>
+      <tr><td><strong>指紋辨識</strong></td><td class="num">13%</td><td>NB 30–35%</td><td>商務 NB＋資安標配；延伸穿戴 / 無人機控制器</td><td class="pos">核心＋安全樞紐</td></tr>
+      <tr><td>指向桿 Pointstick</td><td class="num">13%</td><td>市場主導</td><td>商務機種剛性需求，成熟穩定</td><td>輔助型</td></tr>
+      <tr><td>MCU / 關係企業</td><td class="num">3%</td><td>—</td><td>團隊逐步轉進無人機 / RF / 光通訊</td><td>輔助型（技術底層資產）</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>AI（Edge AI 模組＋演算法）</strong></td><td class="num hi" style="color:#00875a">7%→13%（5月）</td><td>新進入</td><td>ADAS / 智慧交通 / 無人機模組；單機價值十倍級</td><td class="pos" style="font-weight:700">成長主軸</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司法說會（2026/6/8）、本土券商訪談（6/10）；GiS 整理。占比為 2026Q1，AI 5 月單月已達 13%。</span>
+
+  <div class="chart-wrap">
+    <div class="chart-title">AI 業務占比躍升軌跡（季 / 月）</div>
+    <div class="chart-sub">資料來源：公司法說與月營收揭露；GiS 整理。公司原訂 2026 全年 AI 占比雙位數，5 月已提前達 13%</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="cAI" style="display:block;width:100%;height:200px"></canvas></div>
+  </div>
+  <blockquote><strong>GiS 觀點：</strong>產品組合的「由量轉價」是本報告的核心敘事。傳統觸控本業（逾七成）提供穩定現金流與 48% 毛利地板；AI 與 Haptic 則是抬升 ASP／毛利的主動槓桿。但需留意：占比躍升部分來自分母（傳統 NB）受缺料壓抑，而非單純 AI 絕對值爆發——這是我們對 2026 獲利「溫和成長而非倍增」判斷的依據。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 產品組合</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<!-- ══════════════ 章節封面 貳 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Three Growth Engines</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">成長三引擎</div>
+  <div class="sec-desc">引擎一：NB 人機介面的「由量轉價」升級。引擎二：Edge AI 模組化（無人機 / ADAS / 智慧交通）。引擎三：矽光子 EIC 與低軌衛星 RF 的中長期選擇權。</div>
+</div>
+
+<!-- 引擎一 -->
+<div class="full-page page body-page">
+  <h1 class="ch">引擎一、NB 人機介面：量縮、價增、規格升級</h1>
+  <p>2026 年全球 NB 出貨在記憶體飆漲與 CPU 吃緊下預估年減高個位數（外資估 −9%），但品牌將有限資源集中於中高階／商務機種，使義隆的營收動能由「每台出貨」轉向「<strong>每台單機價值量</strong>」。最直接的證據：義隆 NB 相關營收中，<strong>商務機種占比由 2025Q1 的 31% 升至 2026Q1 的 41%</strong>，一年提升 10 個百分點。</p>
+
+  <h2 class="ch">Haptic 觸控板：高 ASP 新標準</h2>
+  <ul>
+    <li><strong>ASP 約傳統 Clickpad 6 倍</strong>（傳統 ~US$3 → Haptic ~US$10–15），模組毛利金額顯著放大。</li>
+    <li>義隆為 <strong>微軟 Advanced Haptic Touchpad 平台現階段獨家供應商</strong>；Apple 滲透率 100%、微軟約 10% 起步。</li>
+    <li>單機成本已由 US$20 降至 US$10，2026 年 Windows OS 內建 Haptic 支援＋美系品牌全系列導入，加速由旗艦向主流擴散。</li>
+    <li>2026Q1 Haptic 模組鋪貨量已超過 2025 全年；法人估若單一大客戶全系列導入，Haptic 可貢獻營收約 10%。</li>
+  </ul>
+
+  <h2 class="ch">觸控螢幕與指紋：技術轉移 ＋ 資安標配</h2>
+  <ul>
+    <li>觸控螢幕技術由 DLOC（雙層 On-Cell）轉向 SLOC（單層 On-Cell），降低總成本但<strong>提高單機所需控制 IC 數量</strong>；2026Q1 SLOC 出貨已達 2025 全年 80%。</li>
+    <li>指紋在商務 NB 與資安需求下滲透率續升，並加入防偽 / 加密功能，延伸穿戴、智慧眼鏡、無人機地面站控制器。</li>
+  </ul>
+
+  <div class="chart-wrap">
+    <div class="chart-title">商務機種占比提升：對抗 Chromebook 下滑的核心支柱</div>
+    <div class="chart-sub">資料來源：公司法說；GiS 整理</div>
+    <div class="chart-container" style="height:185px;width:100%;position:relative"><canvas id="cBiz" style="display:block;width:100%;height:185px"></canvas></div>
+  </div>
+  <blockquote><strong>GiS 判斷：</strong>外資估義隆 NB 相關業務（占營收 ~90%）2025–28E 營收 CAGR 約 8%，明顯優於 NB 出貨量 CAGR −2%。這個「量價背離」是 franchise 定價力的最佳證明，也是本業估值的地板。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 引擎一 NB HMI</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 引擎二 Edge AI -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">引擎二、Edge AI：從單一 IC 到「十倍級」模組</h1>
+  <p>AI 是義隆由「PC IC 廠」轉向「邊緣 AI 平台」最直接的營收動力。占比由 2025 年約 5% → 2026Q1 約 7% → <strong>2026 年 5 月單月 13%</strong>，提前達成全年雙位數目標。法人估 AI 相關營收 2025–2030 年 CAGR 約 <strong>49%</strong>，遠高於傳統 HMI。技術底座為自研 <strong>GElanNet on-device AI</strong>（與中研院合作，由 YOLO 系列優化，算力僅開源約一半），主打低算力、低功耗、小尺寸、低成本。</p>
+
+  <h2 class="ch">三大應用主軸</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>應用</th><th>發展階段</th><th>技術核心</th><th>對 26–27 EPS</th></tr></thead>
+    <tbody>
+      <tr><td><strong>無人機 AI 模組</strong></td><td class="pos">2026 H2 模組量產</td><td>雲台目標偵測/追蹤、360° 避障、AI box、控制器（觸控+Mini LED+指紋）</td><td>26 低個位數 → 27 高個位數</td></tr>
+      <tr><td><strong>ADAS / 車用</strong></td><td>L2 量產、L2+ 起步</td><td>DMS、盲點、最多 6 鏡頭；電巴 / 物流 / 軍用</td><td>基數小（25 約 300 台→26 500–1,000 台）</td></tr>
+      <tr><td><strong>智慧交通 / AI CCTV</strong></td><td>≥4 城市 POC（評測 99 分）</td><td>攝影機端運算 &lt;0.01 秒、5G 智慧燈桿</td><td>標案型，長期 recurring</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">無人機：非紅供應鏈的「十倍級」價值放大</h2>
+  <ul>
+    <li>早期（2025）僅出貨 ISP 與 Mini LED local dimming 晶片；2026 升級為<strong>模組與次系統</strong>，單鏡頭模組單價約過去晶片 10 倍，<strong>整機模組價值可達數千至數萬元台幣</strong>。</li>
+    <li>董事長強調已自研 <strong>11 種無人機相關晶片</strong>（含 IMU、RF front-end），整合成次系統，搶攻非紅供應鏈與軍用 / 工業級市場。</li>
+    <li>2026 H2 起量產，與雷虎等至少四家整機廠合作，初期月出貨目標約 500 台，法人估 H2 模組出貨上看 5 萬台量級。</li>
+  </ul>
+  <blockquote><strong>GiS 判斷：</strong>AI 模組是真實且高毛利的成長軸，但 2026–27 的營收認列高度依賴政府標案與整機廠採購節奏，能見度短、波動大。我們在基礎情境僅給予溫和貢獻，把「放量超預期」留在樂觀情境——這正是評等停在中立而非買進的關鍵之一。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 引擎二 Edge AI</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 引擎三 光通訊 + LEO -->
+<div class="full-page page body-page">
+  <h1 class="ch">引擎三、矽光子 EIC 與低軌衛星 RF：2027 後的選擇權</h1>
+  <h2 class="ch">矽光子 / 光通訊（與 PETA Optronics 合作）</h2>
+  <p>義隆 2026 年 6 月宣布投資美商 <strong>PETA Optronics</strong>（持股約 15–16%），分工為 PETA 負責 PIC、義隆負責 <strong>EIC（TIA、Driver、雷射驅動）</strong>，鎖定 <strong>3.2T NPO</strong>（後續 6.4T）光通訊模組，應用於 AI 資料中心 Scale-out optics。PETA 計畫 2027 年將 3.2T 推進客戶、2028 年擴展，最終客戶為美系 CSP，透過模組廠導入。市場傳聞 PETA 光學夥伴為大立光，使義隆站上「PIC＋光學＋EIC」三方整合的鏈結點。</p>
+  <blockquote style="margin:10px 0"><strong>關鍵時間軸認知：</strong>2026–2027 年 PETA / 達盛主要體現在研發與業外損益，對本業毛利與 EPS 為<strong>稀釋而非放大</strong>；2027 年後若 3.2T 光模組量產並打入美系 CSP，義隆 EIC 出貨才會實質放量。</blockquote>
+
+  <h2 class="ch">低軌衛星 RF front-end（轉投資達盛電子）</h2>
+  <p>經由轉投資達盛開發 LEO 陣列天線 RF front-end IC，2025 年底完成工程樣品，2026 年持續送樣國內天線與設備廠。LEO 市場規模預估自 2024 年約 150 億美元成長至 2035 年 1,080 億美元；陣列天線需數百至千顆 RF / 控制 IC，高 BOM 成本與功耗成痛點，義隆訴求<strong>低成本 RF front-end</strong>，可延伸至高空平台與 5G/6G 陣列天線。目前仍在送樣測試階段，貢獻尚小。</p>
+
+  <div class="timeline">
+    <div class="tl-item active"><div class="tl-year">2026</div><div class="tl-spec">布局期</div><div class="tl-tech">PETA 投資、達盛送樣；業外為稀釋</div></div>
+    <div class="tl-item next"><div class="tl-year">2027</div><div class="tl-spec">3.2T 導入</div><div class="tl-tech">NPO 推進客戶認證；LEO RF 轉量產試水</div></div>
+    <div class="tl-item"><div class="tl-year">2028</div><div class="tl-spec">放量 / 6.4T</div><div class="tl-tech">EIC 量產收益、產品線擴展</div></div>
+    <div class="tl-item"><div class="tl-year">2029+</div><div class="tl-spec">re-rating</div><div class="tl-tech">若規模化，可成超越 NB 的新曲線</div></div>
+  </div>
+  <blockquote><strong>GiS 判斷：</strong>光通訊與 LEO 是「高風險高報酬」的中長期選擇權，對 2026–27 財報幾乎無正貢獻（反而業外虧損）。我們在估值上<strong>不給予前置 premium</strong>——這部分價值將在 2027 認證里程碑兌現時才反映，是樂觀情境 PE re-rating（18.5x）的主要來源。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 引擎三 光通訊 / LEO</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<!-- ══════════════ 章節封面 參 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Industry &amp; Competition</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業與競爭</div>
+  <div class="sec-desc">AI PC 結構升級、記憶體缺料如何「逼出」高階需求、義隆在 HMI 與 Edge AI 生態系的競爭位置，以及可服務市場（TAM）的量級。</div>
+</div>
+
+<!-- 產業洞察 -->
+<div class="full-page page body-page">
+  <h1 class="ch">參之一、產業洞察：記憶體缺料反成高階利多</h1>
+  <p>2026 年 NB 產業最反直覺的結構變化是——<strong>記憶體與 CPU 缺料，對高 ASP 的 IC 設計廠反而是結構性利多</strong>。AI 伺服器帶動 DRAM 供不應求與漲價，壓抑低階 NB 與消費機種，但品牌為維持獲利，採「降規平價機 + 資源集中中高階 / 商務」雙策略，推升義隆高單價觸控與指紋產品的 ASP。</p>
+
+  <div class="chart-grid">
+    <div class="callout">
+      <div class="callout-title">壓抑面（量）</div>
+      <ul>
+        <li>2026 全球 NB 出貨估年減 ~9%</li>
+        <li>消費機種降規、Chromebook 全年略降</li>
+        <li>缺料致接單「急單化」、能見度短</li>
+        <li>晶圓 / 封測 / 基板高個位數漲價</li>
+      </ul>
+    </div>
+    <div class="callout green">
+      <div class="callout-title">利多面（價）</div>
+      <ul>
+        <li><strong>資源集中中高階 / 商務 → 高 ASP 產品受惠</strong></li>
+        <li><strong>HMI 供應商整併 → 漲價可轉嫁客戶</strong></li>
+        <li>AI PC（Copilot Key、Win on ARM、RTX Spark）拉高觸控 / Haptic / 指紋規格</li>
+        <li>義隆談「取消季季降價、選擇性漲價」，7/1 起逐步生效</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="ch">AI PC 滲透與價值鏈趨勢</h2>
+  <ul>
+    <li>含 Copilot Key 寬鬆定義滲透率已約 50%；具本地 AI 運算能力的嚴格定義約 30–40%，2026 後 Win on ARM、RTX Spark 推進。</li>
+    <li>傳統鍵鼠 / 單純 Clickpad 被高階 Touchpad、Haptic 取代；資安需求推升指紋滲透。</li>
+    <li>觸控與 Haptic 技術外溢至工控、戶外點餐機、充電樁、醫療、遊艇等多場域。</li>
+  </ul>
+  <blockquote><strong>GiS 核心觀點：</strong>市場常把「NB 出貨衰退」直接讀成義隆利空，這是認知誤區。真正的傳導鏈是「缺料 → 品牌降規保高階 → 高 ASP HMI 受惠」，這解釋了為何義隆能在 NB 量縮年仍維持營收成長與 48% 毛利。但這也意味著成長是「結構性、溫和的」，而非景氣 V 轉的爆發。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 產業洞察</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 競爭分析 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參之二、競爭分析：HMI 寡占、Edge AI 群雄逐鹿</h1>
+  <h2 class="ch">NB 人機介面（既有戰場 — 義隆領先）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>對手</th><th>地區</th><th>主要產品</th><th>相對義隆</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Synaptics</strong></td><td>美國</td><td>觸控 / 指紋 / HMI</td><td>最主要國際對手；義隆在 NB 觸控板 / 觸控螢幕 / Pointstick 市佔領先</td></tr>
+      <tr><td>敦泰 3545</td><td>台灣</td><td>觸控 + 驅動整合 TDDI</td><td>偏手機 / 面板 TDDI，與義隆 NB HMI 重疊有限</td></tr>
+      <tr><td>神盾 6462</td><td>台灣</td><td>指紋辨識</td><td>手機指紋為主；義隆強於 NB 指紋</td></tr>
+      <tr><td>原相 3227</td><td>台灣</td><td>CIS / 光學感測</td><td>感測領域部分重疊，非 HMI 正面對手</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12.5px">在 NB HMI，全球實質僅義隆與 Synaptics 雙雄，加上供應商整併，形成寡占結構——這是義隆能對代工漲價「選擇性漲價、取消季降」的議價基礎。</p>
+
+  <h2 class="ch">Edge AI / 無人機 / 光通訊（新戰場 — 競爭分散）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>賽道</th><th>競爭格局</th><th>義隆差異化</th></tr></thead>
+    <tbody>
+      <tr><td>Edge AI SoC / 演算法</td><td>國際大廠（NV Jetson、Ambarella）＋ IP 業者眾多</td><td>GElanNet 低算力 + HMI 整合 + 100% MIT</td></tr>
+      <tr><td>無人機模組</td><td>多為系統整合商，晶片端紅供應鏈為主</td><td>自研 11 種晶片整合次系統、非紅供應鏈</td></tr>
+      <tr><td>矽光子 EIC</td><td>國際類比大廠（如 Broadcom 體系）強勢</td><td>與 PETA（PIC）分工，切 EIC 利基</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 判斷：</strong>義隆在既有 HMI 戰場是「定價者」，但在新賽道是「挑戰者」。新事業的競爭壁壘尚待認證與量產驗證，這是我們對其成長給予「機率折現」而非全額計入的原因。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 競爭分析</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- TAM -->
+<div class="full-page page body-page">
+  <h1 class="ch">參之三、TAM：本業穩盤、新事業打開長線想像</h1>
+  <div class="chart-wrap">
+    <div class="chart-title">可服務市場量級對比（示意，log 概念）</div>
+    <div class="chart-sub">資料來源：產業研究、外資報告；GiS 彙編。低軌衛星為 2035 年市場規模預估</div>
+    <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="cTAM" style="display:block;width:100%;height:210px"></canvas></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>終端市場</th><th>量級 / 趨勢</th><th>義隆滲透</th><th>GiS 觀點</th></tr></thead>
+    <tbody>
+      <tr><td>NB 人機介面</td><td>全球 NB ~2 億台 / 年，量平價增</td><td class="pos">市佔 &gt;50%（觸控）</td><td>現金牛，ASP 升級為主軸</td></tr>
+      <tr><td>AI 邊緣運算</td><td>ADAS / CCTV / 機器人高速擴張</td><td>起步（占比 &gt;10%）</td><td class="pos">2025–30 CAGR ~49%</td></tr>
+      <tr><td>無人機（非紅）</td><td>軍工 / 工業 / 巡檢需求強</td><td>2026 H2 模組量產</td><td class="pos">單機萬元級，2027 放量</td></tr>
+      <tr><td>低軌衛星 / 光通訊</td><td>LEO 150 億→1,080 億美元(2035)；AI 資料中心 CPO</td><td>送樣 / 研發</td><td>長線選擇權，27 後兌現</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 判斷：</strong>義隆的 TAM 故事是「穩固的核 + 高斜率的衛星」。核（NB HMI）保證下檔不破，衛星（AI / 無人機 / 光通訊）決定上檔想像空間。但衛星業務 2026–27 對 EPS 貢獻仍小，TAM 的擴張要到 2027–28 才會實質轉化為獲利——這個時間差正是「股價先到、價值後到」的根源。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · TAM 估算</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<!-- ══════════════ 章節封面 肆 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Financials &amp; Forecast</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">財務分析與預估</div>
+  <div class="sec-desc">歷史獲利的循環軌跡、GiS 季度損益模型、年度預估與產品線營收拆解。所有歷史數字以公司年報 / MOPS 為準。</div>
+</div>
+
+<!-- 歷史財務 -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之一、歷史財務：高峰回落後的高原期</h1>
+  <p>義隆獲利具明顯循環性：2020–21 受疫情 WFH 觸控需求推升，2021 年 EPS 達 <strong>17.64 元</strong>歷史高峰；2022 年隨 NB 退潮回落至 7.56，2023–2025 維持 7.5–9.6 元高原震盪。值得注意的是，營收幾乎持平（~120–127 億）下，<strong>毛利率由 2023 的 45.0% 回升至 2025 的 48.6%</strong>——這正是「產品組合升級、由量轉價」的財務印記。</p>
+  <table style="font-size:11.5px">
+    <thead><tr><th>年度</th><th style="text-align:right">營收(億)</th><th style="text-align:right">毛利率</th><th style="text-align:right">營益率</th><th style="text-align:right">稅後EPS</th><th style="text-align:right">現金股利</th></tr></thead>
+    <tbody>
+      <tr><td>2020</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">11.14</td><td class="num">6.50</td></tr>
+      <tr><td>2021（高峰）</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num hi">17.64</td><td class="num">9.00</td></tr>
+      <tr><td>2022</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">7.56</td><td class="num">13.81</td></tr>
+      <tr><td>2023</td><td class="num">120.6</td><td class="num">45.0</td><td class="num">20.2</td><td class="num">7.53</td><td class="num">8.18</td></tr>
+      <tr><td>2024</td><td class="num">127.0</td><td class="num">48.9</td><td class="num">24.2</td><td class="num">9.57</td><td class="num">7.12</td></tr>
+      <tr><td>2025</td><td class="num">123.3</td><td class="num pos">48.6</td><td class="num">24.1</td><td class="num">8.53</td><td class="num">6.41</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>2026F（GiS）</strong></td><td class="num" style="font-weight:700">133.7</td><td class="num" style="font-weight:700">47.9</td><td class="num" style="font-weight:700">24.1</td><td class="num hi" style="font-weight:800">9.54</td><td class="num">~6.7</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>2027F（GiS）</strong></td><td class="num" style="font-weight:700">147.0</td><td class="num pos" style="font-weight:700">48.5</td><td class="num pos" style="font-weight:700">25.5</td><td class="num hi" style="font-weight:800">11.20</td><td class="num">~7.8</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：歷史 EPS 來自公司年報 / MOPS（與本土券商一致）；2026F/2027F 為 GiS 預估。現金股利含 yfinance 估列，配發年度與金額以股東會決議為準。2020–22 營收 / 毛利率因採並表口徑差異未列。</span>
+
+  <div class="chart-wrap">
+    <div class="chart-title">毛利率 / 營益率多年趨勢：升級驅動的結構性回升</div>
+    <div class="chart-sub">資料來源：公司年報（實績）、GiS 預估（F）</div>
+    <div class="chart-container" style="height:185px;width:100%;position:relative"><canvas id="cMargin" style="display:block;width:100%;height:185px"></canvas></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 歷史財務</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- GiS 季度損益模型 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆之二、GiS 季度損益預估模型</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-6px 0 10px">資料來源：1Q26 為公司季報實績；2Q26F 以後為 GiS 預估。單位：百萬元（EPS 除外）。加權股數約 2.75 億股。</p>
+  <table style="font-size:11px">
+    <thead><tr><th>損益項目</th><th style="text-align:right">1Q26A</th><th style="text-align:right;background:#065f46">2Q26F</th><th style="text-align:right;background:#065f46">3Q26F</th><th style="text-align:right;background:#065f46">4Q26F</th><th style="text-align:right">FY26F</th><th style="text-align:right;background:#065f46">FY27F</th></tr></thead>
+    <tbody>
+      <tr><td><strong>營業收入</strong></td><td class="num">3,225</td><td class="num">3,390</td><td class="num">3,500</td><td class="num">3,250</td><td class="num" style="font-weight:700">13,365</td><td class="num hi" style="font-weight:700">14,700</td></tr>
+      <tr><td>營業毛利</td><td class="num">1,535</td><td class="num">1,610</td><td class="num">1,691</td><td class="num">1,576</td><td class="num">6,412</td><td class="num">7,130</td></tr>
+      <tr><td>營業費用</td><td class="num">756</td><td class="num">796</td><td class="num">833</td><td class="num">812</td><td class="num">3,197</td><td class="num">3,382</td></tr>
+      <tr><td><strong>營業利益</strong></td><td class="num">779</td><td class="num">814</td><td class="num">858</td><td class="num">764</td><td class="num" style="font-weight:700">3,215</td><td class="num hi" style="font-weight:700">3,749</td></tr>
+      <tr><td>業外收支</td><td class="num">61</td><td class="num">20</td><td class="num neg">-50</td><td class="num neg">-60</td><td class="num">-29</td><td class="num">-40</td></tr>
+      <tr><td><strong>稅後歸母淨利</strong></td><td class="num">676</td><td class="num">692</td><td class="num">671</td><td class="num">584</td><td class="num" style="font-weight:700">2,623</td><td class="num hi" style="font-weight:700">3,080</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>EPS（元）</strong></td><td class="num" style="font-weight:700">2.46</td><td class="num" style="font-weight:700">2.52</td><td class="num" style="font-weight:700">2.44</td><td class="num" style="font-weight:700">2.12</td><td class="num hi" style="font-weight:800">9.54</td><td class="num hi" style="font-weight:800">11.20</td></tr>
+    </tbody>
+  </table>
+  <table style="font-size:11px;margin-top:-6px">
+    <thead><tr><th>獲利能力 (%)</th><th style="text-align:right">1Q26A</th><th style="text-align:right;background:#065f46">2Q26F</th><th style="text-align:right;background:#065f46">3Q26F</th><th style="text-align:right;background:#065f46">4Q26F</th><th style="text-align:right">FY26F</th><th style="text-align:right;background:#065f46">FY27F</th></tr></thead>
+    <tbody>
+      <tr><td><strong>毛利率</strong></td><td class="num">47.6</td><td class="num">47.5</td><td class="num">48.3</td><td class="num">48.5</td><td class="num">47.9</td><td class="num hi">48.5</td></tr>
+      <tr><td><strong>營益率</strong></td><td class="num">24.2</td><td class="num">24.0</td><td class="num">24.5</td><td class="num">23.5</td><td class="num">24.1</td><td class="num hi">25.5</td></tr>
+      <tr><td>營收 YoY</td><td class="num pos">+3.4</td><td class="num pos">+11.7</td><td class="num pos">+5.6</td><td class="num pos">+13.6</td><td class="num pos">+8.4</td><td class="num pos">+10.0</td></tr>
+      <tr><td>EPS YoY</td><td class="num pos">+28.1</td><td class="num pos">+103</td><td class="num neg">-13.2</td><td class="num neg">-17.2</td><td class="num pos">+11.8</td><td class="num pos">+17.4</td></tr>
+    </tbody>
+  </table>
+  <blockquote style="margin-top:8px"><strong>GiS 模型假設：</strong>(1) H1 受惠短急單「淡季不淡」，2Q26 EPS YoY 大增係 2025Q2 有 −3.2 億匯損低基期；(2) H2 營收因 AI PC 放量回升，但 <strong>光通訊 / PETA 業外虧損與光罩、R&D 費用墊高</strong>，致 Q3/Q4 EPS YoY 轉負——這是 FY26 EPS 僅溫和成長 +12% 的關鍵；(3) 2027 在 NB 溫和復甦＋AI 占比續升＋OPM 營運槓桿下，EPS 增速回到 +17%。</blockquote>
+  <span class="src">資料來源：公司季報（實績）、公司 2Q26 財測（營收 32–34 億、毛利率 46.5–49.5%、營益率 21.4–25.9%）、GiS 預估。</span>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · GiS 季度模型</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 年度預估 + 產品線模型 -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之三、產品線營收模型與年度預估</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>產品大類</th><th style="text-align:right">2025(億)</th><th style="text-align:right">2026F</th><th style="text-align:right">占比</th><th style="text-align:right">2027F</th><th style="text-align:right">YoY</th></tr></thead>
+    <tbody>
+      <tr><td>觸控（觸控板 / 螢幕 / 指紋）</td><td class="num">96.1</td><td class="num">99.5</td><td class="num">74%</td><td class="num">103.8</td><td class="num pos">+4%</td></tr>
+      <tr><td>非觸控（Pointstick / MCU）</td><td class="num">21.0</td><td class="num">21.8</td><td class="num">16%</td><td class="num">25.6</td><td class="num pos">+17%</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>AI（Edge AI 模組＋演算法）</strong></td><td class="num">6.2</td><td class="num hi">12.4</td><td class="num">9%</td><td class="num hi">17.6</td><td class="num pos" style="font-weight:700">+42%</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>合計</strong></td><td class="num" style="font-weight:700">123.3</td><td class="num" style="font-weight:700">133.7</td><td class="num">100%</td><td class="num" style="font-weight:700">147.0</td><td class="num pos" style="font-weight:700">+10%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：本土券商產品別預估為基礎，GiS 微調（AI 採較保守 12.4 億，反映無人機模組認列時程不確定）。</span>
+
+  <div class="chart-wrap">
+    <div class="chart-title">年度營收結構演進（2025 / 2026F / 2027F，億元堆疊）</div>
+    <div class="chart-sub">資料來源：GiS 模型</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="cRevStack" style="display:block;width:100%;height:200px"></canvas></div>
+  </div>
+  <h2 class="ch">月營收交叉驗證</h2>
+  <p style="font-size:12.5px">2026 年 1–5 月累計營收 YoY 約 +4%，與全年 +8% 預估的落差來自 H2 AI PC 放量與漲價（7/1 起）的後段加速。4–5 月單月分別月減 6.7% / 12.0%，主因零組件缺料壓抑出貨節奏，但年增仍維持正成長，顯示「需求在、供應受限」——支持 GiS「成長確定但溫和」的判斷。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 年度預估</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<!-- ══════════════ 章節封面 伍 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">伍</div>
+  <div class="sec-eyebrow">Valuation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">估值分析</div>
+  <div class="sec-desc">PE 為主、DCF 與 Comps 交叉驗證。三種方法、兩組敏感度、一張 Football Field——最終匯流到 NT$185 的中立結論。</div>
+</div>
+
+<!-- PE 估值 + PE band -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍之一、PE 估值（主方法）</h1>
+  <p>義隆 12 個月目標價以 <strong>2027E EPS 11.2 × 目標 PE 16.5x = NT$185</strong> 為基準。目標 PE 取「2020 後升級循環均值 ~16x」與本土券商 18x（2026E ≈ 16.4x 2027E）之折衷。對照歷史 PE 區間 <strong>7–20x（均值 15.73x、+1σ 17.4x、+2σ 19.0x）</strong>，16.5x 略高於均值、低於 +1σ，反映 AI 升級但不過度樂觀。</p>
+
+  <div class="chart-wrap">
+    <div class="chart-title">歷史本益比 Band（TTM）：當前已站上 +2σ</div>
+    <div class="chart-sub">資料來源：TWSE 股價 / 公司年報 EPS；GiS 計算。當前 PE 19.4x（以 6/24 計），6/25 漲停後 ~19.8x，逼近歷史最貴區間</div>
+    <div class="chart-container" style="height:215px;width:100%;position:relative"><canvas id="cPEband" style="display:block;width:100%;height:215px"></canvas></div>
+  </div>
+
+  <h2 class="ch">PE × EPS 敏感度（5×5，中心格 = 目標價）</h2>
+  <table class="heat" style="font-size:11px">
+    <thead><tr><th>2027E EPS ＼ 目標PE</th><th>14.5x</th><th>15.5x</th><th>16.5x</th><th>17.5x</th><th>18.5x</th></tr></thead>
+    <tbody>
+      <tr><td>10.4</td><td class="h5c">151</td><td class="h4c">161</td><td class="h4c">172</td><td class="h3c">182</td><td class="h3c">192</td></tr>
+      <tr><td>10.8</td><td class="h4c">157</td><td class="h4c">167</td><td class="h3c">178</td><td class="h3c">189</td><td class="h2c">200</td></tr>
+      <tr><td><strong>11.2</strong></td><td class="h4c">162</td><td class="h3c">174</td><td class="h3c" style="outline:3px solid #0d1b3e;font-weight:800">185</td><td class="h2c">196</td><td class="h2c">207</td></tr>
+      <tr><td>11.6</td><td class="h3c">168</td><td class="h3c">180</td><td class="h2c">191</td><td class="h2c">203</td><td class="h1c">215</td></tr>
+      <tr><td>12.0</td><td class="h3c">174</td><td class="h2c">186</td><td class="h2c">198</td><td class="h1c">210</td><td class="h1c">222</td></tr>
+    </tbody>
+  </table>
+  <span class="src">綠＝低於現價 180（下檔）／黃＝接近現價／橘紅＝高於現價（上檔）。中心格 NT$185 為採用目標價。</span>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · PE 估值</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- DCF -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">伍之二、DCF 估值（交叉驗證）</h1>
+  <p>義隆為 fabless、低資本密集、高 FCF 轉換的公司，且帳上淨現金，適合 DCF 交叉驗證。關鍵假設：</p>
+  <table style="font-size:11.5px">
+    <thead><tr><th>WACC 組成</th><th>數值</th><th>FCF / 終值假設</th><th>數值</th></tr></thead>
+    <tbody>
+      <tr><td>無風險利率 Rf</td><td class="num">1.5%</td><td>FCFF（2026F）</td><td class="num">~2,700 百萬</td></tr>
+      <tr><td>市場風險溢酬 ERP</td><td class="num">6.5%</td><td>FCF CAGR（26–30）</td><td class="num">~10%</td></tr>
+      <tr><td>Beta（IC 設計循環）</td><td class="num">1.1</td><td>永續成長率 g</td><td class="num">1.5%</td></tr>
+      <tr><td>權益成本 Ke / WACC</td><td class="num hi">~9.0%</td><td>淨現金（加回）</td><td class="num">~80 億</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12.5px"><strong>DCF 結果：每股約 NT$197</strong>（5 年明確期 + 永續終值，期中折現）。此值<strong>高於 PE 法的 185</strong>，主因 DCF 計入了 2027–28 後光通訊 EIC / LEO RF 規模化的長尾現金流——這部分尚未反映在近兩年 EPS。GiS 12 個月目標價基於審慎，仍<strong>錨定較保守的 PE 法 185</strong>，並把 DCF 197 視為「若新事業如期兌現」的上緣指引。</p>
+
+  <h2 class="ch">DCF 敏感度（WACC × 永續成長 g）</h2>
+  <table class="heat" style="font-size:11px">
+    <thead><tr><th>WACC ＼ g</th><th>0.5%</th><th>1.0%</th><th>1.5%</th><th>2.0%</th><th>2.5%</th></tr></thead>
+    <tbody>
+      <tr><td>8.0%</td><td class="h3c">203</td><td class="h2c">213</td><td class="h2c">225</td><td class="h1c">239</td><td class="h1c">256</td></tr>
+      <tr><td>8.5%</td><td class="h3c">188</td><td class="h3c">196</td><td class="h2c">206</td><td class="h2c">218</td><td class="h1c">232</td></tr>
+      <tr><td><strong>9.0%</strong></td><td class="h4c">175</td><td class="h3c">182</td><td class="h3c" style="outline:3px solid #0d1b3e;font-weight:800">197</td><td class="h2c">199</td><td class="h2c">210</td></tr>
+      <tr><td>9.5%</td><td class="h4c">164</td><td class="h4c">170</td><td class="h3c">177</td><td class="h3c">185</td><td class="h2c">195</td></tr>
+      <tr><td>10.0%</td><td class="h5c">154</td><td class="h4c">159</td><td class="h4c">166</td><td class="h3c">173</td><td class="h3c">181</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：GiS DCF 模型。中心格（WACC 9.0% / g 1.5%）= NT$197。DCF 對 WACC 與 g 高度敏感，故僅作交叉驗證，不作為主要目標價。</span>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · DCF</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- Comps -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍之三、同業比較（Comps）</h1>
+  <table style="font-size:11px">
+    <thead><tr><th>公司</th><th>代號</th><th>定位</th><th style="text-align:right">2027E PE</th><th style="text-align:right">毛利率</th><th style="text-align:right">EPS CAGR</th></tr></thead>
+    <tbody>
+      <tr style="background:#eefaf4!important"><td><strong>義隆</strong></td><td>2458</td><td>NB HMI 龍頭＋Edge AI</td><td class="num hi">16.1x</td><td class="num pos">~48%</td><td class="num">~15%</td></tr>
+      <tr><td>Synaptics</td><td>SYNA(US)</td><td>觸控 / IoT / HMI（國際對手）</td><td class="num">~16–18x</td><td class="num">~45%</td><td class="num">~12%</td></tr>
+      <tr><td>原相</td><td>3227</td><td>CIS / 光學感測</td><td class="num">~17x</td><td class="num">~50%</td><td class="num">~13%</td></tr>
+      <tr><td>神盾</td><td>6462</td><td>指紋辨識</td><td class="num">~15x</td><td class="num">~40%</td><td class="num">~20%</td></tr>
+      <tr><td>敦泰</td><td>3545</td><td>TDDI / 觸控驅動</td><td class="num">~13x</td><td class="num">~30%</td><td class="num">~10%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：GiS 彙編（近似值，供相對位置參考；個別公司財年 / 口徑略有差異）。</span>
+  <h2 class="ch">同業統計與相對位置</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>2027E PE 統計</th><th style="text-align:right">數值</th><th>義隆相對位置</th></tr></thead>
+    <tbody>
+      <tr><td>最高 Max</td><td class="num">~18x</td><td rowspan="5" style="vertical-align:middle;font-size:12px">義隆 16.1x 約落在<strong>中位數附近偏上</strong>。相對國際對手 Synaptics 不貴、相對本土同業略有溢價——溢價來自 AI / 無人機 / 光通訊的成長選擇權與 &gt;48% 高毛利，但<strong>並未明顯低估</strong>。</td></tr>
+      <tr><td>75 分位</td><td class="num">~17x</td></tr>
+      <tr><td>中位數 Median</td><td class="num hi">~15.5x</td></tr>
+      <tr><td>25 分位</td><td class="num">~14x</td></tr>
+      <tr><td>最低 Min</td><td class="num">~13x</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap">
+    <div class="chart-title">成長 vs 估值散點（EPS CAGR × 2027E PE）</div>
+    <div class="chart-sub">資料來源：GiS 彙編。氣泡愈右上＝高成長高估值</div>
+    <div class="chart-container" style="height:175px;width:100%;position:relative"><canvas id="cComps" style="display:block;width:100%;height:175px"></canvas></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · Comps</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- Football Field + 結論 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">伍之四、Football Field 與採用結論</h1>
+  <div class="chart-wrap">
+    <div class="chart-title">綜合估值區間（NT$）：現價 180 已落在多數方法的上緣</div>
+    <div class="chart-sub">資料來源：GiS。各法估值區間與採用目標價 185</div>
+    <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="cFF" style="display:block;width:100%;height:210px"></canvas></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>方法</th><th style="text-align:right">區間</th><th style="text-align:right">中值</th><th>權重</th></tr></thead>
+    <tbody>
+      <tr><td>PE（2027E × 14.5–18.5x）</td><td class="num">162–207</td><td class="num hi">185</td><td>主方法 60%</td></tr>
+      <tr><td>DCF（WACC 8.5–9.5%）</td><td class="num">177–206</td><td class="num">197</td><td>交叉 25%</td></tr>
+      <tr><td>Comps（同業 PE 對標）</td><td class="num">165–195</td><td class="num">180</td><td>交叉 15%</td></tr>
+      <tr><td>三情境機率加權</td><td class="num">127–237</td><td class="num">184</td><td>—</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>GiS 採用 12M 目標價</strong></td><td class="num"></td><td class="num hi" style="font-weight:800">185</td><td style="font-weight:700">上檔 +2.8% → 中立</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 採用結論：</strong>PE、DCF、Comps、情境加權四法中值落在 180–197，採較保守的 PE 法 <strong>NT$185</strong>。對照 6/25 收盤 180，上檔 +2.8%，依方法論 §4.3 落入<strong>中立（−5%~+5%）</strong>。我們強調：這不是看壞義隆，而是 10 日 +19% 的漲勢已把 2027 復甦與 AI 題材大致定價；逢回 155–165（PE 回到均值附近）將是更佳的研究員增持時點。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · 採用結論</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<!-- ══════════════ 章節封面 陸 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">陸</div>
+  <div class="sec-eyebrow">Catalysts &amp; Risks</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">催化劑與風險</div>
+  <div class="sec-desc">12 項風險矩陣、關鍵催化劑時間表、券商評等對照，以及 GiS 與街口的差異化所在。</div>
+</div>
+
+<!-- 催化劑 + 風險矩陣 -->
+<div class="full-page page body-page">
+  <h1 class="ch">陸之一、催化劑與上下行</h1>
+  <h2 class="ch">關鍵催化劑時間表</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>選擇性漲價生效</strong></td><td>2026/7/1</td><td class="pos">中高</td><td>取消季季降價、高階選擇性漲價，撐 H2 毛利</td></tr>
+      <tr><td><strong>無人機模組量產</strong></td><td>3Q26</td><td class="pos">中高</td><td>雲台 / 避障模組量產，月 500 台起，與雷虎等合作</td></tr>
+      <tr><td>AI PC 新平台放量</td><td>3Q26</td><td class="pos">高</td><td>NVIDIA Spark、Google、Surface、Lenovo 放量</td></tr>
+      <tr><td>AI 占比續升</td><td>2H26</td><td class="pos">中</td><td>5 月已 13%，能否穩於雙位數並逼近 15%</td></tr>
+      <tr><td>PETA 3.2T 認證 / 達盛 LEO 轉量產</td><td>2027</td><td class="pos">高（長線）</td><td>re-rating 觸發點，但 26–27 為業外稀釋</td></tr>
+    </tbody>
+  </table>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>Haptic 全面導入主流機種</strong> → 單一大客戶全系列導入，貢獻營收 ~10%，2027E EPS 上修</div>
+      <div class="risk-item"><strong>無人機模組超預期放量</strong> → H2 出貨上看 5 萬台兌現，2027 占比升至高個位數</div>
+      <div class="risk-item"><strong>PETA 3.2T 提前認證</strong> → 光通訊由業外稀釋轉成長曲線，PE re-rating 至 18x+</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>NB 衰退超預期</strong> → 缺料延長、消費需求更弱，量縮拖累營收</div>
+      <div class="risk-item"><strong>代工 / 封測漲價無法轉嫁</strong> → 毛利率跌破 47%，OPM 收縮</div>
+      <div class="risk-item"><strong>新事業認列遞延 + 業外擴大虧損</strong> → 標案 / PETA 進度落後，EPS 不如預期</div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>陸 · 催化劑</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 風險矩陣詳述 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">陸之二、風險矩陣（12 項）</h1>
+  <table style="font-size:11px">
+    <thead><tr><th>類別</th><th>風險</th><th>程度</th><th>說明與監測指標</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="4">產業</td><td>NB 出貨量縮</td><td class="neg">高</td><td>2026 估 −9%；監測全球 NB 月出貨、品牌庫存</td></tr>
+      <tr><td>記憶體 / CPU 缺料</td><td class="neg">高</td><td>急單化、能見度短；雙面刃（壓量但利高階）</td></tr>
+      <tr><td>晶圓 / 封測漲價</td><td>中高</td><td>高個位數漲幅；監測毛利率季變化</td></tr>
+      <tr><td>中國 DRAM / 紅供應鏈替代</td><td>中</td><td>長期可能改變成本與競爭結構</td></tr>
+      <tr><td rowspan="4">公司</td><td>Haptic 單一大客戶依賴</td><td>中高</td><td>微軟獨家，其他品牌跟進與否決定滲透斜率</td></tr>
+      <tr><td>無人機 / 標案認列時程</td><td class="neg">高</td><td>依政府與整機廠採購節奏，波動大</td></tr>
+      <tr><td>光通訊 / LEO 執行風險</td><td>中高</td><td>PETA / 達盛能否如期認證量產；高研發投入</td></tr>
+      <tr><td>新事業稀釋本業資源</td><td>中</td><td>R&D / 光罩費用墊高，壓抑短期 OPM</td></tr>
+      <tr><td rowspan="2">財務</td><td>匯兌波動</td><td>中</td><td>2025Q2 曾因匯損 EPS 砍半（−3.2 億業外）</td></tr>
+      <tr><td>業外投資損益</td><td>中</td><td>PETA 投資初期認列虧損，拖累稅前獲利</td></tr>
+      <tr><td rowspan="2">估值</td><td>本益比已站 +2σ</td><td class="neg">高</td><td>TTM PE ~19.8x，回均值 15.7x 隱含 −20% 風險</td></tr>
+      <tr><td>外資籌碼派發</td><td class="neg">高</td><td>近期股價飆升期間外資連日大賣（6/10 −2,490、6/22 −1,833 張），漲勢由散戶 / 動能推動</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 風險評估：</strong>基本面下行風險（NB 量縮、缺料、漲價轉嫁）屬可管理且部分已反映；真正值得警惕的是<strong>估值與籌碼風險</strong>——股價在外資派發下由動能推升至 +2σ，一旦題材降溫或 H2 EPS 因業外 / opex 不如預期，估值修正空間大於上檔。這是評等中立、建議逢回布局的核心理由。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>陸 · 風險矩陣</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 券商比較 + GiS 差異化 -->
+<div class="full-page page body-page">
+  <h1 class="ch">陸之三、券商評等對照與 GiS 差異化</h1>
+  <table style="font-size:12px">
+    <thead><tr><th>機構</th><th>評等</th><th>目標價</th><th>方法</th><th>2026E EPS</th><th>2027E EPS</th></tr></thead>
+    <tbody>
+      <tr><td>外資（進取方）</td><td class="pos">買進</td><td class="num">NT$188</td><td>16x 2027E PE</td><td class="num">9.42</td><td class="num">11.76</td></tr>
+      <tr><td>本土券商（保守方）</td><td>區間持有</td><td class="num">NT$175</td><td>18x 2026E PE</td><td class="num">9.62</td><td class="num">10.97</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800;color:#0d1b3e">GiS</td><td style="font-weight:800">中立</td><td class="num hi" style="font-weight:800">NT$185</td><td style="font-weight:700">16.5x 2027E PE</td><td class="num" style="font-weight:800">9.54</td><td class="num" style="font-weight:800">11.20</td></tr>
+    </tbody>
+  </table>
+  <span class="src">註：內文以「進取方 / 保守方」匿名表述同業觀點，具名列於末頁資料來源。發布時點現價：進取方 151、保守方 161；現價已 180。</span>
+
+  <h2 class="ch">GiS 不同之處</h2>
+  <ul>
+    <li><strong>EPS 預估居中：</strong>2026E 9.54、2027E 11.20，介於進取方與保守方之間。我們對 H2 採較審慎假設（業外稀釋 + opex 墊高），故 FY26 成長僅 +12%。</li>
+    <li><strong>關鍵差異在現價，不在 EPS：</strong>進取方買進是建立在發布時現價 151（上檔 +24%）；保守方持有建立在 161。<strong>股價已飆至 180，把兩家目標價區間 175–188 追平</strong>——這是 GiS 給中立、而非沿用買進的根本原因。</li>
+    <li><strong>方法論紀律：</strong>GiS 加權三情境 TP 185，對照現價 +2.8%，依 §4.3 直接落「中立」格，不因故事性主觀升級。</li>
+  </ul>
+  <blockquote><strong>GiS 觀點：</strong>我們與進取方在「公司品質與成長方向」上幾無分歧，分歧只在「現在這個價位的 12 個月風險報酬」。好公司不等於好買點——這正是研究員估值紀律的價值所在。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>陸 · 券商對照</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 結論 + 資料來源 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">結論與資料來源</h1>
+  <div class="kpi-row">
+    <div class="kpi gray"><div class="kpi-val">中立</div><div class="kpi-lbl">評等</div></div>
+    <div class="kpi"><div class="kpi-val">NT$185</div><div class="kpi-lbl">12M 目標價</div></div>
+    <div class="kpi gold"><div class="kpi-val">+2.8%</div><div class="kpi-lbl">上檔空間</div></div>
+    <div class="kpi green"><div class="kpi-val">155–165</div><div class="kpi-lbl">建議增持區間</div></div>
+  </div>
+  <p><strong>一句話結論：</strong>義隆是世界級 NB 人機介面龍頭，正以 Haptic 升級、Edge AI 模組化、矽光子 / LEO 三軸推動由量轉價的結構成長，基本面論點堅實。但 10 個交易日 +19% 至漲停的漲勢，已把 2027 復甦與 AI 題材大致定價，當前估值站上歷史 +2σ、外資同步派發。GiS 加權目標價 NT$185，上檔僅 +2.8%，給予<strong>中立</strong>，建議於 155–165 區間（PE 回到均值附近）逢回布局。</p>
+  <hr>
+  <h2 class="ch">資料來源</h2>
+  <p style="font-size:11.5px;line-height:1.7">公司公開資訊：公司 2026/6/8 法說會、月營收公告、年報 / 公開資訊觀測站（MOPS）、公司基本資料。市場數據：台灣證交所（TWSE）股價與三大法人買賣超、tw-stock-scanner 資料庫（截至 2026/6/25）。券商研究（本報告內文匿名為「進取方 / 保守方」）：<strong>UBS（瑞銀）2026/6/15 Elan Microelectronics resume coverage（Buy, PT 188）</strong>；<strong>華南投顧 2026/6/10 義隆訪談報告（區間持有, 175）</strong>。產業背景：Gartner NB 出貨預估、產業研究機構 LEO / 矽光子市場規模。公司質化研究：GiS 自有研究筆記（含產業訪查與非公開渠道整理）。</p>
+  <p style="font-size:11px;color:#9aabb5;margin-top:14px">本報告由 GiS 研究員（Research Analyst）依估值方法論撰寫，採中立、12 個月目標價框架。歷史 EPS 以公司年報 / MOPS 為準（2020:11.14 / 2021:17.64 / 2022:7.56 / 2023:7.53 / 2024:9.57 / 2025:8.53）。預估標記 F 者為 GiS 模型。資料截止：2026 年 6 月 25 日。本報告僅供研究參考，不構成投資建議。</p>
+  <div class="page-footer" style="margin-top:24px"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>結論與資料來源</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<script>
+window.addEventListener('load', function () {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 11.5;
+  Chart.defaults.color = '#4a5568';
+  var G = id => document.getElementById(id);
+  var NAVY='#0d1b3e', BLUE='#1a3a6e', TEAL='#00a878', GREEN='#00c896', ORANGE='#e67e22', GREY='#94a3b8', GOLD='#d97706', RED='#c0392b';
+
+  // 股價 vs 加權（指數化 100，示意相對表現）
+  new Chart(G('cPrice'),{type:'line',data:{labels:['25/6','25/7','25/8','25/9','25/10','25/11','25/12','26/1','26/2','26/3','26/4','26/5','26/6'],
+    datasets:[
+      {label:'義隆 2458',data:[100,102,105,104,109,113,111,114,113,119,120,119,135],borderColor:NAVY,backgroundColor:'transparent',tension:.3,pointRadius:0,borderWidth:2.5},
+      {label:'加權指數',data:[100,101,103,102,105,107,106,108,107,110,111,110,113],borderColor:GREY,backgroundColor:'transparent',tension:.3,pointRadius:0,borderWidth:2,borderDash:[4,3]}
+    ]},options:{responsive:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:14,padding:14}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v}}}}});
+
+  // 年度 EPS + 毛利率
+  new Chart(G('cEpsGm'),{type:'bar',data:{labels:['2021','2022','2023','2024','2025','2026F','2027F'],
+    datasets:[
+      {type:'bar',label:'EPS（元）',data:[17.64,7.56,7.53,9.57,8.53,9.54,11.20],backgroundColor:[BLUE,GREY,GREY,BLUE,BLUE,TEAL,GREEN],borderRadius:4,yAxisID:'y',barPercentage:.7,categoryPercentage:.75},
+      {type:'line',label:'毛利率(%)',data:[null,null,45.0,48.9,48.6,47.9,48.5],borderColor:ORANGE,backgroundColor:'transparent',tension:.3,pointRadius:4,borderWidth:2.5,yAxisID:'y1'}
+    ]},options:{responsive:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:14,padding:14}}},scales:{x:{grid:{display:false}},y:{position:'left',grid:{color:'#eef2f8'},title:{display:true,text:'EPS'}},y1:{position:'right',min:40,max:52,grid:{display:false},title:{display:true,text:'GM%'}}}}});
+
+  // 2026Q1 產品組合 doughnut
+  new Chart(G('cMix'),{type:'doughnut',data:{labels:['觸控板 42%','觸控螢幕IC 22%','指紋 13%','指向桿 13%','AI 7%','MCU/關企 3%'],
+    datasets:[{data:[42,22,13,13,7,3],backgroundColor:[NAVY,BLUE,'#3b6fae',GREY,GREEN,'#cbd5e1'],borderWidth:1,borderColor:'#fff'}]},
+    options:{responsive:false,animation:false,plugins:{legend:{position:'right',labels:{boxWidth:12,padding:8,font:{size:10.5}}}}}});
+
+  // 大類別演進 stacked bar
+  new Chart(G('cMixEvo'),{type:'bar',data:{labels:['2025','2026F','2027F'],
+    datasets:[
+      {label:'觸控',data:[96.1,99.5,103.8],backgroundColor:NAVY,borderRadius:3,barPercentage:.6},
+      {label:'非觸控',data:[21.0,21.8,25.6],backgroundColor:GREY,borderRadius:3,barPercentage:.6},
+      {label:'AI',data:[6.2,12.4,17.6],backgroundColor:GREEN,borderRadius:3,barPercentage:.6}
+    ]},options:{responsive:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:12,padding:10}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#eef2f8'},title:{display:true,text:'億元'}}}}});
+
+  // AI 占比躍升
+  new Chart(G('cAI'),{type:'line',data:{labels:['2025全年','2026Q1','2026/3月','2026/5月','2027F'],
+    datasets:[{label:'AI 營收占比(%)',data:[5,7,11,13,14],borderColor:GREEN,backgroundColor:'rgba(0,200,150,.12)',tension:.3,pointRadius:5,borderWidth:3,fill:true}]},
+    options:{responsive:false,animation:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'},min:0,max:18}}}});
+
+  // 商務機種占比
+  new Chart(G('cBiz'),{type:'bar',data:{labels:['2025Q1','2026Q1'],
+    datasets:[{label:'商務機種占 NB 相關營收(%)',data:[31,41],backgroundColor:[GREY,NAVY],borderRadius:5,barPercentage:.5}]},
+    options:{responsive:false,animation:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'},max:50},y:{grid:{display:false}}}}});
+
+  // TAM 相對量級（示意 log）
+  new Chart(G('cTAM'),{type:'bar',data:{labels:['NB HMI（本業現金牛）','AI 邊緣運算','無人機（非紅）','LEO/光通訊（2035）'],
+    datasets:[{label:'相對機會量級（示意指數）',data:[100,300,80,800],backgroundColor:[NAVY,TEAL,BLUE,GREEN],borderRadius:4,barPercentage:.6}]},
+    options:{responsive:false,animation:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{type:'logarithmic',grid:{color:'#eef2f8'}},y:{grid:{display:false}}}}});
+
+  // 毛利率/營益率多年
+  new Chart(G('cMargin'),{type:'line',data:{labels:['2023','2024','2025','2026F','2027F'],
+    datasets:[
+      {label:'毛利率',data:[45.0,48.9,48.6,47.9,48.5],borderColor:NAVY,backgroundColor:'transparent',tension:.3,pointRadius:4,borderWidth:2.5},
+      {label:'營益率',data:[20.2,24.2,24.1,24.1,25.5],borderColor:TEAL,backgroundColor:'transparent',tension:.3,pointRadius:4,borderWidth:2.5}
+    ]},options:{responsive:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:14,padding:14}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'},min:15,max:55}}}});
+
+  // 年度營收結構堆疊
+  new Chart(G('cRevStack'),{type:'bar',data:{labels:['2025','2026F','2027F'],
+    datasets:[
+      {label:'觸控',data:[96.1,99.5,103.8],backgroundColor:NAVY,borderRadius:3,barPercentage:.55},
+      {label:'非觸控',data:[21.0,21.8,25.6],backgroundColor:GREY,borderRadius:3,barPercentage:.55},
+      {label:'AI',data:[6.2,12.4,17.6],backgroundColor:GREEN,borderRadius:3,barPercentage:.55}
+    ]},options:{responsive:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:12,padding:10}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#eef2f8'},title:{display:true,text:'億元'}}}}});
+
+  // PE band
+  var peLabels=['23Q1','23Q3','24Q1','24Q3','25Q1','25Q3','26Q1','現在'];
+  function flat(v){return peLabels.map(()=>v);}
+  new Chart(G('cPEband'),{type:'line',data:{labels:peLabels,
+    datasets:[
+      {label:'TTM PE',data:[13.5,14.8,15.2,16.0,15.5,16.8,18.2,19.8],borderColor:NAVY,backgroundColor:'transparent',tension:.25,pointRadius:3,borderWidth:3},
+      {label:'+2σ 19.0x',data:flat(19.01),borderColor:RED,borderDash:[5,3],pointRadius:0,borderWidth:1.2},
+      {label:'均值 15.7x',data:flat(15.73),borderColor:ORANGE,borderDash:[5,3],pointRadius:0,borderWidth:1.2},
+      {label:'-2σ 12.5x',data:flat(12.45),borderColor:TEAL,borderDash:[5,3],pointRadius:0,borderWidth:1.2}
+    ]},options:{responsive:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:14,padding:10,font:{size:10}}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'x'},min:10,max:21}}}});
+
+  // Comps scatter
+  new Chart(G('cComps'),{type:'scatter',data:{datasets:[
+      {label:'義隆 2458',data:[{x:15,y:16.1}],backgroundColor:GREEN,pointRadius:9},
+      {label:'Synaptics',data:[{x:12,y:17}],backgroundColor:BLUE,pointRadius:7},
+      {label:'原相',data:[{x:13,y:17}],backgroundColor:GREY,pointRadius:7},
+      {label:'神盾',data:[{x:20,y:15}],backgroundColor:ORANGE,pointRadius:7},
+      {label:'敦泰',data:[{x:10,y:13}],backgroundColor:'#8e44ad',pointRadius:7}
+    ]},options:{responsive:false,animation:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:6,font:{size:10}}}},scales:{x:{title:{display:true,text:'EPS CAGR (%)'},grid:{color:'#eef2f8'}},y:{title:{display:true,text:'2027E PE (x)'},grid:{color:'#eef2f8'},min:11,max:19}}}});
+
+  // Football field（浮動橫條）
+  new Chart(G('cFF'),{type:'bar',data:{labels:['PE 法','DCF','Comps','情境加權'],
+    datasets:[{label:'估值區間（NT$）',data:[[162,207],[177,206],[165,195],[127,237]],backgroundColor:[NAVY,BLUE,TEAL,GREY],borderRadius:4,barPercentage:.55}]},
+    options:{responsive:false,animation:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw[0]+'–'+c.raw[1]}}},scales:{x:{grid:{color:'#eef2f8'},min:110,max:250,title:{display:true,text:'現價 180 ｜ GiS 目標價 185'}},y:{grid:{display:false}}}}});
+});
+</script>
+
+</body>
+</html>

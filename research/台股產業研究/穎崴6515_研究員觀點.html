@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!--
+  GiS 6515 穎崴科技 首次覆蓋深度報告
+  2026-05-27 研究員觀點 / 中立 (Neutral) / 12M 目標價 NT$9,900
+  PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="穎崴6515_研究員觀點.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=15000 "file:///Users/chenhongshuo/claude/個股報告/6515/20260527/穎崴6515_研究員觀點.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>6515 穎崴科技 首次覆蓋深度報告 — 中立 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-img{width:100%;height:210px;display:block;border-radius:4px;object-fit:contain}
+.chart-img.tall{height:260px}
+.chart-img.short{height:160px}
+.chart-grid .chart-img{height:180px}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:44px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:550px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:36px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:24px 0 16px;page-break-after:avoid}
+h1.ch:first-child{margin-top:0}
+h2.ch{font-size:16px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:6px;margin:20px 0 12px;page-break-after:avoid}
+h3.ch{font-size:14px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 8px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:10px 0 14px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 10px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 10px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5;font-size:12.5px}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.wine{background:#5c1a1a}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#9aa5b1;color:#fff}
+.badge.sell{background:#65a30d;color:#fff}
+.badge.uw{background:#65a30d;color:#fff}
+.badge.ow{background:#f59e0b;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:14px 20px;font-size:13px;line-height:1.7}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:14px;margin:12px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13.5px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.red{background:linear-gradient(135deg,#7c2d12,#c0392b)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:4px}
+.kpi-val em{font-size:11px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.5px;font-weight:600;color:#0d1b3e;padding:8px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:14px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12px;font-weight:800;margin-bottom:6px}
+.tl-spec{font-size:14px;font-weight:900;color:#00c896;margin-bottom:3px}
+.tl-tech{font-size:10.5px;opacity:.8;line-height:1.5}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:14px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13.5px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+p{margin:6px 0 10px;line-height:1.7;font-size:13px}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+li{margin:3px 0;line-height:1.65;font-size:13px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:8px 12px;margin:10px 0;color:#1a3a6e;font-size:12.5px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:18px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:4px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.red{border-color:#c0392b;background:#fdf0ef}
+.callout-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:6px}
+.callout.green .callout-title{color:#065f46}
+.callout.red .callout-title{color:#7b2020}
+.callout p{font-size:12.5px;margin:4px 0}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:11px;display:flex;justify-content:space-between;align-items:center}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ============ 封面 ============ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">研究員觀點 · 首次覆蓋深度報告</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Initiating Coverage · 2026-05-27</div>
+    <div class="cover-title">穎崴科技（6515）<br><em>AI 測試介面領導者，漲停後安全邊際已薄</em></div>
+    <div class="cover-subtitle">WinWay Technology · 測試座 (Test Socket) + 探針卡 (Probe Card) + Pogo Pin</div>
+    <div class="cover-tags">
+      <span class="ctag hl">評等：中立 (Neutral)</span>
+      <span class="ctag hl">12M 目標價 NT$9,900</span>
+      <span class="ctag">上檔空間 +1.1%</span>
+      <span class="ctag">AI/HPC 測試</span>
+      <span class="ctag">SLT · HyperSocket</span>
+      <span class="ctag">MEMS 探針卡</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">9,795</div><div class="cstat-label">現價（5/27 收，+10%）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>9,900</em></div><div class="cstat-label">GiS 12M TP</div></div>
+    <div class="cstat"><div class="cstat-num">19.54</div><div class="cstat-label">1Q26 EPS（單季新高）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>161</em></div><div class="cstat-label">2027E EPS（GiS 基礎）</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>Genesis International Capital · Research</span>
+    <span>本報告僅供內部研究參考 · 不構成投資建議</span>
+  </div>
+</div>
+
+<!-- ============ 投資摘要 ============ -->
+<div class="body-page">
+  <h1 class="ch">投資摘要：結構故事我們認同，但價格已先行</h1>
+
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">穎崴科技 WinWay Technology</div><div class="co-ticker">6515 TT · TWSE 半導體業</div></div>
+      <div class="co-badge"><span class="badge neutral">中立 Neutral</span><span style="font-size:11px;color:rgba(255,255,255,.7)">12M TP NT$9,900</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">9,795</div><div class="co-metric-label">現價（5/27）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+1.1%</div><div class="co-metric-label">上檔空間</div></div>
+      <div class="co-metric"><div class="co-metric-val">~3,200 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val">61x</div><div class="co-metric-label">2027E PE（現價）</div></div>
+    </div>
+    <div class="co-body">
+      穎崴是 AI/HPC 晶片「最後一哩」測試環節的測試介面供應商，於<strong>大尺寸先進封裝高功率測試座（HyperSocket）</strong>與後段系統級測試（SLT/FT）探針站穩領導，並借與 Technoprobe 合作切入 MEMS 探針卡。基本面是台股少數能直接對應 AI 算力 <em>content growth</em> 的純標的——<strong>我們認同結構故事，但在 5/27 漲停至 9,795（觸市場最保守目標價）後，於 GiS 基礎 2027E EPS 161 之下，加權目標價僅 ~9,900，安全邊際已薄，故首次覆蓋給「中立」。</strong>
+    </div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">1</span><span><strong>content growth 是真的：</strong>AI 晶片 pin 數由 6,000+ 升向 1.2–1.5 萬，SLT 測試座 TAM 約為 FT 的 4–5 倍、HyperSocket ASP 較 Coaxial 高 20–30%；測試介面價值量隨晶片複雜度結構性抬升，不易被削價取代。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">2</span><span><strong>成長軌跡加速：</strong>2025 營收 78.6 億（+35.5%）、EPS 46.96；1Q26 EPS 19.54 創單季新高；訂單能見度由 4 個月延長至 5–6 個月，產能滿載並宣示「每年翻倍至 2030」。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">3</span><span><strong>但估值已反映：</strong>現價對應 2027E PE 約 61x（同業頂端）；DCF 全 5×5 區間（即便 WACC 9.5%/g 6% 僅 7,647）皆低於現價，標準現金流折現無法支撐——這是純 forward-PE 成長股估值。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">4</span><span><strong>我們與市場的差異在「錨年 + 毛利假設」：</strong>市場 2027E EPS 落 103–224、目標價 9,795–15,000 區間極寬。GiS 守 N+1（2027E）錨 + 對「外包 4 成下毛利一步到 50%」打折，2027E EPS 取 161，故落中立；<strong>回檔至 8,000–8,500 或確認毛利/SLT 走 bull 軌，將上調至增加持股。</strong></span></div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-val">46.96</div><div class="kpi-lbl">2025 EPS（元）</div></div>
+    <div class="kpi green"><div class="kpi-val">97 <em>/股</em></div><div class="kpi-lbl">2026E EPS（基礎）</div></div>
+    <div class="kpi gold"><div class="kpi-val">161</div><div class="kpi-lbl">2027E EPS（基礎）</div></div>
+    <div class="kpi"><div class="kpi-val">228</div><div class="kpi-lbl">2028E EPS（基礎）</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 1 · 股價走勢與重大事件</div>
+      <div class="chart-sub">來源：TWSE / GiS 整理</div>
+      <img class="chart-img" src="charts/chart_01_price_history.png" alt="chart_01">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 2 · 歷史 EPS 與毛利率趨勢</div>
+      <div class="chart-sub">來源：MOPS / GiS 預估</div>
+      <img class="chart-img" src="charts/chart_02_eps_gm_trend.png" alt="chart_02">
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<!-- ============ 章節一 ============ -->
+<div class="sec-div page">
+  <div class="sec-num">01</div>
+  <div class="sec-eyebrow">Investment Thesis</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">投資論點<br>Bull vs Bear</div>
+  <div class="sec-desc">穎崴的多空之爭，不在「方向」而在「程度與價格」。多方看 content growth 與 SLT/HyperSocket 結構放量；空方（含本報告的估值紀律）看漲停後的安全邊際與 2027–28 毛利/EPS 假設的脆弱。</div>
+</div>
+
+<div class="body-page">
+  <h1 class="ch">壹、Bull 論點：AI 測試 content growth 的純標的</h1>
+
+  <h2 class="ch">Bull 1 — SLT 放量：TAM 約為 FT 的 4–5 倍</h2>
+  <p>AI GPU、server CPU、AI ASIC 因可靠度門檻提高、Chiplet 多晶片封裝普及，系統級測試（SLT）採用率結構性上升。SLT 測試座市場規模約為傳統 FT 的 <strong>4–5 倍</strong>，穎崴已切入 AI GPU SLT 供應鏈，成為 2026–27 測試座營收成長的主驅動。產業預估測試座營收 2026 年增可達 +100~146%、2027 +59~87%。</p>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 3 · TAM：SLT ≈ FT 的 4-5 倍 + CPO 長線</div>
+    <div class="chart-sub">來源：產業機構 / 優分析整理 / GiS</div>
+    <img class="chart-img" src="charts/chart_13_tam_forecast.png" alt="chart_13">
+  </div>
+
+  <h2 class="ch">Bull 2 — content growth：pin 數與 ASP 結構抬升</h2>
+  <p>AI 晶片 pin 數由過往 6,000+ 升至 2026 年逼近 10,000，未來 1.2–1.5 萬 pin 將成常態；per-pin 價格穩定，但整組測試座 ASP 隨封裝尺寸與複雜度明顯上升。<strong>HyperSocket</strong> 專攻超大封裝（&gt;100×100mm）與翹曲瓶頸，ASP 較傳統 Coaxial 高 20–30%，2027 年起放量；雙層 HyperSocket-DH 已獲全球大型 AI 客戶採用，自研液冷 Socket 取得美國專利。</p>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 4 · AI 晶片 pin 數與測試座 ASP 趨勢</div>
+    <div class="chart-sub">來源：公司法說 / 優分析整理 / GiS</div>
+    <img class="chart-img short" src="charts/chart_09_pincount_asp.png" alt="chart_09">
+  </div>
+
+  <h2 class="ch">Bull 3 — 雙引擎 + 長線選擇權</h2>
+  <p>產品結構由「測試座一家獨大」轉向「測試座 + 探針卡雙引擎」（探針卡占比一季內由 19% 升至 25%，MEMS Phase 2 量產）。長線另有 CPO 光電同測選擇權——2026 為 CPO 商轉元年，CPO 市場 2026–36 年 CAGR 約 37%；穎崴於 Insertion 1/3/3.5/4 佈局，其中封測後測試（Insertion 3/4）被點名由其 test socket / HyperSocket 負責。</p>
+  <div class="timeline">
+    <div class="tl-item active"><div class="tl-year">2024→</div><div class="tl-spec">Coaxial</div><div class="tl-tech">現金流主力<br>AI GPU/CPU/ASIC</div></div>
+    <div class="tl-item active"><div class="tl-year">2026</div><div class="tl-spec">SLT</div><div class="tl-tech">放量初期<br>TAM 4-5x FT</div></div>
+    <div class="tl-item next"><div class="tl-year">2027</div><div class="tl-spec">HyperSocket</div><div class="tl-tech">高毛利第二主軸<br>ASP +20-30%</div></div>
+    <div class="tl-item next"><div class="tl-year">2028+</div><div class="tl-spec">CPO</div><div class="tl-tech">光電同測<br>長線選擇權</div></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<div class="body-page alt">
+  <h1 class="ch">貳、Bear 論點：漲停後的估值紀律</h1>
+
+  <h2 class="ch">Bear 1 — DCF 無法支撐現價</h2>
+  <p>以 WACC 10.5%、永續成長 4%、7 年顯性期建模，DCF 每股值僅 <strong>NT$4,238</strong>，較現價低 57%。即便取最寬鬆組合（WACC 9.5%/g 6%），亦僅 7,647，<strong>全 5×5 區間皆低於現價 9,795</strong>。意即現價隱含「2030 年後仍維持高速成長」的長尾預期，標準現金流折現無安全邊際。</p>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 5 · DCF 5×5 敏感度（每股值，元）</div>
+    <div class="chart-sub">來源：GiS 估值模型｜中心格 = 採用假設</div>
+    <img class="chart-img" src="charts/chart_20_dcf_sensitivity.png" alt="chart_20">
+  </div>
+
+  <h2 class="ch">Bear 2 — 毛利修復受外包與 capex 壓抑</h2>
+  <p>即便探針月產能拉到 900 萬支（2026 年底），自製率仍只覆蓋不到 6 成需求、4 成以上須外包，疊加擴產期折舊與建置費用，毛利率「回升但難一步到 50%」。1Q26 毛利率 43.0%，仍低於 1Q25 的約 49%。市場 bull case 假設毛利率 2027 升至 49–50%，GiS 採保留（基礎 47%）。</p>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 6 · 與同業毛利率對比</div>
+    <div class="chart-sub">來源：各公司財報 / GiS（2025 約值）</div>
+    <img class="chart-img short" src="charts/chart_15_peer_gm.png" alt="chart_15">
+  </div>
+
+  <h2 class="ch">Bear 3 — 客戶集中 + 擴產執行 + 高估值</h2>
+  <ul>
+    <li><strong>客戶集中：</strong>北美 81%、前十大 90%、兩大 AI 客戶為主要動能；任一大客戶訂單調整或市佔流失（如 Vera CPU 探針卡之競爭）對營收衝擊大。</li>
+    <li><strong>擴產執行：</strong>「每年翻倍至 2030」需仁武二廠（面積為一廠 6 倍）、1Q28 新廠如期達標，建廠 / 良率 / 人力任一落後即錯失窗口。</li>
+    <li><strong>高估值脆弱：</strong>現價對應 2027E PE 約 61x，位居同業頂端；對成長不如預期的下檔放大。</li>
+  </ul>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<!-- ============ 章節二 ============ -->
+<div class="sec-div page">
+  <div class="sec-num">02</div>
+  <div class="sec-eyebrow">Company 101</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">公司分析<br>商業模式與護城河</div>
+  <div class="sec-desc">穎崴於 2002 年成立、2021 年上市，主業為半導體測試介面（測試座 + 探針 + 探針卡）。垂直整合探針自製、HyperSocket 大尺寸測試領先、客戶 co-design 黏著，是其三大護城河。</div>
+</div>
+
+<div class="body-page">
+  <h1 class="ch">參、商業模式與產品結構</h1>
+  <p>測試介面是 IC 完成晶圓製造、封裝後，於「測試」環節連接晶片接腳與測試機台的橋樑——含晶圓測試（CP）用<strong>探針卡</strong>、成品/系統級測試（FT/SLT）用<strong>測試座 + 探針</strong>。其本質是「耗材 + 客製」：需與晶片 co-design、有壽命會損耗、需更換，具半重複營收特性，且與晶片測試時間 / pin count 連動。</p>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 7 · 營收結構（按產品線）</div>
+      <div class="chart-sub">來源：優分析 / GiS 基礎情境</div>
+      <img class="chart-img" src="charts/chart_03_revenue_by_product.png" alt="chart_03">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 8 · 營收結構（按應用）</div>
+      <div class="chart-sub">來源：優分析 / GiS</div>
+      <img class="chart-img" src="charts/chart_04_revenue_by_application.png" alt="chart_04">
+    </div>
+  </div>
+
+  <h2 class="ch">產品族群與角色</h2>
+  <table>
+    <thead><tr><th>產品線</th><th>2026Q1 占比</th><th>角色</th><th>2027-28 成長潛力</th></tr></thead>
+    <tbody>
+      <tr><td>測試座 Coaxial</td><td>（含於 65%）</td><td>現金流 + 毛利主力</td><td class="pos">極高</td></tr>
+      <tr><td>SLT 測試座</td><td>放量初期</td><td>結構性主軸（TAM 4-5x FT）</td><td class="pos">極高</td></tr>
+      <tr><td>HyperSocket / 液冷</td><td>起步</td><td>高毛利第二主軸</td><td class="pos">極高</td></tr>
+      <tr><td>MEMS / VPC 探針卡</td><td>25%</td><td>毛利彈性來源</td><td class="pos">極高</td></tr>
+      <tr><td>接觸元件 / Pogo pin</td><td>7%</td><td>核心零組件、自製率拉高</td><td>高</td></tr>
+      <tr><td>CPO / CPC 光電同測</td><td>~0</td><td>長線選擇權</td><td class="pos">極高（2028+）</td></tr>
+    </tbody>
+  </table>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<div class="body-page alt">
+  <h1 class="ch">肆、客戶、製程與股權結構</h1>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 9 · 客戶與地域集中度</div>
+      <div class="chart-sub">來源：公司法說（1-4M26）</div>
+      <img class="chart-img" src="charts/chart_07_customer_concentration.png" alt="chart_07">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 10 · 製程結構</div>
+      <div class="chart-sub">來源：公司法說（1-4M26）</div>
+      <img class="chart-img" src="charts/chart_16_node_ratio.png" alt="chart_16">
+    </div>
+  </div>
+  <p>客戶高度集中於北美 AI 資料中心（81%），前十大占 90%，含兩大 AI 客戶的 CPU/GPU FT/SLT；先進製程（≤7nm）占 89%，顯示營收高度集中於高階節點。股權結構籌碼集中：外資 21.3%、投信 21.1%、董監 17.2%，三者合計近 56%。</p>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 11 · 股權結構</div>
+      <div class="chart-sub">來源：公司 / 公開資訊</div>
+      <img class="chart-img" src="charts/chart_06_shareholding.png" alt="chart_06">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 12 · 產品 / 技術 Roadmap</div>
+      <div class="chart-sub">來源：公司法說 / GiS 整理</div>
+      <img class="chart-img" src="charts/chart_17_roadmap.png" alt="chart_17">
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<div class="body-page">
+  <h1 class="ch">伍、競爭地位與里程碑</h1>
+  <p>穎崴在「高功率、大尺寸 HPC 測試座」主場具技術領先（HyperSocket 大尺寸段公司主張領先）；在探針卡（CP）為後進者，借與 Technoprobe 合作 + 台積電先進產能放量追趕。下表為測試介面同業地圖（產業地圖具名）：</p>
+  <table>
+    <thead><tr><th>公司</th><th>區域</th><th>主力</th><th>與穎崴關係</th></tr></thead>
+    <tbody>
+      <tr><td>穎崴 6515</td><td>台</td><td>測試座 + 探針卡</td><td>—</td></tr>
+      <tr><td>FormFactor (FORM)</td><td>美</td><td>探針卡（全球#1）</td><td>探針卡端競爭</td></tr>
+      <tr><td>Technoprobe (TPI)</td><td>義</td><td>MEMS 探針卡</td><td>合作 + 潛在競爭</td></tr>
+      <tr><td>旺矽 6223</td><td>台</td><td>探針卡 + LED</td><td>直接競爭（Vera CPU 探針卡）</td></tr>
+      <tr><td>中華精測 6510</td><td>台</td><td>探針卡（先進）</td><td>探針卡端競爭</td></tr>
+      <tr><td>雍智 6730</td><td>台</td><td>測試座</td><td>直接競爭</td></tr>
+      <tr><td>Cohu (COHU)</td><td>美</td><td>handler + socket</td><td>socket 競爭</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 13 · 發展里程碑</div>
+    <div class="chart-sub">來源：公司 / GiS 整理</div>
+    <img class="chart-img short" src="charts/chart_05_milestones.png" alt="chart_05">
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<!-- ============ 章節三 ============ -->
+<div class="sec-div page">
+  <div class="sec-num">03</div>
+  <div class="sec-eyebrow">Financials</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">財務分析<br>與三情境預估</div>
+  <div class="sec-desc">2023→2025 營收 CAGR 約 46%、EPS 由 13.5 升至 47.0。我們以 segment-based 三情境建模，2027E EPS 取 161（落於市場 103–224 之間），量化共識縫隙。</div>
+</div>
+
+<div class="body-page">
+  <h1 class="ch">陸、歷史財務與獲利品質</h1>
+  <table>
+    <thead><tr><th>年度</th><th>營收(億)</th><th>YoY</th><th>毛利率</th><th>營益率</th><th>稅後淨利(億)</th><th>EPS</th></tr></thead>
+    <tbody>
+      <tr><td>2023</td><td class="num">36.82</td><td class="num">—</td><td class="num">~42%</td><td class="num">15.1%</td><td class="num">4.64</td><td class="num">13.52</td></tr>
+      <tr><td>2024</td><td class="num">57.98</td><td class="num pos">+57.5%</td><td class="num">~45%</td><td class="num">23.6%</td><td class="num">11.86</td><td class="num">33.30</td></tr>
+      <tr><td>2025</td><td class="num">78.57</td><td class="num pos">+35.5%</td><td class="num">~46%</td><td class="num">26.3%</td><td class="num">16.73</td><td class="num">46.96</td></tr>
+      <tr><td class="hi">1Q26</td><td class="num hi">29.80</td><td class="num pos">+29.7%</td><td class="num hi">43.0%</td><td class="num">26.1%</td><td class="num">6.99</td><td class="num hi">19.54</td></tr>
+    </tbody>
+  </table>
+  <p class="src">歷史數字來源：MOPS 公開資訊觀測站公告值（券商報告交叉驗證一致）。EPS 分母 36.04 百萬股。</p>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 14 · 季度毛利率 / 營益率</div>
+      <div class="chart-sub">來源：MOPS / GiS</div>
+      <img class="chart-img" src="charts/chart_10_quarterly_margin.png" alt="chart_10">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 15 · ROE / ROA 趨勢</div>
+      <div class="chart-sub">來源：MOPS / GiS 預估</div>
+      <img class="chart-img" src="charts/chart_11_roe_roa.png" alt="chart_11">
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<div class="body-page alt">
+  <h1 class="ch">柒、產能、現金流與資本支出</h1>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 16 · 探針月產能擴張路徑</div>
+      <div class="chart-sub">來源：公司法說 / 優分析整理</div>
+      <img class="chart-img" src="charts/chart_08_capacity_expansion.png" alt="chart_08">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 17 · 現金流與資本支出</div>
+      <div class="chart-sub">來源：GiS 基礎情境</div>
+      <img class="chart-img" src="charts/chart_12_fcf_capex.png" alt="chart_12">
+    </div>
+  </div>
+  <blockquote>關鍵約束：即便探針拉到 900 萬支（2026 年底），自製仍覆蓋不到 6 成需求、4 成以上外包 → 這是基礎情境毛利率「回升但壓在 44–47%」的主因。Capex 高峰 2026–27（仁武二廠 + 1Q28 新廠），FCF 2026 受壓至約 8 億後轉強；配發率約 106%（2025 配 50 元），需留意現金流張力（負債比 54.6%）。</blockquote>
+
+  <h2 class="ch">三情境預估</h2>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 18 · 三情境 EPS</div>
+      <div class="chart-sub">來源：GiS 模型</div>
+      <img class="chart-img" src="charts/chart_18_eps_scenarios.png" alt="chart_18">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 19 · 三情境營收</div>
+      <div class="chart-sub">來源：GiS 模型</div>
+      <img class="chart-img" src="charts/chart_19_revenue_scenarios.png" alt="chart_19">
+    </div>
+  </div>
+  <table>
+    <thead><tr><th>EPS（元）</th><th>2025A</th><th>2026E</th><th>2027E</th><th>2028E</th></tr></thead>
+    <tbody>
+      <tr><td>保守（≈ 本土保守方）</td><td class="num">46.96</td><td class="num">76</td><td class="num">103</td><td class="num">125</td></tr>
+      <tr><td class="hi">基礎（GiS 採用）</td><td class="num">46.96</td><td class="num hi">97</td><td class="num hi">161</td><td class="num hi">228</td></tr>
+      <tr><td>樂觀（≈ 外資進取方）</td><td class="num">46.96</td><td class="num">104</td><td class="num">222</td><td class="num">426</td></tr>
+    </tbody>
+  </table>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<!-- ============ 章節四 ============ -->
+<div class="sec-div page">
+  <div class="sec-num">04</div>
+  <div class="sec-eyebrow">Valuation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">估值分析<br>中立 · TP NT$9,900</div>
+  <div class="sec-desc">PE（主，錨 2027E）+ DCF（交叉）+ Comps。加權目標價 9,900、上檔 +1.1%，依方法論 §4.3 落「中立」。我們較街上更紀律——分歧源於錨年與毛利假設，非方向。</div>
+</div>
+
+<div class="body-page">
+  <h1 class="ch">捌、PE 估值（主，錨 2027E EPS）</h1>
+  <table>
+    <thead><tr><th>情境</th><th>2027E EPS</th><th>目標 PE</th><th>目標價</th><th>機率</th></tr></thead>
+    <tbody>
+      <tr><td>保守</td><td class="num">103</td><td class="num">50x</td><td class="num">5,150</td><td class="num">25%</td></tr>
+      <tr><td class="hi">基礎</td><td class="num hi">161</td><td class="num hi">60x</td><td class="num hi">9,660</td><td class="num">50%</td></tr>
+      <tr><td>樂觀</td><td class="num">222</td><td class="num">68x</td><td class="num">15,096</td><td class="num">25%</td></tr>
+      <tr><td class="hi">機率加權目標價</td><td class="num" colspan="3" style="text-align:center">NT$9,892 ≈ <strong>9,900</strong></td><td class="num pos">+1.1%</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 20 · PE × EPS 5×5 敏感度（2027E 目標價，元）</div>
+    <div class="chart-sub">中心格 EPS 161 × 60x = 9,660 ≈ 採用基礎目標價</div>
+    <table style="margin-top:0">
+      <thead><tr><th>EPS＼PE</th><th>45x</th><th>52x</th><th>60x</th><th>68x</th><th>75x</th></tr></thead>
+      <tbody>
+        <tr><td>120</td><td class="num">5,400</td><td class="num">6,240</td><td class="num">7,200</td><td class="num">8,160</td><td class="num">9,000</td></tr>
+        <tr><td>140</td><td class="num">6,300</td><td class="num">7,280</td><td class="num">8,400</td><td class="num">9,520</td><td class="num">10,500</td></tr>
+        <tr><td class="hi">161</td><td class="num">7,245</td><td class="num">8,372</td><td class="num hi">9,660</td><td class="num">10,948</td><td class="num">12,075</td></tr>
+        <tr><td>190</td><td class="num">8,550</td><td class="num">9,880</td><td class="num">11,400</td><td class="num">12,920</td><td class="num">14,250</td></tr>
+        <tr><td>222</td><td class="num">9,990</td><td class="num">11,544</td><td class="num">13,320</td><td class="num">15,096</td><td class="num">16,650</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<div class="body-page alt">
+  <h1 class="ch">玖、DCF 與 Comps 交叉驗證</h1>
+  <p>DCF（WACC 10.5%、g 4%、7 年顯性期）每股值 <strong>NT$4,238</strong>（−57%）；Comps 以同業 forward PE 35–50x × 2027E EPS 161 得 5,635–8,050（−18%~−43%）。<strong>兩交叉法皆低於現價，唯 PE 法（central）與「錨 2028E」貼近或高於現價。</strong></p>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 21 · 同業 成長 vs 估值散布</div>
+      <div class="chart-sub">來源：GiS 整理</div>
+      <img class="chart-img" src="charts/chart_22_comps_scatter.png" alt="chart_22">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 22 · 同業 Forward PE</div>
+      <div class="chart-sub">來源：GiS 整理</div>
+      <img class="chart-img" src="charts/chart_24_peer_pe.png" alt="chart_24">
+    </div>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 23 · 歷史本益比河流圖（TTM PE）</div>
+    <div class="chart-sub">來源：TWSE / MOPS / GiS</div>
+    <img class="chart-img" src="charts/chart_23_pe_band.png" alt="chart_23">
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<div class="body-page">
+  <h1 class="ch">拾、Football Field 與採用結論</h1>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 24 · Football Field 綜合估值</div>
+    <div class="chart-sub">來源：GiS 估值模型</div>
+    <img class="chart-img" src="charts/chart_21_football_field.png" alt="chart_21">
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 25 · 現價 vs GiS 三情境 / 市場目標價</div>
+    <div class="chart-sub">來源：GiS / 公開券商目標價區間</div>
+    <img class="chart-img short" src="charts/chart_25_target_vs_price.png" alt="chart_25">
+  </div>
+  <div class="callout">
+    <div class="callout-title">採用結論（§4.3 五級評等）</div>
+    <p>12 個月目標價 <strong>NT$9,900</strong>（PE 2027E 三情境加權）｜現價 9,795｜上檔 <strong>+1.1%</strong> → <strong>中立 (Neutral)</strong>。</p>
+    <p>較街上 5 家全 Buy/OW 更紀律：給增加持股需改錨 2028E（→ +16%）或接受街上 2027 EPS 213–224；GiS 守 N+1（2027E）+ 自有 haircut EPS，故落中立。</p>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<!-- ============ 章節五 ============ -->
+<div class="sec-div page">
+  <div class="sec-num">05</div>
+  <div class="sec-eyebrow">Risks & Catalysts</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">風險、催化劑<br>與評等轉折</div>
+  <div class="sec-desc">升評 OW 觸發：2Q26 單季 EPS &gt;22 + 毛利率連兩季回升至 ≥46% + SLT 客戶數擴張。降評 UW 觸發：仁武二廠投產遞延 + 外包未降（毛利卡 ≤44%）+ AI capex 轉弱。</div>
+</div>
+
+<div class="body-page">
+  <h1 class="ch">拾壹、風險矩陣與催化劑</h1>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>↑ 升評 / 上行催化劑</h4>
+      <div class="risk-item">2Q26 單季 EPS 確認 &gt;22（券商估 22.6）</div>
+      <div class="risk-item">毛利率連兩季回升至 ≥46%（外包比重下降）</div>
+      <div class="risk-item">SLT 客戶數擴張、HyperSocket 2027 提前放量</div>
+      <div class="risk-item">CPO Insertion 3/4 取得實質訂單</div>
+      <div class="risk-item">仁武二廠 2Q27 提前投產確認</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>↓ 降評 / 下行風險</h4>
+      <div class="risk-item">AI capex 週期反轉，content growth 降速</div>
+      <div class="risk-item">大客戶市佔流失（Vera CPU 探針卡之爭）</div>
+      <div class="risk-item">仁武二廠 / 1Q28 新廠投產遞延</div>
+      <div class="risk-item">外包比重未降，毛利卡 ≤44%</div>
+      <div class="risk-item">高估值（2027E PE 61x）對成長不如預期放大下檔</div>
+      <div class="risk-item">月營收波動度高（4M26 MoM −19%）</div>
+    </div>
+  </div>
+
+  <h2 class="ch">催化劑日曆</h2>
+  <table>
+    <thead><tr><th>時間</th><th>事件</th><th>觀察重點</th></tr></thead>
+    <tbody>
+      <tr><td>2026-05-29</td><td>高雄仁武二廠動土</td><td>擴產時程是否如期</td></tr>
+      <tr><td>2026-06 上旬</td><td>5 月月營收</td><td>能見度 5-6 個月驗證</td></tr>
+      <tr><td>2026-07</td><td>6 月營收 / 2Q26 法說</td><td>單季 EPS &gt;22、毛利率回升</td></tr>
+      <tr><td>2026 下半</td><td>SLT 客戶擴張 / HyperSocket 放量</td><td>2027 EPS 上修 / 下修依據</td></tr>
+    </tbody>
+  </table>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+<div class="body-page alt">
+  <h1 class="ch">拾貳、資料來源與免責聲明</h1>
+  <p><strong>資料來源：</strong>公司 1Q26 法說會（2026-05-26）與公開揭露；MOPS 公開資訊觀測站（歷史財報 / EPS 權威值）；台灣證券交易所（股價 / 成交）；GiS tw-stock-scanner 資料庫（季報 EPS、月營收、法人、價量）；以及過去 7 天券商研究報告交叉驗證——含外資 Goldman Sachs、Morgan Stanley，本土元大投顧、凱基投顧、群益、永豐金、富邦（Sinopac）等之首頁評等 / 目標價 / EPS 預估；產業 TAM 引用 IDTechEx、Omdia、IDC。內文比較券商觀點時以「保守方 / 進取方」「外資 / 本土」匿名表述，本段為完整列名。</p>
+  <p><strong>EPS 來源優先序：</strong>歷史 EPS / 營收 / 毛利率以 MOPS 公告與公司年報為準，未採用 yfinance / Yahoo 回算值（方法論 §7.6）。</p>
+  <blockquote>本報告為 Genesis International Capital（GiS）內部研究員觀點，採估值方法論驅動、中立立場、12 個月目標價框架，僅供研究參考，不構成任何買賣建議或要約。報告所載預估含重大不確定性，實際結果可能與預估顯著不同。投資人應自行判斷並承擔風險。</blockquote>
+  <p class="src">GiS Research · 穎崴科技 6515 首次覆蓋深度報告 · 2026-05-27 · 研究員觀點（中立 / 12M TP NT$9,900）</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> · 穎崴 6515 首次覆蓋</span><span>研究員觀點 · 中立 · 2026-05-27</span></div>
+</div>
+
+</body>
+</html>

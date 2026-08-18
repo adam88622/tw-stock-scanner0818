@@ -5,7 +5,7 @@
 import sys
 import os
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -82,6 +82,27 @@ def main():
                 run_institutional(today_yyyymmdd)
         except Exception as e:
             logger.error(f"法人資料補抓失敗（非致命）: {e}")
+
+    # 16:00 後，補抓期貨大額交易人（個股期大戶淨部位）；電腦關機數日也能一次補齊
+    if now_hour >= 16:
+        try:
+            conn = get_conn()
+            row = conn.execute("SELECT MAX(date) AS d FROM futures_large_trader").fetchone()
+            conn.close()
+            last_lt = row['d'] if row else None
+            if last_lt != today_str:
+                from run_daily import run_large_trader
+                if last_lt:
+                    # 從最後一筆的隔天補到今天（期交所可查區間，非交易日自動略過）
+                    start = (datetime.strptime(last_lt, '%Y-%m-%d') + timedelta(days=1)).strftime('%Y%m%d')
+                    logger.info(f"補抓期貨大額交易人 {start}~{today_yyyymmdd}...")
+                    run_large_trader(start, today_yyyymmdd)
+                else:
+                    logger.info("期貨大額交易人尚無資料，補抓近 30 天...")
+                    start = (today - timedelta(days=30)).strftime('%Y%m%d')
+                    run_large_trader(start, today_yyyymmdd)
+        except Exception as e:
+            logger.error(f"期貨大額交易人補抓失敗（非致命）: {e}")
 
     # 20:00 後，補抓分點
     if now_hour >= 20:

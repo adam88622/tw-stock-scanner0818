@@ -1,0 +1,619 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>玻璃基板 (CoPoS) 供應鏈 Cheat Sheet — 偏多 | GiS Sector Overview</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:20px 0 14px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:18px 0 10px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 8px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:10px 0 14px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 10px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 10px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5;font-size:12.5px}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:14px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:16px;font-weight:800;color:#fff}
+.co-ticker{font-size:11.5px;color:rgba(255,255,255,.6);margin-top:2px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:3px 11px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:10px 12px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:14.5px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:10.5px;color:#6b7a9a}
+.co-body{padding:12px 18px;font-size:13px;line-height:1.65}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:16px;margin:12px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13.5px;font-weight:700;color:#0d1b3e;margin-bottom:3px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin:12px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:18px;font-weight:800;margin-bottom:4px}
+.kpi-val em{font-size:11px;font-style:normal;opacity:.85}
+.kpi-lbl{font-size:11px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px 20px;margin:14px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.5px;font-weight:700;color:#0d1b3e;padding:7px 0;border-bottom:1px solid #dce8f8;display:flex;gap:11px;align-items:flex-start;line-height:1.55}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:19px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);border-radius:8px;overflow:hidden;margin:12px 0}
+.tl-item{background:#f0f4fa;padding:14px 10px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12px;font-weight:800;margin-bottom:6px}
+.tl-spec{font-size:14px;font-weight:900;color:#00c896;margin-bottom:3px}
+.tl-tech{font-size:10.5px;opacity:.85;line-height:1.45}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.risk-card{border-radius:8px;padding:14px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13.5px;font-weight:700;margin-bottom:7px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.pick-card{border-radius:8px;padding:14px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:11.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:5px}
+.pick-name{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:11.5px;color:#6b7a9a;margin-bottom:8px}
+.pick-why{font-size:12.5px;color:#2d3748;line-height:1.65;margin-bottom:8px}
+.pick-catalyst{font-size:11.5px;color:#065f46;background:#e8f5ee;padding:6px 9px;border-radius:5px}
+p{margin:5px 0 9px;line-height:1.7;font-size:13.5px}
+ul,ol{padding-left:20px;margin:5px 0 9px}
+li{margin:3px 0;line-height:1.65;font-size:13px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:8px 13px;margin:10px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:18px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:4px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.red{border-color:#e74c3c;background:#fdf0ef}
+.callout-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:6px}
+.callout.green .callout-title{color:#065f46}
+.callout.red .callout-title{color:#7b2020}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 56px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ Page 1 · 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI 量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Sector Overview · Glass Substrate / Advanced Packaging · 2026 May</div>
+    <div class="cover-title">玻璃基板 (CoPoS) 供應鏈<br><em>Cheat Sheet</em></div>
+    <div class="cover-subtitle">AI 後段製程 2026–2030 兌現曲線 — 從 ABF 漲價到 CoPoS 量產</div>
+    <div class="cover-tags">
+      <span class="ctag hl">CoPoS</span>
+      <span class="ctag hl">CoWoS</span>
+      <span class="ctag hl">FOPLP</span>
+      <span class="ctag">TGV</span>
+      <span class="ctag">ABF 載板</span>
+      <span class="ctag">CPO</span>
+      <span class="ctag">18 檔覆蓋</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">~<em>2030</em></div><div class="cstat-label">CoPoS 量產年</div></div>
+    <div class="cstat"><div class="cstat-num"><em>13–14</em>萬</div><div class="cstat-label">2026E TSMC CoWoS 月產能</div></div>
+    <div class="cstat"><div class="cstat-num"><em>10</em> 家</div><div class="cstat-label">台廠 CoPoS 獨供陣容</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>10–15</em>%</div><div class="cstat-label">2026 ABF 漲價幅度</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 5 月 25 日</span>
+    <span>研究員身份 · 估值方法論驅動 · 12M 視角</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 2 · 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要 — 三句話定調</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">~2030<em> 真量產</em></div><div class="kpi-lbl">CoPoS 兌現時點</div></div>
+    <div class="kpi"><div class="kpi-val">9.5x → &gt;14x</div><div class="kpi-lbl">CoWoS 光罩 27→29 路徑</div></div>
+    <div class="kpi gold"><div class="kpi-val">12 → 24<em> 顆</em></div><div class="kpi-lbl">HBM 搭載 2027→2029</div></div>
+    <div class="kpi green"><div class="kpi-val">98%<em>+</em></div><div class="kpi-lbl">2026 CoWoS 5.5x 量產良率</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>CoPoS 是 TSMC 的下世代護城河，但真正放量要等到 2030。</strong>首條實驗線設於采鈺龍潭、Pilot 線移至嘉義 AP7、Pilot 設備下單預估 2027Q3、量產訂單 2029 後才明朗。Bull case 把 CoPoS 當「現在」題材會踩到時序錯位。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>近期紅利在 ABF 載板 + CoWoS 設備 + FOPLP 試產三條腿，而非 CoPoS。</strong>2026 載板交期已從 12-18 週拉到 20 週以上、ABF 漲價往 10-15% 靠攏；CoWoS 月產能從 2022 年 1 萬片拉到 2026 底 13-14 萬片，設備廠（印能、弘塑、均華、群翊）營收能見度多已看到 2H26 甚至 2027。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>三大反方共識的盲點：TGV 不消除 warpage、TSMC 嚴控供應鏈、Intel EMIB 良率追上 90%。</strong>反方意味玻璃基板不是線性樂觀的故事，Balance Film 與抗翹曲設備反而長期受惠；外溢訂單可能進日月光、Amkor、群創 FOPLP 而非完全留在 TSMC 體系。</span></div>
+  </div>
+
+  <h2 class="ch">三條投資主軸對應時程</h2>
+  <div class="timeline">
+    <div class="tl-item active"><div class="tl-year">2026</div><div class="tl-spec">ABF</div><div class="tl-tech">載板售罄 + 漲價 10-15%；CoWoS 5.5x 量產</div></div>
+    <div class="tl-item next"><div class="tl-year">2027</div><div class="tl-spec">FOPLP</div><div class="tl-tech">CoWoS 9.5x (HBM4E×12)；FOPLP 出貨；CoPoS Pilot 設備下單</div></div>
+    <div class="tl-item"><div class="tl-year">2028</div><div class="tl-spec">CPO</div><div class="tl-tech">CoWoS 14x (HBM5×20)；CPO 量產；FOPLP 全面量產</div></div>
+    <div class="tl-item"><div class="tl-year">2029</div><div class="tl-spec">CoPoS-Pre</div><div class="tl-tech">CoWoS &gt;14x (HBM5E×24)；CoPoS 量產訂單明朗</div></div>
+    <div class="tl-item"><div class="tl-year">2030</div><div class="tl-spec">CoPoS</div><div class="tl-tech">CoPoS 放量；TSMC 亞利桑那 P2 對應</div></div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 核心觀點：</strong>市場常把「CoPoS」當作 2026-2027 的近期 catalyst，但供應鏈訊號（采鈺龍潭 Pilot、AP7 Pilot、2029 設備量產訂單）指向真正放量在 2030。研究員視角下，現在投資玻璃基板族群本質上是在投「CoWoS 擴產 + ABF 漲價 + FOPLP 試產」的近 3 年題材，CoPoS 是「續命題材」。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 3 · 章節壹 封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One · Technology Map</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">CoPoS 是什麼？<br>與 CoWoS / FOPLP 的相對定位</div>
+  <div class="sec-desc">玻璃基板（CoPoS）不是憑空出現的新製程，它是 CoWoS 受限於 12 吋圓形晶圓邊角浪費後的下世代解；FOPLP 則是面板廠繞道進入半導體封裝的路徑。三者並非互斥，而是 AI 後段製程「先繁體後系統級」演進的三條時序差路線。</div>
+</div>
+
+<!-- ══════════════ Page 4 · CoPoS 技術定位 + TSMC 路線圖 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、CoPoS 技術定位 — 為何 TSMC 要走、為何 2030 才放量</h1>
+
+  <h2 class="ch">CoWoS / FOPLP / CoPoS 三路線對照</h2>
+  <table>
+    <thead><tr><th>項目</th><th>CoWoS（現役）</th><th>FOPLP（試產）</th><th>CoPoS（規劃）</th></tr></thead>
+    <tbody>
+      <tr><td>基板形式</td><td>12 吋圓形晶圓</td><td>方型面板（樹脂）</td><td>方型面板（玻璃/藍寶石）</td></tr>
+      <tr><td>面積利用率</td><td class="num">受限（圓形邊角浪費）</td><td class="num pos">~85%</td><td class="num hi">~95%</td></tr>
+      <tr><td>單封裝晶片數</td><td>基準</td><td>2-3 倍</td><td>數倍於 CoWoS</td></tr>
+      <tr><td>2026 主力光罩尺寸</td><td>5.5x 光罩，良率 &gt;98%</td><td>RDL-First 樣品（群創）</td><td>實驗線（采鈺龍潭）</td></tr>
+      <tr><td>2027–2028</td><td>9.5x → 14x；HBM4E→HBM5</td><td>2027 量產（力成 / 夏普）</td><td>2027Q3 Pilot 設備下單；AP7 Pilot</td></tr>
+      <tr><td>2029–2030</td><td>&gt;14x；HBM5E×24</td><td>群創 TGV 量產</td><td>2030 量產（含亞利桑那 P2）</td></tr>
+      <tr><td>核心難點</td><td>中介層面積有限</td><td>RDL 多層、線寬線距、TGV</td><td>化圓為方 / 翹曲 / 均勻度</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：TSMC 北美技術論壇 2026、DIGITIMES、群創、本土券商整理</span>
+
+  <h2 class="ch">TSMC CoWoS 月產能演進（張/月）— 真正的近期動能</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">2022–2028E CoWoS 月產能</div>
+    <div class="chart-sub">資料來源：TSMC、產業鏈訪查、本土券商；GiS 整理</div>
+    <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="cowos_chart" style="display:block;width:100%;height:230px"></canvas></div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 觀點：</strong>市場關注「TSMC 啟動 CoPoS」是因為它代表新護城河，但若把 CoWoS 月產能 12 年 CAGR ~64% 視為當下投資命題，今天的「印能 / 弘塑 / 均華」訂單能見度都已綁在 CoWoS 而非 CoPoS。CoPoS 是 2027 後 narrative，但 EPS 兌現要等 2029-2030。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 技術定位與路線圖</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 5 · 章節貳 — 供應鏈分層 Map ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳、供應鏈分層 Map — 四群核心受惠者</h1>
+  <p>把供應鏈圖中 70+ 個股按「對 CoPoS / 廣義先進封裝的核心程度」分四群。第一群為「設備獨供」（TSMC 嚴控供應鏈下的台廠），第二群為「載板與中介」，第三群為「玻璃材料 / 抗翹曲」，第四群為「廣義 CPO / FOPLP 周邊」。</p>
+
+  <div class="co-card">
+    <div class="co-card-head navy"><div><div class="co-name">第一群 · CoPoS 設備獨供陣容</div><div class="co-ticker">TSMC 封口令 + 獨供令 / 10 家台廠 / 量產數年期限內僅供 TSMC</div></div><div class="co-badge"><span class="badge buy">核心受惠</span></div></div>
+    <div class="co-body">
+      <strong>印能 7734</strong>（除泡/翹曲/RTS）、<strong>弘塑 3131</strong>（濕製程龍頭）、<strong>均華 6640</strong>（CoWoS Bonder）、<strong>志聖 2467</strong>（真空壓膜/熱壓）、<strong>辛耘 3583</strong>（濕製程）、<strong>大量 3167</strong>、<strong>家登 3680</strong>、<strong>致茂</strong>、<strong>晶彩</strong>、<strong>倍利科 7822</strong>。國際大廠對應 KLA / TEL / Screen / 應材 / Disco / Canon / Camtek。<em>業界傳已有 CoWoS 設備廠掉隊，首波技術比拚未必所有人都進得了 CoPoS 第二輪</em>。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head teal"><div><div class="co-name">第二群 · 載板 / 中介層 / FOPLP 主力</div><div class="co-ticker">ABF 漲價直接受惠 + FOPLP 跨界面板廠</div></div><div class="co-badge"><span class="badge buy">直接受惠</span></div></div>
+    <div class="co-body">
+      <strong>欣興 3037</strong>（ABF 47% / 全球市佔 16%）、<strong>景碩 3189</strong>（ABF 用於 RTX/CPU/AI ASIC，引私募策略客戶）、<strong>南電 8046</strong>（三大廠中傳產能售罄）、<strong>群創 3481</strong>（面板廠 FOPLP 進度最速，2025 Chip-First 量產 / 2026 RDL-First 樣品 / 2028 TGV 量產）、<strong>群翊 6664</strong>（TGV 領域耕耘 6 年 + EMIB-T + 玻璃核心載板，Intel 重要夥伴）、<strong>友達</strong>（玻璃衛星天線 / Micro LED 光通訊）。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head wine"><div><div class="co-name">第三群 · 玻璃 / 陶瓷 / 抗翹曲材料</div><div class="co-ticker">Balance Film + 玻纖 + 陶瓷 + low-stress build-up</div></div><div class="co-badge"><span class="badge ow">結構性受惠</span></div></div>
+    <div class="co-body">
+      <strong>山太士 3595</strong>（Balance Film 龍頭，獨家 SpiroxLTS 技術；TGV ultra-thin glass 下 warpage 反而推升 Balance Film 用量）、<strong>中釉 1809</strong>（陶瓷基板 × 工研院精密鑽孔 × 律勝 mSAP build-up）、<strong>富喬 1815</strong>（Low Dk 玻纖布）、<strong>長興 1717</strong>（低應力 build-up 材料）、<strong>正美 8070</strong>（封裝載板材料）、康寧 / AGC / SCHOTT（國際玻璃材料三巨頭）。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head indigo"><div><div class="co-name">第四群 · 廣義 CPO / FOPLP / 周邊封測</div><div class="co-ticker">光引擎 + CPO Socket + 先進封測代工</div></div><div class="co-badge"><span class="badge ow">廣義受惠</span></div></div>
+    <div class="co-body">
+      <strong>力成 6239</strong>（FOPLP 良率 95%、2027 中出貨 / CPO 2028 量產）、<strong>日月光投控 3711</strong>（OSAT 龍頭、CoWoS 外溢承接）、<strong>嘉澤 3533</strong>（CPO/NPO Socket，2026-2028 server CAGR 29%）、<strong>采鈺 6789</strong>（CoPoS 首條實驗線設廠地、CPO Wafer 平台）、<strong>波若威 3163</strong>（CPO 光收發龍頭）、<strong>鴻海 2317</strong>（CPO 機櫃出貨）、<strong>精湛 2070</strong>（已切入 CoWoS）。
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 供應鏈分層 Map</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 6 · 章節參 — 核心受惠個股 Top 5 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參、核心受惠個股 Top 5 — 設備與載板雙線</h1>
+
+  <div class="co-card">
+    <div class="co-card-head navy"><div><div class="co-name">印能 7734</div><div class="co-ticker">CoPoS 設備獨供 / 除泡 + 翹曲 + RTS</div></div><div class="co-badge"><span class="badge buy">買進</span></div></div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">3,385</div><div class="co-metric-label">收盤價 (5/22)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">4,500</div><div class="co-metric-label">本土券商 TP</div></div>
+      <div class="co-metric"><div class="co-metric-val">66.7 / 89.9</div><div class="co-metric-label">2026/27E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">+33%</div><div class="co-metric-label">上檔空間*</div></div>
+    </div>
+    <div class="co-body">
+      訂單能見度至 2H26，營收逐季走高。<strong>WSAS-V（非接觸式翹曲消除）是 CoPoS 應用主力，RTS-chiplet 是 CPO 主要設備</strong>，2027-2028 雙引擎。2026E 營收 YoY +80%，毛利率 66.7%。新業務切入 Burn-in 與散熱機架。<em>*基準 5/22 收盤 NT$3,385；上檔空間以本土券商 TP 4,500 試算。市場共識 TP NT$5,125（國泰偏保守 -12%）。</em>
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head blue"><div><div class="co-name">弘塑 3131</div><div class="co-ticker">先進封裝濕製程龍頭 / CoWoS + SoIC + CoPoS</div></div><div class="co-badge"><span class="badge buy">買進</span></div></div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">2,820</div><div class="co-metric-label">收盤價 (5/22)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">4,000</div><div class="co-metric-label">本土券商 TP</div></div>
+      <div class="co-metric"><div class="co-metric-val">71.4 / 110.0</div><div class="co-metric-label">2026/27E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">+42%</div><div class="co-metric-label">上檔空間</div></div>
+    </div>
+    <div class="co-body">
+      <strong>2027 年底 CoWoS 月產能預估自 180kwpm 上修至 220kwpm</strong>。Phase 2 將於 3Q26 開始貢獻設備產能，自製比率提升帶動 4Q26 毛利率改善。SoIC（含 CPO）、CoPoS 成為 2027 後新成長主軸；本益比 35x，2027E EPS 110 對應 TP 4,000。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head teal"><div><div class="co-name">欣興 3037</div><div class="co-ticker">ABF 載板全球第二 / 漲價直接受惠</div></div><div class="co-badge"><span class="badge buy">買進</span></div></div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">989</div><div class="co-metric-label">收盤價 (5/25)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">965</div><div class="co-metric-label">本土券商 TP</div></div>
+      <div class="co-metric"><div class="co-metric-val">17.1 / 34.4</div><div class="co-metric-label">2026/27E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">−2%*</div><div class="co-metric-label">已超越 TP</div></div>
+    </div>
+    <div class="co-body">
+      Blackwell 載板 75×85mm / 14-16 層 → Rubin 95×98mm / 18 層，<strong>晶片往大尺寸 + 多層數升級趨勢不變</strong>。1Q26 EPS 3.20 元優於預期 81%；ABF 漲價往 10-15% 靠攏（原預估中個位數），交期 12-18 週拉升至 20 週以上。多客戶簽 LTA 鎖定產能。<em>*股價已超越本土券商 TP，待新一輪上修。</em>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 核心受惠個股 (1/2)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 7 · 章節參續 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、核心受惠個股 Top 5（續）</h1>
+
+  <div class="co-card">
+    <div class="co-card-head blue"><div><div class="co-name">景碩 3189</div><div class="co-ticker">ABF + BT 雙線；NVIDIA 15% 比重</div></div><div class="co-badge"><span class="badge ow">增加持股</span></div></div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">669</div><div class="co-metric-label">收盤價 (5/25)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">650</div><div class="co-metric-label">外資 TP</div></div>
+      <div class="co-metric"><div class="co-metric-val">9.2 / 18.0</div><div class="co-metric-label">2026/27E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">−3%*</div><div class="co-metric-label">趨近 TP</div></div>
+    </div>
+    <div class="co-body">
+      2Q26 漲價 3-5%，2H26 漲幅更大。ABF 稼動 85-90% / BT 75-80%。NVIDIA 佔總營收 15%（顯卡 7-8% + CPU 3% + GPU 1-2% + Nvlink/Switch 2%），AMD 5-6%，AI ASIC 3 家美系客戶。<strong>2026-29 月產能 50→65→80 百萬顆，私募引進策略客戶分擔擴產資金</strong>。Vera CPU 市占 50%、開始小量供 TPU 載板。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head slate"><div><div class="co-name">力成 6239</div><div class="co-ticker">FOPLP + 光引擎 + CPO 封裝 + 記憶體 OSAT</div></div><div class="co-badge"><span class="badge buy">買進</span></div></div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">311</div><div class="co-metric-label">收盤價 (5/25)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">308</div><div class="co-metric-label">本土券商 TP</div></div>
+      <div class="co-metric"><div class="co-metric-val">12.2 / 18.2</div><div class="co-metric-label">2026/27E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">−1%*</div><div class="co-metric-label">趨近 TP</div></div>
+    </div>
+    <div class="co-body">
+      <strong>FOPLP 良率 95%、接近客戶要求量產水準 98-99%</strong>，1 階段 3K/月產能於 2H26 裝機，<strong>2027 中正式出貨</strong>。CPO 封裝（光引擎 + ASIC）2026 底-2027 完成驗證，2027 底-2028 量產。CapEx 由 400 億上修至 500 億；TSV/Bump 連結光引擎屬 3D 封裝、2026 底量產。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head wine"><div><div class="co-name">群翊 6664</div><div class="co-ticker">EMIB-T + 玻璃核心載板 + TGV 6 年經驗</div></div><div class="co-badge"><span class="badge ow">增加持股</span></div></div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">432.5</div><div class="co-metric-label">收盤價 (5/22)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">510</div><div class="co-metric-label">本土券商 TP</div></div>
+      <div class="co-metric"><div class="co-metric-val">17.3 / 21.6</div><div class="co-metric-label">2026/27E EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">+18%</div><div class="co-metric-label">上檔空間</div></div>
+    </div>
+    <div class="co-body">
+      Intel EMIB-T 重要設備供應商；玻璃核心載板 + 玻璃中介層 + TGV 金屬化 + RDL 線路全製程設備。<strong>TGV 領域耕耘 6 年</strong>。營收結構：先進封裝/衛星通訊 25% + PCB/載板 60% + 其他 15%。2026 訂單能見度至年底，毛利率 50-60%。擴廠 2026 底動工 / 2028 開出新產能。
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 核心受惠個股 (2/2)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 8 · 章節肆 — 二線觀察 + Comps 表 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆、二線觀察名單 + 整體 Comps</h1>
+
+  <h2 class="ch">玻璃基板 / 先進封裝整體 Comps（18 檔）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>代號</th><th>名稱</th><th>歸類</th><th class="num">收盤</th><th class="num">26E EPS</th><th>一句話論點</th></tr></thead>
+    <tbody>
+      <tr><td>7734</td><td>印能</td><td>設備獨供</td><td class="num">3,385</td><td class="num hi">66.7</td><td>WSAS-V 為 CoPoS 主力，RTS 為 CPO 主力</td></tr>
+      <tr><td>3131</td><td>弘塑</td><td>設備獨供</td><td class="num">2,820</td><td class="num">71.4</td><td>CoWoS 220kwpm 上修，SoIC/CoPoS 接棒</td></tr>
+      <tr><td>6640</td><td>均華</td><td>設備獨供</td><td class="num">1,360</td><td class="num">27.6</td><td>CoWoS Bonder 龍頭</td></tr>
+      <tr><td>2467</td><td>志聖</td><td>設備（抗翹曲）</td><td class="num">603</td><td class="num">13.0</td><td>真空壓膜 + 熱壓抗翹曲</td></tr>
+      <tr><td>3583</td><td>辛耘</td><td>設備獨供</td><td class="num">875</td><td class="num">—</td><td>濕製程 + Intel 研發夥伴</td></tr>
+      <tr><td>7822</td><td>倍利科</td><td>設備獨供</td><td class="num">1,070</td><td class="num">30.0</td><td>切入 CoPoS 設備供應鏈</td></tr>
+      <tr><td>3037</td><td>欣興</td><td>ABF 載板</td><td class="num">989</td><td class="num hi">17.1</td><td>ABF 全球第二，多客戶 LTA 綁定</td></tr>
+      <tr><td>3189</td><td>景碩</td><td>ABF 載板</td><td class="num">669</td><td class="num">9.2</td><td>私募引策略客戶分擔擴產</td></tr>
+      <tr><td>8046</td><td>南電</td><td>ABF 載板</td><td class="num">884</td><td class="num">—</td><td>三大廠之一，產能售罄</td></tr>
+      <tr><td>3481</td><td>群創</td><td>FOPLP 面板</td><td class="num">49.1</td><td class="num">—</td><td>FOPLP 進度最速，2028 TGV 量產</td></tr>
+      <tr><td>6664</td><td>群翊</td><td>FOPLP 設備</td><td class="num">432.5</td><td class="num">17.3</td><td>EMIB-T + TGV 6 年</td></tr>
+      <tr><td>6239</td><td>力成</td><td>OSAT/CPO</td><td class="num">311</td><td class="num">12.2</td><td>FOPLP 良率 95%、CPO 2028</td></tr>
+      <tr><td>3711</td><td>日月光投控</td><td>OSAT</td><td class="num">617</td><td class="num">—</td><td>CoWoS 外溢承接 + FOPLP 跟進</td></tr>
+      <tr><td>3533</td><td>嘉澤</td><td>CPO Socket</td><td class="num">2,555</td><td class="num">92.4</td><td>2026-28 server CAGR 29%</td></tr>
+      <tr><td>6789</td><td>采鈺</td><td>CoPoS 廠地</td><td class="num">572</td><td class="num">—</td><td>CoPoS 首條實驗線設址</td></tr>
+      <tr><td>3163</td><td>波若威</td><td>CPO 光收發</td><td class="num">1,145</td><td class="num">—</td><td>CPO 爆發元年</td></tr>
+      <tr><td>1809</td><td>中釉</td><td>陶瓷基板</td><td class="num">45.6</td><td class="num">—</td><td>陶瓷 × 鑽孔 × 律勝 mSAP</td></tr>
+      <tr><td>1815</td><td>富喬</td><td>Low Dk 玻纖</td><td class="num">108.5</td><td class="num">—</td><td>玻纖布高介電損耗解</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：tw-stock-scanner 5/22 收盤、本土券商個股報告、本中心彙整。歸類由 GiS 依供應鏈位置判斷；EPS 採本土券商最新預估。</span>
+
+  <h2 class="ch">觀察名單（未深度覆蓋）</h2>
+  <p style="font-size:12.5px"><strong>抗翹曲材料/設備</strong>：山太士 3595（Balance Film / SpiroxLTS）、創新服務 7828、大量 3167、家登 3680。<strong>面板精密加工</strong>：牧德 3563、川寶 1595、正達 3149。<strong>國家隊/補位</strong>：博智 8155、立誠 6597、科嶠 4542、迅得 6438、盟立 2464、由田 3455、東台 4526。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 二線觀察 + Comps</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 9 · 章節伍 — Bear Case 三大反方 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍、Bear Case — 共識的三大盲點</h1>
+  <p>玻璃基板族群 2025 下半年起本益比快速擴張，市場開始把「CoPoS」當作中期 catalyst。GiS 認為以下三條反方訊號是中性研究員必須交叉檢驗的：</p>
+
+  <div class="callout red">
+    <div class="callout-title">① TGV 不是 Warpage 解藥（DIGITIMES / 0516）</div>
+    <p style="font-size:12.5px">市場存在「導入 TGV 後玻璃剛性可解決 AI 封裝 warpage」的過度樂觀論述。但實際製程上：(1) 現役 CoW 仍需 Balance Film 抑制 warpage、平衡封裝應力；(2) TGV 要做高密度互連必須 ultra-thinning 至 100μm 以下，<strong>超薄化後玻璃高剛性快速下降</strong>，再疊上 Cu/RDL stress、EMC molding stress、CTE mismatch，warpage 可能更嚴重。<strong>結論：TGV 不消除 warpage，是把 warpage control 的要求拉得更高 — Balance Film 用量反而上行</strong>，這對山太士 3595 是結構性紅利，對純玻璃基板「樂觀派」是修正信號。</p>
+  </div>
+
+  <div class="callout red">
+    <div class="callout-title">② TSMC 對 CoPoS 供應鏈下「封口令 + 獨供令」（DIGITIMES / 0509）</div>
+    <p style="font-size:12.5px">台積對 CoPoS 供應鏈（印能、辛耘、弘塑、均華、志聖、致茂、大量、家登、晶彩、倍利等 10 家）簽合作協議：<strong>研發技術不外流 + 量產數年期限內僅供台積</strong>。動機是防堵 Intel 馬來西亞先進封裝擴產拿到 TSMC Vendor Code 廠商釋單。<strong>真量產訂單預估 2029 後才明朗，2030 放量</strong>。風險：(a) 業界已傳有 CoWoS 設備廠掉隊 — CoPoS 首波技術比拚不是全進；(b) 獨供 TSMC 意味設備廠失去 Intel / Samsung / 中國 OSAT 多元客戶機會成本；(c) 任何 CoPoS 量產延遲，這 10 家 EPS 估值 narrative 都要重來。</p>
+  </div>
+
+  <div class="callout red">
+    <div class="callout-title">③ Intel EMIB-T 良率衝到 90%（DIGITIMES / 0504）</div>
+    <p style="font-size:12.5px">Intel 先進封裝後段良率傳出大躍進，從一線晶片廠手中爭取數十億美元 ASIC 訂單。EMIB-T 在 14× 光罩 + 玻璃中介層整合上有可能成為 CoWoS-L 之外另一選項，且 PCB 廠（搭配矽中介層材質改變）反而受惠。對台廠的雙面影響：<strong>正面 —</strong> 群翊 6664、辛耘 3583（持有 Intel Vendor Code）、PCB/ABF 載板廠都可能受惠 Intel 釋單；<strong>負面 —</strong> 若 Intel 真正搶到 TSMC 大客戶，整個 CoWoS / CoPoS narrative 的「壟斷溢價」將被修正。</p>
+  </div>
+
+  <blockquote>
+    <strong>GiS 中性結論：</strong>三大反方並未否定 CoPoS / 玻璃基板的長期趨勢，但它們意味「線性外推 2025 上升動能 + 給 CoPoS 50× PE」不是 risk-free。中性研究員視角下，本族群合理配置策略應「重壓近期紅利（ABF 漲價 + CoWoS 擴產 + FOPLP 試產）+ 輕觸 CoPoS narrative（避免追高），保留 Balance Film 與抗翹曲材料作為 hedge」。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · Bear Case 三大反方</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 10 · 章節陸 — Catalysts & Risks ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">陸、Catalysts 與 Risks 矩陣</h1>
+
+  <h2 class="ch">未來 12-18 個月 Catalysts 行事曆</h2>
+  <table>
+    <thead><tr><th>時間</th><th>事件</th><th>主要影響標的</th><th>重要性</th></tr></thead>
+    <tbody>
+      <tr><td>2026 Q2-Q3</td><td>ABF 漲價持續落地（10-15%）</td><td>3037 / 3189 / 8046</td><td class="num pos">★★★</td></tr>
+      <tr><td>2026 Q3</td><td>力成 FOPLP 3K/月設備裝機</td><td>6239</td><td class="num pos">★★</td></tr>
+      <tr><td>2026 Q4</td><td>力成 TSV+Bump 光引擎量產</td><td>6239 / 3163</td><td class="num pos">★★</td></tr>
+      <tr><td>2026 Q4</td><td>印能 CPO RTS 設備小量貢獻</td><td>7734</td><td class="num pos">★★</td></tr>
+      <tr><td>2026 底</td><td>TSMC CoWoS 月產能達 13-14 萬</td><td>2330 / 3131 / 6640 / 7734</td><td class="num pos">★★★</td></tr>
+      <tr><td>2027 Q1</td><td>景碩私募引策略客戶完成</td><td>3189</td><td class="num pos">★★</td></tr>
+      <tr><td>2027 Q3</td><td>TSMC CoPoS Pilot 設備下單</td><td>3131 / 7734 / 6640 / 2467 / 7822</td><td class="num pos">★★★</td></tr>
+      <tr><td>2027 中</td><td>力成 FOPLP 正式出貨 CPU/AI</td><td>6239</td><td class="num pos">★★★</td></tr>
+      <tr><td>2027 底</td><td>嘉澤 CPO/NPO Socket 量產</td><td>3533</td><td class="num pos">★★</td></tr>
+      <tr><td>2027</td><td>TSMC CoWoS 9.5× 光罩量產（HBM4E×12）</td><td>2330 / 3037 / 3189 / 8046</td><td class="num pos">★★★</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：DIGITIMES、TSMC 北美技術論壇、本土券商個股報告。重要性由 GiS 依 EPS 兌現幅度評等。</span>
+
+  <h2 class="ch">產業層級 Risk Matrix</h2>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>產業 Catalysts</h4>
+      <div class="risk-item">AI 推論需求超預期，CoWoS 14 萬月產能仍供不應求</div>
+      <div class="risk-item">FOPLP 良率提升至 98-99%，2027 起取代部分 ABF 高階用量</div>
+      <div class="risk-item">CPO 量產時程提前（光引擎技術突破）</div>
+      <div class="risk-item">CoPoS Pilot 線進度優於預期，2029 後年訂單上修</div>
+      <div class="risk-item">Intel 釋單持續，台廠（具 Intel VC）多元化客戶</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>產業 Risks</h4>
+      <div class="risk-item">TGV ultra-thin glass warpage 控制失敗，FOPLP 路線受阻</div>
+      <div class="risk-item">CoWoS 月產能擴張過剩，AI 需求 2H27 後降溫</div>
+      <div class="risk-item">CoPoS 量產延後至 2031+，10 家獨供台廠 EPS 估值重整</div>
+      <div class="risk-item">Intel EMIB-T 真正搶到 TSMC 大客戶（NVIDIA / AMD / Broadcom）</div>
+      <div class="risk-item">本益比快速擴張（部分標的 PE &gt; 50x），漲多回測風險</div>
+      <div class="risk-item">中國紅鏈在 ABF 載板 / FOPLP 設備跟進，2028 後價格戰</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>陸 · Catalysts 與 Risks</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ Page 11 · 資料來源 + 免責 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">柒、資料來源與方法論說明</h1>
+
+  <h2 class="ch">本報告引用之券商研究（依日期排序）</h2>
+  <table style="font-size:11px"><tbody>
+    <tr><td style="width:50px">0519</td><td style="width:90px">摩根士丹利</td><td>ABF Substrates（欣興/景碩/南電/Ibiden/Semco）</td></tr>
+    <tr><td>0519</td><td>國泰證期</td><td>印能 7734 Buy +21.5% — Riding CPO / CoPoS Wave</td></tr>
+    <tr><td>0519</td><td>DIGITIMES</td><td>面板廠 FOPLP 技術持續緊追封測廠（楊仁杰）</td></tr>
+    <tr><td>0518</td><td>國泰證期</td><td>先進封裝產業：2026-2029 是 AI 後段製程兌現爆發期</td></tr>
+    <tr><td>0518</td><td>元大投顧</td><td>分析師有約：ABF 載板產業近況（何宗祐）</td></tr>
+    <tr><td>0518</td><td>群益投顧</td><td>群翊 6664 大咬先進封裝 + Intel 崛起利多（莊禮誠）</td></tr>
+    <tr><td>0516</td><td>DIGITIMES</td><td>TGV 不是 Warpage 解藥，Ultra-Thin Glass 推升 Balance Film</td></tr>
+    <tr><td>0515</td><td>統一投顧</td><td>嘉澤 3533 — 短期利空不改長期成長，CPO/NPO Socket（丁宥霖）</td></tr>
+    <tr><td>0515</td><td>元大投顧</td><td>鴻海 2317 — 持有，伺服器需求高檔，CPO 機櫃出貨</td></tr>
+    <tr><td>0509</td><td>DIGITIMES</td><td>從封口令到「獨供令」！傳台積電嚴控 CoPoS 供應鏈（陳玉娟）</td></tr>
+    <tr><td>0505</td><td>元大投顧</td><td>弘塑 3131 — 上修 CoWoS 營收，先進封裝驅動三年成長</td></tr>
+    <tr><td>0505</td><td>富邦投顧</td><td>波若威 3163 — CPO 爆發元年</td></tr>
+    <tr><td>0504</td><td>DIGITIMES</td><td>英特爾 EMIB 先進封裝良率衝到 90％</td></tr>
+    <tr><td>0430</td><td>統一投顧</td><td>力成 6239 — FOPLP / 光引擎 / CPO 佈局有成（鄭高輯）</td></tr>
+    <tr><td>0429</td><td>元大投顧</td><td>欣興 3037 — ABF 大尺寸趨勢不變，載板需求向上</td></tr>
+    <tr><td>0425</td><td>富邦投顧</td><td>采鈺 6789 — CPO 發展值得期待，TP NT$297</td></tr>
+    <tr><td>0424</td><td>凱基投顧</td><td>景碩 3189 — 載板漲聲持續，加大擴產引策略客戶（林祐熙）</td></tr>
+    <tr><td>0420</td><td>國泰證期</td><td>欣興/景碩/南電 ABF 載板產能售罄</td></tr>
+  </tbody></table>
+  <span class="src">外加：TSMC 2026 北美技術論壇、TSIA、SEMI、TrendForce、各公司法說會與年報、MOPS。</span>
+
+  <p style="font-size:11.5px;margin-top:10px"><strong>方法論與免責：</strong>採 GiS 估值方法論 §4.3 五級評等（買進 &gt;15% / 增加持股 5-15% / 中立 ±5% / 減碼 &lt;-5%）。本報告不給 18 檔正式 12M 目標價，個別 TP 請見對應個股報告。報告引用為公開資訊整理，不構成投資建議。</p>
+
+  <div style="margin-top:8px;padding:9px 12px;background:#0d1b3e;color:#fff;border-radius:8px">
+    <div style="font-size:12px;font-weight:700;margin-bottom:4px;color:#00c896">下一步建議</div>
+    <ul style="font-size:11px;color:rgba(255,255,255,.85);padding-left:18px;margin:0">
+      <li>核心 Top 5（印能 / 弘塑 / 欣興 / 力成 / 群翊）逐檔開展 earnings-analysis-tw 季報</li>
+      <li>buyside conviction：7734 / 3131 / 3037 可跑 investment-memo-tw（Long M / Satellite）</li>
+      <li>監控 10 家獨供台廠後續法說「CoPoS」首次主動提及，是 narrative inflection</li>
+      <li>追蹤 TGV / Balance Film 用量比，山太士 3595 視為 hedge 部位候選</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>柒 · 資料來源與方法論</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<script>
+// CoWoS 月產能演進
+const ctxCowos = document.getElementById('cowos_chart');
+if (ctxCowos) {
+  new Chart(ctxCowos, {
+    type: 'bar',
+    data: {
+      labels: ['2022','2023','2024','2025','2026E','2027E','2028E'],
+      datasets: [{
+        label: 'CoWoS 月產能（張/月）',
+        data: [10000, 18000, 35000, 70000, 135000, 180000, 220000],
+        backgroundColor: ['#94a3b8','#94a3b8','#94a3b8','#94a3b8','#00c896','#00875a','#065f46'],
+        borderRadius: 4,
+        barPercentage: 0.7
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {display: false},
+        title: {display: false},
+        tooltip: {callbacks: {label: c => c.parsed.y.toLocaleString() + ' 張/月'}}
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {callback: v => (v/1000)+'k'},
+          title: {display: true, text: '月產能（張/月）', font: {size: 11}}
+        },
+        x: {grid: {display: false}}
+      }
+    }
+  });
+}
+</script>
+
+</body>
+</html>

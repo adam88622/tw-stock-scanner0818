@@ -7,6 +7,7 @@ import subprocess
 import time
 import os
 import logging
+from datetime import datetime
 import requests
 
 LOG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'watchdog.log')
@@ -116,6 +117,18 @@ def start_realtime_worker():
     logger.info("即時報價 worker 已啟動")
 
 
+def start_volume_alert_worker():
+    logger.info("啟動爆量預估 worker...")
+    subprocess.Popen(
+        [PYTHON, "volume_alert_worker.py"],
+        cwd=PROJECT_DIR,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        creationflags=DETACHED,
+    )
+    logger.info("爆量預估 worker 已啟動")
+
+
 def kill_ngrok():
     try:
         subprocess.run(["taskkill", "/F", "/IM", "ngrok.exe"],
@@ -130,6 +143,27 @@ def _is_realtime_running():
         r = subprocess.run(
             ["powershell", "-Command",
              "Get-CimInstance Win32_Process -Filter \"Name='python.exe'\" | Where-Object { $_.CommandLine -like '*realtime_worker*' } | Measure-Object | Select-Object -ExpandProperty Count"],
+            capture_output=True, text=True, timeout=10)
+        return int(r.stdout.strip() or '0') > 0
+    except Exception:
+        return False
+
+
+def _in_volume_alert_window():
+    """volume_alert worker 該運行的時段：平日 09:00–13:30"""
+    now = datetime.now()
+    if now.weekday() >= 5:
+        return False
+    hm = now.hour * 100 + now.minute
+    return 900 <= hm < 1330
+
+
+def _is_volume_alert_running():
+    """檢查 volume_alert_worker 進程是否存在"""
+    try:
+        r = subprocess.run(
+            ["powershell", "-Command",
+             "Get-CimInstance Win32_Process -Filter \"Name='python.exe'\" | Where-Object { $_.CommandLine -like '*volume_alert_worker*' } | Measure-Object | Select-Object -ExpandProperty Count"],
             capture_output=True, text=True, timeout=10)
         return int(r.stdout.strip() or '0') > 0
     except Exception:
@@ -152,6 +186,9 @@ def main():
     if not _is_realtime_running():
         start_realtime_worker()
 
+    if _in_volume_alert_window() and not _is_volume_alert_running():
+        start_volume_alert_worker()
+
     ngrok_fail_count = 0
     realtime_check_counter = 0
 
@@ -171,13 +208,16 @@ def main():
             else:
                 ngrok_fail_count = 0
 
-            # 每 5 分鐘檢查一次 realtime worker
+            # 每 5 分鐘檢查一次 worker
             realtime_check_counter += 1
             if realtime_check_counter >= 10:
                 realtime_check_counter = 0
                 if not _is_realtime_running():
                     logger.warning("即時報價 worker 掛了，重啟...")
                     start_realtime_worker()
+                if _in_volume_alert_window() and not _is_volume_alert_running():
+                    logger.warning("爆量預估 worker 掛了，重啟...")
+                    start_volume_alert_worker()
 
         except Exception as e:
             logger.error(f"監控迴圈例外（不中斷）: {e}")

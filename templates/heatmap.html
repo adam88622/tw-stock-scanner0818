@@ -3,8 +3,8 @@
 
 {% block content %}
 <div class="content-area">
-    <h4 class="page-title">S&P 500 熱力圖 <span id="heatmap-update-time" style="font-size:14px;color:#9ca3af;margin-left:16px;"></span></h4>
-    <div id="heatmap-loading" style="color:#64748b;padding:40px;text-align:center;font-size:18px;">載入中...</div>
+    <h4 class="page-title">S&P 500 熱力圖 <span id="heatmap-update-time" style="font-size:14px;color:var(--text-muted);margin-left:16px;"></span></h4>
+    <div id="heatmap-status" style="padding:40px;text-align:center;font-size:18px;color:var(--text-muted);">載入中...</div>
     <div id="heatmap-container"></div>
 </div>
 
@@ -15,18 +15,18 @@
     gap: 10px;
 }
 .sector-group {
-    background: #1e293b;
-    border: 1px solid #334155;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
     border-radius: 8px;
     overflow: hidden;
 }
 .sector-header {
-    background: #162032;
+    background: var(--bg-thead);
     padding: 8px 14px;
     font-size: 15px;
     font-weight: 700;
     color: #f59e0b;
-    border-bottom: 1px solid #334155;
+    border-bottom: 1px solid var(--border-light);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -78,6 +78,36 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+.heatmap-error-box {
+    padding: 24px;
+    text-align: center;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+}
+.heatmap-error-box .err-msg {
+    color: #ef4444;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+.heatmap-error-box .last-success {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+.heatmap-retry-btn {
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.heatmap-retry-btn:hover {
+    opacity: 0.9;
 }
 </style>
 {% endblock %}
@@ -222,7 +252,8 @@
 
     function render(perfData) {
         const container = document.getElementById('heatmap-container');
-        document.getElementById('heatmap-loading').style.display = 'none';
+        const statusEl = document.getElementById('heatmap-status');
+        if (statusEl) statusEl.style.display = 'none';
         let html = '';
 
         for (const [sectorName, sectorDef] of Object.entries(SP500_SECTORS)) {
@@ -275,18 +306,48 @@
         container.innerHTML = html;
     }
 
+    var LS_KEY = 'heatmap_us_last_success';
+
+    function showError(msg) {
+        var container = document.getElementById('heatmap-container');
+        var statusEl = document.getElementById('heatmap-status');
+        if (statusEl) statusEl.style.display = 'none';
+        var lastSuccess = localStorage.getItem(LS_KEY);
+        var lastTxt = lastSuccess ? '上次成功時間：' + lastSuccess : '尚無歷史成功紀錄';
+        var html = '<div class="heatmap-error-box">' +
+            '<div class="err-msg">載入失敗：' + (msg || 'Error') + '</div>' +
+            '<div class="last-success">' + lastTxt + '</div>' +
+            '<button type="button" class="heatmap-retry-btn" id="heatmap-retry-btn">重試</button>' +
+            '</div>';
+        container.innerHTML = html;
+        var btn = document.getElementById('heatmap-retry-btn');
+        if (btn) {
+            btn.addEventListener('click', function () {
+                container.innerHTML = '';
+                if (statusEl) {
+                    statusEl.style.display = 'block';
+                    statusEl.textContent = '載入中...';
+                }
+                loadHeatmap();
+            });
+        }
+    }
+
     function loadHeatmap() {
         fetch('/api/heatmap')
-            .then(r => r.json())
-            .then(data => {
+            .then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
+            .then(function (data) {
                 if (data.error) {
-                    document.getElementById('heatmap-loading').textContent = 'Error: ' + data.error;
+                    showError(data.error);
                     return;
                 }
-                let perfData = {};
+                var perfData = {};
                 if (data.nodes) {
                     if (Array.isArray(data.nodes)) {
-                        data.nodes.forEach(n => {
+                        data.nodes.forEach(function (n) {
                             if (n.t && n.c !== undefined) perfData[n.t] = n.c;
                         });
                     } else {
@@ -296,18 +357,21 @@
                     perfData = data;
                 }
                 render(perfData);
-                const now = new Date();
-                const timeEl = document.getElementById('heatmap-update-time');
+                var now = new Date();
+                var hh = String(now.getHours()).padStart(2, '0');
+                var mm = String(now.getMinutes()).padStart(2, '0');
+                localStorage.setItem(LS_KEY, hh + ':' + mm);
+                var timeEl = document.getElementById('heatmap-update-time');
                 if (isUSMarketOpen()) {
                     timeEl.textContent = '盤中即時 更新: ' + now.toLocaleTimeString('zh-TW') + ' (每5分鐘自動更新)';
                     timeEl.style.color = '#22c55e';
                 } else {
-                    timeEl.textContent = '收盤資料 更新: ' + now.toLocaleString('zh-TW', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
-                    timeEl.style.color = '#9ca3af';
+                    timeEl.textContent = '收盤資料 更新: ' + now.toLocaleString('zh-TW', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+                    timeEl.style.color = 'var(--text-muted)';
                 }
             })
-            .catch(err => {
-                document.getElementById('heatmap-loading').textContent = '載入失敗: ' + err.message;
+            .catch(function (err) {
+                showError(err && err.message ? err.message : '網路錯誤');
             });
     }
 

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 產業 cheat sheet -->
+<!--
+  轉 PDF：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="電源管理IC產業概覽.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=15000 "file:///Users/chenhongshuo/claude/產業報告/電源管理IC/20260630/電源管理IC產業概覽.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>電源管理 IC 產業概覽 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.full-page>*{flex-shrink:0}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:520px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:24px 0 16px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:22px 0 12px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:16px 0 8px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:8px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:18px;margin:14px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:12px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.72;letter-spacing:.3px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:22px;margin:18px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:16px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12.5px;font-weight:800;margin-bottom:7px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:10.5px;opacity:.82;line-height:1.45}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.pick-card{border-radius:8px;padding:16px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12px;font-weight:700;color:#00a878;letter-spacing:.8px;margin-bottom:6px}
+.pick-name{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:9px}
+.pick-why{font-size:12.5px;color:#2d3748;line-height:1.6;margin-bottom:9px}
+.pick-catalyst{font-size:12px;color:#065f46;background:#e8f5ee;padding:7px 10px;border-radius:5px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:16px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.red{border-color:#e74c3c;background:#fdf0ef}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+.callout.red .callout-title{color:#7b2020}
+p{margin:7px 0 10px;line-height:1.72}
+ul,ol{padding-left:20px;margin:7px 0 10px}
+li{margin:4px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:22px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:6px}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:13px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge.long{background:#00c896;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.badge.n{background:#9aa5b1;color:#fff}
+.badge.uw{background:#10b981;color:#fff}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Industry Cheat Sheet · 2026 年 6 月</div>
+    <div class="cover-title">電源管理 IC（PMIC）產業概覽<br><em>高用電時代的台廠卡位</em></div>
+    <div class="cover-subtitle">Power Management IC — From 400VAC to 800V HVDC: Taiwan's Analog Power Play</div>
+    <div class="cover-tags">
+      <span class="ctag hl">矽力*-KY 6415</span>
+      <span class="ctag hl">致新 8081</span>
+      <span class="ctag hl">力智 6719</span>
+      <span class="ctag">茂達 6138</span>
+      <span class="ctag">大中 6435</span>
+      <span class="ctag">沛亨 6291</span>
+      <span class="ctag">類比上行循環</span>
+      <span class="ctag">AI 資料中心供電</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">$<em>40→60</em>B</div><div class="cstat-label">全球 PMIC TAM（2024→2030）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>~7</em>%</div><div class="cstat-label">基準 CAGR（結構需求另加成）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>&gt;10</em>x</div><div class="cstat-label">單櫃電源價值躍升（→Rubin Ultra）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>13</em> 檔</div><div class="cstat-label">台股電源/功率 IC 覆蓋池</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 6 月 30 日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要 — 一張地圖看懂台股電源管理 IC</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">$40→60<em> B</em></div><div class="kpi-lbl">全球 PMIC TAM 2024→2030</div></div>
+    <div class="kpi"><div class="kpi-val">7~8<em> 季</em></div><div class="kpi-lbl">類比上行循環剩餘上修空間</div></div>
+    <div class="kpi gold"><div class="kpi-val">$3.6→40<em> 萬</em></div><div class="kpi-lbl">單櫃電源價值（GB200→Rubin Ultra）</div></div>
+    <div class="kpi green"><div class="kpi-val">+15→20<em>%</em></div><div class="kpi-lbl">矽力 6415 資料中心營收佔比</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>結構性需求接棒週期性需求。</strong>本輪電源/類比 IC 上行的核心驅動，已從 PC/手機的景氣循環，轉為 AI 資料中心的供電架構升級。資料中心矽 MOSFET 用量 2024 年約為車用的 1/4，2027 年將與車用相當；這是一條比過往任何一輪都更持久的結構性需求曲線。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>「高用電時代」改寫供電含量。</strong>機櫃功耗由 GB200 的 120kW 升至 Vera Rubin Ultra 的 380~600kW+，供電架構從 400VAC/50VDC 走向 800V HVDC。單櫃電源價值由 3.6 萬美元跳升至 40 萬美元以上（&gt;10x），PSU 功率由 5.5kW 拉到 22~30kW，後端 &lt;12V 小電源 PMIC（CPU/GPU/DDR/光模組）需求同步放大。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>台廠在「後端小電源」卡位明確、估值分歧最大。</strong>台廠定位於 VRM、DrMOS、光模組 PMIC 等後段環節，全球龍頭（TI／ADI／Infineon／MPS）漲價即台廠跟漲空間，中國紅鏈於 MCU/類比投資意願低、衝擊集中於 SiC&gt;IGBT。但族群估值已高度分化：本益比由 16.5x 到 80x 以上，龍頭矽力的多空目標價分歧達 3 倍以上，選股關鍵在「題材純度 × 估值 × 營收動能」的三角平衡。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">全球 PMIC 市場規模（十億美元）</div>
+      <div class="chart-sub">來源：Grand View Research、Mordor Intelligence 區間整理；GiS 彙編</div>
+      <div class="chart-container" style="height:215px;width:100%;position:relative"><canvas id="chTam" style="display:block;width:100%;height:215px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">單櫃電源價值躍升（美元/Rack）</div>
+      <div class="chart-sub">來源：本土券商產業展望；GiS 彙編</div>
+      <div class="chart-container" style="height:215px;width:100%;position:relative"><canvas id="chRack" style="display:block;width:100%;height:215px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 壹 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業定義與市場規模</div>
+  <div class="sec-desc">界定電源管理 IC 的產業邊界與價值鏈位置，量化全球 TAM 與成長動能，並區分「結構性」與「週期性」兩股驅動力。</div>
+</div>
+
+<!-- ══════════════ 壹-1 產業定義 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹、產業定義 — 什麼是電源管理 IC</h1>
+  <p>電源管理 IC（Power Management IC, PMIC）是負責「電能轉換、分配、調節與保護」的類比/混合訊號半導體，將電源從電池或電網的高/不穩定電壓，轉換為各晶片（CPU/GPU/記憶體/感測器）所需的精準低壓。它是所有電子裝置的「電力心臟」，需求與終端裝置的數量、複雜度及功耗高度連動。</p>
+
+  <h2 class="ch">產業邊界（本報告範疇）</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>包含（本報告主軸）</th><th>相鄰／延伸</th><th>不包含</th></tr></thead>
+    <tbody>
+      <tr><td>DC-DC 轉換器、LDO、多相控制器、DrMOS、PMIC SoC、充電/快充 IC、馬達/風扇驅動</td><td>功率分立元件（MOSFET、SiC/GaN）、AC/DC 電源供應器（PSU）、BBU/電池模組</td><td>系統電源供應器整機、變壓器、被動元件、電網級輸配電設備</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">價值鏈位置</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">上游</div><div class="tl-spec">晶圓/製程</div><div class="tl-tech">8吋/12吋特殊製程晶圓、BCD 製程；環球晶、聯電、世界先進</div></div>
+    <div class="tl-item active"><div class="tl-year">中游 ← 台廠主場</div><div class="tl-spec">IC 設計</div><div class="tl-tech">PMIC/類比設計：矽力、致新、力智、茂達、沛亨</div></div>
+    <div class="tl-item"><div class="tl-year">下游</div><div class="tl-spec">模組/電源</div><div class="tl-tech">PSU/Power Shelf/BBU：台達電、光寶、AES-KY</div></div>
+    <div class="tl-item next"><div class="tl-year">終端</div><div class="tl-spec">應用</div><div class="tl-tech">AI 伺服器、車用、工業、消費電子、通訊</div></div>
+  </div>
+
+  <h2 class="ch">終端應用結構（以台廠龍頭矽力為例）</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>終端</th><th class="num">營收佔比</th><th>成長性</th><th>GiS 觀點</th></tr></thead>
+    <tbody>
+      <tr><td>消費電子</td><td class="num">~30~36%</td><td>低（成熟）</td><td>現金流基底，價格競爭激烈</td></tr>
+      <tr><td>工業</td><td class="num">~30~33%</td><td>中（循環復甦）</td><td>庫存去化完成，循環向上</td></tr>
+      <tr><td>車用</td><td class="num">~13~15%</td><td class="pos">高（+45% YoY）</td><td>BMS/AFE、中國在地化放量</td></tr>
+      <tr><td style="font-weight:700">資料中心</td><td class="num hi">15→20%+</td><td class="pos" style="font-weight:700">最高（+85% YoY）</td><td style="color:#00875a;font-weight:700">結構性 alpha 核心，光模組 PMIC 溢價</td></tr>
+      <tr><td>通訊</td><td class="num">~5~6%</td><td>中</td><td>5G/光通訊基礎需求</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司法說會、外資研究、通路訪查；GiS 彙編。佔比為區間值，依各券商口徑略有差異。</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 產業定義</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 壹-2 市場規模 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、市場規模 — 結構性需求疊加週期復甦</h1>
+  <p>全球 PMIC 市場 2024 年約 400 億美元，多數調研機構預估 2030 年達 580~640 億美元，<strong>基準 CAGR 約 6.8%~7.3%</strong>。此為「全產業平均」成長率；其中 AI 資料中心、車用電子兩條子曲線成長率顯著高於平均，是真正驅動台廠 alpha 的部分。</p>
+
+  <h2 class="ch">市場規模與成長預估</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>項目</th><th class="num">2024</th><th class="num">2026E</th><th class="num">2030E</th><th>驅動性質</th></tr></thead>
+    <tbody>
+      <tr><td>全球 PMIC TAM（十億美元）</td><td class="num">40.3</td><td class="num">44.7</td><td class="num hi">59.6</td><td>結構 + 週期</td></tr>
+      <tr><td>基準 CAGR（2025–2030）</td><td class="num" colspan="3" style="text-align:center">約 6.8% ~ 7.3%</td><td>全產業平均</td></tr>
+      <tr><td>AI 資料中心電源（子曲線）</td><td class="num">小</td><td class="num pos">放量</td><td class="num pos hi">高速</td><td class="pos">結構性（最強）</td></tr>
+      <tr><td>車用電子（子曲線）</td><td class="num">中</td><td class="num pos">+45% YoY*</td><td class="num pos">高</td><td class="pos">結構性</td></tr>
+      <tr><td>消費/工業（子曲線）</td><td class="num">大</td><td class="num">復甦</td><td class="num">穩定</td><td>週期性</td></tr>
+    </tbody>
+  </table>
+  <span class="src">*車用 +45% YoY 為矽力之外資均值，非全產業。資料來源：Grand View Research、Mordor Intelligence、Strategic Market Research、Research and Markets；GiS 彙編。</span>
+
+  <h2 class="ch">驅動因子拆解：Structural vs Cyclical</h2>
+  <div class="chart-grid">
+    <div class="callout green">
+      <div class="callout-title">結構性驅動（持久、抗景氣）</div>
+      <ul>
+        <li><strong>AI 資料中心供電含量躍升</strong>：功耗密度每 3 年翻倍，後端小電源用量倍增</li>
+        <li><strong>車用電氣化</strong>：BMS/AFE、48V 架構、中國在地化整併</li>
+        <li><strong>光模組升級</strong>：800G/1.6T 帶動高階光模組 PMIC，單顆 ASP 可達 1 美元</li>
+      </ul>
+    </div>
+    <div class="callout">
+      <div class="callout-title">週期性驅動（復甦中、隨景氣）</div>
+      <ul>
+        <li><strong>庫存去化完成</strong>：工業/車用通路歷經數年調整，目前低位</li>
+        <li><strong>類比漲價循環啟動</strong>：上游矽晶圓緊缺，成本推升 5~15%</li>
+        <li><strong>消費電子回補</strong>：手機/NB 換機與規格升級</li>
+      </ul>
+    </div>
+  </div>
+
+  <blockquote><strong>GiS 核心觀點：</strong>PMIC 是少數同時握有「結構性需求（AI/車用）」與「週期性復甦（庫存+漲價）」兩股順風的類比子產業。基準 7% CAGR 僅是地板；真正的估值重估動能來自 AI 資料中心子曲線——這也是為何族群內「資料中心暴露純度」成為選股的第一篩網。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 市場規模</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 貳 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">成長雙引擎 — AI 供電革命 × 類比上行循環</div>
+  <div class="sec-desc">解析兩股驅動力的量化證據：資料中心供電架構從 400VAC 走向 800V HVDC 的價值躍升，以及類比半導體 EPS 上修循環的時間位置與漲價節奏。</div>
+</div>
+
+<!-- ══════════════ 貳-1 AI 供電架構 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳、引擎一 — AI 資料中心供電架構升級</h1>
+  <p>AI 機櫃功耗的爆炸性成長，正逼迫供電架構從 400VAC/50VDC 走向 <strong>800V HVDC（高壓直流）</strong>。此一架構升級不只是「賣更多電源」，而是整個機櫃電源價值的數量級重估——這是電源族群本輪最強的結構性 alpha。</p>
+
+  <h2 class="ch">供電架構演進路線</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">現行 2025</div><div class="tl-spec">400VAC</div><div class="tl-tech">Power Shelf 轉 50VDC，支援 ≤250kW 機櫃</div></div>
+    <div class="tl-item active"><div class="tl-year">2026–27 ← 現在</div><div class="tl-spec">800VDC In-row</div><div class="tl-tech">800VDC In-row Power Rack 導入，3Q26 驗證、4Q26 小量產</div></div>
+    <div class="tl-item next"><div class="tl-year">2027+</div><div class="tl-spec">800V Native</div><div class="tl-tech">800VDC 直送伺服器、機內降至 18V 供 GPU</div></div>
+    <div class="tl-item"><div class="tl-year">受惠環節</div><div class="tl-spec">HVDC</div><div class="tl-tech">DC Breaker/Protection、高功率 PSU、後端 PMIC</div></div>
+  </div>
+
+  <h2 class="ch">機櫃電源規格演進（content per rack 量化）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>規格</th><th class="num">GB200 (2025)</th><th class="num">GB300 (2026)</th><th class="num">Vera Rubin (2026)</th><th class="num">Vera Rubin Ultra (2027)</th></tr></thead>
+    <tbody>
+      <tr><td>供電架構</td><td class="num">400VAC/50VDC</td><td class="num">同左</td><td class="num">同左</td><td class="num hi">400VAC/800VDC HVDC</td></tr>
+      <tr><td>機櫃功耗 Rack Power</td><td class="num">120kW</td><td class="num">140kW</td><td class="num">200kW</td><td class="num pos hi">380~800kW</td></tr>
+      <tr><td>PSU 功率</td><td class="num">5.5kW</td><td class="num">8.0kW</td><td class="num">18.3kW</td><td class="num pos">22~30kW</td></tr>
+      <tr><td>單櫃電源價值 USD/Rack</td><td class="num">36,000</td><td class="num">57,600</td><td class="num">76,000</td><td class="num pos hi">398,160（&gt;10x）</td></tr>
+      <tr><td>CBU 滲透率</td><td class="num">&lt;5%</td><td class="num">—</td><td class="num">—</td><td class="num pos">&gt;50%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：本土券商 2H26 電源產業展望（2026/06）；GiS 彙編。Power Shelf 功率由 30~60kW 提升至 240~500kW+；單櫃電源價值由 GB200 的 3.6 萬美元躍升至 Rubin Ultra 的近 40 萬美元，逾 10 倍（詳見封面後執行摘要圖）。</span>
+
+  <blockquote><strong>GiS 判斷：</strong>單櫃電源價值 &gt;10x 的躍升，最大受惠者是下游 PSU/HVDC 整合廠（台達電、光寶、AES-KY）；但「水漲船高」效應同樣外溢至後端 &lt;12V 小電源 PMIC——GPU/CPU/DDR/光模組整流的多相控制器、DrMOS 用量隨功率密度同步放大。台廠 PMIC 設計商正是卡在這個後端環節。對台廠而言，content per rack 的放大不只反映在「賣更多顆」，更反映在「更高功率規格、更高 ASP」的結構性質變。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · AI 供電架構</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 貳-2 類比上行循環 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳、引擎二 — 類比半導體上行循環（位置仍偏早）</h1>
+  <p>賣方產業專家觀點指出，類比/車用/工業晶片正進入新一輪 EPS 上修週期，型態類似 2021–2023，但本輪由 AI 資料中心「結構性需求」驅動，而非過往 PC/手機的「週期性需求」，因此更強、更持久。歷史上類比族群上行循環的 EPS 上修幅度可達 <strong>50%~150%</strong>。</p>
+
+  <h2 class="ch">循環時間位置 — 才走完第一季</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>觀察點</th><th>現況</th><th>意涵</th></tr></thead>
+    <tbody>
+      <tr><td>EPS 上修進度</td><td class="num">僅完成第一季</td><td class="pos">預期後續仍有 7~8 季上修空間</td></tr>
+      <tr><td>歐系龍頭共識上修</td><td class="num">Infineon +15%、STM +29%（2027）</td><td>循環啟動信號明確</td></tr>
+      <tr><td>漲價節奏</td><td class="num">ADI/NXP 已第二次漲價（7 月）</td><td class="pos">比 2021 更早更密集（上輪首漲遲至循環啟動後 10 月）</td></tr>
+      <tr><td>庫存水位</td><td class="num">車用/工業通路低位</td><td class="pos">數年去化完成，供需緊繃</td></tr>
+      <tr><td>終端需求</td><td class="num">未轉強（中國車市弱）</td><td>關鍵：上行循環啟動無須強勁終端</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：外資/賣方分析師專家座談（2026/06）；GiS 彙編。</span>
+
+  <div class="chart-wrap">
+    <div class="chart-title">類比上行循環 EPS 上修示意（循環位置）</div>
+    <div class="chart-sub">示意圖；來源：賣方循環觀點，GiS 繪製</div>
+    <div class="chart-container" style="height:195px;width:100%;position:relative"><canvas id="chCycle" style="display:block;width:100%;height:195px"></canvas></div>
+  </div>
+
+  <blockquote><strong>GiS 判斷：</strong>「漲價比上輪更早、終端卻未轉強」是本輪最重要的訊號——意味漲價由供給端緊缺（矽晶圓）與結構性需求（AI/VRM）驅動，而非終端過熱。若循環如賣方預期仍有 7~8 季，則台廠 PMIC 的營收/毛利率動能在 2026 下半年至 2027 仍有上修空間，但須留意龍頭股估值已高度反映此預期。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 類比上行循環</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 參 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">競爭格局與台廠定位</div>
+  <div class="sec-desc">全球龍頭市佔版圖、進入障礙、紅鏈替代風險，以及台廠在後端小電源環節的卡位優勢。</div>
+</div>
+
+<!-- ══════════════ 參 競爭格局 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、競爭格局 — 全球龍頭與台廠定位</h1>
+
+  <h2 class="ch">全球類比/PMIC 龍頭版圖</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>公司</th><th>地區</th><th>定位</th><th>與台廠關係</th></tr></thead>
+    <tbody>
+      <tr><td>Texas Instruments (TI)</td><td>美</td><td>類比/PMIC 全球龍頭，IDM</td><td>標竿；漲價即台廠跟漲空間</td></tr>
+      <tr><td>Analog Devices (ADI)</td><td>美</td><td>高階類比/訊號鏈，已二次漲價</td><td>漲價領頭羊</td></tr>
+      <tr><td>Infineon</td><td>歐</td><td>功率/車用龍頭，MCU 市佔衝 40%</td><td>SiC/IGBT 競爭者</td></tr>
+      <tr><td>STMicroelectronics</td><td>歐</td><td>車用/工業類比，光通訊轉型</td><td>cycle read-across</td></tr>
+      <tr><td>Monolithic Power (MPS)</td><td>美</td><td>AI server 電源直接競爭者</td><td class="neg">台廠後端最直接對手</td></tr>
+      <tr><td style="font-weight:700">台廠（矽力/致新/力智/茂達…）</td><td>台</td><td style="font-weight:700">後端小電源：VRM、DrMOS、光模組 PMIC</td><td class="pos" style="font-weight:700">卡位後段，跟漲 + 利基</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">進入障礙與紅鏈威脅</h2>
+  <div class="chart-grid">
+    <div class="callout green">
+      <div class="callout-title">台廠的護城河與順風</div>
+      <ul>
+        <li><strong>客戶 lock-in + 認證週期長</strong>：車用/伺服器電源驗證 1~2 年</li>
+        <li><strong>中國於 MCU/類比投資意願低</strong>：成長率僅 ~3%/年，不及 GPU 吸引力</li>
+        <li><strong>矽 MOSFET 為「新類比業務」</strong>：VRM 帶動、中國少擴產，營益率可穩 30%+</li>
+        <li><strong>後端小電源利基</strong>：光模組 PMIC、DrMOS 卡位明確</li>
+      </ul>
+    </div>
+    <div class="callout red">
+      <div class="callout-title">風險與紅鏈替代</div>
+      <ul>
+        <li><strong>紅鏈衝擊集中於 SiC（最嚴重）&gt; IGBT</strong>，矽 MOSFET/類比相對安全</li>
+        <li><strong>龍頭客戶集中</strong>：矽力光模組 PMIC 目前僅 Google 一架構</li>
+        <li><strong>估值已高</strong>：族群本益比 16~80x，龍頭預支多年成長</li>
+        <li><strong>終端需求若轉弱</strong>：消費/工業復甦不如預期將壓抑循環</li>
+      </ul>
+    </div>
+  </div>
+
+  <blockquote><strong>GiS 觀點：</strong>競爭格局對台廠相對有利——紅鏈的火力集中在 SiC，而台廠主場（矽基 PMIC/類比）恰是中國投資意願最低、全球龍頭漲價最積極的環節。台廠的角色是「全球龍頭的後段補位者與利基切入者」，alpha 來源是 AI 後端小電源的 content 放大與光模組 PMIC 的溢價，而非與 TI/ADI 正面爭奪大宗市場。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 競爭格局</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 肆 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Section Four</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">台股 Comps 與 GiS 族群排序</div>
+  <div class="sec-desc">13 檔台股電源/功率 IC 的營運與估值對照、相對吸引力排序，以及龍頭矽力的多空分歧拆解。</div>
+</div>
+
+<!-- ══════════════ 肆-1 Comps 表 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆、台股電源/功率 IC Comps</h1>
+  <p style="font-size:12.5px;color:#6b7a9a;margin-bottom:6px">5 營運指標 + 5 估值/規模指標。本益比為 trailing（現價 ÷ 近四季 EPS）。資料截至 2026/06/29 收盤。</p>
+  <table style="font-size:10.8px">
+    <thead><tr>
+      <th>公司</th><th>代號</th><th>細分</th>
+      <th class="num">現價</th><th class="num">股本<br>(億)</th>
+      <th class="num">2025<br>EPS</th><th class="num">1Q26<br>EPS</th><th class="num">TTM<br>EPS</th>
+      <th class="num">近月<br>YoY%</th><th class="num">trail<br>PE</th>
+    </tr></thead>
+    <tbody>
+      <tr><td><strong>矽力*-KY</strong></td><td>6415</td><td>類比龍頭/光模組PMIC</td><td class="num">598.0</td><td class="num">9.7</td><td class="num">6.40</td><td class="num">1.98</td><td class="num">7.45</td><td class="num pos">+31.6</td><td class="num hi">80.3</td></tr>
+      <tr><td><strong>致新</strong></td><td>8081</td><td>DC-DC/伺服器PMIC</td><td class="num">310.5</td><td class="num">8.6</td><td class="num">17.76</td><td class="num">4.62</td><td class="num">17.57</td><td class="num neg">-3.3</td><td class="num">17.7</td></tr>
+      <tr><td><strong>力智 uPI</strong></td><td>6719</td><td>DrMOS/多相控制器</td><td class="num">272.5</td><td class="num">10.5</td><td class="num">6.58</td><td class="num">2.10</td><td class="num">7.20</td><td class="num neg">-9.6</td><td class="num">37.8</td></tr>
+      <tr><td><strong>茂達</strong></td><td>6138</td><td>風扇驅動+PMIC</td><td class="num">365.5</td><td class="num">7.6</td><td class="num">13.04</td><td class="num">3.68</td><td class="num">14.12</td><td class="num pos">+15.4</td><td class="num">25.9</td></tr>
+      <tr><td><strong>沛亨</strong></td><td>6291</td><td>小型PMIC/充電</td><td class="num">588.0</td><td class="num">4.2</td><td class="num">6.60</td><td class="num">3.00</td><td class="num">8.55</td><td class="num pos">+16.1</td><td class="num">68.8</td></tr>
+      <tr><td><strong>通嘉</strong></td><td>3588</td><td>AC/DC快充控制</td><td class="num">68.0</td><td class="num">6.2</td><td class="num">0.50</td><td class="num">0.37</td><td class="num">0.60</td><td class="num pos">+21.7</td><td class="num">113.3</td></tr>
+      <tr><td><strong>大中</strong></td><td>6435</td><td>功率分立+SiC</td><td class="num">330.5</td><td class="num">3.7</td><td class="num">9.52</td><td class="num">3.67</td><td class="num">10.82</td><td class="num pos">+22.2</td><td class="num">30.5</td></tr>
+      <tr><td><strong>富鼎</strong></td><td>8261</td><td>MOSFET功率元件</td><td class="num">270.5</td><td class="num">11.9</td><td class="num">5.73</td><td class="num">1.57</td><td class="num">5.85</td><td class="num pos">+1.2</td><td class="num">46.2</td></tr>
+      <tr><td><strong>杰力</strong></td><td>5299</td><td>MOSFET+電源IC</td><td class="num">116.5</td><td class="num">5.1</td><td class="num">4.58</td><td class="num">1.65</td><td class="num">4.84</td><td class="num pos">+2.2</td><td class="num">24.1</td></tr>
+      <tr><td><strong>尼克森</strong></td><td>3317</td><td>MOSFET功率分立</td><td class="num">89.8</td><td class="num">9.0</td><td class="num">1.66</td><td class="num">0.84</td><td class="num">1.76</td><td class="num neg">-13.1</td><td class="num">51.0</td></tr>
+      <tr><td><strong>天鈺</strong></td><td>4961</td><td>顯示驅動+PMIC</td><td class="num">165.0</td><td class="num">12.1</td><td class="num">9.65</td><td class="num">1.86</td><td class="num">8.25</td><td class="num">+0.1</td><td class="num">20.0</td></tr>
+      <tr><td><strong>偉詮電</strong></td><td>2436</td><td>MCU+電源/快充</td><td class="num">70.8</td><td class="num">20.0</td><td class="num">3.02</td><td class="num">0.70</td><td class="num">3.58</td><td class="num pos">+26.1</td><td class="num">19.8</td></tr>
+      <tr><td><strong>聯陽</strong></td><td>3014</td><td>IO/EC+電源管理</td><td class="num">157.5</td><td class="num">16.6</td><td class="num">9.51</td><td class="num">2.85</td><td class="num">9.53</td><td class="num neg">-8.2</td><td class="num">16.5</td></tr>
+      <tr style="background:#eef5f0!important"><td colspan="3" style="font-weight:800;color:#0d1b3e">統計（13 檔）</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num" style="font-weight:700">中位 +2.2</td><td class="num" style="font-weight:700">中位 30.5</td></tr>
+      <tr style="background:#f7f9fd!important"><td colspan="3" style="color:#6b7a9a">區間 Max / Min</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">+31.6 / -13.1</td><td class="num">113.3 / 16.5</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：tw-stock-scanner DB（收盤價、季報 EPS、月營收）。通嘉 trail PE 113x 因 EPS 處谷底而失真，非估值偏貴。近月 YoY 為 2026 年 5 月合併營收。</span>
+
+  <blockquote style="font-size:12.5px"><strong>GiS 解讀：</strong>族群呈現明顯的「估值 vs 動能」分層——矽力(80x)/沛亨(69x) 估值最高但題材最純；致新(18x)/聯陽(17x)/偉詮(20x) 估值最低；營收動能上，矽力(+32%)/偉詮(+26%)/大中(+22%) 加速，致新(-3%)/力智(-10%)/尼克森(-13%) 走弱（多為 AI server 高基期消化）。沒有一檔同時滿足「便宜 + 動能 + 純題材」，這正是選股需取捨之處。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · Comps</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 肆-2 GiS 排序 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆、GiS 族群相對排序</h1>
+  <p style="font-size:12.5px;color:#6b7a9a">此為「族群內相對吸引力」排序，依「AI/資料中心題材純度 × 估值合理性 × 營收動能」三角綜合評分。<strong>非正式評等與 12M 目標價</strong>——硬評等須俟個股深度報告（首次覆蓋）完整建模後給出。</p>
+
+  <div class="chart-wrap">
+    <div class="chart-title">台廠近月營收 YoY 動能對照（%）</div>
+    <div class="chart-sub">2026 年 5 月合併營收 YoY；來源：tw-stock-scanner DB</div>
+    <div class="chart-container" style="height:185px;width:100%;position:relative"><canvas id="chRev" style="display:block;width:100%;height:185px"></canvas></div>
+  </div>
+
+  <table style="font-size:12px">
+    <thead><tr><th>排序</th><th>標的</th><th>相對傾向</th><th>一句話論點</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>茂達 6138</strong></td><td><span class="badge ow">偏多</span></td><td>AI 散熱風扇驅動 + PMIC 雙引擎，營收 +15% 加速，PE 26x 相對合理，題材與估值平衡最佳</td></tr>
+      <tr><td>2</td><td><strong>致新 8081</strong></td><td><span class="badge ow">偏多</span></td><td>伺服器 DC-DC PMIC，PE 17.7x 全族群最便宜；YoY 轉負為高基期消化，估值提供安全邊際</td></tr>
+      <tr><td>3</td><td><strong>力智 6719</strong></td><td><span class="badge n">中性偏多</span></td><td>DrMOS/多相控制器，AI server 供電後端核心；待高基期消化、營收動能回正為進場觀察點</td></tr>
+      <tr><td>4</td><td><strong>大中 6435</strong></td><td><span class="badge n">中性偏多</span></td><td>功率分立 + SiC 第三代半導體題材，營收 +22% 最強；惟 SiC 為紅鏈衝擊最重環節，須留意</td></tr>
+      <tr><td>5</td><td><strong>矽力*-KY 6415</strong></td><td><span class="badge n">中性（分歧最大）</span></td><td>題材最純的龍頭（光模組 PMIC + DC 佔比 15→20%），但 PE 80x 估值預支、多空目標價分歧達 3 倍以上</td></tr>
+    </tbody>
+  </table>
+
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">族群首選 · 估值/題材平衡</div>
+      <div class="pick-name">茂達 6138</div>
+      <div class="pick-ticker">散熱電源雙引擎 · PE 25.9x</div>
+      <div class="pick-why">AI 伺服器散熱（風扇馬達驅動）與電源（PMIC）雙暴露，營收連月加速 +15%，估值未過度透支，是族群內風險報酬最均衡者。</div>
+      <div class="pick-catalyst">催化劑：AI server 散熱規格升級、PMIC 漲價</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">族群價值 · 安全邊際</div>
+      <div class="pick-name">致新 8081</div>
+      <div class="pick-ticker">伺服器 DC-DC · PE 17.7x</div>
+      <div class="pick-why">全族群最低本益比，伺服器/通用運算 PMIC 暴露明確；營收 YoY 轉負反映 2025 高基期，一旦循環再加速，低估值提供向上彈性。</div>
+      <div class="pick-catalyst">催化劑：營收動能回正、循環 EPS 上修</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · GiS 排序</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 肆-3 矽力多空分歧 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆、焦點 — 矽力 6415 的多空分歧拆解</h1>
+  <p>龍頭矽力是本族群多空分歧最劇烈的標的。現價 NT$598，但賣方目標價從通路多頭的 NT$1,320 到外資大行的 NT$388，<strong>分歧達 3.4 倍</strong>。分歧的本質不在「方向」，而在「光模組 PMIC 放量速度」與「估值倍數」。</p>
+
+  <div class="chart-grid">
+    <div class="callout green">
+      <div class="callout-title">多方觀點（通路/進取方）TP ~1,320</div>
+      <ul>
+        <li><strong>光模組 PMIC 為核心 alpha</strong>：向晶圓代工鎖定 3-4 萬片 12 吋先進產能，單片產出為傳統製程 2.3x、成本降 40%</li>
+        <li><strong>單顆 ASP 可達 1 美元</strong>：受惠 800G/1.6T 升級的高溢價</li>
+        <li><strong>資料中心佔比 15%→20%+</strong>，2028 EPS 上看 ~33（40x → TP 1,320）</li>
+      </ul>
+    </div>
+    <div class="callout red">
+      <div class="callout-title">空方觀點（外資大行/保守方）TP ~388</div>
+      <ul>
+        <li><strong>現價已 price-in</strong>：2026e 本益比達 61x，估值偏高</li>
+        <li><strong>光模組客戶集中</strong>：目前僅 Google 一架構，放量斜率存疑</li>
+        <li>residual income model 估值，2027e/2028e EPS 16.5/21.2（仍低於多方 22/33）</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="ch">共識 vs 分歧</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>議題</th><th>多空是否共識</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><td>1Q26 為毛利率底部</td><td class="pos">✓ 共識</td><td>毛利率 48.2% 為庫存減損+晶圓成本時間差所致，2Q26 回升至 50~51.5%</td></tr>
+      <tr><td>資料中心佔比走向 20%</td><td class="pos">✓ 共識</td><td>1Q26 約 15%，管理層估年底 ~20%</td></tr>
+      <tr><td>2026 營收 YoY +20%+</td><td class="pos">✓ 共識</td><td>data center 與 auto 驅動，2H 加速優於 1H</td></tr>
+      <tr><td>光模組 PMIC 放量斜率</td><td class="neg">✗ 分歧</td><td>多方押 28Y EPS 33、空方僅 21.2</td></tr>
+      <tr><td>合理本益比倍數</td><td class="neg">✗ 分歧</td><td>多方 40x、空方隱含 &lt;30x</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 研究員立場：</strong>多空在「基本面方向」高度一致（毛利率落底回升、DC 佔比向 20%、2026 營收 +20%），分歧純粹落在「光模組 PMIC 放量斜率」與「給多少倍 PE」兩個估值假設。在客戶集中（單一架構）的事實下，敏感度分析顯示矽力的合理價值對「光模組滲透假設」極度敏感——這正是個股深度報告需以三情境機率加權處理的核心變數。本產業報告不對矽力給定 12M 目標價，留待首次覆蓋報告完整建模。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 矽力多空分歧</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 催化劑與風險 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">產業催化劑與風險</h1>
+
+  <h2 class="ch">產業層級催化劑</h2>
+  <table style="font-size:12.5px">
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>800VDC In-row Power Rack 驗證/量產</strong></td><td>3Q26 驗證 / 4Q26 小量產</td><td class="pos">高</td><td>HVDC 架構落地，單櫃電源價值躍升的起點</td></tr>
+      <tr><td><strong>類比龍頭持續漲價</strong></td><td>2H26 起</td><td class="pos">高</td><td>ADI/NXP 二次漲價，台廠跟漲毛利率擴張</td></tr>
+      <tr><td><strong>Vera Rubin / Rubin Ultra 機櫃放量</strong></td><td>2026–2027</td><td class="pos">高</td><td>功耗 200→600kW，後端小電源 content 倍增</td></tr>
+      <tr><td>光模組 800G/1.6T 升級</td><td>2026–2027</td><td>中高</td><td>高階光模組 PMIC 溢價（單顆 ASP 1 美元）</td></tr>
+      <tr><td>美國排中條款</td><td>2026–2027</td><td>中</td><td>利多台廠電池/功率，紅鏈成本上升</td></tr>
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行情境（族群估值上修條件）</h4>
+      <div class="risk-item"><strong>HVDC 架構提前放量</strong> → 後端 PMIC content 加速放大</div>
+      <div class="risk-item"><strong>漲價循環延長至 7~8 季</strong> → 毛利率持續擴張</div>
+      <div class="risk-item"><strong>光模組 PMIC 客戶擴散</strong> → 龍頭 alpha 兌現</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（族群估值下修條件）</h4>
+      <div class="risk-item"><strong>估值預支</strong> → 龍頭 PE 60~80x，業績不如預期殺評價</div>
+      <div class="risk-item"><strong>客戶集中</strong> → 光模組單一架構，放量斜率不如預期</div>
+      <div class="risk-item"><strong>消費/工業復甦不如預期</strong> → 週期性需求拖累</div>
+      <div class="risk-item"><strong>紅鏈於 SiC 加速替代</strong> → 功率分立廠（大中等）承壓</div>
+    </div>
+  </div>
+
+  <blockquote><strong>GiS 風險評估：</strong>族群整體處於「結構性需求明確、但龍頭估值已高度反映」的階段。產業 beta 向上（AI 供電 + 類比循環雙引擎），但選股的 alpha 在於避開估值預支最深、又無法以光模組放量兌現的標的。建議追蹤指標：①月營收 YoY 動能、②800VDC 量產時程、③類比龍頭漲價次數、④矽力資料中心佔比是否如期達 20%。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>催化劑與風險</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 附錄：資料來源 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">附錄 — 資料來源與方法說明</h1>
+
+  <h2 class="ch">資料來源</h2>
+  <ul style="font-size:12.5px">
+    <li><strong>市場規模 / TAM</strong>：Grand View Research（$40.3B→$59.6B, CAGR 6.8%）、Mordor Intelligence（CAGR 7.3%）、Strategic Market Research、Research and Markets。</li>
+    <li><strong>產業供電架構與機櫃規格</strong>：國泰證期研究部《2H26 電源產業展望—高用電時代來臨》（2026/06/16）。</li>
+    <li><strong>類比上行循環觀點</strong>：Jefferies（分析師 Janardan Menon）專家座談，富邦法人業務處整理《類比半導體上行循環—IFX vs STM》（2026/06/04）。</li>
+    <li><strong>矽力 6415 多空觀點</strong>：通路多頭 channel-check 短文（2026/06/14）；Morgan Stanley《Silergy Corp. — Asia AI Summit 2026 Feedback》（2026/05/29，Underweight, TP 388）。</li>
+    <li><strong>台股財務數據</strong>：tw-stock-scanner DB（收盤價截至 2026/06/29、季報 EPS 至 2026Q1、月營收至 2026/05）；原始來源 MOPS 公開資訊觀測站、TWSE/TPEx。</li>
+  </ul>
+
+  <h2 class="ch">方法與限制</h2>
+  <ul style="font-size:12.5px">
+    <li>本報告為產業 cheat sheet，目的在建立產業地圖與背景，<strong>不取代個股深度報告</strong>。GiS 族群排序為相對吸引力評分，非正式評等與 12M 目標價。</li>
+    <li>trailing PE = 現價 ÷ 近四季 EPS 加總；通嘉因 EPS 處谷底，PE 失真不具估值參考意義。</li>
+    <li>內文券商觀點以「多方/空方/外資大行/本土券商」匿名表述，完整機構名稱列於本附錄。產業同業公司（TI/ADI/Infineon 等）與台股標的為產業地圖必要資訊，故具名。</li>
+    <li>本批券商報告未提供「全球 PMIC TAM」量化值，TAM 數據另引調研機構；致新/力智/茂達/沛亨等台廠未獲券商報告直接著墨，財務數據以 DB 為準。</li>
+  </ul>
+
+  <hr>
+  <p style="font-size:11.5px;color:#9aabb5">本報告涵蓋：矽力*-KY 6415、致新 8081、力智 6719、茂達 6138、沛亨 6291、通嘉 3588、大中 6435、富鼎 8261、杰力 5299、尼克森 3317、天鈺 4961、偉詮電 2436、聯陽 3014。資料截止：2026 年 6 月 30 日。本報告僅供研究參考，不構成投資建議。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>附錄 · 資料來源</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+  function getEl(id){return document.getElementById(id);}
+
+  Chart.register({
+    id:'labelPlugin',
+    afterDatasetsDraw(chart){
+      if(chart.config.options.plugins && chart.config.options.plugins.noLabels) return;
+      const ctx=chart.ctx;
+      const isH=chart.options.indexAxis==='y';
+      chart.data.datasets.forEach((ds,i)=>{
+        const meta=chart.getDatasetMeta(i);
+        if(meta.hidden) return;
+        meta.data.forEach((bar,idx)=>{
+          const v=ds.data[idx];
+          if(v===null||v===undefined) return;
+          if(chart.config.type==='line') return;
+          ctx.save();
+          ctx.font='bold 11px PingFang TC, Arial';
+          ctx.textAlign='center';
+          if(isH){ctx.fillStyle='#1a2a4a';ctx.textBaseline='middle';ctx.fillText(v,bar.x+6,bar.y);}
+          else{ctx.fillStyle='#1a2a4a';ctx.textBaseline='bottom';ctx.fillText(String(v),bar.x,bar.y-3);}
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+  // 執行摘要 — TAM
+  new Chart(getEl('chTam'),{
+    type:'bar',
+    data:{labels:['2024','2026E','2030E'],
+      datasets:[{label:'PMIC TAM ($B)',data:[40.3,44.7,59.6],backgroundColor:['#1a3a6e','#1a6e8e','#00a878'],borderRadius:5,barPercentage:0.55}]},
+    options:{responsive:false,animation:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>'$'+v+'B'}}}}
+  });
+
+  // 執行摘要 — 單櫃電源價值
+  new Chart(getEl('chRack'),{
+    type:'bar',
+    data:{labels:['GB200','GB300','Vera Rubin','Rubin Ultra'],
+      datasets:[{label:'USD/Rack',data:[36000,57600,76000,398160],backgroundColor:['#6b7a9a','#1a3a6e','#1a6e8e','#00c896'],borderRadius:5,barPercentage:0.6}]},
+    options:{responsive:false,animation:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>'$'+(v/1000)+'k'}}}}
+  });
+
+  // 類比循環 示意
+  new Chart(getEl('chCycle'),{
+    type:'line',
+    data:{labels:['循環啟動','現在(Q1)','+2季','+4季','+6季','+8季(估頂)'],
+      datasets:[{label:'累計 EPS 上修幅度 (示意 %)',data:[0,15,40,70,100,130],borderColor:'#00a878',backgroundColor:'rgba(0,168,120,.10)',borderWidth:3,pointRadius:5,tension:0.35,fill:true}]},
+    options:{responsive:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:14,padding:14}},noLabels:true},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>'+'+v+'%'}}}}
+  });
+
+  // GiS排序 — 營收 YoY 橫條
+  new Chart(getEl('chRev'),{
+    type:'bar',
+    data:{labels:['矽力6415','偉詮2436','大中6435','通嘉3588','沛亨6291','茂達6138','杰力5299','富鼎8261','天鈺4961','致新8081','聯陽3014','力智6719','尼克森3317'],
+      datasets:[{label:'近月營收 YoY (%)',data:[31.6,26.1,22.2,21.7,16.1,15.4,2.2,1.2,0.1,-3.3,-8.2,-9.6,-13.1],
+        backgroundColor:['#00a878','#00a878','#00a878','#00a878','#00a878','#00a878','#7fae9a','#7fae9a','#9aa5b1','#e08e7a','#d0705a','#d0705a','#c0392b'],borderRadius:3,barPercentage:0.78}]},
+    options:{responsive:false,animation:false,indexAxis:'y',plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}
+  });
+
+});
+</script>
+</body>
+</html>

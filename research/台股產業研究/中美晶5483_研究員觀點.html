@@ -1,0 +1,457 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 研究報告樣板
+  使用方式：直接複製修改文字與圖表數據，轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="輸出檔名.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///完整路徑/檔案.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>中美晶 5483 首次覆蓋 | GiS 研究員觀點</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/*
+  ⚠ 排版重要提醒（避免空白頁 & 內容截斷問題）：
+  1. 每個 .page div 使用 height:297mm（非 min-height），搭配 overflow:hidden
+  2. 不要在 .page 上使用 page-break-after:always，讓固定高度自然分頁
+  3. 每頁內容需控制在 297mm 以內，超出會被裁切（overflow:hidden）
+  4. 若使用 position:absolute 的 footer，確保不會導致額外分頁
+  5. @page{size:A4;margin:0} 已設定，Chrome headless 會自動按 297mm 分頁
+
+  ⚠ 頁高控制實務指引：
+  6. 每頁可用內容高度 ≈ 297mm - padding(40px×2) - footer(~50px) ≈ 225mm（約 850px）
+  7. 一頁最多容納：1 個 h1 + 1 個 h2 + 1 張大表格(8行) + 1 個圖表(240px) + 少量文字
+     或：1 個 h1 + 2 個 h2 + 2 張中型表格(5行) + 少量文字
+  8. 若一頁放了「示意圖/卡片 + 表格 + 圖表」三大元素，幾乎必定溢出，需拆頁
+  9. 寧可多拆一頁留白，也不要讓底部內容被裁切（overflow:hidden 會無聲截斷）
+  10. 轉 PDF 後務必逐頁檢查頁尾 footer 是否完整可見，若看不到 footer 代表內容溢出
+*/
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+/* ── 頁面容器（固定 A4 高度，避免空白頁） ── */
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+/* 注意：不再使用 .pb / page-break-after:always，靠固定 height:297mm 自然分頁 */
+
+/* ── Canvas 強制填滿容器（Chart.js 用） ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── PNG 圖表（matplotlib 生成、首次覆蓋報告用）── */
+/* ⚠ 關鍵：必須用 explicit height + object-fit:contain，避免 X 軸標籤被切 */
+/* ❌ 禁用 height:auto + max-height（contain 對 height:auto 無效，會切到圖表底部）*/
+.chart-img{width:100%;height:210px;display:block;border-radius:4px;object-fit:contain}
+.chart-img.tall{height:260px}    /* 適合 heatmap、roadmap 等密集圖 */
+.chart-img.short{height:160px}   /* 適合 simple bar / pie */
+.chart-grid .chart-img{height:180px}  /* 雙欄並排時更小 */
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 公司卡片 ── */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 首選股卡 ── */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 對比框（callout）── */
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:16px;margin:14px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:32px}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head><body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+<div class="cover page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none"><line x1="0" y1="210" x2="595" y2="360" stroke="white" stroke-width=".5"/><circle cx="480" cy="160" r="90" fill="none" stroke="white" stroke-width=".4"/></svg>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div><div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">研究員觀點 · 首次覆蓋深度報告</div></div></div>
+    <div class="cover-eyebrow">Initiating Coverage · Equity Research · 2026/07/20</div>
+    <div class="cover-title">中美晶 5483<br><em>環球晶的折價代理人</em></div>
+    <div class="cover-subtitle">Sino-American Silicon — A Discounted Proxy for the GlobalWafers Up-cycle</div>
+    <div class="cover-tags"><span class="ctag hl">增加持股 OW</span><span class="ctag hl">12M TP NT$255</span><span class="ctag">SOTP/NAV</span><span class="ctag">環球晶 37%</span><span class="ctag">控股折價</span></div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>255</em></div><div class="cstat-label">12M 目標價（元）</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>10.6</em>%</div><div class="cstat-label">上檔空間 → OW</div></div>
+    <div class="cstat"><div class="cstat-num"><em>34</em>%</div><div class="cstat-label">對 NAV 折價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>2.0</em>x</div><div class="cstat-label">P/B（非極端）</div></div>
+  </div>
+  <div class="cover-bottom"><span>報告日期：2026年7月20日（盤後）</span><span>本報告僅供研究參考，不構成投資建議</span><span>© 2026 GiS</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">投資摘要 — 增加持股（OW）／ 12M 目標價 NT$255</h1>
+  <p style="margin-top:-4px">評等 <span class="badge" style="background:#e67e22;color:#fff">增加持股 OVERWEIGHT</span> ｜ 收盤 230.5 元（2026-07-20，上櫃 .TWO）｜ 上檔 +10.6% ｜ 市值約 1,478 億 ｜ 股本 64.1 億</p>
+  <div class="kpi-row">
+    <div class="kpi gold"><div class="kpi-val">255<em> 元</em></div><div class="kpi-lbl">12M 目標價</div></div>
+    <div class="kpi green"><div class="kpi-val">+10.6%</div><div class="kpi-lbl">上檔 → OW</div></div>
+    <div class="kpi"><div class="kpi-val">~37%</div><div class="kpi-lbl">持環球晶(GiS 估)</div></div>
+    <div class="kpi"><div class="kpi-val">-34%</div><div class="kpi-lbl">對 look-through NAV</div></div>
+  </div>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>本質是控股折價，不是矽晶圓 PE：</strong>中美晶最大資產是全球第三大矽晶圓廠環球晶（6488）約 37% 股權（董事長徐秀蘭同掌兩家）。其自身市值 1,478 億甚至<strong>低於</strong>持有的環球晶股權市值（約 2,246 億）。加計本業與其他轉投資，公司交易於 look-through NAV 約 34% 折價——這是與南電（直接股、估值透支）截然不同的估值起點。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>環球晶大多頭直接推升 NAV：</strong>環球晶 2026-07-09 與 Micron 簽 10 年長約支持美國擴產（Micron 提供 US$0.5bn 策略融資、隱含 200-300kwpm 12" 需求、報價高 40-50%），進取方外資將環球晶目標價由 800 上調至 2,000。中美晶等於「以折價買進 12" 記憶體矽晶圓大多頭」的槓桿代理。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>為何 OW 而非買進：</strong>SOTP 加權目標價 255（+10.6%）落 §4.3 的 OW。折價提供安全邊際，但（1）折價部分合理（太陽能本業續虧、EPS 品質受權益法/少數股權干擾）、（2）股價 60 日已 +83% 跟漲環球晶、折價收斂、（3）環球晶自身為高波動矽晶圓循環，NAV 會雙向放大。上檔具吸引力但非極端。</span></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">中美晶市值 < 環球晶股權市值（控股折價存在）</div><div class="chart-sub">資料來源：TWSE、GiS SOTP</div><img class="chart-img " src="charts/chart_07_discount_bars.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資摘要</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">投資論點（一）｜ 多方論據（Bull Case）</h1>
+  <div class="callout green"><div class="callout-title">B1. 折價 < look-through NAV，安全邊際明確</div>
+    <ul><li>自身市值 1,478 億 < 環球晶 37% 股權市值 2,246 億；加本業+其他轉投資，Gross NAV 約 2,596 億，折價約 34%。</li>
+    <li>折價落台股控股股常態區（30-50%）偏低緣，若隨環球晶題材續收斂，中美晶漲幅可放大。</li></ul></div>
+  <div class="callout green"><div class="callout-title">B2. 環球晶 Micron 長約 = NAV 上行引擎</div>
+    <ul><li>10 年 LTA + US$0.5bn 策略融資 + 12" 需求承諾 200-300kwpm + 報價高 40-50%，是記憶體矽晶圓能見度罕見的長約背書。</li>
+    <li>進取方外資環球晶 TP 800→2,000；若環球晶朝 1,600+，中美晶 NAV 同步上修。</li></ul></div>
+  <div class="callout green"><div class="callout-title">B3. 矽晶圓寡占 + 徐秀蘭經營整合力</div>
+    <ul><li>環球晶為全球第三大矽晶圓（僅次信越、SUMCO），12" 寡占格局，具規模與客戶認證壁壘。</li>
+    <li>徐秀蘭兼掌兩家，集團戰略一致、資本配置與併購執行力（SunEdison 整合）獲市場肯定。</li></ul></div>
+  <div class="chart-wrap"><div class="chart-title">環球晶 Micron 長約 → 中美晶 NAV 上行引擎</div><div class="chart-sub">資料來源：公司公告、券商整理；GiS 彙編</div><img class="chart-img " src="charts/chart_14_micron.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資論點 · 多方</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">投資論點（二）｜ 空方論據與下行風險（Bear Case）</h1>
+  <div class="callout"><div class="callout-title">R1. NAV 隨環球晶雙向放大（核心風險）</div>
+    <ul><li>中美晶價值主體是環球晶股權；環球晶為高波動矽晶圓循環股（一年 333→1,600），一旦 12" 多頭不如預期、環球晶 de-rate，中美晶 NAV 同步縮水。</li>
+    <li>買中美晶 ≈ 帶折價的環球晶 Beta，下行同樣被放大。</li></ul></div>
+  <div class="callout"><div class="callout-title">R2. 本業太陽能續虧 + EPS 品質</div>
+    <ul><li>太陽能受中國過剩衝擊，營收/毛利承壓，拖累本業與集團獲利品質。</li>
+    <li>歸母 EPS 受環球晶權益法與少數股權干擾，「看 EPS」易誤判，須回歸 SOTP。</li></ul></div>
+  <div class="callout"><div class="callout-title">R3. 折價部分合理 + 已漲多</div>
+    <ul><li>控股折價本就反映流動性、治理與稅負摩擦，未必收斂；折價「應該存在」。</li>
+    <li>中美晶 60 日已 +83% 跟漲環球晶，折價自 48% 收斂至 34%，最甜蜜的折價修復可能已過。</li></ul></div>
+  <div class="chart-wrap"><div class="chart-title">NAV 折價走勢（隨環球晶大漲收斂至 34%）</div><div class="chart-sub">資料來源：GiS 估算</div><img class="chart-img " src="charts/chart_08_discount_trend.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資論點 · 空方</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div page"><div class="sec-num">壹</div><div class="sec-eyebrow">Group &amp; Business Model</div><div class="sec-line"></div><div class="sec-title">集團結構與商業模式</div><div class="sec-desc">多引擎控股集團 — 環球晶為皇冠資產、本業與其他轉投資、為何用 look-through NAV。</div></div>
+<div class="full-page page body-page">
+  <h1 class="ch">一、公司簡介與集團定位</h1>
+  <p>中美矽晶（Sino-American Silicon, SAS, 5483.TWO）成立於 1981 年、上櫃掛牌，董事長徐秀蘭。公司歷經從單一矽晶圓廠演進為多引擎控股集團的過程：2011 年將半導體矽晶圓事業分割成立環球晶（6488）獨立上櫃，此後透過環球晶進行國際併購（2016 SunEdison Semiconductor、2020-22 一度嘗試併購德商 Siltronic），奠定全球第三大矽晶圓地位。中美晶則保留控股母公司角色，並持有半導體材料、太陽能、藍寶石等本業。</p>
+  <div class="co-card"><div class="co-card-head navy"><span style="color:#fff;font-weight:800;font-size:15px">中美晶 5483.TWO ｜ 半導體業（控股）</span><span style="color:rgba(255,255,255,.8);font-size:12px">上櫃 · 董座徐秀蘭</span></div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">230.5</div><div class="co-metric-label">收盤（元）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">6.71</div><div class="co-metric-label">FY25 歸母 EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">~37%</div><div class="co-metric-label">持環球晶(GiS 估)</div></div>
+      <div class="co-metric"><div class="co-metric-val">1,478 億</div><div class="co-metric-label">市值</div></div>
+    </div>
+    <div class="co-body"><p style="margin:0">最大資產為環球晶股權（合併報表併入環球晶營收）；本業含半導體材料、太陽能矽晶圓/電池、藍寶石。因價值主體在轉投資，估值應採 SOTP / look-through NAV，而非單純本益比。</p></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">中美晶集團發展里程碑</div><div class="chart-sub">資料來源：公司年報；GiS 整理</div><img class="chart-img short" src="charts/chart_05_milestones.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 公司簡介</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">二、集團結構與商業模式</h1>
+  <p>中美晶 FY25 合併營收 782 億，其中環球晶約 606 億（78%），本業（半導體材料+太陽能+藍寶石）約 176 億。歸母淨利 43 億中，環球晶權益貢獻約 27 億（63%）為主體，本業約 16 億。<strong>這組數字說明：看懂中美晶要看 NAV，不是看合併 PE。</strong></p>
+  <div class="chart-grid">
+    <div class="chart-wrap" style="padding:12px"><div class="chart-title" style="font-size:12px">集團結構樹</div><img class="chart-img " src="charts/chart_03_group_structure.png"></div>
+    <div class="chart-wrap" style="padding:12px"><div class="chart-title" style="font-size:12px">FY25 合併營收結構</div><img class="chart-img " src="charts/chart_04_revenue_mix.png"></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">FY25 歸母淨利 43 億拆解（環球晶為主體）</div><div class="chart-sub">資料來源：MOPS、GiS 拆解</div><img class="chart-img short" src="charts/chart_09_profit_split.png"></div>
+  <blockquote><strong>GiS 核心觀點：</strong>中美晶是「持有一家上市子公司多數價值 + 若干本業」的控股結構。正確估值錨是 look-through NAV（子公司股權 mark-to-market + 本業 + 其他 - 折價），而非把權益法收益與少數股權混在一起的合併 EPS。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 集團結構</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">三、皇冠資產 — 環球晶 6488</h1>
+  <p>環球晶為全球第三大矽晶圓廠（僅次日商信越 Shin-Etsu、SUMCO），主攻 12" 矽晶圓，供應記憶體與邏輯晶圓廠。2026-07-09 與 Micron 簽署 10 年長期供應合約支持其美國擴產：Micron 提供 US$0.5bn 策略融資、隱含 200-300kwpm 的 12" 需求承諾、混合報價估較現價高 40-50%。這是矽晶圓產業罕見的長約能見度，強化 12" 記憶體上行週期。</p>
+  <div class="chart-wrap"><div class="chart-title">環球晶 EPS 復甦（12吋 矽晶圓循環回升）</div><div class="chart-sub">資料來源：MOPS、GiS 整理</div><img class="chart-img " src="charts/chart_11_gwc_eps.png"></div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>環球晶要點</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><td>全球地位</td><td class="num">矽晶圓全球第三 ~15% 市佔</td></tr>
+      <tr><td>FY25 EPS / 市值</td><td class="num">15.29 / 6,071 億（現價 1,270）</td></tr>
+      <tr><td>Micron 長約</td><td class="pos">10 年 LTA + US$0.5bn 融資 + 報價 +40-50%</td></tr>
+      <tr><td>進取方外資 TP</td><td class="pos">由 800 上調至 2,000（買進）</td></tr>
+    </tbody>
+  </table>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 環球晶</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">四、本業與管理層治理</h1>
+  <p>中美晶本業以半導體材料（小尺寸矽晶圓、磊晶）、太陽能（矽晶圓/電池，受中國過剩衝擊、毛利承壓）、藍寶石為主。本業獲利貢獻相對環球晶小，且太陽能為拖累項。管理層方面，徐秀蘭同時擔任中美晶與環球晶董事長，集團戰略一致、併購與資本配置執行力受市場肯定，但「一人兼兩家」也帶來治理與利益一致性的觀察點。</p>
+  <div class="chart-wrap"><div class="chart-title">太陽能本業疲弱（中國過剩，毛利承壓）</div><div class="chart-sub">資料來源：公司季報；GiS 估</div><img class="chart-img " src="charts/chart_15_solar.png"></div>
+  <blockquote><strong>GiS 觀點：</strong>本業（尤其太陽能）是估值折價「部分合理」的來源之一——它稀釋了純矽晶圓曝險的含金量。但半導體材料與藍寶石具週期回升空間，整體本業對 NAV 為淨正貢獻。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 本業與治理</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div page"><div class="sec-num">貳</div><div class="sec-eyebrow">Industry &amp; Competition</div><div class="sec-line"></div><div class="sec-title">產業與競爭格局</div><div class="sec-desc">矽晶圓全球寡占、12" 記憶體 TAM、太陽能過剩、控股折價的產業對照。</div></div>
+<div class="full-page page body-page">
+  <h1 class="ch">一、矽晶圓產業與 TAM</h1>
+  <p>矽晶圓是半導體最上游基板，全球高度寡占：信越、SUMCO、環球晶、Siltronic、SK Siltron 前五大合計逾八成。12" 為主流，受記憶體（HBM/DDR5）與先進邏輯驅動；Micron 等記憶體廠長約鎖量鎖價，反映 2026-28 供需趨緊。太陽能矽晶圓則因中國產能過剩而長期供過於求，是中美晶本業的逆風。</p>
+  <div class="chart-grid">
+    <div class="chart-wrap" style="padding:12px"><div class="chart-title" style="font-size:12px">全球矽晶圓市佔</div><img class="chart-img " src="charts/chart_12_wafer_share.png"></div>
+    <div class="chart-wrap" style="padding:12px"><div class="chart-title" style="font-size:12px">12吋 矽晶圓 TAM</div><img class="chart-img " src="charts/chart_13_tam.png"></div>
+  </div>
+  <blockquote><strong>GiS 觀點：</strong>矽晶圓的寡占結構與長約機制，使本輪 12" 上行的能見度優於一般記憶體循環。這是中美晶 NAV 的產業級順風，也是我們給予 OW（而非中立）的產業依據。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 產業與 TAM</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">二、競爭與控股折價對照</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>對手/對照</th><th>定位</th><th>與中美晶關係</th></tr></thead>
+    <tbody>
+      <tr><td>信越 Shin-Etsu（日）</td><td>矽晶圓全球第一</td><td class="neg">環球晶最大對手</td></tr>
+      <tr><td>SUMCO（日）</td><td>全球第二</td><td class="neg">環球晶對手</td></tr>
+      <tr><td>Siltronic（德）</td><td>全球第四</td><td>環球晶曾嘗試併購</td></tr>
+      <tr><td>SK Siltron（韓）</td><td>全球第五</td><td>對手</td></tr>
+      <tr><td>台股控股股（對照）</td><td>持股型公司</td><td>NAV 折價常態 30-50%</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap"><div class="chart-title">控股折價對照（中美晶 34% 落常態區偏低緣）</div><div class="chart-sub">資料來源：GiS 彙編</div><img class="chart-img " src="charts/chart_20_discount_peer.png"></div>
+  <blockquote><strong>GiS 判斷：</strong>矽晶圓競爭層次由環球晶承擔；對中美晶而言，真正的估值變數是「控股折價」相對台股控股股常態區的位置。目前 34% 落在區間偏低緣——意味折價收斂空間有限，這正是我們把 upside 設在 +10.6%（OW）而非更高的原因。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 競爭與折價對照</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div page"><div class="sec-num">參</div><div class="sec-eyebrow">Financials</div><div class="sec-line"></div><div class="sec-title">財務分析</div><div class="sec-desc">季度 EPS 拐點、與環球晶連動、獲利拆解、股利。</div></div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">一、財務概覽與季度趨勢</h1>
+  <p>中美晶 FY25 歸母 EPS 6.71（以 6.41 億股回推歸母淨利約 43 億；合併報表含少數股權的總淨利不可直接當歸母）。季度 EPS 隨矽晶圓循環回升：2024Q4 谷底 0.54，2026Q1 回到 1.83。獲利主體來自環球晶權益貢獻，本業與其他轉投資為輔。</p>
+  <div class="chart-grid">
+    <div class="chart-wrap" style="padding:12px"><div class="chart-title" style="font-size:12px">中美晶季度 EPS</div><img class="chart-img " src="charts/chart_10_eps_qtrly.png"></div>
+    <div class="chart-wrap" style="padding:12px"><div class="chart-title" style="font-size:12px">中美晶 vs 環球晶 EPS</div><img class="chart-img " src="charts/chart_02_eps_both.png"></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>年度</th><th style="text-align:right">歸母 EPS</th><th style="text-align:right">現金股利</th></tr></thead>
+    <tbody>
+      <tr><td>2023</td><td class="num">—</td><td class="num">11.37</td></tr>
+      <tr><td>2024</td><td class="num">~6.5</td><td class="num">8.80</td></tr>
+      <tr><td>2025</td><td class="num hi">6.71</td><td class="num">6.50</td></tr>
+      <tr><td>2026Q1</td><td class="num">1.83</td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：MOPS、公司年報；tw-stock-scanner DB 交叉驗證（已通過資料健檢）。EPS 為歸母；DB 合併 net_income 含少數股權，本報告以 EPS×股數回推歸母。</span>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 財務概覽</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">二、股價連動與獲利品質</h1>
+  <p>中美晶股價與環球晶高度連動（「母以子貴」），但因控股折價，漲幅通常小於環球晶本身。獲利品質須留意：歸母 EPS 混合了環球晶權益法收益、少數股權、本業盈虧與匯率——單看 EPS 會誤判，這也是我們堅持用 SOTP/NAV 的原因。</p>
+  <div class="chart-wrap"><div class="chart-title">中美晶 vs 環球晶股價連動（母以子貴，但折價存在）</div><div class="chart-sub">資料來源：TWSE、GiS</div><img class="chart-img " src="charts/chart_01_stock_vs_gwc.png"></div>
+  <blockquote><strong>GiS 觀點：</strong>把中美晶當「矽晶圓成長股」用 PE 定價會失真；把它當「持有環球晶的折價載體 + 本業」用 NAV 定價才正確。獲利品質的雜訊，正好是市場給予折價的原因之一。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 股價連動</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div page"><div class="sec-num">肆</div><div class="sec-eyebrow">Valuation</div><div class="sec-line"></div><div class="sec-title">估值分析</div><div class="sec-desc">SOTP/NAV（主）+ P/B 相對 + 三情境（折價×環球晶）→ 目標價 255、增加持股。</div></div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">一、SOTP / NAV 估值（主方法）</h1>
+  <p>控股公司估值應採 SOTP：將各項資產（上市子公司股權 mark-to-market、本業、其他轉投資）加總為 Gross look-through NAV，再扣控股折價。中美晶 Gross NAV 約 2,596 億，扣 37% 折價後目標權益值約 1,635 億，除以 6.41 億股 → 每股約 255。</p>
+  <div class="chart-wrap"><div class="chart-title">SOTP / NAV 拆解（目標權益值 ≈ 1,635 億 → 255 元/股）</div><div class="chart-sub">資料來源：TWSE、GiS SOTP 模型</div><img class="chart-img tall" src="charts/chart_06_sotp_waterfall.png"></div>
+  <blockquote><strong>GiS 判斷：</strong>SOTP 的兩個關鍵變數是「環球晶股價」與「控股折價」。折價 37% 為台股控股股常態中樞；環球晶採現價 1,270 mark-to-market（不預設其漲至外資 TP 2,000）。此為相對保守的中性錨。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · SOTP</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">二、敏感度與 P/B 交叉驗證</h1>
+  <p>SOTP 對「折價 × 環球晶股價」雙變數敏感。下表中心格（折價 37%、環球晶 1,270）對應每股約 255。P/B band 作為 holdco 的淨值錨交叉驗證：現價約 2.0x P/B，非歷史極端，支持估值未過度延伸。</p>
+  <div class="chart-wrap"><div class="chart-title">SOTP 敏感度（折價 × 環球晶價）中心 ≈ 255</div><div class="chart-sub">資料來源：GiS 模型</div><img class="chart-img tall" src="charts/chart_17_sotp_sensitivity.png"></div>
+  <blockquote><strong>讀表：</strong>若環球晶朝 1,600（外資看多路徑一部分）且折價維持 37%，中美晶 SOTP 升至約 300+；若環球晶回落至 1,000 且折價擴大至 43%，則跌至約 200。上下行皆被環球晶波動放大。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 敏感度</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">三、三情境與 P/B Band</h1>
+  <div class="chart-grid">
+    <div class="chart-wrap" style="padding:12px"><div class="chart-title" style="font-size:12px">三情境目標價</div><img class="chart-img " src="charts/chart_16_three_scenarios.png"></div>
+    <div class="chart-wrap" style="padding:12px"><div class="chart-title" style="font-size:12px">P/B Band（holdco 淨值錨）</div><img class="chart-img " src="charts/chart_19_pb_band.png"></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>情境（機率）</th><th>控股折價</th><th>環球晶假設</th><th style="text-align:right">中美晶 TP</th></tr></thead>
+    <tbody>
+      <tr><td>空方 Bear (25%)</td><td class="num">48%</td><td>環球晶回檔</td><td class="num">195</td></tr>
+      <tr style="background:#eef5f0!important"><td style="font-weight:800">基準 Base (50%)</td><td class="num">37%</td><td>環球晶持平 1,270</td><td class="num hi">255</td></tr>
+      <tr><td>多方 Bull (25%)</td><td class="num">27%</td><td>環球晶朝 1,600+</td><td class="num">320</td></tr>
+      <tr><td><strong>機率加權</strong></td><td>—</td><td>—</td><td class="num hi" style="font-weight:800">≈255</td></tr>
+    </tbody>
+  </table>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 三情境</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">四、綜合估值與評等結論</h1>
+  <div class="chart-wrap"><div class="chart-title">Football Field（現價位於估值區間下緣 → 折價機會）</div><div class="chart-sub">資料來源：GiS 模型</div><img class="chart-img tall" src="charts/chart_18_football_field.png"></div>
+  <div class="co-card"><div class="co-card-head" style="background:#b15a17"><span style="color:#fff;font-weight:800;font-size:15px">評等：增加持股（OVERWEIGHT）｜ 12M 目標價 NT$255 ｜ 上檔 +10.6%</span></div>
+    <div class="co-body"><p style="margin:0;font-size:12.5px"><strong>不是買進</strong>：折價收斂空間有限（34% 已落常態區偏低緣）、本業太陽能拖累、環球晶波動放大下行。<strong>不是中立</strong>：交易於 look-through NAV 折價提供安全邊際，加上環球晶 Micron 長約的 NAV 順風，SOTP 加權 +10.6% 落 OW。中美晶是「以折價參與 12" 矽晶圓大多頭」的合理載體。</p></div></div>
+  <div class="chart-wrap"><div class="chart-title">目標價對照</div><div class="chart-sub">資料來源：GiS</div><img class="chart-img short" src="charts/chart_21_target.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 估值結論</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div page"><div class="sec-num">伍</div><div class="sec-eyebrow">Risks &amp; Appendix</div><div class="sec-line"></div><div class="sec-title">風險與附錄</div><div class="sec-desc">風險矩陣、風險雷達、觀察點與資料來源。</div></div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">一、風險矩陣（雙向）</h1>
+  <div class="risk-matrix">
+    <div class="callout"><div class="callout-title">R1 ★ 環球晶波動放大 NAV（高/高）</div><p style="margin:0;font-size:12px">價值主體是環球晶股權；矽晶圓循環 de-rate 直接縮水 NAV，下行同被放大。</p></div>
+    <div class="callout"><div class="callout-title">R2 太陽能本業續虧（中高/中）</div><p style="margin:0;font-size:12px">中國過剩，毛利承壓，稀釋純矽晶圓含金量。</p></div>
+    <div class="callout"><div class="callout-title">R3 折價擴大（中/中高）</div><p style="margin:0;font-size:12px">控股折價本應存在，若市場風險偏好下降，折價可能重新擴大至 45-50%。</p></div>
+    <div class="callout"><div class="callout-title">R4 EPS 品質雜訊（中/中）</div><p style="margin:0;font-size:12px">權益法+少數股權+匯率使 EPS 失真，估值須回歸 SOTP。</p></div>
+    <div class="callout"><div class="callout-title">R5 已漲多（中/中）</div><p style="margin:0;font-size:12px">60 日 +83% 跟漲環球晶，甜蜜折價修復期可能已過。</p></div>
+    <div class="callout green"><div class="callout-title">上行 U1 ★ 環球晶朝 2,000（中/高）</div><p style="margin:0;font-size:12px">Micron 長約帶動 12" 大多頭 + 折價收斂 → NAV 與股價雙升。</p></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">風險雷達圖（5=最高）</div><div class="chart-sub">資料來源：GiS 評估</div><img class="chart-img short" src="charts/chart_22_risk_radar.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · 風險矩陣</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">二、再評價觀察點 &amp; 資料來源</h1>
+  <h2 class="ch">觸發再評價的觀察點</h2>
+  <ul>
+    <li><strong>環球晶股價與訂單</strong>：Micron 長約執行、其他記憶體廠是否跟進長約 → NAV 上行的直接驗證。</li>
+    <li><strong>控股折價</strong>：折價續收斂至 &lt;30% → 上調；擴大至 &gt;45% → 下調。</li>
+    <li><strong>太陽能本業</strong>：是否止血或進一步認列減損。</li>
+    <li><strong>持股比例</strong>：中美晶對環球晶持股是否因增減資變動（影響 NAV 基數）。</li>
+  </ul>
+  <h2 class="ch">資料來源</h2>
+  <p style="font-size:12.5px">MOPS 公開資訊觀測站、中美晶與環球晶年報與法說會（歷史 EPS 以公告值為準）；台灣證券交易所/櫃買中心（TWSE/TPEx）收盤價與月營收；tw-stock-scanner 內部資料庫（資料健檢 20 PASS / 1 WARN / 0 FAIL）；產業與券商研究（含外資：UBS 等）作共識交叉驗證，內文匿名化（進取方/保守方），本段具名列示；環球晶持股比例約 37% 為 GiS 依公開資訊估算。</p>
+  <blockquote style="font-size:12px"><strong>免責聲明：</strong>本報告由 Genesis International Capital（GiS）研究部以研究員身份、依估值方法論獨立撰寫，僅供研究參考，不構成投資建議。SOTP 之持股比例與控股折價含 GiS 估計成分，實際結果可能重大差異。© 2026 GiS。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · 資料來源</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+</body>
+</html>

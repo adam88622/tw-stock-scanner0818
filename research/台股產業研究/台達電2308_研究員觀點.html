@@ -1,0 +1,659 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>台達電 (2308) 首次覆蓋 — 買進 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:40px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:1px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:32px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:46px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:520px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:38px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:6px 0 16px}
+h2.ch{font-size:16.5px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:20px 0 11px}
+h3.ch{font-size:14.5px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 8px}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:12.5px;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 11px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 11px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:16px 0;overflow:hidden;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:15px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:5px 16px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge-sub{font-size:11px;color:rgba(255,255,255,.7)}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:13px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:16px 22px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:18px;margin:14px 0;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:12px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:15px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px 22px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.8px;font-weight:600;color:#1a2540;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:19px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:15px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12px;font-weight:800;margin-bottom:7px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:10.5px;opacity:.85;line-height:1.45}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:15px}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13.5px;font-weight:700;margin-bottom:7px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.3px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+p{margin:6px 0 10px;line-height:1.72}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+li{margin:3px 0;line-height:1.62}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:11px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0;line-height:1.6}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:5px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:15px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:7px}
+.callout.green .callout-title{color:#065f46}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:13px 56px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ═══ 封面 ═══ -->
+<div class="cover page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">AI 量化交易與相關應用產品開發</div></div>
+    </div>
+    <div class="cover-eyebrow">Initiating Coverage · 首次覆蓋深度報告</div>
+    <div class="cover-title">台達電 2308<br><em>從電源龍頭到「電網到晶片」AI 基礎設施平台</em></div>
+    <div class="cover-subtitle">Delta Electronics — AI Power, HVDC & Liquid Cooling Super-Cycle</div>
+    <div class="cover-tags">
+      <span class="ctag hl">AI 伺服器電源</span>
+      <span class="ctag hl">800V HVDC</span>
+      <span class="ctag hl">液冷 Sidecar</span>
+      <span class="ctag">DC/DC 模組</span>
+      <span class="ctag">SOFC 燃料電池</span>
+      <span class="ctag">SST 固態變壓器</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">買進</div><div class="cstat-label">GiS 評等</div></div>
+    <div class="cstat"><div class="cstat-num">$<em>2,660</em></div><div class="cstat-label">12M 目標價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>+15.7</em>%</div><div class="cstat-label">上檔空間</div></div>
+    <div class="cstat"><div class="cstat-num"><em>50</em>×</div><div class="cstat-label">FY27E 目標 PE</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 6 月 8 日</span>
+    <span>身份：研究員 · 估值方法論驅動 · 中立</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ═══ 執行摘要 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要 — 買進 (Buy)，12M 目標價 2,660 元</h1>
+
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">台達電子 Delta Electronics</div><div class="co-ticker">2308 TT · 電源及零組件 / AI 基礎設施</div></div>
+      <div class="co-badge"><span class="badge buy">買進 BUY</span><span class="badge-sub">上檔 +15.7%</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">2,300</div><div class="co-metric-label">參考股價 (06/05)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">2,660</div><div class="co-metric-label">12M 目標價</div></div>
+      <div class="co-metric"><div class="co-metric-val">43×</div><div class="co-metric-label">現價 FY27E PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+101%</div><div class="co-metric-label">2026Q1 EPS YoY</div></div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">37.0<em>%</em></div><div class="kpi-lbl">2026Q1 毛利率（創高）</div></div>
+    <div class="kpi"><div class="kpi-val">~40<em>%</em></div><div class="kpi-lbl">2026 AI 相關營收占比</div></div>
+    <div class="kpi gold"><div class="kpi-val">50–65<em>%</em></div><div class="kpi-lbl">AI 伺服器 PSU 市佔</div></div>
+    <div class="kpi green"><div class="kpi-val">+34<em>%</em></div><div class="kpi-lbl">營收 CAGR (26–28E)</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>AI 電源是結構性放量、非單一週期。</strong>2026Q1 營收僅季減 1%（過去淡季 −8~10%），毛利率 37%、營益率 17.8% 雙創高；AI PSU 由 5.5kW→12kW→18.3kW 推升每瓦 ASP（25–28 CAGR ~40%），AC/DC PSU 2026/27/28 年增 192%/165%/119%。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>HVDC / Power Rack 是 2027 後的第二成長曲線。</strong>800V HVDC 時程多次提前（2026H2 量產），整櫃 ASP 由 0.1→0.5 美元/W；Power Rack 營收（不含 PSU）由 2026 約 40 億 → 2027 約 890 億 → 2028 約 4,950 億，台達 power rack 市佔可維持 60%+。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>估值已部分反映、上檔取決於「超預期」。</strong>股價過去一年完成約 6 倍重評，現價 43× FY27E PE 位居同業之上。GiS 採 FY27E EPS 53.8 × 50× 得 TP 2,660（DCF 2,620 / Comps 2,650 交叉收斂），較券商共識（2,800–2,922）保守，反映高基期 de-rating 與 EV/自動化拖累風險。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">股價與 AI 重評（近一年 ~6 倍）</div>
+      <div class="chart-sub">資料來源：scanner.db / GiS 彙編</div>
+      <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chartPrice" style="display:block;width:100%;height:200px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">EPS 軌跡與毛利率上行</div>
+      <div class="chart-sub">實績 (A) / GiS 預估 (E)</div>
+      <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chartEPS" style="display:block;width:100%;height:200px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>執行摘要</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ═══ 投資論點 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">投資論點 — 多空對照</h1>
+  <p>台達電的投資爭點不在「AI 是否受惠」（已是共識），而在「成長能否超越已偏樂觀的市場預期、毛利率上行斜率能否延續、HVDC 時程是否如期」。以下並列多空關鍵。</p>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>▲ 多方論點（Bull）</h4>
+      <div class="risk-item"><strong>淡季鈍化 = 營運能見度提升。</strong>CAPEX 鎖定使季節性抹平，Q2 預期季增 >20%，獲利可預測性高。</div>
+      <div class="risk-item"><strong>產品 mix 結構性升級。</strong>DC/DC 模組 OPM 40%+、占比 2%→14%；高瓦數 PSU + HVDC 推升整體毛利率朝 40%+（樂觀 45%）。</div>
+      <div class="risk-item"><strong>整櫃級卡位難被取代。</strong>「電源+散熱整櫃」與 NVIDIA co-design，散熱廠缺電源、電源同業缺整櫃，護城河深。</div>
+      <div class="risk-item"><strong>長線選擇權。</strong>SOFC 燃料電池（Ceres 授權）+ SST + 微電網，對應 AI 2028 電力缺口的「表後發電」題材。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>▼ 空方論點（Bear）</h4>
+      <div class="risk-item"><strong>估值高基期。</strong>一年 6 倍重評後，43× FY27E PE 已領先同業，任何低於預期即觸發 de-rating。</div>
+      <div class="risk-item"><strong>HVDC 時程風險。</strong>美系 CSP 400V DVT 曾卡關、量產延後；Power Rack 的 2028 爆發數字（4,950 億）執行不確定性高。</div>
+      <div class="risk-item"><strong>液冷份額流失。</strong>Sidecar 由近獨供走向多供應商，未來成長更依賴總量而非份額。</div>
+      <div class="risk-item"><strong>拖累項與槓桿。</strong>EV 連 5 季虧損、自動化 2026Q1 盈餘 −77%；CAPEX 破 500 億押注 2029 需求，宏觀逆風放大固定成本。</div>
+    </div>
+  </div>
+
+  <h2 class="ch">事業群結構（2026Q1）— 獲利重心已轉向 AI 基礎設施</h2>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">2026Q1 營收結構</div>
+      <div class="chart-sub">電源 54% / 基設 32% / 自動化 9% / 交通 5%</div>
+      <div class="chart-container" style="height:185px;width:100%;position:relative"><canvas id="chartSegment" style="display:block;width:100%;height:185px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">AI 相關營收占比攀升</div>
+      <div class="chart-sub">伺服器電源 + 液冷</div>
+      <div class="chart-container" style="height:185px;width:100%;position:relative"><canvas id="chartAIrev" style="display:block;width:100%;height:185px"></canvas></div>
+    </div>
+  </div>
+  <blockquote><strong>GiS 判斷：</strong>2025 年基礎設施事業群（含液冷與資料中心方案）獲利暴增 +413%、營收 +82%，是估值重評的真正引擎；同時 EV 連虧、自動化衰退是被市場暫時忽略的「分母拖累」。AI 占比由 30%→40% 的同時，須留意非 AI 兩塊包袱對整體 ROE 的稀釋。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資論點</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ═══ 章節壹 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One · Company & Moat</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">公司與商業模式</div>
+  <div class="sec-desc">五十年電源龍頭的轉型路徑、四重護城河，以及在 AI 資料中心「供電 + 散熱」價值鏈的卡位。</div>
+</div>
+
+<!-- 公司 101 -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹、公司與護城河</h1>
+  <p>台達電（1971 成立、1988 上市）為全球最大交換式電源供應器與直流無刷風扇供應商，五十餘年由「電源零組件代工」轉型為「能源管理與智慧製造系統解決方案商」。三大事業群為電源及零組件、基礎設施、自動化，並以 Mobility（EV）為新引擎。全球員工逾 8 萬、研發逾 1 萬人，產能分布中國 45% / 泰國 30% / 台灣 10%+ / 其餘印度・斯洛伐克・美國。</p>
+
+  <h2 class="ch">四重護城河</h2>
+  <table>
+    <thead><tr><th>護城河</th><th>內容</th><th>對手難以複製之處</th></tr></thead>
+    <tbody>
+      <tr><td>技術整合</td><td>同時掌握功率轉換（AC/DC・DC/DC）＋散熱（風扇・液冷）＋系統設計</td><td>可提供「整櫃級」方案，非單一零組件</td></tr>
+      <tr><td>規模與良率</td><td>伺服器電源市佔約 50–65%、DC 風扇龍頭</td><td class="hi">規模效應＋長年良率累積</td></tr>
+      <tr><td>認證壁壘</td><td>伺服器・車用・電信級長期認證</td><td>導入後難替換，切換成本高</td></tr>
+      <tr><td>co-design</td><td>與 AI 晶片龍頭協同設計 800V HVDC / Sidecar / SST</td><td class="hi">設計階段即納入，後進難中途切入</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">在 AI 資料中心價值鏈的位置</h2>
+  <p>機櫃功耗由傳統 10–40kW → GB200/300 的 120–140kW → Vera Rubin 的 600kW–1.5MW，指數級放大「供電 + 散熱」價值量。台達電同時供應 power shelf / power rack（800V HVDC，NVIDIA 660kW Reference Design 主要供應商）與 260kW Liquid-to-Air Sidecar 液冷，並切入 BBU 與 SST。其獨特性在於「電源 + 散熱整櫃供應」——散熱專業廠缺電源、電源同業缺整櫃與散熱、系統商缺垂直整合成本。</p>
+
+  <div class="chart-wrap">
+    <div class="chart-title">AI 伺服器電源市佔對比（示意）</div>
+    <div class="chart-sub">資料來源：產業估計、GiS 彙編</div>
+    <div class="chart-container" style="height:185px;width:100%;position:relative"><canvas id="chartShare" style="display:block;width:100%;height:185px"></canvas></div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 公司與護城河</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 競爭分析 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹（續）、競爭格局</h1>
+  <table style="font-size:11.8px">
+    <thead><tr><th>對手</th><th>代號</th><th>定位</th><th>與台達電的關係</th></tr></thead>
+    <tbody>
+      <tr><td>光寶科</td><td>2301</td><td>伺服器電源直接對手</td><td>AI 電源/BBU 競爭，整櫃與散熱布局不及台達</td></tr>
+      <tr><td>Vertiv</td><td>VRT US</td><td>資料中心電力+散熱系統龍頭</td><td>整櫃供電+散熱正面競爭，強在系統與服務網絡</td></tr>
+      <tr><td>群電</td><td>6412</td><td>台系電源同業</td><td>規模/技術層級顯著小，多為中性評等</td></tr>
+      <tr><td>康舒</td><td>6282</td><td>電源同業（華碩集團）</td><td>高階 HVDC/整櫃卡位不及</td></tr>
+      <tr><td>奇鋐 / 雙鴻</td><td>3017/3324</td><td>AI 液冷散熱（水冷板/CDU）</td><td>部分競爭、部分生態互補（台達強整櫃 Sidecar）</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">產品線重要性排序</h2>
+  <table>
+    <thead><tr><th>產品類別</th><th>2025–26 角色</th><th>2027 後角色</th><th>重要程度</th></tr></thead>
+    <tbody>
+      <tr><td>AI PSU (5.5–18.3kW)</td><td>成長與獲利主軸</td><td>高功率化、ASP/瓦提升</td><td class="hi">極高</td></tr>
+      <tr><td>DC/DC 模組</td><td>比重快拉、OPM 40%+</td><td>高毛利長期金牛</td><td class="hi">極高</td></tr>
+      <tr><td>Power Rack / HVDC</td><td>2026 小量、拉高 ASP</td><td>2027–30 成長主驅動</td><td class="hi">極高</td></tr>
+      <tr><td>液冷（Sidecar/CDU）</td><td>占比 ~9–13%</td><td>與整櫃綁定放大案量</td><td>高</td></tr>
+      <tr><td>SOFC / SST / 微電網</td><td>研發投入期</td><td>「電網到晶片」選擇權</td><td>中（長線高）</td></tr>
+      <tr><td>EV / 自動化</td><td>虧損 / 衰退拖累</td><td>控虧 / Retrofit 回穩</td><td class="neg">低–中</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 核心觀點：</strong>台達電的「From Grid to Chip」縱向整合（電網接入→微電網→800VDC→液冷→IT 機櫃）使其在未來 3–5 年難被單一零組件對手取代；但這也意味成長路徑高度綁定單一終端（AI 資料中心 CAPEX），是高 beta 的一體兩面。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 競爭格局</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ═══ 章節貳 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two · AI Growth Engine</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">AI 成長引擎拆解</div>
+  <div class="sec-desc">AI PSU、DC/DC、HVDC Power Rack 與液冷的營收軌跡、ASP 躍升邏輯與時程風險。</div>
+</div>
+
+<!-- AI 電源 -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳、AI 電源產品線與 ASP 躍升</h1>
+
+  <h2 class="ch">PSU 規格演進時間軸</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">GB200/300</div><div class="tl-spec">5.5 kW</div><div class="tl-tech">33kW power shelf 6–8 層</div></div>
+    <div class="tl-item active"><div class="tl-year">2026 ← 現在</div><div class="tl-spec">11–12 kW</div><div class="tl-tech">Vera Rubin；每瓦 BOM +43%</div></div>
+    <div class="tl-item next"><div class="tl-year">2026H2–2027</div><div class="tl-spec">18.3 kW</div><div class="tl-tech">高瓦數 PSU 放量</div></div>
+    <div class="tl-item"><div class="tl-year">2027+</div><div class="tl-spec">800V HVDC</div><div class="tl-tech">整櫃 0.1→0.5 美元/W</div></div>
+  </div>
+
+  <h2 class="ch">營收 by 產品線（堆疊，NT$ 億）</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">產品線營收結構演進 FY2025–FY2028E</div>
+    <div class="chart-sub">資料來源：公司法說、外資預估彙編、GiS 模型（E）</div>
+    <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartProduct" style="display:block;width:100%;height:230px"></canvas></div>
+  </div>
+
+  <table style="font-size:11.8px">
+    <thead><tr><th>產品線</th><th class="num">2025 占比</th><th class="num">2026E 占比</th><th>營收 YoY (26/27/28E)</th><th>毛利特性</th></tr></thead>
+    <tbody>
+      <tr><td>AC/DC PSU</td><td class="num">~8%</td><td class="num">14%</td><td class="pos">+192% / +165% / +119%</td><td>高於均值；ASP/瓦 CAGR ~40%</td></tr>
+      <tr><td>DC/DC 模組</td><td class="num">~2%</td><td class="num">拉升</td><td class="pos">CAGR +142%</td><td class="hi">OPM 40%+（最高）</td></tr>
+      <tr><td>液冷</td><td class="num">~9%</td><td class="num">~13%</td><td class="pos">+50~60%（26E）</td><td>略低於高階電源</td></tr>
+      <tr><td>伺服器電源合計</td><td class="num">~24%</td><td class="num">&gt;30%</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · AI 電源</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- HVDC + 液冷 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳（續）、HVDC Power Rack 與液冷</h1>
+
+  <h2 class="ch">Power Rack 營收躍升（不含 PSU，NT$ 億，對數軸）</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">HVDC Power Rack 營收 40 → 890 → 4,950 億</div>
+    <div class="chart-sub">資料來源：外資預估彙編、GiS 整理；2028 數字屬樂觀情境主驅動</div>
+    <div class="chart-container" style="height:170px;width:100%;position:relative"><canvas id="chartPowerRack" style="display:block;width:100%;height:170px"></canvas></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="callout">
+      <div class="callout-title">時程：多次「提前」</div>
+      <ul>
+        <li>2026 初：800VDC 原估 2027 主貢獻</li>
+        <li>2026 Q1：美系 CSP 400V DVT 卡關，部分延至 Q4</li>
+        <li><strong>2026 Q2–Q3：外資指 800V「近期量產」，提前約 1 年</strong></li>
+        <li>滲透率 2027–30：11% → 60%；台達 power rack 市佔 60%+</li>
+      </ul>
+    </div>
+    <div class="callout green">
+      <div class="callout-title">液冷：Sidecar → L2L / CDU</div>
+      <ul>
+        <li>占比 2024 &lt;1% → 2025 ~9% → 2025Q4 一度 17%</li>
+        <li>2026Q1 認列 ~9%，全年估年增 50–60%</li>
+        <li><strong>主力仍 L2A Sidecar；CDU 2025Q4 小量出貨</strong></li>
+        <li>份額由近獨供 → 多供應商，倚賴總量擴張</li>
+      </ul>
+    </div>
+  </div>
+
+  <blockquote><strong>GiS 判斷：</strong>800V HVDC 不是「PSU 替換」而是「整櫃重組」（含 PDU、匯流排、斷路器、電容櫃、液冷整合），單位功率 ASP 由 0.1 跳升至 0.5 美元/W，是 2027 後價值量倍增的核心。但 Power Rack 2028 年 4,950 億的外資預估隱含營收近 21,500 億，屬樂觀情境上緣，GiS Base 僅部分計入。液冷占比由 2024 &lt;1% 升至 2026 約 13%，全年估年增 50–60%，惟份額由近獨供走向多供應商，未來成長更依賴市場總量擴張。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · HVDC 與液冷</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ═══ 章節參 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three · Financials</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">財務分析與預估</div>
+  <div class="sec-desc">歷史財務、季度軌跡的淡季鈍化與毛利率躍升，以及 FY2026–2028E 三情境損益模型。</div>
+</div>
+
+<!-- 歷史 + 季度 -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、歷史財務與季度軌跡</h1>
+
+  <table>
+    <thead><tr><th>年度</th><th class="num">營收(億)</th><th class="num">毛利率</th><th class="num">營益率</th><th class="num">EPS(元)</th><th class="num">YoY</th></tr></thead>
+    <tbody>
+      <tr><td>FY2023A</td><td class="num">4,012</td><td class="num">~29%</td><td class="num">~11%</td><td class="num">~13.2</td><td class="num">—</td></tr>
+      <tr><td>FY2024A</td><td class="num">4,210</td><td class="num">~30%</td><td class="num">~11%</td><td class="num">13.56</td><td class="num pos">+3%</td></tr>
+      <tr><td>FY2025A</td><td class="num">5,549</td><td class="num">34.3%</td><td class="num">15.1%</td><td class="num hi">23.14</td><td class="num pos">+70.6%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">季度軌跡 — 淡季鈍化 + 毛利率躍升</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">季營收 YoY 與毛利率（近 9 季）</div>
+    <div class="chart-sub">資料來源：MOPS / 公司季報</div>
+    <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="chartQuarter" style="display:block;width:100%;height:210px"></canvas></div>
+  </div>
+
+  <table style="font-size:11.8px">
+    <thead><tr><th>季度</th><th class="num">營收(億)</th><th class="num">YoY</th><th class="num">QoQ</th><th class="num">毛利率</th><th class="num">EPS</th></tr></thead>
+    <tbody>
+      <tr><td>2025Q3</td><td class="num">1,503</td><td class="num pos">+34%</td><td class="num">+21%</td><td class="num">~33%</td><td class="num">7.16</td></tr>
+      <tr><td>2025Q4</td><td class="num">1,616</td><td class="num pos">+42%</td><td class="num">+8%</td><td class="num">34.6%</td><td class="num">6.67</td></tr>
+      <tr><td>2026Q1</td><td class="num hi">1,594</td><td class="num pos">+34%</td><td class="num">−1%</td><td class="num hi">37.0%</td><td class="num hi">7.91</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 判斷：</strong>2026Q1 季減僅 1%（過去 −8~10%）印證 AI CAPEX 鎖定後的季節性鈍化；毛利率 37% 含 0.7% EV 一次性賠償，正常化後 >36% 仍創高。Q2 管理層預期季增 >20%，全年動能無虞。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 歷史財務</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 三情境 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參（續）、FY2026–2028E 三情境預估</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">三情境 EPS 預估（元）</div>
+    <div class="chart-sub">機率：樂觀 25% / 基礎 50% / 保守 25%</div>
+    <div class="chart-container" style="height:215px;width:100%;position:relative"><canvas id="chartScenario" style="display:block;width:100%;height:215px"></canvas></div>
+  </div>
+
+  <table style="font-size:12px">
+    <thead><tr><th>項目</th><th class="num">FY2025A</th><th class="num">FY2026E</th><th class="num">FY2027E</th><th class="num">FY2028E</th></tr></thead>
+    <tbody>
+      <tr><td>營收(億)</td><td class="num">5,549</td><td class="num">7,300</td><td class="num">9,800</td><td class="num">13,200</td></tr>
+      <tr><td>YoY</td><td class="num pos">+31.8%</td><td class="num pos">+31.6%</td><td class="num pos">+34.2%</td><td class="num pos">+34.7%</td></tr>
+      <tr><td>毛利率</td><td class="num">34.3%</td><td class="num">37.5%</td><td class="num">39.5%</td><td class="num hi">41.0%</td></tr>
+      <tr><td>營益率</td><td class="num">15.1%</td><td class="num">18.2%</td><td class="num">19.8%</td><td class="num">21.0%</td></tr>
+      <tr><td>EPS(元)·Base</td><td class="num">23.14</td><td class="num hi">38.8</td><td class="num hi">53.8</td><td class="num hi">73.0</td></tr>
+      <tr><td>ROE</td><td class="num">~24%</td><td class="num">~32%</td><td class="num">~40%</td><td class="num">~50%+</td></tr>
+    </tbody>
+  </table>
+
+  <table style="font-size:11.8px">
+    <thead><tr><th>情境</th><th class="num">FY26E EPS</th><th class="num">FY27E EPS</th><th class="num">FY28E EPS</th><th class="num">機率</th></tr></thead>
+    <tbody>
+      <tr><td>樂觀 Bull</td><td class="num">42.0</td><td class="num">62.0</td><td class="num">90.0</td><td class="num">25%</td></tr>
+      <tr><td>基礎 Base</td><td class="num hi">38.8</td><td class="num hi">53.8</td><td class="num hi">73.0</td><td class="num">50%</td></tr>
+      <tr><td>保守 Bear</td><td class="num">36.0</td><td class="num">44.0</td><td class="num">52.0</td><td class="num">25%</td></tr>
+    </tbody>
+  </table>
+  <span class="src">交叉驗證：保守方券商 FY2026E EPS 38.77 ≈ 本模型 Base 38.8；進取方上修 EPS 8.8% ≈ Bull。</span>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 三情境</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ═══ 章節肆 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Section Four · Valuation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">估值分析</div>
+  <div class="sec-desc">PE × FY27E EPS 為主錨、DCF 與 Comps 交叉，Football Field 收斂與 5×5 敏感度，導出 12M 目標價與評等。</div>
+</div>
+
+<!-- 估值 -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆、估值 — PE / DCF / Comps</h1>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">Football Field — 綜合估值區間</div>
+      <div class="chart-sub">三法中心收斂於 2,620–2,660</div>
+      <div class="chart-container" style="height:195px;width:100%;position:relative"><canvas id="chartFootball" style="display:block;width:100%;height:195px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Comps — 成長 vs Forward PE</div>
+      <div class="chart-sub">台達溢價有成長/毛利支撐</div>
+      <div class="chart-container" style="height:195px;width:100%;position:relative"><canvas id="chartComps" style="display:block;width:100%;height:195px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">PE 三情境目標價（PE × FY2027E EPS）</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>情境</th><th class="num">FY27E EPS</th><th class="num">Target PE</th><th class="num">目標價</th><th class="num">機率</th></tr></thead>
+    <tbody>
+      <tr><td>樂觀 Bull</td><td class="num">62.0</td><td class="num">55×</td><td class="num">3,410</td><td class="num">25%</td></tr>
+      <tr><td>基礎 Base</td><td class="num">53.8</td><td class="num">50×</td><td class="num hi">2,690</td><td class="num">50%</td></tr>
+      <tr><td>保守 Bear</td><td class="num">44.0</td><td class="num">42×</td><td class="num">1,848</td><td class="num">25%</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">機率加權</td><td class="num">—</td><td class="num">—</td><td class="num hi" style="color:#00875a">2,660</td><td class="num">100%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <div class="callout-title">DCF 交叉驗證</div>
+    WACC 8.5%（Ke 8.8%、β 1.2）、永續成長 g 3.0%；5 年 Unlevered FCF 折現 + 終值 → 每股中心值約 <strong>2,620 元</strong>，與 PE 加權 2,660 差異 &lt;2%。CAPEX 高峰（FY26–27）壓抑近期 FCF，使 DCF 對 2028 後放量敏感。
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 估值</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- 敏感度 + 結論 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆（續）、5×5 敏感度與評等結論</h1>
+
+  <h2 class="ch">敏感度（PE × FY2027E EPS，中心格 = 目標價）</h2>
+  <table style="font-size:12px;text-align:center">
+    <thead><tr><th>EPS↓ / PE→</th><th class="num">44×</th><th class="num">47×</th><th class="num">50×</th><th class="num">53×</th><th class="num">56×</th></tr></thead>
+    <tbody>
+      <tr><td>46.0</td><td class="num">2,024</td><td class="num">2,162</td><td class="num">2,300</td><td class="num">2,438</td><td class="num">2,576</td></tr>
+      <tr><td>50.0</td><td class="num">2,200</td><td class="num">2,350</td><td class="num">2,500</td><td class="num">2,650</td><td class="num">2,800</td></tr>
+      <tr><td style="font-weight:800">53.8</td><td class="num">2,367</td><td class="num">2,529</td><td class="num hi">2,690</td><td class="num">2,851</td><td class="num">3,013</td></tr>
+      <tr><td>58.0</td><td class="num">2,552</td><td class="num">2,726</td><td class="num">2,900</td><td class="num">3,074</td><td class="num">3,248</td></tr>
+      <tr><td>62.0</td><td class="num">2,728</td><td class="num">2,914</td><td class="num">3,100</td><td class="num">3,286</td><td class="num">3,472</td></tr>
+    </tbody>
+  </table>
+  <span class="src">EPS 每 ±4 元 ≈ TP ±200 元；PE 每 ±3× ≈ TP ±160 元。EPS（量+ASP+毛利）影響略大於 PE（情緒）。</span>
+
+  <h2 class="ch">採用結論</h2>
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">12M 目標價 2,660 元</div><div class="co-ticker">FY27E EPS 53.8 × 50× · DCF 2,620 / Comps 2,650 交叉</div></div>
+      <div class="co-badge"><span class="badge buy">買進 BUY</span><span class="badge-sub">上檔 +15.7%</span></div>
+    </div>
+    <div class="co-body">
+      <p style="margin:0">加權 TP 2,660 / 現價 2,300 = <strong>+15.7% &gt; 15% → 買進</strong>（§4.3，不主觀降級）。GiS 較券商共識（進取方 2,922 / 保守方 2,800）更保守：Target PE 取 50× 反映高基期 de-rating 與 EV/自動化拖累；Power Rack 2028 爆發數字僅部分計入 Base，留作 Bull upside。</p>
+    </div>
+  </div>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>維持 Buy 的條件</h4>
+      <div class="risk-item">Q2–Q3 營收季增 &gt;20%</div>
+      <div class="risk-item">毛利率守住 37%+</div>
+      <div class="risk-item">HVDC 2026H2 量產落地</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下修 OW/N 的訊號</h4>
+      <div class="risk-item">HVDC 量產時程再延</div>
+      <div class="risk-item">液冷份額流失加速 / 毛利率回落 &lt;35%</div>
+      <div class="risk-item">CSP CAPEX guidance 下修</div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 敏感度與結論</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ═══ 章節伍 風險 + 來源 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍、風險矩陣與資料來源</h1>
+
+  <h2 class="ch">風險矩陣</h2>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>產業 / 公司風險</h4>
+      <div class="risk-item"><strong>AI CAPEX 週期性（高）：</strong>營收綁定 CSP/AI 晶片龍頭資本支出，消化期將高 beta 波動。</div>
+      <div class="risk-item"><strong>架構轉換時點/份額（中高）：</strong>800V vs ±400V、HVDC 時程與份額非確定。</div>
+      <div class="risk-item"><strong>客戶集中度（中高）：</strong>AI 營收集中少數客戶。</div>
+      <div class="risk-item"><strong>新事業初期虧損（中）：</strong>EV/ESS/SOFC/SST 投入大、回收慢。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>財務 / 估值風險</h4>
+      <div class="risk-item"><strong>毛利率波動（中）：</strong>SiC/GaN、銅鋁原料 + 產品 mix。</div>
+      <div class="risk-item"><strong>CAPEX 與 FCF（中）：</strong>破 500 億押注 2029，FCF 落後獲利。</div>
+      <div class="risk-item"><strong>高基期 de-rating（高）：</strong>一年 6 倍重評，估值已偏高。</div>
+      <div class="risk-item"><strong>預期落差（中高）：</strong>共識偏樂觀，僅符合則上檔有限。</div>
+    </div>
+  </div>
+
+  <h2 class="ch">資料來源</h2>
+  <p style="font-size:12.5px">本報告財務數據來源：公開資訊觀測站（MOPS）合併財報、台達電 2026-05-04 第一季法說會、月營收公告、scanner.db 量化資料庫。產業與預估數據參考過去 7 天券商研究報告（含 Daiwa、群益投顧、國泰證期研究部等）與優分析整理之外資預估，內文比較觀點以「保守方 / 進取方 / 外資 / 法人」匿名化處理。</p>
+  <p style="font-size:12.5px">EPS 歷史值採 MOPS / 公司公告為準（§7.6），未採用 yfinance。股價為 2026-06-05 收盤 2,300 元（環境內部資料庫）。三情境與目標價為 GiS 自有模型推導。</p>
+
+  <blockquote style="font-size:12px">本報告由 Genesis International Capital 研究部（研究員身份）製作，採估值方法論驅動、中立立場、12 個月目標價框架。內容僅供研究參考，不構成任何投資要約或建議。投資人應審慎評估自身風險承受度。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · 風險與來源</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<script>
+const NAVY='#0d1b3e', TEAL='#00c896', BLUE='#1a3a6e', GOLD='#d97706', GREY='#94a3b8', RED='#e74c3c';
+Chart.defaults.font.family="'PingFang TC','Microsoft JhengHei',sans-serif";
+Chart.defaults.font.size=11;
+Chart.defaults.plugins.legend.labels.boxWidth=12;
+const noGrid={grid:{display:false}};
+
+// 股價歷史
+new Chart(chartPrice,{type:'line',data:{labels:['25/06','25/08','25/10','25/12','26/02','26/04','26/06'],datasets:[{label:'股價(元)',data:[390,560,820,1180,1750,2380,2300],borderColor:TEAL,backgroundColor:'rgba(0,200,150,.12)',fill:true,tension:.35,pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:noGrid,y:{beginAtZero:false}}}});
+
+// EPS + 毛利率
+new Chart(chartEPS,{data:{labels:['FY24A','FY25A','FY26E','FY27E','FY28E'],datasets:[{type:'bar',label:'EPS(元)',data:[13.56,23.14,38.8,53.8,73.0],backgroundColor:NAVY,yAxisID:'y',borderRadius:3},{type:'line',label:'毛利率(%)',data:[30,34.3,37.5,39.5,41.0],borderColor:GOLD,backgroundColor:GOLD,yAxisID:'y1',tension:.3,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:noGrid,y:{position:'left',title:{display:true,text:'EPS'}},y1:{position:'right',grid:{display:false},min:25,max:45,title:{display:true,text:'毛利率%'}}}}});
+
+// 事業群 doughnut
+new Chart(chartSegment,{type:'doughnut',data:{labels:['電源及零組件 54%','基礎設施 32%','自動化 9%','交通/EV 5%'],datasets:[{data:[54,32,9,5],backgroundColor:[NAVY,TEAL,GOLD,GREY]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right'}}}});
+
+// AI 占比
+new Chart(chartAIrev,{type:'bar',data:{labels:['2024','2025','2026E'],datasets:[{label:'AI 相關營收占比(%)',data:[18,30,40],backgroundColor:TEAL,borderRadius:3},{label:'伺服器電源占比(%)',data:[14,24,31],backgroundColor:NAVY,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:noGrid,y:{beginAtZero:true,max:50}}}});
+
+// 市佔
+new Chart(chartShare,{type:'bar',indexAxis:'y',data:{labels:['台達電','光寶科','群電','其他'],datasets:[{label:'AI 伺服器 PSU 市佔(%)',data:[60,18,8,14],backgroundColor:[TEAL,BLUE,GREY,'#cbd5e1'],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:noGrid,x:{beginAtZero:true,max:70}}}});
+
+// 產品線堆疊
+new Chart(chartProduct,{type:'bar',data:{labels:['FY2025','FY2026E','FY2027E','FY2028E'],datasets:[
+{label:'AC/DC PSU',data:[440,1022,2700,5900],backgroundColor:TEAL},
+{label:'DC/DC 模組',data:[110,300,800,1850],backgroundColor:'#00a878'},
+{label:'Power Rack/HVDC',data:[40,40,890,3050],backgroundColor:NAVY},
+{label:'液冷',data:[500,950,1450,2000],backgroundColor:BLUE},
+{label:'其他(電源/基設/自動化/EV)',data:[4459,4988,3960,400+0],backgroundColor:GREY}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true,...noGrid},y:{stacked:true,beginAtZero:true,title:{display:true,text:'NT$ 億'}}}}});
+
+// Power Rack log
+new Chart(chartPowerRack,{type:'bar',data:{labels:['2026E','2027E','2028E'],datasets:[{label:'Power Rack 營收(億)',data:[40,890,4950],backgroundColor:[GREY,BLUE,NAVY],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:noGrid,y:{type:'logarithmic',title:{display:true,text:'NT$ 億 (log)'}}}}});
+
+// 季營收 YoY + 毛利率
+new Chart(chartQuarter,{data:{labels:['24Q1','24Q3','25Q1','25Q3','25Q4','26Q1'],datasets:[{type:'bar',label:'營收 YoY(%)',data:[null,null,30,34,42,34],backgroundColor:NAVY,yAxisID:'y',borderRadius:3},{type:'line',label:'毛利率(%)',data:[27,29,31,33,34.6,37],borderColor:GOLD,backgroundColor:GOLD,yAxisID:'y1',tension:.3,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:noGrid,y:{position:'left',title:{display:true,text:'YoY%'}},y1:{position:'right',grid:{display:false},min:20,max:40,title:{display:true,text:'毛利率%'}}}}});
+
+// 三情境 EPS
+new Chart(chartScenario,{type:'bar',data:{labels:['FY2026E','FY2027E','FY2028E'],datasets:[
+{label:'樂觀',data:[42,62,90],backgroundColor:TEAL,borderRadius:3},
+{label:'基礎',data:[38.8,53.8,73],backgroundColor:NAVY,borderRadius:3},
+{label:'保守',data:[36,44,52],backgroundColor:GREY,borderRadius:3}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{x:noGrid,y:{beginAtZero:true,title:{display:true,text:'EPS(元)'}}}}});
+
+// Football field (floating bar)
+new Chart(chartFootball,{type:'bar',indexAxis:'y',data:{labels:['PE 三情境','DCF','Comps','綜合收斂'],datasets:[{label:'估值區間',data:[[1848,3410],[2400,2820],[2300,2950],[2350,2950]],backgroundColor:['#cbd5e1',BLUE,'#7c93b8',TEAL],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw[0]+' – '+c.raw[1]}}},scales:{y:noGrid,x:{beginAtZero:false,min:1500,max:3600,title:{display:true,text:'股價(元)；虛線=TP 2,660'}}}}});
+
+// Comps scatter
+new Chart(chartComps,{type:'scatter',data:{datasets:[
+{label:'台達電',data:[{x:34,y:43}],backgroundColor:TEAL,pointRadius:8},
+{label:'同業',data:[{x:25,y:38},{x:18,y:22},{x:12,y:18},{x:10,y:16},{x:30,y:28}],backgroundColor:BLUE,pointRadius:5}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{title:{display:true,text:'營收成長(%)'},...noGrid},y:{title:{display:true,text:'Forward PE(×)'},beginAtZero:true}}}});
+</script>
+</body>
+</html>

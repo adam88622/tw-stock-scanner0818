@@ -1,0 +1,841 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>精材科技 3374 首次覆蓋 | GiS 研究員觀點</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:18px 0 14px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:20px 0 11px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:15px 0 8px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 11px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 11px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.wine{background:#5c1a1a}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.sell{background:#3aa56e;color:#fff}
+.badge-px{font-size:11px;color:rgba(255,255,255,.7)}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:16px 22px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:18px;margin:14px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:12px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.red{background:linear-gradient(135deg,#7b1d1d,#c0392b)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.75;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14px;font-weight:700;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.55}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:16px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12.5px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:10.5px;opacity:.85;line-height:1.45}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:14px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13.5px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+p{margin:6px 0 10px;line-height:1.7}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+li{margin:4px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:11px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:20px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:6px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.red{border-color:#e74c3c;background:#fdf0ef}
+.callout-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+.callout.red .callout-title{color:#7b2020}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:13px 56px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI 量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Initiating Coverage · Research Analyst · 2026.06.29</div>
+    <div class="cover-title">精材科技 3374<br><em>從感測封裝到台積電 AI 測試供應鏈</em></div>
+    <div class="cover-subtitle">XinTec — TSMC's Mid-End Test &amp; 12" WLP Partner in the AI Era</div>
+    <div class="cover-tags">
+      <span class="ctag hl">晶圓測試 CP/FT/SLT</span>
+      <span class="ctag hl">12 吋 CSP / 晶背銅</span>
+      <span class="ctag">台積電持股 41%</span>
+      <span class="ctag">轉型題材</span>
+      <span class="ctag">估值預支</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">減碼 <em>UW</em></div><div class="cstat-label">投資評等</div></div>
+    <div class="cstat"><div class="cstat-num">$<em>260</em></div><div class="cstat-label">12M 目標價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>−7.8</em>%</div><div class="cstat-label">潛在空間（現價 282）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>45</em>x</div><div class="cstat-label">FY26F 本益比</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 6 月 29 日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 投資摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資摘要 — 故事是真的，但價格跑在前面</h1>
+
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div><div class="co-name">精材科技 XinTec</div><div class="co-ticker">3374.TWO · 半導體封測 · 上櫃</div></div>
+      <div class="co-badge"><span class="badge sell">減碼 UW</span><span class="badge-px">TP NT$260 · 現價 282</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">NT$260</div><div class="co-metric-label">12M 目標價</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">−7.8%</div><div class="co-metric-label">潛在空間</div></div>
+      <div class="co-metric"><div class="co-metric-val">35x</div><div class="co-metric-label">目標本益比 (FY27F)</div></div>
+      <div class="co-metric"><div class="co-metric-val">0.9%</div><div class="co-metric-label">現金殖利率</div></div>
+    </div>
+    <div class="co-body">
+      <p>精材是台積電集團封裝中段（Mid-End）成員，正從「iPhone 影像感測器（CIS）／DOE 3D 感測封裝廠」轉型為「台積電 AI 晶片 12 吋測試（CP/FT/SLT）＋高階晶圓級封裝（WLP/CSP/晶背銅）夥伴」。<strong>轉型方向真實且有結構性紅利</strong>，但<strong>股價一年內上漲逾 1 倍（129.5→312）、forward PE 衝上約 45 倍</strong>，已大幅領先 2026 下半年折舊高原與 12 吋實質貢獻落點（2027）之間的空窗。我們以加權目標價 NT$260 首評<strong>減碼（UW）</strong>。</p>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">+78%</div><div class="kpi-lbl">2025 測試營收 YoY</div></div>
+    <div class="kpi red"><div class="kpi-val">27.4%</div><div class="kpi-lbl">2025 毛利率 (從 35.3%)</div></div>
+    <div class="kpi gold"><div class="kpi-val">+30~40%</div><div class="kpi-lbl">2026F 折舊 YoY</div></div>
+    <div class="kpi"><div class="kpi-val">~90%</div><div class="kpi-lbl">前 2 大客戶營收占比</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>業務重心已質變：測試 &gt; 封裝。</strong>2025 測試營收占比達 48%、銷量 YoY +106%；公司預期 2026 突破五成。承接台積電因 CoWoS 排擠而外溢的中後段測試（含 Apple AP、AI/HPC 邏輯 IC），是真正的結構性成長鏈，非景氣循環。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>2026 是「折舊高原 × 毛利逆風」年。</strong>2025 折舊 YoY +62.7%、2026F 再 +30~40%，且集中 H2 顯現；高毛利 DOE 訂單 2 年內砍近 40% 使毛利率由 35.3%→27.4%。EPS 自 FY24 的 6.15 衰退至 FY25 的 4.99，FY26F 僅回升至約 6.1。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>12 吋 CSP 與 AI 測試是 2027 的故事，不是 2026。</strong>12 吋 CSP 2026 Q3 才完成擴產（月 2,000 片），需 1~2 季調校，2027 才見實質營收貢獻；穿戴／Micro-LED 更要到 2028。當期估值已把這些未來預先計入。</span></div>
+  </div>
+
+  <blockquote><strong>GiS 研究員結論：</strong>我們認同精材在台積電 AI 測試外溢鏈中的稀缺定位與長期升級邏輯，但依估值方法論加權目標價 NT$260（35x × FY27F EPS 7.6），對現價 282 為 −7.8%，落入 §4.3 五級制<strong>減碼（UW）</strong>區間。這是一個<strong>估值判斷</strong>而非否定公司質地——以目前價格進場，投資人是在為 2027 才落地的成長付出 2026 年的折舊代價。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資摘要</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 投資論點 Bull/Bear ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">投資論點 — 多空對照</h1>
+  <p>精材的多空爭點高度集中：多方押注「測試結構性成長＋台積電綁定＋12 吋升級」，空方聚焦「折舊高原＋毛利逆風＋估值預支＋客戶集中」。本報告以估值方法論量化兩方，結論為當前風險報酬不對稱偏空。</p>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>▲ 多方論點（Bull）</h4>
+      <div class="risk-item"><strong>測試是真結構成長。</strong>台積電 CoWoS 產能與場地吃緊，將成熟與 AI/HPC 邏輯測試長期外溢給精材，2025 測試銷量 YoY +106%。</div>
+      <div class="risk-item"><strong>產能 2026 底較 2025 增約 50%。</strong>P2 新廠裝機已逾 60%，Q2 底至 Q3 底前完成，營收彈性高。</div>
+      <div class="risk-item"><strong>12 吋單價／毛利優於 8 吋。</strong>晶背銅、12 吋 CSP 切入高階邏輯與 CIS，結構升級槓桿。</div>
+      <div class="risk-item"><strong>營收動能明確。</strong>5 月營收 YoY +43.3%、Q2 季增上看 10%、全年挑戰雙位數成長創高。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>▼ 空方論點（Bear）</h4>
+      <div class="risk-item"><strong>折舊高原壓毛利。</strong>2026F 折舊 YoY +30~40% 集中 H2，稼動率一旦鬆動即放大成本槓桿。</div>
+      <div class="risk-item"><strong>DOE 高毛利結構性流失。</strong>客戶分散供應鏈，2 年砍近 40%，是 FY25 毛利率崩 8pp 的主因，難回頭。</div>
+      <div class="risk-item"><strong>估值已預支 2027。</strong>forward PE ~45x，遠高於測試同業 27~38x；股價一年 +118%。</div>
+      <div class="risk-item"><strong>客戶集中＋匯率＋電價。</strong>台積電佔營收 &gt;75%、前 2 大 ~90%；營收全美元、成本新台幣，升值直接侵蝕毛利。</div>
+    </div>
+  </div>
+
+  <h2 class="ch">研究員量化裁決</h2>
+  <table>
+    <thead><tr><th>爭點</th><th>多方</th><th>空方</th><th>GiS 研究員判斷</th></tr></thead>
+    <tbody>
+      <tr><td>測試成長</td><td>結構性、可持續</td><td>受台積電調度</td><td class="pos">偏多 — 趨勢真實，但能見度受單一客戶決定</td></tr>
+      <tr><td>2026 毛利率</td><td>稼動率抵銷折舊</td><td>H2 折舊高原</td><td>中性偏空 — GM 約 29~30%，難回 FY24 的 35%</td></tr>
+      <tr><td>12 吋貢獻</td><td>升級槓桿</td><td>2027 才放量</td><td>偏空 — 2026 僅試水，估值已先反映</td></tr>
+      <tr><td>估值</td><td>稀缺 AI 測試標的</td><td>forward 45x 過高</td><td class="neg">明確偏空 — 加權 TP 260 &lt; 現價 282</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 判斷：</strong>四項爭點中，僅「測試成長」明確偏多，但其能見度受台積電調度牽制；「估值」明確偏空，且為當前最關鍵的決定因子。當一檔好公司的價格已把 2 年後的成長預先計入，研究員的職責是指出風險報酬已不對稱，而非追逐動能。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資論點</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 章節壹封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Company &amp; Business Model</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">公司與商業模式</div>
+  <div class="sec-desc">台積電集團封裝中段成員，從影像感測器晶圓級封裝起家，正轉型為以 12 吋測試與系統級測試（SLT/FT）為核心的 AI 測試供應商。</div>
+</div>
+
+<!-- ══════════════ 公司簡介 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹之一、公司簡介與里程碑</h1>
+  <p>精材科技（XinTec, 3374.TWO）成立於 1998 年 9 月，2015 年 3 月於櫃買中心掛牌，董事長兼總經理為陳家湘。公司股本約 27.14 億元、流通股數約 2.714 億股，主業為晶圓級封裝（Wafer-Level Packaging, WLP）與晶圓測試服務，是台積電集團在後段封測的關鍵子公司之一。技術平台涵蓋 Wafer Bumping、WLP、FOWLP、WLCSP、3D WLP、WL Optics 與 3D IC，並自 2021 年起切入晶圓測試（CP/FT/SLT）。</p>
+
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">~2020</div><div class="tl-spec">CIS 封裝廠</div><div class="tl-tech">iPhone 影像感測器、DOE 3D 感測高毛利主體</div></div>
+    <div class="tl-item"><div class="tl-year">2021-2024</div><div class="tl-spec">導入測試</div><div class="tl-tech">承接台積電成熟製程測試，測試占比逐年攀升</div></div>
+    <div class="tl-item active"><div class="tl-year">2025-2026 ← 現在</div><div class="tl-spec">測試 &gt; 封裝</div><div class="tl-tech">測試占比 48%→&gt;50%，P2 擴產、DOE 衰退</div></div>
+    <div class="tl-item next"><div class="tl-year">2027-2028</div><div class="tl-spec">12 吋放量</div><div class="tl-tech">12 吋 CSP/CIS、晶背銅、穿戴/Micro-LED</div></div>
+  </div>
+
+  <h2 class="ch">營運基本面速覽</h2>
+  <table>
+    <thead><tr><th>項目</th><th class="num">FY2023</th><th class="num">FY2024</th><th class="num">FY2025</th><th class="num">FY2026F</th></tr></thead>
+    <tbody>
+      <tr><td>營收（億元）</td><td class="num">63.9</td><td class="num">70.6</td><td class="num">72.4</td><td class="num">~85</td></tr>
+      <tr><td>毛利率</td><td class="num">~33%</td><td class="num">35.3%</td><td class="num neg">27.4%</td><td class="num">~29.5%</td></tr>
+      <tr><td>稅後淨利（億元）</td><td class="num">13.8</td><td class="num">16.7</td><td class="num">13.5</td><td class="num">~16.6</td></tr>
+      <tr><td>EPS（元）</td><td class="num">5.06</td><td class="num">6.15</td><td class="num neg">4.99</td><td class="num hi">~6.1</td></tr>
+      <tr><td>現金股利（元）</td><td class="num">—</td><td class="num">—</td><td class="num">2.50</td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司季報 / MOPS、tw-stock-scanner DB；FY2026F 為 GiS 預估。</span>
+
+  <blockquote><strong>關鍵觀察：</strong>FY2024→FY2025 營收成長 +2.5%，EPS 卻由 6.15 衰退至 4.99（−19%）。這不是需求問題，而是<strong>純粹的毛利率故事</strong>——高毛利 DOE 流失 ＋ 新廠折舊稀釋。理解這點，就理解了精材未來兩年的全部矛盾。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 公司簡介</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 商業模式 / 股價圖 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹之二、商業模式與收入結構</h1>
+  <p>精材的收入由兩大引擎構成：<strong>晶圓測試</strong>（CP 大宗、FT 約 15~20%、SLT 為 AI 晶片設計）與<strong>晶圓級封裝</strong>（WLCSP、3D CSP、PPI）。成本結構以折舊（資本密集）與電力（約佔銷貨成本 15%）為大宗，營收幾乎全數美元計價、成本以新台幣為主。競爭護城河來自台積電綁定（持股 41%＋技術協同）、晶圓級製程 know-how 與 consign 設備帶來的客戶 lock-in。</p>
+
+  <div class="chart-wrap">
+    <div class="chart-title">股價軌跡與關鍵事件（近一年）</div>
+    <div class="chart-sub">資料來源：tw-stock-scanner DB（櫃買收盤）；GiS 標註</div>
+    <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chPrice" style="display:block;width:100%;height:230px"></canvas></div>
+  </div>
+
+  <h2 class="ch">收入結構（2025）</h2>
+  <table>
+    <thead><tr><th>業務</th><th class="num">2025 營收占比</th><th class="num">2025 YoY</th><th>定位與重要程度</th></tr></thead>
+    <tbody>
+      <tr><td>晶圓測試 CP/FT/SLT</td><td class="num hi">48%</td><td class="num pos">+78%</td><td>核心成長引擎（極高）</td></tr>
+      <tr><td>WLCSP（含 CIS、環境光感測）</td><td class="num">45%</td><td class="num">接近持平</td><td>穩定底盤＋新案補強（中高）</td></tr>
+      <tr><td>WLP PPI（MEMS／功率分離／指紋）</td><td class="num">5%</td><td class="num">—</td><td>利基毛利墊（中）</td></tr>
+      <tr><td>其中：DOE 3D 感測封裝</td><td class="num">（含於 WLCSP）</td><td class="num neg">2 年 −40%</td><td>結構性衰退利空（中）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司法說會、優分析彙整；GiS 整理。</span>
+
+  <blockquote><strong>GiS 觀點：</strong>精材的商業模式正在「從一個高毛利單一應用（iPhone CIS/DOE），換成多個中毛利但量大的測試訂單」。這降低了 iPhone 週期風險，但也意味著<strong>毛利率的天花板被結構性下修</strong>——測試業務的毛利高度依賴稼動率，且 consign 設備模式下「營收大增 ≠ 單位毛利顯著提升」。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 商業模式</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 業務結構演進 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹之三、業務結構演進 — 測試取代封裝</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">營收結構變遷：測試 vs 封裝（2024 → 2026F）</div>
+    <div class="chart-sub">資料來源：公司法說會（占比）；GiS 彙編。2025Q4 測試占比已達 60%</div>
+    <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chMix" style="display:block;width:100%;height:240px"></canvas></div>
+  </div>
+
+  <h2 class="ch">出貨量結構：動能明確轉向測試</h2>
+  <table>
+    <thead><tr><th>指標</th><th class="num">2025 銷量</th><th class="num">YoY</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>封裝銷貨量（約 8 吋）</td><td class="num">284K 片</td><td class="num neg">−3%</td><td>成熟、趨穩</td></tr>
+      <tr><td>測試服務銷量（約 12 吋）</td><td class="num hi">1,311K 片</td><td class="num pos">+106%</td><td>新廠產能開出，主動能</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-grid">
+    <div class="callout">
+      <div class="callout-title">過去（≤2023）：iPhone 感測封裝廠</div>
+      <ul>
+        <li>高度集中 iPhone CIS / DOE</li>
+        <li>高毛利但單一終端週期風險大</li>
+        <li>8 吋 WLCSP 為主體</li>
+      </ul>
+    </div>
+    <div class="callout green">
+      <div class="callout-title">現在/未來（2025→）：台積電 AI 測試夥伴</div>
+      <ul>
+        <li><strong>12 吋測試 + SLT/FT 為核心</strong></li>
+        <li><strong>承接台積電 CoWoS 外溢測試</strong></li>
+        <li>多應用：AI/HPC、手機 AP、車用、穿戴</li>
+      </ul>
+    </div>
+  </div>
+
+  <blockquote><strong>GiS 判斷：</strong>這是一次<strong>本質性的角色轉換</strong>——精材的價值錨從「Apple 供應鏈」移到「台積電先進製程生態系」。中壢中興廠專為 AI 晶片 SLT/FT 設計，反映整個後段測試正從「景氣循環」變成「綁定先進製程擴產的結構成長鏈」。但角色轉換期＝資本支出與折舊高峰期，財報波動隨之放大。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 結構演進</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 章節貳封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Industry &amp; Competitive Position</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業地位與競爭格局</div>
+  <div class="sec-desc">AI 與 HPC 帶動中後段晶圓測試外溢成長，8 吋→12 吋製程轉移升級封測，精材位居台積電 AI 測試外溢的關鍵承接節點。</div>
+</div>
+
+<!-- ══════════════ 產業洞察 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳之一、產業洞察 — AI 驅動中後段測試外溢</h1>
+  <p>2026 年後，中段封測與晶圓測試產業的關鍵變化幾乎都與 AI、高階運算與 8 吋→12 吋轉移綁定。台積電因 CoWoS 產能與廠房吃緊，將中後段晶圓測試（含 Apple AP 與其他邏輯 IC）持續外包給轉投資封測廠，形成晶圓廠向關係封測廠釋出「測試產能」的長期結構性外溢。這代表中段晶圓測試<strong>不再只是景氣循環，而是緊扣先進製程與 AI 擴產的結構性成長鏈</strong>。</p>
+
+  <h2 class="ch">產業結構重點對照（精材所處位置）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>面向</th><th>過去主軸</th><th>現在／未來主軸</th><th>精材位置與意義</th></tr></thead>
+    <tbody>
+      <tr><td>晶圓尺寸</td><td>8 吋為主</td><td>8 吋利基 + 12 吋主流</td><td class="pos">8 吋轉 12 吋加速中</td></tr>
+      <tr><td>主要應用</td><td>手機 CIS、3D 感測</td><td>AI、HPC、穿戴、車用 CIS、ALS</td><td>從單一手機改為多元感測</td></tr>
+      <tr><td>業務重心</td><td>CIS 封裝、中段封裝</td><td>晶圓測試、12 吋封裝、SLT/FT</td><td class="pos">台積電 AI 測試外溢承接者</td></tr>
+      <tr><td>收益結構</td><td>高毛利單一應用</td><td>多產品組合 + 高折舊高 Capex</td><td>需靠高稼動與組合平衡</td></tr>
+      <tr><td>產業關係</td><td>感測器封裝供應鏈一員</td><td>台積電 AI 測試與先進封裝生態</td><td>高度協同、高集中</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 核心觀點：</strong>12 吋測試的單價與毛利率明顯優於傳統 8 吋，是 2026 年產業獲利結構改善的核心驅動，也被視為 AI 時代封測鏈中最具槓桿的環節之一。SLT/FT 隨 AI/高階 SoC 可靠度要求提升而普及化，新建測試廠「從一開始就規劃 SLT/FT 線」成為標配——精材中壢新廠正是此趨勢的縮影。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 產業洞察</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 競爭與同業 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳之二、競爭格局與同業對比</h1>
+  <p>精材在後段封測屬「晶圓級封裝＋晶圓測試」雙專長的中型業者，與純測試廠（京元電、欣銓）、測試＋封裝（矽格）、驅動 IC 封測（頎邦）構成台灣中後段測試地圖。其最大差異化在於<strong>台積電持股 41% 的集團綁定</strong>，可優先承接先進製程外溢訂單，但也使議價力與營運自主性受限。</p>
+
+  <h2 class="ch">同業估值與獲利對比</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>公司</th><th class="num">收盤</th><th class="num">FY24 EPS</th><th class="num">FY25 EPS</th><th class="num">Trailing PE</th><th>定位</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td><strong>精材 3374</strong></td><td class="num">282.0</td><td class="num">6.15</td><td class="num">4.99</td><td class="num" style="color:#c0392b;font-weight:800">56.5x</td><td>WLP＋測試（台積電系）</td></tr>
+      <tr><td>京元電 2449</td><td class="num">308.5</td><td class="num">6.37</td><td class="num">9.01</td><td class="num">34.2x</td><td>全球最大純測試</td></tr>
+      <tr><td>矽格 6257</td><td class="num">224.5</td><td class="num">5.89</td><td class="num">6.14</td><td class="num">36.6x</td><td>測試＋封裝</td></tr>
+      <tr><td>欣銓 3264</td><td class="num">216.5</td><td class="num">4.44</td><td class="num">5.99</td><td class="num">36.1x</td><td>測試</td></tr>
+      <tr><td>頎邦 6147</td><td class="num">211.5</td><td class="num">5.59</td><td class="num">3.74</td><td class="num">56.6x</td><td>驅動 IC 封測（低基期）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：tw-stock-scanner DB（2026-06-29 收盤、年度 EPS 加總）。頎邦 trailing 偏高係 FY25 獲利低基期所致。</span>
+
+  <div class="chart-wrap">
+    <div class="chart-title">同業 Trailing PE 對比 — 精材處於頂端</div>
+    <div class="chart-sub">資料來源：GiS 彙編。EPS 加總自季報</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chPeerPE" style="display:block;width:100%;height:200px"></canvas></div>
+  </div>
+
+  <blockquote><strong>GiS 判斷：</strong>除獲利低基期的頎邦外，精材 trailing 56.5x 為同業最高；即便以 forward EPS 6.1 計，PE ~45x 仍高於純測試龍頭京元電（forward ~38x）。考量精材<strong>更高的客戶集中度、更重的折舊負擔、更小的規模波動</strong>，其相對京元電應有折價而非溢價，當前市場定價已過度反映轉型樂觀。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 競爭格局</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 章節參封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Financial Analysis &amp; Forecast</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">財務分析與預估</div>
+  <div class="sec-desc">營收動能強勁但毛利率受 DOE 流失與折舊高原雙重壓抑；2026 是過渡年，獲利彈性遞延至 2027。</div>
+</div>
+
+<!-- ══════════════ 歷史財務 + EPS/GM ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參之一、歷史財務與獲利趨勢</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">EPS 與毛利率趨勢（2023–2027F）</div>
+    <div class="chart-sub">資料來源：公司季報 / MOPS（實績）、GiS 預估（F）</div>
+    <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chEpsGm" style="display:block;width:100%;height:230px"></canvas></div>
+  </div>
+
+  <h2 class="ch">近八季財務明細</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>季別</th><th class="num">營收(億)</th><th class="num">毛利率</th><th class="num">營益率</th><th class="num">稅後淨利(億)</th><th class="num">EPS</th></tr></thead>
+    <tbody>
+      <tr><td>2024Q3</td><td class="num">21.66</td><td class="num">—</td><td class="num">32.96%</td><td class="num">5.62</td><td class="num">2.07</td></tr>
+      <tr><td>2024Q4</td><td class="num">18.08</td><td class="num">—</td><td class="num">27.01%</td><td class="num">4.57</td><td class="num">1.68</td></tr>
+      <tr><td>2025Q1</td><td class="num">15.45</td><td class="num">—</td><td class="num">22.11%</td><td class="num">3.42</td><td class="num">1.26</td></tr>
+      <tr><td>2025Q2</td><td class="num">15.37</td><td class="num neg">~11%</td><td class="num neg">10.66%</td><td class="num">0.65</td><td class="num neg">0.24</td></tr>
+      <tr><td>2025Q3</td><td class="num">20.90</td><td class="num">29.05%</td><td class="num">24.93%</td><td class="num">4.33</td><td class="num">1.59</td></tr>
+      <tr><td>2025Q4</td><td class="num">20.66</td><td class="num">32.82%</td><td class="num">27.31%</td><td class="num">5.14</td><td class="num">1.90</td></tr>
+      <tr class="hi"><td>2026Q1</td><td class="num">19.14</td><td class="num">29.66%</td><td class="num">23.62%</td><td class="num">3.84</td><td class="num">1.42</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：tw-stock-scanner DB（季報實績）、優分析（毛利率）。2025Q2 為 DOE 急縮 + 匯損低點。</span>
+
+  <blockquote><strong>GiS 觀察：</strong>2025Q2 是教科書級的「結構轉換陣痛」——EPS 僅 0.24，毛利率掉到約 11%，DOE 訂單流失與新廠開辦費同時壓頂。隨後測試占比拉高，Q3/Q4 毛利率回升至 29~33%。但 2026Q1 毛利率 29.66%、QoQ −3.1pp，顯示<strong>季節性與折舊已開始侵蝕</strong>，回升動能並非單向。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 歷史財務</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 毛利率橋接 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參之二、毛利率橋接 — 為何 FY25 崩 8pp？</h1>
+  <p>FY2024→FY2025 毛利率由 35.31% 下滑至 27.42%，是理解精材獲利的核心。我們將 7.89pp 的下滑拆解為三大驅動：DOE 高毛利訂單流失、新廠折舊稀釋、匯率與電價逆風。</p>
+
+  <div class="chart-wrap">
+    <div class="chart-title">毛利率橋接：FY2024 (35.3%) → FY2025 (27.4%)</div>
+    <div class="chart-sub">資料來源：GiS 估算（基於公司質化說明拆解）</div>
+    <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chBridge" style="display:block;width:100%;height:230px"></canvas></div>
+  </div>
+
+  <h2 class="ch">毛利率敏感因子</h2>
+  <table>
+    <thead><tr><th>因子</th><th>方向</th><th>量級</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>DOE 訂單</td><td class="neg">利空</td><td>2 年 −40%</td><td>高毛利結構流失，最大拖累</td></tr>
+      <tr><td>折舊</td><td class="neg">利空</td><td>FY25 +62.7%／FY26F +30~40%</td><td>新廠集中 2026 前三季進機</td></tr>
+      <tr><td>電價</td><td class="neg">利空</td><td>每漲 10% → GM −1pp</td><td>電費約佔銷貨成本 15%，難轉嫁</td></tr>
+      <tr><td>匯率（NT$ 升值）</td><td class="neg">利空</td><td>2025Q4 升 3.1% 即不利</td><td>營收全美元、成本新台幣</td></tr>
+      <tr><td>測試稼動率</td><td class="pos">利多</td><td>滿載可抵銷折舊</td><td>關鍵變數，雙面槓桿</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 判斷：</strong>毛利率的回升完全押注於「測試稼動率維持高檔」這一個變數。公司預期 2026 H2 GM 優於 H1，但這需要測試營收成長持續快過折舊增速。<strong>一旦台積電外溢訂單節奏放緩或 NT$ 走強，毛利率的下行槓桿將立刻顯現</strong>——這是我們給予保守評等的財務根據。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 毛利率橋接</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ Capex/折舊 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參之三、資本支出與折舊高原</h1>
+  <p>精材正處資本支出高峰：2025 Capex YoY +94.5%、2026F 再增 7~14%，逾九成投入測試產能與 12 吋製程。2026/4 公告 5.915 億元廠務工程；2026/5 董事會通過 2,221 萬美元 12 吋晶背銅製程設備 ＋ 91 萬美元經常性 Capex。投資的另一面是折舊——2025 折舊 YoY +62.7%、2026F 再 +30~40%，且集中 H2 顯現。</p>
+
+  <div class="chart-wrap">
+    <div class="chart-title">折舊增速軌跡與 EPS 壓力窗口</div>
+    <div class="chart-sub">資料來源：公司法說會（折舊 YoY）、GiS 預估</div>
+    <div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chDep" style="display:block;width:100%;height:220px"></canvas></div>
+  </div>
+
+  <div class="callout green">
+    <div class="callout-title">2027 後的轉折：折舊壓力趨緩</div>
+    <p style="margin:0">公司多次重申「2027 年後暫無進一步測試擴充、亦無赴美投資」。意味 2025–2026 是投資高峰，之後 Capex 強度有望下滑、折舊成長趨緩。若 2027 測試稼動率維持高檔，EPS 有機會出現「營收與獲利同向放大」的正向營運槓桿——這是長線 re-rating 的關鍵，但<strong>落點在 2027，非 2026</strong>。</p>
+  </div>
+
+  <blockquote><strong>GiS 判斷：</strong>2026 是「先承擔折舊、後收割產能」的過渡年。投資人此刻買進，是在折舊高原（H2 2026）與 12 吋實質貢獻（2027）之間的空窗付出代價。研究員框架下，這個時間錯配正是估值與基本面落差的來源。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · Capex 與折舊</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 預估模型 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參之四、損益預估模型（FY2025–2028F）</h1>
+
+  <table style="font-size:12px">
+    <thead><tr><th>項目（億元）</th><th class="num">FY2025</th><th class="num">FY2026F</th><th class="num">FY2027F</th><th class="num">FY2028F</th></tr></thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">72.4</td><td class="num">85.0</td><td class="num">97.0</td><td class="num">108.5</td></tr>
+      <tr><td>YoY</td><td class="num">+2.5%</td><td class="num pos">+17.4%</td><td class="num pos">+14.1%</td><td class="num pos">+11.9%</td></tr>
+      <tr><td>毛利</td><td class="num">19.8</td><td class="num">25.1</td><td class="num">30.6</td><td class="num">35.3</td></tr>
+      <tr><td>毛利率</td><td class="num neg">27.4%</td><td class="num">29.5%</td><td class="num">31.5%</td><td class="num">32.5%</td></tr>
+      <tr><td>營業利益</td><td class="num">15.9</td><td class="num">19.4</td><td class="num">24.0</td><td class="num">28.0</td></tr>
+      <tr><td>營益率</td><td class="num">21.9%</td><td class="num">22.8%</td><td class="num">24.7%</td><td class="num">25.8%</td></tr>
+      <tr><td>稅後淨利</td><td class="num">13.5</td><td class="num">16.6</td><td class="num">20.6</td><td class="num">23.6</td></tr>
+      <tr class="hi"><td><strong>EPS（元）</strong></td><td class="num">4.99</td><td class="num">6.1</td><td class="num">7.6</td><td class="num">8.7</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：FY2025 為實績；FY2026F–2028F 為 GiS 預估。股數 2.714 億股。</span>
+
+  <h2 class="ch">關鍵預估假設</h2>
+  <ul>
+    <li><strong>營收</strong>：2026 測試產能較 2025 底增約 50%，H1 已 YoY +31%（5 月 +43.3%）；H2 &gt; H1（公司 guidance）。2027 起 12 吋 CSP 放量接棒。</li>
+    <li><strong>毛利率</strong>：2026 受折舊高原壓抑回升有限（~29.5%）；2027 因 12 吋高單價＋折舊增速趨緩，回升至 ~31.5%，但<strong>不預期回到 FY24 的 35%</strong>（DOE 結構流失）。</li>
+    <li><strong>稅後淨利</strong>：業外貢獻穩定，假設稅率 ~14%。</li>
+  </ul>
+
+  <blockquote><strong>GiS 判斷：</strong>我們的 FY2026F EPS 6.1 已隱含營收 +17%、毛利率改善 2pp 的偏多假設，但仍僅略高於 FY2024 的 6.15。換言之，<strong>精材要到 FY2027（EPS 7.6）才真正突破 2024 獲利高點</strong>。當前股價已對應 forward 45x，意味市場用 FY2027 甚至 FY2028 的獲利在定價今天。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 預估模型</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 章節肆封面 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Valuation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">估值分析</div>
+  <div class="sec-desc">以 PE 為主、DCF 與 Comps 交叉驗證；三情境機率加權目標價 NT$260，對現價 −7.8%，評等減碼。</div>
+</div>
+
+<!-- ══════════════ PE 估值 + 三情境 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆之一、PE 估值與三情境</h1>
+  <p>精材為高成長、獲利波動的封測股，主估值採 PE×forward EPS。以 12 個月目標（落於 2027 年中）為錨，我們對 FY2027F EPS 套用三情境機率加權，目標本益比參酌測試同業 27~38x，並反映精材的客戶集中與折舊溢/折價。</p>
+
+  <table style="font-size:12px">
+    <thead><tr><th>情境</th><th class="num">機率</th><th class="num">FY27F EPS</th><th class="num">目標 PE</th><th class="num">隱含股價</th><th class="num">vs 現價</th></tr></thead>
+    <tbody>
+      <tr><td><strong>樂觀 Bull</strong></td><td class="num">30%</td><td class="num">8.5</td><td class="num">38x</td><td class="num pos">323</td><td class="num pos">+14.5%</td></tr>
+      <tr class="hi"><td><strong>基礎 Base</strong></td><td class="num">45%</td><td class="num">7.6</td><td class="num">35x</td><td class="num">266</td><td class="num neg">−5.7%</td></tr>
+      <tr><td><strong>保守 Bear</strong></td><td class="num">25%</td><td class="num">6.2</td><td class="num">28x</td><td class="num neg">174</td><td class="num neg">−38%</td></tr>
+      <tr style="background:#0d1b3e!important;color:#fff"><td style="color:#fff"><strong>加權目標價</strong></td><td class="num" style="color:#fff">100%</td><td class="num" style="color:#fff">—</td><td class="num" style="color:#fff">—</td><td class="num" style="color:#00c896;font-weight:800">260</td><td class="num" style="color:#ff8a8a;font-weight:800">−7.8%</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="ch">情境差異點（非僅 EPS ±10%）</h3>
+  <ul>
+    <li><strong>Bull：</strong>台積電外溢訂單加速、測試滿載、12 吋 CSP 提早放量、DOE 止穩 → 市場給予 AI 測試動能溢價（38x）。</li>
+    <li><strong>Base：</strong>產能 +50% 如期開出但折舊高原封頂毛利、12 吋 2027 才實質貢獻 → 給予略高於測試同業之合理倍數（35x）。</li>
+    <li><strong>Bear：</strong>測試稼動率鬆動、NT$ 升值＋電價上行、DOE 衰退超預期、12 吋遞延 → 動能股 de-rating 至同業中位（28x）。</li>
+  </ul>
+
+  <div class="chart-wrap">
+    <div class="chart-title">三情境 FY27F EPS 與隱含股價</div>
+    <div class="chart-sub">資料來源：GiS 估值模型</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chScen" style="display:block;width:100%;height:200px"></canvas></div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · PE 估值</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ DCF + Comps ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之二、DCF 與 Comps 交叉驗證</h1>
+
+  <h2 class="ch">DCF 估值（永續成長法）</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>輸入</th><th class="num">假設</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>無風險利率</td><td class="num">1.5%</td><td>台灣 10 年期公債</td></tr>
+      <tr><td>Beta</td><td class="num">1.30</td><td>小型封測股、高波動</td></tr>
+      <tr><td>股權風險溢酬</td><td class="num">6.0%</td><td>台股長期 ERP</td></tr>
+      <tr><td>WACC</td><td class="num hi">9.0%</td><td>近全股權融資</td></tr>
+      <tr><td>永續成長率 g</td><td class="num">2.5%</td><td>成熟期假設</td></tr>
+      <tr><td>DCF 隱含合理價</td><td class="num hi">~255</td><td>受 2025–26 Capex 高峰壓抑 FCF</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">Comps 相對估值</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>方法</th><th class="num">基準</th><th class="num">倍數</th><th class="num">隱含價</th></tr></thead>
+    <tbody>
+      <tr><td>同業 forward PE 中位</td><td class="num">FY26F 6.1</td><td class="num">30x</td><td class="num">183</td></tr>
+      <tr><td>同業 forward PE 75 分位</td><td class="num">FY27F 7.6</td><td class="num">36x</td><td class="num">274</td></tr>
+      <tr><td>京元電（純測試龍頭）forward</td><td class="num">FY27F 7.6</td><td class="num">38x</td><td class="num">289</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-wrap">
+    <div class="chart-title">Football Field — 綜合估值區間</div>
+    <div class="chart-sub">資料來源：GiS 估值模型。紅線＝現價 282，綠線＝加權 TP 260</div>
+    <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="chFF" style="display:block;width:100%;height:210px"></canvas></div>
+  </div>
+
+  <blockquote><strong>GiS 判斷：</strong>三種方法的合理區間約 183–289，中樞落在 255–275。現價 282 已位於估值區間上緣，僅在最樂觀（京元電同等倍數＋FY27 獲利全數實現）情境下才有限上檔。加權目標價 NT$260 是三法交集的中性結論。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · DCF 與 Comps</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 敏感度 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆之三、估值敏感度（PE × FY27F EPS）</h1>
+  <p>下表為 5×5 敏感度，中心格（35x × 7.6）＝基礎情境隱含價 266。可見目標價對「市場給予的本益比倍數」極為敏感——這正是動能股的估值風險本質：基本面變化不大時，倍數的擴張或收縮主導股價。</p>
+
+  <table style="font-size:12px;text-align:center">
+    <thead><tr><th>EPS ＼ PE</th><th class="num">28x</th><th class="num">31x</th><th class="num">35x</th><th class="num">38x</th><th class="num">42x</th></tr></thead>
+    <tbody>
+      <tr><td>6.2</td><td class="num neg">174</td><td class="num neg">192</td><td class="num neg">217</td><td class="num neg">236</td><td class="num">260</td></tr>
+      <tr><td>7.0</td><td class="num neg">196</td><td class="num neg">217</td><td class="num neg">245</td><td class="num">266</td><td class="num">294</td></tr>
+      <tr><td>7.6</td><td class="num neg">213</td><td class="num neg">236</td><td class="num hi">266</td><td class="num">289</td><td class="num pos">319</td></tr>
+      <tr><td>8.5</td><td class="num neg">238</td><td class="num">264</td><td class="num">298</td><td class="num pos">323</td><td class="num pos">357</td></tr>
+      <tr><td>9.2</td><td class="num">258</td><td class="num">285</td><td class="num pos">322</td><td class="num pos">350</td><td class="num pos">386</td></tr>
+    </tbody>
+  </table>
+  <span class="src">紅＝低於現價 282、綠＝顯著高於現價、黃底＝基礎情境中心格。</span>
+
+  <div class="callout red">
+    <div class="callout-title">風險報酬不對稱</div>
+    <p style="margin:0">在 25 格中，僅 7 格高於現價 282，且多需「EPS ≥ 8.5 且 PE ≥ 35x」雙樂觀同時成立。反之，只要 PE 回到同業中位（28~31x），即便 EPS 達 8.5，股價仍僅 238~264。<strong>下檔情境的機率質量明顯大於上檔</strong>，支撐減碼評等。</p>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 敏感度</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 估值結論 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之四、估值結論與評等</h1>
+
+  <div class="kpi-row">
+    <div class="kpi red"><div class="kpi-val">減碼 UW</div><div class="kpi-lbl">投資評等</div></div>
+    <div class="kpi"><div class="kpi-val">NT$260</div><div class="kpi-lbl">12M 目標價</div></div>
+    <div class="kpi gold"><div class="kpi-val">−7.8%</div><div class="kpi-lbl">潛在空間</div></div>
+    <div class="kpi"><div class="kpi-val">35x</div><div class="kpi-lbl">目標 PE (FY27F)</div></div>
+  </div>
+
+  <h2 class="ch">§4.3 五級制落格</h2>
+  <table>
+    <thead><tr><th>評等</th><th class="num">12M 上檔空間</th><th>精材落點</th></tr></thead>
+    <tbody>
+      <tr><td>買進 Buy</td><td class="num">&gt;15%</td><td>—</td></tr>
+      <tr><td>增加持股 OW</td><td class="num">+5% ~ +15%</td><td>—</td></tr>
+      <tr><td>中立 N</td><td class="num">−5% ~ +5%</td><td>—</td></tr>
+      <tr class="hi"><td><strong>減碼 UW</strong></td><td class="num">&lt;−5%</td><td><strong>✔ −7.8%（加權 TP 260 / 現價 282）</strong></td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>研究員最終結論：</strong>精材是台積電 AI 測試外溢鏈中具稀缺性的轉型標的，長線升級邏輯成立。但依估值方法論，加權目標價 NT$260 對現價 282 為 −7.8%，落入減碼區間。我們的保守不是看空公司，而是<strong>看空當前價格</strong>——市場已用 2027–2028 的獲利在定價今天，而中間隔著 2026 的折舊高原與 12 吋的調校空窗。當潛在下檔大於上檔、且關鍵變數（稼動率、台積電調度、匯率）皆非公司可控，紀律性的評等應為減碼。建議投資人待回檔至估值區間中樞（~250 以下）再重新評估。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 估值結論</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 情報追蹤：台積電 OS 轉單 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆之五、情報追蹤 — 台積電後段 OS 轉單（待驗證 upside）</h1>
+  <p>市場流傳一則具高度影響力但<strong>尚未經公司／台積電正式公告</strong>的情報：台積電將部分後段 OS（Outsourced Semiconductor，後段封測）訂單由原承接的矽品（2325，已併入日月光集團）轉釋給精材，反映台積電「優先扶植自家持股 41% 子公司」的垂直整合策略。本頁將其列為<strong>當前最關鍵的單一上行變數</strong>並量化其對評等的潛在影響。</p>
+
+  <div class="callout green">
+    <div class="callout-title">為何重要</div>
+    <p style="margin:0">若屬實，這比「CoWoS 排擠外溢」更具結構性——是台積電主動的供應鏈份額重分配，能見度與黏著度都更高，直接驗證本報告的核心轉型 thesis，並可能延長成長能見度至 2027 以後。</p>
+  </div>
+
+  <h2 class="ch">敏感度：若轉單為實質大單，評等如何移動</h2>
+  <table>
+    <thead><tr><th>情境</th><th>FY27F EPS 上修至</th><th class="num">目標 PE</th><th class="num">隱含 TP</th><th>評等變化</th></tr></thead>
+    <tbody>
+      <tr><td>目前（未計入轉單）</td><td>7.6</td><td class="num">35x</td><td class="num">260</td><td class="neg">減碼 UW（−7.8%）</td></tr>
+      <tr><td>轉單溫和（+10% 營收）</td><td>8.3</td><td class="num">36x</td><td class="num">299</td><td>增加持股 OW（+6%）</td></tr>
+      <tr class="hi"><td>轉單顯著（+15~20% 營收）</td><td>8.5~9.0</td><td class="num">36~38x</td><td class="num">306~342</td><td class="pos">OW → 買進 Buy（+8~21%）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">上表為條件式情境，非本報告採用結論。採用評等仍為減碼 UW / TP 260，待下列三項確認後重評。</span>
+
+  <h2 class="ch">上修評等前必須確認的三件事</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>變數</th><th>為何關鍵</th><th>確認來源／時點</th></tr></thead>
+    <tbody>
+      <tr><td>① 金額量級</td><td>加 5 億 vs 20 億營收，對 FY27F EPS 差距巨大</td><td>法說會、公司年報、訂單公告</td></tr>
+      <tr><td>② 認列時點</td><td>若 2027 才 ramp，2026 折舊高原的估值缺口仍在</td><td>產能進機與量產時程</td></tr>
+      <tr><td>③ 是否已 priced-in</td><td>6/22-23 連兩漲停、外資單日買 11,418 張，恐已部分反映</td><td>股價對後續公告的反應</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 研究員立場：</strong>我們將此情報視為<strong>高價值、待驗證</strong>，而非既成事實。它明確偏多、且是本報告 Bull case 的核心，但在金額與時點未明前，依估值紀律維持減碼 UW / TP 260。<strong>2026 Q2/Q3 法說會若管理層證實 OS 轉單規模與時程，即為我們上修評等的扳機</strong>——屆時 TP 有望落入 300~340（OW/Buy 區間）。</blockquote>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 情報追蹤</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 風險矩陣 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">伍、風險矩陣</h1>
+
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>▼ 下行風險</h4>
+      <div class="risk-item"><strong>客戶集中（產業）。</strong>台積電佔營收 &gt;75%、前 2 大 ~90%；任何外包策略、自建測試或價格調整都顯著衝擊精材。</div>
+      <div class="risk-item"><strong>折舊高原（財務）。</strong>2026F 折舊 +30~40% 集中 H2，稼動率鬆動即放大成本槓桿。</div>
+      <div class="risk-item"><strong>DOE 結構衰退（公司）。</strong>客戶分散供應鏈，高毛利 3D 感測難回成長軌道。</div>
+      <div class="risk-item"><strong>匯率（財務）。</strong>營收全美元、成本新台幣，NT$ 升值不對稱侵蝕毛利。</div>
+      <div class="risk-item"><strong>估值 de-rating（估值）。</strong>forward 45x，一旦動能退潮，倍數回測同業中位風險大。</div>
+    </div>
+    <div class="risk-card up">
+      <h4>▲ 上行風險（對空方）</h4>
+      <div class="risk-item"><strong>台積電外溢加速。</strong>CoWoS 持續吃緊，AI/HPC/手機 AP 測試外包比率超預期。</div>
+      <div class="risk-item"><strong>12 吋提早放量。</strong>CSP 調校快於 1~2 季，2026 H2 即見貢獻。</div>
+      <div class="risk-item"><strong>稼動率滿載。</strong>測試營收成長持續快過折舊，毛利率回升超預期。</div>
+      <div class="risk-item"><strong>新感測接棒。</strong>ALS 環境光、車用 CIS、穿戴感測放量填補 DOE 缺口。</div>
+    </div>
+  </div>
+
+  <h2 class="ch">2026–2027 五大關鍵監測指標</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>指標</th><th>意義</th><th>研究員關注點</th></tr></thead>
+    <tbody>
+      <tr><td>測試產能利用率</td><td>EPS 關鍵</td><td>稼動率能否跟上折舊曲線</td></tr>
+      <tr><td>毛利率 vs 折舊</td><td>H2&gt;H1 是否兌現</td><td>未達＝折舊/電價超管理層假設</td></tr>
+      <tr><td>12 吋 CSP ramp 速度</td><td>長線 re-rating</td><td>2027 能否出現明顯貢獻</td></tr>
+      <tr><td>台積電委外語氣</td><td>領先指標</td><td>外溢比率變化先於訂單</td></tr>
+      <tr><td>DOE 與新感測替代</td><td>組合健康度</td><td>ALS／車用／穿戴放量進度</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · 風險矩陣</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════════ 來源與免責 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">陸、資料來源與免責聲明</h1>
+
+  <h2 class="ch">資料來源</h2>
+  <ul>
+    <li><strong>財務數據：</strong>公開資訊觀測站（MOPS）合併財報、公司季報；tw-stock-scanner DB（季報 EPS、營收、法人買賣超、櫃買收盤價）。</li>
+    <li><strong>營運質化：</strong>公司法說會、股東會（2026/05–06）、董事長公開訪談、優分析（uAnalyze）彙整之公司更新與產業趨勢解析。</li>
+    <li><strong>同業比較：</strong>京元電（2449）、矽格（6257）、欣銓（3264）、頎邦（6147）公開財報與市場收盤價。</li>
+    <li><strong>估值模型：</strong>GiS 估值方法論（PE 三情境、DCF 永續成長、Comps），目標價與情境機率為 GiS 自有判斷。</li>
+  </ul>
+
+  <h2 class="ch">評等定義（GiS §4.3 五級制）</h2>
+  <table>
+    <thead><tr><th>評等</th><th class="num">12M 上檔空間</th></tr></thead>
+    <tbody>
+      <tr><td>買進 Buy</td><td class="num">&gt;15%</td></tr>
+      <tr><td>增加持股 OW</td><td class="num">+5% ~ +15%</td></tr>
+      <tr><td>中立 N</td><td class="num">−5% ~ +5%</td></tr>
+      <tr><td>減碼 UW</td><td class="num">&lt;−5%</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote style="font-size:12px"><strong>免責聲明：</strong>本報告由 Genesis International Capital（GiS）研究部門基於估值方法論獨立撰寫，採中立、12 個月目標價框架，僅供研究參考，不構成任何證券買賣之要約或邀約。報告所載預估與目標價基於發布日所得資訊與假設，未來實際結果可能因市場、產業與公司營運變化而有重大差異。投資人應自行評估風險並就投資決策負責。GiS 不保證資訊之完整與正確，亦不對依本報告所為之投資結果負責。</blockquote>
+
+  <p style="text-align:center;color:#9aabb5;font-size:12px;margin-top:24px">— 報告結束 · 精材科技 3374 首次覆蓋（研究員觀點）·&nbsp;2026.06.29 —</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>陸 · 來源與免責</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<script>
+Chart.defaults.animation=false;
+Chart.defaults.font.family="'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif";
+Chart.defaults.font.size=11;
+Chart.defaults.plugins.legend.labels.boxWidth=12;
+const NAVY='#0d1b3e',TEAL='#00c896',BLUE='#1a3a6e',GOLD='#d97706',RED='#c0392b',GREY='#94a3b8';
+
+new Chart(document.getElementById('chPrice'),{type:'line',
+ data:{labels:['25/07','25/09','25/10','25/12','26/01','26/02','26/03','26/04','26/05','26/06上','26/06底'],
+ datasets:[{label:'收盤價 (NT$)',data:[145,148,145,140,179,160,153,183,278,303,282],borderColor:NAVY,backgroundColor:'rgba(13,27,62,.08)',fill:true,tension:.3,pointRadius:3,pointBackgroundColor:TEAL}]},
+ options:{plugins:{legend:{display:false},tooltip:{enabled:true}},scales:{y:{title:{display:true,text:'股價 NT$'}}}}});
+
+new Chart(document.getElementById('chMix'),{type:'bar',
+ data:{labels:['2024','2025','2026F'],
+ datasets:[
+  {label:'測試 CP/FT/SLT',data:[35,48,52],backgroundColor:TEAL,stack:'s'},
+  {label:'WLCSP 封裝',data:[58,45,41],backgroundColor:BLUE,stack:'s'},
+  {label:'PPI／其他',data:[7,7,7],backgroundColor:GREY,stack:'s'}]},
+ options:{plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'%'}}},scales:{x:{stacked:true},y:{stacked:true,max:100,title:{display:true,text:'營收占比 %'}}}}});
+
+new Chart(document.getElementById('chPeerPE'),{type:'bar',
+ data:{labels:['精材 3374','頎邦 6147','矽格 6257','欣銓 3264','京元電 2449'],
+ datasets:[{label:'Trailing PE',data:[56.5,56.6,36.6,36.1,34.2],
+ backgroundColor:['#c0392b','#e08a8a',BLUE,BLUE,BLUE]}]},
+ options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'Trailing PE (x)'}}}}});
+
+new Chart(document.getElementById('chEpsGm'),{type:'bar',
+ data:{labels:['2023','2024','2025','2026F','2027F'],
+ datasets:[
+  {label:'EPS (元)',data:[5.06,6.15,4.99,6.1,7.6],backgroundColor:NAVY,yAxisID:'y',order:2},
+  {label:'毛利率 (%)',data:[33,35.3,27.4,29.5,31.5],type:'line',borderColor:TEAL,backgroundColor:TEAL,yAxisID:'y1',tension:.3,pointRadius:4,order:1}]},
+ options:{scales:{y:{position:'left',title:{display:true,text:'EPS'}},y1:{position:'right',title:{display:true,text:'毛利率 %'},grid:{drawOnChartArea:false},min:20,max:40}}}});
+
+new Chart(document.getElementById('chBridge'),{type:'bar',
+ data:{labels:['FY24 GM','DOE 流失','折舊稀釋','匯率/電價','FY25 GM'],
+ datasets:[{label:'毛利率 %',data:[35.3,-3.8,-2.9,-1.2,27.4],
+ backgroundColor:[NAVY,RED,RED,RED,TEAL]}]},
+ options:{plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'毛利率 %（橋接，非堆疊）'},min:0,max:40}}}});
+
+new Chart(document.getElementById('chDep'),{type:'bar',
+ data:{labels:['2024','2025','2026F','2027F'],
+ datasets:[{label:'折舊 YoY 增速 %',data:[null,62.7,35,10],backgroundColor:[GREY,RED,GOLD,TEAL]}]},
+ options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'折舊 YoY +'+c.raw+'%'}}},scales:{y:{title:{display:true,text:'折舊費用 YoY %'}}}}});
+
+new Chart(document.getElementById('chScen'),{type:'bar',
+ data:{labels:['Bear (25%)','Base (45%)','Bull (30%)'],
+ datasets:[{label:'隱含股價',data:[174,266,323],backgroundColor:[RED,GOLD,TEAL]}]},
+ options:{plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'隱含股價 NT$'}},x:{}},
+ plugins:{legend:{display:false},annotation:{}}}});
+
+new Chart(document.getElementById('chFF'),{type:'bar',
+ data:{labels:['Comps 中位 (30x)','DCF','PE 加權 TP','Comps 75分位','京元電倍數','Bull'],
+ datasets:[{label:'估值 NT$',data:[183,255,260,274,289,323],
+ backgroundColor:[GREY,BLUE,TEAL,BLUE,BLUE,'#7fd8b8']}]},
+ options:{indexAxis:'y',plugins:{legend:{display:false},
+  tooltip:{callbacks:{footer:()=>'現價 282 / 加權 TP 260'}}},
+ scales:{x:{title:{display:true,text:'隱含股價 NT$'},min:150,max:340}}}});
+</script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>台股去槓桿壓力儀表板</title>
+<style>
+:root, [data-theme="light"] {
+  --surface-1:#fcfcfb; --page:#f9f9f7;
+  --ink-1:#0b0b0b; --ink-2:#52514e; --ink-3:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --s1:#2a78d6; --s2:#1baf7a; --s3:#eda100; --s4:#008300; --s5:#4a3aa7; --s6:#e34948;
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+  --wash:rgba(11,11,11,.045);
+}
+[data-theme="dark"] {
+  --surface-1:#1a1a19; --page:#0d0d0d;
+  --ink-1:#ffffff; --ink-2:#c3c2b7; --ink-3:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --s1:#3987e5; --s2:#199e70; --s3:#c98500; --s4:#008300; --s5:#9085e9; --s6:#e66767;
+  --wash:rgba(255,255,255,.06);
+}
+* { box-sizing:border-box; }
+html,body { margin:0; padding:0; background:var(--page); color:var(--ink-1);
+  font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;
+  font-size:14px; line-height:1.55; }
+.wrap { max-width:1180px; margin:0 auto; padding:20px 16px 56px; }
+header.top { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 14px; margin-bottom:6px; }
+header.top h1 { font-size:20px; font-weight:700; margin:0; }
+.sub { color:var(--ink-3); font-size:12.5px; }
+.spacer { flex:1; }
+button.ghost { background:none; border:1px solid var(--ring); border-radius:8px; color:var(--ink-2);
+  padding:4px 10px; font-size:12px; cursor:pointer; white-space:nowrap; flex:none; }
+button.ghost:hover { background:var(--wash); }
+.hero { display:grid; grid-template-columns:290px 1fr; gap:14px; margin:14px 0; }
+@media (max-width:860px){ .hero { grid-template-columns:1fr; } }
+.card { background:var(--surface-1); border:1px solid var(--ring); border-radius:14px; padding:16px 18px; }
+.gauge-card { display:flex; flex-direction:column; align-items:center; }
+.tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; }
+.tile .lbl { color:var(--ink-2); font-size:12.5px; }
+.tile .val { font-size:26px; font-weight:600; margin-top:2px; font-variant-numeric:tabular-nums; }
+.tile .delta { font-size:12px; margin-top:2px; color:var(--ink-3); }
+.tile.bad .lbl::before { content:'●'; color:var(--crit); font-size:10px; margin-right:5px; vertical-align:1px; }
+.tile.bad .val { color:var(--crit); }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin:2px 0 14px; }
+.chip { display:flex; align-items:center; gap:7px; border:1px solid var(--ring); border-radius:999px;
+  padding:5px 12px; font-size:12.5px; color:var(--ink-2); background:var(--surface-1); }
+.chip b { color:var(--ink-1); font-weight:600; }
+.dot { width:9px; height:9px; border-radius:50%; flex:none; }
+.signal-detail { flex-basis:100%; margin:-4px 0 2px 4px; font-size:11.5px; color:var(--ink-3); line-height:1.5; }
+.signal-origin { display:inline-block; margin-left:6px; padding:0 5px; border:1px solid var(--ring); border-radius:4px;
+  color:var(--ink-2); font-size:10.5px; vertical-align:1px; }
+.signal-citation { margin-left:6px; }
+.signal-citation a { color:var(--s1); text-decoration:underline; text-decoration-color:var(--axis); text-underline-offset:2px; }
+.signal-citation a:hover { color:var(--ink-1); }
+.filters { display:flex; align-items:center; gap:6px; margin:4px 0 12px; flex-wrap:wrap; }
+.filters .fl { color:var(--ink-3); font-size:12px; margin-right:2px; }
+.filters button { background:none; border:1px solid var(--ring); color:var(--ink-2); border-radius:8px;
+  padding:4px 12px; font-size:12.5px; cursor:pointer; }
+.filters button.on { background:var(--wash); color:var(--ink-1); font-weight:600; border-color:var(--axis); }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media (max-width:960px){ .grid { grid-template-columns:1fr; } }
+.card h3 { margin:0 0 2px; font-size:14.5px; font-weight:700; display:flex; align-items:center; gap:8px; }
+.card .desc { color:var(--ink-3); font-size:12px; margin-bottom:8px; }
+.card .hd { display:flex; align-items:flex-start; }
+.card .hd .spacer { flex:1; }
+.legend { display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:6px; font-size:12px; color:var(--ink-2); }
+.legend .key { display:flex; align-items:center; gap:6px; }
+.key .sw { width:10px; height:10px; border-radius:3px; }
+.key .ln { width:14px; height:2px; border-radius:1px; }
+.fn { color:var(--ink-3); font-size:11.5px; margin-top:8px; }
+svg text { font-family:inherit; }
+.tick { fill:var(--ink-3); font-size:10.5px; font-variant-numeric:tabular-nums; }
+.dlabel { fill:var(--ink-2); font-size:11px; font-weight:600; }
+.tooltip { position:fixed; pointer-events:none; background:var(--surface-1); border:1px solid var(--ring);
+  border-radius:10px; padding:8px 11px; font-size:12px; box-shadow:0 4px 14px rgba(0,0,0,.14);
+  z-index:50; display:none; max-width:280px; }
+.tooltip .tt-d { color:var(--ink-3); margin-bottom:3px; font-size:11.5px; }
+.tooltip .row { display:flex; align-items:center; gap:6px; margin-top:2px; }
+.tooltip .row .v { margin-left:auto; font-weight:600; font-variant-numeric:tabular-nums; padding-left:10px; }
+.tblwrap { max-height:300px; overflow:auto; margin-top:6px; border:1px solid var(--ring); border-radius:8px; }
+table.tv { border-collapse:collapse; width:100%; font-size:12px; }
+table.tv th, table.tv td { padding:4px 9px; text-align:right; border-bottom:1px solid var(--grid);
+  font-variant-numeric:tabular-nums; white-space:nowrap; }
+table.tv th:first-child, table.tv td:first-child { text-align:left; position:sticky; left:0; background:var(--surface-1); }
+table.tv thead th { position:sticky; top:0; background:var(--surface-1); color:var(--ink-2); z-index:2; }
+.unwind { margin-top:10px; }
+.unwind .bar { height:10px; border-radius:5px; background:var(--wash); position:relative; overflow:hidden; }
+.unwind .fill { position:absolute; inset:0 auto 0 0; background:var(--s1); border-radius:5px; }
+.unwind .cap { display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-3); margin-top:4px; gap:12px; }
+.parts .row { display:flex; align-items:center; gap:10px; margin:7px 0; }
+.parts .nm { width:190px; font-size:12px; color:var(--ink-2); flex:none; }
+.parts .bar { flex:1; height:12px; background:var(--wash); border-radius:6px; position:relative; }
+.parts .bf { position:absolute; inset:0 auto 0 0; background:var(--s1); border-radius:6px; }
+.parts .pv { width:70px; text-align:right; font-size:12px; font-variant-numeric:tabular-nums; color:var(--ink-2); flex:none; }
+.pending { border:1px dashed var(--axis); border-radius:10px; padding:12px 14px; color:var(--ink-2); font-size:12.5px; background:var(--wash); }
+.stale { display:inline-block; color:var(--warn); border:1px solid var(--warn); border-radius:999px; padding:1px 7px; font-size:10.5px; font-weight:600; }
+.method { font-size:12.5px; color:var(--ink-2); }
+.method h4 { margin:14px 0 4px; font-size:13px; color:var(--ink-1); }
+.method code { background:var(--wash); border-radius:4px; padding:1px 5px; font-size:11.5px; }
+details.how { margin:2px 0 8px; }
+details.how summary { cursor:pointer; font-size:12px; color:var(--s1); user-select:none; list-style:none; }
+details.how summary::before { content:'▸ '; }
+details.how[open] summary::before { content:'▾ '; }
+details.how .hb { margin-top:6px; padding:9px 12px; background:var(--wash); border-radius:9px;
+  font-size:12.5px; color:var(--ink-2); line-height:1.65; }
+#commentary p { margin:7px 0; font-size:13.5px; line-height:1.75; }
+#verdict { margin:4px 0 14px; padding:12px 16px; background:var(--wash); border-radius:11px; border-left:4px solid var(--s1); }
+#verdict:empty { display:none; }
+#verdict .v0 { font-size:11.5px; letter-spacing:.06em; color:var(--ink-3); margin-bottom:4px; }
+#verdict .v1 { font-size:14.5px; font-weight:650; line-height:1.7; }
+#verdict .v2 { font-size:12.5px; color:var(--ink-2); margin-top:6px; line-height:1.65; }
+#commentary .tag { display:inline-block; font-size:11px; color:var(--ink-3); border:1px solid var(--ring);
+  border-radius:5px; padding:0 6px; margin-right:8px; vertical-align:1px; }
+footer { color:var(--ink-3); font-size:11.5px; margin-top:22px; }
+.zone-good { color:var(--good); } .zone-warn { color:var(--warn); }
+.zone-serious { color:var(--serious); } .zone-crit { color:var(--crit); }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <header class="top">
+    <h1>台股去槓桿壓力儀表板</h1>
+    <span class="sub" id="asof"></span>
+    <span class="spacer"></span>
+    <button class="ghost" id="themeBtn">深/淺色</button>
+  </header>
+  <div class="sub" id="genline"></div>
+
+  <div class="hero">
+    <div class="card gauge-card">
+      <h3 style="align-self:flex-start">去槓桿壓力指數</h3>
+      <div id="gauge"></div>
+      <div id="zoneLabel" style="font-size:13px;font-weight:600;margin-top:-6px"></div>
+      <div class="fn" style="text-align:center">0＝出清完成 · 100＝極端槓桿壓力<br>台股五維壓力指標，方法見頁尾</div>
+    </div>
+    <div class="card">
+      <div class="tiles" id="tiles"></div>
+      <div class="chips" id="chips" style="margin-top:14px"></div>
+      <div class="fn">三項關鍵訊號：①技術性賣壓衰竭（自動判定）②外部催化劑落地（人工旗標）③政策干預力度（國安基金／限空令等人工旗標）。三燈轉綠前的反彈，仍應先視為技術性反彈。</div>
+    </div>
+  </div>
+
+  <div class="card" id="commentary" style="margin-bottom:14px">
+    <div class="hd"><div><h3>本期解讀</h3><div class="desc">依當期讀數自動生成（定位 → 證據 → 條件），可直接複製使用。</div></div>
+    <div class="spacer"></div><button class="ghost" id="copyComm">複製</button></div>
+    <div id="verdict"></div>
+    <div id="commBody"></div>
+  </div>
+
+  <div class="filters" id="filters"><span class="fl">期間</span></div>
+  <div class="grid" id="cards"></div>
+
+  <div class="card method" style="margin-top:14px">
+    <h3>方法論與數據源</h3>
+    <div id="methodBody"></div>
+  </div>
+  <footer id="foot"></footer>
+</div>
+<div class="tooltip" id="tt"></div>
+
+<script>
+const IND = {{ ind_json|safe }};
+(function(){
+'use strict';
+if(!IND){ document.getElementById('app').innerHTML='<p style="padding:40px">尚無數據 — 請先執行數據管線。</p>'; return; }
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const el=(t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e;};
+const D=Array.isArray(IND.dates)?IND.dates:[];
+const S=IND.series||{};
+const L=IND.latest||{};
+const E=IND.latest_extra||{};
+const P=E.pctl||{};
+const shortBalanceUnit=E.short_balance_unit||'萬張';
+const turnHeatUnit=E.turn_heat_unit||'天';
+const U=IND.unwind||{};
+const C=IND.composite||{};
+const signalDefaults={s1:{label:'技術性賣壓衰竭',status:'watch',detail:'等待信用壓力與低維持率曝險同步降溫'},s2:{label:'外部催化劑落地',status:'watch',detail:'由研究人員依事件進展更新'},s3:{label:'政策干預力度',status:'watch',detail:'國安基金、限空令與平盤下放空限制等'} };
+const SIG={...signalDefaults,...(IND.signals||{})};
+const series=k=>Array.isArray(S[k])?S[k]:Array(D.length).fill(null);
+const val=(k,fallback=null)=>L[k]??E[k]??fallback;
+const pctl=(k,fallback=null)=>P[k]??E[k+'_pctl']??fallback;
+const fmtD=d=>{ if(!d)return ''; const x=String(d).replace(/-/g,''); return x.length>=8?x.slice(0,4)+'/'+x.slice(4,6)+'/'+x.slice(6,8):String(d); };
+const fmtN=(v,dp=1)=>v==null||Number.isNaN(Number(v))?'–':Number(v).toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const pct=(v,dp=1)=>v==null?'–':fmtN(v,dp)+'%';
+const safeDiv=(a,b)=>a!=null&&b?100*a/b:null;
+const latestDateFor=k=>{const a=series(k); for(let i=Math.min(D.length,a.length)-1;i>=0;i--){if(a[i]!=null)return D[i];} return null;};
+const sameDay=(a,b)=>a&&b&&String(a).replace(/-/g,'')===String(b).replace(/-/g,'');
+const tradingDaysBehind=(a,b)=>{if(!a||!b)return Infinity;const from=String(a).replace(/-/g,''),to=String(b).replace(/-/g,'');return D.filter(d=>{const x=String(d).replace(/-/g,'');return x>from&&x<=to;}).length;};
+const statusClass=z=>({high:'zone-crit',mid:'zone-serious',late:'zone-warn',done:'zone-good'})[z]||'';
+const zoneText=z=>({high:'高壓區',mid:'去化中後期',late:'出清尾聲',done:'大致出清'})[z]||C.zone_label||'監測中';
+
+/* ---------- theme ---------- */
+let theme=(matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
+document.documentElement.setAttribute('data-theme',theme);
+$('#themeBtn').onclick=()=>{theme=theme==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',theme);renderAll();};
+if(matchMedia){matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{theme=e.matches?'dark':'light';document.documentElement.setAttribute('data-theme',theme);renderAll();});}
+
+/* ---------- header ---------- */
+$('#asof').textContent='行情截至 '+fmtD(IND.asof_market||IND.asof)+'｜融資餘額截至 '+fmtD(IND.asof_credit||IND.asof)+'｜整戶維持率截至 '+fmtD(IND.asof_maint||IND.asof_credit||IND.asof)+'（信用資料通常 T+1～T+2）';
+$('#genline').textContent='共 '+(IND.n_days_total??D.length).toLocaleString()+' 個交易日 · 產出於 '+(IND.generated||'–');
+if(IND.sample||IND.partial){
+  const b=el('div',null,IND.sample?'⚠️ 目前顯示<b>測試用數據</b>，僅供管線驗證，不應作為市場判斷。':'ⓘ 歷史資料不足，<b>綜合分數為暫估</b>；百分位基準將隨歷史累積改善。');
+  b.style.cssText='margin:10px 0 2px;padding:10px 14px;border-radius:10px;font-size:13px;background:rgba(42,120,214,.08);border:1px solid rgba(42,120,214,.35);color:var(--ink-1)';
+  $('#genline').after(b);
+}
+
+/* ---------- gauge ---------- */
+function gauge(score,zone){
+  score=Number(score??0); const w=250,h=150,cx=w/2,cy=135,r=100,r2=86;
+  const zones=[[0,25,css('--good')],[25,45,css('--warn')],[45,70,css('--serious')],[70,100,css('--crit')]];
+  const a=v=>Math.PI*(1+v/100), P0=(ang,rad)=>[cx+rad*Math.cos(ang),cy+rad*Math.sin(ang)];
+  let s='<svg width="'+w+'" height="'+h+'" role="img" aria-label="壓力指數 '+score+'">';
+  zones.forEach(([f,t,col])=>{const gap=.014,a1=a(f)+(f>0?gap:0),a2=a(t)-(t<100?gap:0),p1=P0(a1,r),p2=P0(a2,r),p3=P0(a2,r2),p4=P0(a1,r2);
+    s+='<path d="M'+p1[0]+' '+p1[1]+' A'+r+' '+r+' 0 0 1 '+p2[0]+' '+p2[1]+' L'+p3[0]+' '+p3[1]+' A'+r2+' '+r2+' 0 0 0 '+p4[0]+' '+p4[1]+' Z" fill="'+col+'" opacity=".9"/>';});
+  const n=P0(a(Math.max(0,Math.min(100,score))),r2-6);
+  s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+n[0]+'" y2="'+n[1]+'" stroke="'+css('--ink-1')+'" stroke-width="2.5" stroke-linecap="round"/><circle cx="'+cx+'" cy="'+cy+'" r="5" fill="'+css('--ink-1')+'"/><text x="'+cx+'" y="'+(cy-28)+'" text-anchor="middle" style="font-size:44px;font-weight:650" fill="'+css('--ink-1')+'">'+fmtN(score,1)+'</text>';
+  ['0','25','45','70','100'].forEach(v=>{const p=P0(a(+v),r+11);s+='<text x="'+p[0]+'" y="'+(p[1]+3)+'" text-anchor="middle" class="tick">'+v+'</text>';});
+  $('#gauge').innerHTML=s+'</svg>';
+  $('#zoneLabel').innerHTML='<span class="'+statusClass(zone)+'">●</span> '+(C.zone_label||zoneText(zone));
+}
+
+/* ---------- tiles and signals ---------- */
+function tiles(){
+  const margin=val('margin_total'), maint=val('maint_wavg'), low140=val('maint_low140_share'), dd=val('taiex_dd');
+  const distPeak=safeDiv(margin,U.peak);
+  const maintZone=E.maint_zone_label||'分區待資料',maintD1=E.maint_d1_pp==null?'單日變動 –':'單日 '+(E.maint_d1_pp>0?'+':'')+fmtN(E.maint_d1_pp,1)+' 個百分點',officialGap=E.maint_official_gap_pp;
+  const maintDetail=maintZone+' · '+maintD1+(officialGap==null?'':' · 官方差 '+(officialGap>0?'+':'')+fmtN(officialGap,1)+'pp');
+  const t=[
+    {l:'融資餘額（全市場）',v:fmtN(margin,3)+' 兆元',d:(E.margin_d5_pct==null?'':'5日 '+(E.margin_d5_pct>0?'+':'')+pct(E.margin_d5_pct,1))+' · 距峰值 '+(distPeak==null?'–':pct(distPeak-100,1))},
+    {l:'整戶維持率',v:pct(maint,1),d:maintDetail,bad:maint!=null&&maint<140},
+    {l:'低維持率曝險（<140%）',v:pct(low140,1),d:'融資餘額占比 · 越低越好',bad:low140!=null&&pctl('maint_low140_share')>70},
+    {l:'TAIEX 距52週盤中高點',v:pct(dd,1),d:'現收 '+fmtN(val('taiex_close'),0)+' · 回撤採盤中 high／low 口徑',bad:dd!=null&&dd<-10}
+  ];
+  const host=$('#tiles'); host.innerHTML='';
+  t.forEach(x=>{const d=el('div','tile'+(x.bad?' bad':''));d.append(el('div','lbl',x.l),el('div','val',x.v),el('div','delta',x.d));host.append(d);});
+}
+function chips(){
+  const host=$('#chips');host.innerHTML=''; const colors={green:css('--good'),yellow:css('--warn'),red:css('--crit'),watch:css('--ink-3')}, icons={green:'✓',yellow:'△',red:'✕',watch:'…'};
+  ['s1','s2','s3'].forEach((k,i)=>{const s={...signalDefaults[k],...(SIG[k]||{})},c=el('div','chip');c.title=s.detail||'';
+    c.innerHTML='<span class="dot" style="background:'+(colors[s.status]||colors.watch)+'"></span><b>'+String(i+1)+'·'+s.label+'</b><span>'+((icons[s.status])||icons.watch)+'</span>';host.append(c);
+    const d=el('div','signal-detail');d.textContent=s.detail||'';
+    if(k==='s2'||k==='s3') appendSignalProvenance(d,s);
+    host.append(d);});
+}
+function appendSignalProvenance(host,signal){
+  const origin=String(signal.origin||signal.source_type||'').toLowerCase();
+  const label=(origin==='manual'||origin==='human')?'人工旗標':((origin==='auto'||origin==='ai')?'AI自動判讀':'');
+  if(label){const mark=el('span','signal-origin');mark.textContent=label;host.append(mark);}
+  const primary=Array.isArray(signal.citations)?signal.citations[0]:null;
+  if(!primary||typeof primary!=='object')return;
+  const title=String(primary.title||'').trim(),source=String(primary.source||'').trim(),date=fmtD(primary.date||'');
+  if(!title||!source||!date)return;
+  const citation=el('span','signal-citation');
+  const text=[title,source,date].join('·');
+  const url=safeExternalUrl(primary.url);
+  if(url){const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=text;citation.append(a);}
+  else citation.textContent=text;
+  host.append(citation);
+}
+function safeExternalUrl(value){
+  try{const url=new URL(String(value||''));return /^(https?):$/.test(url.protocol)?url.href:null;}catch(_){return null;}
+}
+
+/* ---------- chart engine ---------- */
+const RANGES={'6月':6,'1年':12,'3年':36,'5年':60,'全部':null}; let rangeMonths=12;
+function calendarTarget(lastDate,months){const m=String(lastDate).match(/^(\d{4})-?(\d{2})-?(\d{2})/);if(!m)return null;const y=Number(m[1]),month=Number(m[2]),day=Number(m[3]),totalMonths=y*12+(month-1)-months,targetY=Math.floor(totalMonths/12),targetMonth=totalMonths%12+1,lastDay=new Date(targetY,targetMonth,0).getDate();return String(targetY).padStart(4,'0')+String(targetMonth).padStart(2,'0')+String(Math.min(day,lastDay)).padStart(2,'0');}
+function sliceIdx(){const n=D.length;if(!n||rangeMonths==null)return [0,n];const target=calendarTarget(D[n-1],rangeMonths);if(!target)return [0,n];const i0=D.findIndex(d=>String(d).replace(/\D/g,'').slice(0,8)>=target);return [i0<0?0:i0,n];}
+function niceTicks(mn,mx,m=4){if(mn===mx)mx=mn+1;const span=mx-mn,step0=span/m,mag=Math.pow(10,Math.floor(Math.log10(step0))),cand=[1,2,2.5,5,10].map(x=>x*mag),step=cand.find(c=>span/c<=m)||cand[4],lo=Math.floor(mn/step)*step,hi=Math.ceil(mx/step)*step,t=[];for(let v=lo;v<=hi+1e-9;v+=step)t.push(+v.toFixed(10));return t;}
+const tt=$('#tt');
+function showTT(x,y,html){tt.innerHTML=html;tt.style.display='block';const r=tt.getBoundingClientRect();let px=x+14,py=y+14;if(px+r.width>innerWidth-8)px=x-r.width-14;if(py+r.height>innerHeight-8)py=y-r.height-14;tt.style.left=px+'px';tt.style.top=py+'px';}
+function hideTT(){tt.style.display='none';}
+function chart(host,cfg){
+  host.innerHTML=''; const [i0,i1]=sliceIdx(); if(!D.length||i1<=i0){host.append(el('div','pending','尚無可繪製的序列資料。'));return;}
+  const W=host.clientWidth||520,H=cfg.h||210,pad={l:8,r:8,t:12,b:22},innerW=W-pad.l-pad.r,maxPts=Math.max(80,Math.floor(innerW/2.5)),nRaw=i1-i0,stride=Math.max(1,Math.ceil(nRaw/maxPts)),idx=[];
+  for(let i=i0;i<i1;i+=stride)idx.push(i);if(idx[idx.length-1]!==i1-1)idx.push(i1-1);
+  const rows=idx.map(i=>({d:D[i],vals:cfg.series.map(s=>(s.data||series(s.key))[i])}));let mn=Infinity,mx=-Infinity;
+  rows.forEach(r=>r.vals.forEach(v=>{if(v!=null&&Number.isFinite(Number(v))){mn=Math.min(mn,Number(v));mx=Math.max(mx,Number(v));}}));
+  (cfg.refLines||[]).forEach(r=>{if(r.v!=null){mn=Math.min(mn,r.v);mx=Math.max(mx,r.v);}});if(!isFinite(mn)){mn=0;mx=1;}if(cfg.zero&&mn>0)mn=0;
+  const ticks=niceTicks(mn,mx,4);mn=ticks[0];mx=ticks[ticks.length-1];const tickW=Math.max(...ticks.map(t=>String(cfg.yFmt?cfg.yFmt(t):t).length))*6.6+8,pl=pad.l+tickW,pw=W-pl-pad.r,ph=H-pad.t-pad.b,X=i=>pl+pw*(rows.length===1?.5:i/(rows.length-1)),Y=v=>pad.t+ph*(1-(v-mn)/(mx-mn)),NS='http://www.w3.org/2000/svg',svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('width',W);svg.setAttribute('height',H);svg.style.display='block';const add=(p,t,at)=>{const e=document.createElementNS(NS,t);Object.keys(at).forEach(k=>e.setAttribute(k,at[k]));p.appendChild(e);return e;};
+  ticks.forEach(t=>{add(svg,'line',{x1:pl,x2:W-pad.r,y1:Y(t),y2:Y(t),stroke:css('--grid'),'stroke-width':1});const x=add(svg,'text',{x:pl-6,y:Y(t)+3.5,'text-anchor':'end','class':'tick'});x.textContent=cfg.yFmt?cfg.yFmt(t):t;});
+  add(svg,'line',{x1:pl,x2:W-pad.r,y1:Y(mn),y2:Y(mn),stroke:css('--axis'),'stroke-width':1});
+  const xn=Math.min(4,rows.length);for(let k=0;k<xn;k++){const i=Math.round(k*(rows.length-1)/(xn-1||1)),x=add(svg,'text',{x:X(i),y:H-6,'text-anchor':k===0?'start':(k===xn-1?'end':'middle'),'class':'tick'});x.textContent=fmtD(rows[i].d).slice(2);}
+  (cfg.refLines||[]).forEach(r=>{if(r.v==null)return;add(svg,'line',{x1:pl,x2:W-pad.r,y1:Y(r.v),y2:Y(r.v),stroke:css('--axis'),'stroke-width':1});const x=add(svg,'text',{x:pl+4,y:Y(r.v)-4,'text-anchor':'start','class':'tick'});x.textContent=r.label;});
+  const surface=css('--surface-1');cfg.series.forEach((s,si)=>{const col=s.color;if(s.type==='bar'){const bw=Math.min(24,Math.max(1.5,pw/rows.length-2));rows.forEach((r,i)=>{const v=r.vals[si];if(v==null)return;const y=Y(Math.max(0,v)),y0=Y(Math.max(0,mn)),hgt=Math.max(1,Math.abs(Y(v)-Y(Math.max(0,mn)))),rr=Math.min(4,bw/2);add(svg,'path',{d:'M'+(X(i)-bw/2)+' '+y0+' V'+(y+rr)+' Q'+(X(i)-bw/2)+' '+y+' '+(X(i)-bw/2+rr)+' '+y+' H'+(X(i)+bw/2-rr)+' Q'+(X(i)+bw/2)+' '+y+' '+(X(i)+bw/2)+' '+(y+rr)+' V'+y0+' Z',fill:col});});}else{let dPath='',firstI=null,lastI=null;rows.forEach((r,i)=>{const v=r.vals[si];if(v==null)return;if(firstI==null)firstI=i;dPath+=(lastI==null?'M':'L')+X(i).toFixed(1)+' '+Y(v).toFixed(1)+' ';lastI=i;});if(s.type==='area'&&firstI!=null)add(svg,'path',{d:dPath+'L'+X(lastI)+' '+Y(mn)+' L'+X(firstI)+' '+Y(mn)+' Z',fill:col,opacity:.10});if(dPath)add(svg,'path',{d:dPath,fill:'none',stroke:col,'stroke-width':2,'stroke-linecap':'round','stroke-linejoin':'round'});if(lastI!=null){const lv=rows[lastI].vals[si];add(svg,'circle',{cx:X(lastI),cy:Y(lv),r:4.5,fill:col,stroke:surface,'stroke-width':2});}}});
+  const cross=add(svg,'line',{x1:0,x2:0,y1:pad.t,y2:pad.t+ph,stroke:css('--axis'),'stroke-width':1,opacity:0}),hot=add(svg,'rect',{x:pl,y:pad.t,width:pw,height:ph,fill:'transparent'});hot.style.cursor='crosshair';
+  const near=evX=>{const rct=svg.getBoundingClientRect(),rx=evX-rct.left;let best=0,bd=1e9;rows.forEach((r,i)=>{const d=Math.abs(X(i)-rx);if(d<bd){bd=d;best=i;}});return best;};
+  hot.addEventListener('mousemove',e=>{const i=near(e.clientX);cross.setAttribute('x1',X(i));cross.setAttribute('x2',X(i));cross.setAttribute('opacity',1);let html='<div class="tt-d">'+fmtD(rows[i].d)+'</div>';cfg.series.forEach((s,si)=>{const v=rows[i].vals[si];html+='<div class="row"><span class="sw" style="width:9px;height:9px;border-radius:3px;background:'+s.color+'"></span>'+s.name+'<span class="v">'+(v==null?'–':(cfg.yFmt?cfg.yFmt(v):fmtN(v)))+'</span></div>';});showTT(e.clientX,e.clientY,html);});hot.addEventListener('mouseleave',()=>{cross.setAttribute('opacity',0);hideTT();});
+  host.appendChild(svg);if(cfg.series.length>1&&cfg.series.length<=3&&cfg.series.every(s=>s.type!=='bar')){const endpoints=cfg.series.map((s,si)=>{let i=rows.length-1;while(i>=0&&rows[i].vals[si]==null)i--;return i<0?null:{i,y:Y(rows[i].vals[si])};}),ys=endpoints.map(p=>p&&p.y),ok=ys.every((y,i)=>y==null||ys.every((y2,j)=>i===j||y2==null||Math.abs(y-y2)>=13));if(ok)cfg.series.forEach((s,si)=>{const p=endpoints[si];if(!p)return;const x=document.createElementNS(NS,'text');x.setAttribute('x',X(p.i));x.setAttribute('y',p.y-8);x.setAttribute('text-anchor','end');x.setAttribute('class','dlabel');x.textContent=s.name;svg.appendChild(x);});}
+}
+
+/* ---------- commentary ---------- */
+function genComment(){
+  const gave=(U.peak??0)-(U.current??0),uPct=U.U==null?'–':fmtN(100*U.U,0)+'%',hasExcess=Number(U.excess_peak)>0;
+  const unwindText=hasExcess?'已回吐 '+fmtN(gave,3)+' 兆、尚餘 '+fmtN(U.excess_now,3)+' 兆超額槓桿，出清進度為 '+uPct+'。':'本輪未形成高於基期的新增融資；目前較基期 '+fmtN((U.current??0)-(U.baseline??0),3)+' 兆。';
+  const divergence=E.divergence_flag===true?'目前出現「指數創60日新高而維持率走低」的槓桿背離，代表擔保品緩衝可能在累積脆弱性。':'';
+  const s1='去槓桿壓力指數 '+fmtN(C.score,1)+'，目前為'+zoneText(C.zone)+'。本輪以 '+fmtD(U.baseline_date||'20260430')+' 的融資餘額 '+fmtN(U.baseline,3)+' 兆元為基期，升至 '+fmtD(U.peak_date)+' 的 '+fmtN(U.peak,3)+' 兆元高點；目前 '+fmtN(U.current,3)+' 兆元，'+unwindText+(divergence?' '+divergence:'');
+  const ev=[];if(E.margin_d5_pct!=null)ev.push('融資餘額近5日 '+(E.margin_d5_pct>0?'+':'')+pct(E.margin_d5_pct,1)+(E.margin_d5_pct<-1?'，降槓桿仍在進行':(E.margin_d5_pct>1?'，槓桿仍在累積':'，融資變化接近持平')));
+  if(val('maint_wavg')!=null){const zone=E.maint_zone_label||'未分類區',d1=E.maint_d1_pp,accel=E.maint_accel_days;let maintText='整戶維持率 '+pct(val('maint_wavg'),1)+'，處 '+zone+(d1==null?'；單日變動資料不足':'；單日 '+(d1>0?'+':'')+fmtN(d1,1)+' 個百分點')+(accel==null?'；近10日加速訊號資料不足':'；近10日 '+accel+' 次單日降幅 ≤ −2pp');if(d1!=null&&d1<=-2)maintText+='，去槓桿加速訊號已亮起';if(E.maint_zone==='callwave'||E.maint_zone==='liquidation')maintText+='；跌破130%後會進入追繳與補繳程序，若未回升，處分賣壓通常較維持率讀數落後約2–3個交易日';ev.push(maintText);}
+  if(val('maint_low140_share')!=null)ev.push('維持率低於140%的融資餘額占 '+pct(val('maint_low140_share'),1)+(pctl('maint_low140_share')!=null?'（5年百分位 '+fmtN(pctl('maint_low140_share'),0)+'）':''));
+  if(val('rv20')!=null&&val('turn_heat')!=null){const rvPctl=pctl('rv20'),turnPctl=pctl('turn_heat');ev.push(rvPctl==null||turnPctl==null?'歷史百分位基準不足，暫不判定市場應激是否改善':(rvPctl>60||turnPctl>60?'波動率或成交熱度仍高於歷史常態，市場應激尚未完全退潮':'波動率與成交熱度接近歷史常態，市場消化壓力正在改善'));}
+  const s2=(ev.length?ev.join('；'):'目前資料不足以形成多項佐證')+'。';
+  const miss=[];if((SIG.s1||{}).status!=='green')miss.push('①技術性賣壓衰竭（維持率、融資與低維持率曝險需同步改善）');if((SIG.s2||{}).status!=='green')miss.push('②外部催化劑落地');if((SIG.s3||{}).status!=='green')miss.push('③政策干預力度明朗（國安基金／限空令／平盤下放空限制）');
+  const s3=miss.length?'市場重回基本面主導之前，仍待：'+miss.join('、')+'。':'三項關鍵訊號均已亮綠，市場回到基本面主導的條件漸備。';
+  const notes=[];if(latestDateFor('pcr_oi')&&IND.asof_market&&String(latestDateFor('pcr_oi')).replace(/-/g,'')!==String(IND.asof_market).replace(/-/g,''))notes.push('TXO 情緒資料獨立截至 '+fmtD(E.asof_txo||latestDateFor('pcr_oi'))+'，未納入壓力指數。');if(!latestDateFor('daytrade_ratio'))notes.push('當沖資料尚待官方來源補齊，未影響主流程。');
+  return [['定位',s1],['證據',s2],['條件',s3]].concat(notes.length?[['註',notes.join(' ')]]:[]);
+}
+function genVerdict(){
+  const uPct=U.U==null?'–':fmtN(U.U*100,0)+'%',maint=val('maint_wavg'),low=val('maint_low140_share'),hasExcess=Number(U.excess_peak)>0,unwindIncomplete=hasExcess&&Number(U.U)<.5;let main;
+  if(C.zone==='done')main='綜合壓力指數落在低壓分數區間（指數 '+fmtN(C.score,0)+'，出清 '+uPct+'）；'+(unwindIncomplete?'但本輪超額槓桿僅出清 '+uPct+'，不能據此判定去槓桿已完成。':'仍須確認整戶維持率與低維持率曝險沒有反覆惡化。');
+  else if(C.zone==='late')main='綜合壓力指數落在中低壓分數區間（指數 '+fmtN(C.score,0)+'，出清 '+uPct+'）；'+(unwindIncomplete?'本輪超額槓桿尚未明顯出清，仍需持續確認維持率、融資與低維持率曝險。':'仍須確認整戶維持率與低維持率曝險沒有反覆惡化。');
+  else main='去槓桿處於'+zoneText(C.zone)+'（指數 '+fmtN(C.score,0)+'，本輪超額槓桿已出清 '+uPct+'）；'+(maint!=null&&maint<140?'整戶維持率正接近斷頭敏感帶，反彈仍應先按技術性反彈看待。':'仍待維持率、融資餘額與低維持率曝險同步降溫，才是較可靠的底部確認。');
+  if(E.divergence_flag===true)main+=' 同時有槓桿背離，暫不把指數創高解讀為信用風險解除。';
+  return {main,watch:'後續優先盯三條線：<b>整戶維持率</b>、<b>維持率低於140%的曝險占比</b>與<b>融資餘額</b>。三者同時改善，才代表斷頭風險與被動賣壓正在退潮。'};
+}
+function renderComment(){const v=genVerdict();$('#verdict').innerHTML='<div class="v0">一句話結論</div><div class="v1">'+v.main+'</div><div class="v2">'+v.watch+'</div>';const box=$('#commBody');box.innerHTML='';genComment().forEach(([tag,txt])=>box.append(el('p',null,'<span class="tag">'+tag+'</span>'+txt)));$('#copyComm').onclick=()=>{const t='【結論】'+v.main+' '+v.watch.replace(/<[^>]+>/g,'')+'\n\n'+genComment().map(x=>x[1]).join('\n');if(navigator.clipboard)navigator.clipboard.writeText(t);$('#copyComm').textContent='已複製';setTimeout(()=>$('#copyComm').textContent='複製',1500);};}
+
+/* ---------- cards ---------- */
+const hasSeries=k=>series(k).some(v=>v!=null&&Number.isFinite(Number(v)));
+function maintPrimarySeries(){const rows=[{name:'TEJ 個股加權估計',key:'maint_wavg',color:'--s1',type:'line'}];if(hasSeries('maint_official'))rows.push({name:'官方大盤維持率',key:'maint_official',color:'--s2',type:'line'});return rows;}
+function maintVsTaiexNormalisedSeries(){const maint=series('maint_wavg'),taiex=series('taiex_close'),[i0,i1]=sliceIdx();let base=null;for(let i=i0;i<i1;i++){if(maint[i]!=null&&taiex[i]!=null&&Number.isFinite(Number(maint[i]))&&Number.isFinite(Number(taiex[i]))){base=i;break;}}const normalise=raw=>base==null?Array(D.length).fill(null):raw.map(v=>v==null?null:100*Number(v)/Number(raw[base]));return [{name:'整戶維持率（標準化）',data:normalise(maint),color:'--s1',type:'line'},{name:'加權指數（標準化）',data:normalise(taiex),color:'--s5',type:'line'}];}
+const CARDS=[
+  {id:'margin',t:'融資餘額（全市場）',d:'台股散戶槓桿的主體。單位為兆元；參考線為本輪峰值與基期。',how:'融資餘額是投資人向券商借錢買股的存量。曲線急跌通常代表被動去槓桿正在發生；走平並不等於風險消失，仍要搭配整戶維持率與低維持率曝險判讀。出清進度 U 只衡量本輪基期後新增的融資是否退出。',series:[{name:'融資餘額',key:'margin_total',color:'--s1',type:'line'}],yFmt:v=>fmtN(v,3)+' 兆',refs:()=>[{v:U.peak,label:'峰值 '+fmtN(U.peak,3)},{v:U.baseline,label:'基期 '+fmtD(U.baseline_date)}],extra:'unwind',fn:()=>{const gave=(U.peak??0)-(U.current??0),added=(U.peak??0)-(U.baseline??0);return '本輪基期 '+fmtN(U.baseline,3)+' 兆（'+fmtD(U.baseline_date)+'）→ 峰值 '+fmtN(U.peak,3)+' 兆（'+fmtD(U.peak_date)+'），現為 '+fmtN(U.current,3)+' 兆；已回吐 '+fmtN(gave,3)+' 兆／本輪新增 '+fmtN(added,3)+' 兆。';},panel2:{t:'融券餘額（'+shortBalanceUnit+'）',series:[{name:'融券餘額（'+shortBalanceUnit+'）',key:'short_balance',color:'--s2',type:'line'}],yFmt:v=>fmtN(v,1)+' '+shortBalanceUnit}},
+  {id:'maint',t:'整戶維持率（主角指標）',d:'TEJ 個股融資餘額加權估計；130／140／166% 為追繳與風險判讀的參考線。',how:'分區口訣：>166%安全（166.7%對應融資六成的初始緩衝）、150–166%正常、140–150%警戒、130–140%追繳潮、<130%全面斷頭敏感帶。130%是追繳制度線，圖中參考線皆為風險監測基準，非進出場指令。速度：單日≤−2pp為去槓桿加速，近10日連續出現代表斷頭潮逼近。背離：TAIEX創60日新高而維持率同窗走低，代表槓桿脆弱性累積。時滯：跌破130%後，追繳、補繳至處分通常落後約2–3個交易日。若未來接入可驗證的官方大盤日序列，會以同一%單軸疊線，不使用雙Y軸。',series:maintPrimarySeries,yFmt:v=>fmtN(v,0)+'%',refs:()=>[{v:130,label:'130%'},{v:140,label:'140%'},{v:166,label:'166%'}],panel2:{t:'低維持率曝險廣度（融資餘額占比）',series:[{name:'<130%',key:'maint_low130_share',color:'--s6',type:'line'},{name:'<140%',key:'maint_low140_share',color:'--s3',type:'line'}],yFmt:v=>fmtN(v,1)+'%'}},
+  {id:'maint-compare',t:'維持率 vs 加權指數（標準化）',d:'單一Y軸；當前顯示範圍的第一個共同有效日＝100，用於看同向／背離，不比較絕對點位。',how:'兩條線都以當前顯示範圍第一個共同有效日標準化為100，故可在單一Y軸比較變化方向。指數創60日新高、但維持率在同窗走低時，標示為「槓桿背離」：融資膨脹可能快於擔保品市值，脆弱性累積。此圖不使用MacroMicro式雙Y軸。',series:maintVsTaiexNormalisedSeries,yFmt:v=>fmtN(v,0)+'（基期=100）'},
+  {id:'ratio',t:'券資比與融資使用率',d:'券資比觀察放空與融資的相對結構；融資使用率則反映槓桿可用空間。',how:'券資比與融資使用率是結構性觀察，而非單獨的方向訊號。高融資使用率代表新增緩衝較薄，必須和維持率、成交熱度及股價波動一併看。',series:[{name:'券資比',key:'short_margin_ratio',color:'--s3',type:'line'}],yFmt:v=>fmtN(v,1)+'%',panel2:{t:'融資使用率（加權平均）',series:[{name:'融資使用率',key:'margin_util',color:'--s2',type:'line'}],yFmt:v=>fmtN(v,1)+'%'}},
+  {id:'taiex',t:'TAIEX 與市場應激',d:'加權指數走勢與20日年化已實現波動率。回撤採52週盤中 high／low 口徑。',how:'指數點位提供市場背景；去槓桿判讀更重視波動率是否降溫。回撤使用每日盤中高低價，通常較收盤對收盤的回撤更能捕捉壓力測試。',series:[{name:'TAIEX',key:'taiex_close',color:'--s1',type:'line'}],yFmt:v=>fmtN(v,0),panel2:{t:'20日年化已實現波動率',series:[{name:'RV20',key:'rv20',color:'--s5',type:'line'}],yFmt:v=>fmtN(v,0)+'%'}},
+  {id:'turn',t:'成交熱度與融資消化天數',d:'成交金額反映籌碼換手；消化天數＝融資餘額 ÷ 日成交額，越低代表市場吸收槓桿越快。',how:'成交額居高意味籌碼仍在激烈換手，不能單獨解讀為健康。消化天數將融資存量與市場流動性放到同一個量綱：若槓桿被迫出售，理論上需多少個日成交額才能吸收。',series:[{name:'成交金額',key:'turn_val',color:'--s1',type:'bar'}],yFmt:v=>fmtN(v,2)+' 兆',zero:true,panel2:{t:'融資消化天數（'+turnHeatUnit+'）',series:[{name:'消化天數（'+turnHeatUnit+'）',key:'turn_heat',color:'--s2',type:'line'}],yFmt:v=>fmtN(v,1)+' '+turnHeatUnit}},
+  {id:'foreign',t:'外資動向',d:'外資買賣超以20日累計觀察（萬張）；正值為買超、負值為賣超。',how:'外資20日累計可提供去槓桿期間的外部資金背景。這是輔助維度，不應與融資維持率混為同一種風險：前者是資金流，後者是帳戶被動賣壓。',series:[{name:'外資20日累計買賣超',key:'foreign_net_20d',color:'--s4',type:'line'}],yFmt:v=>fmtN(v,0)+' 萬張',zero:true,panel2:{t:'外資5日累計買賣超',series:[{name:'外資5日累計買賣超',key:'foreign_net_5d',color:'--s2',type:'line'}],yFmt:v=>fmtN(v,0)+' 萬張',zero:true}},
+  {id:'txo',t:'TXO 選擇權情緒',d:'Put/Call 未平倉比與 ATM IV 各自標示截至日；ATM IV 於 FinMind 斷尾後，經重疊窗驗證改由 TAIFEX 結算價反推。',how:'台指選擇權是情緒與避險需求的觀察窗。TXO 分項不納入 v1 綜合壓力指數；ATM IV 使用 TX 近月結算價與最近到期 TXO call/put 結算價的 Black-76 反推，資料可能有 T+1 時滯。',series:[{name:'Put/Call OI 比',key:'pcr_oi',color:'--s5',type:'line'}],yFmt:v=>fmtN(v,2),badge:'txo',panel2:{t:'ATM IV 代理值',series:[{name:'ATM IV',key:'atm_iv',color:'--s6',type:'line'}],yFmt:v=>fmtN(v,1)}},
+  {id:'daytrade',t:'當沖比重',d:'當沖成交值占比；若官方來源未回傳，卡片會保持 pending，不影響其餘產出。',how:'當沖比重反映短線交易在成交中的占比。它是市場微結構觀察項目，不是壓力指數分項；資料尚未完整時不應以空值推論風險已消失。',series:[{name:'當沖成交值占比',key:'daytrade_ratio',color:'--s3',type:'line'}],yFmt:v=>fmtN(v,1)+'%',pendingKey:'daytrade_ratio'}
+];
+function cardEl(c){const d=el('div','card');d.id='card-'+c.id;const hd=el('div','hd'),left=el('div');let title=c.t;if(c.badge==='txo'){const pcrDate=latestDateFor('pcr_oi')||E.asof_txo,ivDate=latestDateFor('atm_iv'),pcrStale=!pcrDate||tradingDaysBehind(pcrDate,IND.asof_market)>3,ivStale=!ivDate||tradingDaysBehind(ivDate,IND.asof_market)>3;title+=' <span class="'+(pcrStale?'stale':'')+'">PCR 截至 '+(pcrDate?fmtD(pcrDate):'尚未取得')+'</span>';title+=' <span class="'+(ivStale?'stale':'')+'">ATM IV 截至 '+(ivDate?fmtD(ivDate):'尚未取得')+'</span>';}if(c.id==='daytrade'){const daytradeDate=E.asof_daytrade||latestDateFor('daytrade_ratio'),daytradePending=E.daytrade_pending===true||!daytradeDate;if(daytradePending)title+=' <span class="stale">pending · 來源尚未取得</span>';else if(!sameDay(daytradeDate,IND.asof_market))title+=' <span class="stale">stale · '+fmtD(daytradeDate)+'</span>';}left.append(el('h3',null,title),el('div','desc',c.d));if(c.how){const dt=el('details','how');dt.innerHTML='<summary>怎麼看這張圖</summary><div class="hb">'+c.how+'</div>';left.append(dt);}hd.append(left,el('div','spacer'));const tb=el('button','ghost','表格');tb.onclick=()=>{c.showTable=!c.showTable;tb.textContent=c.showTable?'圖表':'表格';renderCard(c);};hd.append(tb);d.append(hd);const body=el('div','body');d.append(body);if(c.extra==='unwind'){const hasExcess=Number(U.excess_peak)>0,q=hasExcess?Math.max(0,Math.min(1,Number(U.U??0))):0,u=el('div','unwind');u.innerHTML='<div class="bar"><div class="fill" style="width:'+(q*100).toFixed(0)+'%"></div></div><div class="cap"><span>'+ (hasExcess?'出清進度 '+(q*100).toFixed(0)+'%':'出清進度 不適用')+'</span><span>'+ (hasExcess?'剩餘超額 '+fmtN(U.excess_now,3)+' 兆元':'本輪未形成新增融資')+'</span></div>';d.append(u);}d.append(el('div','legend'));d.append(el('div','fn'));return d;}
+function renderCard(c){const card=$('#card-'+c.id),body=card.querySelector('.body'),lg=card.querySelector('.legend'),fn=card.querySelector('.fn');body.innerHTML='';const primary=typeof c.series==='function'?c.series():c.series,secondary=c.panel2?(typeof c.panel2.series==='function'?c.panel2.series():c.panel2.series):[],mk=a=>a.map(s=>({...s,color:css(s.color)}));if(c.pendingKey&&(E.daytrade_pending===true||!series(c.pendingKey).some(v=>v!=null))){body.append(el('div','pending','⏳ 當沖官方資料尚未取得或暫停更新；此觀察模組標示為 pending，並未影響壓力指數與其他卡片。'));lg.innerHTML='';fn.innerHTML='';return;}if(c.showTable){const [i0,i1]=sliceIdx(),all=[...primary,...secondary];let h='<div class="tblwrap"><table class="tv"><thead><tr><th>日期</th>'+all.map(x=>'<th>'+x.name+'</th>').join('')+'</tr></thead><tbody>';for(let i=i1-1;i>=i0;i--)h+='<tr><td>'+fmtD(D[i])+'</td>'+all.map(x=>{const values=x.data||series(x.key);return '<td>'+(values[i]==null?'–':fmtN(values[i],2))+'</td>';}).join('')+'</tr>';body.innerHTML=h+'</tbody></table></div>';lg.innerHTML='';}else{const h1=el('div');body.append(h1);chart(h1,{series:mk(primary),yFmt:c.yFmt,refLines:c.refs?c.refs():null,zero:c.zero,h:c.panel2?190:230});if(c.panel2){body.append(el('div','desc',c.panel2.t));const h2=el('div');body.append(h2);chart(h2,{series:mk(secondary),yFmt:c.panel2.yFmt,zero:c.panel2.zero,h:120});}const all=[...primary,...secondary];lg.innerHTML=all.length>1?all.map(s=>'<span class="key"><span class="'+(s.type==='bar'?'sw':'ln')+'" style="background:'+css(s.color)+'"></span>'+s.name+'</span>').join(''):'';}fn.innerHTML=c.fn?c.fn():'';}
+function partsCard(){const d=el('div','card');d.append(el('h3',null,'壓力指數分解（各分項貢獻）'),el('div','desc','分項貢獻＝權重 × 標準化讀數；合計＝'+fmtN(C.score,1)+'。'));const dt=el('details','how');dt.innerHTML='<summary>怎麼看這張圖</summary><div class="hb">條越長代表該分項接近其權重上限。台灣版優先看「整戶維持率／低維持率曝險」是否成為壓力主因，再分辨是存量槓桿、出清速度、被動賣壓、波動成交或外資賣壓所致。</div>';d.append(dt);const box=el('div','parts'),parts=C.parts||{},max=Math.max(...Object.values(parts).map(Number).filter(Number.isFinite),1);Object.entries(parts).forEach(([k,v])=>{const r=el('div','row');r.innerHTML='<div class="nm">'+k+'</div><div class="bar"><div class="bf" style="width:'+(100*Number(v)/max).toFixed(1)+'%"></div></div><div class="pv">'+fmtN(v,1)+' 分</div>';box.append(r);});if(!Object.keys(parts).length)box.append(el('div','pending','尚無分項資料。'));d.append(box);return d;}
+
+/* ---------- filters, method, render ---------- */
+Object.keys(RANGES).forEach(k=>{const b=el('button',null,k);if(RANGES[k]===rangeMonths)b.classList.add('on');b.onclick=()=>{rangeMonths=RANGES[k];document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderAll();};$('#filters').append(b);});
+function method(){const w=(IND.config||{}).weights||{};const official=E.maint_official_available===true?'已接入可用官方大盤序列；顯示口徑差只在相同觀測日計算。':'未找到可公開回填的官方每日大盤序列；本板使用 TEJ 個股融資餘額加權估計。以偶發官方新聞稿作量級對照時，官方整戶平均值可能低約2pp，非日對日可驗證序列。';$('#methodBody').innerHTML='<h4>綜合壓力指數（0–100）</h4>五個台灣化維度合計100分：槓桿水位25、出清進度30、被動賣壓（整戶維持率）20、市場應激15、外資賣壓10。TXO與當沖為觀察模組，不納入 v1 指數。'+(Object.keys(w).length?'目前權重由管線 CONFIG 輸出。':'')+'<h4>出清進度 U</h4><code>U =（峰值 − 目前）/（峰值 − 基期）</code>；基期預設為 2026/04/30，峰值取近400交易日並將 U 夾在0–1。U=100%表示本輪新增融資全數退出，不代表全市場融資歸零。'+'<h4>整戶維持率：怎麼看這張圖</h4><b>分區口訣</b>：>166%為安全區（166.7%可視為融資六成初始緩衝的參考）、150–166%為正常區、140–150%為警戒區、130–140%為追繳潮區、<130%為全面斷頭敏感區。130%是追繳制度線：跌破後於收盤通知，通知送達次日起有兩個營業日補繳期（常簡稱 T+2）；屆期仍未補繳且維持率未回升，才會於次一營業日處分。<br><b>速度</b>：單日維持率變動 ≤ −2 個百分點為去槓桿加速訊號；近10日連續出現時，代表斷頭潮逼近。<br><b>背離</b>：TAIEX 收盤創60日新高、但同窗維持率走低，即為「槓桿背離」——融資膨脹可能快於擔保品市值，脆弱性累積。<br><b>時滯</b>：追繳、補繳與處分並非同日完成，賣壓通常較維持率跌破落後約2–3個交易日；這是風險時鐘，不是確定賣出日期。'+'<h4>資料源與口徑</h4>主資料為內網 QUANTDATA；行情以 TAIEX 日資料為主軸，信用資料通常 T+1～T+2，故圖上信用序列尾端可能比行情短。'+official+' 維持率與加權指數的對比圖均以顯示範圍第一個共同有效日＝100標準化，在單一Y軸呈現，不使用雙Y軸。成交金額新鮮段由證交所銜接；當沖為可降級的證交所來源。<b>回撤口徑</b>：52週高點採盤中 high、最深回撤採 low，與只看收盤不同。'+'<h4>訊號判定</h4>①技術性賣壓衰竭：整戶維持率5日回升、融資5日跌幅大於−1%，且低於140%維持率的曝險小於近60日峰值一半；若60日峰值為零，則維持為零即通過。②外部催化劑與③政策干預均為人工旗標。'+'<h4>使用提醒</h4>本頁為風險監測與研究工具，不構成投資建議。維持率分區與參考線用於辨識斷頭壓力，並非機械化交易訊號。';$('#foot').innerHTML='指標定義、權重與資料截止日以 compute_indicators.py 輸出的 indicators.json 為準。信用資料以個股層級融資餘額加權彙總，不含槓桿ETF、股票質押或場外配資。';}
+function renderAll(){gauge(C.score,C.zone);tiles();chips();renderComment();const box=$('#cards');if(!box.dataset.built){CARDS.forEach(c=>box.append(cardEl(c)));box.append(partsCard());box.dataset.built='1';}CARDS.forEach(renderCard);method();}
+renderAll();let rto;addEventListener('resize',()=>{clearTimeout(rto);rto=setTimeout(renderAll,150);});
+})();
+</script>
+</body>
+</html>

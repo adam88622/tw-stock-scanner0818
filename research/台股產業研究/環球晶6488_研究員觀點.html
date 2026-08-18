@@ -1,0 +1,623 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<!--
+  GiS Genesis International Capital — 研究報告樣板
+  使用方式：直接複製修改文字與圖表數據，轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="輸出檔名.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///完整路徑/檔案.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>環球晶 6488 首次覆蓋 — 減碼 UW / TP 830 | GiS 研究員觀點</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/*
+  ⚠ 排版重要提醒（避免空白頁 & 內容截斷問題）：
+  1. 每個 .page div 使用 height:297mm（非 min-height），搭配 overflow:hidden
+  2. 不要在 .page 上使用 page-break-after:always，讓固定高度自然分頁
+  3. 每頁內容需控制在 297mm 以內，超出會被裁切（overflow:hidden）
+  4. 若使用 position:absolute 的 footer，確保不會導致額外分頁
+  5. @page{size:A4;margin:0} 已設定，Chrome headless 會自動按 297mm 分頁
+
+  ⚠ 頁高控制實務指引：
+  6. 每頁可用內容高度 ≈ 297mm - padding(40px×2) - footer(~50px) ≈ 225mm（約 850px）
+  7. 一頁最多容納：1 個 h1 + 1 個 h2 + 1 張大表格(8行) + 1 個圖表(240px) + 少量文字
+     或：1 個 h1 + 2 個 h2 + 2 張中型表格(5行) + 少量文字
+  8. 若一頁放了「示意圖/卡片 + 表格 + 圖表」三大元素，幾乎必定溢出，需拆頁
+  9. 寧可多拆一頁留白，也不要讓底部內容被裁切（overflow:hidden 會無聲截斷）
+  10. 轉 PDF 後務必逐頁檢查頁尾 footer 是否完整可見，若看不到 footer 代表內容溢出
+*/
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+/* ── 頁面容器（固定 A4 高度，避免空白頁） ── */
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+/* 注意：不再使用 .pb / page-break-after:always，靠固定 height:297mm 自然分頁 */
+
+/* ── Canvas 強制填滿容器（Chart.js 用） ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── PNG 圖表（matplotlib 生成、首次覆蓋報告用）── */
+/* ⚠ 關鍵：必須用 explicit height + object-fit:contain，避免 X 軸標籤被切 */
+/* ❌ 禁用 height:auto + max-height（contain 對 height:auto 無效，會切到圖表底部）*/
+.chart-img{width:100%;height:210px;display:block;border-radius:4px;object-fit:contain}
+.chart-img.tall{height:260px}    /* 適合 heatmap、roadmap 等密集圖 */
+.chart-img.short{height:160px}   /* 適合 simple bar / pie */
+.chart-grid .chart-img{height:180px}  /* 雙欄並排時更小 */
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 公司卡片 ── */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 首選股卡 ── */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 對比框（callout）── */
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:16px;margin:14px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:32px}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+
+<style>
+.full-page > *, .body-page > * { flex-shrink: 0 !important; }
+.body-page { padding: 24px 40px !important; }
+.co-card { margin: 10px 0 !important; }
+.co-metric { padding: 8px 10px !important; }
+.kpi-row { margin: 8px 0 !important; gap: 8px !important; }
+.kpi { padding: 9px 12px !important; }
+.kpi-val { font-size: 16px !important; }
+.exec-sum { padding: 12px 15px !important; margin: 8px 0 !important; }
+.exec-thesis { margin: 7px 0 !important; font-size: 11.3px !important; line-height: 1.5 !important; }
+.chart-grid { margin: 8px 0 !important; gap: 10px !important; }
+.chart-wrap { padding: 9px !important; margin: 6px 0 !important; }
+.chart-title { font-size: 12px !important; }
+.chart-sub { font-size: 10px !important; }
+h1.ch { margin: 9px 0 8px !important; font-size: 17px !important; }
+h2.ch { margin: 10px 0 6px !important; font-size: 14px !important; }
+table { margin: 6px 0 8px !important; font-size: 10.5px !important; }
+th { padding: 5px 7px !important; font-size: 10.5px !important; }
+td { padding: 4.5px 7px !important; font-size: 10.5px !important; line-height: 1.38 !important; }
+li { font-size: 11px !important; line-height: 1.42 !important; }
+p { font-size: 11.5px !important; line-height: 1.5 !important; }
+blockquote { margin: 8px 0 !important; padding: 8px 12px !important; font-size: 11px !important; line-height: 1.5 !important; }
+.callout { padding: 10px 12px !important; margin: 8px 0 !important; }
+.callout-title { font-size: 12px !important; }
+.risk-matrix { gap: 10px !important; margin: 8px 0 !important; }
+.risk-card { padding: 11px !important; }
+.risk-item { font-size: 10.5px !important; line-height: 1.4 !important; padding: 5px 0 !important; }
+.timeline { margin: 9px 0 !important; }
+.tl-item { padding: 9px !important; }
+.tl-year { font-size: 11px !important; }
+.tl-spec { font-size: 11px !important; }
+.tl-tech { font-size: 9.5px !important; line-height: 1.35 !important; }
+.src { font-size: 9.5px !important; }
+.page-footer { padding: 7px 20px !important; font-size: 9.5px !important; }
+</style>
+</head><body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+<div class="cover pb page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none"><line x1="0" y1="230" x2="595" y2="380" stroke="white" stroke-width=".5"/><circle cx="470" cy="170" r="95" fill="none" stroke="white" stroke-width=".4"/></svg>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div><div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">研究員觀點 · 首次覆蓋深度報告</div></div></div>
+    <div class="cover-eyebrow">Initiating Coverage · Equity Research · 2026/08/05</div>
+    <div class="cover-title">環球晶 6488<br><em>對的循環，被雜訊定價的公司</em></div>
+    <div class="cover-subtitle">GlobalWafers — Real Recovery, Borrowed Valuation, Mark-to-Market Noise</div>
+    <div class="cover-tags"><span class="ctag hl">減碼 UW</span><span class="ctag hl">12M TP NT$830</span><span class="ctag">經常性 EPS 估值</span><span class="ctag">Siltronic MTM</span><span class="ctag">全球第三大矽晶圓</span></div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>830</em></div><div class="cstat-label">12M 目標價（元）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>−12.8</em>%</div><div class="cstat-label">上檔空間 → UW</div></div>
+    <div class="cstat"><div class="cstat-num"><em>71</em>%</div><div class="cstat-label">1H26 帳面 EPS 來自業外</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4.8</em>x</div><div class="cstat-label">P/B（+1.5σ）</div></div>
+  </div>
+  <div class="cover-bottom"><span>報告日期：2026年8月5日</span><span>本報告僅供研究參考，不構成投資建議</span><span>© 2026 GiS</span></div>
+</div>
+<div class="full-page pb page body-page">
+  <h1 class="ch">投資摘要 — 減碼（UW）／ 12M 目標價 NT$830</h1>
+  <p style="margin-top:-4px">評等 <span class="badge" style="background:#27ae60;color:#fff">◉ 減碼 UNDERWEIGHT</span> ｜ 價格錨 <strong>952 元</strong>（2026-08-04 收盤，上櫃 .TWO）｜ 上檔 <strong>−12.8%</strong> ｜ 市值約 4,551 億 ｜ 股本 47.81 億元（4.781 億股）</p>
+  <div class="kpi-row">
+    <div class="kpi gold"><div class="kpi-val">830<em> 元</em></div><div class="kpi-lbl">12M 目標價</div></div>
+    <div class="kpi"><div class="kpi-val">−12.8%</div><div class="kpi-lbl">上檔 → 減碼</div></div>
+    <div class="kpi"><div class="kpi-val">7.5<em> 元</em></div><div class="kpi-lbl">FY26F 經常性 EPS</div></div>
+    <div class="kpi green"><div class="kpi-val">25.0<em> 元</em></div><div class="kpi-lbl">FY27F 經常性 EPS</div></div>
+  </div>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>帳面 EPS 已不能用來估值：71% 的獲利來自僅佔市值 2.8% 的一筆金融資產。</strong>環球晶持有 Siltronic AG 13.67%（410 萬股），按市價評價直接進損益；德國子公司另發行以 Siltronic 股票為標的的海外附認股權公司債（EB），反向再放大一次。1H26 帳面 EPS 11.87 元中，本業經常性僅 <strong>3.41 元</strong>，其餘 <strong>8.46 元為評價損益</strong>。單月 EPS 因此在 4 月 <strong>+8.85</strong>、6 月 <strong>−8.27</strong> 之間擺盪，同季振幅 17.12 元。這筆持股市值僅約 126 億元，卻主導了整份損益表的表情。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>本業復甦是真的，但斜率被公司自己的指引限制住。</strong>2Q26 營收 152.1 億元（QoQ +8.8%），既有 12 吋、8 吋、6 吋與 GaN-on-Si 產線幾近滿載，高階 12 吋供應已明顯轉緊，日本新潟廠單季營收創歷史新高。然而管理層在法說會上明確指出：<strong>產業 UTR 要回到 90% 以上須待 2027 年底、德州 Sherman P1 滿載同樣要到 2027 年底、新產能折舊 2027 年才達峰值</strong>。加上義大利 Novara 8 吋廠 7 月火警、復產時程未定，原本「3Q26 優於 2Q26」的預期已降級為「力拚維持季增」。GiS 因此估 FY26 營收 610 億（+0.7%）、FY27 820 億（+34%），營益率 FY27 回到 19.5%——復甦成立，但不是 V 型。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>價格已經把 2028 年的產能藍圖折現完畢。</strong>股價 12 個月內走過 403 → 1,515 → 952。以 GiS 經常性 EPS 計，現價對應 FY26 <strong>127x</strong>、FY27 <strong>38x</strong>；以 P/B 計為 4.8x，是五年均值 3.1x 的 +1.5σ（7 月峰值 7.6x ＝ +4.1σ）。市場對 FY27 EPS 的預估從 25 元到 75 元、12M 目標價從 550 元到 2,000 元——<strong>離散 2.4 倍與 3.6 倍</strong>本身就是「估值建立在尚未證實的產能曲線上」的證據。三情境機率加權後 TP 830 元，低於現價 12.8%，依 §4.3 五級制落 <strong>減碼</strong>。</span></div>
+  </div>
+  <blockquote><strong>GiS 與市場的不同之處：</strong>市場以「Micron 十年約 + 美國唯一 300mm 廠」為前提，直接把 FY28 的產能與價格折現到今天。GiS 不否認這條路徑存在，並在多方情境中給予 30% 機率與 1,344 元的對應價值；但我們把 <strong>公司自己說出口的三個時間點（產業 UTR 2027 年底、德州 P1 滿載 2027 年底、折舊峰值 2027）</strong> 當作模型約束，而不是背景雜音。差別不在看多看空，在於折現的起算年份。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資摘要</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div pb page"><div class="sec-num">壹</div><div class="sec-eyebrow">Company & Industry</div><div class="sec-line"></div><div class="sec-title">公司定位與產業結構</div><div class="sec-desc">全球第三大矽晶圓廠、美國唯一先進 300mm 產能，以及一張橫跨六地的產能地圖。</div></div>
+<div class="full-page page body-page">
+  <h1 class="ch">一、公司速覽</h1>
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">環球晶圓 GlobalWafers</div><div class="co-ticker">6488 · 上櫃 TPEx · 全球第三大矽晶圓廠，美國唯一先進 300mm 產能</div></div>
+      <div class="co-badge">
+        <span class="badge" style="background:#27ae60;color:#fff">◉ 減碼</span>
+        <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$830 | 價格錨 NT$952（08/04 收盤）</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val" style="color:#27ae60">−12.8%</div><div class="co-metric-label">預期報酬</div></div>
+      <div class="co-metric"><div class="co-metric-val">30x</div><div class="co-metric-label">Base 情境 Target PE</div></div>
+      <div class="co-metric"><div class="co-metric-val">25.0元</div><div class="co-metric-label">FY27F 經常性 EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val">27.0%</div><div class="co-metric-label">FY27F 毛利率</div></div>
+    </div>
+    <div class="co-body">
+      2011 年自中美晶（5483）分拆獨立，母公司持股約 37%、free float 僅 37%，董事長徐秀蘭同時掌理兩家公司。歷經 GlobiTech（2008）、Covalent（2012）、Topsil 與 SunEdison Semiconductor（2016）等併購後，取得全球約 17% 矽晶圓市占，僅次於信越與 SUMCO。產品涵蓋拋光片、磊晶（EPI）、退火、擴散、非拋光、FZ、SOI 與 GaN-on-Si。2025 年 5 月啟用的德州 Sherman 廠投資 35 億美元，是美國二十餘年來首座先進高量產 300mm 矽晶圓廠，也是目前該國唯一一座。
+    </div>
+  </div>
+  <table>
+    <thead><tr><th>項目</th><th>數值</th><th>項目</th><th>數值</th></tr></thead>
+    <tbody>
+      <tr><td>股本／股數</td><td class="num">47.81 億元／4.781 億股</td><td>市值（@952）</td><td class="num">約 4,551 億元</td></tr>
+      <tr><td>每股淨值（FY26E）</td><td class="num">約 199 元</td><td>P/B</td><td class="num hi">4.8x（+1.5σ）</td></tr>
+      <tr><td>52 週區間</td><td class="num">341 ~ 1,515 元</td><td>2026 年內區間</td><td class="num">403 ~ 1,515 元</td></tr>
+      <tr><td>FY25 營收／EPS</td><td class="num">606.0 億／15.29 元</td><td>FY25 現金股利</td><td class="num">7.70 元（配發率 50.4%）</td></tr>
+      <tr><td>1H26 營收／帳面 EPS</td><td class="num">292.0 億／11.87 元</td><td>1H26 經常性 EPS</td><td class="num neg">3.41 元</td></tr>
+      <tr><td>1H26 營益率／淨利率</td><td class="num">9.9%／19.4%（倒掛）</td><td>淨負債（FY25）</td><td class="num">約 548 億元</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司季報與法說會、TWSE／TPEx、GiS 整理</span>
+  <div class="chart-wrap"><div class="chart-title">全球矽晶圓市占結構</div><div class="chart-sub">環球晶居第三（約 17%），並持有第四大 Siltronic 13.67% 股權——這層交叉持股是本報告的核心議題</div><img class="chart-img" src="charts/chart_08_market_share.png" style="height:250px;object-fit:contain;width:100%"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 公司定位｜1/2</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">二、產能布局與 2Q26 營運實況</h1>
+  <div class="chart-wrap"><div class="chart-title">全球產能布局與運轉狀態</div><div class="chart-sub">既有廠幾近滿載，變數集中在德州爬坡與義大利火警</div><img class="chart-img" src="charts/chart_10_capacity_map.png" style="height:235px;object-fit:contain;width:100%"></div>
+  <h2 class="ch">2026 年第二季法說會重點（2026-08-04）</h2>
+  <table>
+    <thead><tr><th>面向</th><th>公司揭露</th><th>GiS 解讀</th></tr></thead>
+    <tbody>
+      <tr><td>2Q26 財務</td><td>營收 152.1 億（QoQ +8.8%、YoY −5%）；稅後淨利 37.8 億；EPS 7.90 元</td><td>營收動能確立，但獲利組成須拆解</td></tr>
+      <tr><td>1H26 累計</td><td>營收 292 億（YoY −7.6%）；毛利率 20.7%；營益率 9.9%；淨利率 19.4%；EPS 11.87 元</td><td class="neg">淨利率高於營益率 9.5pp ＝ 業外主導</td></tr>
+      <tr><td>產能利用</td><td>排除認證／爬坡中的新產能，既有 12 吋、8 吋、6 吋與矽基氮化鎵產線幾乎全面滿載；部分高階 12 吋供應明顯轉緊</td><td class="pos">本業基本面確實在改善</td></tr>
+      <tr><td>日本廠</td><td>新潟廠 2Q26 單季營收創歷史新高；宇都宮廠 6 月、2Q 與 1H 出貨同創新高</td><td class="pos">海外新廠已開始貢獻</td></tr>
+      <tr><td>義大利 Novara</td><td>8 吋產線 7 月火警停產；原預期 3Q26 營收續優於 2Q26，現以跨廠調度力拚維持季增，幅度視設備修復、客戶認證與替代產能而定</td><td class="neg">3Q26 能見度下降，佔營收約 5%</td></tr>
+      <tr><td>產業節奏</td><td>4Q25 產業 UTR 僅 77~83%，回到 90% 以上預估要 2027 年底；德州 P1 滿載亦在 2027 年底；新產能折舊 2027 年達峰值</td><td class="neg">復甦成立，但斜率被公司自己設限</td></tr>
+      <tr><td>長約</td><td>與美光簽署十年供應協議，美光提供 5 億美元（約 160 億元）策略融資支持 Sherman 廠；董事長表示為公司史上最大長約，Sherman 第二期擴產「勢在必行」</td><td class="pos">最強的多方依據，但放量時程未量化</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：環球晶 2026-08-04 法說會、公司重大訊息、公開報導；GiS 整理</span>
+  <blockquote><strong>GiS 觀點：</strong>這場法說會的訊息其實是分岔的——<strong>營運面偏正向（滿載、創高、轉緊），時間軸面偏保守（2027 年底、2027 年底、2027 年）</strong>。市場在 8 月 4 日以漲停回應前半段，而估值的分歧點在後半段。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 公司定位｜2/2</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div pb page"><div class="sec-num">貳</div><div class="sec-eyebrow">Earnings Quality</div><div class="sec-line"></div><div class="sec-title">獲利品質：一筆金融資產綁架了損益表</div><div class="sec-desc">拆解 1H26 帳面 EPS 11.87 元——本業 3.41 元，Siltronic 與業外評價 8.46 元。</div></div>
+<div class="full-page pb page body-page">
+  <h1 class="ch">三、EPS 橋接：帳面 11.87 元，本業 3.41 元</h1>
+  <p>環球晶自 2020 年收購 Siltronic AG 破局後，仍保留該公司 <strong>13.67%（410 萬股）</strong> 股權，會計上分類為透過損益按公允價值衡量之金融資產（FVTPL），<strong>股價變動直接進當期損益</strong>。另有德國子公司發行以 Siltronic 股票為標的之海外附認股權公司債（EB），其評價反向變動，再放大一次波動。</p>
+  <div class="chart-wrap"><div class="chart-title">1H26 EPS 橋接（GiS 自建）</div><div class="chart-sub">自營業利益逐項還原至帳面 EPS，差額即為評價損益</div><img class="chart-img" src="charts/chart_03_eps_bridge.png" style="height:258px;object-fit:contain;width:100%"></div>
+  <table>
+    <thead><tr><th>項目</th><th>1Q26</th><th>2Q26</th><th>1H26</th></tr></thead>
+    <tbody>
+      <tr><td>營收（億元）</td><td class="num">139.85</td><td class="num">152.15</td><td class="num">292.00</td></tr>
+      <tr><td>營業利益（億元）</td><td class="num">14.75</td><td class="num">14.15</td><td class="num">28.90</td></tr>
+      <tr><td>營益率</td><td class="num">10.6%</td><td class="num">9.3%</td><td class="num">9.9%</td></tr>
+      <tr><td>減：淨利息費用（GiS 估）</td><td class="num neg">−4.00</td><td class="num neg">−4.00</td><td class="num neg">−8.00</td></tr>
+      <tr><td>本業稅後（稅率 22%，億元）</td><td class="num">8.39</td><td class="num">7.92</td><td class="num">16.31</td></tr>
+      <tr><td><strong>經常性 EPS（GiS 估）</strong></td><td class="num"><strong>1.75</strong></td><td class="num"><strong>1.66</strong></td><td class="num"><strong>3.41</strong></td></tr>
+      <tr><td>帳面 EPS（公司公告）</td><td class="num">3.97</td><td class="num">7.90</td><td class="num">11.87</td></tr>
+      <tr><td><strong>差額＝評價／業外雜訊</strong></td><td class="num hi"><strong>+2.22</strong></td><td class="num hi"><strong>+6.24</strong></td><td class="num hi"><strong>+8.46（71%）</strong></td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司季報與法說會（營收、營業利益、帳面 EPS 為實績）；淨利息費用與稅率為 GiS 估計，故經常性 EPS 標示為估計值</span>
+  <blockquote><strong>方法論說明：</strong>本報告後續所有估值均以<strong>經常性 EPS</strong> 為基礎。理由是 Siltronic 評價損益（一）不可預測、（二）不產生現金、（三）與矽晶圓本業景氣無因果關係。將其計入本益比分母，等同以他人股價為環球晶定價。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 獲利品質｜1/2</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">四、波動的具體形狀</h1>
+  <div class="chart-grid">
+    <div class="chart-wrap"><div class="chart-title">2Q26 單月自結 EPS</div><div class="chart-sub">同一季內振幅 17.12 元</div><img class="chart-img" src="charts/chart_04_monthly_eps_swing.png" style="height:205px;object-fit:contain;width:100%"></div>
+    <div class="chart-wrap"><div class="chart-title">營益率 vs 淨利率（近八季）</div><div class="chart-sub">2Q26 倒掛 15.5pp</div><img class="chart-img" src="charts/chart_05_margin_inversion.png" style="height:205px;object-fit:contain;width:100%"></div>
+  </div>
+  <p>2026 年 4 月公司自結單月 EPS <strong>+8.85 元</strong>，其中約 40 億元為 Siltronic 未實現評價利益；6 月 Siltronic 股價單月下跌 22.2%，公司自結單月 <strong>EPS −8.27 元</strong>（稅後虧損 39.55 億元），其中約 35.7 億元為持股評價損失、另約 8~10 億元為 EB 評價損失。本業在這兩個月之間並未發生任何實質變化。</p>
+  <div class="chart-wrap"><div class="chart-title">規模與影響力的不對稱</div><div class="chart-sub">2.8% 的資產，主宰 71% 的帳面獲利</div><img class="chart-img" src="charts/chart_09_siltronic_paradox.png" style="height:215px;object-fit:contain;width:100%"></div>
+  <div class="callout">
+    <div class="callout-title">為什麼這件事會影響評等，而不只是註腳</div>
+    <ul>
+      <li><strong>估值錨失效：</strong>以帳面 TTM EPS 計算的本益比與 PE Band 全數失真，故本報告改用經常性 EPS forward PE，並以 P/B Band 交叉驗證。</li>
+      <li><strong>市場定價被雜訊帶動：</strong>7 月 29 日公司公告 6 月自結虧損後股價連續重挫，但該虧損不影響本業；同理，4 月的評價利益也不代表本業轉強。雙向都會造成錯誤定價。</li>
+      <li><strong>可被移除：</strong>若公司處分或避險此部位，EPS 品質立即改善，估值可回歸本業——這是本檔最明確的一項 re-rating 觸發條件（見第九章）。</li>
+    </ul>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 獲利品質｜2/2</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div pb page"><div class="sec-num">參</div><div class="sec-eyebrow">Fundamentals & Model</div><div class="sec-line"></div><div class="sec-title">本業基本面與財務預估</div><div class="sec-desc">剝離雜訊之後，矽晶圓循環走到哪裡？FY26–FY28 的營收、毛利率與經常性 EPS。</div></div>
+<div class="full-page page body-page">
+  <h1 class="ch">五、本業趨勢：營收落底，毛利率仍在爬坡的陰影下</h1>
+  <div class="chart-wrap"><div class="chart-title">季營收與毛利率（近十季）</div><div class="chart-sub">營收 25Q3 落底回升，毛利率因新產能爬坡與折舊費用化而滯後</div><img class="chart-img" src="charts/chart_06_rev_gm.png" style="height:250px;object-fit:contain;width:100%"></div>
+  <div class="chart-wrap"><div class="chart-title">月營收與 YoY</div><div class="chart-sub">YoY 仍為負，公司預期轉正落於 3Q26</div><img class="chart-img" src="charts/chart_07_monthly_rev.png" style="height:230px;object-fit:contain;width:100%"></div>
+  <p>毛利率自 FY23 的高點滑落至 1H26 的 20.7%，主因並非售價崩跌，而是<strong>成本端三件事同時發生</strong>：美國、義大利、日本新廠處於試產與客戶認證階段，產量極低但固定成本已開始分攤；德州廠自 3Q25 起將原資本化成本費用化並列入銷貨成本；折舊費用 2025 年已佔營收 16~20%，且新產能折舊要到 2027 年才達峰值。這意味著<strong>毛利率的回升將落後於營收與利用率的回升，至少一年</strong>。</p>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2023–2024</div><div class="tl-spec">循環高點回落</div><div class="tl-tech">FY23 營收 706 億、營益率 28.4%；FY24 起需求走弱</div></div>
+    <div class="tl-item"><div class="tl-year">2025</div><div class="tl-spec">谷底 · 擴產成本高峰</div><div class="tl-tech">營收 606 億、EPS 15.29；3Q25 毛利率低點 18.4%；Sherman 廠 5 月啟用</div></div>
+    <div class="tl-item active"><div class="tl-year">2026 ← 現在</div><div class="tl-spec">量先於價的復甦</div><div class="tl-tech">既有產線滿載、高階 12 吋轉緊；但折舊與爬坡壓抑毛利率；義大利火警</div></div>
+    <div class="tl-item next"><div class="tl-year">2027–2028</div><div class="tl-spec">營運槓桿兌現期</div><div class="tl-tech">產業 UTR 回 90%＋、德州 P1 滿載、美光長約放量、折舊率下降</div></div>
+  </div>
+  <span class="src">資料來源：公司季報與法說會、公開資訊觀測站月營收；GiS 整理</span>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 基本面與模型｜1/2</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+  <h1 class="ch">六、GiS 財務模型（FY26F–FY28F）</h1>
+  <table>
+    <thead><tr><th>項目</th><th>FY23A</th><th>FY24A</th><th>FY25A</th><th>FY26F</th><th>FY27F</th><th>FY28F</th></tr></thead>
+    <tbody>
+      <tr><td>營收（億元）</td><td class="num">706.5</td><td class="num">626.3</td><td class="num">606.0</td><td class="num">610</td><td class="num">820</td><td class="num">950</td></tr>
+      <tr><td>YoY</td><td class="num">—</td><td class="num neg">−11.4%</td><td class="num neg">−3.2%</td><td class="num">+0.7%</td><td class="num pos">+34.4%</td><td class="num pos">+15.9%</td></tr>
+      <tr><td>毛利率</td><td class="num">—</td><td class="num">—</td><td class="num">24.1%</td><td class="num">21.5%</td><td class="num">27.0%</td><td class="num">31.0%</td></tr>
+      <tr><td>營益率</td><td class="num">28.4%</td><td class="num">22.5%</td><td class="num">13.45%</td><td class="num">10.5%</td><td class="num">19.5%</td><td class="num">21.5%</td></tr>
+      <tr><td>營業利益（億元）</td><td class="num">200.6</td><td class="num">141.2</td><td class="num">81.5</td><td class="num">64.1</td><td class="num">159.9</td><td class="num">204.3</td></tr>
+      <tr><td><strong>經常性 EPS（元）</strong></td><td class="num">44.0</td><td class="num">20.0</td><td class="num">11.0</td><td class="num"><strong>7.5</strong></td><td class="num"><strong>25.0</strong></td><td class="num"><strong>33.5</strong></td></tr>
+      <tr><td>帳面 EPS（元）</td><td class="num">45.41</td><td class="num">21.17</td><td class="num">15.29</td><td class="num">約 16.0</td><td class="num">不可預測</td><td class="num">不可預測</td></tr>
+      <tr><td>現價對應經常性 PE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num hi">127x</td><td class="num hi">38x</td><td class="num">28x</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：FY23–FY25 為公司實績；FY26F–FY28F 為 GiS 預估。「不可預測」係因帳面 EPS 含 Siltronic 市價評價，無法建模</span>
+  <div class="chart-grid">
+    <div class="chart-wrap"><div class="chart-title">營收與營益率預估</div><div class="chart-sub">FY27 為營運槓桿轉折年</div><img class="chart-img" src="charts/chart_11_model.png" style="height:185px;object-fit:contain;width:100%"></div>
+    <div class="chart-wrap"><div class="chart-title">經常性 EPS vs 帳面 EPS</div><div class="chart-sub">估值分母必須用前者</div><img class="chart-img" src="charts/chart_12_recurring_vs_book.png" style="height:185px;object-fit:contain;width:100%"></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 基本面與模型｜2/3</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+  <h1 class="ch">關鍵假設與依據</h1>
+  <table>
+    <thead><tr><th>假設</th><th>GiS 設定</th><th>依據</th></tr></thead>
+    <tbody>
+      <tr><td>FY26 營收</td><td class="num">610 億</td><td>1H 實績 292 億 ＋ 2H 318 億。義大利 Novara 佔營收約 5% 且復產未定，故未採外部較高預估</td></tr>
+      <tr><td>FY27 營收</td><td class="num">820 億（+34%）</td><td>德州 P1、日本新潟／宇都宮、義大利復產與 LTA 調價；但公司自承德州 P1 滿載在 2027 年底，故不採更激進之營收曲線</td></tr>
+      <tr><td>FY27 營益率</td><td class="num">19.5%</td><td>新產能折舊 2027 年才達峰值（公司法說指引），故未回到 FY23 的 28.4% 水準</td></tr>
+      <tr><td>淨利／EBIT 轉換</td><td class="num">0.75</td><td>介於 FY23 的 0.98 與 FY24 的 0.70 之間；淨負債 548 億對應之利息費用 FY26 約 16 億、FY27 約 15 億</td></tr>
+      <tr><td>股數</td><td class="num">4.781 億股</td><td>股本 47.81 億元；未假設進一步稀釋</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>模型錨定驗證：</strong>GiS 對 FY26 帳面 EPS 之推估為約 16.0 元（＝1H26 實績 11.87 ＋ 2H26 經常性約 4.1，2H 評價損益假設為零），與國際投行 A 於 7 月 23 日發布之 16.75 元僅差 4.5%。分歧不在 2026 年，而在 2027 年之後的斜率。</blockquote>
+  <blockquote><strong>為什麼 FY27 是關鍵年：</strong>營收 +34% 與營益率 +9pp 同時發生，經常性 EPS 因此自 7.5 元跳升至 25.0 元——這是典型的營運槓桿。但該跳升完全建立在「德州 P1 於 2027 年底滿載、產業 UTR 於 2027 年底回到 90%」兩項公司指引之上。若任一項延後一年，FY27 經常性 EPS 將落在 Bear 情境的 15 元附近，對應目標價 360 元。<strong>模型的脆弱性集中在單一年度</strong>，這也是三情境權重設計的依據。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 基本面與模型｜3/3</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div pb page"><div class="sec-num">肆</div><div class="sec-eyebrow">Valuation</div><div class="sec-line"></div><div class="sec-title">估值：方法選擇、三情境與敏感度</div><div class="sec-desc">為什麼不用 PE Band、三情境如何加權，以及 830 元是怎麼來的。</div></div>
+<div class="full-page page body-page">
+  <h1 class="ch">七、估值方法選擇（方法論 §3.1）</h1>
+  <table>
+    <thead><tr><th>方法</th><th>是否適用</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>Trailing PE Band</td><td class="neg">✗ 不採用</td><td>帳面 EPS 含 Siltronic 市價評價，TTM 分母被雜訊汙染，Band 完全失真</td></tr>
+      <tr><td><strong>Forward PE（經常性 EPS）</strong></td><td class="pos">✓ 主方法</td><td>剝離評價損益後之本業獲利能力，為循環製造業的標準錨</td></tr>
+      <tr><td>P/B Band</td><td class="pos">✓ 輔助</td><td>資本密集、淨值穩定，且景氣底部 PE 失效時仍可用；為國際投行 A 之採用法</td></tr>
+      <tr><td>EV/EBITDA</td><td class="pos">✓ 輔助</td><td>折舊處於高峰且各廠爬坡進度不一時，可跨期比較</td></tr>
+      <tr><td>DCF</td><td class="neg">✗ 不採用</td><td>擴產週期中 FCF 為負且轉正時點高度不確定（外部預估自 FY26 至 FY29 不等），終值假設將主導結果</td></tr>
+      <tr><td>SOTP</td><td class="neg">✗ 不採用</td><td>Siltronic 持股僅佔市值 2.8%，拆分不改變結論；本業為單一事業體</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap"><div class="chart-title">P/B Band（五年）</div><div class="chart-sub">現價 4.8x 介於 +1σ 與 +2σ；7 月峰值 7.6x 為 +4.1σ</div><img class="chart-img" src="charts/chart_17_pb_band.png" style="height:250px;object-fit:contain;width:100%"></div>
+  <p>五年 P/B 均值 3.1x、+1σ 4.2x、+2σ 5.3x。現價 952 元對應 FY26E 每股淨值 199 元為 <strong>4.8x（+1.5σ）</strong>。以 FY27E 每股淨值約 220 元計，target P/B 3.5~4.5x 對應 <strong>770 ~ 990 元</strong>。</p>
+  <span class="src">資料來源：TWSE／TPEx 日收盤價、公司財報；每股淨值採年度內插，故 Band 為近似值</span>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 估值｜1/3</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">八、三情境與機率加權（方法論 §4.2）</h1>
+  <table>
+    <thead><tr><th>情境</th><th>機率</th><th>核心假設</th><th>FY27F 經常性 EPS</th><th>Target PE</th><th>目標價</th></tr></thead>
+    <tbody>
+      <tr><td><strong>空方 Bear</strong></td><td class="num">25%</td><td>義大利復產延宕至 2027；non-AI／成熟製程續弱；產業 UTR 停在 80% 出頭；現貨價漲不動</td><td class="num">15.0</td><td class="num">24x</td><td class="num neg">360</td></tr>
+      <tr><td><strong>基準 Base</strong></td><td class="num">45%</td><td>12 吋滿載延續、高階轉緊帶動 LTA 續約調價；德州 P1 於 2027 年底滿載；義大利 4Q26 部分復產</td><td class="num">25.0</td><td class="num">30x</td><td class="num">750</td></tr>
+      <tr><td><strong>多方 Bull</strong></td><td class="num">30%</td><td>美光十年約帶動 Sherman P2 定案並提前放量；記憶體矽晶圓超級循環；混合報價顯著上行</td><td class="num">42.0</td><td class="num">32x</td><td class="num pos">1,344</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">加權目標價 ＝ 0.25 × 360 ＋ 0.45 × 750 ＋ 0.30 × 1,344 ＝ 90.0 ＋ 337.5 ＋ 403.2 ＝ <strong>830.7 → NT$830</strong></p>
+  <div class="chart-wrap"><div class="chart-title">三情境目標價與機率權重</div><div class="chart-sub">僅多方情境高於現價</div><img class="chart-img" src="charts/chart_15_scenarios.png" style="height:230px;object-fit:contain;width:100%"></div>
+  <blockquote><strong>機率設定的理由：</strong>多方情境給予 30%（高於一般深度覆蓋的 20~25%），是因為美光十年約與 Sherman P2 是<strong>具名、具金額、具合約期間</strong>的催化劑，不是題材；空方 25% 則反映義大利復產與折舊峰值兩項已發生或已確認的阻力。基準情境權重 45% 對應「公司指引照表操課、不加速也不延後」。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 估值｜2/4</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">5 × 5 敏感度：FY27F 經常性 EPS × Target PE（方法論 §10）</h1>
+  <table>
+    <thead><tr><th>EPS ＼ PE</th><th>22x</th><th>26x</th><th>30x</th><th>34x</th><th>38x</th></tr></thead>
+    <tbody>
+      <tr><td><strong>15.0（Bear）</strong></td><td class="num neg">330</td><td class="num neg">390</td><td class="num neg">450</td><td class="num neg">510</td><td class="num neg">570</td></tr>
+      <tr><td><strong>20.0</strong></td><td class="num neg">440</td><td class="num neg">520</td><td class="num neg">600</td><td class="num neg">680</td><td class="num neg">760</td></tr>
+      <tr><td><strong>25.0（Base）</strong></td><td class="num neg">550</td><td class="num neg">650</td><td class="num hi">750</td><td class="num neg">850</td><td class="num">950</td></tr>
+      <tr><td><strong>32.6（市場共識）</strong></td><td class="num neg">717</td><td class="num neg">848</td><td class="num">978</td><td class="num pos">1,108</td><td class="num pos">1,239</td></tr>
+      <tr><td><strong>42.0（Bull）</strong></td><td class="num">924</td><td class="num pos">1,092</td><td class="num pos">1,260</td><td class="num pos">1,428</td><td class="num pos">1,596</td></tr>
+    </tbody>
+  </table>
+  <span class="src">綠色＝低於現價 952 元；橘色＝GiS Base 情境；紅色＝高於現價。表列為 FY27F 經常性 EPS × Target PE，未計入評價損益</span>
+  <blockquote><strong>敏感度讀法：</strong>要讓目標價高於現價 952 元，需要 FY27 經常性 EPS 達到市場共識的 32.6 元<strong>且</strong>本益比給到 30x 以上，或 EPS 落在 Bull 的 42 元。換言之，<strong>現價已經隱含「共識成真且不打折」</strong>。這正是 GiS 給予減碼的算術理由——不是預期公司變差，而是好消息已經被完整計價。</blockquote>
+  <blockquote><strong>反向讀法（多方須成立的條件）：</strong>若投資人認同國際投行 A 的 FY28 路徑，則現價 952 元對應該路徑的 FY28 EPS 為個位數本益比。這條路徑並非不可能，但它要求 Sherman P2 定案、美光長約全額放量、且矽晶圓進入類似 2021–2022 的超級循環三者同時成立。GiS 在多方情境給予 30% 機率，即為對此組合機率的估計。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 估值｜3/4</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+  <h1 class="ch">九、估值彙總與評等落格（方法論 §4.3）</h1>
+  <div class="chart-wrap"><div class="chart-title">Football Field：三法估值區間</div><div class="chart-sub">三法區間 455 ~ 1,344 元，加權法採 830 元</div><img class="chart-img" src="charts/chart_16_football_field.png" style="height:235px;object-fit:contain;width:100%"></div>
+  <table>
+    <thead><tr><th>方法</th><th>假設</th><th>對應價值</th><th>權重處理</th></tr></thead>
+    <tbody>
+      <tr><td>Forward PE（主）</td><td>FY27F 經常性 EPS 25.0 元 × 24~32x</td><td class="num">600 ~ 1,344</td><td>三情境機率加權</td></tr>
+      <tr><td>P/B Band（輔）</td><td>FY27E BVPS 約 220 元 × 3.5~4.5x</td><td class="num">770 ~ 990</td><td>交叉驗證，區間涵蓋 830</td></tr>
+      <tr><td>EV/EBITDA（輔）</td><td>FY27F EBITDA 約 270 億 × 9~11x，扣淨負債</td><td class="num">455 ~ 555</td><td>最保守，反映高折舊與高負債</td></tr>
+      <tr><td colspan="2"><strong>GiS 12M 目標價（三情境機率加權）</strong></td><td class="num hi"><strong>830</strong></td><td><strong>採用</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap"><div class="chart-title">目標價與評等落格</div><div class="chart-sub">−12.8% 對照五級制門檻落「減碼」</div><img class="chart-img" src="charts/chart_18_target_bridge.png" style="height:190px;object-fit:contain;width:100%"></div>
+  <table>
+    <thead><tr><th>GiS 評等</th><th>12M 上檔空間門檻</th><th>本檔</th></tr></thead>
+    <tbody>
+      <tr><td>買進 Buy</td><td>&gt; +15%</td><td></td></tr>
+      <tr><td>增加持股 OW</td><td>+5% ~ +15%</td><td></td></tr>
+      <tr><td>中立 N</td><td>−5% ~ +5%</td><td></td></tr>
+      <tr><td><strong>減碼 UW</strong></td><td><strong>&lt; −5%</strong></td><td class="num hi"><strong>◉ −12.8%</strong></td></tr>
+    </tbody>
+  </table>
+  <span class="src">上檔空間 ＝（830 − 952）／ 952 ＝ −12.8%，價格錨為 2026-08-04 收盤價</span>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 估值｜4/4</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div pb page"><div class="sec-num">伍</div><div class="sec-eyebrow">Consensus & Risk</div><div class="sec-line"></div><div class="sec-title">市場共識、風險與不能證明的事</div><div class="sec-desc">3.6 倍的目標價離散、雙向風險，以及本報告的方法論限制。</div></div>
+<div class="full-page page body-page">
+  <h1 class="ch">十、市場共識與離散度</h1>
+  <div class="chart-grid">
+    <div class="chart-wrap"><div class="chart-title">12M 目標價分布</div><div class="chart-sub">550 ~ 2,000，離散 3.6 倍</div><img class="chart-img" src="charts/chart_13_tp_dispersion.png" style="height:205px;object-fit:contain;width:100%"></div>
+    <div class="chart-wrap"><div class="chart-title">FY27E EPS 分布</div><div class="chart-sub">25 ~ 75 元，離散 2.4 倍</div><img class="chart-img" src="charts/chart_14_eps_dispersion.png" style="height:205px;object-fit:contain;width:100%"></div>
+  </div>
+  <table>
+    <thead><tr><th>來源</th><th>日期</th><th>評等</th><th>12M TP</th><th>FY26E EPS</th><th>FY27E EPS</th><th>FY28E EPS</th></tr></thead>
+    <tbody>
+      <tr><td>國際投行 A</td><td>07/23</td><td>買進</td><td class="num">2,000</td><td class="num">16.75</td><td class="num">45.08</td><td class="num">87.00</td></tr>
+      <tr><td>本土券商 B</td><td>07/29</td><td>增加持股</td><td class="num">1,500</td><td class="num">32.9</td><td class="num">75.0</td><td class="num">—</td></tr>
+      <tr><td>國際投行 C</td><td>03/11</td><td>加碼</td><td class="num">588</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>本土券商 D</td><td>01/13</td><td>買進</td><td class="num">550</td><td class="num">21.20</td><td class="num">31.05</td><td class="num">—</td></tr>
+      <tr><td>本土券商 E</td><td>07/29</td><td>正向</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>市場共識（A 報告載列）</td><td>07/23</td><td>—</td><td class="num">—</td><td class="num">21.49</td><td class="num">32.60</td><td class="num">54.03</td></tr>
+      <tr><td><strong>GiS（經常性 EPS）</strong></td><td><strong>08/05</strong></td><td><strong>減碼</strong></td><td class="num hi"><strong>830</strong></td><td class="num"><strong>7.5</strong></td><td class="num"><strong>25.0</strong></td><td class="num"><strong>33.5</strong></td></tr>
+    </tbody>
+  </table>
+  <span class="src">同業機構於內文採匿名代號處理，機構全名列於末頁資料來源</span>
+  <div class="callout">
+    <div class="callout-title">關於離散度的三點觀察</div>
+    <ul>
+      <li><strong>基數不一致：</strong>GiS 的 FY26 7.5 元與 FY27 25.0 元為<strong>經常性</strong> EPS，外部預估多為<strong>帳面</strong> EPS（含評價損益）。以帳面基礎比較，GiS FY26 約 16.0 元，與國際投行 A 的 16.75 元僅差 4.5%——分歧集中在 FY27 之後。</li>
+      <li><strong>本土券商 B 的 FY27E 75.0 元</strong>隱含淨利率約 40%，高於環球晶史上最佳的 FY23（約 28%）。GiS 判斷該預估應含大額業外或極端漲價假設，故未納入共識中位數的參考。</li>
+      <li><strong>離散度本身是訊號：</strong>當 12M 目標價從 550 元到 2,000 元、跨距 3.6 倍時，代表估值差異並非來自對當期獲利的認知，而是來自<strong>對尚未證實之產能與價格曲線的折現年份選擇</strong>。這與 GiS 於 2026 年 6 月覆蓋全新（2455）時觀察到的型態一致。</li>
+    </ul>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · 共識與風險｜1/2</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">十一、雙向風險</h1>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（目標價上修條件）</h4>
+      <div class="risk-item"><strong>德州 Sherman P2 正式定案並揭露放量時程</strong> → Bull 機率自 30% 上修，FY28 營收基數重估</div>
+      <div class="risk-item"><strong>美光十年約放量節奏優於預期</strong> → 美國製造溢價落袋，FY27 營益率可望超越 19.5%</div>
+      <div class="risk-item"><strong>高階 12 吋供應轉緊帶動 LTA 續約調價</strong> → 每 1pp 毛利率約影響 FY27 EPS 1.3 元</div>
+      <div class="risk-item"><strong>公司處分或避險 Siltronic 部位</strong> → EPS 品質改善，估值可回歸本業，觸發 re-rating</div>
+      <div class="risk-item"><strong>義大利火警反向改善 8 吋供需</strong> → 業界 8 吋價格上行</div>
+      <div class="risk-item"><strong>記憶體循環上行拉動 12 吋需求</strong> → 產業 UTR 提前於 2027 年底前回到 90%</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（目標價下修條件）</h4>
+      <div class="risk-item"><strong>Siltronic 評價損益持續為 EPS 雜訊源</strong> → EB 反向部位再放大波動，市場持續錯誤定價</div>
+      <div class="risk-item"><strong>義大利 Novara 復產延宕</strong> → 3Q26 營收季增落空，約佔營收 5%</div>
+      <div class="risk-item"><strong>新產能折舊 2027 年才達峰值</strong> → 毛利率回升斜率低於模型，每延後一年約影響 FY27 EPS 4~5 元</div>
+      <div class="risk-item"><strong>中國矽晶圓業者擴產</strong> → 成熟製程與 non-AI 應用價格戰</div>
+      <div class="risk-item"><strong>淨負債 548 億 ＋ 高資本支出</strong> → 自由現金流轉正時點延後，財務成本侵蝕獲利</div>
+      <div class="risk-item"><strong>新台幣強勢</strong> → 壓抑以美元計價之營收與毛利</div>
+    </div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">風險強度雷達</div><div class="chart-sub">業外評價波動與估值預支為當前兩大風險源</div><img class="chart-img" src="charts/chart_19_risk_radar.png" style="height:250px;object-fit:contain;width:100%"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · 共識與風險｜2/2</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page">
+  <h1 class="ch">十二、不能證明的事（方法論 §11 NO SHORTCUTS）</h1>
+  <p>本節列出本報告在方法上的限制，以及哪些結論屬於推估而非實證。</p>
+  <table>
+    <thead><tr><th>項目</th><th>限制</th><th>對結論的影響</th></tr></thead>
+    <tbody>
+      <tr><td>經常性 EPS 拆解</td><td>公司未單獨揭露 Siltronic 評價損益金額，GiS 係由營業利益向下推估淨利息費用（估 4 億／季）與稅率（估 22%）反推。實際數字需待財報附註揭露</td><td>1H26 經常性 EPS 3.41 元屬<strong>估計值</strong>；若利息費用高估，經常性 EPS 將略高於此數</td></tr>
+      <tr><td>2Q26 營業利益</td><td>係以 1H26 營益率 9.9% 反推總額後，減去 1Q26 實績 14.75 億求得，非公司直接揭露之單季數</td><td>2Q26 營益率 9.3% 為推估值，誤差約 ±0.3pp</td></tr>
+      <tr><td>Siltronic 持股市值</td><td>以 410 萬股 × 約 €88 × 匯率 35 估算約 126 億元；Siltronic 股價每日變動，且 EB 部位之名目金額未公開</td><td>「佔市值 2.8%」為量級概念，非精確比例</td></tr>
+      <tr><td>FY27–FY28 營收</td><td>德州 P2 尚未定案、美光長約放量時程未公開、義大利復產時程未定。三者皆無公開量化指引</td><td>模型的 FY27 +34% 與 FY28 +16% 屬<strong>情境設定</strong>，不是預測。三情境即為此不確定性的表達方式</td></tr>
+      <tr><td>P/B Band</td><td>每股淨值採年度數值內插，未逐季調整；FY21–FY22 淨值為推估</td><td>Band 位階為近似，±0.2x 內不宜過度解讀</td></tr>
+      <tr><td>Target PE 選取</td><td>24x／30x／32x 係參考環球晶歷史區間與循環位置設定，非由同業迴歸得出</td><td>目標價對 PE 假設高度敏感，見 §10 敏感度表</td></tr>
+      <tr><td>盤中時點</td><td>本報告完成於 2026-08-05 盤中，價格錨採 08-04 收盤 952 元；08-05 盤中曾見 892 元</td><td>若以 892 元計，上檔空間為 −7.0%，<strong>仍落於減碼區間</strong>，評等不變</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>結論的邊界：</strong>GiS 的減碼評等是一項<strong>估值判斷</strong>，不是對環球晶產業地位或管理層執行力的否定。既有產線滿載、日本廠創高、美光十年約——這些都是實績。減碼的理由僅有一個：以公司自己給出的時間表推導，現價已把 2027–2028 年的成果折現完畢，而中間十八個月的路徑存在義大利復產、折舊峰值與評價波動三項具體阻力。若 Sherman P2 定案並揭露量化時程，本報告將重新評估多方情境權重。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>陸 · 方法論限制</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page page body-page alt">
+  <h1 class="ch">資料來源與免責聲明</h1>
+  <h2 class="ch">公司與市場資料</h2>
+  <ul>
+    <li>環球晶圓 2026 年第二季法說會（2026-08-04）、2026 年第一季法說會（2026-05-05）、2025 年第四季法說會（2026-03-11）</li>
+    <li>公開資訊觀測站：季報財務數據、月營收公告、自結損益重大訊息（2026-07-29 六月自結）</li>
+    <li>臺灣證券交易所／證券櫃檯買賣中心：日收盤價、三大法人買賣超、融資融券餘額</li>
+    <li>GiS tw-stock-scanner 資料庫（本報告產出前已通過 21 項資料健檢，全數 PASS）</li>
+  </ul>
+  <h2 class="ch">同業機構報告（內文採匿名代號）</h2>
+  <ul>
+    <li><strong>國際投行 A</strong>：瑞銀 UBS《GlobalWafers — Fast Take》，2026-07-23，Buy／TP 2,000</li>
+    <li><strong>本土券商 B</strong>：凱基投顧《即時資訊_獲利公告》，2026-07-29，增加持股／TP 1,500</li>
+    <li><strong>國際投行 C</strong>：摩根士丹利《Raw wafer prices increase gradually with rush orders》，2026-03-11，OW／TP 588</li>
+    <li><strong>本土券商 D</strong>：群益投顧《個股報告》，2026-01-13，Buy／TP 550</li>
+    <li><strong>本土券商 E</strong>：元大投顧《即時訊息》，2026-07-29 與 2026-03-06</li>
+    <li>市場共識數據引自國際投行 A 報告所載列之 Refinitiv／LSEG 彙整值</li>
+  </ul>
+  <h2 class="ch">公開報導</h2>
+  <ul>
+    <li>美光與環球晶十年供應協議與 5 億美元策略融資相關報導（2026-07-09 起）</li>
+    <li>環球晶 2026 年第二季法說會相關報導（2026-08-04）</li>
+    <li>Siltronic AG 股價與市場資料</li>
+  </ul>
+  <h2 class="ch">方法論</h2>
+  <ul>
+    <li>GiS 估值方法論模板 §3.1（公司類型適用方法）、§4.2（三情境機率）、§4.3（五級制評等門檻）、§7.6（EPS 來源優先序）、§10（5×5 敏感度）、§11（NO SHORTCUTS）</li>
+  </ul>
+  <blockquote style="margin-top:14px"><strong>免責聲明：</strong>本報告由 Genesis International Capital 研究部門編製，僅供研究參考，不構成任何證券之買賣要約或投資建議。報告所載預估與情境設定係基於報告日之公開資訊與 GiS 假設，實際結果可能因產業循環、匯率、地緣政治與公司營運變動而有重大差異。投資人應自行判斷並承擔投資風險。本報告完成於 2026 年 8 月 5 日盤中，價格錨採 8 月 4 日收盤價。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>資料來源</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+</body>
+</html>

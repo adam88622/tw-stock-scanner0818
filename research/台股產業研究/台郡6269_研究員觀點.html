@@ -1,0 +1,539 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>台郡 6269 首次覆蓋 | GiS 研究員觀點</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#1a3a6e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:40px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#f5b041;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:1px;margin-bottom:16px}
+.cover-title em{color:#f5b041;font-style:normal}
+.cover-subtitle{font-size:14.5px;color:rgba(255,255,255,.65);margin-bottom:36px;letter-spacing:.5px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(245,176,65,.5);color:#f5d08a}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 22px;text-align:center}
+.cstat-num{font-size:21px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#f5b041;font-style:normal}
+.cstat-num.green{color:#00c896}
+.cstat-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:46px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:520px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:38px 52px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:20px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:0 0 16px;page-break-after:avoid}
+h2.ch{font-size:16px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:22px 0 11px;page-break-after:avoid}
+h3.ch{font-size:14px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:16px 0 8px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 11px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.3px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:8px 11px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:15px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.blue{background:#1a3a6e}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:12.5px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px}
+.badge.ow{background:#f59e0b;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:13px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:16px 22px;font-size:13px;line-height:1.7}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:18px;margin:14px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13.5px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:12px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:15px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.red{background:linear-gradient(135deg,#7b1d1d,#c0392b)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.85}
+.kpi-lbl{font-size:11px;opacity:.75;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:22px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.5px;font-weight:600;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:19px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:16px 13px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12.5px;font-weight:800;margin-bottom:7px}
+.tl-spec{font-size:14px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:10.5px;opacity:.85;line-height:1.45}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:15px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13.5px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+p{margin:6px 0 10px;line-height:1.72}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+li{margin:4px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:11px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0;line-height:1.65}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:5px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:15px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.red{border-color:#e74c3c;background:#fdf0ef}
+.callout.amber{border-color:#d97706;background:#fef6e7}
+.callout-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:7px}
+.callout.green .callout-title{color:#065f46}
+.callout.red .callout-title{color:#7b2020}
+.callout.amber .callout-title{color:#78350f}
+.sens td,.sens th{text-align:center;font-size:11.5px}
+.sens .c1{background:#f8d7da}.sens .c2{background:#fde2c4}.sens .c3{background:#fff3cd}.sens .c4{background:#e8f5d0}.sens .c5{background:#d4edda}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:13px 52px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13.5px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ════ 封面 ════ -->
+<div class="cover page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div><div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">研究員觀點 · 首次覆蓋</div></div></div>
+    <div class="cover-eyebrow">Initiating Coverage · 2026.06.15</div>
+    <div class="cover-title">台郡 6269<br><em>淨值打底，等待轉骨</em></div>
+    <div class="cover-subtitle">Flexium — A real FPC turnaround trading at book, with concrete H2 catalysts</div>
+    <div class="cover-tags">
+      <span class="ctag hl">評等：增加持股 OW</span>
+      <span class="ctag">12M TP NT$78</span>
+      <span class="ctag">上檔 +8%</span>
+      <span class="ctag">Apple 軟板主力</span>
+      <span class="ctag">智慧眼鏡 / ASIC 伺服器</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>增加持股</em></div><div class="cstat-label">GiS 評等 (OW)</div></div>
+    <div class="cstat"><div class="cstat-num">NT$<em>78</em></div><div class="cstat-label">12個月目標價</div></div>
+    <div class="cstat"><div class="cstat-num green">+8<em>%</em></div><div class="cstat-label">距 6/12 收盤上檔</div></div>
+    <div class="cstat"><div class="cstat-num">~1.0<em>x</em></div><div class="cstat-label">股價淨值比(貼近淨值)</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年6月15日（盤前）</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ════ 執行摘要 ════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要 — 增加持股 (OW)，12M 目標價 NT$78</h1>
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div><div class="co-name">台郡 Flexium</div><div class="co-ticker">6269.TW · 電子零組件業（軟板 FPC）</div></div>
+      <div class="co-badge"><span class="badge ow">增加持股 OW</span><span style="font-size:11px;color:rgba(255,255,255,.7)">12M TP NT$78</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">72.3</div><div class="co-metric-label">收盤 (6/12, NT$)</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+8%</div><div class="co-metric-label">距目標價空間</div></div>
+      <div class="co-metric"><div class="co-metric-val">234 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val">~1.0x</div><div class="co-metric-label">P/B（貼近淨值）</div></div>
+    </div>
+    <div class="co-body">
+      台郡是全球軟板大廠、<strong>Apple 軟板主力供應商</strong>（天線/電池/SLP）。2019-2023 連年穩定獲利（EPS 6.45-10.83、配息 4-5 元），2024-2025 因 Apple FPC 殺價、產能利用率低落、擴產折舊沉重轉為大虧（−2.56 / −6.95）。現股價 72.3 ≈ 每股淨值（P/B≈1.0x），管理層 5/08 法說明確 guide「<strong>下半年轉虧為盈、甚至彌補上半年虧損</strong>」。
+      <strong>GiS 研究員結論：這是一檔有「帳面價值地板」保護、且轉機驅動具體可驗（智慧眼鏡 H2 貢獻 10-20%、ASIC 伺服器已小量出貨、客戶分散）的價值反轉。下檔由淨值托底、上檔靠 2027 獲利復甦，風險報酬優於同業嘉聯益。</strong>
+    </div>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi red"><div class="kpi-val">−6.95<em> 元</em></div><div class="kpi-lbl">FY2025 EPS（谷底）</div></div>
+    <div class="kpi green"><div class="kpi-val">10.83<em> 元</em></div><div class="kpi-lbl">2022 EPS（獲利能力）</div></div>
+    <div class="kpi"><div class="kpi-val">~73<em> 元</em></div><div class="kpi-lbl">每股淨值 BVPS</div></div>
+    <div class="kpi gold"><div class="kpi-val">10-20<em>%</em></div><div class="kpi-lbl">智慧眼鏡 H2 營收占比</div></div>
+  </div>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>貼近淨值＝下檔有地板。</strong>P/B≈1.0x（BVPS≈73），市場篩選列「偏低位階」。連虧期歷史 P/B 低點約 0.8x（≈58），自此再殺空間有限；這是與嘉聯益（P/B 1.52x 高檔無托底）最大的不同。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>獲利能力是證實的，不是夢。</strong>2019-2023 EPS 6.45-10.83、年年配息。當前是「週期＋擴產折舊」的虧損，非結構性失能；營業現金流仍正（2025 帳面虧 22 億但現金流入約 +6.7 億）。正常化 EPS ~5 元的 re-rating 選擇權真實存在。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>H2 催化劑具體可驗。</strong>智慧眼鏡 H2 貢獻營收 10-20%、ASIC 伺服器 Q1 已小量出貨、客戶分散（Apple 90%→非主力 30-40%）、Apple 新機量價正向；管理層明確 guide H2 轉盈——相較嘉聯益「不敢給年份」訊息度高得多。</span></div>
+  </div>
+  <p style="font-size:12.5px;color:#6b7a9a">加碼確認條件：① Q2/Q3 毛利率轉正 ② 智慧眼鏡放量入帳 ③ 月營收回升。主要風險：有息負債 148 億偏高、2026 仍為虧損年、Apple 依賴。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>執行摘要</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ════ 投資論點頁 ════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">投資論點 — 從 142 元到貼近淨值的價值反轉</h1>
+  <div class="chart-wrap">
+    <div class="chart-title">股價 5 年走勢 — 自 135 元下殺至 56 元，2026 反彈至 72</div>
+    <div class="chart-sub">資料來源：TWSE / tw-stock-scanner（季末收盤）；GiS 彙編</div>
+    <div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="cPrice" style="display:block;width:100%;height:225px"></canvas></div>
+  </div>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>多方論點 (Bull)</h4>
+      <div class="risk-item">① P/B≈1.0x 貼近淨值，下檔有帳面地板（歷史低 0.8x≈58）</div>
+      <div class="risk-item">② 證實獲利能力（2019-23 EPS 6.45-10.83），正常化 re-rating 選擇權</div>
+      <div class="risk-item">③ H2 催化具體：智慧眼鏡 10-20%、ASIC 已出貨、客戶分散</div>
+      <div class="risk-item">④ 營業現金流為正（折舊高），非燒錢型虧損</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>空方論點 (Bear)</h4>
+      <div class="risk-item">① 2026 仍為虧損年，轉機尚未證實</div>
+      <div class="risk-item">② 有息負債 148 億偏高（擴產長借），利息壓力</div>
+      <div class="risk-item">③ Apple 依賴仍高，FPC 殺價/拉貨風險</div>
+      <div class="risk-item">④ 已自 56 反彈至 72（+29%），短線過熱</div>
+    </div>
+  </div>
+  <blockquote><strong>GiS 核心判斷：</strong>台郡與嘉聯益同處 FPC 下行週期，但本質不同——台郡有「淨值地板＋證實獲利能力＋具體催化」三重支撐，嘉聯益則是「高估值＋連年虧＋遠端題材」。同樣是軟板轉機，台郡的風險報酬對稱性明顯較佳，這是 GiS 給予 OW（而非嘉聯益之 UW）的根本理由。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資論點</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ════ 章節一封面 ════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Company & Business Model</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">公司與商業模式</div>
+  <div class="sec-desc">Apple 軟板主力供應商，高雄大寮起家；如何從單一大客戶依賴，走向 AI 高速傳輸、智慧眼鏡與多元客戶結構。</div>
+</div>
+
+<!-- ════ 公司 101 ════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹、公司簡介與商業模式</h1>
+  <p>台郡科技（Flexium）成立於 1997 年、2003 年掛牌，總部高雄大寮，為全球軟板（FPC）大廠、<strong>Apple 軟板核心供應商</strong>，供應 iPhone 天線、電池、觸控與 SLP 軟硬結合板。2019-2023 為穩定獲利期（年年 EPS 逾 6 元、配息 4-5 元）；2024 年起受 Apple FPC 殺價、產能利用率低落與擴產折舊沉重影響轉為虧損。</p>
+  <table>
+    <thead><tr><th>項目</th><th>內容</th><th>項目</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><td>成立 / 上市</td><td>1997 / 2003-09-23</td><td>董事長</td><td>鄭明智</td></tr>
+      <tr><td>市場 / 產業</td><td>TWSE / 電子零組件</td><td>總經理</td><td>David Cheng</td></tr>
+      <tr><td>股本 / 股數</td><td>32.38 億 / 3.238 億股</td><td>財務</td><td>熊雅士</td></tr>
+      <tr><td>主力產品</td><td>軟板 FPC、SLP、高速傳輸</td><td>市值 (6/12)</td><td class="hi">234 億元</td></tr>
+    </tbody>
+  </table>
+  <h2 class="ch">收入 / 成本 / 護城河</h2>
+  <p><strong>收入</strong>：Apple 去年占營收約 90%（iPhone 天線/電池/SLP）；ASP 隨機種規格。<strong>成本</strong>：FCCL/PI/LCP 原料 + 人工 + <strong>高折舊</strong>（擴產資本支出，Q1 折舊 5.14 億）。<strong>護城河</strong>：Apple 認證壁壘、大尺寸/高頻製程；弱點為單一客戶集中與 Apple 議價力。</p>
+  <div class="chart-grid">
+    <div class="callout green">
+      <div class="callout-title">護城河正向</div>
+      <ul><li>Apple 長期認證供應關係</li><li>高頻高速、SLP 軟硬結合製程能力</li><li>規模僅次臻鼎，台系軟板第二大</li></ul>
+    </div>
+    <div class="callout amber">
+      <div class="callout-title">結構弱點</div>
+      <ul><li>單一客戶集中（Apple ~90%）</li><li>FPC 殺價、Apple 議價力強</li><li>擴產折舊沉重，產能利用率為損益關鍵</li></ul>
+    </div>
+  </div>
+  <blockquote><strong>GiS 觀點：</strong>台郡的問題不是「沒有護城河」，而是「護城河集中在一個議價力極強的客戶上」。轉型的核心不只是新產品，更是<strong>客戶結構分散</strong>——管理層將非主力客戶占比由 10% 拉升至 30-40%，這是降低結構風險、重建獲利品質的關鍵。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 公司與商業模式</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ════ 章節二封面 ════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Turnaround Drivers</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">轉機驅動與<br>H2 催化劑</div>
+  <div class="sec-desc">智慧眼鏡、ASIC 伺服器、AI 高速傳輸、折疊 iPhone、客戶分散——哪些在 H2 兌現，哪些是 2027+ 選擇權？</div>
+</div>
+
+<!-- ════ 轉機題材 + 時間軸 ════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳、轉機驅動 — H2 2026 是關鍵時刻</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>驅動</th><th>進度（5/08 法說）</th><th>時程</th><th>可信度</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Apple 新 iPhone 量價</strong></td><td>主力客戶新品下半年量價均正向改變</td><td class="pos">H2 2026</td><td class="pos">高</td></tr>
+      <tr><td><strong>智慧眼鏡</strong></td><td>下半年可望貢獻營收 <strong>10-20%</strong></td><td class="pos">H2 2026</td><td class="pos">中高</td></tr>
+      <tr><td><strong>ASIC 伺服器</strong></td><td>Q1 已小量出貨</td><td class="pos">進行中</td><td class="pos">中高</td></tr>
+      <tr><td><strong>客戶分散</strong></td><td>非主力客戶占比 90%→30-40%</td><td>2026</td><td>中高</td></tr>
+      <tr><td>AI 伺服器高速傳輸</td><td>電腦託盤內傳輸，開發中</td><td>2026-27</td><td>中</td></tr>
+      <tr><td>折疊 iPhone</td><td>預期帶動 2026-27 成長</td><td>2026H2-27</td><td>中</td></tr>
+      <tr><td>低軌衛星/機器人/無人機</td><td>明後年發酵</td><td>2027+</td><td class="neg">中-低</td></tr>
+    </tbody>
+  </table>
+  <h2 class="ch">獲利週期時間軸</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2019-2023</div><div class="tl-spec">獲利期</div><div class="tl-tech">EPS 6.45-10.83、配息 4-5 元</div></div>
+    <div class="tl-item active"><div class="tl-year">2024-2026H1 ← 現在</div><div class="tl-spec">谷底</div><div class="tl-tech">殺價+折舊+稼動率低，連虧；股價貼淨值</div></div>
+    <div class="tl-item next"><div class="tl-year">2026H2-2027</div><div class="tl-spec">轉骨</div><div class="tl-tech">智慧眼鏡+ASIC+Apple 新機，轉虧為盈</div></div>
+    <div class="tl-item"><div class="tl-year">2028+</div><div class="tl-spec">復甦</div><div class="tl-tech">AI 高速傳輸+折疊機+衛星/機器人</div></div>
+  </div>
+  <blockquote><strong>GiS 判斷：</strong>台郡轉機的可信度高於同業，關鍵在「近端引擎已啟動」——智慧眼鏡 H2 即可貢獻雙位數營收占比、ASIC 伺服器 Q1 已出貨，並非純口號。管理層敢明確 guide「H2 轉虧為盈、甚至彌補上半年虧損」，是對能見度的信心表態。GiS 視 H2 毛利率轉正為核心驗證點。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 轉機驅動</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ════ 競爭格局 ════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參、產業地位與同業對比</h1>
+  <p>台系軟板：臻鼎（龍頭，含硬板）＞台郡＞嘉聯益≈易華電。台郡為 Apple FPC 主力第二大，FY2025 營收 223 億。整個 FPC 族群 2024-2025 同步陷入下行（Apple 殺價、消費需求疲弱），台郡與嘉聯益皆虧損，差別在規模、客戶結構與轉機進度。</p>
+  <table style="font-size:11.5px">
+    <thead><tr><th>公司</th><th>代號</th><th>定位</th><th>對比台郡</th></tr></thead>
+    <tbody>
+      <tr><td>臻鼎-KY</td><td>4958</td><td>全球 FPC 龍頭（含硬板）</td><td>規模最大、客戶分散、已獲利</td></tr>
+      <tr style="background:#e8f5ee!important"><td style="font-weight:800">台郡</td><td style="font-weight:800">6269</td><td style="font-weight:700">Apple 軟板主力</td><td class="pos" style="font-weight:700">貼近淨值、轉機具體（GiS：OW）</td></tr>
+      <tr><td>嘉聯益</td><td>6153</td><td>軟板/軟硬結合，轉型中</td><td class="neg">P/B 1.52x 高檔、題材更遠（GiS：UW）</td></tr>
+      <tr><td>易華電</td><td>6552</td><td>軟板 + COF</td><td>規模相近、同樣承壓</td></tr>
+      <tr><td>台虹 / 達邁</td><td>8039/3645</td><td>上游材料（FCCL/PI）</td><td>材料端、獲利穩</td></tr>
+    </tbody>
+  </table>
+  <div class="callout amber">
+    <div class="callout-title">重要更正聲明</div>
+    <p style="margin:3px 0;font-size:12.5px">GiS 嘉聯益 6153 報告（6/12）曾將台郡描述為「已獲利、底氣足」，<strong>此為誤述並予更正</strong>：台郡 2024-2025 同樣大虧（EPS −2.56 / −6.95），與嘉聯益同處 FPC 下行週期。台郡的相對優勢在於規模、Apple 主供地位、營業現金流為正與轉機驅動的具體性，而非「未虧損」。</p>
+  </div>
+  <blockquote><strong>GiS 觀點：</strong>在 FPC 族群普遍承壓下，選股關鍵不是「誰沒虧」，而是「誰的下檔有保護、誰的轉機可驗證」。台郡兼具淨值地板與具體催化，是族群中風險報酬較佳者。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 產業地位</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ════ 章節三封面 ════ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Financials</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">財務分析與預估</div>
+  <div class="sec-desc">從 EPS 10.83 到 −6.95 的週期，到 2027 的復甦路徑；淨值穩定提供地板，三情境財務模型 2026-2028E。</div>
+</div>
+
+<!-- ════ 歷史財務 ════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆、歷史財務 — 週期性虧損，非結構性失能</h1>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">年度 EPS（元）：獲利 → 谷底 → 復甦</div>
+      <div class="chart-sub">資料來源：MOPS / HiStock（2019-2025 實績）；2026-2028 GiS 基礎情境</div>
+      <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="cEPS" style="display:block;width:100%;height:200px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">年度營收（億元）</div>
+      <div class="chart-sub">資料來源：公司月營收彙總；2026-28 GiS 基礎情境</div>
+      <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="cRev" style="display:block;width:100%;height:200px"></canvas></div>
+    </div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>年度</th><th class="num">2019</th><th class="num">2020</th><th class="num">2021</th><th class="num">2022</th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th><th class="num">26Q1</th></tr></thead>
+    <tbody>
+      <tr><td>EPS(元)</td><td class="num pos">10.02</td><td class="num pos">8.63</td><td class="num pos">8.19</td><td class="num pos hi">10.83</td><td class="num pos">6.45</td><td class="num neg">−2.56</td><td class="num neg">−6.95</td><td class="num neg">−2.60</td></tr>
+    </tbody>
+  </table>
+  <blockquote style="font-size:12.5px"><strong>關鍵解讀：</strong>2024-2025 的虧損是「Apple 殺價 + 稼動率低 + 擴產折舊」三重壓力的週期性結果，<strong>非結構性失能</strong>——公司握有證實的獲利能力（peak EPS 10.83）與正向營業現金流（2025 帳面虧 22 億但現金流入約 +6.7 億）。這是 GiS 願意給予正常化盈餘估值的基礎。歷史 EPS 採 MOPS / HiStock，不採 yfinance（方法論 §7.6）。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 歷史財務</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ════ 淨值地板 + 三情境 ════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">伍、淨值地板與三情境預估</h1>
+  <div class="chart-wrap">
+    <div class="chart-title">股東權益（億元）與每股淨值 BVPS（元）— 相對穩定，提供下檔地板</div>
+    <div class="chart-sub">資料來源：HiStock / 富邦 e 投顧；母/合併口徑差異，BVPS 取中值約 73。GiS 彙編</div>
+    <div class="chart-container" style="height:195px;width:100%;position:relative"><canvas id="cEquity" style="display:block;width:100%;height:195px"></canvas></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>情境</th><th class="num">26E EPS</th><th class="num">27E EPS</th><th class="num">28E EPS</th><th>關鍵假設</th></tr></thead>
+    <tbody>
+      <tr><td>保守</td><td class="num neg">−3.5</td><td class="num pos">+1.0</td><td class="num pos">+2.5</td><td>稼動率回升慢、智慧眼鏡遞延，2027 微利</td></tr>
+      <tr style="background:#eefaf4!important"><td>基礎</td><td class="num neg">−2.0</td><td class="num pos">+3.5</td><td class="num pos">+5.0</td><td>H2'26 轉盈、Apple 新機+智慧眼鏡放量、27 復甦</td></tr>
+      <tr><td>樂觀</td><td class="num neg">−0.5</td><td class="num pos">+5.5</td><td class="num pos">+7.5</td><td>智慧眼鏡+ASIC+折疊機齊發，接近歷史獲利</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 觀點：</strong>有別於嘉聯益淨值持續崩落，台郡股東權益相對穩定（225-251 億區間），BVPS≈73 提供明確下檔地板。三情境差異在「轉正速度與復甦斜率」；即便保守情境 2027 也回到微利，這是「淨值托底 + 獲利復甦」雙保險的來源。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · 淨值與三情境</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ════ 章節四封面 ════ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Valuation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">估值分析</div>
+  <div class="sec-desc">trailing 虧損禁用 PE。P/B band 為主（下檔地板）、正常化盈餘 PE（上檔復甦）、EV/Sales 交叉；Football Field 與敏感度。</div>
+</div>
+
+<!-- ════ P/B + 正常化 ════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">陸、估值（一）P/B Band 與正常化盈餘</h1>
+  <div class="chart-wrap">
+    <div class="chart-title">P/B Band — 現價 ≈1.0x，歷史區間 0.8-1.4x</div>
+    <div class="chart-sub">資料來源：GiS 自算（股價 vs BVPS×{0.8/1.0/1.2/1.4}）。獲利期 1.2-1.4x、低潮 0.8-1.0x</div>
+    <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="cPBband" style="display:block;width:100%;height:210px"></canvas></div>
+  </div>
+  <table style="font-size:12px">
+    <thead><tr><th>方法</th><th>說明</th><th class="num">基礎結果</th></tr></thead>
+    <tbody>
+      <tr><td>P/B band（主）</td><td>公允 1.18x × 前瞻 BVPS 72</td><td class="num hi">85</td></tr>
+      <tr><td>正常化 PE</td><td>through-cycle EPS 5.0 × 15x（遠低於 peak 10）</td><td class="num">75</td></tr>
+      <tr><td>EV/Sales</td><td>1.35x × FY26E 235 億 − 淨債 116 億</td><td class="num">62</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px"><strong>P/B 法（主錨）</strong>：下檔由淨值托底（0.8x≈58），公允 1.18x（獲利復甦中段水準）× 前瞻 BVPS 72 ≈ 85。<strong>正常化 PE</strong>：採 through-cycle EPS 5.0（保守於歷史均 8.8，反映 Apple FPC 成熟 + 新品補位）× 15x ≈ 75。<strong>EV/Sales</strong>：因有息負債 148 億，EV/Sales 法偏保守（62）。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>陸 · P/B 與正常化</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ════ Football + 結論 ════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">柒、估值（二）綜合區間與目標價</h1>
+  <div class="chart-wrap">
+    <div class="chart-title">Football Field — 綜合估值區間（元）</div>
+    <div class="chart-sub">資料來源：GiS 估值模型。橫條為各法保守-樂觀區間</div>
+    <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="cFootball" style="display:block;width:100%;height:210px"></canvas></div>
+  </div>
+  <table style="font-size:12px">
+    <thead><tr><th>方法</th><th class="num">保守</th><th class="num">基礎</th><th class="num">樂觀</th><th>權重</th></tr></thead>
+    <tbody>
+      <tr><td>P/B band（主）</td><td class="num">61</td><td class="num">85</td><td class="num">104</td><td>50%</td></tr>
+      <tr><td>正常化盈餘 PE</td><td class="num">28</td><td class="num">75</td><td class="num">112</td><td>30%</td></tr>
+      <tr><td>EV/Sales</td><td class="num">34</td><td class="num">62</td><td class="num">95</td><td>20%</td></tr>
+      <tr style="background:#fff8e1!important"><td style="font-weight:800">加權</td><td class="num" style="font-weight:700">46</td><td class="num hi" style="font-weight:800">77</td><td class="num" style="font-weight:700">106</td><td style="font-weight:700">—</td></tr>
+    </tbody>
+  </table>
+  <div class="callout green">
+    <div class="callout-title">採用目標價與評等</div>
+    <p style="margin:4px 0"><strong>12M 目標價 NT$78</strong>（以基礎情境 P/B 法 85 為主錨，EV/Sales 與保守正常化盈餘下修，綜合取 78）。對 6/12 收盤 72.3：<strong>上檔空間 +7.9%</strong>。對照方法論 §4.3（+5%~+15% = 增加持股）→ <strong style="color:#f59e0b">增加持股 (OW)</strong>。</p>
+  </div>
+  <blockquote style="font-size:12px"><strong>方法論紀律：</strong>§4.3 加權 TP 直接落格。台郡上檔由 2027 獲利復甦驅動、下檔由淨值（~58-73）托底，風險報酬對稱性佳。若 H2 毛利轉正與智慧眼鏡放量確認，正常化 EPS 上修空間將推升至樂觀區間（90+），屆時可上修評等。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>柒 · 目標價與評等</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ════ 敏感度 ════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">捌、敏感度分析（5×5：公允 P/B × 前瞻 BVPS）</h1>
+  <p style="font-size:12.5px">中心格 = 公允 P/B 1.18x × 前瞻 BVPS 72 ≈ 85（P/B 法基礎）。綜合各法後採用 TP 78。橫軸為市場願給的 P/B（隨獲利復甦能見度上升），縱軸為 12 個月後每股淨值。</p>
+  <table class="sens" style="font-size:12px">
+    <thead><tr><th>BVPS ↓ \ P/B →</th><th>0.85x</th><th>1.00x</th><th>1.18x</th><th>1.30x</th><th>1.45x</th></tr></thead>
+    <tbody>
+      <tr><td><strong>68</strong></td><td class="c1">58</td><td class="c2">68</td><td class="c3">80</td><td class="c4">88</td><td class="c5">99</td></tr>
+      <tr><td><strong>70</strong></td><td class="c1">60</td><td class="c2">70</td><td class="c3">83</td><td class="c4">91</td><td class="c5">102</td></tr>
+      <tr><td><strong>72（基礎）</strong></td><td class="c2">61</td><td class="c3">72</td><td class="c3" style="font-weight:800;border:2px solid #0d1b3e">85</td><td class="c4">94</td><td class="c5">104</td></tr>
+      <tr><td><strong>74</strong></td><td class="c2">63</td><td class="c3">74</td><td class="c4">87</td><td class="c5">96</td><td class="c5">107</td></tr>
+      <tr><td><strong>76</strong></td><td class="c3">65</td><td class="c4">76</td><td class="c4">90</td><td class="c5">99</td><td class="c5">110</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 解讀：</strong>即便最保守格（P/B 0.85x × BVPS 68）也有 58 元（較現價 −20%），對應歷史低潮 P/B——這是淨值地板的具象。中性偏多情境（P/B 1.18-1.3x）落在 80-94，支撐 OW。關鍵變數是「市場願給的 P/B」，由 H2 毛利轉正與獲利能見度決定。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>捌 · 敏感度</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ════ 風險 + 催化劑 ════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">玖、風險矩陣與催化劑日曆</h1>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>下行風險（產業 + 公司）</h4>
+      <div class="risk-item">Apple FPC 殺價 / 新機拉貨不如預期</div>
+      <div class="risk-item">智慧眼鏡放量遞延，H2 營收貢獻不足</div>
+      <div class="risk-item">產能利用率回升慢，毛利持續為負</div>
+      <div class="risk-item">客戶分散不及預期，Apple 依賴難降</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>財務 + 估值風險</h4>
+      <div class="risk-item">有息負債 148 億偏高，利息與折舊負擔</div>
+      <div class="risk-item">續虧侵蝕淨值，P/B 地板下移</div>
+      <div class="risk-item">已自 56 反彈至 72（+29%），短線過熱回吐</div>
+      <div class="risk-item">2026 全年仍為虧損年，轉機未證</div>
+    </div>
+  </div>
+  <h2 class="ch">催化劑日曆</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>時點</th><th>事件</th><th>方向</th></tr></thead>
+    <tbody>
+      <tr><td>每月 10 日</td><td>月營收（觀察 H2 回升斜率）</td><td>追蹤</td></tr>
+      <tr><td>2026 Q2 財報（8月）</td><td>毛利率是否轉正、H2 能見度 guidance</td><td class="pos">關鍵</td></tr>
+      <tr><td>2026 Q3（9-10月）</td><td>智慧眼鏡放量入帳、Apple 新機拉貨</td><td class="pos">關鍵</td></tr>
+      <tr><td>2026 Q3 財報（11月）</td><td>驗證「H2 轉虧為盈」guidance</td><td class="pos">驗證</td></tr>
+      <tr><td>2027</td><td>折疊 iPhone、AI 高速傳輸放量</td><td>結構成長</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>加碼確認條件：</strong>① Q2/Q3 毛利率轉正 ② 智慧眼鏡放量入帳 ③ 月營收回升。三者確認則上修至樂觀區間（90+）。下檔由淨值（~58-73）托底，提供承接安全邊際。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>玖 · 風險與催化劑</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ════ 附錄 ════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">附錄 — 估值方法論與資料來源</h1>
+  <h2 class="ch">為何 P/B 為主、PE 為輔？</h2>
+  <p>台郡 trailing EPS 為負（FY2025 −6.95），PE 無分母意義。但與嘉聯益不同，台郡握有<strong>證實的獲利歷史</strong>（2019-2023 EPS 6.45-10.83）與<strong>穩定淨值</strong>，故採 <strong>P/B band 為主</strong>（下檔地板 + 復甦再評價）、<strong>正常化盈餘 PE</strong>（上檔復甦能力）、<strong>EV/Sales</strong>（規模相對）三法交叉。評等門檻採 GiS 五級制（§4.3）：本檔加權上檔 +7.9% → 增加持股。</p>
+  <h2 class="ch">資料來源</h2>
+  <ul style="font-size:12.5px">
+    <li>MOPS 公開資訊觀測站（歷史損益、資產負債表）</li>
+    <li>台郡 2026/05/08 法說會（總經理 David Cheng）— 鉅亨網、公開記錄</li>
+    <li>tw-stock-scanner DB（股價、月營收、籌碼）；HiStock（歷史 EPS / 股東權益）；富邦 e 投顧（資產負債表季表）；財報狗（健診）</li>
+    <li>同業：臻鼎 4958 / 嘉聯益 6153 / 易華電 6552 / 台虹 8039 / 達邁 3645</li>
+    <li>股價淨值比 band 為 GiS 自算（年度權益 ÷ 股數 ÷ 對應股價）；BVPS 因母/合併口徑差異取中值約 73</li>
+  </ul>
+  <div class="callout">
+    <div class="callout-title">研究員身份聲明</div>
+    <p style="margin:4px 0;font-size:12px">本報告為 GiS 研究員觀點，以估值方法論驅動、中立、12 個月目標價為框架。投資人觀點（Investment Memo）另行出具。同業券商觀點內文匿名，末段資料來源具名。本報告基於 2026-06-12 收盤價 72.3 撰寫，盤中變動以即時為準，不構成投資建議。</p>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>附錄 · 方法論與來源</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<script>
+const NAVY='#0d1b3e',TEAL='#00c896',BLUE='#1a3a6e',RED='#c0392b',GOLD='#d97706',AMBER='#f59e0b',GREY='#9aabb5';
+Chart.defaults.font.family="'PingFang TC','Microsoft JhengHei',sans-serif";
+Chart.defaults.font.size=11;Chart.defaults.color='#33415c';
+Chart.defaults.animation=false;
+
+const pLabels=["21-06","21-09","21-12","22-03","22-06","22-09","22-12","23-03","23-06","23-09","23-12","24-03","24-06","24-09","24-12","25-03","25-06","25-09","25-12","26-03","26-06"];
+const pVals=[135.0,102.5,104.5,101.5,86.6,86.9,98.0,99.0,92.6,88.0,88.3,91.2,90.7,78.6,64.3,60.3,56.2,62.3,59.0,57.2,72.3];
+new Chart(document.getElementById('cPrice'),{type:'line',data:{labels:pLabels,datasets:[{label:'收盤',data:pVals,borderColor:NAVY,backgroundColor:'rgba(26,58,110,.07)',borderWidth:2,fill:true,tension:.25,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'NT$'}}}}});
+
+new Chart(document.getElementById('cEPS'),{type:'bar',data:{labels:['2019','2020','2021','2022','2023','2024','2025','2026E','2027E','2028E'],datasets:[{data:[10.02,8.63,8.19,10.83,6.45,-2.56,-6.95,-2.0,3.5,5.0],backgroundColor:['#00a878','#00a878','#00a878','#00875a','#3bb78f',RED,RED,'#e67e22','#7cc36a',TEAL]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'EPS 元'}}}}});
+
+new Chart(document.getElementById('cRev'),{type:'bar',data:{labels:['2022','2023','2024','2025','2026E','2027E','2028E'],datasets:[{data:[320,290,264,223,235,265,295],backgroundColor:[BLUE,BLUE,RED,RED,GOLD,'#7cc36a',TEAL]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'億元'}}}}});
+
+new Chart(document.getElementById('cEquity'),{data:{labels:['2021','2022','2023','2024','2025','26Q1'],datasets:[
+ {type:'bar',label:'股東權益(億)',data:[243.9,233.6,235.5,259.2,251.8,243.5],backgroundColor:'rgba(26,58,110,.7)',yAxisID:'y'},
+ {type:'line',label:'BVPS(元)',data:[75.3,72.1,72.7,80.0,77.7,75.2],borderColor:TEAL,borderWidth:2.5,pointRadius:3,yAxisID:'y1'}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'億元'}},y1:{position:'right',title:{display:true,text:'BVPS 元'},grid:{drawOnChartArea:false},min:60,max:90}}}});
+
+new Chart(document.getElementById('cPBband'),{type:'line',data:{labels:['2021','2022','2023','2024','2025','26Q1','現價'],datasets:[
+ {label:'股價',data:[104.5,98.0,88.3,64.3,59.0,57.2,72.3],borderColor:NAVY,borderWidth:2.6,pointRadius:3,tension:.15},
+ {label:'1.4x',data:[105,101,102,112,109,105,102],borderColor:'#f5b7b1',borderWidth:1,borderDash:[4,3],pointRadius:0},
+ {label:'1.2x',data:[90,87,87,96,93,90,87],borderColor:GOLD,borderWidth:1.2,borderDash:[4,3],pointRadius:0},
+ {label:'1.0x(淨值)',data:[75.3,72.1,72.7,80.0,77.7,75.2,73],borderColor:TEAL,borderWidth:1.4,pointRadius:0},
+ {label:'0.8x',data:[60,58,58,64,62,60,58],borderColor:'#a9dfbf',borderWidth:1,borderDash:[4,3],pointRadius:0}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'NT$'}}}}});
+
+new Chart(document.getElementById('cFootball'),{type:'bar',data:{labels:['P/B band','正常化 PE','EV/Sales','加權'],datasets:[
+ {label:'保守',data:[61,28,34,46],backgroundColor:'#e74c3c'},
+ {label:'基礎',data:[85,75,62,77],backgroundColor:AMBER},
+ {label:'樂觀',data:[104,112,95,106],backgroundColor:TEAL}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:{min:0,max:120,title:{display:true,text:'每股價值 NT$（現價 72.3 / TP 78 / 淨值 ~73）'}}}}});
+</script>
+</body>
+</html>

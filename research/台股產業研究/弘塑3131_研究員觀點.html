@@ -1,0 +1,599 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>弘塑 3131 首次覆蓋 — 中立 | GiS 研究員觀點</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-img{width:100%;height:210px;display:block;border-radius:4px;object-fit:contain}
+.chart-img.tall{height:260px}
+.chart-img.short{height:160px}
+.chart-grid .chart-img{height:180px}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8)}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5)}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:22px 0 14px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:20px 0 11px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 11px;text-align:left;font-weight:600;font-size:12px}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:8px 11px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:20px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.wine{background:#5c1a1a}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700}
+.badge.neutral{background:#7f8c8d;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:13px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:16px 20px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:16px;margin:14px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13.5px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:11px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.grey{background:linear-gradient(135deg,#2d3748,#5c6f7f)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:11px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.5px;font-weight:600;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:11px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.red{border-color:#e74c3c;background:#fdf0ef}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+.callout.red .callout-title{color:#7b2020}
+p{margin:6px 0 10px;line-height:1.7}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+li{margin:3px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:8px 13px;margin:11px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0;line-height:1.65}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:16px 13px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12.5px;font-weight:800;margin-bottom:7px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:13px 56px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head><body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<div class="cover page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row"><div class="cover-logo-sq">Gi<em>S</em></div>
+      <div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">研究員觀點 · 首次覆蓋深度報告</div></div></div>
+    <div class="cover-eyebrow">Initiating Coverage · Equity Research · 2026/05/29</div>
+    <div class="cover-title">弘塑 3131<br><em>CoWoS × SoIC 雙引擎</em>，估值已 in the price</div>
+    <div class="cover-subtitle">Grand Process Technology — The Pure-play on TSMC Advanced Packaging Wet Processing</div>
+    <div class="cover-tags">
+      <span class="ctag hl">中立 N</span><span class="ctag hl">12M TP NT$3,630</span>
+      <span class="ctag">CoWoS 獨家認證</span><span class="ctag">3D SoIC ASP +50%</span>
+      <span class="ctag">台積電供應鏈</span><span class="ctag">設備 + 化學藥水雙軌</span></div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>3,630</em></div><div class="cstat-label">12M 目標價（元）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>-0.1</em>%</div><div class="cstat-label">上檔空間 → N</div></div>
+    <div class="cstat"><div class="cstat-num"><em>70 / 103</em></div><div class="cstat-label">26/27F EPS（元）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>51.7</em>x</div><div class="cstat-label">Forward PE</div></div>
+  </div>
+  <div class="cover-bottom"><span>報告日期：2026年5月29日（盤後）</span><span>本報告僅供研究參考，不構成投資建議</span><span>© 2026 GiS</span></div>
+</div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">投資摘要 — 中立（N）／ 12M 目標價 NT$3,630</h1>
+  <p style="margin-top:-2px">評等 <span class="badge neutral">中立 N (NEUTRAL)</span> ｜ 收盤 NT$3,635（2026-05-28；5/29 盤中 3,450）｜ 上檔 <strong>-0.1%</strong> ｜ 市值 982 億</p>
+  <div class="kpi-row">
+    <div class="kpi grey"><div class="kpi-val">3,630<em> 元</em></div><div class="kpi-lbl">12M 目標價</div></div>
+    <div class="kpi"><div class="kpi-val">-0.1%</div><div class="kpi-lbl">上檔 → N（中立）</div></div>
+    <div class="kpi"><div class="kpi-val">70.34 / 103.47 / 136</div><div class="kpi-lbl">26/27/28F EPS（元）</div></div>
+    <div class="kpi gold"><div class="kpi-val">41% → 46.1%</div><div class="kpi-lbl">毛利率（26-27F）</div></div>
+  </div>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>CoWoS + SoIC 雙引擎結構性放量：</strong>台積電 CoWoS 月產能 70 → 220 kwpm（+214%），SoIC 月產能 1.5 → 7.5 kwpm（+400%）。SoIC ASP 較 CoWoS 高 50-100%，量價齊揚是 2026-2028 最關鍵成長驅動。弘塑為台積電 CoWoS 獨家認證 + 主力 SoIC 供應商。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>台積電獨家認證 + 製程 know-how 護城河：</strong>2021 起獲台積電 CoWoS 獨家或主力認證，更換供應商需 1.5-2 年認證 + HVM 資格審查。設備 + 化學藥水雙軌綁定，藥水毛利 50-60% 反向加深設備 lock-in。製程 know-how 累積 18 年，新進者極難切入。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>為何 N 而非 Buy／OW：</strong>股價 12M +192%、Forward PE 51.7X 已大幅高於歷史中位 45X；本研究員 TP 3,630 較共識 3,900 保守 7%，反映（A）1Q26 本業 miss 45%（毛利率 33.8% 異常低）、（B）5/29 盤中 -5% 顯示 sentiment derate、（C）高估值對 EPS 下修敏感度高。<strong>升級 OW 條件：2Q26 毛利率重回 41% + TSMC CoWoS 2027 guidance 上修至 240 kwpm。</strong></span></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">弘塑 3131 股價歷史與重大事件（12M +192%）</div><div class="chart-sub">資料來源：TPEX、GiS 整理</div><img class="chart-img" src="charts/chart_01_stock_history.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資摘要</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">投資論點（一）｜ 多方論據（Bull Case）</h1>
+  <div class="callout green"><div class="callout-title">B1. CoWoS 結構性擴張：70 → 220 kwpm（2025-2027 +214%）</div>
+    <ul><li>台積電 CoWoS 月產能：2024 40k → 2025 70k → 2026 180k → 2027 220k → 2028 260k</li>
+    <li>NVIDIA Rubin、AMD MI400、Broadcom Tomahawk、Marvell Custom ASIC 等 CSP 客戶持續擴大訂單</li>
+    <li>弘塑每 kwpm 對應 wet processing 設備採購約 NT$5-8 億，是 CoWoS 浪潮中最直接受惠者</li>
+    <li>2025 全年營收 +60% YoY，2026 預估 +30%、2027 預估 +40%（券商共識）</li></ul></div>
+  <div class="callout green"><div class="callout-title">B2. 3D SoIC 升級紅利：ASP +50-100% 而非單純多賣機器</div>
+    <ul><li>SoIC 濕製程設備 ASP 較 CoWoS 高 50-100%（製程更接近前段、潔淨度要求嚴）</li>
+    <li>Groq LPU 35（2027 回 TSMC N3）、TSMC COUPE（CPO 平台）、NVIDIA GB200/GB300 直接帶動 3D SoIC</li>
+    <li>SoIC 月產能 2026/27/28 = 1.5/4.5/7.5 kwpm（+200% / +200% / +67%），量價齊揚雙重 leverage</li>
+    <li>毛利率預估 2027 跳升至 46.1%（vs 2025 41.2%），結構性 +5pt</li></ul></div>
+  <div class="callout green"><div class="callout-title">B3. 多元擴展：CPO / FOPLP / HBM 中長期擴張</div>
+    <ul><li>CPO（Co-Packaged Optics）：TSMC COUPE 平台 2027-2028 商用，光通訊設備需求</li>
+    <li>FOPLP（Fan-Out Panel Level Packaging）：2028 後新一代封裝平台</li>
+    <li>HBM TSV 製程：美光、SK 海力士、三星 HBM4/4E 帶動，2026 占比 10-15%</li>
+    <li>多元應用 + TSMC 獨家認證 + 18 年製程 know-how，三層護城河疊加</li></ul></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資論點 · 多方</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">投資論點（二）｜ 空方論據（Bear Case）</h1>
+  <div class="callout red"><div class="callout-title">R1. 1Q26 本業 miss 45% — 估值最大下行觸發</div>
+    <ul><li>1Q26 營業利益 218M vs 元大共識 398M（miss 45%）、市場 430M（miss 49%）</li>
+    <li>毛利率 33.8% 異常低（vs 2025 平均 41.2%），主因處分上海添鴻一次性成本</li>
+    <li>業外處分獲利 3.8 億支撐 EPS 16.11，但<strong>本業實質獲利惡化</strong>；2Q26 毛利率回升若延後，市場將大幅 derate</li>
+    <li>調整後（剔除業外）EPS 僅 3-4 元，較 25Q4 19.74 大幅下滑</li></ul></div>
+  <div class="callout red"><div class="callout-title">R2. 高估值（PE 51.7X / TTM 79X）對 EPS 下修敏感度高</div>
+    <ul><li>歷史 PE 區間 30-72X，目前 51.7X（2026E）/ 79X（TTM）為歷史偏高端</li>
+    <li>2027 EPS 若下修 10%（從 103 至 93），PE 修正至 40X 時 TP 從 3,932 降至 3,720</li>
+    <li>若 PE 修至歷史中位 35X，TP 落到 3,255（vs 現價 3,635 下行 -10%）</li>
+    <li>5/29 盤中 -5% 已預示 sentiment derate 風險</li></ul></div>
+  <div class="callout red"><div class="callout-title">R3. 客戶集中（台積電 50-60%）+ 半導體景氣循環</div>
+    <ul><li>台積電 CapEx 紀律調整、CoWoS 供應商分散化、自研設備等任一發生都會衝擊</li>
+    <li>半導體強週期性，2027-2028 若進入下行週期，弘塑訂單能見度與營收成長腰斬</li>
+    <li>SCREEN（日本龍頭，10× 規模）長期可能透過低價或技術突破挑戰</li>
+    <li>負債比 173% 偏高 + 配息率 86% 偏高，景氣下行時財務彈性壓縮</li></ul></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資論點 · 空方</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div page"><div class="sec-num">壹</div><div class="sec-eyebrow">Company &amp; Business</div>
+  <div class="sec-line"></div><div class="sec-title">公司與商業模式</div>
+  <div class="sec-desc">2007 年由前 TSMC 研發團隊核心成員創辦、2014 上櫃、台積電 CoWoS 獨家認證的單晶圓濕製程設備龍頭 — 公司沿革、收入結構、護城河、客戶版圖。</div></div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">一、公司簡介</h1>
+  <p>弘塑科技（Grand Process Technology Corporation, GPTC）2007 年由前台積電研發團隊核心成員與現任董事長兼總經理<strong>吳田玉博士</strong>共同創立，2014 年 12 月上櫃（掛牌價 NT$180）。專注「<strong>單晶圓濕製程設備</strong>（Single-Wafer Wet Processing Equipment）+ 化學藥水（蝕刻液 / 清洗液）+ 系統整合」一站式解決方案。2018 年切入 TSMC InFO，2021 年獲 TSMC CoWoS 獨家認證，是 18 年來最關鍵兩大里程碑。</p>
+  <div class="co-card"><div class="co-card-head wine"><span style="color:#fff;font-weight:800;font-size:15px">弘塑科技 3131.TWO ｜ 半導體設備</span><span style="color:rgba(255,255,255,.8);font-size:12px">上櫃 2014/12</span></div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">3,635</div><div class="co-metric-label">收盤（元，5-28）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">45.88</div><div class="co-metric-label">FY25 EPS</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+60%</div><div class="co-metric-label">FY25 營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">166</div><div class="co-metric-label">FY25 BVPS</div></div>
+    </div>
+    <div class="co-body"><p style="margin:0">總部新竹科學園區。流通股 28.486 百萬股（小股本高股價）。董監持股 19.2%、外資 40.1%（顯著高於同業）、投信 5-7%。產品：設備 60-70%、化學藥水 15-20%、代理 5-10%。主力客戶：TSMC（50-60%）、美光、ASE 日月光、Amkor。</p></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">公司發展里程碑（2007-2026）</div><div class="chart-sub">資料來源：公司年報、IR 投資人區、上櫃公開說明書</div><img class="chart-img short" src="charts/chart_05_milestones.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 公司簡介</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">二、商業模式 — 設備 + 藥水雙軌綁定</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>產品線</th><th>2024 占比</th><th>2025 占比</th><th>2026E</th><th>毛利率</th><th>角色定位</th></tr></thead>
+    <tbody>
+      <tr><td><strong>設備 Equipment</strong></td><td class="num hi">62%</td><td class="num hi">65%</td><td class="num hi">67%</td><td class="pos">38-42%</td><td style="color:#00875a;font-weight:700">成長主軸</td></tr>
+      <tr><td>化學藥水 Chemical</td><td class="num">20%</td><td class="num">18%</td><td class="num">16%</td><td class="pos">50-60%</td><td>毛利支柱 + 客戶 lock-in</td></tr>
+      <tr><td>代理 Distributors</td><td class="num">10%</td><td class="num">8%</td><td class="num">9%</td><td>10-15%</td><td>策略性補完</td></tr>
+      <tr><td>SoIC/CPO 新平台</td><td class="num">7%</td><td class="num">8%</td><td class="num">8%</td><td class="pos">45-55%</td><td>2026-2028 主力新增</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-grid">
+    <div class="chart-wrap" style="padding:11px"><div class="chart-title" style="font-size:12px">營收 by 產品線（設備+藥水雙軌）</div><img class="chart-img" src="charts/chart_03_revenue_by_product.png"></div>
+    <div class="chart-wrap" style="padding:11px"><div class="chart-title" style="font-size:12px">營收 by 終端應用（CoWoS+SoIC 雙引擎）</div><img class="chart-img" src="charts/chart_04_revenue_by_region.png"></div>
+  </div>
+  <blockquote><strong>GiS 核心觀點：</strong>弘塑的商業模式核心在「<strong>設備 + 藥水互鎖</strong>」。設備售出後客戶必然採購配套藥水（毛利 50-60%），藥水銷售反向加深客戶對設備的依賴，是同業少見的雙軌 stickiness 設計。2026 起 CoWoS + SoIC 占公司營收 62%（vs 2023 16%），結構性向高 ASP 應用集中。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 商業模式</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">三、護城河 — 五層疊加</h1>
+  <div class="risk-matrix">
+    <div class="callout green"><div class="callout-title">① 台積電獨家認證 + lock-in</div><p style="margin:0;font-size:12.5px">CoWoS 濕製程設備 2021 起獲 TSMC 獨家或主力認證，更換供應商需重走 1.5-2 年認證週期 + HVM 資格審查。新進者極難切入。</p></div>
+    <div class="callout green"><div class="callout-title">② 設備 + 藥水雙軌綁定</div><p style="margin:0;font-size:12.5px">設備售出後客戶必須採購配套藥水，藥水配方為公司專利，毛利率 50-60%。雙向 lock-in 結構。</p></div>
+    <div class="callout green"><div class="callout-title">③ 製程 know-how 累積 18 年</div><p style="margin:0;font-size:12.5px">濕製程的化學配方、流速控制、潔淨度管理、抗 corrosion 設計需 10+ 年實戰累積，無法用論文或專利取代。</p></div>
+    <div class="callout green"><div class="callout-title">④ 先進封裝 ASP 倍數升級</div><p style="margin:0;font-size:12.5px">CoWoS → SoIC → CPO 每升一級 ASP +50-100%，且 SoIC 月產能 2026-2028 +200%/+200%/+67%，量價齊揚。</p></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">同業毛利率對比（弘塑 41% 屬高毛利端，僅次於 Lam/AMAT）</div><div class="chart-sub">資料來源：各公司 2025 年報；GiS 彙編</div><img class="chart-img" src="charts/chart_15_peer_gm.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 護城河</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">四、客戶與技術版圖</h1>
+  <div class="chart-wrap"><div class="chart-title">客戶/應用版圖（綠 = 量產 / 橘 = 滲透中）</div><div class="chart-sub">資料來源：公司法說、券商 takeaway；GiS 整理</div><img class="chart-img" src="charts/chart_07_customers.png"></div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>客戶</th><th>應用</th><th>2025 比重</th><th>2026 趨勢</th></tr></thead>
+    <tbody>
+      <tr><td><strong>TSMC</strong></td><td>CoWoS / SoIC / InFO / FE 製程</td><td class="num hi">50-60%</td><td class="pos">+30-40%（CoWoS 擴產主力）</td></tr>
+      <tr><td>美光 Micron</td><td>HBM4 / HBM4E TSV 製程</td><td class="num">10-12%</td><td class="pos">+20-25%</td></tr>
+      <tr><td>ASE 日月光 / Amkor</td><td>傳統封裝 + 部分先進封裝</td><td class="num">10-15%</td><td>持平</td></tr>
+      <tr><td>SK 海力士 / 三星</td><td>HBM 製程</td><td class="num">3-5%</td><td class="pos">+15-20%</td></tr>
+      <tr><td>其他 IDM / Foundry</td><td>聯電、力積電等</td><td class="num">10-15%</td><td>持平</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap"><div class="chart-title">技術藍圖：CoWoS → SoIC → CPO → FOPLP（ASP 每代 +50-100%）</div><div class="chart-sub">資料來源：公司法說、TSMC roadmap；GiS 整理</div><img class="chart-img tall" src="charts/chart_17_roadmap.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>壹 · 客戶與技術</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div page"><div class="sec-num">貳</div><div class="sec-eyebrow">Industry &amp; Competition</div>
+  <div class="sec-line"></div><div class="sec-title">產業與競爭格局</div>
+  <div class="sec-desc">全球半導體設備 TAM、CoWoS / SoIC 子市場結構性放量、SCREEN / TEL / Lam 競爭對手分析。</div></div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">一、TAM 與成長動能</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>市場層</th><th>2025 規模</th><th>2030E 規模</th><th>CAGR</th><th>弘塑對應</th></tr></thead>
+    <tbody>
+      <tr><td>全球半導體設備</td><td class="num">USD 110B</td><td class="num">USD 150B</td><td>+6.4%</td><td>整體基礎盤</td></tr>
+      <tr><td>全球濕製程設備</td><td class="num">USD 38B</td><td class="num">USD 65B</td><td>+11.3%</td><td>核心子市場</td></tr>
+      <tr><td>先進封裝 wet processing</td><td class="num">USD 12B</td><td class="num">USD 35B</td><td class="pos">+23.9%</td><td>主力（占公司 60%+）</td></tr>
+      <tr><td class="hi"><strong>CoWoS / SoIC wet（最高純度）</strong></td><td class="num hi">USD 4B</td><td class="num hi">USD 18B</td><td class="pos hi">+35.0%</td><td style="font-weight:700">前 3 名 + TSMC 獨家</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap"><div class="chart-title">TAM 4 層堆疊：弘塑核心賽道 CoWoS/SoIC CAGR 35%</div><div class="chart-sub">資料來源：產業研究、SEMI；GiS 估算</div><img class="chart-img" src="charts/chart_13_tam.png"></div>
+  <blockquote><strong>GiS 核心觀點：</strong>弘塑的成長故事是「<strong>SAM 高速擴張（24-35% CAGR）+ 公司穩住份額</strong>」雙因子驅動。2026-2028 結構性 tailwind 強勁，但須觀察 2028+ SCREEN 規模優勢是否反撲。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · TAM</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">二、CoWoS / SoIC 產能擴張軌跡（弘塑直接受惠）</h1>
+  <div class="chart-grid">
+    <div class="chart-wrap" style="padding:11px"><div class="chart-title" style="font-size:12px">台積電 CoWoS 月產能（kwpm）</div><img class="chart-img" src="charts/chart_08_foundry.png"></div>
+    <div class="chart-wrap" style="padding:11px"><div class="chart-title" style="font-size:12px">台積電 SoIC 月產能（kwpm）</div><img class="chart-img" src="charts/chart_09_rd.png"></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>年度</th><th>CoWoS（kwpm）</th><th>SoIC（kwpm）</th><th>SoIC ASP / CoWoS</th><th>弘塑營收影響</th></tr></thead>
+    <tbody>
+      <tr><td>2024</td><td class="num">40</td><td class="num">&lt;1</td><td>-</td><td>基期</td></tr>
+      <tr><td>2025</td><td class="num">70</td><td class="num">1.0</td><td>1.5x</td><td>+60% YoY 起點</td></tr>
+      <tr><td>2026E</td><td class="num">180</td><td class="num">1.5</td><td>1.7x</td><td class="pos">+30% YoY</td></tr>
+      <tr><td>2027E</td><td class="num hi">220</td><td class="num hi">4.5</td><td class="num hi">1.8x</td><td class="pos hi">+38.8% YoY（雙引擎放量）</td></tr>
+      <tr><td>2028E</td><td class="num">260</td><td class="num">7.5</td><td>2.0x</td><td class="pos">+28% YoY</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap"><div class="chart-title">先進封裝（CoWoS+SoIC）營收占比演進（2026 突破 60%）</div><div class="chart-sub">資料來源：公司法說、TSMC 法說；GiS 預估</div><img class="chart-img" src="charts/chart_16_customer_concentration.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · CoWoS/SoIC 擴張</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">三、競爭格局 — 全球濕製程設備市占</h1>
+  <table style="font-size:11px">
+    <thead><tr><th>公司</th><th>2024 營收 USD</th><th>毛利率</th><th>主力應用</th><th>vs 弘塑</th></tr></thead>
+    <tbody>
+      <tr style="background:#fff8e1!important"><td><strong>弘塑 3131</strong></td><td class="num hi">~200M</td><td class="pos">41.2%</td><td>TSMC CoWoS / SoIC 純血</td><td style="color:#00875a;font-weight:700">本標的</td></tr>
+      <tr><td>SCREEN（日，7735）</td><td class="num">~2,000M</td><td>36%</td><td>全應用 wet processing</td><td>全球龍頭，10× 規模，可能蠶食</td></tr>
+      <tr><td>TEL（日，8035）</td><td class="num">~10,000M</td><td>42%</td><td>多元設備（蝕刻+CVD）</td><td>應用區隔，少直接競爭</td></tr>
+      <tr><td>Lam Research</td><td class="num">~14,000M</td><td>47%</td><td>蝕刻 + 沉積</td><td>濕製程部分切入</td></tr>
+      <tr><td>AMAT</td><td class="num">~27,000M</td><td>47%</td><td>全領域設備</td><td>非主力競爭</td></tr>
+      <tr><td>萬潤 6187</td><td class="num">~150M</td><td>28%</td><td>多角化中型設備</td><td>規模較小，技術較淺</td></tr>
+      <tr><td>迅得 6438</td><td class="num">~180M</td><td>36%</td><td>PCB 濕製程為主</td><td>半導體業務次要</td></tr>
+      <tr><td>辛耘 3583</td><td class="num">~175M</td><td>32%</td><td>化學藥水代理 + 部分設備</td><td>商業模式不同</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap"><div class="chart-title">同業成長 vs 估值（弘塑：高成長 + 高 PE 雙偏離）</div><div class="chart-sub">資料來源：各公司年報、Bloomberg；GiS 整理</div><img class="chart-img" src="charts/chart_22_comps_scatter.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>貳 · 競爭格局</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div page"><div class="sec-num">參</div><div class="sec-eyebrow">Financial Analysis</div>
+  <div class="sec-line"></div><div class="sec-title">財務分析與預估</div>
+  <div class="sec-desc">2022-2025 歷史財報、1Q26 本業 miss 深度解析、三情境 EPS 預估（2026-2030）、現金流與配息政策。</div></div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">一、歷史財務（2022-2025）</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>項目（百萬 NT$）</th><th class="num">2022</th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th><th class="num">CAGR</th></tr></thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">3,723</td><td class="num neg">3,544</td><td class="num">4,073</td><td class="num hi">6,515</td><td>+20.6%</td></tr>
+      <tr><td>YoY %</td><td class="num">-</td><td class="num neg">-4.8%</td><td class="num pos">+14.9%</td><td class="num pos hi">+60.0%</td><td>-</td></tr>
+      <tr><td><strong>毛利率</strong></td><td class="num pos">43.4%</td><td class="num pos">42.0%</td><td class="num pos">45.3%</td><td class="num pos">41.2%</td><td>-2.2pt</td></tr>
+      <tr><td>營業利益</td><td class="num">762</td><td class="num">690</td><td class="num">906</td><td class="num hi">1,640</td><td>+29.1%</td></tr>
+      <tr><td>OPM</td><td class="num">20.5%</td><td class="num">19.5%</td><td class="num">22.2%</td><td class="num hi">25.2%</td><td>+4.7pt</td></tr>
+      <tr><td>稅後淨利</td><td class="num">722</td><td class="num">616</td><td class="num">845</td><td class="num hi">1,327</td><td>+22.4%</td></tr>
+      <tr><td><strong>EPS（元）</strong></td><td class="num">25.32</td><td class="num">21.56</td><td class="num">29.07</td><td class="num hi">45.88</td><td>+21.9%</td></tr>
+      <tr><td>ROE</td><td class="num">24.0%</td><td class="num">17.5%</td><td class="num">20.5%</td><td class="num hi">28.4%</td><td>-</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap"><div class="chart-title">EPS 與毛利率（2026 業外處分一次性、2027 起 SoIC 帶動 GM 大幅擴張）</div><div class="chart-sub">資料來源：MOPS / yfinance；GiS 整理</div><img class="chart-img" src="charts/chart_02_eps_gm_trend.png"></div>
+  <blockquote><strong>三大歷史觀察：</strong>（1）2023 衰退年（-4.8% YoY），半導體去庫存 + CoWoS 未啟動；（2）2024 復甦（+14.9%），CoWoS 初步量產；（3）2025 結構性爆發（+60%），CoWoS 70 kwpm 達標。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 歷史財務</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">二、季度趨勢 + 1Q26 本業 miss 深度解析</h1>
+  <table style="font-size:11px">
+    <thead><tr><th>項目</th><th class="num">24Q4</th><th class="num">25Q1</th><th class="num">25Q2</th><th class="num">25Q3</th><th class="num">25Q4</th><th class="num hi">26Q1</th></tr></thead>
+    <tbody>
+      <tr><td>營收（百萬）</td><td class="num">1,222</td><td class="num">1,241</td><td class="num">1,630</td><td class="num">1,494</td><td class="num hi">2,150</td><td class="num">1,596</td></tr>
+      <tr><td>QoQ %</td><td class="num">-</td><td class="num">+1.6</td><td class="num">+31.4</td><td class="num">-8.4</td><td class="num hi">+43.9</td><td class="num neg">-25.7</td></tr>
+      <tr><td>毛利率</td><td class="num">46.0%</td><td class="num">40.8%</td><td class="num">40.6%</td><td class="num">40.7%</td><td class="num hi">42.1%</td><td class="num neg">33.8%</td></tr>
+      <tr><td>營業利益</td><td class="num">282</td><td class="num">277</td><td class="num">408</td><td class="num">317</td><td class="num hi">637</td><td class="num neg">218</td></tr>
+      <tr><td>OPM</td><td class="num">23.1%</td><td class="num">22.3%</td><td class="num">25.0%</td><td class="num">21.2%</td><td class="num hi">29.6%</td><td class="num neg">13.7%</td></tr>
+      <tr><td><strong>EPS</strong></td><td class="num">8.81</td><td class="num">8.71</td><td class="num">7.04</td><td class="num">10.39</td><td class="num hi">19.74</td><td class="num">16.11</td></tr>
+    </tbody>
+  </table>
+  <div class="callout red"><div class="callout-title">1Q26 EPS 16.11 看似 beat，但本業實質 miss 45%</div>
+    <ul style="font-size:12.5px">
+      <li><strong>本業營業利益僅 218M</strong> vs 元大共識 398M（<strong>miss 45%</strong>）/ 市場 430M（miss 49%）</li>
+      <li>毛利率 33.8% 異常低，較 2025 平均 41.2% 大幅滑落 <strong>7.4pt</strong></li>
+      <li><strong>業外處分上海添鴻一次性獲利 3.8 億</strong>，業外貢獻 EPS 約 13 元（非經常性）</li>
+      <li>調整後（剔除業外）EPS 僅 3-4 元，較 25Q4 19.74 大幅下滑</li>
+      <li>元大預估 2Q26 毛利率回 40-41%、3Q26 41-42%、4Q26 42-43%，<strong>若實際延後 1 季回升，市場將大幅 derate</strong></li>
+    </ul>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">毛利率／營益率季度趨勢（1Q26 因上海添鴻處分異常低點）</div><div class="chart-sub">資料來源：公司季報；GiS 預估</div><img class="chart-img" src="charts/chart_10_gm_opm_qtrly.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 1Q26 解析</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">三、三情境營收與 EPS 預估（2026-2030）</h1>
+  <table style="font-size:11px">
+    <thead><tr><th>情境（機率）</th><th class="num">26E</th><th class="num">27E</th><th class="num">28E</th><th class="num">29E</th><th class="num">30E</th><th class="num">EPS CAGR</th></tr></thead>
+    <tbody>
+      <tr><td><strong>樂觀 Bull (30%)</strong></td><td class="num pos">78</td><td class="num pos">125</td><td class="num pos">170</td><td class="num pos">220</td><td class="num pos">275</td><td class="num pos">+38%</td></tr>
+      <tr class="hi" style="background:#fff8e1"><td><strong>基礎 Base (55%)</strong></td><td class="num hi">70.34</td><td class="num hi">103.47</td><td class="num hi">136.47</td><td class="num hi">172.27</td><td class="num hi">209.13</td><td class="num hi">+35.5%</td></tr>
+      <tr><td>保守 Bear (15%)</td><td class="num">60</td><td class="num">80</td><td class="num">100</td><td class="num">120</td><td class="num">140</td><td class="num">+24%</td></tr>
+      <tr><td><strong>加權 EPS</strong></td><td class="num hi">72.0</td><td class="num hi">106.4</td><td class="num hi">141.0</td><td class="num hi">175.7</td><td class="num hi">213.5</td><td>-</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-grid">
+    <div class="chart-wrap" style="padding:11px"><div class="chart-title" style="font-size:12px">三情境 EPS 預估</div><img class="chart-img" src="charts/chart_18_three_scenarios_eps.png"></div>
+    <div class="chart-wrap" style="padding:11px"><div class="chart-title" style="font-size:12px">三情境營收預估</div><img class="chart-img" src="charts/chart_19_three_scenarios_rev.png"></div>
+  </div>
+  <ul style="font-size:12.5px">
+    <li><strong>Bull</strong>：2027 CoWoS 240 kwpm、SoIC 5.5 kwpm、GM 48%、CPO 商用化加速</li>
+    <li><strong>Base</strong>：2027 CoWoS 220 kwpm、SoIC 4.5 kwpm、GM 46.1%、無重大景氣循環</li>
+    <li><strong>Bear</strong>：CoWoS 上修不足（180 kwpm）、SoIC 延後、半導體 2027 下行週期</li>
+  </ul>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>參 · 三情境</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div page"><div class="sec-num">肆</div><div class="sec-eyebrow">Valuation</div>
+  <div class="sec-line"></div><div class="sec-title">估值分析</div>
+  <div class="sec-desc">PE-based（40%）+ DCF（25%）+ Comps（20%）+ EV/EBITDA（10%）+ P/B（5%）五法加權，依方法論 §4.3 五級制評等。</div></div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">一、PE 估值（主要法，權重 40%）</h1>
+  <p>歷史 Forward PE 區間 25-72X、平均 45X。本研究員<strong>採 2027E EPS 為估值基準</strong>（與券商共識一致，避開 2026 一次性業外）。</p>
+  <table style="font-size:11.5px">
+    <thead><tr><th>情境</th><th class="num">PE 倍數</th><th class="num">2027E EPS</th><th class="num">TP（NT$）</th><th class="num">vs 3,450 上檔</th></tr></thead>
+    <tbody>
+      <tr><td>樂觀 Bull (30%)</td><td class="num">42X</td><td class="num">125</td><td class="num pos">5,250</td><td class="num pos">+52.2%</td></tr>
+      <tr class="hi" style="background:#fff8e1"><td><strong>基礎 Base (55%)</strong></td><td class="num">38X</td><td class="num">103.47</td><td class="num hi">3,932</td><td class="num pos">+14.0%</td></tr>
+      <tr><td>保守 Bear (15%)</td><td class="num">30X</td><td class="num">80</td><td class="num">2,400</td><td class="num neg">-30.4%</td></tr>
+      <tr><td><strong>加權 PE TP</strong></td><td colspan="3"></td><td class="num hi pos">4,098</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap"><div class="chart-title">Forward PE Band（歷史 25-72X，目前 51.7X 中性偏高）</div><div class="chart-sub">資料來源：TPEX；GiS 整理</div><img class="chart-img" src="charts/chart_23_pe_band.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · PE 估值</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">二、DCF 估值（交叉驗證，權重 25%）</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>WACC 計算</th><th class="num">數值</th></tr></thead>
+    <tbody>
+      <tr><td>無風險利率 Rf</td><td class="num">1.50%</td></tr>
+      <tr><td>股權風險溢酬 ERP</td><td class="num">7.00%</td></tr>
+      <tr><td>Beta（2 年回歸）</td><td class="num">1.20</td></tr>
+      <tr><td>股權成本 Ke</td><td class="num">9.90%</td></tr>
+      <tr><td>稅後債務成本 Kd</td><td class="num">2.00%</td></tr>
+      <tr><td>股本/債務權重</td><td class="num">60%/40%</td></tr>
+      <tr><td class="hi"><strong>WACC</strong></td><td class="num hi">6.74%</td></tr>
+      <tr><td>永續成長 g</td><td class="num">2.5%</td></tr>
+    </tbody>
+  </table>
+  <h2 class="ch">EV → Equity 橋接</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>項目</th><th class="num">百萬 NT$</th></tr></thead>
+    <tbody>
+      <tr><td>Σ PV(UFCF) 2026-2030</td><td class="num">13,920</td></tr>
+      <tr><td>PV(TV) Gordon g=2.5%</td><td class="num">94,899</td></tr>
+      <tr><td><strong>EV</strong></td><td class="num">108,819</td></tr>
+      <tr><td>- 淨負債</td><td class="num neg">-480</td></tr>
+      <tr><td>+ 長期投資</td><td class="num pos">+100</td></tr>
+      <tr><td><strong>Equity Value</strong></td><td class="num hi">108,439</td></tr>
+      <tr><td>÷ 流通股數</td><td class="num">28.486M</td></tr>
+      <tr><td class="hi"><strong>DCF 隱含 TP</strong></td><td class="num hi pos">NT$ 3,807</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12.5px">DCF 隱含 TP 3,807 與券商共識（元大 4,000 / 國泰 3,800）中位 3,900 一致。下頁完整敏感度。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · DCF</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">二之一、DCF 5×5 敏感度（WACC × g）</h1>
+  <p>WACC 5.5-8.5% × 永續成長 g 1.5-3.5% 區間矩陣，中心格（WACC 6.74% × g 2.5%）= 基礎 TP <strong>3,807 元</strong>。</p>
+  <div class="chart-wrap"><div class="chart-title">DCF 敏感度（WACC × g）— 中心格基礎 3,807</div><div class="chart-sub">資料來源：GiS 自建 DCF 模型</div><img class="chart-img tall" src="charts/chart_20_dcf_sensitivity.png"></div>
+  <blockquote><strong>敏感度結論：</strong>合理 WACC 區間（6-8%）× g 區間（2-3%）內，DCF TP 落於 <strong>3,200-4,500</strong>，中心 3,807。最保守組合（WACC 8.5% × g 1.5%）TP 仍 2,680 元（vs 現價 3,635 下行 -26%）。DCF 法的「下行緩衝」相對較弱，反映高估值風險。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · DCF 敏感度</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">三、Football Field 綜合估值區間</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>估值法</th><th class="num">低端</th><th class="num">中心</th><th class="num">高端</th><th class="num">權重</th></tr></thead>
+    <tbody>
+      <tr><td><strong>DCF</strong>（WACC × g）</td><td class="num">2,910</td><td class="num">3,807</td><td class="num">5,010</td><td class="num">25%</td></tr>
+      <tr><td><strong>PE-based</strong>（30-42X × 2027 EPS）</td><td class="num">2,400</td><td class="num">3,932</td><td class="num">5,250</td><td class="num hi">40%</td></tr>
+      <tr><td><strong>Comps</strong>（同業中位調整）</td><td class="num">3,400</td><td class="num">4,139</td><td class="num">4,700</td><td class="num">20%</td></tr>
+      <tr><td>EV/EBITDA（18-24X）</td><td class="num">1,500</td><td class="num">1,716</td><td class="num">2,100</td><td class="num">10%</td></tr>
+      <tr><td>P/B（7-11X）</td><td class="num">1,800</td><td class="num">2,097</td><td class="num">2,400</td><td class="num">5%</td></tr>
+      <tr><td>券商共識</td><td class="num">3,500</td><td class="num">3,900</td><td class="num">4,000</td><td class="num">參考</td></tr>
+      <tr style="background:#fff8e1!important;font-weight:800"><td>加權 12M TP</td><td colspan="3" class="num" style="color:#7f8c8d;font-size:14px">NT$ 3,630</td><td class="num">合計</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap"><div class="chart-title">Football Field 綜合估值區間（加權 TP 3,630）</div><div class="chart-sub">資料來源：GiS 自建估值模型</div><img class="chart-img tall" src="charts/chart_21_football_field.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · Football Field</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">四、第二組敏感度與券商目標價對照</h1>
+  <h2 class="ch">營收成長 × 毛利率（基於 2027E）</h2>
+  <table style="font-size:11px">
+    <thead><tr><th>營收成長 ↓ ／ 2027 GM →</th><th class="num">42%</th><th class="num">44%</th><th class="num hi">46.1%</th><th class="num">48%</th><th class="num">50%</th></tr></thead>
+    <tbody>
+      <tr><td>+30%</td><td class="num">78</td><td class="num">89</td><td class="num">95</td><td class="num">105</td><td class="num">116</td></tr>
+      <tr><td>+35%</td><td class="num">86</td><td class="num">95</td><td class="num">99</td><td class="num">113</td><td class="num">125</td></tr>
+      <tr class="hi" style="background:#fff8e1"><td><strong>+38.8% Base</strong></td><td class="num">91</td><td class="num">99</td><td class="num hi">103.47</td><td class="num">120</td><td class="num">135</td></tr>
+      <tr><td>+42%</td><td class="num">96</td><td class="num">105</td><td class="num">112</td><td class="num">127</td><td class="num">142</td></tr>
+      <tr><td>+45%</td><td class="num">100</td><td class="num">110</td><td class="num">117</td><td class="num">133</td><td class="num pos">150</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap"><div class="chart-title">目標價對照（GiS 3,630 較共識 -7%，反映 1Q26 本業 miss 風險）</div><div class="chart-sub">資料來源：本土券商報告共識；GiS 整理</div><img class="chart-img" src="charts/chart_25_target_comparison.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>肆 · 對照</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="sec-div page"><div class="sec-num">伍</div><div class="sec-eyebrow">Risks &amp; Conclusion</div>
+  <div class="sec-line"></div><div class="sec-title">風險、催化劑與結論</div>
+  <div class="sec-desc">12 項風險矩陣、4 大催化劑時間軸、升降等條件、估值結論與附錄。</div></div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">一、風險矩陣（12 項）</h1>
+  <h2 class="ch">產業 + 公司風險</h2>
+  <div class="risk-matrix">
+    <div class="callout red"><div class="callout-title">A. CoWoS / SoIC 產能上修不如預期</div><p style="margin:0;font-size:12px">若 2027 CoWoS 月產能僅達 180kwpm（vs 220），弘塑營收下修 5-10%、EPS 下修 10-15%、TP 至 3,000-3,400。</p></div>
+    <div class="callout red"><div class="callout-title">B. 1Q26 本業 miss 延續至 2Q-3Q</div><p style="margin:0;font-size:12px">若 2Q26 毛利率未回到 40-41% 水位，市場將對全年 EPS 下修信心，PE 從 51X 修正至 40X，TP 落 3,000-3,400。</p></div>
+    <div class="callout red"><div class="callout-title">C. SCREEN / TEL 蠶食</div><p style="margin:0;font-size:12px">全球濕製程龍頭規模 10× 於弘塑，長期透過低價或技術突破可能挑戰 TSMC 供應地位。</p></div>
+    <div class="callout red"><div class="callout-title">D. 半導體景氣循環下行</div><p style="margin:0;font-size:12px">2027-2028 若進入衰退週期，TSMC CapEx 延後，弘塑訂單能見度與營收成長腰斬，單季營收可能 -20-30%。</p></div>
+    <div class="callout red"><div class="callout-title">E. 過度依賴 TSMC（50-60%）</div><p style="margin:0;font-size:12px">客戶集中度極高，TSMC 任何 CapEx 紀律調整、供應商分散化、自研設備都會造成顯著衝擊。</p></div>
+    <div class="callout red"><div class="callout-title">F. 創辦人個人依賴</div><p style="margin:0;font-size:12px">吳田玉博士兼任董事長/總經理 18 年，無平行接班；一旦健康/退休/家族因素，策略中斷風險顯著。</p></div>
+    <div class="callout red"><div class="callout-title">G. 研發規模 vs 國際巨頭</div><p style="margin:0;font-size:12px">研發 100-150 人 vs SCREEN 2,000+ / TEL 5,000+，新技術突破速度可能落後（SoIC、CPO、FOPLP）。</p></div>
+    <div class="callout red"><div class="callout-title">H. 地緣政治 / 美中科技戰</div><p style="margin:0;font-size:12px">中國業務占 5-10%，若美中加強出口管制或中國自主可控政策升級，影響相對有限但存在。</p></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">風險雷達圖（7 維度，5 = 最高）</div><div class="chart-sub">資料來源：GiS 風險評估</div><img class="chart-img short" src="charts/chart_26_risk_radar.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · 風險矩陣</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">二、估值與財務風險 + 催化劑時間軸</h1>
+  <h2 class="ch">財務 + 估值風險</h2>
+  <div class="risk-matrix">
+    <div class="callout red"><div class="callout-title">I. 高負債比 173%</div><p style="margin:0;font-size:12px">2025 末總負債 8,204M / 權益 4,738M = 173%。淨負債 +480M（首次轉正）。</p></div>
+    <div class="callout red"><div class="callout-title">J. 配息率 86% 偏高</div><p style="margin:0;font-size:12px">2025 配息率 85.9%，配息現金流 11.4 億 vs OCF 9.85 億，仰賴短借。</p></div>
+    <div class="callout red"><div class="callout-title">K. PE 倍數壓縮（51X → 38X）</div><p style="margin:0;font-size:12px">PE 修至歷史中位 35X，TP 落 3,605（vs 3,635 close to par）。</p></div>
+    <div class="callout red"><div class="callout-title">L. 估值已 in the price</div><p style="margin:0;font-size:12px">12M +192%、市值 982 億、外資 40%，機構配置已重，新增買盤動能有限。</p></div>
+  </div>
+  <h2 class="ch">催化劑時間軸</h2>
+  <div class="timeline">
+    <div class="tl-item active"><div class="tl-year">2026 Q2 (8 月)</div><div class="tl-spec">2Q 法說</div><div class="tl-tech">毛利率是否回 41%</div></div>
+    <div class="tl-item next"><div class="tl-year">2026 Q3 (10 月)</div><div class="tl-spec">TSMC CoWoS</div><div class="tl-tech">2027 guidance 是否上修</div></div>
+    <div class="tl-item"><div class="tl-year">2026 Q4 (11-12 月)</div><div class="tl-spec">SoIC 量產</div><div class="tl-tech">大客戶報喜 Groq/COUPE</div></div>
+    <div class="tl-item"><div class="tl-year">2027 Q1 (2-3 月)</div><div class="tl-spec">FY27 展望</div><div class="tl-tech">營收 +40% 是否兌現</div></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">季度 EPS（紫=預估，2026 全年 70.34）</div><div class="chart-sub">資料來源：MOPS、券商共識、GiS 預估</div><img class="chart-img short" src="charts/chart_27_quarterly_eps.png"></div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · 催化劑</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page alt">
+  <h1 class="ch">三、估值結論摘要</h1>
+  <div class="co-card"><div class="co-card-head navy"><span style="color:#fff;font-weight:800;font-size:16px">弘塑科技 3131.TWO ｜ 首次覆蓋 · 研究員觀點</span><span class="badge neutral">中立 N</span></div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">3,630</div><div class="co-metric-label">12M 目標價</div></div>
+      <div class="co-metric"><div class="co-metric-val">3,635</div><div class="co-metric-label">現價（5/28）</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">-0.1%</div><div class="co-metric-label">上檔空間</div></div>
+      <div class="co-metric"><div class="co-metric-val">35.1x</div><div class="co-metric-label">@ TP 之 2027 PE</div></div>
+    </div>
+    <div class="co-body">
+      <p style="margin:0;font-size:12.5px"><strong>方法論依據</strong>：估值方法論 §4.3 五級制（±5% N 中性區間，-0.1% 直接落格中立，不主觀升降級）。<strong>權重</strong>：PE 40% / DCF 25% / Comps 20% / EV-EBITDA 10% / P/B 5%。<strong>三情境機率</strong>：Bull 30% / Base 55% / Bear 15%，加權 2027 EPS 106.4。</p>
+    </div>
+  </div>
+  <h2 class="ch">升降等條件</h2>
+  <ul style="font-size:12.5px">
+    <li><strong>升等 OW 條件</strong>：（A）2Q26 毛利率回升至 41% 水位以上；（B）TSMC CoWoS 2027 guidance 上修至 240 kwpm；（C）SoIC 大客戶（Groq、COUPE、Rubin）量產報喜</li>
+    <li><strong>升等 Buy 條件</strong>：上述三條件全部達成 + Forward PE 修正至 40-45X</li>
+    <li><strong>降等 UW 條件</strong>：（A）2Q-3Q26 毛利率連兩季 &lt; 38%；（B）CoWoS 上修 stalling 或 NVIDIA / AMD 訂單顯著下修；（C）半導體景氣明確進入下行週期</li>
+  </ul>
+  <h2 class="ch">與券商共識差異</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>機構</th><th>評等</th><th>TP（NT$）</th><th>vs 收盤 3,635</th></tr></thead>
+    <tbody>
+      <tr><td>元大投顧</td><td class="pos">買進</td><td class="num">4,000</td><td class="num pos">+10.0%</td></tr>
+      <tr><td>國泰證期</td><td class="pos">買進</td><td class="num">3,800</td><td class="num pos">+4.5%</td></tr>
+      <tr><td>合庫投顧（2026/03）</td><td class="pos">買進</td><td class="num">3,500</td><td class="num neg">-3.7%</td></tr>
+      <tr style="background:#fff8e1!important;font-weight:700"><td><strong>GiS（本報告）</strong></td><td><strong>中立 N</strong></td><td class="num hi">3,630</td><td class="num neg">-0.1%</td></tr>
+      <tr><td>共識中位</td><td>買進</td><td class="num">3,900</td><td class="num pos">+7.3%</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12.5px"><strong>GiS 較共識保守 7%</strong>。差異主因：（1）採 EV/EBITDA + P/B 兩法（合計權重 15%）拉低加權；（2）1Q26 本業 miss 風險折價未被券商充分反映；（3）5/29 盤中 -5% 暗示 sentiment derate。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>伍 · 結論</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<div class="full-page page body-page">
+  <h1 class="ch">附錄 — 資料來源與方法論</h1>
+  <h2 class="ch">資料來源（依重要性）</h2>
+  <ul style="font-size:12.5px">
+    <li><strong>公司一手資料</strong>：公司年報、上櫃公開說明書、IR 投資人專區、季度法說、月營收公告</li>
+    <li><strong>市場資料</strong>：MOPS、TPEX 行情、yfinance（對齊 MOPS）</li>
+    <li><strong>券商深度報告 11 份</strong>（pCloud 過去 90 天）：元大（2026/05/05 TP 4,000）、國泰（2026/04/10 TP 3,800、2026/05/05 1Q26 評析）、合庫（2026/03/16 TP 3,500）、CF（2026/04/22, 04/24）、外資 GS（2026/05/05）等</li>
+    <li><strong>產業 TAM</strong>：SEMI、Gartner、TrendForce 公開估算（半導體設備 + 濕製程 + 先進封裝 + CoWoS/SoIC 4 層）</li>
+    <li><strong>同業資料</strong>：SCREEN（7735.JP）、TEL（8035.JP）、Lam（LRCX）、AMAT、萬潤 6187、迅得 6438、辛耘 3583、崇越 5434</li>
+  </ul>
+  <h2 class="ch">方法論依據</h2>
+  <ul style="font-size:12.5px">
+    <li><strong>§3.1</strong>：公司類型混合判斷（高成長 + 強週期 + 客戶集中），對應五法加權</li>
+    <li><strong>§4.2</strong>：三情境機率法（Bull 30% / Base 55% / Bear 15%），加權 2027 EPS 106.4</li>
+    <li><strong>§4.3 評等門檻</strong>：&gt;15% Buy / 5-15% OW / ±5% N / &lt;-5% UW（本案 -0.1% → N）</li>
+    <li><strong>§7.6</strong>：歷史 EPS 以 MOPS / 公司年報為準（MOPS 45.88，yfinance 45.42 接近）</li>
+    <li><strong>§8</strong>：DCF 含 WACC（CAPM）、Gordon Growth Model、Mid-year convention、EV → Equity 橋接</li>
+    <li><strong>§9</strong>：Comps 含 SCREEN、TEL、Lam、AMAT 4 家國際 + 萬潤、迅得、辛耘 3 家台廠</li>
+    <li><strong>§10</strong>：5×5 兩組敏感度（DCF: WACC × g；Op: Rev × GM）</li>
+    <li><strong>§11 NO SHORTCUTS</strong>：所有預估標明假設、無 placeholder 話術</li>
+  </ul>
+  <h2 class="ch">重要披露</h2>
+  <p style="font-size:11.5px;color:#5c6f7f">本報告由 GiS Genesis International Capital 研究部於 2026-05-29 出版。報告引用之公司財務數字以 MOPS / yfinance / 公司公告為準；同業數字以公開研究與年報為準。本研究員及 GiS 與弘塑 3131 無業務或財務關係；本研究員及 GiS 持有部位之揭露：無。本報告不構成任何個別投資建議。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>附錄</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+</body></html>

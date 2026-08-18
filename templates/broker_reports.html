@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+{% block title %}每日券商報告{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <h4 class="page-title">每日券商報告</h4>
+
+    {% if message %}
+    <div style="color:var(--text-muted);padding:40px;text-align:center;">
+        {{ message }}
+    </div>
+    {% elif not dates %}
+    <div style="color:var(--text-muted);padding:40px;text-align:center;">
+        尚無報告。
+    </div>
+    {% else %}
+    <!-- 日期選擇列（整頁換日期，用連結） -->
+    <div class="research-filter">
+        {% for d in dates %}
+        <a class="research-filter-btn {% if d.code == selected_date %}active{% endif %}"
+           href="/broker-reports?date={{ d.code }}">{{ d.label }} ({{ d.count }})</a>
+        {% endfor %}
+    </div>
+
+    <!-- 類型篩選列（JS 就地篩選） -->
+    <div class="research-filter">
+        <button class="research-filter-btn active" data-type="all">全部 ({{ count_all }})</button>
+        <button class="research-filter-btn" data-type="個股">個股 ({{ count_stock }})</button>
+        <button class="research-filter-btn" data-type="產業">產業 ({{ count_industry }})</button>
+    </div>
+
+    <div class="research-list">
+        {% for r in reports %}
+        <div class="research-row" data-type="{{ r.rtype }}"
+             onclick="openReport('{{ selected_date }}/{{ r.filename }}', '{{ r.title|e }}')">
+            <div class="research-row-left">
+                <div class="research-row-title">{{ r.title }}</div>
+                <div class="research-row-meta">
+                    <span class="research-tag">{{ r.rtype }}</span>
+                </div>
+            </div>
+            {% if r.rating %}<span class="rating-badge rating-{{ r.rating }}">{{ r.rating }}</span>{% endif %}
+            <div class="research-row-arrow">›</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- 彈出式報告視窗 -->
+<div id="research-overlay" class="research-overlay" onclick="closeReport()"></div>
+<div id="research-modal" class="research-modal">
+    <div class="research-modal-header">
+        <span id="research-modal-title"></span>
+        <span style="display:flex;align-items:center;gap:14px;">
+            <a id="research-modal-download" href="#" target="_blank"
+               style="font-size:14px;color:var(--link-color);text-decoration:none;">⬇ 下載 / 開新分頁</a>
+            <button onclick="closeReport()" style="background:none;border:none;color:var(--text-secondary);font-size:24px;cursor:pointer;">&times;</button>
+        </span>
+    </div>
+    <iframe id="research-iframe" class="research-iframe"></iframe>
+</div>
+
+<style>
+.research-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.research-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.research-row:hover {
+    border-color: var(--link-color);
+    background: var(--hover-bg);
+}
+.research-row-left { flex: 1; min-width: 0; }
+.research-row-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.research-row-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.research-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(99,102,241,0.15);
+    color: var(--link-color);
+    font-weight: 600;
+}
+.research-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+.research-filter-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: inline-block;
+}
+.research-filter-btn:hover {
+    border-color: var(--link-color);
+}
+.research-filter-btn.active {
+    background: var(--link-color);
+    color: #fff;
+    border-color: var(--link-color);
+}
+.research-row-arrow {
+    font-size: 24px;
+    color: var(--text-muted);
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+
+/* 投資評等徽章（台股慣例：紅=偏多、綠=偏空、灰=中性） */
+.rating-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+.rating-買進, .rating-增持, .rating-偏多 {
+    background: rgba(239,68,68,.15);
+    color: #ef4444;
+}
+.rating-減碼, .rating-賣出 {
+    background: rgba(34,197,94,.15);
+    color: #22c55e;
+}
+.rating-中立, .rating-區間操作 {
+    background: rgba(148,163,184,.15);
+    color: #94a3b8;
+}
+
+/* 彈出視窗 */
+.research-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+}
+.research-modal {
+    display: none;
+    position: fixed;
+    top: 3%;
+    left: 3%;
+    right: 3%;
+    bottom: 3%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    z-index: 2001;
+    flex-direction: column;
+    overflow: hidden;
+}
+.research-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-heading);
+}
+.research-iframe {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #fff;
+}
+.research-modal.active,
+.research-overlay.active {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .research-row { padding: 12px 14px; }
+    .research-row-title { font-size: 14px; }
+    .research-modal { top: 0; left: 0; right: 0; bottom: 0; border-radius: 0; }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function openReport(filepath, title) {
+    document.getElementById('research-modal-title').textContent = title;
+    // 用 / 分割路徑，分別 encode 每段
+    var parts = filepath.split('/');
+    var encoded = parts.map(function(p) { return encodeURIComponent(p); }).join('/');
+    var url = '/api/broker-report/' + encoded;
+    document.getElementById('research-iframe').src = url;
+    document.getElementById('research-modal-download').href = url;
+    document.getElementById('research-overlay').classList.add('active');
+    document.getElementById('research-modal').classList.add('active');
+}
+
+function closeReport() {
+    document.getElementById('research-overlay').classList.remove('active');
+    document.getElementById('research-modal').classList.remove('active');
+    document.getElementById('research-iframe').src = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeReport();
+});
+
+document.addEventListener('contextmenu', function(e) {
+    if (document.getElementById('research-modal').classList.contains('active')) {
+        e.preventDefault();
+    }
+});
+
+// 類型篩選（就地顯示/隱藏 row）
+document.querySelectorAll('.research-filter-btn[data-type]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.research-filter-btn[data-type]').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var t = btn.getAttribute('data-type');
+        document.querySelectorAll('.research-row[data-type]').forEach(function(el) {
+            el.style.display = (t === 'all' || el.getAttribute('data-type') === t) ? '' : 'none';
+        });
+    });
+});
+</script>
+{% endblock %}

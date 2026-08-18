@@ -3,8 +3,8 @@
 
 {% block content %}
 <div class="content-area">
-    <h4 class="page-title">台股類股熱力圖 <span id="heatmap-update-time" style="font-size:14px;color:#9ca3af;margin-left:16px;"></span></h4>
-    <div id="heatmap-loading" style="color:#64748b;padding:40px;text-align:center;font-size:18px;">載入中...</div>
+    <h4 class="page-title">台股類股熱力圖 <span id="heatmap-update-time" style="font-size:14px;color:var(--text-muted);margin-left:16px;"></span></h4>
+    <div id="heatmap-status" style="padding:40px;text-align:center;font-size:18px;color:var(--text-muted);">載入中...</div>
     <div id="tw-heatmap-container"></div>
 </div>
 
@@ -15,25 +15,25 @@
     gap: 10px;
 }
 .tw-sector-group {
-    background: #1e293b;
-    border: 1px solid #334155;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
     border-radius: 8px;
     overflow: hidden;
 }
 .tw-sector-header {
-    background: #162032;
+    background: var(--bg-thead);
     padding: 8px 14px;
     font-size: 15px;
     font-weight: 700;
     color: #f59e0b;
-    border-bottom: 1px solid #334155;
+    border-bottom: 1px solid var(--border-light);
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
 }
 .tw-sector-header:hover {
-    background: #1a2540;
+    background: var(--hover-bg);
 }
 .tw-sector-header .sector-avg {
     font-size: 14px;
@@ -88,6 +88,36 @@
     font-size: 10px;
     color: rgba(255,255,255,0.5);
 }
+.heatmap-error-box {
+    padding: 24px;
+    text-align: center;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+}
+.heatmap-error-box .err-msg {
+    color: #ef4444;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+.heatmap-error-box .last-success {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+.heatmap-retry-btn {
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.heatmap-retry-btn:hover {
+    opacity: 0.9;
+}
 </style>
 {% endblock %}
 
@@ -117,7 +147,8 @@
 
     function render(data) {
         var container = document.getElementById('tw-heatmap-container');
-        document.getElementById('heatmap-loading').style.display = 'none';
+        var statusEl = document.getElementById('heatmap-status');
+        if (statusEl) statusEl.style.display = 'none';
 
         var sectors = data.sectors;
         var date = data.date;
@@ -177,15 +208,49 @@
             '資料日期：' + (date || '');
     }
 
+    var LS_KEY = 'heatmap_tw_last_success';
+
+    function showError(msg) {
+        var container = document.getElementById('tw-heatmap-container');
+        var statusEl = document.getElementById('heatmap-status');
+        if (statusEl) statusEl.style.display = 'none';
+        var lastSuccess = localStorage.getItem(LS_KEY);
+        var lastTxt = lastSuccess ? '上次成功時間：' + lastSuccess : '尚無歷史成功紀錄';
+        var html = '<div class="heatmap-error-box">' +
+            '<div class="err-msg">載入失敗：' + (msg || 'Error') + '</div>' +
+            '<div class="last-success">' + lastTxt + '</div>' +
+            '<button type="button" class="heatmap-retry-btn" id="heatmap-retry-btn">重試</button>' +
+            '</div>';
+        container.innerHTML = html;
+        var btn = document.getElementById('heatmap-retry-btn');
+        if (btn) {
+            btn.addEventListener('click', function () {
+                container.innerHTML = '';
+                if (statusEl) {
+                    statusEl.style.display = 'block';
+                    statusEl.textContent = '載入中...';
+                }
+                loadHeatmap();
+            });
+        }
+    }
+
     function loadHeatmap() {
         fetch('/api/tw-heatmap')
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
+            .then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
+            .then(function (data) {
                 if (data.error) {
-                    document.getElementById('heatmap-loading').textContent = '錯誤: ' + data.error;
+                    showError(data.error);
                     return;
                 }
                 render(data);
+                var now = new Date();
+                var hh = String(now.getHours()).padStart(2, '0');
+                var mm = String(now.getMinutes()).padStart(2, '0');
+                localStorage.setItem(LS_KEY, hh + ':' + mm);
                 // 顯示即時/收盤狀態
                 var timeEl = document.getElementById('heatmap-update-time');
                 if (data.realtime) {
@@ -193,11 +258,11 @@
                     timeEl.style.color = '#22c55e';
                 } else {
                     timeEl.textContent = '收盤資料：' + (data.date || '');
-                    timeEl.style.color = '#9ca3af';
+                    timeEl.style.color = 'var(--text-muted)';
                 }
             })
-            .catch(function(err) {
-                document.getElementById('heatmap-loading').textContent = '載入失敗: ' + err.message;
+            .catch(function (err) {
+                showError(err && err.message ? err.message : '網路錯誤');
             });
     }
 

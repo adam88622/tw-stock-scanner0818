@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% block title %}電子期 vs 金融期 相對強弱{% endblock %}
+
+{% block content %}
+<div class="content-area">
+<style>
+    .ts-meta { color:#94a3b8; font-size:13px; margin:8px 0 12px; display:flex; flex-wrap:wrap;
+               gap:8px 18px; align-items:center; }
+    .ts-meta .dot { width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:5px; }
+    .ts-meta .dot.on { background:#22c55e; } .ts-meta .dot.off { background:#ef4444; }
+    .ts-meta .qd { display:inline-block; width:8px; height:8px; border-radius:50%; margin:0 3px;
+                   vertical-align:middle; }
+    .ts-meta .qd.on { background:#22c55e; } .ts-meta .qd.off { background:#64748b; }
+
+    .ts-head { display:flex; flex-wrap:wrap; gap:12px; margin:12px 0; }
+    .ts-stat { flex:1 1 160px; background:#0f172a; border:1.5px solid #1e293b; border-radius:10px;
+               padding:16px; text-align:center; }
+    .ts-stat .lbl { font-size:13px; color:#94a3b8; margin-bottom:6px; }
+    .ts-stat .num { font-size:34px; font-weight:800; line-height:1; color:#e2e8f0; }
+    .ts-stat .sub { font-size:12px; color:#64748b; margin-top:6px; }
+    /* 強弱主卡：紅=電子強，綠=金融強 */
+    .ts-stat.strength.red .num { color:#ef4444; } .ts-stat.strength.red { border-color:rgba(239,68,68,.45); }
+    .ts-stat.strength.green .num { color:#22c55e; } .ts-stat.strength.green { border-color:rgba(34,197,94,.45); }
+    .ts-stat.strength.flat .num { color:#f59e0b; } .ts-stat.strength.flat { border-color:rgba(245,158,11,.4); }
+
+    .ts-state { font-size:18px; font-weight:700; padding:10px 0 0; }
+    .ts-state.red { color:#ef4444; } .ts-state.green { color:#22c55e; } .ts-state.flat { color:#f59e0b; }
+
+    .ts-chart-wrap { background:#0b1220; border:1px solid #1e293b; border-radius:10px; padding:12px;
+                     margin:12px 0; }
+    .ts-chart-wrap canvas { display:block; width:100%; height:340px; }
+    .ts-legend { display:flex; gap:16px; font-size:12px; color:#94a3b8; margin-top:8px; }
+    .ts-legend .sw { display:inline-block; width:12px; height:3px; border-radius:2px; margin-right:5px;
+                     vertical-align:middle; }
+
+    .ts-error { background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.4); color:#fca5a5;
+                padding:14px 16px; border-radius:8px; margin:16px 0; }
+    h4.ts-title { margin:8px 0 0; }
+</style>
+
+<h4 class="ts-title">電子期 vs 金融期 相對強弱（option radar）</h4>
+<div class="ts-meta" id="ts-meta">載入中...</div>
+
+<div id="ts-error-box"></div>
+
+<div class="ts-head" id="ts-head">
+    <div class="ts-stat strength flat" id="card-strength">
+        <div class="lbl">相對強弱 Strength（電子% − 金融%）</div>
+        <div class="num" id="st-strength">--</div>
+        <div class="ts-state flat" id="st-state">--</div>
+    </div>
+    <div class="ts-stat">
+        <div class="lbl">電子期 漲跌%</div>
+        <div class="num" id="st-te">--</div>
+        <div class="sub" id="st-te-close">收盤 --</div>
+    </div>
+    <div class="ts-stat">
+        <div class="lbl">金融期 漲跌%</div>
+        <div class="num" id="st-tf">--</div>
+        <div class="sub" id="st-tf-close">收盤 --</div>
+    </div>
+</div>
+
+<div class="ts-chart-wrap">
+    <canvas id="ts-canvas"></canvas>
+    <div class="ts-legend">
+        <span><span class="sw" style="background:#ef4444;"></span>電子強於金融（strength &gt; 0）</span>
+        <span><span class="sw" style="background:#22c55e;"></span>金融強於電子（strength &lt; 0）</span>
+        <span><span class="sw" style="background:#475569;"></span>0 軸基準</span>
+    </div>
+</div>
+
+<script>
+(function() {
+    var RED = '#ef4444', GREEN = '#22c55e';
+    var series = [];      // [{ts, strength}, ...]
+    var canvas = document.getElementById('ts-canvas');
+    var ctx = canvas.getContext('2d');
+
+    function fmtPct(v) {
+        if (v === null || v === undefined || isNaN(v)) return '--';
+        var n = Number(v);
+        return (n > 0 ? '+' : '') + n.toFixed(2) + '%';
+    }
+    function fmtNum(v, d) {
+        if (v === null || v === undefined || isNaN(v)) return '--';
+        return Number(v).toLocaleString(undefined, {minimumFractionDigits: d, maximumFractionDigits: d});
+    }
+
+    // 依 color 決定狀態文字與 class
+    function stateText(color) {
+        if (color === 'red') return '電子強於金融';
+        if (color === 'green') return '金融強於電子';
+        return '持平';
+    }
+
+    function updateNow(now) {
+        // 強弱主卡
+        var card = document.getElementById('card-strength');
+        var stEl = document.getElementById('st-state');
+        card.className = 'ts-stat strength ' + (now.color || 'flat');
+        stEl.className = 'ts-state ' + (now.color || 'flat');
+        document.getElementById('st-strength').textContent =
+            (now.strength === null || now.strength === undefined) ? '--' : Number(now.strength).toFixed(2);
+        stEl.textContent = stateText(now.color);
+
+        document.getElementById('st-te').textContent = fmtPct(now.te_chg_pct);
+        document.getElementById('st-te').style.color = now.te_chg_pct > 0 ? RED : (now.te_chg_pct < 0 ? GREEN : '#e2e8f0');
+        document.getElementById('st-tf').textContent = fmtPct(now.tf_chg_pct);
+        document.getElementById('st-tf').style.color = now.tf_chg_pct > 0 ? RED : (now.tf_chg_pct < 0 ? GREEN : '#e2e8f0');
+
+        document.getElementById('st-te-close').textContent = '收盤 ' + fmtNum(now.te_close, 2);
+        document.getElementById('st-tf-close').textContent = '收盤 ' + fmtNum(now.tf_close, 2);
+    }
+
+    function updateMeta(qs, now, ok, errMsg) {
+        var meta = document.getElementById('ts-meta');
+        var sweep = qs && qs.last_sweep ? String(qs.last_sweep).replace('T', ' ').slice(0, 19) : '--';
+        var n = new Date(), pad = function(x){ return (x < 10 ? '0' : '') + x; };
+        var refreshTs = n.getFullYear() + '-' + pad(n.getMonth()+1) + '-' + pad(n.getDate())
+            + ' ' + pad(n.getHours()) + ':' + pad(n.getMinutes()) + ':' + pad(n.getSeconds());
+        var connOn = qs && qs.connected;
+        var connDot = connOn ? '<span class="dot on"></span>已連線' : '<span class="dot off"></span>未連線';
+        var teDot = (qs && qs.te_priced) ? '<span class="qd on"></span>' : '<span class="qd off"></span>';
+        var tfDot = (qs && qs.tf_priced) ? '<span class="qd on"></span>' : '<span class="qd off"></span>';
+        var html = connDot
+            + '<span style="color:#e2e8f0;font-weight:600;">最後更新：' + refreshTs + '</span>'
+            + '<span>報價時間：' + sweep + '</span>'
+            + '<span>TE' + teDot + '/ TF' + tfDot + '報價</span>';
+        if (now && now.base_source) html += '<span>基期：' + now.base_source + '</span>';
+        html += '<span style="color:#64748b;">每 3 秒自動更新</span>';
+        meta.innerHTML = html;
+    }
+
+    // ---- Canvas 強弱線：正紅、負綠、含 0 軸基準 ----
+    function resizeCanvas() {
+        var ratio = window.devicePixelRatio || 1;
+        var cssW = canvas.clientWidth || canvas.parentNode.clientWidth;
+        var cssH = canvas.clientHeight || 340;
+        canvas.width = Math.round(cssW * ratio);
+        canvas.height = Math.round(cssH * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+
+    // 線性內插求跨 0 軸的時間位置（回傳 0~1 間插值比例）
+    function zeroFrac(a, b) {
+        // a、b 為相鄰兩點 strength，異號；回傳 a→b 間 strength==0 的比例
+        var denom = (a - b);
+        if (denom === 0) return 0.5;
+        return a / denom;  // a + t*(b-a)=0 → t = a/(a-b)
+    }
+
+    function drawChart() {
+        var ratio = window.devicePixelRatio || 1;
+        var W = canvas.width / ratio, H = canvas.height / ratio;
+        ctx.clearRect(0, 0, W, H);
+
+        var padL = 52, padR = 14, padT = 14, padB = 26;
+        var plotW = W - padL - padR, plotH = H - padT - padB;
+
+        // 背景區
+        ctx.fillStyle = '#0b1220';
+        ctx.fillRect(0, 0, W, H);
+
+        if (!series.length) {
+            ctx.fillStyle = '#64748b';
+            ctx.font = '14px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('尚無當日強弱資料', W / 2, H / 2);
+            ctx.textAlign = 'left';
+            return;
+        }
+
+        // Y 範圍：貼合當日資料範圍 + padding，凸顯盤中波動（不強制對稱含 0）。
+        // 價差長時間停在單側時，仍能放大上下波動；0 軸只在靠近資料時才納入視野。
+        var dataMin = Infinity, dataMax = -Infinity;
+        for (var i = 0; i < series.length; i++) {
+            var v = Number(series[i].strength) || 0;
+            if (v < dataMin) dataMin = v;
+            if (v > dataMax) dataMax = v;
+        }
+        if (!isFinite(dataMin)) { dataMin = -0.5; dataMax = 0.5; }
+        var span = dataMax - dataMin;
+        var pad = Math.max(span * 0.20, 0.10);   // 至少 0.10 padding，平線不貼邊
+        var yMin = dataMin - pad, yMax = dataMax + pad;
+        // 0 軸（紅綠分界）若在一個 span 內就拉進視野當參考，否則讓資料填滿圖面
+        if (yMin > 0 && (yMin - 0) < span + pad) yMin = -pad * 0.5;
+        if (yMax < 0 && (0 - yMax) < span + pad) yMax = pad * 0.5;
+        if (yMax === yMin) { yMax += 0.5; yMin -= 0.5; }
+
+        var n = series.length;
+        function xAt(i) { return padL + (n <= 1 ? plotW / 2 : (plotW * i / (n - 1))); }
+        function yAt(v) { return padT + plotH * (yMax - v) / (yMax - yMin); }
+
+        // 網格 + Y 軸刻度
+        ctx.strokeStyle = '#1e293b';
+        ctx.fillStyle = '#64748b';
+        ctx.font = '11px sans-serif';
+        ctx.lineWidth = 1;
+        var ticks = [];
+        for (var tk = 0; tk <= 4; tk++) ticks.push(yMin + (yMax - yMin) * tk / 4);
+        if (yMin < 0 && yMax > 0) ticks.push(0);  // 0 軸在範圍內時確保畫出紅綠分界
+        ticks.forEach(function(t) {
+            var y = yAt(t);
+            ctx.beginPath();
+            ctx.moveTo(padL, y);
+            ctx.lineTo(W - padR, y);
+            ctx.strokeStyle = (t === 0) ? '#475569' : '#162032';
+            ctx.lineWidth = (t === 0) ? 1.5 : 1;
+            ctx.stroke();
+            ctx.fillStyle = '#64748b';
+            ctx.textAlign = 'right';
+            ctx.fillText(t.toFixed(2), padL - 6, y + 3);
+        });
+        ctx.textAlign = 'left';
+
+        // X 軸時間標籤（首、中、尾）
+        ctx.fillStyle = '#64748b';
+        ctx.textAlign = 'center';
+        function tsShort(t) { return t ? String(t).slice(0, 5) : ''; }
+        if (n >= 1) {
+            ctx.fillText(tsShort(series[0].ts), xAt(0), H - 8);
+            if (n >= 3) ctx.fillText(tsShort(series[Math.floor((n - 1) / 2)].ts), xAt(Math.floor((n - 1) / 2)), H - 8);
+            if (n >= 2) ctx.fillText(tsShort(series[n - 1].ts), xAt(n - 1), H - 8);
+        }
+        ctx.textAlign = 'left';
+
+        // 折線：逐段比較相鄰點正負，跨 0 軸於零點切換顏色
+        ctx.lineWidth = 2;
+        ctx.lineJoin = 'round';
+        var y0 = yAt(0);
+        for (var k = 0; k < n - 1; k++) {
+            var v1 = Number(series[k].strength) || 0;
+            var v2 = Number(series[k + 1].strength) || 0;
+            var x1 = xAt(k), x2 = xAt(k + 1);
+            var py1 = yAt(v1), py2 = yAt(v2);
+
+            var sameSign = (v1 >= 0 && v2 >= 0) || (v1 < 0 && v2 < 0);
+            if (sameSign) {
+                ctx.strokeStyle = (v1 >= 0 && v2 >= 0) ? RED : GREEN;
+                ctx.beginPath();
+                ctx.moveTo(x1, py1);
+                ctx.lineTo(x2, py2);
+                ctx.stroke();
+            } else {
+                // 跨 0 軸：在零點拆成兩段，各自著色
+                var t = zeroFrac(v1, v2);
+                var xz = x1 + (x2 - x1) * t;
+                ctx.strokeStyle = (v1 >= 0) ? RED : GREEN;
+                ctx.beginPath();
+                ctx.moveTo(x1, py1);
+                ctx.lineTo(xz, y0);
+                ctx.stroke();
+                ctx.strokeStyle = (v2 >= 0) ? RED : GREEN;
+                ctx.beginPath();
+                ctx.moveTo(xz, y0);
+                ctx.lineTo(x2, py2);
+                ctx.stroke();
+            }
+        }
+
+        // 單點時畫一個圓點
+        if (n === 1) {
+            var v = Number(series[0].strength) || 0;
+            ctx.fillStyle = v >= 0 ? RED : GREEN;
+            ctx.beginPath();
+            ctx.arc(xAt(0), yAt(v), 3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function showError(msg) {
+        document.getElementById('ts-error-box').innerHTML =
+            '<div class="ts-error">' + (msg || '群益報價服務暫時無法連線，請稍後再試。') + '</div>';
+    }
+
+    function load() {
+        fetch('/api/te-tf-strength')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var errBox = document.getElementById('ts-error-box');
+                // 即使 ok:false，series 仍可能含當日已落點 → 仍重繪供觀察
+                if (data && data.series) { series = data.series; }
+                if (!data || !data.ok) {
+                    showError(data && data.error ? data.error : '報價服務未啟動或暫時無法取得有效報價。');
+                    updateMeta(data && data.quote_status, null, false);
+                    drawChart();
+                    return;
+                }
+                errBox.innerHTML = '';
+                if (data.now) updateNow(data.now);
+                updateMeta(data.quote_status || {}, data.now, true);
+                drawChart();
+            })
+            .catch(function(e) {
+                showError('載入失敗：' + e);
+            });
+    }
+
+    window.addEventListener('resize', function() { resizeCanvas(); drawChart(); });
+
+    resizeCanvas();
+    load();
+    setInterval(load, 3000);
+})();
+</script>
+</div>
+{% endblock %}

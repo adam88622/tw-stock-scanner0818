@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!--
+  研華 2395 — 首次覆蓋深度報告（initiating-coverage-tw）
+  撰寫：2026-05-11（盤後）
+  基準收盤：NT$ 478.5（5/11 收盤）
+  五階段：Phase 1 公司研究 → Phase 2 財務模型 → Phase 3 估值 → Phase 4 圖表 → Phase 5 HTML 組裝
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>研華 2395 — 首次覆蓋深度報告 — 中立 | GiS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:36px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:14.5px;color:rgba(255,255,255,.65);margin-bottom:36px;letter-spacing:1px;line-height:1.7}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+.sec-div{height:297mm;background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px;position:relative}
+.sec-num{font-size:140px;font-weight:900;color:rgba(0,200,150,.2);line-height:1;margin-bottom:24px}
+.sec-name{font-size:34px;font-weight:800;letter-spacing:3px;margin-bottom:14px}
+.sec-name em{color:#00c896;font-style:normal}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);max-width:540px;line-height:1.8}
+
+.body-page{padding:38px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:24px 0 16px;page-break-after:avoid}
+h1.ch:first-child{margin-top:0}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:6px;margin:22px 0 11px;page-break-after:avoid}
+h3.ch{font-size:14.5px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 8px;page-break-after:avoid}
+
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 10px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 10px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:12.5px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.indigo{background:#312e81}
+.co-card-head.wine{background:#7c2d12}
+.co-card-head.slate{background:#475569}
+.co-name{font-size:17px;font-weight:800;color:#fff}
+.co-ticker{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 12px;border-radius:18px;font-size:10px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#94a3b8;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:14px 20px;font-size:13px;line-height:1.7}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.gray{background:linear-gradient(135deg,#475569,#94a3b8)}
+.kpi-val{font-size:18px;font-weight:800;margin-bottom:4px}
+.kpi-val em{font-size:11px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.7;letter-spacing:.5px}
+
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.5px;font-weight:700;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:11px;align-items:flex-start;line-height:1.65}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:19px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.risk-card{border-radius:8px;padding:14px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card.gold{background:#fff7ed;border:1.5px solid #d97706}
+.risk-card h4{font-size:13.5px;font-weight:700;margin-bottom:7px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-card.gold h4{color:#7c2d12}
+.risk-item{font-size:12.5px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.tl-card{background:#f0f4fc;border-left:4px solid #00c896;border-radius:6px;padding:12px;font-size:12px}
+.tl-date{font-size:11.5px;font-weight:700;color:#00875a;margin-bottom:4px}
+.tl-event{font-size:12.5px;font-weight:700;color:#0d1b3e;margin-bottom:4px;line-height:1.45}
+.tl-desc{font-size:11.5px;color:#6b7a9a;line-height:1.5}
+
+p{margin:6px 0 9px;line-height:1.72}
+ul,ol{padding-left:18px;margin:6px 0 9px}
+li{margin:3px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:8px 12px;margin:10px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:20px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:5px;line-height:1.65}
+
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.amber{border-color:#d97706;background:#fff7ed}
+.callout.wine{border-color:#7c2d12;background:#fdeee2}
+.callout-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:6px}
+.callout.green .callout-title{color:#065f46}
+.callout.amber .callout-title{color:#7c2d12}
+.callout.wine .callout-title{color:#7b2020}
+
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 56px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+
+.chart-img{width:100%;max-width:760px;display:block;margin:14px auto;border:1px solid #e5edf8;border-radius:6px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-cap{font-size:11px;color:#6b7a9a;text-align:center;margin:-6px auto 16px;max-width:740px;line-height:1.55}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ 浮水印 ═══════════════════ -->
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">G<em>i</em>S</div></div>
+  <div class="wm-name">Genesis International</div>
+</div>
+
+<!-- ═══════════════════ P1 — 封面 ═══════════════════ -->
+<div class="cover">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">G<em>i</em>S</div>
+      <div>
+        <div class="cover-co">GENESIS INTERNATIONAL CAPITAL</div>
+        <div class="cover-co-en">Equity Research · Taiwan Tech</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">首次覆蓋深度報告 · INITIATING COVERAGE</div>
+    <h1 class="cover-title"><span style="display:inline-block;background:rgba(0,200,150,.15);border:1px solid rgba(0,200,150,.5);padding:5px 16px;border-radius:6px;font-size:16px;color:#00c896;letter-spacing:3px;margin-bottom:14px">🏭 INITIATING COVERAGE</span><br>研華 2395<br>從 IPC 龍頭到<em>邊緣 AI 兌現年</em></h1>
+    <div class="cover-subtitle">
+      全球工業電腦 41% 市佔（OMDIA）+ 邊緣 AI 滲透 17% → 30%+ 兌現中，
+      <br>但 5/8 法說後股價漲幅 +16% 已完全 price-in 樂觀情境。
+      <br>結構故事認可，評價無 margin of safety — 維持中立 (N)。
+    </div>
+    <div class="cover-tags">
+      <span class="ctag hl">中立 (N) · 上檔 -0.94%</span>
+      <span class="ctag">12M TP NT$ 474</span>
+      <span class="ctag">FY26E EPS 15.50</span>
+      <span class="ctag">B/B 1.77 史上次強</span>
+      <span class="ctag">Edge AI 占比 17→30%+</span>
+      <span class="ctag">機器人 +200% YoY</span>
+      <span class="ctag">市值 NT$ 4,155 億</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat">
+      <div class="cstat-num">中立 <em>(N)</em></div>
+      <div class="cstat-label">GiS RATING</div>
+    </div>
+    <div class="cstat">
+      <div class="cstat-num">NT$<em>474</em></div>
+      <div class="cstat-label">12M TARGET PRICE</div>
+    </div>
+    <div class="cstat">
+      <div class="cstat-num"><em>-0.94%</em></div>
+      <div class="cstat-label">UPSIDE</div>
+    </div>
+    <div class="cstat">
+      <div class="cstat-num">NT$<em>478.5</em></div>
+      <div class="cstat-label">CLOSE 2026-05-11</div>
+    </div>
+  </div>
+  <div class="cover-bottom">
+    <span>2026-05-11 · GiS 首次覆蓋深度報告</span>
+    <span>For Internal Distribution Only</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P2 — 投資摘要 ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">投資摘要 — Top 5 takeaways</h1>
+
+  <div class="exec-sum">
+    <div class="exec-thesis">
+      <span class="thesis-num">①</span>
+      <span><strong>全球 IPC 龍頭轉型 Edge AI 公司，市場地位無可挑戰。</strong>
+      OMDIA 2022 全球 IPC 市佔 41%（第二名 Beckhoff 13%、第三名 Kontron 9%），規模約為對手 2-3 倍。
+      研華為唯一純品牌 IPC + WISE-PaaS 軟體棧 + AI 生態系 Elite 卡位的玩家。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">②</span>
+      <span><strong>1Q26 法說會三大訊號全強：B/B 1.77、北美 2.37、Edge AI 滲透 17%。</strong>
+      1Q26 EPS NT$ 3.85（YoY +22%）創單季歷史第二高。
+      訂單能見度 B/B 1.77 為 12 季新高，北美 2.37 反映資料中心 + 邊緣 AI 專案集中下單。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">③</span>
+      <span><strong>FY26 EPS 共識 NT$ 13.6-17.8（中位 14.65）；GiS 基礎 15.50。</strong>
+      管理層 2026 目標邊緣 AI 占比 30%+ + 機器人業務 +200% YoY + 軍工 / 能源新動能放量。
+      高毛利皇冠 iAutomation 占比 7% → 12%，毛利結構升級可期。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">④</span>
+      <span><strong>5/7-5/8 法說後股價爆漲 +16%，當前評價已 fully price-in 基礎情境。</strong>
+      Forward PE 30.9x 介於 5Y mean (28.95x) 與 +1σ (32.5x) 之間。
+      DCF 隱含 NT$ 551（+15%）、Comps 隱含 NT$ 384（-20%）— 三方法分歧大、加權落 NT$ 474。</span>
+    </div>
+    <div class="exec-thesis">
+      <span class="thesis-num">⑤</span>
+      <span><strong>觸發 OW 升級兩條路徑：</strong>(a) 拉回至 NT$ 450 以下（+5% 上檔入 OW），或 (b) 6/1-6/3 COMPUTEX 後 EPS 共識上修至 NT$ 16+ 同時 PE 維持 30x+。<br>
+      <strong>觸發 UW 降級兩條路徑：</strong>(c) 衝至 NT$ 510 以上（-7%），或 (d) 3Q26 B/B 反轉至 1.2 以下。</span>
+    </div>
+  </div>
+
+  <h2 class="ch">公司速覽</h2>
+
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div>
+        <div class="co-name">研華 ADVANTECH</div>
+        <div class="co-ticker">2395 · TWSE · Edge Computing &amp; AIoT</div>
+      </div>
+      <div class="co-badge">
+        <span class="badge neutral">中立 (N)</span>
+        <span class="badge ow" style="background:#475569">12M TP NT$ 474</span>
+      </div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric">
+        <div class="co-metric-val up">NT$ 3.85</div>
+        <div class="co-metric-label">1Q26 EPS（+22% YoY）</div>
+      </div>
+      <div class="co-metric">
+        <div class="co-metric-val up">18.3%</div>
+        <div class="co-metric-label">1Q26 OPM（+1.4 pp YoY）</div>
+      </div>
+      <div class="co-metric">
+        <div class="co-metric-val">41%</div>
+        <div class="co-metric-label">全球 IPC 市佔（OMDIA 2022）</div>
+      </div>
+      <div class="co-metric">
+        <div class="co-metric-val up">1.77</div>
+        <div class="co-metric-label">1Q26 B/B Ratio（12 季新高）</div>
+      </div>
+    </div>
+    <div class="co-body">
+      <strong>產業位置</strong>：1983 創立，1999 上市，市值 NT$ 4,155 億。全球工業電腦 41% 市佔（OMDIA 2022），第二名 Beckhoff 13%。
+      NVIDIA Edge AI 生態系 Elite 夥伴（兆元宴受邀的唯一台灣 IPC 廠）；同時與 Intel、Qualcomm、Rockchip、AMD 多平台合作。
+      <br><br>
+      <strong>核心業務（1Q26 切面）</strong>：iSystems 35%（半導體設備 / 資料中心 / Allied-DMS 醫療設備）/ Embedded 35%（醫療通路 / 嵌入式 IoT）/
+      <strong>iAutomation 7%（OPM 42%、GM 65-70% — 高毛利皇冠）</strong> / Advantech Service+ 15%（訂閱化、1Q26 YoY +66%）/ iService 6%。
+      員工約 8,849 人，跨 27 國，三大製造中心：林口 + 昆山 + 福岡，美國新廠 2026Q4 啟用後產能由 US$7bn 翻倍至 US$15bn。
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">+17%</div><div class="kpi-lbl">1Q26 營收 YoY · 創單季新高</div></div>
+    <div class="kpi green"><div class="kpi-val">+22%</div><div class="kpi-lbl">1Q26 EPS YoY</div></div>
+    <div class="kpi gold"><div class="kpi-val">2.37</div><div class="kpi-lbl">北美 B/B 史上最強</div></div>
+    <div class="kpi"><div class="kpi-val">8.39 元</div><div class="kpi-lbl">2024 全年現金股利</div></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 2 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P3 — 三方法估值收斂與分歧 ═══════════════════ -->
+<div class="page body-page alt">
+
+  <h1 class="ch">三方法估值收斂與分歧</h1>
+
+  <img class="chart-img" src="charts/chart_21_football_field.png" alt="Football Field 估值區間">
+  <div class="chart-cap">Football Field — PE / DCF / Comps / Hist. PE Band 八線整合。當前股價 NT$ 478.5 落 60-70 percentile，已 fully price-in 基礎情境。</div>
+
+  <h2 class="ch">12M Target Price 加權拆解</h2>
+
+  <table>
+    <thead>
+      <tr><th>估值方法</th><th class="num">TP (NT$)</th><th class="num">vs 478.5</th><th class="num">權重</th><th class="num">加權貢獻</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>PE-based（主，FY26E EPS × Target PE）</td><td class="num">464</td><td class="num neg">-2.8%</td><td class="num">50%</td><td class="num">232.0</td></tr>
+      <tr><td>DCF（次，WACC 7.35% / g 3.0%）</td><td class="num">551</td><td class="num pos">+15.1%</td><td class="num">30%</td><td class="num">165.3</td></tr>
+      <tr><td>Comps（驗證，Peer Median × 1.5 品牌溢價）</td><td class="num">384</td><td class="num neg">-19.7%</td><td class="num">20%</td><td class="num">76.8</td></tr>
+      <tr class="hi"><td><strong>加權 12M 目標價</strong></td><td class="num"><strong>NT$ 474</strong></td><td class="num neg"><strong>-0.94%</strong></td><td class="num">100%</td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>三方法分歧解讀</strong>：DCF（+15%）與 Comps（-20%）相差 NT$ 167 = 43.5%，反映「**品牌 + AI 卡位溢價是否持續**」的市場分歧。
+    DCF 反映長期現金流折現價值（含 5-10 年 Edge AI 兌現），Comps 反映同業折價收斂風險（PE 30.9x vs Peer Median 17x）。
+    加權 TP NT$ 474 為平衡點，落 GiS §4.3「中立 (N) ±5%」格中央。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 3 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P4 — 章節分隔：投資論點 ═══════════════════ -->
+<div class="page sec-div">
+  <div class="sec-num">01</div>
+  <div class="sec-name">投資論點 <em>Bull / Bear</em></div>
+  <div class="sec-desc">兩面看法平衡呈現 — 結構性升級兌現中，但短期評價已 fully price-in。<br>Bull 三點 / Bear 三點 / 兩條觸發路徑。</div>
+</div>
+
+<!-- ═══════════════════ P5 — Bull 論點 1-2 ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">Bull 論點 ① — 1Q26 訂單能見度結構性升級</h1>
+
+  <p>研華 1Q26 法說會公告整體 B/B Ratio <strong>1.77</strong>（12 季新高），北美單區 <strong>2.37</strong>（該地區歷史最高水位），未交訂單 US$ 11.3 億。Booking QoQ +54% 是過去 12 季從未出現的訂單跳升幅度。</p>
+
+  <table>
+    <thead><tr><th>時點</th><th class="num">整體 B/B</th><th class="num">北美</th><th class="num">歐洲</th><th class="num">中國</th><th class="num">Booking QoQ</th></tr></thead>
+    <tbody>
+      <tr><td>2025Q3</td><td class="num">1.01</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>2025Q4</td><td class="num">1.33</td><td class="num">1.28</td><td class="num">1.57</td><td class="num">1.25</td><td class="num">—</td></tr>
+      <tr><td>2026/1-2 月</td><td class="num">~1.80</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr class="hi"><td><strong>2026Q1</strong></td><td class="num"><strong>1.77</strong></td><td class="num pos"><strong>2.37</strong></td><td class="num">1.76</td><td class="num">1.30</td><td class="num pos"><strong>+54%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p>更關鍵的是<strong>「全球 B/B &gt; 1.5x」</strong>：日本、台灣、韓國 B/B 全部超過 1.5x，意味這次不只是北美 AI 拉貨單點熱，而是<strong>全球同步進入訂單擴張期</strong>。工業電腦 / 邊緣 AI 設備出貨週期 6-12 週，B/B 1.77 表示「每收到 1 元出貨，同時收到 1.77 元新訂單」— 鎖定 2026H1 出貨動能。</p>
+
+  <div class="callout green">
+    <div class="callout-title">為什麼 B/B 是首次覆蓋最重要的單一訊號</div>
+    工業電腦客戶（設備商、SI、雲端服務商）下單後出貨週期 6-12 週、認列營收需 1-2 季。B/B 1.77 意味未來 2-3 季出貨量結構性高於當季出貨 — 為 2H26 EPS 提供具體訂單支撐。
+    若 2Q-3Q26 月營收 YoY 維持 +20%+，2H26 EPS 上修空間將從 NT$ 15.50 拓寬至 16+。
+  </div>
+
+  <h1 class="ch">Bull 論點 ② — 邊緣 AI 兌現節奏「9.4% → 30%+」確認</h1>
+
+  <table>
+    <thead><tr><th>時點</th><th class="num">邊緣 AI 占營收</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>2024 全年</td><td class="num">9.4%</td><td>初期商轉（NVIDIA Jetson + Edge AI 平台）</td></tr>
+      <tr><td>2025Q3</td><td class="num">17%</td><td>滲透翻倍，跨入主流</td></tr>
+      <tr><td>2025 全年</td><td class="num">~20%</td><td>突破門檻</td></tr>
+      <tr class="hi"><td><strong>2026 目標</strong></td><td class="num"><strong>30%+</strong></td><td><strong>「具 AI 算力硬體銷售占比突破 30%」— 管理層官方定調</strong></td></tr>
+      <tr><td>FY27E（GiS 基礎）</td><td class="num">38%</td><td>機器人 + 軍工 + 能源三條動能成熟</td></tr>
+      <tr><td>FY30E（GiS 基礎）</td><td class="num">52%</td><td>達到「Edge AI 公司」終態</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>毛利率對比</strong>：邊緣 AI 業務平均毛利率 <strong>42-43%</strong>，明顯高於整體 39-40%。mix shift 本身就有結構性升級效果 — 但 2026 年因 DDR4/SSD 漲價，這個正向效應暫時被成本壓力抵銷。一旦記憶體漲價週期於 2H26 終結，毛利率可望反彈至 41%+。</p>
+
+  <p>研華為 NVIDIA Edge AI 生態系最高等級「Elite」夥伴（兆元宴受邀的唯一台灣 IPC 廠），同時與 Intel、Qualcomm、Rockchip、AMD 多平台合作。**AI 算力底層卡位完成，下游客戶導入時優先選擇研華方案** — 是 Edge AI 滲透節奏可預期的根本原因。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 5 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P6 — Bull 論點 3 + Bear 1 ═══════════════════ -->
+<div class="page body-page alt">
+
+  <h1 class="ch">Bull 論點 ③ — 三條新動能：機器人 / 軍工 / 能源</h1>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>① 機器人 / Physical AI</h4>
+      <div class="risk-item"><strong>2025</strong>：機器人業務 YoY +100%+</div>
+      <div class="risk-item"><strong>2026 預估</strong>：再 +200%（接近兩倍）</div>
+      <div class="risk-item">與 NVIDIA Elite 合作導入實體 AI 機器人</div>
+      <div class="risk-item">AMR、人形機器人、達文西手術機器人感控</div>
+      <div class="risk-item">Pipeline 130 個專案、潛在商機 US$ 1.2 億</div>
+    </div>
+    <div class="risk-card up">
+      <h4>② 軍工 / 無人機 / 國防</h4>
+      <div class="risk-item">無人機控制模組「大量出貨」</div>
+      <div class="risk-item">取得 <strong>AS9100 航太認證</strong> — 國際軍工門票</div>
+      <div class="risk-item">IEC 62443 工業資安合規</div>
+      <div class="risk-item">部分軍工產品<strong>毛利率 50%+</strong></div>
+      <div class="risk-item">中東地緣升溫 + 全球軍工數位化需求</div>
+    </div>
+    <div class="risk-card up">
+      <h4>③ 能源 / 智慧電網</h4>
+      <div class="risk-item">2026/03 策略投資加雲聯網</div>
+      <div class="risk-item">智慧電網 + 儲能 + 虛擬電廠 SRP</div>
+      <div class="risk-item">ISO 27001 + IEC 62443 雙認證</div>
+      <div class="risk-item">對應 AI 高耗能 → 電網升級的長坡</div>
+      <div class="risk-item">2H26 預期兌現首批標案</div>
+    </div>
+    <div class="risk-card up">
+      <h4>④ 北美擴產（產能升級）</h4>
+      <div class="risk-item">南加州新總部 6/25 完工 / 11 月啟用</div>
+      <div class="risk-item">承載能力 US$ 7bn → <strong>US$ 15bn</strong>（翻倍）</div>
+      <div class="risk-item">在地組裝 + 供應鏈韌性</div>
+      <div class="risk-item">關稅多由客戶吸收（不是 ASP 提升）</div>
+      <div class="risk-item">應對「Taiwan+1」全球供應鏈重組</div>
+    </div>
+  </div>
+
+  <h1 class="ch">Bear 論點 ① — 5/8 法說後股價爆漲已 fully price-in</h1>
+
+  <p>5/7-5/8 兩日累計 +16.4%，5/11 收盤 NT$ 478.5。Forward PE 30.9x（用 FY26E EPS 15.5），介於 5Y mean (28.95x) 與 +1σ (32.5x) 之間 — 屬「**結構故事認可的合理偏高位置**」，但已**無 margin of safety**。</p>
+
+  <table>
+    <thead><tr><th>觀察</th><th>數據</th><th>解讀</th></tr></thead>
+    <tbody>
+      <tr><td>當前 Forward PE</td><td class="num">30.9x</td><td>已接近 5Y +1σ（32.5x）上沿</td></tr>
+      <tr><td>5Y mean PE</td><td class="num">28.95x</td><td>對應股價 ~ NT$ 449（EPS 15.5）</td></tr>
+      <tr><td>外資進取派 4/30 TP</td><td class="num">NT$ 400</td><td>已被 5/8 收盤 NT$ 476.5 突破 +19%</td></tr>
+      <tr><td>12 家券商 TP 中位</td><td class="num">~ NT$ 460</td><td>5/11 收盤已超過共識中位</td></tr>
+      <tr><td>EV/Sales vs Peer Median</td><td class="num">5.3x vs 1.0x</td><td>5.3x 倍率溢價 — 反映品牌 + AI 卡位</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 6 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P7 — Bear 論點 2-3 ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">Bear 論點 ② — DDR4 / SSD 漲價持續壓制毛利</h1>
+
+  <p>1Q26 毛利率 39.1%（YoY -1.4 pp）反映 DDR4 + SSD 漲價直接壓制。記憶體價格自 2025 起進入新一輪上行週期：</p>
+
+  <ul>
+    <li><strong>DDR4 供給緊縮</strong>：主流廠商產能轉 DDR5，DDR4 為服務 legacy 工業電腦客戶（需 5-10 年 lifecycle 認證），供給結構性緊縮</li>
+    <li><strong>Server SSD</strong>：AI 訓練需求拉動 NAND 高階產品，價格 2025 全年上漲 35-50%</li>
+    <li><strong>研華 BOM 結構</strong>：記憶體 + SSD 約占 BOM 20-25%</li>
+    <li><strong>傳導效率</strong>：研華 2025Q4 起對板卡 / 系統先後漲價 4-8%，但客戶接受度有限，無法完全轉嫁</li>
+  </ul>
+
+  <p>每 10% 漲價約壓制毛利率 1.5-2.0 pp。預期延續到 <strong>2026H2-2027H1</strong>。若漲價週期延長至 2027/H2，FY26 毛利率可能下修至 38.5%，對應 EPS 下修約 3-5%。</p>
+
+  <h1 class="ch">Bear 論點 ③ — 治理結構洗牌期 + 共治制度決策效率</h1>
+
+  <p>劉克振 1983 創辦以來主導研華 43 年，<strong>2026 年底卸任 CEO 為研華歷史上最大治理變革</strong>。共治三總經理（陳清熙 / 蔡淑妍 / 張家豪）需在後劉克振時代證明決策一致性與長期戰略連貫性：</p>
+
+  <table>
+    <thead><tr><th>共治總經理</th><th>事業群 / 職能</th><th>占合併營收</th><th>年資</th></tr></thead>
+    <tbody>
+      <tr><td>陳清熙 (Eric Chen)</td><td>總管理處 + CFO + CISO（三合一）</td><td>—</td><td>32 年</td></tr>
+      <tr><td>蔡淑妍 (Linda Tsai)</td><td>iSystems + COO</td><td>35%</td><td>21 年</td></tr>
+      <tr><td>張家豪 (Miller Chang)</td><td>Embedded</td><td>34%</td><td>19 年</td></tr>
+      <tr><td>合計（兩位事業群）</td><td>—</td><td><strong>69%</strong></td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <p>iSystems + Embedded 合計 1Q26 占合併營收 69%，這兩位事業群總經理任一離職將造成顯著治理空缺。共治制度的決策效率在快速變動的 Edge AI 市場可能產生決策瓶頸 — 涉及跨事業群資源分配（如機器人業務歸 iSystems 還是 Embedded、軟體棧誰主導）時，決策慢將錯失市場窗口。</p>
+
+  <div class="callout amber">
+    <div class="callout-title">治理風險的時間表</div>
+    2023/05 已成立經營管理委員會（最高決策機構）+ 3 年交棒緩衝期，治理結構轉換已部署。但 2026Q4-2027Q1 為實際執行交接期，市場可能對「劉克振卸任後 6-12 月」的戰略一致性給予 5-10% 估值折讓。
+  </div>
+
+  <h2 class="ch">兩條進場 / 兩條退出觸發條件</h2>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>進場 OW（從 N 升 OW）</h4>
+      <div class="risk-item">A. 股價拉回 NT$ 450 以下 → +5.3% 上檔，入 OW</div>
+      <div class="risk-item">B. EPS 共識上修至 NT$ 16.5+ × PE 32x → TP NT$ 528 (+10.4%)</div>
+      <div class="risk-item">催化窗口：6/1-6/3 COMPUTEX 三日連發</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>退出 UW（從 N 降 UW）</h4>
+      <div class="risk-item">C. 股價衝 NT$ 510 以上（PE &gt; 33x）→ TP/股價 -7.1%，入 UW</div>
+      <div class="risk-item">D. FY26 EPS 共識下修至 NT$ 14 以下 → TP NT$ 364 (-23.9%)</div>
+      <div class="risk-item">觸發點：3Q26 B/B 反轉至 1.2 以下</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 7 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P8 — 章節分隔：公司 101 ═══════════════════ -->
+<div class="page sec-div">
+  <div class="sec-num">02</div>
+  <div class="sec-name">公司 <em>101</em></div>
+  <div class="sec-desc">沿革三波 / 商業模式三層次 / 共治四人組管理層 / 全球佈局 27 國 8,849 人</div>
+</div>
+
+<!-- ═══════════════════ P9 — 沿革 ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">沿革三波 — 從代理商到全球 IPC 龍頭再轉 Edge AI 公司</h1>
+
+  <p><strong>研華於 1983 年 5 月</strong>由三位前 HP 台灣儀器事業部工程師——劉克振、黃育民、莊永順——共同創立。以代理工業儀表起家，1985 年起切入工業電腦自有品牌業務。<strong>1999 年 12 月 13 日</strong>於台灣證交所主板掛牌（股票代號 2395），實收資本額目前 NT$ 86.42 億元。</p>
+
+  <h2 class="ch">關鍵里程碑</h2>
+
+  <div class="timeline">
+    <div class="tl-card"><div class="tl-date">1983-2000</div><div class="tl-event">第一波 IPC 全球化</div><div class="tl-desc">1986 美國分公司 / 1992 北京辦事處 / 1996 中國昆山首座海外生產基地 / 1999 上市</div></div>
+    <div class="tl-card"><div class="tl-date">2014-2020</div><div class="tl-event">第二波 IoT 戰略轉折</div><div class="tl-desc">2014 桃園龜山物聯網園區 / 2015 美 B+B SmartWorx 併購 US$ 99.85M / 2017 共治總經理制度</div></div>
+    <div class="tl-card"><div class="tl-date">2023</div><div class="tl-event">第三波 Edge AI 兌現</div><div class="tl-desc">2023/05 宣示「劉家不接班」+ 3 年內交棒專業經理人；經營管理委員會成立</div></div>
+    <div class="tl-card"><div class="tl-date">2026</div><div class="tl-event">美廠啟用 + 治理交棒</div><div class="tl-desc">6/25 加州總部完工 / 11 月啟用 / 承載 US$7bn → US$15bn；年底劉克振卸任 CEO</div></div>
+  </div>
+
+  <h2 class="ch">全球佈局與廠房</h2>
+
+  <table>
+    <thead><tr><th>地點</th><th>角色</th><th>產能占比</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td>台灣林口</td><td>主要製造中心</td><td class="num">~ 50%</td><td>新品試產 / 高階產品 / 亞太區出貨</td></tr>
+      <tr><td>中國昆山</td><td>主要製造中心</td><td class="num">~ 50%</td><td>標準產品 / 中國 + 北亞市場</td></tr>
+      <tr><td>日本福岡</td><td>區域配置中心</td><td class="num">~ 5%</td><td>CTOS 客製組裝</td></tr>
+      <tr class="hi"><td><strong>美國南加州</strong></td><td><strong>新廠（2026Q4 啟用）</strong></td><td class="num"><strong>US$7bn → 15bn</strong></td><td>在地組裝 + 北美客戶 + 關稅彈性</td></tr>
+    </tbody>
+  </table>
+
+  <p>全球設有 <strong>90+ 辦公室</strong>、4 大物流中心、<strong>21 個在地服務中心</strong>。員工約 8,849 人，分布 27 國。**地理分散性極高，無單一市場 black swan 風險**（最大區域北美 29%）。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 9 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P10 — 商業模式 + 五事業群 ═══════════════════ -->
+<div class="page body-page alt">
+
+  <h1 class="ch">商業模式 — 硬體 × 軟體 × 行業解決方案三層次</h1>
+
+  <p>研華商業模式可拆解為「**硬體 IPC 規模 × WISE-IoT 軟體棧 × 行業 Edge AI 解決方案**」三層次，與單純 IPC 純硬體廠（樺漢、廣積、艾訊）或單純自動化軟體廠（Siemens TIA、Rockwell FactoryTalk）皆形成明顯差異。</p>
+
+  <h2 class="ch">五事業群（1Q26 切面）</h2>
+
+  <table>
+    <thead><tr><th>事業群</th><th class="num">1Q26 占比</th><th class="num">OPM</th><th class="num">毛利率</th><th>核心產品</th></tr></thead>
+    <tbody>
+      <tr><td>iSystems（智能系統）</td><td class="num">35%</td><td class="num">27%</td><td class="num">38-40%</td><td>半導體設備平台 / 資料中心 IPC / Allied-DMS 醫療</td></tr>
+      <tr><td>Embedded（嵌入式）</td><td class="num">35%</td><td class="num">25%</td><td class="num">38-40%</td><td>嵌入式主機板 / SBC / COM / 醫療通路</td></tr>
+      <tr><td>Advantech Service+</td><td class="num">15%</td><td class="num">—</td><td class="num">較低</td><td>訂閱服務（1Q26 YoY +66%）/ DMS / 雲端</td></tr>
+      <tr class="hi"><td><strong>iAutomation（高毛利皇冠）</strong></td><td class="num"><strong>7%</strong></td><td class="num"><strong>42%</strong></td><td class="num"><strong>65-70%</strong></td><td>自動化控制器 / HMI / I/O</td></tr>
+      <tr><td>iService（智能服務）</td><td class="num">6%</td><td class="num">較低</td><td class="num">偏低</td><td>北美零售 / 醫療現場服務</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>iAutomation 雖然只占 7%，卻是毛利率最高（65-70%）、OPM 最高（42%）的「皇冠」事業群</strong>。Embedded + iSystems 合計 70% 為穩定基本盤，提供現金流。Advantech Service+ 是訂閱化轉型主力，1Q26 +66% 顯示「賣硬體 + 賣服務」雙引擎建立中。</p>
+
+  <h2 class="ch">5 年事業群 mix shift 預估</h2>
+
+  <img class="chart-img" src="charts/chart_03_revenue_by_segment.png" alt="營收 by 事業群 5 年歷史 + 5 年預估">
+  <div class="chart-cap">FY26-30 基礎情境：iAutomation 7% → 12%（皇冠擴張）、Advantech Service+ 15% → 20%（訂閱化）、iService 6% → 2%（戰略性收縮）</div>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 10 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P11 — 競爭優勢四維護城河 ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">競爭優勢 — 四維護城河</h1>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>① 規模 + 通路（最強）</h4>
+      <div class="risk-item">全球 IPC 市佔 41%（OMDIA 2022）</div>
+      <div class="risk-item">規模為 Beckhoff / Kontron 的 2-3 倍</div>
+      <div class="risk-item">90+ 全球辦公室 + 21 個服務中心</div>
+      <div class="risk-item">新進者無法在短期內複製</div>
+    </div>
+    <div class="risk-card up">
+      <h4>② 產品認證壁壘（次強）</h4>
+      <div class="risk-item">IEC 61508 安全等級 / IEC 62443 工業資安</div>
+      <div class="risk-item">AS9100 航太 / ISO 13485 醫療 / ISO 27001</div>
+      <div class="risk-item">每項認證 2-3 年取得，須按產品線重複</div>
+      <div class="risk-item">研華已累積 10+ 項主要工業認證</div>
+    </div>
+    <div class="risk-card up">
+      <h4>③ 客戶 Lock-in（中強）</h4>
+      <div class="risk-item">B2B 客製化案件平均壽命 5-8 年</div>
+      <div class="risk-item">WISE-IoT 軟體一旦導入，切換成本高</div>
+      <div class="risk-item">設備換代週期長，續訂模式穩定</div>
+      <div class="risk-item">單一客戶 &lt; 5% — 分散性極高</div>
+    </div>
+    <div class="risk-card up">
+      <h4>④ AI 生態系卡位（增強中）</h4>
+      <div class="risk-item">NVIDIA Edge AI Elite 夥伴（最高等級）</div>
+      <div class="risk-item">兆元宴受邀的唯一台灣 IPC 廠</div>
+      <div class="risk-item">Intel / Qualcomm / Rockchip / AMD 多平台</div>
+      <div class="risk-item">下游客戶導入時優先選研華方案</div>
+    </div>
+  </div>
+
+  <h2 class="ch">配息政策 — 成長 + 高股息混合</h2>
+
+  <table>
+    <thead><tr><th>年度</th><th class="num">EPS NT$</th><th class="num">現金股利 NT$</th><th class="num">配息率</th><th>備註</th></tr></thead>
+    <tbody>
+      <tr><td>FY21</td><td class="num">9.70</td><td class="num">7.09</td><td class="num">73%</td><td>—</td></tr>
+      <tr><td>FY22</td><td class="num">12.60</td><td class="num">7.98</td><td class="num">63%</td><td>—</td></tr>
+      <tr><td>FY23</td><td class="num">12.65</td><td class="num">9.99</td><td class="num">79%</td><td>含 1.0 元股票股利</td></tr>
+      <tr><td>FY24</td><td class="num">10.45</td><td class="num">9.45</td><td class="num pos">90.4%</td><td>衰退年仍維穩配息</td></tr>
+      <tr class="hi"><td><strong>FY25</strong></td><td class="num"><strong>12.25</strong></td><td class="num"><strong>8.39</strong></td><td class="num">68.5%</td><td>FCF 7,066 / 配息 7,254 = 0.97x，首見不足</td></tr>
+      <tr><td>FY26E（GiS 預估）</td><td class="num">15.50</td><td class="num">10.33</td><td class="num">75%</td><td>調降配息率為內生資本支出保留子彈</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 11 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P12 — 管理層四人組 ═══════════════════ -->
+<div class="page body-page alt">
+
+  <h1 class="ch">管理層四人組 — 共治制度</h1>
+
+  <p>研華自 2023 年宣示「劉家不接班」後，由共治三總經理 + 兼任 CFO 的總管理處總經理共同主導日常經營。劉克振仍任董事長，但日常決策已由 2023/05 成立的經營管理委員會主導。</p>
+
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div>
+        <div class="co-name">劉克振 (KC Liu)</div>
+        <div class="co-ticker">創辦人 / 董事長 · 1983-（43 年）</div>
+      </div>
+      <div class="co-badge"><span class="badge" style="background:#0d1b3e;border:1px solid #00c896;color:#00c896">2026 年底卸任 CEO</span></div>
+    </div>
+    <div class="co-body">
+      <strong>學歷</strong>：國立交通大學電信工程系（傑出校友）。
+      <strong>職涯</strong>：HP 台灣儀器事業部業務工程師（1977-1983）→ 1983 創辦研華（時年 29 歲）→ 1999 上市 → 2017 推動共治制度 → 2023 宣示交棒。
+      <strong>持股</strong>：劉家透過家族控股公司「克振 / 燕本投資」持有逾 90% 家族股份（10 人）。
+      <strong>關鍵成就</strong>：40 年帶領研華從代理商轉為全球 IPC 第一品牌（OMDIA 41% 市佔）；2014 推動 IPC → IoT 戰略轉型；2023 明確化治理結構。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div>
+        <div class="co-name">陳清熙 (Eric Chen)</div>
+        <div class="co-ticker">總管理處總經理 + CFO + CISO（三合一）· 1994-（32 年）</div>
+      </div>
+      <div class="co-badge"><span class="badge buy" style="background:#00c896">接班最有力候選</span></div>
+    </div>
+    <div class="co-body">
+      <strong>加入研華</strong>：1994 年（從財務基層升任）。
+      <strong>關鍵成就</strong>：2017 共治總經理三人組之一；2023 接掌總管理處 → 經營管理委員會；2024 安永企業家獎「建勳四海企業家獎」得主；主導研華 Edge AI 戰略對外論述（2024/12 工商時報專訪確立邊緣 AI 戰略骨幹）。
+      <strong>三合一角色</strong>：兼任 CFO + CISO（資訊安全長）凸顯研華「資訊安全」為工業客戶第一信任要素的策略定位。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div>
+        <div class="co-name">蔡淑妍 (Linda Tsai)</div>
+        <div class="co-ticker">iSystems 事業群總經理 + COO · 2005-（21 年）</div>
+      </div>
+      <div class="co-badge"><span class="badge ow">負責 35% 合併營收</span></div>
+    </div>
+    <div class="co-body">
+      <strong>加入研華</strong>：2005 年（從 iSystems 業務副總崛起）。
+      <strong>關鍵成就</strong>：2017 共治三總經理之一；2023 升任 COO，督管全球營運。
+      <strong>戰略貢獻</strong>：iSystems 為研華最大事業群（1Q26 占合併營收 35%），帶領 iAutomation 子部門毛利率衝至 65-70%、OPM 42% 高水位；推動 Allied-DMS 醫療設備 service 訂閱化轉型。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head indigo">
+      <div>
+        <div class="co-name">張家豪 (Miller Chang)</div>
+        <div class="co-ticker">Embedded 事業群總經理 · 2007-（19 年）</div>
+      </div>
+      <div class="co-badge"><span class="badge ow">負責 34% 合併營收</span></div>
+    </div>
+    <div class="co-body">
+      <strong>加入研華</strong>：2007 年（從嵌入式產品線經理升任）。
+      <strong>關鍵成就</strong>：2017 共治總經理三人組之一；領導嵌入式事業群（1Q26 占合併營收 34%）；推動 Embedded-IoT 模組與 NVIDIA Jetson、Intel NUC 深度整合；醫療通路（Embedded 子部門）為研華切入醫療影像、手術機器人控制的關鍵窗口。
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 12 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P13 — 章節分隔：產業與競爭 ═══════════════════ -->
+<div class="page sec-div">
+  <div class="sec-num">03</div>
+  <div class="sec-name">產業地位 <em>& 競爭分析</em></div>
+  <div class="sec-desc">全球 IPC 41% 市佔 · 5 國際對手 + 5 台廠對手 · TAM 雙引擎 Edge AI + IIoT</div>
+</div>
+
+<!-- ═══════════════════ P14 — 產業地位 + IPC TAM ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">全球 IPC 市場與研華地位</h1>
+
+  <p>依 OMDIA 2022 Industrial PCs Report 數據，研華為**全球唯一純品牌 IPC 玩家**——其他大廠 IPC 線多嵌套在工業自動化 / 控制系統業務內，獨立揭露營收稀少。</p>
+
+  <table>
+    <thead><tr><th>排名</th><th>公司</th><th>國</th><th class="num">市佔</th><th>業務特徵</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>1</td><td><strong>Advantech 研華</strong></td><td>台</td><td class="num"><strong>41%</strong></td><td>唯一純品牌 IPC + Edge AI 軟硬整合</td></tr>
+      <tr><td>2</td><td>Beckhoff Automation</td><td>德</td><td class="num">~ 13%</td><td>PC-based 控制龍頭、EtherCAT 生態系</td></tr>
+      <tr><td>3</td><td>Kontron AG</td><td>奧德</td><td class="num">~ 9%</td><td>嵌入式 + 工業電腦 + 軌道交通通訊</td></tr>
+      <tr><td>4</td><td>Siemens SIMATIC IPC</td><td>德</td><td class="num">~ 6%</td><td>嵌入於 Digital Industries 棧內</td></tr>
+      <tr><td>5</td><td>Mitsubishi / Rockwell / Schneider</td><td>日美法</td><td class="num">各 ~ 4%</td><td>工業自動化集團附屬</td></tr>
+      <tr><td>—</td><td>其他（含台廠樺漢 / 凌華 / 艾訊 / 廣積等）</td><td>—</td><td class="num">~ 23%</td><td>細分市場玩家</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">全球 IPC TAM 與 Edge AI / IIoT 雙引擎</h2>
+
+  <table>
+    <thead><tr><th>市場層次</th><th class="num">2024-25 規模</th><th class="num">2030 預估</th><th class="num">CAGR</th><th>研華目前滲透率</th></tr></thead>
+    <tbody>
+      <tr><td>核心 IPC 純硬體</td><td class="num">US$ 6.17B</td><td class="num">US$ 7.66-8.91B</td><td class="num">5.5-7.9%</td><td><strong>41%</strong>（已飽和）</td></tr>
+      <tr class="hi"><td><strong>Edge AI 硬體</strong></td><td class="num">US$ 26.14B</td><td class="num">US$ 58.9B</td><td class="num pos"><strong>17.6%</strong></td><td>&lt; 1%（早期）</td></tr>
+      <tr class="hi"><td><strong>Edge AI 軟體</strong></td><td class="num">US$ 1.95B</td><td class="num">US$ 8.91B</td><td class="num pos"><strong>29.2%</strong></td><td>&lt; 1%</td></tr>
+      <tr><td>IIoT 工業物聯網</td><td class="num">US$ 154-275B</td><td class="num">US$ 470-498B</td><td class="num">12.5-33%</td><td>&lt; 0.5%</td></tr>
+    </tbody>
+  </table>
+
+  <p>研華以 41% 市佔對應**約 US$ 2.5-3.0B 純 IPC 業務 TAM**，與 1Q26 合併營收年化 US$ 2.6B 量級吻合。意味純 IPC 已上限封頂，**真正成長故事在 Edge AI 雙引擎滲透率提升**：</p>
+
+  <ul>
+    <li><strong>滲透率提升</strong>：邊緣 AI 從目前 ~2.5% 滲透 → 5-7%（2030E），意味研華 Edge AI 業務有 2-3 倍成長空間</li>
+    <li><strong>產品 ASP 升級</strong>：Edge AI 平台軟硬整合 ASP 為純 IPC 的 1.5-2.5 倍</li>
+    <li><strong>訂閱化轉型</strong>：WISE-IoT PaaS 從 &lt; 5% → 15-20%（2030E），帶來更高估值倍數</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 14 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P15 — 國際對手 ═══════════════════ -->
+<div class="page body-page alt">
+
+  <h1 class="ch">國際對手 — Siemens / Beckhoff / Kontron / Eurotech</h1>
+
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div>
+        <div class="co-name">Siemens AG</div>
+        <div class="co-ticker">ETR:SIE · 2024 營收 €75.9B</div>
+      </div>
+      <div class="co-badge"><span class="badge" style="background:#94a3b8">中威脅</span></div>
+    </div>
+    <div class="co-body">
+      <strong>與研華比較範圍</strong>：SIMATIC IPC + Industrial Edge 平台。
+      <strong>優勢</strong>：PLC（SIMATIC S7）+ TIA Portal 自動化軟體 + MindSphere IoT 三合一綁定，歐洲市場（德法義西）勢力範圍。
+      <strong>劣勢</strong>：IPC 僅占 Digital Industries 5-7%，管理層注意力分散；亞洲市場顯著弱於研華。
+      <strong>威脅程度</strong>：歐洲 + 大型工廠 head-to-head（中威脅）；亞洲市場低威脅。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div>
+        <div class="co-name">Beckhoff Automation</div>
+        <div class="co-ticker">德、未上市 · 2024 營收 €1.17B (YoY -33%)</div>
+      </div>
+      <div class="co-badge"><span class="badge sell">高威脅（歐洲）</span></div>
+    </div>
+    <div class="co-body">
+      <strong>與研華比較範圍</strong>：PC-based 高階運動控制 + EtherCAT 生態系 + XTS/XPlanar 物料搬運。
+      <strong>優勢</strong>：技術深度極高，EtherCAT 為全球工業乙太網事實標準；德國機械工業（食品、包裝、印刷）鐵桿客戶基地。
+      <strong>劣勢</strong>：規模僅研華 1/4，產品線單一，缺乏 IoT 軟體棧，Edge AI 起步晚。
+      <strong>威脅程度</strong>：歐洲 OEM 機械市場高威脅，亞洲 + 北美低威脅。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div>
+        <div class="co-name">Kontron AG</div>
+        <div class="co-ticker">Vienna:KTN · 2024 營收 €1.685B (YoY +13.3%)</div>
+      </div>
+      <div class="co-badge"><span class="badge" style="background:#94a3b8">中威脅</span></div>
+    </div>
+    <div class="co-body">
+      <strong>與研華比較範圍</strong>：嵌入式 + 工業電腦 + 軌道交通通訊。
+      <strong>優勢</strong>：2024 完成戰略轉型（退出 IT 服務、純化為 IoT + 嵌入式）；歐洲軌道交通 / 航太國防 / 5G 通訊基礎設施優勢領域。
+      <strong>劣勢</strong>：規模約研華 60%；Edge AI 軟體棧落後研華 WISE-PaaS。
+      <strong>威脅程度</strong>：歐洲嵌入式市場高威脅，亞洲低威脅。
+    </div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div>
+        <div class="co-name">Eurotech</div>
+        <div class="co-ticker">義、ETH.MI · Edge AI Gateway 利基</div>
+      </div>
+      <div class="co-badge"><span class="badge neutral">低威脅</span></div>
+    </div>
+    <div class="co-body">
+      <strong>與研華比較範圍</strong>：Edge AI Gateway 利基玩家、cybersecure 模組化邊緣 gateway。
+      <strong>優勢</strong>：純度高、毛利率 &gt; 50%；ReliaGATE 15A-14（首款 cybersecure 模組化邊緣 gateway）為利基創新。
+      <strong>劣勢</strong>：規模極小（年營收 &lt; US$ 100M），無法在規模戰中與研華競爭。
+      <strong>威脅程度</strong>：低威脅（niche disruptor）。
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 15 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P16 — 台廠對手 ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">台廠對手 — 樺漢 / 凌華 / 友通 / 廣積 / 艾訊</h1>
+
+  <table>
+    <thead><tr><th>公司</th><th>Ticker</th><th class="num">2024 營收</th><th class="num">2024 EPS</th><th class="num">毛利率</th><th>對研華威脅</th></tr></thead>
+    <tbody>
+      <tr><td>樺漢科技（鴻海系）</td><td>6414.TW</td><td class="num">NT$ 1,300-1,400 億</td><td class="num">NT$ 20.03</td><td class="num">19.5%</td><td>中威脅 / SI 大型項目重疊</td></tr>
+      <tr><td>凌華科技</td><td>6166.TW</td><td class="num">NT$ 110 億</td><td class="num">—</td><td class="num">35.0%</td><td>高威脅（Edge AI Server 利基）</td></tr>
+      <tr><td>友通資訊（DFI）</td><td>2397.TW</td><td class="num">—</td><td class="num">—</td><td class="num">~ 25%</td><td>中威脅 / ODM 嵌入式</td></tr>
+      <tr><td>廣積科技</td><td>8050.TWO</td><td class="num">NT$ 52.67 億</td><td class="num">—</td><td class="num">~ 30%</td><td>低威脅（網通細分市場）</td></tr>
+      <tr><td>艾訊（研華關係企業）</td><td>3088.TW</td><td class="num">NT$ 67.5 億</td><td class="num">NT$ 7.53</td><td class="num">34.2%</td><td>合作 &gt; 競爭（研華持股 40%+）</td></tr>
+      <tr class="hi"><td><strong>研華（對標）</strong></td><td><strong>2395.TW</strong></td><td class="num"><strong>NT$ 709 億</strong></td><td class="num"><strong>NT$ 12.25</strong></td><td class="num"><strong>39.8%</strong></td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">競爭格局總結</h2>
+
+  <p>研華在全球 IPC 市場形成「**規模 + 品牌 + 軟體棧 + AI 生態系卡位**」四維護城河。國際對手中只有 Beckhoff 在歐洲機械市場、Siemens 在德國 PLC 市場對研華形成局部威脅；亞洲對手規模顯著小（多為研華 1/10 ~ 1/15），技術深度與全球通路皆落後。</p>
+
+  <div class="callout green">
+    <div class="callout-title">研華未來 3-5 年最大競爭壓力來源</div>
+    不來自單一同業，而來自「**Edge AI 滲透速度是否如預期、毛利結構是否被 DRAM/SSD 漲價持續壓制**」兩大內部變數。
+    任一變數惡化將直接影響 GiS 基礎情境 EPS 15.5 的兌現節奏。
+  </div>
+
+  <h2 class="ch">Comps 7 維對比</h2>
+
+  <img class="chart-img" src="charts/chart_22_comps_scatter.png" alt="Comps 散點">
+  <div class="chart-cap">研華 Forward PE 30.9x 顯著高於 Peer Median 17x。EV/Sales 5.3x vs Peer 1.0x = 5.3x 倍率溢價，反映品牌 + AI 卡位溢價約 +20-40% PE 倍數。</div>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 16 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P17 — 章節分隔：1Q26 法說 ═══════════════════ -->
+<div class="page sec-div">
+  <div class="sec-num">04</div>
+  <div class="sec-name">1Q26 <em>法說 Deep Dive</em></div>
+  <div class="sec-desc">營收 +17% / EPS +22% 創歷史第二高 · B/B 1.77 訂單能見度史上次強<br>區域：台灣 +75% / ASEAN +70% / 中國 +38%</div>
+</div>
+
+<!-- ═══════════════════ P18 — 1Q26 數字 ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">1Q26 財務數字 vs 共識</h1>
+
+  <table>
+    <thead>
+      <tr><th>項目 (NT$mn)</th><th class="num">1Q26 實際</th><th class="num">共識</th><th class="num">Diff</th><th class="num">QoQ</th><th class="num">YoY</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>營業收入</td><td class="num">20,385</td><td class="num">18,933</td><td class="num pos">+8%</td><td class="num pos">+14%</td><td class="num pos">+17%</td></tr>
+      <tr><td>毛利</td><td class="num">7,980</td><td class="num">7,495</td><td class="num pos">+6%</td><td class="num pos">+12%</td><td class="num pos">+14%</td></tr>
+      <tr><td>營業費用</td><td class="num">-4,251</td><td class="num">-4,368</td><td class="num pos">-3%</td><td class="num pos">-2%</td><td class="num">+4%</td></tr>
+      <tr class="hi"><td><strong>營業利益</strong></td><td class="num"><strong>3,728</strong></td><td class="num">3,127</td><td class="num pos"><strong>+19%</strong></td><td class="num pos">+33%</td><td class="num pos">+28%</td></tr>
+      <tr class="hi"><td><strong>稅後淨利</strong></td><td class="num"><strong>3,334</strong></td><td class="num">2,764</td><td class="num pos"><strong>+21%</strong></td><td class="num pos">+7%</td><td class="num pos">+22%</td></tr>
+      <tr class="hi"><td><strong>EPS (NT$)</strong></td><td class="num"><strong>3.85</strong></td><td class="num">3.17</td><td class="num pos"><strong>+22%</strong></td><td class="num pos">+7%</td><td class="num pos">+22%</td></tr>
+      <tr><td>毛利率</td><td class="num">39.1%</td><td class="num">39.6%</td><td class="num neg">-0.4 pp</td><td class="num neg">-0.7 pp</td><td class="num neg">-1.4 pp</td></tr>
+      <tr><td>營業利益率</td><td class="num">18.3%</td><td class="num">16.5%</td><td class="num pos">+1.8 pp</td><td class="num pos">+2.6 pp</td><td class="num pos">+1.4 pp</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>解讀</strong>：營益率擴張不靠毛利（毛利率反而年減 1.4 pp，反映 DDR4/SSD 漲價直接壓制），靠的是費用率管控 — 公司 2025 年人員增幅放緩 + 導入 AI 提升生產力，營業費用率從 24% 壓到 20.9%。
+    這是「**規模放大 × 自動化**」帶來的營運槓桿兌現，而非單純需求拉貨。
+  </blockquote>
+
+  <h1 class="ch">區域與事業群分析</h1>
+
+  <img class="chart-img" src="charts/chart_04_revenue_by_geo.png" alt="1Q26 地區占比 + YoY">
+  <div class="chart-cap">1Q26 區域結構：北美 29%、中國 24%、歐洲 16%、北亞 9%、台灣 8%、ASEAN 3%。台灣 +75% / ASEAN +70% / 中國 +38% 為亮點。</div>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 18 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P19 — 章節分隔：財務模型 ═══════════════════ -->
+<div class="page sec-div">
+  <div class="sec-num">05</div>
+  <div class="sec-name">5 年財務模型 <em>(FY26-FY30)</em></div>
+  <div class="sec-desc">基礎情境 EPS 15.50 → 26.00（5Y CAGR +17.5%）<br>三情境完整 / DCF Unlevered FCF / 現金流預估</div>
+</div>
+
+<!-- ═══════════════════ P20 — 5 年歷史 ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">5 年歷史合併損益表（FY21-FY25）</h1>
+
+  <table>
+    <thead><tr><th>項目 (NT$mn)</th><th class="num">FY21</th><th class="num">FY22</th><th class="num">FY23</th><th class="num">FY24</th><th class="num">FY25</th><th class="num">5Y CAGR</th></tr></thead>
+    <tbody>
+      <tr><td>營業收入</td><td class="num">58,622</td><td class="num">68,745</td><td class="num">64,568</td><td class="num">59,786</td><td class="num">70,882</td><td class="num">+4.9%</td></tr>
+      <tr><td>營業毛利</td><td class="num">22,132</td><td class="num">26,113</td><td class="num">26,162</td><td class="num">24,376</td><td class="num">28,198</td><td class="num pos">+6.2%</td></tr>
+      <tr><td>毛利率</td><td class="num">37.8%</td><td class="num">38.0%</td><td class="num">40.5%</td><td class="num">40.8%</td><td class="num">39.8%</td><td class="num">—</td></tr>
+      <tr><td>營業費用</td><td class="num">12,331</td><td class="num">13,581</td><td class="num">14,034</td><td class="num">15,326</td><td class="num">16,631</td><td class="num">+7.7%</td></tr>
+      <tr><td>研發費用</td><td class="num">4,270</td><td class="num">4,768</td><td class="num">4,830</td><td class="num">5,416</td><td class="num">5,816</td><td class="num">+8.0%</td></tr>
+      <tr class="hi"><td><strong>營業利益</strong></td><td class="num"><strong>9,800</strong></td><td class="num"><strong>12,532</strong></td><td class="num"><strong>12,128</strong></td><td class="num"><strong>9,050</strong></td><td class="num"><strong>11,567</strong></td><td class="num pos">+4.2%</td></tr>
+      <tr><td>OPM</td><td class="num">16.7%</td><td class="num">18.2%</td><td class="num">18.8%</td><td class="num">15.1%</td><td class="num">16.3%</td><td class="num">—</td></tr>
+      <tr><td>稅後淨利</td><td class="num">8,250</td><td class="num">10,757</td><td class="num">10,838</td><td class="num">9,005</td><td class="num">10,593</td><td class="num pos">+6.5%</td></tr>
+      <tr class="hi"><td><strong>EPS NT$</strong></td><td class="num"><strong>9.70</strong></td><td class="num"><strong>12.60</strong></td><td class="num"><strong>12.65</strong></td><td class="num"><strong>10.45</strong></td><td class="num"><strong>12.25</strong></td><td class="num pos"><strong>+6.0%</strong></td></tr>
+      <tr><td>ROE</td><td class="num">22.7%</td><td class="num pos">26.0%</td><td class="num">23.3%</td><td class="num neg">17.9%</td><td class="num">19.8%</td><td class="num">—</td></tr>
+      <tr><td>配息率</td><td class="num">73%</td><td class="num">63%</td><td class="num">79%</td><td class="num neg">90.4%</td><td class="num">68.5%</td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">9 季毛利率 / 營益率趨勢</h2>
+
+  <img class="chart-img" src="charts/chart_10_margin_trend.png" alt="9 季毛利率 / 營益率趨勢">
+  <div class="chart-cap">1Q26 OPM 18.3% 為 9 季新高（反映規模 × 自動化費用率管控），但毛利率 39.1% YoY -1.4 pp（DDR4/SSD 漲價壓制）。</div>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 20 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P21 — 5 年 forward + 三情境 ═══════════════════ -->
+<div class="page body-page alt">
+
+  <h1 class="ch">5 年 forward 損益預估（基礎情境）</h1>
+
+  <table>
+    <thead><tr><th>項目 (NT$mn)</th><th class="num">FY25 實</th><th class="num">FY26E</th><th class="num">FY27E</th><th class="num">FY28E</th><th class="num">FY29E</th><th class="num">FY30E</th></tr></thead>
+    <tbody>
+      <tr><td>營業收入</td><td class="num">70,882</td><td class="num">80,000</td><td class="num">90,400</td><td class="num">102,000</td><td class="num">114,500</td><td class="num">128,500</td></tr>
+      <tr><td>YoY</td><td class="num">—</td><td class="num pos">+13%</td><td class="num pos">+13%</td><td class="num pos">+13%</td><td class="num pos">+12%</td><td class="num pos">+12%</td></tr>
+      <tr><td>毛利率</td><td class="num">39.8%</td><td class="num">39.0%</td><td class="num">39.6%</td><td class="num pos">40.5%</td><td class="num pos">41.0%</td><td class="num pos">41.4%</td></tr>
+      <tr><td>OPM</td><td class="num">16.3%</td><td class="num">16.5%</td><td class="num pos">17.6%</td><td class="num pos">19.0%</td><td class="num pos">20.0%</td><td class="num pos">20.9%</td></tr>
+      <tr><td>稅後淨利</td><td class="num">10,593</td><td class="num">13,283</td><td class="num">15,422</td><td class="num">17,562</td><td class="num">19,702</td><td class="num">22,282</td></tr>
+      <tr class="hi"><td><strong>EPS NT$</strong></td><td class="num"><strong>12.25</strong></td><td class="num pos"><strong>15.50</strong></td><td class="num pos"><strong>18.00</strong></td><td class="num pos"><strong>20.50</strong></td><td class="num pos"><strong>23.00</strong></td><td class="num pos"><strong>26.00</strong></td></tr>
+      <tr><td>EPS YoY</td><td class="num">—</td><td class="num pos">+26.5%</td><td class="num pos">+16.1%</td><td class="num pos">+13.9%</td><td class="num pos">+12.2%</td><td class="num pos">+13.0%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">三情境 EPS 對比</h2>
+
+  <img class="chart-img" src="charts/chart_18_three_scenarios.png" alt="三情境 EPS">
+  <div class="chart-cap">FY26-30 三情境：樂觀（30%）→ 16.50/19.20/23.55/28.20/33.30；基礎（50%）→ 15.50/18.00/20.50/23.00/26.00；保守（20%）→ 14.00/14.80/15.80/17.20/18.80</div>
+
+  <h2 class="ch">三情境驅動因子</h2>
+
+  <table>
+    <thead><tr><th>維度</th><th>樂觀 16.50</th><th>基礎 15.50</th><th>保守 14.00</th></tr></thead>
+    <tbody>
+      <tr><td>Edge AI 占比 FY26</td><td>33%</td><td>30%</td><td>25%</td></tr>
+      <tr><td>機器人業務 YoY</td><td>+250%</td><td>+200%</td><td>+120%</td></tr>
+      <tr><td>軍工 / 無人機</td><td>大放量 GM 55%+</td><td>持續 GM 50%</td><td>維持 GM 40-45%</td></tr>
+      <tr><td>DDR/SSD 漲價終結</td><td>2026/H1 提早</td><td>2026/H2 如預期</td><td>延續至 2027/H1</td></tr>
+      <tr><td>日本市場</td><td>回穩 +5%</td><td>-3 ~ 0%</td><td>-8% 持續</td></tr>
+      <tr><td>美廠啟用</td><td>順利滿載</td><td>啟用爬坡 6 個月</td><td>爬坡延誤、毛利率受壓</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 21 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P22 — 章節分隔：估值分析 ═══════════════════ -->
+<div class="page sec-div">
+  <div class="sec-num">06</div>
+  <div class="sec-name">估值分析 <em>三方法整合</em></div>
+  <div class="sec-desc">PE 50% + DCF 30% + Comps 20% → 加權 TP NT$ 474<br>三組敏感度 5×5 / Football Field 八線 / 評等 §4.3 落格</div>
+</div>
+
+<!-- ═══════════════════ P23 — PE-based 估值 ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">PE-based 估值（主方法，50%）</h1>
+
+  <p>研華屬「**成長型 + 高股息混合**」公司：高 ROE（19-22%）、低資本支出強度、現金流穩定、配發率 65-90%、淨現金部位 NT$ 11.2 bn。
+  主要用 <strong>Forward PE on FY26E</strong>（2026 為邊緣 AI 兌現年）；交叉驗證用 PE Band 與 Comps。</p>
+
+  <h2 class="ch">三情境機率重檢</h2>
+
+  <table>
+    <thead><tr><th>情境</th><th class="num">機率</th><th class="num">FY26 EPS</th><th class="num">Target PE</th><th class="num">12M TP NT$</th><th class="num">上檔 vs 478.5</th></tr></thead>
+    <tbody>
+      <tr><td>樂觀（5/8 大漲後上調）</td><td class="num">30%</td><td class="num">16.50</td><td class="num">32x</td><td class="num">528</td><td class="num pos">+10.3%</td></tr>
+      <tr class="hi"><td><strong>基礎（共識中位）</strong></td><td class="num"><strong>50%</strong></td><td class="num"><strong>15.50</strong></td><td class="num"><strong>30x</strong></td><td class="num"><strong>465</strong></td><td class="num neg">-2.8%</td></tr>
+      <tr><td>保守（DDR 壓制延長）</td><td class="num">20%</td><td class="num">14.00</td><td class="num">26x</td><td class="num">364</td><td class="num neg">-23.9%</td></tr>
+      <tr class="hi"><td><strong>加權 PE-based TP</strong></td><td class="num">100%</td><td class="num">—</td><td class="num">—</td><td class="num"><strong>464</strong></td><td class="num neg"><strong>-2.8%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">Target PE 區間合理性（vs Historical PE Band）</h2>
+
+  <img class="chart-img" src="charts/chart_23_pe_band.png" alt="5Y PE Band">
+  <div class="chart-cap">5Y TTM PE Mean 28.95x / +1σ 32.5x / +2σ 36.05x。當前 Forward PE 30.9x 介於 Mean 與 +1σ 之間，屬「邊緣 AI 兌現年的合理上沿」。</div>
+
+  <table>
+    <thead><tr><th>統計值</th><th class="num">Forward PE</th><th class="num">對應 EPS 15.5 之 TP</th></tr></thead>
+    <tbody>
+      <tr><td>5Y mean</td><td class="num">28.95x</td><td class="num">449</td></tr>
+      <tr><td>5Y +1σ</td><td class="num">32.5x</td><td class="num">504</td></tr>
+      <tr><td>5Y +2σ</td><td class="num">36.05x</td><td class="num">559</td></tr>
+      <tr class="hi"><td><strong>Current（FY26E EPS 15.5）</strong></td><td class="num"><strong>30.9x</strong></td><td class="num"><strong>478.5（5/11 收盤）</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 23 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P24 — DCF 估值 ═══════════════════ -->
+<div class="page body-page alt">
+
+  <h1 class="ch">DCF 估值（次方法，30%）</h1>
+
+  <h2 class="ch">WACC 計算</h2>
+
+  <p>研華為**淨現金公司**（FY25 期末淨現金 NT$ 11.2 bn vs 借款 NT$ 0.15 bn），WACC ≈ Cost of Equity。</p>
+
+  <table>
+    <thead><tr><th>參數</th><th class="num">數值</th><th>來源</th></tr></thead>
+    <tbody>
+      <tr><td>Risk-free rate Rf</td><td class="num">1.50%</td><td>台灣 10 年期公債殖利率（2026/04）</td></tr>
+      <tr><td>Equity Risk Premium</td><td class="num">6.50%</td><td>Damodaran TW market ERP 中位數</td></tr>
+      <tr><td>Beta（5Y monthly）</td><td class="num">0.90</td><td>yfinance β 估算</td></tr>
+      <tr class="hi"><td><strong>Cost of Equity (CAPM)</strong></td><td class="num"><strong>7.35%</strong></td><td>Rf + β × ERP = 1.5 + 0.9 × 6.5</td></tr>
+      <tr><td>債務比率 D/V</td><td class="num">&lt; 1%</td><td>淨現金公司</td></tr>
+      <tr class="hi"><td><strong>WACC</strong></td><td class="num"><strong>7.35%</strong></td><td>≈ Cost of Equity</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">5 年 Unlevered FCF Schedule（基礎情境）</h2>
+
+  <table>
+    <thead><tr><th>項目 (NT$mn)</th><th class="num">FY26E</th><th class="num">FY27E</th><th class="num">FY28E</th><th class="num">FY29E</th><th class="num">FY30E</th></tr></thead>
+    <tbody>
+      <tr><td>EBIT</td><td class="num">14,800</td><td class="num">17,700</td><td class="num">21,150</td><td class="num">24,700</td><td class="num">28,500</td></tr>
+      <tr><td>NOPAT (× 0.82)</td><td class="num">12,136</td><td class="num">14,514</td><td class="num">17,343</td><td class="num">20,254</td><td class="num">23,370</td></tr>
+      <tr><td>+ D&amp;A</td><td class="num">1,800</td><td class="num">2,100</td><td class="num">2,400</td><td class="num">2,600</td><td class="num">2,800</td></tr>
+      <tr><td>- CapEx</td><td class="num">-3,000</td><td class="num">-3,200</td><td class="num">-2,800</td><td class="num">-2,500</td><td class="num">-2,300</td></tr>
+      <tr><td>- ΔWC</td><td class="num">-800</td><td class="num">-1,000</td><td class="num">-1,200</td><td class="num">-1,300</td><td class="num">-1,400</td></tr>
+      <tr class="hi"><td><strong>Unlevered FCF</strong></td><td class="num"><strong>10,136</strong></td><td class="num"><strong>12,414</strong></td><td class="num"><strong>15,743</strong></td><td class="num"><strong>19,054</strong></td><td class="num"><strong>22,470</strong></td></tr>
+      <tr><td>PV @ 7.35%</td><td class="num">9,787</td><td class="num">11,166</td><td class="num">13,191</td><td class="num">14,872</td><td class="num">16,338</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">EV → Equity Bridge（基礎情境）</h2>
+
+  <table>
+    <thead><tr><th>項目 (NT$mn)</th><th class="num">數值</th></tr></thead>
+    <tbody>
+      <tr><td>Σ PV FCF (FY26-30)</td><td class="num">65,354</td></tr>
+      <tr><td>+ TV PV（g 3.0%）</td><td class="num">386,193</td></tr>
+      <tr class="hi"><td><strong>Enterprise Value</strong></td><td class="num"><strong>451,547</strong></td></tr>
+      <tr><td>+ 期末淨現金</td><td class="num">+11,167</td></tr>
+      <tr><td>- 少數股權</td><td class="num">-500</td></tr>
+      <tr class="hi"><td><strong>Equity Value</strong></td><td class="num"><strong>462,214</strong></td></tr>
+      <tr><td>÷ 股本（億股）</td><td class="num">8.57</td></tr>
+      <tr class="hi"><td><strong>每股 DCF 值（基礎）</strong></td><td class="num"><strong>NT$ 539</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p>樂觀 DCF 值 NT$ 624 / 保守 DCF 值 NT$ 471。**DCF 機率加權 = 30% × 624 + 50% × 539 + 20% × 471 = NT$ 551**（上檔 +15.1%）。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 24 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P25 — DCF 敏感度 + Comps ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">DCF 敏感度（WACC × g, 5×5）</h1>
+
+  <img class="chart-img" src="charts/chart_20_dcf_sensitivity.png" alt="DCF 敏感度熱力圖">
+  <div class="chart-cap">中心格 NT$ 539（WACC 7.35% / g 3.0%）。範圍 NT$ 415-832；WACC 每降 0.5% 影響每股 ~ 33；g 每升 0.5% 影響每股 ~ 25-40。</div>
+
+  <h1 class="ch">Comps 估值（驗證方法，20%）</h1>
+
+  <table>
+    <thead><tr><th>公司</th><th>Ticker</th><th class="num">EV/Sales</th><th class="num">EV/EBITDA</th><th class="num">Forward PE</th><th class="num">EPS CAGR</th><th class="num">GM%</th><th class="num">OPM%</th><th class="num">ROE</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td><strong>研華</strong></td><td>2395</td><td class="num">5.3x</td><td class="num">27.5x</td><td class="num">30.9x</td><td class="num pos">+18%</td><td class="num">39.8%</td><td class="num">16.3%</td><td class="num">19.8%</td></tr>
+      <tr><td>Kontron</td><td>KTN</td><td class="num">1.0x</td><td class="num">9.0x</td><td class="num">12.5x</td><td class="num">+10%</td><td class="num">30.5%</td><td class="num">8.5%</td><td class="num">12.0%</td></tr>
+      <tr><td>樺漢</td><td>6414</td><td class="num">0.6x</td><td class="num">11.0x</td><td class="num">14.5x</td><td class="num">+12%</td><td class="num">19.5%</td><td class="num">6.8%</td><td class="num">16.2%</td></tr>
+      <tr><td>凌華</td><td>6166</td><td class="num">0.8x</td><td class="num">14.0x</td><td class="num">20.0x</td><td class="num">+15%</td><td class="num">35.0%</td><td class="num">11.0%</td><td class="num">13.5%</td></tr>
+      <tr><td>艾訊</td><td>3088</td><td class="num">1.5x</td><td class="num">13.5x</td><td class="num">22.0x</td><td class="num">+10%</td><td class="num">34.2%</td><td class="num">12.5%</td><td class="num">16.0%</td></tr>
+      <tr><td>廣積</td><td>8050</td><td class="num">1.0x</td><td class="num">12.0x</td><td class="num">17.0x</td><td class="num">+10%</td><td class="num">30.0%</td><td class="num">12.0%</td><td class="num">14.0%</td></tr>
+      <tr class="hi"><td><strong>Peer Median</strong></td><td>—</td><td class="num">1.0x</td><td class="num">12.0x</td><td class="num">17.0x</td><td class="num">+11%</td><td class="num">32%</td><td class="num">11%</td><td class="num">14%</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>研華相對溢價分析</strong>：EV/Sales 5.3x vs Peer Median 1.0x = <strong>5.3x 倍率溢價</strong>。EV/EBITDA 27.5x vs 12.0x = 2.3x 溢價。Forward PE 30.9x vs 17.0x = 1.8x 溢價。
+  EPS CAGR +18% vs Median +11% = +7 pp 成長溢價。</p>
+
+  <p>採 **Peer Median Forward PE 17x + 50% 研華品牌溢價 = 25.5x** 為合理 Comps PE：</p>
+
+  <table>
+    <thead><tr><th>情境</th><th class="num">EPS</th><th class="num">Comps Target PE</th><th class="num">TP NT$</th></tr></thead>
+    <tbody>
+      <tr><td>樂觀</td><td class="num">16.50</td><td class="num">28x</td><td class="num">462</td></tr>
+      <tr class="hi"><td><strong>基礎</strong></td><td class="num">15.50</td><td class="num">25.5x</td><td class="num">395</td></tr>
+      <tr><td>保守</td><td class="num">14.00</td><td class="num">22x</td><td class="num">308</td></tr>
+      <tr class="hi"><td><strong>Comps 加權</strong></td><td class="num">—</td><td class="num">—</td><td class="num"><strong>NT$ 384</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p>Comps 上檔 vs 478.5 = -19.7%，顯著低於 PE 與 DCF 估值。**意味市場給研華的「品牌 + AI 卡位 + WISE-PaaS」溢價約 +20-40% PE 倍數**。若邊緣 AI 兌現速度低於預期，市場可能將其 Forward PE 從 30x 收斂至 24-25x，對應股價下修 17-20%。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 25 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P26 — 三方法整合 + Football Field ═══════════════════ -->
+<div class="page body-page alt">
+
+  <h1 class="ch">三方法整合 — 加權 12M Target Price</h1>
+
+  <table>
+    <thead><tr><th>方法</th><th class="num">TP NT$</th><th class="num">vs 478.5</th><th class="num">權重</th><th class="num">加權貢獻</th><th>訊號解讀</th></tr></thead>
+    <tbody>
+      <tr><td>PE-based（主，市場視角）</td><td class="num">464</td><td class="num neg">-2.8%</td><td class="num">50%</td><td class="num">232.0</td><td>略保守、貼近共識</td></tr>
+      <tr><td>DCF（次，長期 CF 視角）</td><td class="num">551</td><td class="num pos">+15.1%</td><td class="num">30%</td><td class="num">165.3</td><td>樂觀，反映 5-10 年 Edge AI 成長</td></tr>
+      <tr><td>Comps（驗證，同業折價）</td><td class="num">384</td><td class="num neg">-19.7%</td><td class="num">20%</td><td class="num">76.8</td><td>保守，反映品牌溢價收斂風險</td></tr>
+      <tr class="hi"><td><strong>加權整合</strong></td><td class="num"><strong>474</strong></td><td class="num neg"><strong>-0.94%</strong></td><td class="num">100%</td><td class="num">—</td><td><strong>中立 (N)</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">Football Field 估值區間整合</h2>
+
+  <p>整合 PE / DCF / Comps / Historical PE Band 八條估值線，當前股價 NT$ 478.5 落 Football Field 60-70 percentile — 反映「**短期已 fully price-in 樂觀情境的合理範圍上沿**」。</p>
+
+  <img class="chart-img" src="charts/chart_21_football_field.png" alt="Football Field 估值區間">
+  <div class="chart-cap">Football Field 集中區（30-70 percentile）：NT$ 419-526。GiS 加權 TP NT$ 474 為平衡點，落中立 (N) 區帶中央。</div>
+
+  <h2 class="ch">評等決定 — GiS §4.3 五級制落格</h2>
+
+  <table>
+    <thead><tr><th>GiS 評等</th><th class="num">12M 上檔空間</th><th>2395 落點</th></tr></thead>
+    <tbody>
+      <tr><td>買進 (Buy)</td><td class="num">&gt; +15%</td><td>—</td></tr>
+      <tr><td>增加持股 (OW)</td><td class="num">+5% ~ +15%</td><td>—</td></tr>
+      <tr class="hi"><td><strong>中立 (N)</strong></td><td class="num"><strong>-5% ~ +5%</strong></td><td><strong>✓ 上檔 -0.94%（中央）</strong></td></tr>
+      <tr><td>減碼 (UW)</td><td class="num">&lt; -5%</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>評等結論：中立 (N)</strong><br>
+    加權 TP NT$ 474 vs 收盤 NT$ 478.5 = -0.94%，落 GiS §4.3「中立 (N) ±5%」格中央。
+    結構故事認可，評價暫時無 margin of safety — 但也未過度高估。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 26 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P27 — 章節分隔：風險與行動 ═══════════════════ -->
+<div class="page sec-div">
+  <div class="sec-num">07</div>
+  <div class="sec-name">風險矩陣 <em>+ 行動觸發條件</em></div>
+  <div class="sec-desc">12 項風險（產業 4 / 公司 4 / 財務 2 / 估值 2）<br>OW / UW 各兩條觸發路徑 + 短期催化窗口</div>
+</div>
+
+<!-- ═══════════════════ P28 — 風險矩陣（前 6 項）═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">風險矩陣 — 12 項全覽</h1>
+
+  <h2 class="ch">產業風險（4 項）</h2>
+
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>R1. DRAM/NAND 漲價壓制毛利率（已發生）</h4>
+      <div class="risk-item">1Q26 毛利率 39.1% YoY -1.4 pp 已反映</div>
+      <div class="risk-item">研華 BOM 記憶體 + SSD 占 20-25%</div>
+      <div class="risk-item">每 10% 漲價 → 毛利率 -1.5-2.0 pp</div>
+      <div class="risk-item">預期延續至 2026/H2-2027</div>
+      <div class="risk-item">衝擊：高 / 機率：高</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R2. 全球工業需求放緩（歐美庫存修正延長）</h4>
+      <div class="risk-item">2024 營收 YoY -7% 主因歐美庫存修正</div>
+      <div class="risk-item">2025-2026 已逆轉但需觀察 PMI / IFO</div>
+      <div class="risk-item">B/B 1.77 訂單能見度可能反轉</div>
+      <div class="risk-item">緩解：地理分散（北美 29% / 中國 24% / 歐洲 16%）</div>
+      <div class="risk-item">衝擊：高 / 機率：中</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R3. Edge AI 滲透速度不如預期</h4>
+      <div class="risk-item">管理層目標 2026 占比 30%+（從 9.4% 大跳）</div>
+      <div class="risk-item">1Q26 已達 17%，達標可能性偏高</div>
+      <div class="risk-item">若 &lt; 25%，mix shift 效應遞延</div>
+      <div class="risk-item">影響 FY26 EPS ~ -5-8%</div>
+      <div class="risk-item">衝擊：中 / 機率：中</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R4. IPC 市場 CAGR 5-8% 封頂</h4>
+      <div class="risk-item">純 IPC TAM CAGR 上限 5-8%</div>
+      <div class="risk-item">若 Edge AI 故事兌現慢，視為「成熟製造業」</div>
+      <div class="risk-item">估值倍數從 28-30x 收斂至 18-22x</div>
+      <div class="risk-item">緩解：管理層積極論述 + mix shift 數字</div>
+      <div class="risk-item">衝擊：高 / 機率：低</div>
+    </div>
+  </div>
+
+  <h2 class="ch">公司風險（4 項）</h2>
+
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>R5. 劉克振 2026 年底卸任 CEO</h4>
+      <div class="risk-item">43 年創辦人退場，治理結構洗牌</div>
+      <div class="risk-item">共治三總經理需證明戰略連貫性</div>
+      <div class="risk-item">短期市場可能 derate 5-10%</div>
+      <div class="risk-item">緩解：2023 經管會 + 3 年交棒緩衝</div>
+      <div class="risk-item">衝擊：中 / 機率：高（已確定）</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R6. 共治制度的決策效率</h4>
+      <div class="risk-item">三總經理跨事業群資源分配決策慢</div>
+      <div class="risk-item">機器人 / 軟體棧主導權若不清晰，錯失窗口</div>
+      <div class="risk-item">需 2026-2028 實際觀察</div>
+      <div class="risk-item">緩解：經管會作為協調機制</div>
+      <div class="risk-item">衝擊：中 / 機率：中</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R7. 蔡淑妍或張家豪離職空缺</h4>
+      <div class="risk-item">iSystems + Embedded 占合併營收 69%</div>
+      <div class="risk-item">兩位 20 年資歷內部接班人</div>
+      <div class="risk-item">短期業績可能波動 -5-10%</div>
+      <div class="risk-item">緩解：劉克振家族控股 + ESOP 綁定</div>
+      <div class="risk-item">衝擊：高 / 機率：低</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R8. 中美地緣升溫 / 中國業務受擾</h4>
+      <div class="risk-item">中國 1Q26 占 24%、YoY +38% 高位</div>
+      <div class="risk-item">若工業 AI 出口管制擴大 → -5-15% 衝擊</div>
+      <div class="risk-item">影響整體營收 -2.5-3.5%</div>
+      <div class="risk-item">緩解：昆山 + 美廠雙軌生產</div>
+      <div class="risk-item">衝擊：高 / 機率：中</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 28 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P29 — 風險矩陣（後 4 項）+ 行動建議 ═══════════════════ -->
+<div class="page body-page alt">
+
+  <h2 class="ch">財務風險（2 項）+ 估值風險（2 項）</h2>
+
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>R9. 配息率 91.4% 高位、再投資空間有限</h4>
+      <div class="risk-item">FY24 配息率 90.4% 業界罕見高位</div>
+      <div class="risk-item">未來大型 M&amp;A 需發債或現增</div>
+      <div class="risk-item">緩解：現金部位 NT$ 200 億，US$100M 級併購可承受</div>
+      <div class="risk-item">衝擊：中 / 機率：低</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R10. 美國新廠產能爬坡風險</h4>
+      <div class="risk-item">2026Q4 啟用，承載 US$7bn → US$15bn</div>
+      <div class="risk-item">爬坡期成本高 + 良率不穩</div>
+      <div class="risk-item">短期毛利率波動 -1-2 pp（1-2 季）</div>
+      <div class="risk-item">緩解：三地生產經驗</div>
+      <div class="risk-item">衝擊：低-中 / 機率：中</div>
+    </div>
+    <div class="risk-card gold">
+      <h4>R11. 股價已超過外資 TP NT$ 400 +19%</h4>
+      <div class="risk-item">5/11 收盤 NT$ 478.5 已 fully price-in</div>
+      <div class="risk-item">短期修正空間 5-8%</div>
+      <div class="risk-item">緩解：6/1-6/3 COMPUTEX 催化窗口</div>
+      <div class="risk-item">衝擊：中 / 機率：中</div>
+    </div>
+    <div class="risk-card gold">
+      <h4>R12. 共識 EPS 區間 NT$ 13.6-17.8 寬幅</h4>
+      <div class="risk-item">12 家券商 EPS 共識差 30%+</div>
+      <div class="risk-item">市場對毛利結構 / Edge AI 兌現意見分歧</div>
+      <div class="risk-item">EPS 落保守端 → 估值收斂 10-15%</div>
+      <div class="risk-item">緩解：管理層 guidance + 月營收</div>
+      <div class="risk-item">衝擊：高 / 機率：中</div>
+    </div>
+  </div>
+
+  <h1 class="ch">行動建議 + 評等動態觸發條件</h1>
+
+  <img class="chart-img" src="charts/chart_25_price_vs_tp.png" alt="股價軌跡 vs TP">
+  <div class="chart-cap">近 60 日股價 + GiS 加權 TP NT$ 474 + OW 進場區 NT$ 450 + UW 減持區 NT$ 510。5/7-5/8 法說後 +16% 爆漲視覺化。</div>
+
+  <table>
+    <thead><tr><th>動作</th><th>觸發條件</th><th>對應 TP / 評等</th></tr></thead>
+    <tbody>
+      <tr><td><strong>進場 OW</strong>（從 N 升 OW）</td><td>股價拉回 NT$ 450 以下</td><td>+5.3% 上檔 / OW</td></tr>
+      <tr><td><strong>進場 OW</strong></td><td>EPS 共識上修至 NT$ 16.5+ × PE 32x</td><td>TP NT$ 528 / +10.4%</td></tr>
+      <tr><td>維持 N</td><td>NT$ 450-510 區間震盪</td><td>TP NT$ 474 / ±5%</td></tr>
+      <tr><td><strong>減持 UW</strong>（從 N 降 UW）</td><td>股價衝 NT$ 510 以上（PE &gt; 33x）</td><td>-7.1% / UW</td></tr>
+      <tr><td><strong>減持 UW</strong></td><td>FY26 EPS 共識下修 NT$ 14 以下</td><td>TP NT$ 364 / -23.9%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 29 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P30 — 結論 + 觀察時程 ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">GiS 結論</h1>
+
+  <div class="callout green">
+    <div class="callout-title">結構認可 + 評價已 fully price-in</div>
+    研華從「IPC 領導廠」轉向「邊緣 AI 公司」的結構性升級**完全兌現**：B/B 1.77 + 北美 2.37、Edge AI 占比 17% → 30%+、iAutomation 高毛利皇冠擴張、機器人 / 軍工 / 能源三條新動能放量、美廠擴產 — 均符合 24 個月以上長期看好邏輯。
+    <br><br>
+    但 5/11 收盤 NT$ 478.5 已超過 GiS 加權 TP NT$ 474（-0.94%），落「中立 (N) ±5%」格中央。**評價無 margin of safety，但也未過度高估**。
+    <br><br>
+    DCF 隱含 +15% / Comps 隱含 -20% 的三方法分歧，反映「品牌 + AI 卡位溢價是否持續」的市場辯論。加權 TP NT$ 474 為三方法平衡點。
+  </div>
+
+  <h2 class="ch">下一個觀察點時程</h2>
+
+  <table>
+    <thead><tr><th>日期</th><th>事件</th><th>關注重點</th><th>影響</th></tr></thead>
+    <tbody>
+      <tr><td>2026-05/中</td><td>5 月月營收公告</td><td>YoY 維持 +20%+？</td><td>≥ +20% OW 訊號 / &lt; +15% 衰退預警</td></tr>
+      <tr class="hi"><td><strong>2026-06-01</strong></td><td><strong>Advantech Edge AI Conference</strong></td><td>新產品發表</td><td>EPS 共識上修觸發點</td></tr>
+      <tr><td>2026-06-02</td><td>COMPUTEX + Brand Pavilion</td><td>客戶 demo</td><td>媒體曝光 + 估值短期 +5-10%</td></tr>
+      <tr><td>2026-06-03</td><td>Grand Keynote + Sector Forums</td><td>機器人 / 醫療 / 車載專場</td><td>機器人 +200% 進度確認</td></tr>
+      <tr><td>2026-06/中</td><td>6 月月營收公告</td><td>2Q26 走勢</td><td>QoQ +1-4% 確認</td></tr>
+      <tr><td>2026-07/下</td><td>2Q26 法說會</td><td>2H 完整 guidance</td><td>邊緣 AI 占比實際進度</td></tr>
+      <tr><td>2026Q4</td><td>美廠啟用 + 11 月</td><td>產能擴張兌現</td><td>FY27 EPS 上修空間</td></tr>
+      <tr><td>2026 年底</td><td>劉克振卸任 CEO</td><td>新團隊策略連貫性</td><td>治理結構轉換期</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">給投資組合經理的具體行動建議</h2>
+
+  <ul>
+    <li><strong>現有部位</strong>：維持，無新加碼必要（評等中立 N）</li>
+    <li><strong>新進場條件</strong>：拉回至 NT$ 450 以下（OW 區），或 EPS 共識上修至 NT$ 16+ 同時 PE 倍數維持 30x+</li>
+    <li><strong>減持條件</strong>：股價衝至 NT$ 510 以上（PE &gt; 33x，偏 +2σ 上沿），或 FY26 EPS 下修至 NT$ 14 以下</li>
+    <li><strong>短期催化窗口</strong>：6/1-6/3 COMPUTEX 三日連發，可能拉動評價短期 +5-10%（OW 訊號），但需配合月營收與機器人 demo 實質進度確認</li>
+    <li><strong>追蹤指標</strong>：(a) 月營收 YoY、(b) 季 B/B Ratio、(c) FY26 EPS 共識變化、(d) 邊緣 AI 占比實際進度、(e) DDR4/SSD 漲價週期終結時點</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 30 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P31 — 附錄 A：12 家券商共識分布 ═══════════════════ -->
+<div class="page body-page alt">
+
+  <h1 class="ch">附錄 A — 12 家券商 FY26 EPS 共識分布</h1>
+
+  <img class="chart-img" src="charts/chart_29_consensus_eps.png" alt="12 家券商 EPS 共識">
+  <div class="chart-cap">12 家券商 FY26 EPS 預估區間 NT$ 13.6-17.8。共識中位 ~ NT$ 14.65；GiS 基礎情境 NT$ 15.50 略高於共識中位。</div>
+
+  <h2 class="ch">研華關鍵假設備忘錄</h2>
+
+  <table>
+    <thead><tr><th>#</th><th>假設</th><th>來源 / 邏輯</th><th>風險</th></tr></thead>
+    <tbody>
+      <tr><td>A1</td><td>FY26 營收 +13%</td><td>1Q26 +17% + 2Q26 guidance + 4 月 +35%</td><td>3Q26 中美關稅升級可下修至 +8-10%</td></tr>
+      <tr><td>A2</td><td>FY26 GM% 39.0%</td><td>DDR/SSD 漲價 2H26 + iAutomation mix +1 pp</td><td>記憶體漲價延長至 2027 可下修至 38.5%</td></tr>
+      <tr><td>A3</td><td>FY26 OPM% 16.5%</td><td>費用率 22.5% 反映規模 + AI 自動化</td><td>美廠啟用費用率短期升高</td></tr>
+      <tr><td>A4</td><td>FY26 EPS 15.50</td><td>A1×A2×A3 推導</td><td>與券商共識 NT$ 14.65 中位略高</td></tr>
+      <tr><td>A5</td><td>FY30 EPS 26.00</td><td>5 年 CAGR +17.5%</td><td>Edge AI 占比達 52% 為樂觀邊界</td></tr>
+      <tr><td>A6</td><td>配息率 FY26+ 75%</td><td>CapEx 增加需保留資本</td><td>管理層若維持 90% 配息現金部位下降</td></tr>
+      <tr><td>A7</td><td>WACC 7.35%</td><td>β 0.9 + ERP 6.5% + Rf 1.5%</td><td>5Y monthly β 重新估算</td></tr>
+      <tr><td>A8</td><td>Terminal g 3.0%</td><td>TW GDP + IPC CAGR 6% 中和</td><td>Edge AI 兌現超預期可調至 3.5%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">12 月月營收完整序列</h2>
+
+  <table>
+    <thead><tr><th>月份</th><th class="num">營收 NT$mn</th><th class="num">YoY%</th><th>月份</th><th class="num">營收 NT$mn</th><th class="num">YoY%</th></tr></thead>
+    <tbody>
+      <tr><td>2025/05</td><td class="num">5,855</td><td class="num pos">+18.3%</td><td>2025/11</td><td class="num">5,920</td><td class="num pos">+9.5%</td></tr>
+      <tr><td>2025/06</td><td class="num">5,838</td><td class="num pos">+18.4%</td><td>2025/12</td><td class="num">5,985</td><td class="num pos">+11.4%</td></tr>
+      <tr><td>2025/07</td><td class="num">6,009</td><td class="num pos">+19.4%</td><td>2026/01</td><td class="num">7,060</td><td class="num pos">+23.1%</td></tr>
+      <tr><td>2025/08</td><td class="num">5,556</td><td class="num pos">+11.9%</td><td>2026/02</td><td class="num">5,627</td><td class="num pos">+6.3%</td></tr>
+      <tr><td>2025/09</td><td class="num">6,208</td><td class="num pos">+25.4%</td><td>2026/03</td><td class="num">7,699</td><td class="num pos">+21.8%</td></tr>
+      <tr><td>2025/10</td><td class="num">6,016</td><td class="num pos">+8.7%</td><td><strong>2026/04</strong></td><td class="num">8,269</td><td class="num pos"><strong>+34.6%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>累計觀察</strong>：1Q26 月加總 NT$ 20,386 mn ≈ 法說公告 20,385 mn（差 1 mn 四捨五入）。4 月 YoY +34.6% 為 12 個月最高，反映去年基期低 + 1Q26 訂單延續至 2Q26 出貨。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 31 / 32</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ P32 — 資料來源 + 免責 ═══════════════════ -->
+<div class="page body-page">
+
+  <h1 class="ch">資料來源</h1>
+
+  <p class="src">
+    <strong>1. 公司一手資料</strong><br>
+    - 研華 2026 第一季法人說明會簡報（公司 IR，2026-05-06）<br>
+    - 研華投資人專區 https://www.advantech.com/zh-tw/investors<br>
+    - MOPS 公開資訊觀測站 https://mops.twse.com.tw （t164sb03 合併損益表 / t164sb05 現金流）<br>
+    - 公司歷年年報、ESG 報告、Form 20-F equivalent
+  </p>
+
+  <p class="src">
+    <strong>2. 券商研究報告（pCloud 2026-05-04 至 2026-05-08）</strong><br>
+    - Morgan Stanley（4/30、5/4、5/6）— OW 評等、TP NT$ 400 → 提升後 NT$ 460+<br>
+    - Citi（5/6、5/7）— Neutral、TP NT$ 405-410 → 5/8 大漲後可能上修<br>
+    - CTBC（5/7）、凱基（5/6、5/7、最樂觀 TP NT$ 545）、統一（5/7）<br>
+    - 宏遠投顧、元富投顧、台新新光金控、群益（5/7、5/8）、國泰證期、華南投顧（5/17）<br>
+    - Daiwa、CallMemo（5/6、5/7）
+  </p>
+
+  <p class="src">
+    <strong>3. 產業與市場資料</strong><br>
+    - OMDIA 2022 Industrial PCs Report（研華 41% 全球 IPC 市佔）<br>
+    - Grand View Research（Edge AI 市場 CAGR 17-37%）<br>
+    - MarketsandMarkets、Mordor Intelligence、IDC、Statista（IPC / IIoT TAM）<br>
+    - Business Research Company、IndustryArc、ResearchNester、STL Partners
+  </p>
+
+  <p class="src">
+    <strong>4. 同業比較（Comps）</strong><br>
+    - Kontron AG IR（KTN.VI）、Beckhoff Automation 公告營收<br>
+    - 樺漢科技 6414.TW、凌華科技 6166.TW、艾訊 3088.TW、廣積 8050.TWO、友通 2397.TW 公開財報<br>
+    - stockanalysis.com（交叉驗證年度損益）/ histock.tw（月營收）
+  </p>
+
+  <p class="src">
+    <strong>5. 估值方法論</strong><br>
+    - GiS 估值方法論模板.md §3-4（評等門檻）、§7.6（EPS 來源優先序）、§8（DCF）、§9（Comps）、§10（敏感度）、§11（NO SHORTCUTS）<br>
+    - GiS 報告樣板.html（強制套用 CSS 元件）
+  </p>
+
+  <hr>
+
+  <h2 class="ch">免責聲明</h2>
+
+  <p style="font-size:11.5px;color:#6b7a9a;line-height:1.7">
+    本報告由 <strong>Genesis International Capital (GiS) 研究員觀點</strong>獨立撰寫，基於公開資訊、公司 IR 資料、券商研究報告交叉驗證、產業權威報告引用。評等依 GiS 估值方法論 §4.3 五級制（買進 &gt; +15% / OW +5~+15% / 中立 ±5% / UW &lt; -5%）與 §11 NO SHORTCUTS 原則。<br><br>
+    <strong>本報告為「研究員身份」中立分析</strong>，目的是給市場研究與機構投資人作為「合理價值」參考。投資決策應同時參考個人風險偏好、部位狀況、其他資料來源。<br><br>
+    報告日期 2026-05-11（盤後），基準收盤 NT$ 478.5。若後續發生重大資訊變化（管理層更新 guidance、月營收公告、6 月 COMPUTEX 新產品、Q&amp;A 補充等），將於下一份更新報告中調整。<br><br>
+    <strong>For Internal Distribution Only — 本報告僅供 GiS 內部使用，不得對外傳播。</strong>
+  </p>
+
+  <div class="page-footer">
+    <span class="footer-logo">G<em>i</em>S</span>
+    <span>2395 研華 · 首次覆蓋深度報告 · 2026-05-11</span>
+    <span>P. 32 / 32</span>
+  </div>
+</div>
+
+</body>
+</html>

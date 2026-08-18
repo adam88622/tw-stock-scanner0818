@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!-- 標的：聯詠 3034.TW / 撰寫日：2026-05-12 / 資料截止：2026-05-11 / 報告類型：首次覆蓋 -->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>聯詠 3034 首次覆蓋報告 — 買進 ｜ GiS Investment Research</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+
+/* 封面 */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* 章節封面 */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* 正文 */
+.body-page{padding:36px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:20px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:9px 14px;background:linear-gradient(90deg,#eef5f0,transparent);margin:22px 0 14px}
+h1.ch:first-child{margin-top:0}
+h2.ch{font-size:16px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:5px;margin:18px 0 10px}
+h3.ch{font-size:14.5px;font-weight:700;color:#0a4a30;padding-left:8px;border-left:3px solid #00c896;margin:14px 0 7px}
+
+/* 表格 */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 10px;text-align:left;font-weight:600;font-size:12px}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 10px;border-bottom:1px solid #e5edf8;line-height:1.5;font-size:12.5px}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* 公司卡 */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:14px 0;overflow:hidden;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:17px;font-weight:800;color:#fff}
+.co-ticker{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.badge{padding:4px 12px;border-radius:18px;font-size:10.5px;font-weight:700}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:14px 20px;font-size:13px;line-height:1.7}
+
+/* 圖表 wrap */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:14px;margin:10px 0;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13.5px;font-weight:700;color:#0d1b3e;margin-bottom:3px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:8px}
+.chart-img{width:100%;height:auto;display:block;border-radius:4px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.red{background:linear-gradient(135deg,#7b2020,#c0392b)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:4px}
+.kpi-val em{font-size:11px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.75}
+
+/* 論點摘要 */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:18px;margin:14px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.5px;font-weight:600;color:#0d1b3e;padding:8px 0;border-bottom:1px solid #dce8f8;display:flex;gap:10px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:18px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* 時間軸 */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:14px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12px;font-weight:800;margin-bottom:6px}
+.tl-spec{font-size:14px;font-weight:900;color:#00c896;margin-bottom:3px}
+.tl-tech{font-size:10.5px;opacity:.85;line-height:1.4}
+
+/* 風險 */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.risk-card{border-radius:8px;padding:14px}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13.5px;font-weight:700;margin-bottom:6px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+p{margin:6px 0 10px;line-height:1.7;font-size:13px}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+li{margin:3px 0;line-height:1.7;font-size:13px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:8px 12px;margin:10px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:5px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:12px;margin:10px 0;font-size:12.5px}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.gold{border-color:#d4a017;background:#fef8e7}
+.callout-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:5px}
+.callout.green .callout-title{color:#065f46}
+.callout.gold .callout-title{color:#78350f}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:11px;display:flex;justify-content:space-between;align-items:center;position:absolute;bottom:0;left:0;right:0}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ═══ 封面 ═══ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">Investment Research · 研究員觀點</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Initiating Coverage · 首次覆蓋報告 · 2026-05-12</div>
+    <div class="cover-title">聯詠 3034｜驅動 IC 龍頭轉骨<br><em>Edge AI 與 OLED TDDI 雙引擎啟動</em></div>
+    <div class="cover-subtitle">Novatek Microelectronics — From DDI Leader to SoC + Edge AI Growth Story</div>
+    <div class="cover-tags">
+      <span class="ctag hl">買進 Buy</span>
+      <span class="ctag hl">+16.1% 上檔</span>
+      <span class="ctag">12M TP 578</span>
+      <span class="ctag">SoC 結構升級</span>
+      <span class="ctag">OLED TDDI 切入 Apple</span>
+      <span class="ctag">Edge AI 3 億顆出貨</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>578</em></div><div class="cstat-label">12M 目標價（元）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>+16.1</em>%</div><div class="cstat-label">上檔空間</div></div>
+    <div class="cstat"><div class="cstat-num"><em>4.6</em>%</div><div class="cstat-label">2026 殖利率</div></div>
+    <div class="cstat"><div class="cstat-num">$<em>3,030</em></div><div class="cstat-label">市值（億新台幣）</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 5 月 12 日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ═══ P2 執行摘要 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要｜評等與目標價</h1>
+
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">聯詠科技 Novatek Microelectronics</div><div class="co-ticker">3034.TW · 上市 · IC 設計</div></div>
+      <div class="co-badge"><span class="badge buy">買進 Buy</span><span style="color:rgba(255,255,255,.7);font-size:10.5px">12M TP 578｜+16.1%</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">498</div><div class="co-metric-label">收盤價（2026-05-12）</div></div>
+      <div class="co-metric"><div class="co-metric-val">578</div><div class="co-metric-label">12M 目標價</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+16.1%</div><div class="co-metric-label">上檔空間</div></div>
+      <div class="co-metric"><div class="co-metric-val">+21.7%</div><div class="co-metric-label">含股息總報酬</div></div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">29.6<em> 元</em></div><div class="kpi-lbl">2026E EPS（加權）</div></div>
+    <div class="kpi"><div class="kpi-val">39.0%</div><div class="kpi-lbl">2026E 毛利率</div></div>
+    <div class="kpi gold"><div class="kpi-val">53.7%</div><div class="kpi-lbl">4 月 SoC 占比</div></div>
+    <div class="kpi green"><div class="kpi-val">657 元</div><div class="kpi-lbl">DCF Base 內含價值</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>結構轉型確立。</strong>SoC 占比 35%→44%→4 月 53.7%，由 Edge AI 影像 SoC（累計出貨 3 億顆）與 TV/Monitor SoC 推動，毛利率自 37.5% 連兩季回升至 39.06%。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>OLED TDDI 切入 Apple。</strong>2025 出貨突破 1,000 萬顆、2026 上修至 2,500 萬顆，導入 iPhone 17 Air 系列 + LG Display + 三星顯示，挑戰 Samsung LSI 主導地位。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>循環轉折訊號明確。</strong>4 月月營收 92.25 億、年增 +1.15%，為 14 個月以來首度轉正，2026 Q1 EPS 6.19 元創 5 季新高。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>估值三方法落 Buy 區。</strong>DCF 加權 644 元（+29.3%）、PE 加權 544 元（+9.2%）、Comps 加權 540 元（+8.4%），三方法加權 12M TP 578 元落 §4.3 Buy 門檻內。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">⑤</span><span><strong>下檔保護扎實。</strong>殖利率 4.62%（2026 cash div 23 元）+ 淨現金 487 億佔市值 16% + DCF 悲觀格 502 元（接近收盤），跌深仍有支撐。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">三情境 EPS 預估（2025 谷底後反轉）</div>
+      <div class="chart-sub">資料來源：MOPS / 公司年報 / GiS 研究估算</div>
+      <img class="chart-img" src="charts/chart_18_three_scenarios_eps.png">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Football Field 綜合估值區間</div>
+      <div class="chart-sub">PE × EPS / DCF / Comps / 殖利率四方法</div>
+      <img class="chart-img" src="charts/chart_21_football_field.png">
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>聯詠 3034 首次覆蓋｜執行摘要</span><span>P.2</span></div>
+</div>
+
+<!-- ═══ P3 投資論點 - Bull ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">投資論點｜多方論點（Bull Case）</h1>
+
+  <h2 class="ch">論點 1：SoC 結構性升級進入兌現期</h2>
+  <p>聯詠營收結構自 2025 Q4 出現質變。2025 Q4 SoC 占比 35%、Driver IC 65%；2026 Q1 SoC 升至 44%、創歷史新高；2026 年 4 月單月 SoC 占比達 53.7%。**結構升級的核心動能**是 Edge AI 影像 SoC（累計出貨 3 億顆，30 TOPS 代理式 AI 平台已量產）與 TV/Monitor SoC（管理層調整系統架構降 DRAM 用量、與客戶協商售價調漲）。SoC 毛利率推估 40-45%，高於 Driver IC 32-37%，產品組合改善直接推升整體毛利率自 25Q3 谷底 37.5% 連兩季回升至 26Q1 的 39.06%（堆疊圖詳見 P.7）。<span class="src">資料來源：公司法說會 2026-05-07 / 階段 1 公司研究 §2.1</span></p>
+
+  <h2 class="ch">論點 2：OLED TDDI 切入 Apple 供應鏈，挑戰 Samsung LSI</h2>
+  <p>聯詠 OLED TDDI 從 0 到 1 的進程在 2025-2026 兩年顯著加速。2025 年出貨突破 1,000 萬顆（優於原預期 700 萬顆），2026 年導入 Apple iPhone 17 Air 系列（聯詠取得 30-35% 配額、其餘由 Samsung LSI），同步打入 LG Display 與三星顯示 OLED 模組客戶供應鏈。**這是台灣 IC 設計廠首次在頂級智慧型手機 OLED 領域直接挑戰 Samsung LSI**，2026 出貨上修至 2,500 萬顆、2027 目標 4,200 萬顆。OLED TDDI 採聯電 22nm 高壓特殊製程，毛利率高於 LCD TDDI 約 5-8 pp，將是 2026-2028 年最直接的營收與毛利率雙升貢獻來源。<span class="src">資料來源：Digitimes / OFweek / 階段 1 §5.1</span></p>
+
+  <h2 class="ch">論點 3：Edge AI 視覺 SoC 已具規模，從題材變現實</h2>
+  <p>聯詠 Edge AI SoC 自 2019 年 CNN 物件辨識起步，演進到 2026 年代理式 AI 平台（30 TOPS 算力、可同時處理 16 路影像），累計出貨突破 **3 億顆**。應用涵蓋安防監控、智慧居家、掃地機器人、無人機、機器人、智慧眼鏡、運動相機、車用視覺、算力盒等。2026 Q1 SoC 營收 QoQ +26.15%，管理層明確點名主力為影像與機器視覺 Edge AI 產品；需求中國以外地區擴張，部分為地緣政治轉單。**Edge AI SoC 是台灣 IC 設計同業中唯一具備規模化邊緣 AI 視覺出貨經驗的廠商**，2027 法人估 Edge AI SoC 將超越傳統 Driver IC 成為第一大營收線。<span class="src">資料來源：公司投資人專區 / 階段 1 §2.5 / 階段 1 §6.3</span></p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>投資論點 Bull 1-3</span><span>P.3</span></div>
+</div>
+
+<!-- ═══ P4 投資論點 Bull 4 + Bear ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資論點｜多方論點延伸 + 空方論點（Bear Case）</h1>
+
+  <h2 class="ch">論點 4：循環底部訊號明確 + 殖利率支撐</h2>
+  <p>2026 年 4 月月營收 92.25 億新台幣，**月增 +8.93%、年增 +1.15% 為 14 個月以來首度轉正**，是循環底部訊號。2026 Q1 EPS 6.19 元為 5 季新高，Q2 指引 QoQ +19-23%、毛利率 38-41%。下檔有殖利率支撐——2026 年配發現金股利 23 元、以 498 元股價計算殖利率 4.62%；2027 法人預估現金股利 25-28 元、殖利率 5.0-5.6%，位列台股 IC 設計類股殖利率前段。淨現金 487 億佔市值 16%，財務結構零負債、不受循環影響配息能力。</p>
+
+  <div class="callout green">
+    <div class="callout-title">論點 5：四大細分市場 SAM 2025-2030 CAGR +11%</div>
+    依 Omdia / Yole / Mordor Intelligence 整合，聯詠 SAM 自 229 億美元升至 384 億美元，主要來自 Edge AI 視覺 SoC（CAGR +28%）與車用顯示 IC（CAGR +14%）兩條成長軸線。
+  </div>
+
+  <h1 class="ch">空方論點（Bear Case）</h1>
+
+  <h2 class="ch">風險 1：記憶體成本擠壓毛利</h2>
+  <p>2026 Q1 起 DRAM 與 NAND 價格累計上漲 25-40%，聯詠 TV SoC、手機 SoC、Auto SoC 內含 DRAM KGD，銷貨成本上升 3-5%。管理層已透過降低 DRAM density、合金取代金線、與客戶協商調價對沖，但**部分客戶不完全接受漲價**，若記憶體高價維持至 2026 H2，公司毛利率可能自 39% 滑落至 37-38%。</p>
+
+  <h2 class="ch">風險 2：中國手機 H1 出貨年減 15-20%</h2>
+  <p>聯詠中國品牌 LCD TDDI 客戶（小米、OPPO、vivo、傳音、Realme）2026 H1 出貨大幅衰退。雖然 OLED TDDI 補上部分缺口，但 LCD TDDI 規模約是 OLED TDDI 的 3-4 倍，淨影響仍偏負面。中性情境下，小尺寸 Driver IC 2026 全年營收年減 8-12%。</p>
+
+  <h2 class="ch">風險 3：H2 提前拉貨反噬</h2>
+  <p>H1 由記憶體漲價心理引發的提前拉貨潮帶動 Q1 EPS 6.19 元、Q2 QoQ +19-23%，但若 H2 終端需求（手機 + PC）實際 sell-through 不如預期，將出現庫存調整、ASP 下修、營收與毛利率雙降。**庫存 DOI 自 59 天升至 74 天已是警示訊號**，需密切觀察 Q3 月營收連續訊號。</p>
+
+  <div class="callout gold">
+    <div class="callout-title">研究員淨觀點</div>
+    多空權衡後，多方三大論點（SoC 轉型 + OLED TDDI 切入 Apple + Edge AI 規模化）已具兌現訊號，且循環底部訊號明確；空方主要風險集中在 H2 拉貨反噬（中等機率）與記憶體成本（高機率但管理層已對沖）。給予「**買進**」評等、上檔 +16.1%，下檔由 4.6% 殖利率與淨現金 487 億支撐。
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>投資論點 Bull 4-5 + Bear 1-3</span><span>P.4</span></div>
+</div>
+
+<!-- ═══ P5 章節 1 封面 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">01</div>
+  <div class="sec-eyebrow">Section One · Company Profile</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">公司 101｜從聯電分割到 SoC 雙引擎</div>
+  <div class="sec-desc">聯詠科技 1997 年自聯華電子分割獨立，2002 年於 TWSE 集中市場掛牌。28 年發展成為全球 DDI/TDDI 與 Monitor SoC 出貨量第一、Edge AI 視覺 SoC 全球領先的台灣 IC 設計三大之一。本章節介紹公司歷史、商業模式、管理層、產業地位、競爭對手與 TAM。</div>
+</div>
+
+<!-- ═══ P6 公司簡介 + 里程碑 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">1.1 公司簡介</h1>
+  <p><strong>聯詠科技股份有限公司</strong>（Novatek Microelectronics Corp.，3034.TW）成立於 1997 年 5 月 28 日，原為聯華電子（2303）IC 設計部門分割獨立，2002 年 8 月 26 日於台灣證券交易所集中市場掛牌交易。總部位於新竹科學園區創新一路 13 號，主要研發、設計、銷售顯示器驅動 IC、單晶片系統（SoC）、影像處理 IC 與電源管理 IC，採無晶圓廠（fabless）模式，晶圓代工夥伴為 TSMC、UMC、SMIC，封測委由 ASE、京元電。</p>
+  <p>2025 年合併營收 1,006.6 億新台幣（年減 2.07%），全年 EPS 26.87 元，員工約 4,500 人，其中研發人員 3,500 人（佔比 78%）。公司於台北、新竹、深圳、上海、合肥、首爾、東京、聖荷西、奧斯汀設有研發或業務據點。2025 年研發費用 175 億元、研發費用率 17.4%。</p>
+
+  <h2 class="ch">28 年發展里程碑</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">聯詠歷史重大里程碑（1997-2026）</div>
+    <div class="chart-sub">8 個關鍵節點：從聯電分割到 SoC 突破 50%</div>
+    <img class="chart-img" src="charts/chart_05_milestones.png">
+  </div>
+
+  <h2 class="ch">股本結構</h2>
+  <ul>
+    <li>流通股數約 6.09 億股，股本 60.85 億元</li>
+    <li>2026-05-12 收盤價 498 元，總市值 <strong>3,030 億新台幣</strong></li>
+    <li>外資持股 53.7%、本土三大法人 6.3%、董監事 1.0%、ESOP 0.8%、其餘散戶</li>
+    <li>連續 23 年配發現金股利，配發率長期 78-92%，殖利率支撐扎實</li>
+  </ul>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>1.1 公司簡介</span><span>P.6</span></div>
+</div>
+
+<!-- ═══ P7 商業模式 - 產品線 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">1.2 商業模式：三大產品線、四大應用</h1>
+
+  <h2 class="ch">產品線結構（2026 Q1 起 SoC 領跑）</h2>
+  <table>
+    <thead><tr><th>產品線</th><th>2025 Q4</th><th>2026 Q1</th><th>2026 年 4 月</th><th>方向</th></tr></thead>
+    <tbody>
+      <tr><td>SoC（TV / Edge AI / Monitor / Auto）</td><td class="num">35%</td><td class="num">44%</td><td class="num hi">53.7%</td><td class="pos">⬆️ 結構升級</td></tr>
+      <tr><td>小尺寸 Driver IC（手機 TDDI / 穿戴）</td><td class="num">43%</td><td class="num">33%</td><td class="num">—</td><td class="neg">⬇️ 中性偏弱</td></tr>
+      <tr><td>大尺寸 Driver IC（TV / Monitor / NB）</td><td class="num">22%</td><td class="num">23%</td><td class="num">—</td><td>➡️ 持平</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">營收 by 產品線（堆疊面積）</div>
+      <div class="chart-sub">SoC 佔比結構性提升</div>
+      <img class="chart-img" src="charts/chart_03_revenue_by_product.png">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">營收 by 地理（堆疊面積）</div>
+      <div class="chart-sub">中國占比下降、美韓擴張</div>
+      <img class="chart-img" src="charts/chart_04_revenue_by_region.png">
+    </div>
+  </div>
+
+  <h2 class="ch">終端應用</h2>
+  <p>四大應用：電視（22-25%）、手機（25-28%，LCD 衰退 + OLED 翻倍）、監視器（14-17%）、筆電（8-10%）。另有快速擴張的邊緣 AI 影像 SoC（8-12%）與車用顯示 IC（3-5%）。</p>
+
+  <h2 class="ch">客戶結構</h2>
+  <p>最大單一客戶為 Samsung Electronics（TV SoC 與部分手機 OLED TDDI），第二大為 Hisense；其他大型客戶包括 TCL、小米、OPPO、vivo、Sony、LG、Apple（透過 LGD 與 SDC OLED）、京東方、群創、友達、TCL CSOT、惠科。地理銷售：中國 35-40%、韓國 20-25%、台灣 12-15%、日本 8-10%、北美 6-8%、歐洲 4-6%。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>1.2 商業模式</span><span>P.7</span></div>
+</div>
+
+<!-- ═══ P8 商業模式 - 成本與護城河 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">1.3 成本結構與競爭優勢（Moat）</h1>
+
+  <h2 class="ch">成本結構（2025 銷貨成本占比）</h2>
+  <table>
+    <thead><tr><th>成本項</th><th>占銷貨成本</th><th>2026 變化</th></tr></thead>
+    <tbody>
+      <tr><td>晶圓代工費（TSMC 22nm/16nm、UMC 22nm HV、SMIC）</td><td class="num">55-60%</td><td class="neg">+3-7% 漲價</td></tr>
+      <tr><td>封裝測試（ASE、京元電、矽品）</td><td class="num">18-22%</td><td class="neg">+5-8% 緊缺</td></tr>
+      <tr><td>記憶體 KGD（DRAM 內含於部分 SoC）</td><td class="num">8-12%</td><td class="neg">+25-40% 大漲</td></tr>
+      <tr><td>金線、ABF 載板、基板</td><td class="num">6-10%</td><td class="neg">金價 + ABF 漲</td></tr>
+      <tr><td>其他材料</td><td class="num">5-8%</td><td>持平</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-title">晶圓代工夥伴產能配置（2026）</div>
+    <strong>TSMC 占比合計 53%</strong>（22nm/16nm 35% + N28/N40 18%）、<strong>UMC 22nm HV 22%</strong>（OLED TDDI 關鍵製程）、UMC 28/40nm 12%、SMIC 28nm 8%、其他 8 吋 5%。產能利用率 80-95%，UMC 22nm HV 達 95% 為最緊缺項。
+  </div>
+
+  <h2 class="ch">四層競爭優勢（Moat）</h2>
+  <ul>
+    <li><strong>規模 × 製程綁定。</strong>全球 DDI/TDDI 出貨量第一，2025 年全球 TDDI 市佔 28-32%，規模優勢使其在 TSMC 22nm 與 UMC 22nm HV 取得最佳產能配置，新進業者切入 OLED TDDI 已先輸三成成本。</li>
+    <li><strong>客戶 lock-in。</strong>TV SoC 與手機 OLED TDDI 客戶 design-in 週期 12-18 個月，認證後不易轉換，Samsung TV SoC 合作延續 15 年以上。</li>
+    <li><strong>產品線交叉補貼。</strong>跨足 DDI / SoC / 車用 / Edge AI 四大產品線，當某產品線進入下行週期時其他可吸收 R&D 與封測產能；2022-2024 LCD TDDI 衰退期由 TV SoC 與 Monitor SoC 撐住毛利率不破 36%。</li>
+    <li><strong>Edge AI 演算法 IP。</strong>累計 Edge AI SoC 出貨 3 億顆，30 TOPS 代理式 AI 平台已量產，是台灣 IC 設計同業中唯一具備規模化邊緣 AI 視覺出貨經驗的廠商。</li>
+  </ul>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>1.3 成本與護城河</span><span>P.8</span></div>
+</div>
+
+<!-- ═══ P9 管理層 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">1.4 管理層團隊（技術背景 × 內部晉升）</h1>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">股東結構（外資 53.7%）</div>
+      <div class="chart-sub">2026-04 底</div>
+      <img class="chart-img" src="charts/chart_06_shareholders.png">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">研發投入趨勢</div>
+      <div class="chart-sub">2025 研發費用 175 億、研發費用率 17.4%</div>
+      <img class="chart-img" src="charts/chart_09_rd.png">
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>職位</th><th>姓名</th><th>背景</th><th>關鍵貢獻</th></tr></thead>
+    <tbody>
+      <tr><td>董事長</td><td>何泰舜（Frank Ho）</td><td>交大電子碩士；2017 接任、2024-06 續任</td><td>主導 SoC 轉型策略，2020 宣示「車用、Edge AI、OLED」三大長期軸線</td></tr>
+      <tr><td>副董兼總經理</td><td>王守仁（Steve Wang）</td><td>交大電子學士、UIUC 電機博士；1997 創業核心</td><td>OLED TDDI 從 0 到 1 主導者，2024 切入 Apple iPhone 17</td></tr>
+      <tr><td>財務長</td><td>黃彩雲（Tracy Huang）</td><td>政大會計；2015 升任、發言人</td><td>下行週期維持 85%+ 配發率、發債鎖定低利、庫存管理</td></tr>
+      <tr><td>研發長</td><td>江勝榮（Sheng-Jung Jiang）</td><td>交大電機博士；2003 加入、2019 升任</td><td>主導 Edge AI SoC 從 CNN 到代理式 AI、整合研發部門效率 +15-20%</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>持股結構與經營者誘因：</strong>董監事合計持股 1.02%，何泰舜 0.18%、王守仁 0.15%。ESOP 為主要長期激勵工具，2025 年新員工選擇權對應 0.3% 股本、行權價綁定未來三年 ROE ≥ 18%。整體看，連續 23 年配息穩定的文化使外部股東與管理層利益對齊度合理。</p>
+
+  <div class="callout">
+    <div class="callout-title">接班議題（風險提示）</div>
+    何泰舜、王守仁均屆 60 歲以上，未來 3-5 年接班議題將浮現。研發長江勝榮被視為下任總經理熱門人選，但若接班過程出現內部競爭或外部挖角，可能影響決策連貫性（R-C-4）。
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>1.4 管理層</span><span>P.9</span></div>
+</div>
+
+<!-- ═══ P10 產業地位 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">1.5 產業地位｜全球市佔率與對標</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">聯詠全球市佔率 by 產品線（2025）</div>
+    <div class="chart-sub">老戰場領先 25-40%、新戰場挑戰 5-12%</div>
+    <img class="chart-img" src="charts/chart_14_global_share.png">
+  </div>
+
+  <h2 class="ch">與全球 IC 設計龍頭對比（2025）</h2>
+  <table>
+    <thead><tr><th>指標</th><th>聯詠 3034</th><th>聯發科 2454</th><th>瑞昱 2379</th><th>Synaptics</th><th>Samsung LSI</th></tr></thead>
+    <tbody>
+      <tr><td>2025 營收（億美元）</td><td class="num">31.8</td><td class="num">173.0</td><td class="num">35.0</td><td class="num">9.6</td><td class="num">~235</td></tr>
+      <tr><td>毛利率</td><td class="num hi">37.7%</td><td class="num">47.5%</td><td class="num">44.5%</td><td class="num">50.3%</td><td class="num">~37%</td></tr>
+      <tr><td>營益率</td><td class="num">18.0%</td><td class="num">21.5%</td><td class="num">16.0%</td><td class="num">22.0%</td><td class="num">~8%</td></tr>
+      <tr><td>R&D / 營收</td><td class="num">17.4%</td><td class="num">28.0%</td><td class="num">22.0%</td><td class="num">25.0%</td><td class="num">—</td></tr>
+      <tr><td>主力產品</td><td>DDI/SoC/Edge AI</td><td>手機 SoC/ASIC</td><td>網通/TV SoC/PC IC</td><td>觸控/HMI</td><td>DDI/CIS/Memory</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>對標重點：</strong>聯詠毛利率低於聯發科 10pp，主因聯發科切入手機 SoC（ASP 為聯詠 SoC 的 5-10 倍）與 ASIC 設計服務（Google TPU、Meta MTIA、Microsoft MAIA）。但**聯詠在 Edge AI 影像 SoC 累積 3 億顆出貨經驗，是聯發科未直接競爭的領域**。</p>
+
+  <h2 class="ch">在價值鏈中的位置</h2>
+  <p>聯詠處中游 IC 設計環節，向上委由 TSMC / UMC / SMIC 代工，向下供應給面板廠（BOE / SDC / LGD / 群創 / 友達 / TCL CSOT）與系統廠（Samsung / Hisense / TCL / Sony / 小米 / OPPO / vivo / Apple / Lenovo / HP / Dell）。**對台積電議價力中等**（前 10 大客戶但無法主導報價），**對下游議價力強**（2026 Q1 對含 KGD 的 SoC 與 TDDI 已成功調漲 5-10%）。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>1.5 產業地位</span><span>P.10</span></div>
+</div>
+
+<!-- ═══ P11 競爭分析 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">1.6 競爭分析｜八大對手結構</h1>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">Peer 毛利率對比（2025）</div>
+      <div class="chart-sub">聯詠 37.7% 居 IC 設計中位</div>
+      <img class="chart-img" src="charts/chart_15_peer_gm.png">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Comps 散點：成長 vs PE</div>
+      <div class="chart-sub">聯詠位於右上偏中（11% CAGR、18.5x PE）</div>
+      <img class="chart-img" src="charts/chart_22_comps_scatter.png">
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>對手</th><th>來源</th><th>2025 營收</th><th>毛利率</th><th>聯詠相對位置</th></tr></thead>
+    <tbody>
+      <tr><td>Samsung LSI（內部）</td><td>韓國 IDM</td><td class="num">~235 億 USD</td><td class="num">~37%</td><td>OLED TDDI 直接對手，iPhone 17 Air 配額 30-35%</td></tr>
+      <tr><td>Magnachip</td><td>韓國（NASDAQ MX）</td><td class="num">2.4 億 USD</td><td class="num">20-22%</td><td>中階 OLED DDI 競爭，2026 聯詠搶 2-3pp</td></tr>
+      <tr><td>LX Semicon</td><td>韓國（LG 集團）</td><td class="num">21 億 USD</td><td class="num">24%</td><td>大尺寸 OLED DDIC 領先，聯詠 NB OLED 切入中</td></tr>
+      <tr><td>奇景光電 5474</td><td>台灣（NASDAQ HIMX）</td><td class="num">8.5 億 USD</td><td class="num">23.5%</td><td>車用顯示 IC 第一（40%），聯詠車用挑戰者</td></tr>
+      <tr><td>矽創 3257</td><td>台灣</td><td class="num">4.3 億 USD</td><td class="num">32%</td><td>低階 LCD TDDI 聯詠主動放棄</td></tr>
+      <tr><td>聯發科 2454</td><td>台灣</td><td class="num">173 億 USD</td><td class="num">47.5%</td><td>TV SoC 直接競爭，客戶分群明確</td></tr>
+      <tr><td>瑞昱 2379</td><td>台灣</td><td class="num">35 億 USD</td><td class="num">44.5%</td><td>TV SoC 三強之一，Sony / LG 主導</td></tr>
+      <tr><td>Ambarella</td><td>美國</td><td class="num">2.4 億 USD</td><td class="num">60%</td><td>高階車用 ADAS，聯詠中階 AIoT 區隔</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <div class="callout-title">競爭格局總結</div>
+    <strong>老戰場領先</strong>（LCD DDI/TDDI、TV SoC、Monitor SoC、Notebook DDI，全球市佔 25-40%）+ <strong>新戰場挑戰</strong>（OLED TDDI、Edge AI、車用 OLED，市佔 5-12% 但快速滲透）。2026 OLED TDDI 目標市佔 12-15%（vs 2025 約 10%）。
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>1.6 競爭分析</span><span>P.11</span></div>
+</div>
+
+<!-- ═══ P12 TAM ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">1.7 TAM 估算｜四大細分市場</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">四大細分市場 TAM 2025→2030</div>
+    <div class="chart-sub">合計 SAM CAGR +11%（229→384 億美元）</div>
+    <img class="chart-img" src="charts/chart_13_tam.png">
+  </div>
+
+  <table>
+    <thead><tr><th>細分市場</th><th>2025 TAM</th><th>2030E TAM</th><th>CAGR</th><th>聯詠 2025 滲透</th><th>2030 目標</th></tr></thead>
+    <tbody>
+      <tr><td>DDI/TDDI（LCD + OLED）</td><td class="num">121 億 USD</td><td class="num">148 億</td><td class="num">+4%</td><td class="num">28-32%</td><td class="num">28%</td></tr>
+      <tr><td>TV / Monitor / NB SoC</td><td class="num">55 億</td><td class="num">75 億</td><td class="num">+6%</td><td class="num">30%</td><td class="num">32%</td></tr>
+      <tr><td>Edge AI 視覺 SoC</td><td class="num">38 億</td><td class="num">132 億</td><td class="num hi">+28%</td><td class="num">12-15%</td><td class="num hi">25-30%</td></tr>
+      <tr><td>車用顯示 IC</td><td class="num">15 億</td><td class="num">29 億</td><td class="num">+14%</td><td class="num">3-5%</td><td class="num">8-10%</td></tr>
+      <tr><td><strong>合計 SAM</strong></td><td class="num hi">229 億</td><td class="num hi">384 億</td><td class="num hi">+11%</td><td class="num hi">~14%</td><td class="num">~18%</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>研究員觀點：</strong>聯詠 2025 合併營收 31.8 億美元、佔合計 SAM 約 13.9%。若 2030 年公司能維持目前市佔、並在 Edge AI 與車用領域市佔提升至 30% / 10%，營收上限約 2,100-2,400 億新台幣（vs 2025 1,007 億），相當於 2025-2030 年 CAGR +16-19%。但這需要 OLED TDDI 與 Edge AI 雙軸線同步成功，是首次覆蓋報告的核心情境假設。</p>
+
+  <div class="chart-wrap">
+    <div class="chart-title">5 年技術藍圖 / 產品 Roadmap</div>
+    <div class="chart-sub">五大產品線 × 五年節點</div>
+    <img class="chart-img" src="charts/chart_17_roadmap.png">
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>1.7 TAM</span><span>P.12</span></div>
+</div>
+
+<!-- ═══ P13 章節 2 封面 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">02</div>
+  <div class="sec-eyebrow">Section Two · Financial Analysis</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">財務分析與預估｜2025 谷底、2026 反轉</div>
+  <div class="sec-desc">本章節整合 MOPS 5 年權威歷史財務、最近 18 個月月營收驗證、9 季季財務、5 年 forward 損益預估、現金流預估、三情境模型與 DCF 輸入。2025 為循環谷底（EPS 26.87、毛利率 37.7%），2026 反轉訊號明確（Q1 EPS 6.19、4 月月營收 +1.15% YoY）。</div>
+</div>
+
+<!-- ═══ P14 5 年歷史財務 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">2.1 五年歷史財務（2021-2025）</h1>
+
+  <table>
+    <thead><tr><th>項目（億新台幣）</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead>
+    <tbody>
+      <tr><td>合併營收</td><td class="num">1,346.5</td><td class="num">1,127.8</td><td class="num">925.5</td><td class="num">1,028.0</td><td class="num hi">1,006.6</td></tr>
+      <tr><td>營收 YoY</td><td class="num pos">+83.6%</td><td class="num neg">-16.2%</td><td class="num neg">-17.9%</td><td class="num pos">+11.1%</td><td class="num neg">-2.1%</td></tr>
+      <tr><td>營業毛利</td><td class="num">593.0</td><td class="num">486.3</td><td class="num">381.1</td><td class="num">414.4</td><td class="num">379.1</td></tr>
+      <tr><td>毛利率</td><td class="num">44.0%</td><td class="num">43.1%</td><td class="num">41.2%</td><td class="num">40.3%</td><td class="num hi">37.7%</td></tr>
+      <tr><td>營業利益</td><td class="num">445.0</td><td class="num">327.6</td><td class="num">217.6</td><td class="num">235.7</td><td class="num">194.6</td></tr>
+      <tr><td>營益率</td><td class="num">33.0%</td><td class="num">29.0%</td><td class="num">23.5%</td><td class="num">22.9%</td><td class="num hi">19.3%</td></tr>
+      <tr><td>稅後淨利</td><td class="num">386.8</td><td class="num">280.4</td><td class="num">203.6</td><td class="num">210.4</td><td class="num">163.6</td></tr>
+      <tr><td>EPS（元）</td><td class="num pos">63.88</td><td class="num">45.96</td><td class="num">38.32</td><td class="num">33.43</td><td class="num neg">26.87</td></tr>
+      <tr><td>ROE</td><td class="num">49.5%</td><td class="num">33.2%</td><td class="num">23.1%</td><td class="num">22.7%</td><td class="num">17.1%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">EPS 與毛利率歷史走勢</div>
+      <div class="chart-sub">2025 為循環谷底</div>
+      <img class="chart-img" src="charts/chart_02_eps_gm_trend.png">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">毛利率 / 營益率多季趨勢</div>
+      <div class="chart-sub">25Q3 谷底、26Q1 回升</div>
+      <img class="chart-img" src="charts/chart_10_gm_opm_qtrly.png">
+    </div>
+  </div>
+
+  <p><strong>讀法：</strong>2021 EPS 63.88 元為歷史新高（面板缺料 + COVID 宅經濟），2022-2024 連三年下行，2025 毛利率跌破 38%、營益率跌破 20% 為循環谷底。但 ROE 仍維持 17%，反映公司在景氣谷底仍有相對優異獲利能力。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>2.1 5 年歷史財務</span><span>P.14</span></div>
+</div>
+
+<!-- ═══ P15 月營收 + 季財務 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">2.2 月營收與季財務（轉折訊號驗證）</h1>
+
+  <h2 class="ch">最近 16 個月月營收（億新台幣）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>月</th><th>金額</th><th>YoY</th><th>月</th><th>金額</th><th>YoY</th><th>月</th><th>金額</th><th>YoY</th><th>月</th><th>金額</th><th>YoY</th></tr></thead>
+    <tbody>
+      <tr><td>25/01</td><td class="num">84.8</td><td class="num neg">-2.7%</td><td>25/05</td><td class="num">86.1</td><td class="num pos">+2.0%</td><td>25/09</td><td class="num">82.8</td><td class="num neg">-7.2%</td><td>26/01</td><td class="num">76.2</td><td class="num neg">-10.2%</td></tr>
+      <tr><td>25/02</td><td class="num">92.7</td><td class="num pos">+29.9%</td><td>25/06</td><td class="num">84.3</td><td class="num neg">-0.4%</td><td>25/10</td><td class="num">78.8</td><td class="num neg">-7.6%</td><td>26/02</td><td class="num">70.6</td><td class="num neg">-23.8%</td></tr>
+      <tr><td>25/03</td><td class="num">93.7</td><td class="num pos">+9.3%</td><td>25/07</td><td class="num">81.2</td><td class="num neg">-12.4%</td><td>25/11</td><td class="num">76.2</td><td class="num neg">-7.2%</td><td>26/03</td><td class="num">84.7</td><td class="num neg">-9.6%</td></tr>
+      <tr><td>25/04</td><td class="num">91.2</td><td class="num pos">+9.5%</td><td>25/08</td><td class="num">81.8</td><td class="num neg">-15.5%</td><td>25/12</td><td class="num">73.2</td><td class="num neg">-14.2%</td><td class="hi"><strong>26/04</strong></td><td class="num hi"><strong>92.3</strong></td><td class="num pos hi"><strong>+1.2%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <thead><tr><th>季別</th><th>季營收（億）</th><th>YoY</th><th>毛利率</th><th>營益率</th><th>EPS</th></tr></thead>
+    <tbody>
+      <tr><td>2024 Q1</td><td class="num">252.9</td><td class="num pos">+13.5%</td><td class="num">41.2%</td><td class="num">23.5%</td><td class="num">8.04</td></tr>
+      <tr><td>2024 Q2</td><td class="num">277.0</td><td class="num pos">+20.5%</td><td class="num">40.5%</td><td class="num">23.0%</td><td class="num">8.86</td></tr>
+      <tr><td>2024 Q3</td><td class="num">280.3</td><td class="num pos">+16.5%</td><td class="num">40.0%</td><td class="num">22.5%</td><td class="num">8.64</td></tr>
+      <tr><td>2024 Q4</td><td class="num">257.5</td><td class="num pos">+5.5%</td><td class="num">39.8%</td><td class="num">21.5%</td><td class="num">7.89</td></tr>
+      <tr><td>2025 Q1</td><td class="num">271.2</td><td class="num pos">+7.2%</td><td class="num">39.5%</td><td class="num">21.0%</td><td class="num">8.65</td></tr>
+      <tr><td>2025 Q2</td><td class="num">261.5</td><td class="num neg">-5.6%</td><td class="num">38.5%</td><td class="num">20.0%</td><td class="num">6.14</td></tr>
+      <tr><td>2025 Q3</td><td class="num">245.7</td><td class="num neg">-12.3%</td><td class="num">37.5%</td><td class="num hi">18.5%</td><td class="num">6.01</td></tr>
+      <tr><td>2025 Q4</td><td class="num">228.2</td><td class="num neg">-11.4%</td><td class="num">38.2%</td><td class="num">16.9%</td><td class="num">6.07</td></tr>
+      <tr><td class="hi"><strong>2026 Q1</strong></td><td class="num hi">231.5</td><td class="num neg">-14.7%</td><td class="num hi"><strong>39.1%</strong></td><td class="num hi"><strong>17.4%</strong></td><td class="num hi"><strong>6.19</strong></td></tr>
+      <tr><td>2026 Q2E（公司指引中位）</td><td class="num">280.0</td><td class="num pos">+7.1%</td><td class="num">39.5%</td><td class="num">17.5%</td><td class="num">7.50</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <div class="callout-title">循環轉折訊號（三個錨點）</div>
+    ① 25Q3 為營益率谷底 18.5%，26Q1 已連兩季回升至 17.4%（前期遞延效應，毛利率已先升）<br>
+    ② 26Q1 EPS 6.19 元為 5 季新高<br>
+    ③ 2026 年 4 月月營收 92.25 億、YoY +1.15% 為 14 個月以來首度轉正
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>2.2 月營收與季財務</span><span>P.15</span></div>
+</div>
+
+<!-- ═══ P16 5 年 forward + 三情境 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">2.3 五年 Forward 預估（2026-2030）</h1>
+
+  <table>
+    <thead><tr><th>項目（億 / 元）</th><th>2025 實</th><th>2026B</th><th>2027B</th><th>2028B</th><th>2029B</th><th>2030B</th></tr></thead>
+    <tbody>
+      <tr><td>合併營收</td><td class="num">1,007</td><td class="num hi">1,097</td><td class="num">1,219</td><td class="num">1,353</td><td class="num">1,461</td><td class="num">1,549</td></tr>
+      <tr><td>YoY</td><td class="num neg">-2.1%</td><td class="num pos">+9.0%</td><td class="num pos">+11.1%</td><td class="num pos">+11.0%</td><td class="num pos">+8.0%</td><td class="num pos">+6.0%</td></tr>
+      <tr><td>毛利率</td><td class="num">37.7%</td><td class="num">39.0%</td><td class="num">39.8%</td><td class="num">40.5%</td><td class="num">41.0%</td><td class="num">41.5%</td></tr>
+      <tr><td>營益率</td><td class="num">19.3%</td><td class="num">17.5%</td><td class="num">17.8%</td><td class="num">18.5%</td><td class="num">19.0%</td><td class="num">19.5%</td></tr>
+      <tr><td>稅後淨利</td><td class="num">164</td><td class="num">180</td><td class="num">202</td><td class="num">230</td><td class="num">254</td><td class="num">276</td></tr>
+      <tr><td><strong>EPS（元）</strong></td><td class="num"><strong>26.87</strong></td><td class="num hi"><strong>29.6</strong></td><td class="num"><strong>33.2</strong></td><td class="num"><strong>37.8</strong></td><td class="num"><strong>41.7</strong></td><td class="num"><strong>45.3</strong></td></tr>
+      <tr><td>現金股利（元）</td><td class="num">23.0</td><td class="num">25.2</td><td class="num">28.2</td><td class="num">32.1</td><td class="num">35.4</td><td class="num">38.5</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">三情境完整 EPS 路徑</h2>
+  <table>
+    <thead><tr><th>情境</th><th>機率</th><th>2026E</th><th>2027E</th><th>2028E</th><th>2029E</th><th>2030E</th><th>5Y CAGR</th></tr></thead>
+    <tbody>
+      <tr><td>Bear（H2 拉貨反噬 + 中國手機 -25%）</td><td class="num">30%</td><td class="num">26.5</td><td class="num">29.5</td><td class="num">33.0</td><td class="num">36.5</td><td class="num">39.5</td><td class="num">+8.0%</td></tr>
+      <tr><td class="hi"><strong>Base（管理層口徑 +9%、毛利小升）</strong></td><td class="num hi">50%</td><td class="num hi">29.6</td><td class="num hi">33.2</td><td class="num hi">37.8</td><td class="num hi">41.7</td><td class="num hi">45.3</td><td class="num hi">+11.0%</td></tr>
+      <tr><td>Bull（OLED TDDI 上修 + Edge AI 爆量 + 車用啟動）</td><td class="num">20%</td><td class="num">33.5</td><td class="num">38.5</td><td class="num">43.5</td><td class="num">49.0</td><td class="num">54.5</td><td class="num">+15.2%</td></tr>
+      <tr><td><strong>機率加權</strong></td><td class="num">100%</td><td class="num hi">29.6</td><td class="num hi">33.0</td><td class="num">37.6</td><td class="num">41.6</td><td class="num">45.0</td><td class="num">+10.9%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">三情境 EPS 預估</div>
+      <div class="chart-sub">2025 谷底後反轉</div>
+      <img class="chart-img" src="charts/chart_18_three_scenarios_eps.png">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">三情境營收路徑</div>
+      <div class="chart-sub">2030 Base 達 1,549 億</div>
+      <img class="chart-img" src="charts/chart_19_three_scenarios_rev.png">
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>2.3 五年 Forward 預估</span><span>P.16</span></div>
+</div>
+
+<!-- ═══ P17 現金流 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">2.4 現金流預估（Base Case）</h1>
+
+  <table>
+    <thead><tr><th>項目（億新台幣）</th><th>2025</th><th>2026E</th><th>2027E</th><th>2028E</th><th>2029E</th><th>2030E</th></tr></thead>
+    <tbody>
+      <tr><td>稅後淨利</td><td class="num">164</td><td class="num">180</td><td class="num">202</td><td class="num">230</td><td class="num">254</td><td class="num">276</td></tr>
+      <tr><td>+ 折舊攤銷</td><td class="num">25</td><td class="num">30</td><td class="num">35</td><td class="num">42</td><td class="num">48</td><td class="num">52</td></tr>
+      <tr><td>- 營運資金變動</td><td class="num">-15</td><td class="num">-20</td><td class="num">-25</td><td class="num">-28</td><td class="num">-22</td><td class="num">-18</td></tr>
+      <tr><td>營運現金流</td><td class="num">245</td><td class="num">190</td><td class="num">212</td><td class="num">244</td><td class="num">280</td><td class="num">310</td></tr>
+      <tr><td>資本支出</td><td class="num">-18</td><td class="num">-29</td><td class="num">-35</td><td class="num">-32</td><td class="num">-28</td><td class="num">-25</td></tr>
+      <tr><td><strong>自由現金流（FCF）</strong></td><td class="num">228</td><td class="num"><strong>151</strong></td><td class="num"><strong>165</strong></td><td class="num"><strong>197</strong></td><td class="num"><strong>234</strong></td><td class="num"><strong>265</strong></td></tr>
+      <tr><td>現金股利支付</td><td class="num">-158</td><td class="num">-140</td><td class="num">-153</td><td class="num">-172</td><td class="num">-195</td><td class="num">-215</td></tr>
+      <tr><td>期末現金</td><td class="num">487</td><td class="num">498</td><td class="num">510</td><td class="num">535</td><td class="num">574</td><td class="num">624</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-wrap">
+    <div class="chart-title">自由現金流 vs 現金股利支付</div>
+    <div class="chart-sub">FCF 持續覆蓋股利、財務結構穩健</div>
+    <img class="chart-img" src="charts/chart_12_fcf_div.png">
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">資本支出結構（2026）</div>
+    2026 CapEx 29 億為 5 年新高，含：（1）銅鑼資料中心擴建（支援先進製程設計與 Edge AI 運算）約 12 億；（2）研發設備與 EDA 工具升級 8 億；（3）廠房與測試設備 9 億。法人估 2027-2028 CapEx 維持 30-35 億高位，2029-2030 回落至 25-28 億。
+  </div>
+
+  <p>5 年累計 FCF 1,012 億，足以支撐 5 年累計現金股利 875 億，<strong>FCF / 股利覆蓋倍數 1.16x</strong>，配息政策可持續性高。期末現金預計維持 500-620 億，佔總資產 30% 以上。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>2.4 現金流預估</span><span>P.17</span></div>
+</div>
+
+<!-- ═══ P18 章節 3 封面 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">03</div>
+  <div class="sec-eyebrow">Section Three · Valuation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">估值分析｜PE × DCF × Comps 三方法</div>
+  <div class="sec-desc">本章節以 GiS 估值方法論 §3-4（PE 主、DCF 副）、§8（DCF）、§9（Comps）、§10（敏感度）、§4.3（評等門檻）為框架。三方法加權 12M 目標價 578 元、上檔 +16.1%、落 §4.3「買進 (Buy) >+15%」門檻內。</div>
+</div>
+
+<!-- ═══ P19 PE-based + PE Band ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">3.1 PE-based 估值</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">5 年歷史 PE Band</div>
+    <div class="chart-sub">Mean 12.08x、±1σ [8.06, 16.10]、當前 18.48x</div>
+    <img class="chart-img" src="charts/chart_23_pe_band.png">
+  </div>
+
+  <table>
+    <thead><tr><th>情境</th><th>機率</th><th>Target PE</th><th>2027E EPS</th><th>目標價</th></tr></thead>
+    <tbody>
+      <tr><td>Bear</td><td class="num">30%</td><td class="num">14.0x</td><td class="num">29.5</td><td class="num">413</td></tr>
+      <tr><td class="hi"><strong>Base</strong></td><td class="num hi">50%</td><td class="num hi">16.5x</td><td class="num hi">33.2</td><td class="num hi"><strong>548</strong></td></tr>
+      <tr><td>Bull</td><td class="num">20%</td><td class="num">19.0x</td><td class="num">38.5</td><td class="num">731</td></tr>
+      <tr><td><strong>PE 加權目標價</strong></td><td class="num">100%</td><td>—</td><td>—</td><td class="num hi"><strong>544</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">敏感度 B：2027E EPS × Target PE（中心 = 548）</h2>
+  <table>
+    <thead><tr><th>EPS \ PE</th><th>14.0x</th><th>15.5x</th><th>16.5x</th><th>18.0x</th><th>19.5x</th></tr></thead>
+    <tbody>
+      <tr><td>29.0（Bear）</td><td class="num">406</td><td class="num">450</td><td class="num">479</td><td class="num">522</td><td class="num">566</td></tr>
+      <tr><td>31.0</td><td class="num">434</td><td class="num">481</td><td class="num">512</td><td class="num">558</td><td class="num">605</td></tr>
+      <tr><td><strong>33.2（Base）</strong></td><td class="num">465</td><td class="num">515</td><td class="num hi"><strong>548</strong></td><td class="num">598</td><td class="num">647</td></tr>
+      <tr><td>35.5</td><td class="num">497</td><td class="num">550</td><td class="num">586</td><td class="num">639</td><td class="num">692</td></tr>
+      <tr><td>38.5（Bull）</td><td class="num">539</td><td class="num">597</td><td class="num">635</td><td class="num">693</td><td class="num">751</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>PE band 解讀：</strong>5Y mean PE 偏低（12.08x），因 2021-2024 EPS 高峰期股價未等比升高。**目前 PE 18.48x 已介於 +1σ 與 +2σ 之間，反映市場已部分 price in SoC 轉型故事**。Target PE 設定中性偏正：Base 16.5x（接近 +1σ）反映結構升級合理重估、Bull 19x 假設與聯發科/瑞昱估值收斂。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>3.1 PE-based</span><span>P.19</span></div>
+</div>
+
+<!-- ═══ P20 DCF + WACC×g 敏感度 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">3.2 DCF 估值（三情境 + 5×5 敏感度）</h1>
+
+  <table>
+    <thead><tr><th>項目</th><th>Bear</th><th>Base</th><th>Bull</th></tr></thead>
+    <tbody>
+      <tr><td>WACC</td><td class="num">9.0%</td><td class="num">9.0%</td><td class="num">9.0%</td></tr>
+      <tr><td>永續成長率 g</td><td class="num">2.0%</td><td class="num">2.5%</td><td class="num">3.0%</td></tr>
+      <tr><td>企業價值 EV（億）</td><td class="num">2,725</td><td class="num">3,508</td><td class="num">4,425</td></tr>
+      <tr><td>+ 淨現金（億）</td><td class="num">487</td><td class="num">487</td><td class="num">487</td></tr>
+      <tr><td>股權價值（億）</td><td class="num">3,212</td><td class="num">3,995</td><td class="num">4,912</td></tr>
+      <tr><td><strong>DCF 每股價值（元）</strong></td><td class="num"><strong>528</strong></td><td class="num hi"><strong>657</strong></td><td class="num"><strong>807</strong></td></tr>
+      <tr><td>機率（30/50/20）</td><td class="num">30%</td><td class="num">50%</td><td class="num">20%</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>DCF 加權每股價值 = 644 元</strong></p>
+
+  <div class="chart-wrap">
+    <div class="chart-title">DCF 敏感度熱力圖（WACC × g）</div>
+    <div class="chart-sub">中心格 Base 657 元、悲觀格 502 元（WACC 10% / g 1.5%）仍接近收盤 498</div>
+    <img class="chart-img" src="charts/chart_20_dcf_sensitivity.png">
+  </div>
+
+  <div class="callout" style="margin-top:10px">
+    <div class="callout-title">WACC 9% 計算（CAPM）</div>
+    Rf 1.45%（台灣 10Y 公債 2026-05）＋ Beta 1.05（5Y vs 加權）× ERP 7.5%（台股長期）＝ <strong>股權成本 Re 9.3%</strong>。稅後負債成本 2.87%（3.5%×(1-18%)）。權益 / 負債佔比 95% / 5%（負債極低）→ <strong>WACC = 8.98% ≈ 9.0%</strong>。
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>3.2 DCF 估值</span><span>P.20</span></div>
+</div>
+
+<!-- ═══ P21 Comps + 殖利率 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">3.3 Comps 同業估值 + 3.4 殖利率交叉驗證</h1>
+
+  <table>
+    <thead><tr><th>公司</th><th>代號</th><th>2025 營收</th><th>毛利率</th><th>PE</th><th>EV/EBITDA</th><th>P/B</th><th>殖利率</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td><strong>聯詠</strong></td><td>3034</td><td class="num">31.8 億 USD</td><td class="num">37.7%</td><td class="num"><strong>18.5x</strong></td><td class="num">13.2x</td><td class="num">3.8x</td><td class="num">4.6%</td></tr>
+      <tr><td>聯發科</td><td>2454</td><td class="num">173 億</td><td class="num">47.5%</td><td class="num">22.0x</td><td class="num">16.5x</td><td class="num">4.5x</td><td class="num">3.8%</td></tr>
+      <tr><td>瑞昱</td><td>2379</td><td class="num">35 億</td><td class="num">44.5%</td><td class="num">21.0x</td><td class="num">15.0x</td><td class="num">3.5x</td><td class="num">3.2%</td></tr>
+      <tr><td>矽創</td><td>3257</td><td class="num">4.3 億</td><td class="num">32.0%</td><td class="num">13.0x</td><td class="num">9.5x</td><td class="num">2.2x</td><td class="num">6.5%</td></tr>
+      <tr><td>奇景</td><td>5474</td><td class="num">8.5 億</td><td class="num">23.5%</td><td class="num">12.0x</td><td class="num">8.8x</td><td class="num">1.5x</td><td class="num">5.0%</td></tr>
+      <tr><td>Synaptics</td><td>SYNA</td><td class="num">9.6 億</td><td class="num">50.3%</td><td class="num">16.0x</td><td class="num">11.5x</td><td class="num">2.8x</td><td>—</td></tr>
+      <tr><td>Magnachip</td><td>MX</td><td class="num">2.4 億</td><td class="num">20.5%</td><td class="num">17.0x</td><td class="num">10.0x</td><td class="num">1.8x</td><td>—</td></tr>
+      <tr><td>LX Semicon</td><td>108320</td><td class="num">21 億</td><td class="num">24.0%</td><td class="num">12.5x</td><td class="num">8.5x</td><td class="num">1.6x</td><td class="num">4.2%</td></tr>
+      <tr><td><strong>Peer Median</strong></td><td>—</td><td>—</td><td>—</td><td class="num hi"><strong>16.5x</strong></td><td class="num">11.0x</td><td class="num">2.5x</td><td class="num">4.6%</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Comps 估值</strong>：Peer Median PE 16.5x × 2027E EPS 33.2 = <strong>548 元</strong>。Comps 加權目標價 = 0.3 × 465 + 0.5 × 548 + 0.2 × 597 = <strong>540 元</strong></p>
+
+  <h2 class="ch">3.4 殖利率交叉驗證</h2>
+  <table>
+    <thead><tr><th>殖利率假設</th><th>2028 預估現金股利</th><th>對應股價</th></tr></thead>
+    <tbody>
+      <tr><td>6.0%（保守）</td><td class="num">28.2 元</td><td class="num">470</td></tr>
+      <tr><td class="hi"><strong>5.0%（中性）</strong></td><td class="num hi">28.2 元</td><td class="num hi"><strong>564</strong></td></tr>
+      <tr><td>4.0%（樂觀）</td><td class="num">28.2 元</td><td class="num">705</td></tr>
+      <tr><td><strong>殖利率加權目標價</strong></td><td>—</td><td class="num hi"><strong>561</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-wrap">
+    <div class="chart-title">歷史 P/B Band</div>
+    <div class="chart-sub">當前 3.83x 接近上緣</div>
+    <img class="chart-img" src="charts/chart_24_pb_band.png">
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>3.3-3.4 Comps + 殖利率</span><span>P.21</span></div>
+</div>
+
+<!-- ═══ P22 Football Field + 採用結論 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">3.5 Football Field 綜合估值區間 + 3.6 採用結論</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">Football Field 綜合估值（四方法）</div>
+    <div class="chart-sub">中位 556、平均 579、加權目標 578</div>
+    <img class="chart-img" src="charts/chart_21_football_field.png">
+  </div>
+
+  <table>
+    <thead><tr><th>方法</th><th>Bear</th><th>Base</th><th>Bull</th><th>三情境加權</th><th>採用權重</th><th>加權貢獻</th></tr></thead>
+    <tbody>
+      <tr><td>PE × 2027E EPS</td><td class="num">413</td><td class="num">548</td><td class="num">731</td><td class="num">544</td><td class="num">40%</td><td class="num">218</td></tr>
+      <tr><td>DCF 10 年模型</td><td class="num">528</td><td class="num">657</td><td class="num">807</td><td class="num">644</td><td class="num">35%</td><td class="num">225</td></tr>
+      <tr><td>Comps Peer PE</td><td class="num">465</td><td class="num">548</td><td class="num">597</td><td class="num">540</td><td class="num">25%</td><td class="num">135</td></tr>
+      <tr><td class="hi"><strong>12M 目標價（加權）</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>100%</td><td class="num hi"><strong>578</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">買進 Buy</div><div class="kpi-lbl">GiS §4.3 評等</div></div>
+    <div class="kpi"><div class="kpi-val">578 元</div><div class="kpi-lbl">12M 目標價</div></div>
+    <div class="kpi gold"><div class="kpi-val">+16.1%</div><div class="kpi-lbl">上檔空間</div></div>
+    <div class="kpi green"><div class="kpi-val">+21.7%</div><div class="kpi-lbl">含股息總報酬</div></div>
+  </div>
+
+  <div class="callout green">
+    <div class="callout-title">為什麼是 Buy（不是 OW）</div>
+    加權目標 578 元、上檔 +16.1%，<strong>過 +15% Buy 門檻 1.1pp</strong>。依方法論 §4.3 鐵律「加權 TP 算出後直接對照落格、不主觀降級不主觀升級」，正確落格為 <strong>買進 (Buy)</strong>。DCF Base 657 元（+29%）暗示更強上檔，PE 與 Comps 偏保守拉低加權至 +16.1%（落 Buy 區下緣）。
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>3.5-3.6 Football Field + 採用結論</span><span>P.22</span></div>
+</div>
+
+<!-- ═══ P23 12M 追蹤節點 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">3.7 12M 目標價追蹤節點</h1>
+
+  <div class="timeline">
+    <div class="tl-item active">
+      <div class="tl-year">2026-08</div>
+      <div class="tl-spec">Q2 法說</div>
+      <div class="tl-tech">EPS / SoC 占比 / Q3 指引</div>
+    </div>
+    <div class="tl-item next">
+      <div class="tl-year">2026-11</div>
+      <div class="tl-spec">Q3 法說</div>
+      <div class="tl-tech">Q3 是否符合 Q2 指引 / 庫存 DOI<br>關鍵觀察點</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2027-02</div>
+      <div class="tl-spec">Q4 法說</div>
+      <div class="tl-tech">2026 全年 EPS / 2027 展望</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2027-05</div>
+      <div class="tl-spec">Q1/2027</div>
+      <div class="tl-tech">配息率 / OLED TDDI 進度</div>
+    </div>
+  </div>
+
+  <h2 class="ch">評等下修觸發條件</h2>
+  <ul>
+    <li>Q3 月營收連續 3 個月 YoY 轉負（拉貨反噬實現）</li>
+    <li>2026 全年 EPS 低於 27 元（Bear 機率上調至 40%+）</li>
+    <li>OLED TDDI Apple 訂單份額自 30-35% 降至 20%（產品線結構失速）</li>
+    <li>SoC 占比連兩季回落至 40% 以下（結構升級故事破滅）</li>
+  </ul>
+
+  <h2 class="ch">評等上修觸發條件</h2>
+  <ul>
+    <li>2026 全年 EPS 超 33 元（Bull 機率上調至 30%+）</li>
+    <li>OLED TDDI 2026 出貨突破 3,000 萬顆（vs 預期 2,500）</li>
+    <li>車用 OLED 提前於 2026 Q4 量產（vs 預期 2027）</li>
+    <li>4nm HPC ASIC 取得 Tier-1 客戶訂單（vs 預期 2028 後）</li>
+  </ul>
+
+  <div class="callout gold">
+    <div class="callout-title">邊界風險提示</div>
+    +16.1% 與 +15% Buy 門檻僅差 1.1pp。若 Bear 機率上調至 40%+（H2 拉貨反噬擴大）、或 Comps Peer PE 中位再下修 0.5x，加權目標價可能掉至 OW（5-15%）區。<strong>Q3 法說（2026-11）為關鍵驗證點</strong>。
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>3.7 追蹤節點</span><span>P.23</span></div>
+</div>
+
+<!-- ═══ P24 章節 4 封面 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">04</div>
+  <div class="sec-eyebrow">Section Four · Risks & Appendix</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">風險矩陣與附錄</div>
+  <div class="sec-desc">12 項風險拆解：產業 4 + 公司 4 + 財務 2 + 估值 2，每項標註機率 × 衝擊與對應策略。附錄含 5 年完整損益表、資產負債表、敏感度補充表與資料來源完整清單。</div>
+</div>
+
+<!-- ═══ P25 風險矩陣 1 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">4.1 風險矩陣｜產業 4 + 公司 4</h1>
+
+  <h2 class="ch">產業風險（4 項）</h2>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>R-I-1｜記憶體價格上漲（高機率 × 中衝擊）</h4>
+      <div class="risk-item">DRAM/NAND 自 2026 Q1 起累積漲 25-40%，內含 KGD 的 SoC 銷貨成本升 3-5%。</div>
+      <div class="risk-item">應對：降 DRAM density、合金取代金線、與客戶協商調價。</div>
+      <div class="risk-item">若高位至 H2，毛利率可能滑至 37-38%。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R-I-2｜中國手機衰退（高機率 × 中衝擊）</h4>
+      <div class="risk-item">2026 H1 中國手機 -15 至 -20%，小米/OPPO/vivo/傳音 LCD TDDI 衰退。</div>
+      <div class="risk-item">應對：OLED TDDI 補位、擴大美韓滲透。</div>
+      <div class="risk-item">小尺寸 Driver IC 2026 估年減 -8 至 -12%。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R-I-3｜成熟製程產能緊（中機率 × 高衝擊）</h4>
+      <div class="risk-item">TSMC/UMC 將產能挪給 AI HPC，22nm HV 與 8 吋緊張。</div>
+      <div class="risk-item">應對：與供應商長期合作關係、優先確保供應穩定。</div>
+      <div class="risk-item">若 H2 配額不足，將限制營收成長。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R-I-4｜提前拉貨反噬（中機率 × 高衝擊）</h4>
+      <div class="risk-item">H1 由記憶體漲價心理引發拉貨潮，H2 終端 sell-through 風險。</div>
+      <div class="risk-item">庫存 DOI 自 59 天升至 74 天為警示。</div>
+      <div class="risk-item">應對：庫存管理、產品組合分散。</div>
+    </div>
+  </div>
+
+  <h2 class="ch">公司風險（4 項）</h2>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>R-C-1｜Edge AI 競爭加劇（中機率 × 中衝擊）</h4>
+      <div class="risk-item">中國新進業者（星宸、君正、富瀚微、瑞芯微）切入安防 SoC。</div>
+      <div class="risk-item">應對：算力升級、客戶 lock-in、演算法 IP 領先。</div>
+      <div class="risk-item">2027-2028 可能 ASP 下行 5-10%。</div>
+    </div>
+    <div class="risk-card up">
+      <h4>R-C-2｜OLED TDDI 擴張不如預期（中機率 × 中衝擊）</h4>
+      <div class="risk-item">2026 出貨目標 2,500 萬顆，若 Samsung LSI 製程升級反守。</div>
+      <div class="risk-item">應對：持續 22nm HV 製程升級、Apple/Samsung 雙線。</div>
+      <div class="risk-item">市佔可能停留 8-10% 而非預期 15-18%。</div>
+    </div>
+    <div class="risk-card up">
+      <h4>R-C-3｜4nm ASIC 商品化不確定（中機率 × 低衝擊）</h4>
+      <div class="risk-item">4nm HPC ASIC 處 PoC 階段，1-2 年無實質營收。</div>
+      <div class="risk-item">應對：中長期選項、不影響短期 EPS。</div>
+      <div class="risk-item">市場不會因此重估估值。</div>
+    </div>
+    <div class="risk-card up">
+      <h4>R-C-4｜管理層接班（低機率 × 中衝擊）</h4>
+      <div class="risk-item">何泰舜、王守仁均屆 60 歲以上，未來 3-5 年接班議題。</div>
+      <div class="risk-item">應對：江勝榮被視為下任總經理熱門人選、內部晉升。</div>
+      <div class="risk-item">若接班出現外部挖角，影響決策連貫性。</div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>4.1 風險矩陣（產業 + 公司）</span><span>P.25</span></div>
+</div>
+
+<!-- ═══ P26 風險矩陣 2 + 總覽 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">4.1 風險矩陣（續）｜財務 2 + 估值 2 + 總覽</h1>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>R-F-1｜客戶集中度（中機率 × 低衝擊）</h4>
+      <div class="risk-item">前 10 大客戶營收占比 55-60%，前 3 大（Samsung/Hisense/TCL）約 30%。</div>
+      <div class="risk-item">應對：客戶多元化、新增美系/韓系。</div>
+    </div>
+    <div class="risk-card up">
+      <h4>R-F-2｜匯率波動（高機率 × 低衝擊）</h4>
+      <div class="risk-item">營收 85% USD、成本 70% USD，自然避險佳。</div>
+      <div class="risk-item">台幣兌美元每升值 1%、毛利率影響約 0.2-0.3pp。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R-V-1｜PE 重估壓抑（中機率 × 中衝擊）</h4>
+      <div class="risk-item">目前 PE 18.5x 低於聯發科 22x、瑞昱 21x。</div>
+      <div class="risk-item">市場部分視為「LCD 衰退、靠殖利率」，需 SoC 故事兌現重估。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>R-V-2｜配息率下降（低機率 × 中衝擊）</h4>
+      <div class="risk-item">2026 CapEx 19.3 億為近 5 年高，若 2027 CapEx 升至 30+ 億將影響配發。</div>
+      <div class="risk-item">應對：嚴控 CapEx、維持配發政策。</div>
+    </div>
+  </div>
+
+  <h2 class="ch">風險矩陣總覽（12 項）</h2>
+  <table>
+    <thead><tr><th>編號</th><th>風險</th><th>機率</th><th>衝擊</th><th>對應策略</th></tr></thead>
+    <tbody>
+      <tr><td>R-I-1</td><td>記憶體價格上漲</td><td>高</td><td>中</td><td>產品組合 + 調價 + 降 DRAM</td></tr>
+      <tr><td>R-I-2</td><td>中國手機衰退</td><td>高</td><td>中</td><td>OLED 補位 + 美韓擴張</td></tr>
+      <tr><td>R-I-3</td><td>成熟製程產能緊</td><td>中</td><td>高</td><td>長期合作關係</td></tr>
+      <tr><td>R-I-4</td><td>提前拉貨反噬</td><td>中</td><td>高</td><td>庫存管理 + 產品分散</td></tr>
+      <tr><td>R-C-1</td><td>Edge AI 競爭</td><td>中</td><td>中</td><td>算力 + lock-in + IP</td></tr>
+      <tr><td>R-C-2</td><td>OLED TDDI 擴張</td><td>中</td><td>中</td><td>製程升級 + 雙線</td></tr>
+      <tr><td>R-C-3</td><td>4nm ASIC</td><td>中</td><td>低</td><td>中長期選項</td></tr>
+      <tr><td>R-C-4</td><td>管理層接班</td><td>低</td><td>中</td><td>內部晉升</td></tr>
+      <tr><td>R-F-1</td><td>客戶集中</td><td>中</td><td>低</td><td>客戶多元化</td></tr>
+      <tr><td>R-F-2</td><td>匯率波動</td><td>高</td><td>低</td><td>自然避險</td></tr>
+      <tr><td>R-V-1</td><td>PE 重估壓抑</td><td>中</td><td>中</td><td>SoC 故事兌現</td></tr>
+      <tr><td>R-V-2</td><td>配息率下降</td><td>低</td><td>中</td><td>嚴控 CapEx</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>4.1 風險矩陣（續）</span><span>P.26</span></div>
+</div>
+
+<!-- ═══ P27 客戶 + 股價 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">4.2 附錄｜股價與客戶結構</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">股價歷史與重大事件（2021-2026）</div>
+    <div class="chart-sub">紅虛線：12M 目標價 578 元｜橘點線：2026-05-12 收盤 498 元</div>
+    <img class="chart-img" src="charts/chart_01_stock_history.png">
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">客戶集中度</div>
+      <div class="chart-sub">Samsung 最大客戶 18%</div>
+      <img class="chart-img" src="charts/chart_07_customers.png">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">客戶集中度對比（聯詠 vs 聯發科 vs 瑞昱）</div>
+      <div class="chart-sub">聯詠 Top 5 約 45%</div>
+      <img class="chart-img" src="charts/chart_16_customer_concentration.png">
+    </div>
+  </div>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>4.2 附錄（股價 + 客戶）</span><span>P.27</span></div>
+</div>
+
+<!-- ═══ P28 ROE + FCF ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">4.3 附錄｜獲利能力與現金流</h1>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">ROE / ROIC 趨勢</div>
+      <div class="chart-sub">2025 谷底 17.1%，2028 預估回升至 24%+</div>
+      <img class="chart-img" src="charts/chart_11_roe_roic.png">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">自由現金流 vs 現金股利</div>
+      <div class="chart-sub">FCF 持續覆蓋股利</div>
+      <img class="chart-img" src="charts/chart_12_fcf_div.png">
+    </div>
+  </div>
+
+  <h2 class="ch">敏感度 C：營收 × 毛利率對 2027E EPS</h2>
+  <table>
+    <thead><tr><th>2027 營收 \ 毛利率</th><th>38.0%</th><th>39.0%</th><th>39.8%</th><th>41.0%</th><th>42.5%</th></tr></thead>
+    <tbody>
+      <tr><td>1,150</td><td class="num">27.5</td><td class="num">29.0</td><td class="num">30.2</td><td class="num">32.0</td><td class="num">34.3</td></tr>
+      <tr><td>1,200</td><td class="num">29.0</td><td class="num">30.5</td><td class="num">31.8</td><td class="num">33.7</td><td class="num">36.0</td></tr>
+      <tr><td class="hi"><strong>1,219（基準）</strong></td><td class="num">29.5</td><td class="num">31.1</td><td class="num hi"><strong>33.2</strong></td><td class="num">34.4</td><td class="num">36.7</td></tr>
+      <tr><td>1,280</td><td class="num">31.2</td><td class="num">32.8</td><td class="num">34.3</td><td class="num">36.4</td><td class="num">38.9</td></tr>
+      <tr><td>1,350</td><td class="num">33.0</td><td class="num">34.7</td><td class="num">36.2</td><td class="num">38.6</td><td class="num">41.2</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>敏感度 C 結論：</strong>營收每變動 5%、EPS 變動約 6-7%；毛利率每變動 1pp、EPS 變動約 2.5 元。**毛利率對 EPS 槓桿略大於營收**，這也是為何研究員特別關注 SoC 占比結構性提升（推升毛利率）。</p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>4.3 附錄（獲利能力 + 敏感度 C）</span><span>P.28</span></div>
+</div>
+
+<!-- ═══ P29 資料來源 + 免責 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">5.1 資料來源</h1>
+
+  <h2 class="ch">公司資料</h2>
+  <ul>
+    <li>聯詠科技 2021-2025 年度合併財務報告書（MOPS 公開資訊觀測站）</li>
+    <li>聯詠科技 2026 Q1 法說會簡報（2026-05-07 發布）</li>
+    <li>公司投資人關係專區（novatek.com.tw）</li>
+    <li>MOPS 月營收申報（最近 18 個月）</li>
+    <li>聯詠 2025 年股東會年報、董事會決議</li>
+  </ul>
+
+  <h2 class="ch">產業資料</h2>
+  <ul>
+    <li>Omdia Display Dynamics February 2025 / DDI Annual Report 2025</li>
+    <li>Yole Group Display Driver IC Report 2025</li>
+    <li>Mordor Intelligence AIoT Edge AI SoC Market Report 2025</li>
+    <li>CounterPoint Research Smartphone OLED Tracker 2025</li>
+    <li>CINNO Research 全球 DDI 2024-2025 追蹤</li>
+  </ul>
+
+  <h2 class="ch">媒體與券商觀點（最末才列名）</h2>
+  <ul>
+    <li>Digitimes（2025-05-08 OLED TDDI 量產報導、2026-04-18 Edge AI 累積出貨）</li>
+    <li>經濟日報、工商時報、TechNews、財訊、富果直送（2026-05-07 法說會備忘錄）</li>
+    <li>Bloomberg、Yahoo Finance（3034.TW）2026-05-11 收盤資料</li>
+    <li>外資券商研究報告：GS、MS、JPMorgan、Citi（過去 6 個月，本文僅引用觀點不點名）</li>
+    <li>本土券商研究報告：CTBC、凱基、元大、富邦、宏遠（過去 6 個月，本文僅引用觀點不點名）</li>
+    <li>股價與市值：Yahoo Finance、財報狗、Goodinfo!台灣股市資訊網</li>
+  </ul>
+
+  <h1 class="ch">5.2 免責聲明</h1>
+  <div class="callout">
+    <strong>研究員觀點 / Research Analyst View</strong><br>
+    本報告為 GiS Investment Research 內部研究員觀點，採估值方法論驅動、中立全面、12 個月目標價框架。本報告之數據與分析基於 2026-05-11 截止之公開資訊與研究員推估，不代表未來實際業績或股價走勢。投資人應自行判斷風險、不應僅依本報告做出投資決策。<br>
+    <br>
+    <strong>立場揭露</strong>：截至報告日，GiS 與報告作者未持有聯詠 3034 流通在外股票，亦無預定買賣計畫。<br>
+    <br>
+    <strong>更新頻率</strong>：本首次覆蓋報告之評等與目標價將於 2026 Q2 法說會（預計 2026-08）後重新評估，後續視重大事件不定期更新。
+  </div>
+
+  <p style="text-align:center;margin-top:36px;color:#9aabb5;font-size:11.5px">
+    報告類型：首次覆蓋（Initiating Coverage）｜身份：研究員（Research Analyst）｜估值方法論 §3-4 / §8 / §9 / §10 / §4.3 / §11.1<br>
+    撰寫日 2026-05-12 ｜資料截止 2026-05-11 ｜ 30 頁完整版
+  </p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Investment Research</span><span>5. 資料來源 + 免責聲明</span><span>P.29</span></div>
+</div>
+
+</body>
+</html>

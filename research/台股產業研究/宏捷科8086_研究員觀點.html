@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!--
+  GiS Genesis International Capital — 研究報告樣板
+  使用方式：直接複製修改文字與圖表數據，轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="輸出檔名.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///完整路徑/檔案.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>宏捷科 8086 首次覆蓋 | GiS 研究員觀點</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/*
+  ⚠ 排版重要提醒（避免空白頁 & 內容截斷問題）：
+  1. 每個 .page div 使用 height:297mm（非 min-height），搭配 overflow:hidden
+  2. 不要在 .page 上使用 page-break-after:always，讓固定高度自然分頁
+  3. 每頁內容需控制在 297mm 以內，超出會被裁切（overflow:hidden）
+  4. 若使用 position:absolute 的 footer，確保不會導致額外分頁
+  5. @page{size:A4;margin:0} 已設定，Chrome headless 會自動按 297mm 分頁
+
+  ⚠ 頁高控制實務指引：
+  6. 每頁可用內容高度 ≈ 297mm - padding(40px×2) - footer(~50px) ≈ 225mm（約 850px）
+  7. 一頁最多容納：1 個 h1 + 1 個 h2 + 1 張大表格(8行) + 1 個圖表(240px) + 少量文字
+     或：1 個 h1 + 2 個 h2 + 2 張中型表格(5行) + 少量文字
+  8. 若一頁放了「示意圖/卡片 + 表格 + 圖表」三大元素，幾乎必定溢出，需拆頁
+  9. 寧可多拆一頁留白，也不要讓底部內容被裁切（overflow:hidden 會無聲截斷）
+  10. 轉 PDF 後務必逐頁檢查頁尾 footer 是否完整可見，若看不到 footer 代表內容溢出
+*/
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+/* ── 頁面容器（固定 A4 高度，避免空白頁） ── */
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+/* 注意：不再使用 .pb / page-break-after:always，靠固定 height:297mm 自然分頁 */
+
+/* ── Canvas 強制填滿容器（Chart.js 用） ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── PNG 圖表（matplotlib 生成、首次覆蓋報告用）── */
+/* ⚠ 關鍵：必須用 explicit height + object-fit:contain，避免 X 軸標籤被切 */
+/* ❌ 禁用 height:auto + max-height（contain 對 height:auto 無效，會切到圖表底部）*/
+.chart-img{width:100%;height:210px;display:block;border-radius:4px;object-fit:contain}
+.chart-img.tall{height:260px}    /* 適合 heatmap、roadmap 等密集圖 */
+.chart-img.short{height:160px}   /* 適合 simple bar / pie */
+.chart-grid .chart-img{height:180px}  /* 雙欄並排時更小 */
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 公司卡片 ── */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 首選股卡 ── */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 對比框（callout）── */
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:16px;margin:14px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:32px}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+
+<style>
+/* ── GiS 研究員首覆標準緊縮 override（page_check SOP 模板 A）── */
+.full-page > *, .body-page > * { flex-shrink: 0 !important; }
+.body-page { padding: 26px 42px !important; }
+.co-card { margin: 11px 0 !important; }
+.co-metric { padding: 9px 11px !important; }
+.kpi-row { margin: 9px 0 !important; gap: 8px !important; }
+.kpi { padding: 10px 12px !important; }
+.kpi-val { font-size: 16px !important; }
+.exec-sum { padding: 13px 16px !important; margin: 9px 0 !important; }
+.exec-thesis { margin: 7px 0 !important; font-size: 11.5px !important; line-height: 1.5 !important; }
+.chart-grid { margin: 9px 0 !important; gap: 11px !important; }
+.chart-wrap { padding: 11px !important; margin: 7px 0 !important; }
+.chart-title { font-size: 11.5px !important; }
+.chart-sub { font-size: 9.5px !important; margin-bottom: 4px !important; }
+h1.ch { margin: 10px 0 9px !important; font-size: 17px !important; }
+h2.ch { margin: 11px 0 7px !important; font-size: 14.5px !important; }
+table { margin: 7px 0 9px !important; font-size: 11px !important; }
+th { padding: 5px 8px !important; font-size: 10.5px !important; }
+td { padding: 5px 8px !important; font-size: 11px !important; line-height: 1.4 !important; }
+li { font-size: 11.5px !important; line-height: 1.45 !important; }
+p { font-size: 12px !important; line-height: 1.55 !important; margin: 7px 0 !important; }
+blockquote { font-size: 11.5px !important; line-height: 1.5 !important; padding: 10px 14px !important; margin: 9px 0 !important; }
+.src { font-size: 9.5px !important; }
+.risk-matrix { gap: 11px !important; margin: 9px 0 !important; }
+.risk-card { padding: 11px 13px !important; }
+.risk-item { font-size: 11px !important; line-height: 1.4 !important; margin: 5px 0 !important; }
+.timeline { margin: 10px 0 !important; }
+.tl-item { padding: 9px 10px !important; }
+.tl-tech { font-size: 10px !important; line-height: 1.35 !important; }
+.page-footer { padding: 8px 22px !important; font-size: 10px !important; margin-top: 14px !important; }
+</style>
+</head>
+<body>
+<div class="wm">
+<div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+<div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════ 封面 ══════════ -->
+<div class="cover pb page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div><div class="cover-co-en">Genesis International Capital</div>
+      <div class="cover-co">AI量化交易與相關應用產品開發</div></div>
+    </div>
+    <div class="cover-eyebrow">Initiating Coverage · Taiwan Compound Semiconductor · August 2026</div>
+    <div class="cover-title">稼動率在降，毛利率在升<br><em>成長在 2028，付款在 2027</em></div>
+    <div class="cover-subtitle">Advanced Wireless Semiconductor (8086.TWO) — Initiating Coverage with an Overweight Rating</div>
+    <div class="cover-tags">
+      <span class="ctag hl">宏捷科 8086</span><span class="ctag hl">增加持股 (OW)</span>
+      <span class="ctag">TP NT$137</span><span class="ctag">砷化鎵晶圓代工</span>
+      <span class="ctag">手機 PA</span><span class="ctag">Wi-Fi 7 / 無人機</span>
+      <span class="ctag">VCSEL / 光通訊</span><span class="ctag">中美晶集團</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">NT$<em>137</em></div><div class="cstat-label">12M 目標價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>+10.9</em>%</div><div class="cstat-label">上檔空間（對 8/6 收盤 123.5）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>5.69</em></div><div class="cstat-label">2027F EPS（元）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>27.0</em>x</div><div class="cstat-label">目標本益比</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年8月7日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════ P2 執行摘要 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">執行摘要 — 宏捷科 8086 首次覆蓋</h1>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-val">增加持股<em> (OW)</em></div><div class="kpi-lbl">GiS 評等</div></div>
+  <div class="kpi gold"><div class="kpi-val">137<em> 元</em></div><div class="kpi-lbl">12 個月目標價</div></div>
+  <div class="kpi green"><div class="kpi-val">+10.9<em>%</em></div><div class="kpi-lbl">上檔空間（參考價 123.5）</div></div>
+  <div class="kpi"><div class="kpi-val">22.6<em>x</em></div><div class="kpi-lbl">2026F 前瞻本益比</div></div>
+</div>
+
+<div class="exec-sum">
+  <div class="exec-thesis"><span class="thesis-num">①</span><span>
+  <strong>毛利率的改善發生在稼動率下滑的期間——這是組合的證據，不是景氣的證據。</strong>
+  4Q25 稼動率 75-80%、毛利率 30.4%；2Q26 稼動率降到 60-65%，推估毛利率仍有 32.7%，
+  1Q26 更達 35.4%（近十年最高）。晶圓代工廠的毛利率通常隨稼動率同向移動，
+  宏捷科這三季反向。原因是三件事同時發生：中高階手機改採 Flip Chip（光罩層 14→16 道）、
+  非射頻應用（毛利率 40-50%）占比自中個位數升至 5-6%、以及自 1Q26 起將研磨晶圓的鎵回收轉售
+  （每季貢獻毛利率 1-2 個百分點）。</span></div>
+
+  <div class="exec-thesis"><span class="thesis-num">②</span><span>
+  <strong>1H26 EPS 2.93 元，超越全部四家券商預估（2.26-2.68 元）9-30%。</strong>
+  8 月 6 日公告 1H26 稅後 5.75 億元，換算 2Q26 單季 EPS 1.42 元、營收 12.98 億元為歷史次高。
+  但同一天股價收 123.5 元，距 5 月 26 日的 179 元高點已回檔 <strong>31.0%</strong>，
+  前瞻本益比從 32.7x 壓到 22.6x。<strong>市場在獲利超預期的同時給了折價</strong>，
+  折價的理由是 3Q26 指引轉弱與原物料成本壓力——這兩件事是真的，但為期一到兩季。</span></div>
+
+  <div class="exec-thesis"><span class="thesis-num">③</span><span>
+  <strong>8 月 6 日董事會通過的 28 億元廠務工程，是本報告給 OW 而非買進的唯一理由。</strong>
+  金額約當 2025 年資本支出（2.25 億元）的 12 倍。DCF 顯示 2027-2028 年自由現金流會被壓到
+  2.93 億與 8.26 億元，每股價值僅 <strong>105 元</strong>，低於現價。
+  所有高毛利新應用（PD、濾波器放量、HAPS 太陽能）的現金流都落在 2028 年之後。
+  本益比法看到的 154 元是對的，但它假設市場願意提前兩年付款。</span></div>
+</div>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">營收與 EPS：2023 年谷底之後的三級跳</div><div class="chart-sub">營收（億元，柱）／EPS（元，線）· 2022-2028F · 資料：MOPS、GiS 預估</div><div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="cRevEps" style="display:block;width:100%;height:225px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">核心證據：稼動率在降，毛利率在升</div><div class="chart-sub">稼動率（%，柱，公司揭露區間中值）／毛利率（%，線）· 資料：公司、GiS 推估</div><div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="cGmUtil" style="display:block;width:100%;height:225px"></canvas></div></div>
+</div>
+
+<blockquote><strong>GiS 首次覆蓋結論：</strong>給予 <strong>增加持股 (OW)</strong> 評等、12 個月目標價
+<strong>NT$137</strong>（上檔 +10.9%）。宏捷科是全球第二大六吋砷化鎵晶圓代工廠，
+正從「手機 PA 代工廠」轉向「化合物半導體多平台代工廠」。轉型的證據已經出現在毛利率上，
+但轉型的現金流要等到 2028 年。現價 22.6x 前瞻本益比相對同業（穩懋 73x、全新 117x、環宇 175x）
+是全族群最低，這個折價一半合理、一半是機會。</blockquote>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 02</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P3 評等總表 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">評等、目標價與關鍵預估</h1>
+
+<div class="co-card">
+  <div class="co-card-head navy">
+    <div><div class="co-name">宏捷科技　Advanced Wireless Semiconductor</div>
+    <div class="co-ticker">8086.TWO · 上櫃 · 半導體業 · 台南科學園區</div></div>
+    <div class="co-badge"><span class="badge ow">增加持股 OW</span><span style="color:#fff;font-size:12px">TP NT$137</span></div>
+  </div>
+  <div class="co-metrics">
+    <div class="co-metric"><div class="co-metric-val">123.5</div><div class="co-metric-label">收盤價（8/6）</div></div>
+    <div class="co-metric"><div class="co-metric-val up">+10.9%</div><div class="co-metric-label">上檔空間</div></div>
+    <div class="co-metric"><div class="co-metric-val">242.7 億</div><div class="co-metric-label">市值</div></div>
+    <div class="co-metric"><div class="co-metric-val">1.97 億股</div><div class="co-metric-label">流通股數</div></div>
+  </div>
+  <div class="co-body">
+  <p style="margin:0">全球第二大六吋砷化鎵（GaAs）晶圓代工廠，月產能約 2 萬片，規模僅次於穩懋（3105）。
+  營收 70-75% 來自手機功率放大器（PA）、20-25% 來自 Wi-Fi PA、5-6% 來自非射頻應用
+  （Datacom VCSEL、LiDAR、濾波器、III-V 太陽能）。
+  最大股東為中美矽晶（5483，持股 28.46%）；2026 年 3 月 6 日起由中美晶董事長徐秀蘭接任董事長。</p>
+  </div>
+</div>
+
+<h2 class="ch">關鍵財務預估</h2>
+<table>
+<thead><tr><th>百萬元</th><th class="num">2023A</th><th class="num">2024A</th><th class="num">2025A</th><th class="num">2026F</th><th class="num">2027F</th><th class="num">2028F</th></tr></thead>
+<tbody>
+<tr><td>營業收入</td><td class="num">2,723</td><td class="num">4,456</td><td class="num">4,117</td><td class="num">5,065</td><td class="num">5,622</td><td class="num">6,353</td></tr>
+<tr><td>　YoY</td><td class="num">+25.9%</td><td class="num">+63.6%</td><td class="num neg">−7.6%</td><td class="num pos">+23.0%</td><td class="num">+11.0%</td><td class="num">+13.0%</td></tr>
+<tr><td>毛利率</td><td class="num">15.2%</td><td class="num">19.9%</td><td class="num">26.5%</td><td class="num hi">32.2%</td><td class="num">31.2%</td><td class="num">32.0%</td></tr>
+<tr><td>營業利益</td><td class="num">68</td><td class="num">525</td><td class="num">738</td><td class="num">1,227</td><td class="num">1,293</td><td class="num">1,525</td></tr>
+<tr><td>營益率</td><td class="num">2.5%</td><td class="num">11.8%</td><td class="num">17.9%</td><td class="num hi">24.2%</td><td class="num">23.0%</td><td class="num">24.0%</td></tr>
+<tr><td>稅後淨利</td><td class="num">83</td><td class="num">521</td><td class="num">660</td><td class="num">1,075</td><td class="num">1,119</td><td class="num">1,315</td></tr>
+<tr><td><strong>EPS（元）</strong></td><td class="num">0.42</td><td class="num">2.65</td><td class="num">3.36</td><td class="num hi">5.47</td><td class="num hi">5.69</td><td class="num hi">6.69</td></tr>
+<tr><td>　YoY</td><td class="num">+503%</td><td class="num">+530%</td><td class="num">+26.7%</td><td class="num pos">+62.8%</td><td class="num">+4.1%</td><td class="num">+17.6%</td></tr>
+<tr><td>每股淨值（元）</td><td class="num">38.08</td><td class="num">39.73</td><td class="num">41.90</td><td class="num">45.69</td><td class="num">48.53</td><td class="num">52.19</td></tr>
+<tr><td>ROE</td><td class="num">1.1%</td><td class="num">6.8%</td><td class="num">8.2%</td><td class="num">12.5%</td><td class="num">12.1%</td><td class="num">13.3%</td></tr>
+<tr><td>現金股利（元）</td><td class="num">1.00</td><td class="num">1.19</td><td class="num">1.68</td><td class="num">2.74</td><td class="num">2.85</td><td class="num">3.35</td></tr>
+<tr><td>本益比（對 123.5）</td><td class="num">—</td><td class="num">46.6x</td><td class="num">36.8x</td><td class="num">22.6x</td><td class="num">21.7x</td><td class="num">18.5x</td></tr>
+</tbody></table>
+<span class="src">2023-2025 為 MOPS 公告實績；2026F 含 1H26 實績（EPS 2.93）＋ 2H26 GiS 預估。全表未採用 yfinance 資料。</span>
+
+<div class="chart-wrap"><div class="chart-title">自建前瞻本益比區間：現價位於均值下方 0.45 個標準差</div><div class="chart-sub">倍 · 2024/01-2026/08 · 分母為往後 12 個月內插 EPS（2022-2023 年 EPS 趨近零，trailing PE band 數學上失效）</div><div class="chart-container" style="height:215px;width:100%;position:relative"><canvas id="cFwdPE" style="display:block;width:100%;height:215px"></canvas></div></div>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 03</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ 章節 01 ══════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">01</div>
+  <div class="sec-eyebrow">Investment Thesis</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">投資論點</div>
+  <div class="sec-desc">三個支撐 OW 的理由，與三個讓它不是「買進」的理由。<br><br>
+  核心矛盾：獲利改善的證據已經落地（1H26 EPS 超越全部券商預估），
+  但把公司推向下一個層級的資本支出，要到 2028 年才會產生現金流。</div>
+</div>
+
+<!-- ══════════ P5 論點一 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">論點一 · 這一輪的毛利率改善不是景氣，是組合</h1>
+
+<p>晶圓代工是重折舊產業。宏捷科每年折舊 7-8 億元，對應 2026F 營收 50.6 億元約 14-16%。
+教科書的結論是：<strong>稼動率決定毛利率</strong>。過去四年宏捷科完全符合這個規律——
+2022 年稼動率崩跌，毛利率 15.9%、營益率 −1.7%；2024 年下半年需求轉弱，4Q24 單季營益再度轉負。</p>
+
+<p><strong>2026 年是這個規律第一次失效。</strong>公司揭露的稼動率從 4Q25 的 75-80% 一路降到
+2Q26 的 60-65%，但毛利率反向走高：</p>
+
+<table>
+<thead><tr><th>季別</th><th class="num">營收（百萬）</th><th class="num">稼動率（公司揭露）</th><th class="num">毛利率</th><th class="num">營益率</th><th class="num">EPS（元）</th></tr></thead>
+<tbody>
+<tr><td>4Q25</td><td class="num">1,253</td><td class="num">75-80%</td><td class="num">30.4%</td><td class="num">22.2%</td><td class="num">1.33</td></tr>
+<tr><td>1Q26</td><td class="num">1,222</td><td class="num">65-70%</td><td class="num hi">35.4%*</td><td class="num">27.4%</td><td class="num">1.51</td></tr>
+<tr><td>2Q26</td><td class="num">1,298</td><td class="num">60-65%</td><td class="num">32.7%*</td><td class="num">24.7%*</td><td class="num">1.42</td></tr>
+<tr><td>3Q26F</td><td class="num">1,259</td><td class="num">&lt;60%（公司預告）</td><td class="num">30.5%</td><td class="num">22.5%</td><td class="num">1.26</td></tr>
+<tr><td>4Q26F</td><td class="num">1,285</td><td class="num">約 60%</td><td class="num">30.5%</td><td class="num">22.5%</td><td class="num">1.28</td></tr>
+</tbody></table>
+<span class="src">＊1Q26 營益率 27.4% 為 MOPS 實績；毛利率以營費率 8.0%（2024-2025 實績 8.1-8.6%）回推。
+2Q26 淨利由 8/6 公告 1H26 EPS 2.93 元減 1Q26 的 1.51 元推導，營收為 4-6 月月營收加總實績。</span>
+
+<h2 class="ch">三個結構性驅動，可以逐一驗證</h2>
+
+<div class="risk-matrix">
+  <div class="risk-card up">
+    <h4>驅動 ① Flip Chip 高階化（貢獻最大）</h4>
+    <div class="risk-item">中高階手機因電池容量與功能增加，PA 可用空間被壓縮，必須改採 Flip Chip 縮小尺寸並改善散熱。</div>
+    <div class="risk-item">對應製程光罩層數自 14 道升至 16 道，單價與毛利率同步上移。</div>
+    <div class="risk-item"><strong>可驗證的數字：高階與低階手機毛利率相差 5-6 個百分點</strong>（公司揭露）。手機平均毛利率 20-25%。</div>
+  </div>
+  <div class="risk-card up">
+    <h4>驅動 ② 非射頻應用（槓桿最大）</h4>
+    <div class="risk-item">非射頻（Datacom VCSEL、LiDAR、濾波器、太陽能）毛利率 <strong>40-50%</strong>，是手機的兩倍。</div>
+    <div class="risk-item">占比自 2025 年的中個位數升至 2Q26 的 5-6%。</div>
+    <div class="risk-item"><strong>槓桿倍率：占比每升 1 個百分點，整體毛利率提升約 0.20-0.25 個百分點。</strong></div>
+  </div>
+</div>
+
+<div class="callout green">
+  <div class="callout-title">驅動 ③ 鎵回收轉售 —— 一個少被討論但已在損益表上的項目</div>
+  <p style="margin:0">公司自 1Q26 起，將研磨晶圓製程所產生的鎵回收後轉售，<strong>預估每季貢獻毛利率 1-2 個百分點</strong>
+  （來源：某本土券商 2026/3 訪談紀要）。在鎵出口管制與金屬價格上漲的環境下，
+  這是一個結構性、非一次性的成本回收機制，且會隨投片量同步放大。
+  它同時解釋了為什麼公司在金價上漲時仍能維持毛利率——除了滾動式採購讓黃金庫存成本低於市價之外，
+  鎵回收提供了另一層對沖。</p>
+</div>
+
+<div class="chart-wrap"><div class="chart-title">三率季度趨勢：毛利率與營益率同步上移，營費率維持 8% 低檔</div><div class="chart-sub">％ · 2025Q1-2026Q4F · 資料：MOPS 實績 + GiS 推估</div><div class="chart-container" style="height:168px;width:100%;position:relative"><canvas id="cMarginQ" style="display:block;width:100%;height:168px"></canvas></div></div>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 05</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P6 論點二 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">論點二 · 非射頻是重估的唯一鑰匙，但鑰匙還沒轉動</h1>
+
+<p>宏捷科在資本市場上的折價非常明顯：TTM 本益比 27.8x，同為台灣化合物半導體族群的
+穩懋 73.2x、全新 117.0x、環宇-KY 175.4x。<strong>宏捷科的營益率（21.7%）在四家中排第二，
+本益比卻低出一個量級。</strong></p>
+
+<p>折價的成因不能簡化成「市場錯了」。誠實的拆解是：同業的高本益比有一部分來自分母失真
+（穩懋 TTM EPS 含 2025 上半年虧損季），另一部分來自 AI 光通訊的選擇權定價
+（全新與環宇的營收高度集中在光通訊 / CPO）。
+<strong>宏捷科拿不到光通訊溢價，是因為它的非射頻只有 5-6%。</strong></p>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">分產品毛利率：非射頻是手機的兩倍</div><div class="chart-sub">％ · 公司揭露區間 · 2Q26</div><div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="cMixGM" style="display:block;width:100%;height:200px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">非射頻占比路徑：GiS 預估低於公司目標</div><div class="chart-sub">占比（%，線）／金額（億元，柱）· 2024-2028F</div><div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="cMixPath" style="display:block;width:100%;height:200px"></canvas></div></div>
+</div>
+
+<h2 class="ch">六條非射頻產品線，時程差異極大</h2>
+<table>
+<thead><tr><th>產品線</th><th>製程／規格</th><th>現況</th><th>明顯貢獻時點</th></tr></thead>
+<tbody>
+<tr><td>Datacom VCSEL</td><td>850nm / 940nm，6 吋 GaAs</td><td>2023 年起量產，年成長 &gt;50%；1Q26 季增 17%、年增 150%</td><td class="pos"><strong>已在貢獻</strong></td></tr>
+<tr><td>濾波器 SAW</td><td>低頻／中頻 SAW</td><td>4Q25 起穩定量產，近期需求持續增加</td><td class="pos"><strong>已在貢獻</strong>（2026 占比低個位數）</td></tr>
+<tr><td>LiDAR 光源</td><td>VCSEL / LD</td><td>無人機避障、機器人視覺與手部感測</td><td class="pos">已在貢獻</td></tr>
+<tr><td>Datacom PD</td><td>1060nm，6 吋 GaAs</td><td>2Q26 末送樣客戶驗證</td><td>2027H2 完成驗證 → <strong>2027 年底至 2028 年初起量</strong></td></tr>
+<tr><td>III-V 太陽能</td><td>多接面，HAPS／長航時無人機</td><td>客戶進度落後，原訂 3Q26 量產延至 4Q26 以後</td><td>2027 年</td></tr>
+<tr><td>Datacom LD</td><td>InP 材料</td><td>研發階段</td><td class="neg">短期貢獻有限</td></tr>
+<tr><td>高頻濾波器 POI SAW</td><td>瞄準 Sub-6G 與 6G 前端模組</td><td>開發中</td><td class="neg">2028 年之後</td></tr>
+</tbody></table>
+
+<blockquote><strong>GiS 的預估刻意低於公司目標。</strong>公司對外目標是 2026 年「努力朝接近 1 成前進」、
+2027 年雙位數。但實際占比從 2025 年的中個位數到 2Q26 的 5-6%，<strong>連續多季持平</strong>。
+本模型採 2026F 5.5%、2027F 8.5%、2028F 13%，2027 年低於公司目標。
+理由是 HAPS 太陽能已經是現成的遞延案例：原訂 3Q26 量產，客戶進度落後延至 4Q26 以後。
+<strong>重估的觸發條件是可以明確定義的：非射頻季度占比連續兩季站上 9%。在此之前，折價會持續存在。</strong></blockquote>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 06</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P7 論點三 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">論點三 · 28 億元的廠務工程：成長在 2028，付款在 2027</h1>
+
+<p>2026 年 8 月 6 日，宏捷科董事會通過新建 3F 無塵室及各樓層生產線整合優化相關附屬工程，
+<strong>金額約新台幣 28 億元</strong>。這是本次首次覆蓋中最重要的單一事件，也是評等從「買進」
+降到「增加持股」的唯一理由。</p>
+
+<h2 class="ch">量級的跳階</h2>
+<table>
+<thead><tr><th>期間</th><th>資本支出態度</th><th class="num">金額</th></tr></thead>
+<tbody>
+<tr><td>2022-2023</td><td>Wi-Fi 6 / 5G 擴產週期</td><td class="num">10.8 億 / 6.4 億</td></tr>
+<tr><td>2024</td><td>正常設備更新</td><td class="num">8.6 億</td></tr>
+<tr><td>2025</td><td>幾乎不投資，累積現金至 34.5 億元</td><td class="num neg">2.25 億（四年最低）</td></tr>
+<tr><td>2026 上半（原規劃）</td><td>「現有產能足以支應需求」，僅完善無塵室空間</td><td class="num">5-6 億</td></tr>
+<tr><td>2026/7 初</td><td>宣布下半年啟動擴產，新產能 2027Q2-H2 陸續開出</td><td class="num">未揭露</td></tr>
+<tr><td><strong>2026/8/6 董事會</strong></td><td><strong>3F 無塵室 + 產線整合工程，「先建空間、後進設備」，分年執行</strong></td><td class="num hi"><strong>約 28 億</strong></td></tr>
+</tbody></table>
+<span class="src">28 億元約當 2025 年資本支出的 12 倍、2025 年全年營收的 68%。資料：公司重訊（2026/8/6）、法人會議紀要。</span>
+
+<div class="chart-wrap"><div class="chart-title">自由現金流的兩年凹陷：2027 年 FCF 僅 2.93 億元</div><div class="chart-sub">億元 · 資本支出（柱）／自由現金流（線）· 2024-2029F · GiS 預估</div><div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="cCapexFcf" style="display:block;width:100%;height:210px"></canvas></div></div>
+
+<h2 class="ch">為什麼這件事同時是利多與利空</h2>
+<div class="risk-matrix">
+  <div class="risk-card up">
+    <h4>利多面：這是一張對 2028 年的明牌</h4>
+    <div class="risk-item"><strong>「先建空間、後進設備」保留了彈性。</strong>設備資本支出未承諾，可視訂單調整；建物折舊年限遠長於設備。</div>
+    <div class="risk-item"><strong>不需要現金增資。</strong>2025 年底現金 34.5 億元、負債比 21.8%，2026-2028 年累計 FCF 約 20.9 億元，自有資金即可支應。</div>
+    <div class="risk-item"><strong>與同業的擴產模式不同。</strong>過去砷化鎵同業多在高峰期一次重壓設備；宏捷科在稼動率僅 60-65% 時先建空間，是逆循環佈局。</div>
+    <div class="risk-item"><strong>經營權易主後的第一個大決策。</strong>徐秀蘭在環球晶的一貫作風是長約綁定產能，這次採分段模式與其紀律一致。</div>
+  </div>
+  <div class="risk-card dn">
+    <h4>利空面：DCF 上的代價是每股約 23 元</h4>
+    <div class="risk-item"><strong>2027-2028 年 FCF 被壓到 2.93 億與 8.26 億元</strong>（2025 年為 10.8 億元）。</div>
+    <div class="risk-item">DCF 每股價值 <strong>105 元</strong>，低於現價 123.5 元。若把 28 億元工程自模型中移除，DCF 升至約 128 元——<strong>擴產的短期代價約 23 元／股。</strong></div>
+    <div class="risk-item"><strong>回收期取決於一件未證實的事：2027-2028 年非射頻是否如期放量。</strong>若沒有，空間建好而訂單未到，會產生廠務攤提與閒置成本。</div>
+    <div class="risk-item">工程廠址與分年支出節奏尚未由公司完整說明，是後續法說會的必問項。</div>
+  </div>
+</div>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 07</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P8 Bear ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">反面論點 · 三個讓這不是「買進」的理由</h1>
+
+<h2 class="ch">Bear ① 價格轉嫁只成功一半，2H26 毛利率的壓力是確定的</h2>
+<p>黃金自 2025 年起持續上漲，砷化鎵基板與石油連動材料同步走升。公司明確表示 1H26 已承受部分成本增加，
+影響可能於下半年反映在毛利率。目前<strong>約一半客戶接受價格調整</strong>：
+中高階手機客戶接受度較高，中低階陸系客戶對成本敏感、仍在協商。
+報價依製程而非個別產品調整，沒有統一漲幅。</p>
+<p>本模型假設 2H26 毛利率 30.5%（自 1H26 的 33.9% 下滑 3.4 個百分點）。
+若協商進度不如預期而跌至 28%，2026F EPS 會從 5.47 降至約 4.95 元。</p>
+
+<h2 class="ch">Bear ② 美系 IDM 退出的紅利有明確終點：2028 年</h2>
+<p>宏捷科 2026 年最重要的成長來源，是美系 IDM 廠退出 Android 手機市場後空出的份額——
+一家自 2022 年起、另一家自 2025 年起逐步退出，公司預估<strong>約至 2028 年前後才會完全退出</strong>。
+承接方是美系 Fabless 與陸系設計公司，它們需要外部代工，宏捷科是受益者。</p>
+<blockquote>這是估值上最容易犯的錯誤：<strong>把一個有到期日的順風，當成永續成長率。</strong>
+2029 年之後的成長必須完全依靠非射頻。本報告 DCF 的永續成長率設在 2.0%，
+正是反映手機這條線在紅利結束後回到零成長的假設。</blockquote>
+
+<h2 class="ch">Bear ③ 五年下來，股東實際上是虧的</h2>
+<p>宏捷科 2026 年的營運數字很漂亮，但把時間拉長，畫面完全不同：</p>
+<table>
+<thead><tr><th>期間</th><th class="num">宏捷科 8086</th><th class="num">加權指數</th><th class="num">相對報酬</th></tr></thead>
+<tbody>
+<tr><td>近 5 年（2021/7 至今）</td><td class="num neg">−27.8%</td><td class="num pos">+152.6%</td><td class="num neg"><strong>−180.4pp</strong></td></tr>
+<tr><td>近 1 年（2025/8 至今）</td><td class="num pos">+23.6%</td><td class="num pos">+90.3%</td><td class="num neg">−66.7pp</td></tr>
+<tr><td>距 2026/5/26 高點 179 元</td><td class="num neg">−31.0%</td><td class="num">—</td><td class="num">—</td></tr>
+</tbody></table>
+<p>五年前股價 171 元、現在 123.5 元。這段期間公司經歷了 2022-2023 年的深度虧損循環
+（2022 年 EPS 0.07 元、1Q23 單季 −1.00 元）。
+<strong>這是一家獲利波動極大的公司，不是一家可以買進並持有的公司。</strong>
+即使在 2026 年獲利創高的此刻，五年累積報酬仍為負。</p>
+
+<div class="chart-wrap"><div class="chart-title">五年相對大盤：即使計入 2026 年的獲利大幅成長，累積報酬仍為負</div><div class="chart-sub">％ · 以 2021/07 為基期 · 資料：Yahoo Finance</div><div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="cRel" style="display:block;width:100%;height:200px"></canvas></div></div>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 08</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ 章節 02 ══════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">02</div>
+  <div class="sec-eyebrow">Company 101</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">公司 101</div>
+  <div class="sec-desc">1998 年成立於台南科學園區的全球第二大六吋砷化鎵晶圓代工廠。<br><br>
+  商業模式、客戶結構、成本結構、管理層與股權——
+  以及 2026 年 3 月經營權移轉到中美晶集團之後，這家公司改變了什麼。</div>
+</div>
+
+<!-- ══════════ P10 公司簡介 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">公司簡介與發展沿革</h1>
+
+<p>宏捷科技股份有限公司（Advanced Wireless Semiconductor Company，AWSC）1998 年成立於
+台南科學工業園區，2009 年 6 月 1 日於櫃買中心上櫃。資本額 19.65 億元，
+流通在外股數 196,516,123 股，簽證會計師事務所為安侯建業（KPMG）。</p>
+
+<p>公司是<strong>純晶圓代工（pure-play foundry）</strong>：不做自有品牌晶片設計，
+只提供化合物半導體製程平台給 IC 設計公司與 IDM 廠。這與同業環宇-KY（自有產品比重較高）
+或上游的全新（磊晶片供應）在商業模式上有本質差異。</p>
+
+<h2 class="ch">五個製程平台</h2>
+<table>
+<thead><tr><th>製程平台</th><th>主要產品</th><th>終端應用</th><th class="num">毛利率</th></tr></thead>
+<tbody>
+<tr><td>HBT</td><td>功率放大器 PA</td><td>手機 Cellular PA、Wi-Fi PA</td><td class="num">20-25%</td></tr>
+<tr><td>pHEMT</td><td>開關 Switch、低雜訊放大器 LNA</td><td>手機／Wi-Fi 前端模組</td><td class="num">20-25%</td></tr>
+<tr><td>VCSEL</td><td>850nm / 940nm 光源</td><td>AI 資料中心短距光通訊、3D 感測、LiDAR</td><td class="num">40-50%</td></tr>
+<tr><td>SAW / POI SAW</td><td>聲表面波濾波器</td><td>手機射頻前端</td><td class="num">40-50%</td></tr>
+<tr><td>III-V 多接面太陽能</td><td>高效率太陽能電池</td><td>HAPS 高空平台、長航時無人機</td><td class="num">40-50%</td></tr>
+</tbody></table>
+
+<h2 class="ch">發展沿革</h2>
+<div class="timeline">
+  <div class="tl-item"><div class="tl-year">1998-2009</div><div class="tl-spec">建立期</div><div class="tl-tech">台南科學園區設立，切入 GaAs HBT 代工；2009 年上櫃</div></div>
+  <div class="tl-item"><div class="tl-year">2021-2023</div><div class="tl-spec">深度谷底</div><div class="tl-tech">投入 5.17 億建無塵室搶 Wi-Fi 6；2022 營收 −54%、EPS 0.07；1Q23 單季 −1.00 元</div></div>
+  <div class="tl-item active"><div class="tl-year">2024-2025</div><div class="tl-spec">體質轉折</div><div class="tl-tech">2024 營收 +63.6%；2025 營收 −7.6% 但毛利率自 19.9% 升至 26.5%；中美晶入股成最大股東</div></div>
+  <div class="tl-item next"><div class="tl-year">2026-2028</div><div class="tl-spec">易主與擴產</div><div class="tl-tech">3/6 徐秀蘭接任董事長；1H26 EPS 2.93 創同期新高；8/6 通過 28 億元廠務工程</div></div>
+</div>
+
+<div class="callout">
+  <div class="callout-title">為什麼在此時首次覆蓋</div>
+  <p style="margin:0">三個時間點的巧合構成覆蓋的理由：<strong>（1）經營權正式易手</strong>——2026/3/6 起，
+  徐秀蘭同時執掌中美晶（5483）、環球晶（6488）與宏捷科（8086）；
+  <strong>（2）獲利結構出現非循環性改變</strong>——2025 年營收衰退 7.6% 而毛利率上升 6.6 個百分點，
+  1H26 EPS 2.93 元超越全部四家券商預估；
+  <strong>（3）資本支出量級跳階</strong>——2026/8/6 從每年 5-6 億元的小額支出，
+  一次跳到 28 億元的跨年度廠務工程。</p>
+</div>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 10</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P11 商業模式 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">商業模式 · 應用別與客戶別</h1>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">2Q26 應用別營收結構</div><div class="chart-sub">％ · 公司揭露區間中值</div><div class="chart-container" style="height:195px;width:100%;position:relative"><canvas id="cMixDonut" style="display:block;width:100%;height:195px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">2Q26 客戶別營收結構</div><div class="chart-sub">％ · 公司揭露區間中值</div><div class="chart-container" style="height:195px;width:100%;position:relative"><canvas id="cCustDonut" style="display:block;width:100%;height:195px"></canvas></div></div>
+</div>
+
+<h2 class="ch">客戶結構正在分散，這是好事也是壞事</h2>
+<table>
+<thead><tr><th>客戶類型</th><th class="num">2Q26 占比</th><th>2026 年趨勢與驅動</th></tr></thead>
+<tbody>
+<tr><td>中國大陸最大客戶</td><td class="num">20-25%</td><td>較 1Q26 下降；陸系設計公司承接美系 IDM 空出的中高階份額</td></tr>
+<tr><td>美系 Fabless 客戶</td><td class="num">15-20%</td><td class="pos">受惠高階旗艦機自 2Q26 起拉貨，占比略升</td></tr>
+<tr><td>台灣 Wi-Fi 大客戶</td><td class="num">約 15%</td><td>持平；Router 需求平淡，成長靠 Wi-Fi 7 顆數升級</td></tr>
+<tr><td>韓系手機相關客戶</td><td class="num">接近 10%</td><td class="pos">較 1Q26 明顯成長；韓系品牌有自家記憶體供應，不受漲價衝擊</td></tr>
+<tr><td>無人機 Wi-Fi 客戶</td><td class="num">6-8%</td><td class="pos">自 2 月起需求明顯增加，客戶數持續增加</td></tr>
+</tbody></table>
+<span class="src">公開資料指出主要客戶包含立積（4968）、Qualcomm 與中國飛驤（Vanchip）。</span>
+
+<p>2024-2025 年宏捷科高度依賴單一中國客戶；2Q26 已分散為五個占比 6-25% 的客戶群。
+<strong>好處是單一客戶流失的破壞力下降；壞處是任何一個客戶的成長都不足以單獨帶動公司。</strong></p>
+
+<h2 class="ch">成本結構：折舊是命脈，原物料是變數</h2>
+<table>
+<thead><tr><th>成本項</th><th>特性</th><th>2026 年變化</th></tr></thead>
+<tbody>
+<tr><td>原材料（GaAs 磊晶基板、黃金）</td><td>半變動</td><td class="neg">金價自 2025 年起上漲；黃金採滾動式採購，目前庫存成本低於市價；砷化鎵基板同步漲價</td></tr>
+<tr><td>折舊</td><td>固定，約 7-8 億元／年</td><td>與前兩年相近；28 億元新工程分年執行，不會一次湧現</td></tr>
+<tr><td>人工與廠務</td><td>半固定</td><td>2024 年員工 820 人（YoY −77 人）</td></tr>
+<tr><td>對沖項</td><td>—</td><td class="pos">鎵回收轉售自 1Q26 起每季貢獻毛利率 1-2 個百分點</td></tr>
+</tbody></table>
+
+<blockquote>折舊 7-8 億元對應 2026F 營收 50.6 億元，約占 14-16%。
+<strong>稼動率每下滑 5 個百分點，毛利率承壓約 1.5-2 個百分點。</strong>
+1H26 之所以能在稼動率下滑時提升毛利率，靠的是產品組合的改善速度超過稼動率下滑的速度。
+這個賽跑在 2H26 會更緊繃。</blockquote>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 11</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P12 管理層 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">管理層與股權結構</h1>
+
+<div class="co-card">
+  <div class="co-card-head teal">
+    <div><div class="co-name">徐秀蘭　Doris Hsu</div><div class="co-ticker">董事長（2026/3/6 起接任）· 中美矽晶法人代表</div></div>
+  </div>
+  <div class="co-body">
+  <p style="margin:0 0 8px">同時擔任中美矽晶（5483）董事長暨執行長、環球晶圓（6488）董事長暨執行長——三家公司同一位負責人。</p>
+  <p style="margin:0 0 8px"><strong>關鍵成就：</strong>主導環球晶兩次跨國併購整合——2012 年併購日本 Covalent Materials、
+  2016 年以 6.83 億美元併購 SunEdison Semiconductor，將環球晶推上全球第三大矽晶圓廠。
+  2020-2022 年主導收購德國 Siltronic（最終因德國政府未如期核准而終止，環球晶保留 13.67% 持股）。</p>
+  <p style="margin:0"><strong>對宏捷科的意義：</strong>策略上，宏捷科從獨立代工廠變成中美晶集團化合物半導體版圖的一塊；
+  資本上，8/6 通過的 28 億元工程是過去的宏捷科董事會不會出現的量級；
+  紀律上，「先建空間、後進設備」的分段模式與其在環球晶「長約綁定產能、不做投機性擴產」的作風一致。
+  <strong>利益一致性來自中美矽晶持有的 28.46% 股權，而非個人持股。</strong></p>
+  </div>
+</div>
+
+<div class="mini-table">
+<div class="mini-t"><table>
+<thead><tr><th>經營團隊</th><th>職務</th><th class="num">持股</th></tr></thead>
+<tbody>
+<tr><td>徐秀蘭</td><td>董事長</td><td class="num">法人代表</td></tr>
+<tr><td>黃國鈞</td><td>董事兼總經理</td><td class="num">0.06%</td></tr>
+<tr><td>祁幼銘</td><td>榮譽董事長暨顧問（創辦人）</td><td class="num">2.04%</td></tr>
+<tr><td>蔡文惠</td><td>董事</td><td class="num">1.32%</td></tr>
+<tr><td>薛文翔</td><td>發言人</td><td class="num">—</td></tr>
+<tr><td>周靜文 / 劉忠賢<br>蔡子萱 / 藍崇文</td><td>獨立董事（4 席）</td><td class="num">0%</td></tr>
+</tbody></table></div>
+<div class="mini-t"><table>
+<thead><tr><th>股權結構</th><th class="num">持股率</th></tr></thead>
+<tbody>
+<tr><td><strong>中美矽晶製品（5483）</strong></td><td class="num hi"><strong>28.46%</strong></td></tr>
+<tr><td>董監事合計</td><td class="num">31.88%</td></tr>
+<tr><td>外資</td><td class="num">26.4-26.8%</td></tr>
+<tr><td>投信</td><td class="num">0.11%</td></tr>
+<tr><td>合作金庫</td><td class="num">2.62%</td></tr>
+<tr><td>全球人壽</td><td class="num">2.28%</td></tr>
+<tr><td>新制勞退基金</td><td class="num">2.24%</td></tr>
+</tbody></table></div>
+</div>
+<span class="src">中美矽晶三席董事：姚宕梁、徐秀蘭、陳振乾。公司治理評鑑 2025 年度為前 5%（A+），較 2024 年的 6-20%（A）進步。</span>
+
+<h2 class="ch">兩個值得留意的訊號</h2>
+<div class="risk-matrix">
+  <div class="risk-card up">
+    <h4>訊號 ① 創辦人有序交棒，非經營權爭奪</h4>
+    <div class="risk-item">祁幼銘為創辦人之一，長期深耕化合物半導體，帶領公司建立全球第二大 GaAs 代工廠的地位。</div>
+    <div class="risk-item">2026/3 轉任榮譽董事長暨顧問並保留 2.04% 持股，代表技術與客戶關係的交接是有序的。</div>
+    <div class="risk-item">公司治理評鑑同期自 A 升至 A+（前 5%）。</div>
+  </div>
+  <div class="risk-card dn">
+    <h4>訊號 ② 投信持股僅 0.11%</h4>
+    <div class="risk-item">本土法人幾乎沒有部位。這是一體兩面：獲利能見度若改善，潛在增量買盤來源存在。</div>
+    <div class="risk-item">但目前缺少本土法人的價格支撐。外資持股 26.4-26.8%，近 30 個交易日累計賣超 6,416 張。</div>
+    <div class="risk-item">融資餘額 8,706 張（8/6），融資使用率約兩成，散戶參與度不低。</div>
+  </div>
+</div>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 12</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P13 產能 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">產能、稼動率與擴產路徑</h1>
+
+<div class="chart-wrap"><div class="chart-title">稼動率與毛利率的背離（本報告的核心圖）</div><div class="chart-sub">稼動率（%，柱，公司揭露區間中值）／毛利率（%，線）· 4Q25-4Q26F</div><div class="chart-container" style="height:175px;width:100%;position:relative"><canvas id="cCapUtil" style="display:block;width:100%;height:175px"></canvas></div></div>
+
+<table>
+<thead><tr><th>項目</th><th>現況</th><th>2027-2028 規劃</th></tr></thead>
+<tbody>
+<tr><td>月產能</td><td>約 2 萬片（4Q25 揭露 22 千片）</td><td>新產能 2027Q2 至 2027H2 陸續開出</td></tr>
+<tr><td>稼動率</td><td>4Q25 75-80% → 1Q26 65-70% → 2Q26 60-65%</td><td>公司預告 2H26 較上半年降低</td></tr>
+<tr><td>資本支出</td><td>2026 年原規劃 5-6 億元（無塵室完善為主）</td><td class="hi">另加 8/6 通過的約 28 億元廠務工程，分年執行</td></tr>
+<tr><td>折舊</td><td>約 7-8 億元／年，與前兩年相近</td><td>建物折舊年限長於設備，壓力分年釋放</td></tr>
+<tr><td>擴產策略</td><td colspan="2">「<strong>先建空間、後進設備</strong>」——優先改善動線、預留非射頻設備空間，設備投入視手機／Wi-Fi／非射頻實際訂單調整</td></tr>
+</tbody></table>
+
+<div class="callout green">
+  <div class="callout-title">擴產不是因為滿載，是因為動線與空間</div>
+  <p style="margin:0">這一點值得強調：宏捷科在 2Q26 稼動率僅 60-65% 的情況下宣布 28 億元擴建。
+  公司的說明是——擴建主要為了改善動線、預留非射頻設備空間，而非因全面滿載被迫擴產；
+  但高階 HBT 產線（手機、Wi-Fi 6/7）已接近滿載。
+  <strong>這是逆循環佈局：在稼動率低點建空間，等 2028 年非射頻需求到來時不必被動追廠務工程。</strong>
+  代價是 2027-2028 年的自由現金流，效益要到 2029 年之後才會顯現。</p>
+</div>
+
+<h2 class="ch">全球 GaAs 代工的供給結構：高度寡佔</h2>
+<div class="chart-wrap"><div class="chart-title">主要 GaAs 代工廠月產能對比</div><div class="chart-sub">千片／月（六吋約當）· 產業推估 · 小廠多在 5 千片以下，不具接大單能力</div><div class="chart-container" style="height:148px;width:100%;position:relative"><canvas id="cSupply" style="display:block;width:100%;height:148px"></canvas></div></div>
+<p style="margin-top:4px">具規模者屈指可數：台灣的穩懋與宏捷科、中國的三安。
+驗證門檻以年計（以 PD 為例，2Q26 送樣 → 2027H2 完成驗證 → 2028 初起量，前後 18-24 個月），
+客戶一旦導入，替換成本極高。<strong>資本密集與驗證門檻讓既有玩家在擴產時保守但前瞻，
+成本上升短期壓抑獲利，卻也提高新進者門檻。</strong></p>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 13</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ 章節 03 ══════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">03</div>
+  <div class="sec-eyebrow">Industry &amp; Competition</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業與競爭</div>
+  <div class="sec-desc">手機是「量平、值升」；Wi-Fi 是「低階被矽吃掉、高階顆數翻倍」；
+  非射頻是「技術門檻與毛利率都更高，但時程更長」。<br><br>
+  三條線的加總，決定宏捷科 2028 年的樣子。</div>
+</div>
+
+<!-- ══════════ P15 手機 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">手機射頻：量不再成長，值持續抬高</h1>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">全球智慧手機出貨進入零成長時代</div><div class="chart-sub">億支 · 2025-2026 · 2026 年安卓年減 9-16%</div><div class="chart-container" style="height:195px;width:100%;position:relative"><canvas id="cPhoneTam" style="display:block;width:100%;height:195px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">單機 PA 顆數：規格升級抵銷量的停滯</div><div class="chart-sub">顆／台 · 5G 支援頻段合計可超過 90 個</div><div class="chart-container" style="height:195px;width:100%;position:relative"><canvas id="cPaCount" style="display:block;width:100%;height:195px"></canvas></div></div>
+</div>
+
+<h2 class="ch">三個驅動，只有兩個是持續的</h2>
+<table>
+<thead><tr><th>驅動</th><th>性質</th><th>對宏捷科的影響</th><th>持續性</th></tr></thead>
+<tbody>
+<tr><td>PA 顆數升級（4G 2-3 顆 → 5G 3-5 顆）</td><td>產業性</td><td>單機 GaAs 用量與 ASP 上升</td><td class="pos">持續（緩慢）</td></tr>
+<tr><td>Flip Chip 高階化（光罩 14→16 道）</td><td>產業性</td><td>高階與低階手機毛利率相差 5-6 個百分點</td><td class="pos">持續</td></tr>
+<tr><td>美系 IDM 退出 Android 騰挪份額</td><td>一次性</td><td class="hi">2026 年最重要的成長來源</td><td class="neg"><strong>2028 年終止</strong></td></tr>
+</tbody></table>
+
+<h2 class="ch">2026 年的逆風：記憶體排擠效應</h2>
+<p>2026 年 DRAM 因 AI 伺服器需求暴衝而大漲，導致中低階手機 BOM 成本增加 10-20%，
+多數陸系中低階機種被迫降量出貨。這造成兩個效果：</p>
+<ul>
+<li><strong>上半年提前拉貨，下半年出現調整。</strong>公司預告 3Q26 手機出貨量小幅衰退，
+但高階旗艦機開始拉貨可部分彌補。</li>
+<li><strong>成長動能轉向韓系品牌。</strong>韓系品牌具備內部記憶體供應，不受漲價衝擊，
+是 3Q26 手機 PA 成長的主要來源——而韓系客戶正是宏捷科 2026 年占比成長最快的一塊
+（2Q26 接近 10%，較 1Q26 明顯成長）。</li>
+<li><strong>高階機種的緩衝。</strong>高階手機記憶體占物料成本比重較低，毛利率面對成本上漲較具緩衝效果。
+宏捷科近年積極耕耘中國 5G / Wi-Fi 7 高階市場，客戶受衝擊相對有限。</li>
+</ul>
+
+<blockquote>手機這條線的正確理解是：<strong>宏捷科 2026 年手機營收成長，靠的不是市場成長，
+而是從別人手上拿到份額。</strong>這讓 2026-2028 年的成長可預測性高於產業，
+但也意味著 2029 年之後必須換一個引擎。</blockquote>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 15</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P16 Wi-Fi ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">Wi-Fi 7 與無人機：顆數翻倍的利基市場</h1>
+
+<div class="timeline">
+  <div class="tl-item"><div class="tl-year">Wi-Fi 5</div><div class="tl-spec">2-3 顆</div><div class="tl-tech">中低階已大量被 Silicon / SiGe 方案取代</div></div>
+  <div class="tl-item"><div class="tl-year">Wi-Fi 6</div><div class="tl-spec">3-4 顆</div><div class="tl-tech">部分中低階同樣面臨矽方案侵蝕</div></div>
+  <div class="tl-item active"><div class="tl-year">Wi-Fi 7</div><div class="tl-spec">8-10 顆</div><div class="tl-tech">理論速率 46.1 Gbps；2028 年市場規模 120-140 億美元、CAGR 14-18%</div></div>
+  <div class="tl-item next"><div class="tl-year">無人機 Wi-Fi</div><div class="tl-spec">4-8 顆</div><div class="tl-tech">圖像傳輸、遙控鏈路、地面基站與反制系統；2Q26 占營收 6-8%</div></div>
+</div>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">Wi-Fi 7 滲透率快速爬升</div><div class="chart-sub">％ · 2024-2026F</div><div class="chart-container" style="height:190px;width:100%;position:relative"><canvas id="cWifiPen" style="display:block;width:100%;height:190px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">非射頻應用的 TAM 年複合成長率</div><div class="chart-sub">％ · 各機構推估區間中值</div><div class="chart-container" style="height:190px;width:100%;position:relative"><canvas id="cTamNonRf" style="display:block;width:100%;height:190px"></canvas></div></div>
+</div>
+
+<h2 class="ch">兩股相反的力量</h2>
+<div class="risk-matrix">
+  <div class="risk-card dn">
+    <h4>逆風：矽基方案的結構性侵蝕</h4>
+    <div class="risk-item">Router 市場中，部分中低階 Wi-Fi 5 / Wi-Fi 6 設備已被 Silicon（含 SiGe）方案取代。</div>
+    <div class="risk-item">這是不可逆的材料替代，GaAs 的守勢範圍收縮到 Wi-Fi 7 與高階 Router / AP。</div>
+    <div class="risk-item">公司對 Router 需求的看法一貫是「<strong>持平</strong>」——成長完全不來自舊世代產品。</div>
+  </div>
+  <div class="risk-card up">
+    <h4>順風：無人機與低空經濟</h4>
+    <div class="risk-item">中國推動低空經濟，一台無人機需 4-8 顆 Wi-Fi PA（含反制系統）。</div>
+    <div class="risk-item">自 2026 年 2 月起需求明顯增加，客戶數持續增加；2Q26 占營收 6-8%。</div>
+    <div class="risk-item">2035 年物流無人機產值預估上看人民幣兆元、CAGR 約 20%。</div>
+    <div class="risk-item">延伸應用：LiDAR 用於無人機障礙物識別、機器人視覺與手部感測。</div>
+  </div>
+</div>
+
+<h2 class="ch">手機 Wi-Fi：下一個轉單標的</h2>
+<p>手機 Wi-Fi 過去在陸系與韓系品牌主要由美系 IDM 廠供應。
+隨美系 IDM 逐步退出 Android 市場，美系 Fabless 與陸系客戶開始承接相關市場。
+公司明確將<strong>手機 Wi-Fi 列為後續拓展的新應用</strong>——這與手機 Cellular PA 是同一個轉單邏輯，
+只是時間落後一到兩年。</p>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 16</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P17 競爭者 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">競爭者分析</h1>
+
+<div class="co-card">
+  <div class="co-card-head slate">
+    <div><div class="co-name">穩懋　WIN Semiconductors</div><div class="co-ticker">3105.TWO · 全球最大 GaAs 代工廠 · 最直接對手</div></div>
+    <div class="co-badge"><span style="color:#fff;font-size:12px">TTM PE 73.2x</span></div>
+  </div>
+  <div class="co-metrics">
+    <div class="co-metric"><div class="co-metric-val">176.5 億</div><div class="co-metric-label">TTM 營收</div></div>
+    <div class="co-metric"><div class="co-metric-val dn">7.7%</div><div class="co-metric-label">TTM 營益率</div></div>
+    <div class="co-metric"><div class="co-metric-val">5.22</div><div class="co-metric-label">TTM EPS</div></div>
+    <div class="co-metric"><div class="co-metric-val">約 5.5 萬片</div><div class="co-metric-label">月產能</div></div>
+  </div>
+  <div class="co-body"><p style="margin:0">月產能約為宏捷科的 2.5-3 倍，長期綁定美系大廠。<strong>劣勢是對美系客戶依賴度過高</strong>：
+  美系 IDM 退出 Android 市場時，穩懋是相對受害者，而宏捷科（服務承接方的陸系與美系 Fabless）是受益者。
+  穩懋 2025 上半年連兩季營益虧損，2026Q1 恢復至營益 4.31 億元。<strong>其 TTM 本益比 73.2x 有相當部分是分母失真，不是溢價。</strong></p></div>
+</div>
+
+<div class="co-card">
+  <div class="co-card-head indigo">
+    <div><div class="co-name">環宇-KY　Global Communication Semiconductors</div><div class="co-ticker">4991.TWO · 光通訊 / CPO 導向</div></div>
+    <div class="co-badge"><span style="color:#fff;font-size:12px">TTM PE 175.4x</span></div>
+  </div>
+  <div class="co-metrics">
+    <div class="co-metric"><div class="co-metric-val">24.4 億</div><div class="co-metric-label">TTM 營收</div></div>
+    <div class="co-metric"><div class="co-metric-val up">22.5%</div><div class="co-metric-label">TTM 營益率</div></div>
+    <div class="co-metric"><div class="co-metric-val">2.52</div><div class="co-metric-label">TTM EPS</div></div>
+    <div class="co-metric"><div class="co-metric-val">最高</div><div class="co-metric-label">四家中本益比</div></div>
+  </div>
+  <div class="co-body"><p style="margin:0">規模最小但定位截然不同：主攻光通訊與 CPO。TTM 營益率 22.5% 與本益比 175.4x 均為四家最高——市場給的是 AI 光通訊的選擇權價值。
+  <strong>這正是宏捷科想走、但還沒走到的位置：宏捷科的非射頻僅占 5-6%，環宇則以此為主業。</strong></p></div>
+</div>
+
+<div class="co-card">
+  <div class="co-card-head wine">
+    <div><div class="co-name">全新　Visual Photonics Epitaxy</div><div class="co-ticker">2455.TW · GaAs / InP 磊晶（上游供應者）· GiS 已覆蓋</div></div>
+    <div class="co-badge"><span class="badge sell">GiS 減碼 UW</span><span style="color:#fff;font-size:12px">TP 370（06/18）</span></div>
+  </div>
+  <div class="co-body"><p style="margin:0"><strong>TTM 營收 35.5 億元｜營益率 20.2%｜EPS 3.18 元｜本益比 117.0x。</strong>
+  上游磊晶供應者而非代工競爭者，但資本市場歸為同一族群。GiS 於 2026/6/18 給予減碼（TP 370），
+  核心保留是「2027F 共識離散度 2.2 倍」與「InP 基板受中國出口管制卡關」。<strong>其高本益比同樣建立在 AI 光通訊敘事上。</strong></p></div>
+</div>
+
+<div class="co-card">
+  <div class="co-card-head blue">
+    <div><div class="co-name">三安光電（集成電路）</div><div class="co-ticker">中國 · 國產替代主力 · 未在台上市</div></div>
+  </div>
+  <div class="co-body"><p style="margin:0 0 5px">中國最大化合物半導體集團，在「去美化」政策下持續獲得本土設計公司訂單，是宏捷科在陸系客戶端的直接對手。
+  優勢是政策支持與價格；劣勢是高階製程與國際客戶認證。<strong>宏捷科的防線在於：陸系設計公司做中高階機種時，仍傾向使用台灣代工廠的成熟製程與良率。</strong></p>
+  <p style="margin:0"><strong>另註：Qorvo / Skyworks 不是對手，是變數。</strong>兩家是自有設計 + 自有產能的 IDM，其退出 Android 的進度決定宏捷科 2026-2028 年份額提升的斜率。</p></div>
+</div>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 17</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ 章節 04 ══════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">04</div>
+  <div class="sec-eyebrow">Financial Analysis &amp; Forecast</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">財務分析與預估</div>
+  <div class="sec-desc">2022 年 EPS 0.07 元、2026F 5.47 元——四年 78 倍的成長，
+  但這個倍數本身就說明了這家公司的波動有多大。<br><br>
+  本章拆解 1H26 的實績、2H26 的指引衝突，與 2026-2030 年的完整預估。</div>
+</div>
+
+<!-- ══════════ P19 歷史 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">歷史財務回顧（2022-2025）</h1>
+
+<div class="chart-wrap"><div class="chart-title">營收與毛利率：2025 年是「營收衰退但獲利成長」的轉折年</div><div class="chart-sub">營收（億元，柱）／毛利率（%，線）· 2022-2028F</div><div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="cRevHist" style="display:block;width:100%;height:210px"></canvas></div></div>
+
+<table>
+<thead><tr><th>百萬元</th><th class="num">2022</th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th></tr></thead>
+<tbody>
+<tr><td>營業收入</td><td class="num">2,164</td><td class="num">2,723</td><td class="num">4,456</td><td class="num">4,117</td></tr>
+<tr><td>　YoY</td><td class="num neg">−54.1%</td><td class="num">+25.9%</td><td class="num">+63.6%</td><td class="num neg">−7.6%</td></tr>
+<tr><td>營業毛利</td><td class="num">344</td><td class="num">415</td><td class="num">885</td><td class="num">1,090</td></tr>
+<tr><td>　毛利率</td><td class="num">15.9%</td><td class="num">15.2%</td><td class="num">19.9%</td><td class="num hi">26.5%</td></tr>
+<tr><td>營業費用</td><td class="num">381</td><td class="num">347</td><td class="num">360</td><td class="num">352</td></tr>
+<tr><td>　營費率</td><td class="num">17.6%</td><td class="num">12.7%</td><td class="num">8.1%</td><td class="num">8.6%</td></tr>
+<tr><td>營業利益</td><td class="num neg">−37</td><td class="num">68</td><td class="num">525</td><td class="num">738</td></tr>
+<tr><td>　營益率</td><td class="num neg">−1.7%</td><td class="num">2.5%</td><td class="num">11.8%</td><td class="num">17.9%</td></tr>
+<tr><td>業外收支</td><td class="num">52</td><td class="num">26</td><td class="num">72</td><td class="num">42</td></tr>
+<tr><td>稅後淨利</td><td class="num">14</td><td class="num">83</td><td class="num">521</td><td class="num">660</td></tr>
+<tr><td><strong>EPS（元）</strong></td><td class="num">0.07</td><td class="num">0.42</td><td class="num">2.65</td><td class="num">3.36</td></tr>
+<tr><td>ROE</td><td class="num">0.18%</td><td class="num">1.11%</td><td class="num">6.81%</td><td class="num">8.23%</td></tr>
+<tr><td>營業活動現金流</td><td class="num">508</td><td class="num">137</td><td class="num">1,249</td><td class="num">1,308</td></tr>
+<tr><td>資本支出</td><td class="num">1,081</td><td class="num">638</td><td class="num">863</td><td class="num neg">225</td></tr>
+</tbody></table>
+<span class="src">全表來自 MOPS 公告，並與四家券商財報表逐格比對一致。tw-stock-scanner 資料庫的季度數字（2023Q1-2026Q1）與 MOPS 完全相符。未採用 yfinance。</span>
+
+<h2 class="ch">兩個結構性事實</h2>
+<div class="risk-matrix">
+  <div class="risk-card up">
+    <h4>① 營費率已壓到 8-9% 的低檔</h4>
+    <div class="risk-item">2022 年 17.6% → 2024-2025 年 8.1-8.6%。</div>
+    <div class="risk-item">意味著未來的獲利改善<strong>必須來自毛利率</strong>，營費率沒有太多壓縮空間。</div>
+    <div class="risk-item">對照組：GiS 於 2026/8/5 覆蓋的瑞昱（2379），其核心問題正是營費率結構性升到 37%。宏捷科在這一項上體質截然不同。</div>
+  </div>
+  <div class="risk-card dn">
+    <h4>② 這是一家獲利波動極大的公司</h4>
+    <div class="risk-item">2022 年 EPS 0.07 元、2023Q1 單季 −1.00 元、2024Q4 單季營益再度轉負（−0.34 億元）。</div>
+    <div class="risk-item">四年間 EPS 從 0.07 到 3.36（48 倍），2026F 再到 5.47。<strong>倍數的大小本身就是波動的證據。</strong></div>
+    <div class="risk-item">估值上的意涵：不能對循環高點的毛利率套用歷史平均本益比。</div>
+  </div>
+</div>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 19</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P20 1H26 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">1H26 實績拆解 —— 超越全部四家券商預估</h1>
+
+<p>2026 年 8 月 6 日，公司公告 1H26 稅後淨利 5.75 億元、EPS 2.93 元。
+結合已公告的 1Q26（EPS 1.51 元、淨利 2.9686 億元）與 4-6 月月營收，
+可以完整還原 2Q26 的單季數字：</p>
+
+<table>
+<thead><tr><th>項目</th><th class="num">1Q26 實績</th><th class="num">2Q26 實績／推導</th><th class="num">1H26 合計</th></tr></thead>
+<tbody>
+<tr><td>營業收入（百萬元）</td><td class="num">1,222.3</td><td class="num">1,298.4</td><td class="num hi">2,520.8</td></tr>
+<tr><td>　QoQ</td><td class="num">−2.5%</td><td class="num pos">+6.2%</td><td class="num">—</td></tr>
+<tr><td>　YoY</td><td class="num pos">+58.4%</td><td class="num pos">+33.2%</td><td class="num pos"><strong>+44.4%</strong></td></tr>
+<tr><td>營業利益</td><td class="num">334.4</td><td class="num">320.1</td><td class="num">654.5</td></tr>
+<tr><td>　營益率</td><td class="num">27.4%</td><td class="num">24.7%</td><td class="num">26.0%</td></tr>
+<tr><td>推估毛利率</td><td class="num hi">35.4%</td><td class="num">32.7%</td><td class="num">33.9%</td></tr>
+<tr><td>稅後淨利</td><td class="num">296.9</td><td class="num">278.1</td><td class="num hi">575.0</td></tr>
+<tr><td><strong>EPS（元）</strong></td><td class="num">1.51</td><td class="num">1.42</td><td class="num hi"><strong>2.93</strong></td></tr>
+</tbody></table>
+<span class="src">1Q26 為 MOPS 實績。2Q26 營收為 4-6 月月營收加總實績；淨利由 1H26 公告值減 1Q26 推導；
+營業利益與毛利率為推估（假設營費率 8.0%、業外 15 百萬元、有效稅率 17%）。</span>
+
+<h2 class="ch">與券商預估的落差</h2>
+<table>
+<thead><tr><th>來源</th><th>報告日</th><th class="num">1H26F EPS</th><th class="num">2026F EPS</th><th>目標價與方法</th><th class="num">實際 2.93 的超越幅度</th></tr></thead>
+<tbody>
+<tr><td>本土券商 A</td><td>2026/3/17</td><td class="num">約 2.40</td><td class="num">4.70</td><td>區間操作 140（30x × 2026F）</td><td class="num pos">+22%</td></tr>
+<tr><td>本土券商 B</td><td>2026/3/19</td><td class="num">2.41</td><td class="num">4.73</td><td>增加持股 153（32x × 2H26-1H27）</td><td class="num pos">+22%</td></tr>
+<tr><td>本土券商 C</td><td>2026/3/31</td><td class="num">2.26</td><td class="num">5.14</td><td>買進 155（30x × 2026F）</td><td class="num pos">+30%</td></tr>
+<tr><td>本土券商 D</td><td>2026/4/23</td><td class="num">2.68</td><td class="num">5.61</td><td>買進 185（P/B 4.0x × 2026F BVPS）</td><td class="num pos">+9%</td></tr>
+<tr><td><strong>GiS</strong></td><td><strong>2026/8/7</strong></td><td class="num hi"><strong>2.93（實績）</strong></td><td class="num hi"><strong>5.47</strong></td><td><strong>增加持股 137（四法加權）</strong></td><td class="num">—</td></tr>
+</tbody></table>
+<span class="src">依 GiS 匿名化規範，券商名稱於最末「資料來源」段完整列名。四家報告均為 3-4 月出版，尚未反映 1H26 實績與 8/6 的 28 億元工程決議。</span>
+
+<blockquote><strong>GiS 的 2026F EPS 5.47 元位於券商區間（4.70-5.61）的上半部，但目標價 137 元卻低於全部四家（140-185）。</strong>
+差異不在獲利預估，在估值方法：四家全數採用單一方法（三家 PE 30-32x、一家 P/B 4.0x），
+本報告則以 DCF（權重 25%）計入 2027-2028 年 28 億元工程對自由現金流的壓縮——
+這是四家報告出版時尚未發生的事件。</blockquote>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 20</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P21 月營收 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">月營收動能與 2H26 指引</h1>
+
+<div class="chart-wrap"><div class="chart-title">月營收與年增率：YoY 高峰已過，絕對金額維持高檔</div><div class="chart-sub">億元（柱）／YoY %（線）· 2025-01 至 2026-07</div><div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="cMRev" style="display:block;width:100%;height:220px"></canvas></div></div>
+
+<p>2026 年 7 月營收 4.19 億元（MoM +2.66%、YoY +18.39%），累計前 7 月年增約 40%。
+值得注意的是<strong>年增率的收斂軌跡</strong>：1 月 +90.2%、3 月 +47.9%、5 月 +37.0%、6 月 +16.1%、7 月 +18.4%。
+這不是動能轉弱，而是 2025 年下半年基期墊高的自然結果（2025 年 10 月起月營收已回到 4 億元以上）。</p>
+
+<h2 class="ch">2H26 指引：兩個版本的衝突必須交代</h2>
+<table>
+<thead><tr><th>來源時點</th><th>3Q26 指引</th><th>4Q26 指引</th><th>2H26 vs 1H26</th></tr></thead>
+<tbody>
+<tr><td>2026/7/27 法人會議紀要</td><td>營收季減個位數</td><td class="neg">通常較 3Q26 小幅衰退</td><td class="neg">個位數衰退</td></tr>
+<tr><td>2026/8/4-8/5 較新版本</td><td>持平或小幅季減個位數</td><td class="pos">訂單能見度已看到 4Q，可望優於 3Q26</td><td class="pos">仍有機會優於上半年</td></tr>
+<tr><td><strong>GiS 採用（兩者之間）</strong></td><td class="num"><strong>−3.0% QoQ</strong></td><td class="num"><strong>+2.0% QoQ</strong></td><td class="num"><strong>+0.9%</strong></td></tr>
+</tbody></table>
+
+<p>本模型不採信樂觀版的「明顯優於」，也不採信 7/27 版本的「個位數衰退」，取兩者之間。
+<strong>敏感度：若採 7/27 版本（2H26 較 1H26 衰退 5%），2026F EPS 將自 5.47 降至約 5.20 元。</strong></p>
+
+<div class="chart-wrap"><div class="chart-title">季度營收與 EPS：2026 全年逐季走勢</div><div class="chart-sub">營收（億元，柱）／EPS（元，線）· 2025Q1-2026Q4F</div><div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="cQtr" style="display:block;width:100%;height:200px"></canvas></div></div>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 21</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P22 損益預估 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">損益預估（2026F-2030F）</h1>
+
+<table>
+<thead><tr><th>百萬元</th><th class="num">2025A</th><th class="num">2026F</th><th class="num">2027F</th><th class="num">2028F</th><th class="num">2029F</th><th class="num">2030F</th></tr></thead>
+<tbody>
+<tr><td>營業收入</td><td class="num">4,117</td><td class="num">5,065</td><td class="num">5,622</td><td class="num">6,353</td><td class="num">6,988</td><td class="num">7,547</td></tr>
+<tr><td>　YoY</td><td class="num neg">−7.6%</td><td class="num pos">+23.0%</td><td class="num">+11.0%</td><td class="num">+13.0%</td><td class="num">+10.0%</td><td class="num">+8.0%</td></tr>
+<tr><td>營業毛利</td><td class="num">1,090</td><td class="num">1,631</td><td class="num">1,754</td><td class="num">2,033</td><td class="num">2,271</td><td class="num">2,490</td></tr>
+<tr><td>　毛利率</td><td class="num">26.5%</td><td class="num hi">32.2%</td><td class="num">31.2%</td><td class="num">32.0%</td><td class="num">32.5%</td><td class="num">33.0%</td></tr>
+<tr><td>營業費用</td><td class="num">352</td><td class="num">405</td><td class="num">461</td><td class="num">508</td><td class="num">559</td><td class="num">604</td></tr>
+<tr><td>　營費率</td><td class="num">8.6%</td><td class="num">8.0%</td><td class="num">8.2%</td><td class="num">8.0%</td><td class="num">8.0%</td><td class="num">8.0%</td></tr>
+<tr><td>營業利益</td><td class="num">738</td><td class="num">1,227</td><td class="num">1,293</td><td class="num">1,525</td><td class="num">1,712</td><td class="num">1,887</td></tr>
+<tr><td>　營益率</td><td class="num">17.9%</td><td class="num hi">24.2%</td><td class="num">23.0%</td><td class="num">24.0%</td><td class="num">24.5%</td><td class="num">25.0%</td></tr>
+<tr><td>業外收支</td><td class="num">42</td><td class="num">69</td><td class="num">55</td><td class="num">60</td><td class="num">65</td><td class="num">70</td></tr>
+<tr><td>稅前淨利</td><td class="num">780</td><td class="num">1,296</td><td class="num">1,348</td><td class="num">1,585</td><td class="num">1,777</td><td class="num">1,957</td></tr>
+<tr><td>所得稅（17%）</td><td class="num">120</td><td class="num">221</td><td class="num">229</td><td class="num">269</td><td class="num">302</td><td class="num">333</td></tr>
+<tr><td>稅後淨利</td><td class="num">660</td><td class="num">1,075</td><td class="num">1,119</td><td class="num">1,315</td><td class="num">1,475</td><td class="num">1,624</td></tr>
+<tr><td><strong>EPS（元）</strong></td><td class="num">3.36</td><td class="num hi">5.47</td><td class="num hi">5.69</td><td class="num hi">6.69</td><td class="num">7.51</td><td class="num">8.26</td></tr>
+<tr><td>　YoY</td><td class="num">+26.7%</td><td class="num pos">+62.8%</td><td class="num neg">+4.1%</td><td class="num pos">+17.6%</td><td class="num">+12.1%</td><td class="num">+10.1%</td></tr>
+<tr><td>ROE</td><td class="num">8.2%</td><td class="num">12.5%</td><td class="num">12.1%</td><td class="num">13.3%</td><td class="num">13.8%</td><td class="num">14.0%</td></tr>
+</tbody></table>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">營益率橋接：2025A → 2026F（+6.3pp）</div><div class="chart-sub">百分點 · 毛利率貢獻 +5.7pp、營費率貢獻 +0.6pp</div><div class="chart-container" style="height:195px;width:100%;position:relative"><canvas id="cBridge" style="display:block;width:100%;height:195px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">ROE 回升路徑：從 8.2% 到 14%</div><div class="chart-sub">％ · 2023-2030F</div><div class="chart-container" style="height:195px;width:100%;position:relative"><canvas id="cRoe" style="display:block;width:100%;height:195px"></canvas></div></div>
+</div>
+
+<h2 class="ch">兩個關鍵假設，也是與市場的分歧點</h2>
+<ul>
+<li><strong>2027F 毛利率降至 31.2%（低於多數券商的持平或上升）。</strong>
+反映新產能於 2027Q2-H2 開出後初期稼動率偏低與廠務攤提增加，
+抵銷非射頻占比自 5.5% 升至 8.5% 的正貢獻。<strong>這是本模型最主要的獨立判斷。</strong></li>
+<li><strong>2027F EPS 僅 +4.1%。</strong>2026 年基期已包含 1H26 的毛利率高點（33.9%），
+2027 年是「新產能開出但訂單未到、原物料成本全年反映」的過渡年。
+成長要到 2028 年 PD 起量、非射頻占比達 13% 之後才會回來（+17.6%）。</li>
+</ul>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 22</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P23 三情境 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">三情境（方法論 §4.2）</h1>
+
+<p>三個情境的差異不是 EPS 的 ±10%，而是四個具體驅動因子的不同組合：</p>
+
+<table>
+<thead><tr><th>驅動因子</th><th>保守（25%）</th><th>基礎（50%）</th><th>樂觀（25%）</th></tr></thead>
+<tbody>
+<tr><td>① 2H26 手機需求</td><td>記憶體排擠擴大至高階，3Q26 −8%、4Q26 再 −5% QoQ</td><td>3Q26 −3%、4Q26 +2%（指引中值）</td><td>韓系與美系 Fabless 超預期，3Q26 持平、4Q26 +6%</td></tr>
+<tr><td>② 原物料轉嫁</td><td>僅 3 成客戶接受，2H26 毛利率 28%</td><td>半數客戶接受，2H26 毛利率 30.5%</td><td>8 成客戶自 3Q26 接受，2H26 毛利率 32%</td></tr>
+<tr><td>③ 非射頻占比（2027）</td><td>停在 6%，PD 驗證延至 2028H2</td><td>8.5%，PD 依計畫 2027H2 完成驗證</td><td>達 11%，PD 提前 + 濾波器放量 + HAPS 太陽能 2027 恢復</td></tr>
+<tr><td>④ 新產能稼動</td><td>2027 稼動率降至 55%，攤提侵蝕 2.5pp</td><td>2027 稼動率 62%，攤提侵蝕 1.2pp</td><td>2027 稼動率 70%，攤提由營收成長吸收</td></tr>
+<tr><td><strong>2026F EPS（元）</strong></td><td class="num">4.95</td><td class="num hi">5.47</td><td class="num">5.85</td></tr>
+<tr><td><strong>2027F EPS（元）</strong></td><td class="num">4.70</td><td class="num hi">5.69</td><td class="num">6.60</td></tr>
+<tr><td>2027F 毛利率</td><td class="num">28.5%</td><td class="num">31.2%</td><td class="num">34.0%</td></tr>
+<tr><td>2027F ROE</td><td class="num">10.0%</td><td class="num">12.1%</td><td class="num">13.8%</td></tr>
+<tr><td>目標本益比</td><td class="num">22.0x</td><td class="num">27.0x</td><td class="num">32.0x</td></tr>
+<tr><td><strong>情境目標價（元）</strong></td><td class="num"><strong>103</strong></td><td class="num hi"><strong>154</strong></td><td class="num"><strong>211</strong></td></tr>
+<tr><td>對現價 123.5</td><td class="num neg">−16.3%</td><td class="num pos">+24.5%</td><td class="num pos">+71.0%</td></tr>
+</tbody></table>
+
+<div class="chart-wrap"><div class="chart-title">三情境 2027F EPS 與對應目標價</div><div class="chart-sub">EPS（元，左軸柱）／目標價（元，右軸點）· 機率加權期望值 155.5 元</div><div class="chart-container" style="height:205px;width:100%;position:relative"><canvas id="cScenario" style="display:block;width:100%;height:205px"></canvas></div></div>
+
+<blockquote><strong>情境的不對稱性值得注意：向上 +71%、向下 −16%，上下比約 4.4:1。</strong>
+下檔支撐來自淨現金 24.7 億元（每股 12.6 元）與 P/B 歷史下緣 1.5x（約 68 元）；
+上檔則是非射頻重估的選擇權。<br><br>
+但機率加權期望值 155.5 元<strong>只是本益比法內部的分布</strong>，不是最終目標價。
+最終目標價 137 元納入了 DCF（105 元）與 P/B（137 元）的加權——
+兩者的 18.5 元差距，正是 DCF 對 2027-2028 年資本支出現金流壓力的懲罰。</blockquote>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 23</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ 章節 05 ══════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">05</div>
+  <div class="sec-eyebrow">Valuation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">估值分析</div>
+  <div class="sec-desc">四種方法、一個結論。<br><br>
+  本益比法說 154 元、DCF 說 105 元、股價淨值比說 137 元、同業比較說 137 元。
+  加權後的 137 元，落在 §4.3 的「增加持股」區間。</div>
+</div>
+
+<!-- ══════════ P25 方法 + PE ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">方法選用與本益比法（權重 45%）</h1>
+
+<h2 class="ch">為什麼是這四種方法</h2>
+<table>
+<thead><tr><th>判斷項</th><th>宏捷科的狀態</th><th>對估值方法的意涵</th></tr></thead>
+<tbody>
+<tr><td>是否連續獲利</td><td>是（2023 年起連 14 季獲利）</td><td class="pos">本益比可用</td></tr>
+<tr><td>盈餘品質</td><td>業外僅占稅前淨利 5.3%（2026F 69/1,296），本業主導</td><td class="pos">不需調整</td></tr>
+<tr><td>歷史 EPS 基期</td><td>2022 年 0.07 元、2023 年 0.42 元</td><td class="neg"><strong>trailing PE band 會出現 300-2,000x 的無意義讀數 → 失效</strong></td></tr>
+<tr><td>資產密集度</td><td>不動產廠房設備 47.9 億元，占總資產 45.5%</td><td class="pos">股價淨值比有參考價值</td></tr>
+<tr><td>自由現金流可預測性</td><td>中等；2027-2028 進入資本支出高峰</td><td class="pos"><strong>DCF 必做，且會顯著低於本益比法</strong></td></tr>
+<tr><td>權益法投資</td><td>無重大權益法投資</td><td>不需 SOTP</td></tr>
+</tbody></table>
+
+<div class="callout">
+  <div class="callout-title">自動化工具失效紀錄（方法論 §11 NO SHORTCUTS）</div>
+  <p style="margin:0">GiS 內部 <code>fetch_chart_data.py</code> 對 8086 產出 PE 均值 37.36x、現值 36.76x。
+  檢查後發現：其 TTM EPS 取 FY2025 的 3.36 元（未含 2026Q1），且 TTM 序列僅 174 個交易日。
+  真實 TTM EPS（2025Q3-2026Q2）為 5.37 元、對應本益比 23.0x。
+  <strong>本報告的本益比區間為手工建立的前瞻 PE band，未採用該工具輸出。</strong>
+  同類問題已於 GiS 覆蓋瑞昱 2379、南電 8046、環球晶 6488 時紀錄。</p>
+</div>
+
+<h2 class="ch">目標本益比 27.0x 的推導</h2>
+<table>
+<thead><tr><th>參考點</th><th class="num">數值</th><th>說明</th></tr></thead>
+<tbody>
+<tr><td>GiS 自建前瞻 PE 均值</td><td class="num">25.9x</td><td>2024/01-2026/08，627 個交易日；σ = 9.3</td></tr>
+<tr><td>　+1σ / −1σ</td><td class="num">35.2x / 16.6x</td><td>現值 21.7x，位於均值下方 0.45σ</td></tr>
+<tr><td>公司自身歷史前瞻 PE 區間</td><td class="num">25-35x</td><td>本土券商 B 引用</td></tr>
+<tr><td>GaAs / PA 同業前瞻 PE 區間</td><td class="num">30-35x</td><td>本土券商 A 引用</td></tr>
+<tr><td>四家券商採用值</td><td class="num">30x / 30x / 32x / P/B 4.0x</td><td>三家用本益比，最低 30x</td></tr>
+<tr><td><strong>GiS 採用</strong></td><td class="num hi"><strong>27.0x</strong></td><td><strong>低於全部四家與歷史區間中值（30x），約當自建均值 +0.1σ</strong></td></tr>
+</tbody></table>
+
+<p><strong>五個採用低於區間中值的具體理由：</strong></p>
+<ul>
+<li><strong>獲利處於毛利率循環高點。</strong>1Q26 推估毛利率 35.4% 是近十年最高。對循環高點盈餘套用歷史平均倍數，是估值最典型的陷阱。</li>
+<li><strong>成長曲線在 2027 年出現凹陷。</strong>2026F EPS +62.8%、2027F 僅 +4.1%。對一個成長 4% 的年度給 30x 以上不合理。</li>
+<li><strong>價格轉嫁只成功一半。</strong>議價權不足的公司不應享有議價權充足者的倍數。</li>
+<li><strong>美系 IDM 退出紅利有明確終點（2028 年）。</strong>約三分之一的成長動能是有期限的。</li>
+<li><strong>消費性應用占 93-95%。</strong>同業之所以享有 30-35x，多半因其 AI 光通訊曝險遠高於宏捷科。</li>
+</ul>
+
+<blockquote><strong>本益比法目標價 ＝ 27.0x × 2027F EPS 5.69 元 ＝ NT$153.6</strong><br>
+交叉檢查（12 個月前瞻 EPS 口徑）：2H26F 2.54 + 1H27F 約 2.67 ＝ 5.21 元 → 27.0x × 5.21 ＝ NT$140.7。兩種口徑區間 141-154。</blockquote>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 25</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P26 DCF ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">DCF（權重 25%）</h1>
+
+<div class="mini-table">
+<div class="mini-t"><table>
+<thead><tr><th>WACC 參數</th><th class="num">數值</th></tr></thead>
+<tbody>
+<tr><td>無風險利率（台灣 10Y 公債）</td><td class="num">1.70%</td></tr>
+<tr><td>市場風險溢酬</td><td class="num">6.50%</td></tr>
+<tr><td>Beta（中小型化合物半導體）</td><td class="num">1.40</td></tr>
+<tr><td>權益成本 Ke</td><td class="num">10.80%</td></tr>
+<tr><td>稅後負債成本</td><td class="num">1.83%</td></tr>
+<tr><td>D /（D+E）</td><td class="num">4.0%</td></tr>
+<tr><td><strong>WACC</strong></td><td class="num hi"><strong>10.50%</strong></td></tr>
+<tr><td>永續成長率 g</td><td class="num">2.00%</td></tr>
+</tbody></table></div>
+<div class="mini-t"><table>
+<thead><tr><th>EV → Equity 橋接</th><th class="num">百萬元</th></tr></thead>
+<tbody>
+<tr><td>明確期現值（2027-2031F）</td><td class="num">4,524</td></tr>
+<tr><td>終值現值（占 EV 的 73%）</td><td class="num">13,298</td></tr>
+<tr><td>2H26 FCF stub</td><td class="num">400</td></tr>
+<tr><td><strong>企業價值 EV</strong></td><td class="num"><strong>18,222</strong></td></tr>
+<tr><td>＋ 現金（2026 年中推估）</td><td class="num">3,800</td></tr>
+<tr><td>− 有息負債</td><td class="num">−1,000</td></tr>
+<tr><td>− 2026 年已發放股利</td><td class="num">−330</td></tr>
+<tr><td><strong>權益價值</strong></td><td class="num"><strong>20,691</strong></td></tr>
+<tr><td><strong>每股價值</strong></td><td class="num hi"><strong>NT$105.3</strong></td></tr>
+</tbody></table></div>
+</div>
+
+<h2 class="ch">Unlevered FCF Schedule（mid-year convention，估值日 2026/8/7）</h2>
+<table>
+<thead><tr><th>年度</th><th class="num">EBIT</th><th class="num">NOPAT</th><th class="num">D&amp;A</th><th class="num">CapEx</th><th class="num">ΔWC</th><th class="num">FCF</th><th class="num">t</th><th class="num">折現因子</th><th class="num">現值</th></tr></thead>
+<tbody>
+<tr><td>2027F</td><td class="num">1,293</td><td class="num">1,073</td><td class="num">800</td><td class="num neg">1,500</td><td class="num">−80</td><td class="num neg"><strong>293</strong></td><td class="num">0.9</td><td class="num">0.914</td><td class="num">268</td></tr>
+<tr><td>2028F</td><td class="num">1,525</td><td class="num">1,266</td><td class="num">950</td><td class="num neg">1,300</td><td class="num">−90</td><td class="num">826</td><td class="num">1.9</td><td class="num">0.827</td><td class="num">683</td></tr>
+<tr><td>2029F</td><td class="num">1,712</td><td class="num">1,421</td><td class="num">1,050</td><td class="num">800</td><td class="num">−80</td><td class="num">1,591</td><td class="num">2.9</td><td class="num">0.749</td><td class="num">1,191</td></tr>
+<tr><td>2030F</td><td class="num">1,887</td><td class="num">1,566</td><td class="num">1,100</td><td class="num">800</td><td class="num">−70</td><td class="num">1,796</td><td class="num">3.9</td><td class="num">0.677</td><td class="num">1,217</td></tr>
+<tr><td>2031F</td><td class="num">2,000</td><td class="num">1,660</td><td class="num">1,150</td><td class="num">850</td><td class="num">−60</td><td class="num">1,900</td><td class="num">4.9</td><td class="num">0.613</td><td class="num">1,165</td></tr>
+<tr><td colspan="9"><strong>終值 TV ＝ 1,900 × 1.02 /（10.5% − 2.0%）＝ 22,800，折現（t=5.4）</strong></td><td class="num hi"><strong>13,298</strong></td></tr>
+</tbody></table>
+
+<h2 class="ch">敏感度 5×5（每股，元）</h2>
+<table>
+<thead><tr><th>WACC ＼ g</th><th class="num">1.0%</th><th class="num">1.5%</th><th class="num">2.0%</th><th class="num">2.5%</th><th class="num">3.0%</th></tr></thead>
+<tbody>
+<tr><td>9.5%</td><td class="num">109</td><td class="num">113</td><td class="num">119</td><td class="num">125</td><td class="num">132</td></tr>
+<tr><td>10.0%</td><td class="num">103</td><td class="num">107</td><td class="num">112</td><td class="num">117</td><td class="num">123</td></tr>
+<tr><td><strong>10.5%</strong></td><td class="num">98</td><td class="num">101</td><td class="num hi"><strong>105</strong></td><td class="num">110</td><td class="num">115</td></tr>
+<tr><td>11.0%</td><td class="num">93</td><td class="num">96</td><td class="num">100</td><td class="num">104</td><td class="num">108</td></tr>
+<tr><td>11.5%</td><td class="num">89</td><td class="num">91</td><td class="num">95</td><td class="num">98</td><td class="num">102</td></tr>
+</tbody></table>
+
+<blockquote><strong>全表區間 89-132 元，沒有任何一格達到現價 123.5 元以上，除非 WACC 降至 9.5% 且 g 提高到 2.5% 以上。</strong>
+原因不在獲利能力（2027F NOPAT 10.7 億元），而在 2027-2028 年的資本支出高峰把兩年自由現金流壓到 2.93 億與 8.26 億元。
+若把 28 億元工程自模型移除，DCF 每股價值升至約 128 元——<strong>擴產的短期代價約 23 元／股，需要 2029 年之後的現金流才能賺回來。</strong></blockquote>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 26</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P27 PB + Comps ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">股價淨值比（權重 20%）與同業比較（權重 10%）</h1>
+
+<h2 class="ch">股價淨值比法</h2>
+<table>
+<thead><tr><th>目標 P/B</th><th>對應情境</th><th class="num">2026F BVPS</th><th class="num">目標價</th></tr></thead>
+<tbody>
+<tr><td>2.4x</td><td>ROE 回到 8-9%（2025 水準）</td><td class="num">45.69</td><td class="num">110</td></tr>
+<tr><td><strong>3.0x（GiS 採用）</strong></td><td><strong>ROE 12-13%、非射頻占比 8-9%</strong></td><td class="num">45.69</td><td class="num hi"><strong>137</strong></td></tr>
+<tr><td>3.6x</td><td>ROE 14%+、非射頻達雙位數</td><td class="num">45.69</td><td class="num">165</td></tr>
+<tr><td>4.0x</td><td>本土券商 D 採用值</td><td class="num">46.22</td><td class="num">185</td></tr>
+</tbody></table>
+<p>近五年 P/B 區間 1.5-4.5x；2022-2025 年各年底 P/B 分別為 3.97 / 3.93 / 3.76 / 3.57x。
+現價 123.5 元對應 2026 年中 BVPS 約 43.1 元 → <strong>P/B 2.87x</strong>。
+GiS 採 3.0x：位於歷史區間中間偏上、低於 2022-2025 年實際成交的 3.57-3.97x，
+理由是 ROE 雖自 8.2% 升至 12.5%，但 2027 年因擴產期回落至 12.1%，尚未證明 14% 以上的持續性。</p>
+<span class="src">附帶說明：理論 P/B ＝ (ROE − g)/(Ke − g) ＝ (12.5%−2.0%)/(10.8%−2.0%) ＝ 1.19x，遠低於歷史區間。
+此為 CAPM 的 Ke 對 ROE 僅 12.5% 的公司幾乎不留溢價空間所致，會嚴重低估半導體資產的重置價值，故不採用理論值。</span>
+
+<h2 class="ch">同業比較（TTM 2025Q2-2026Q1，統一口徑）</h2>
+<table>
+<thead><tr><th>公司</th><th class="num">股價</th><th class="num">TTM EPS</th><th class="num">TTM PE</th><th class="num">TTM 營收</th><th class="num">TTM 營益率</th><th>定位</th></tr></thead>
+<tbody>
+<tr><td><strong>宏捷科 8086</strong></td><td class="num">123.5</td><td class="num">4.45</td><td class="num hi"><strong>27.8x</strong></td><td class="num">4,567</td><td class="num hi"><strong>21.7%</strong></td><td>GaAs 代工 #2，手機 PA 為主</td></tr>
+<tr><td>穩懋 3105</td><td class="num">382.0</td><td class="num">5.22</td><td class="num">73.2x</td><td class="num">17,653</td><td class="num neg">7.7%</td><td>GaAs 代工 #1，旗艦機 + 5G</td></tr>
+<tr><td>全新 2455</td><td class="num">372.0</td><td class="num">3.18</td><td class="num">117.0x</td><td class="num">3,546</td><td class="num">20.2%</td><td>GaAs / InP 磊晶（上游）</td></tr>
+<tr><td>環宇-KY 4991</td><td class="num">442.0</td><td class="num">2.52</td><td class="num">175.4x</td><td class="num">2,437</td><td class="num">22.5%</td><td>光通訊 / CPO</td></tr>
+<tr><td>中位數（不含 8086）</td><td class="num">—</td><td class="num">—</td><td class="num">117.0x</td><td class="num">—</td><td class="num">20.2%</td><td>—</td></tr>
+<tr><td><strong>8086 的位置</strong></td><td class="num">—</td><td class="num">—</td><td class="num"><strong>最低（Min）</strong></td><td class="num">—</td><td class="num"><strong>75th 附近</strong></td><td>—</td></tr>
+</tbody></table>
+<span class="src">四家同業 2026Q2 財報尚未公告，故 TTM 一律採 2025Q2-2026Q1 以維持可比。
+若改採宏捷科最新 TTM（2025Q3-2026Q2 ＝ 5.37 元），其本益比進一步降至 23.0x。</span>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">同業 TTM 本益比：8086 是全族群最低</div><div class="chart-sub">倍 · @2026-08-06</div><div class="chart-container" style="height:185px;width:100%;position:relative"><canvas id="cPeerPe" style="display:block;width:100%;height:185px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">營益率 vs 本益比：8086 的位置</div><div class="chart-sub">X 軸＝TTM 營益率 %，Y 軸＝TTM PE 倍</div><div class="chart-container" style="height:185px;width:100%;position:relative"><canvas id="cPeerScatter" style="display:block;width:100%;height:185px"></canvas></div></div>
+</div>
+
+<blockquote><strong>這個折價一半合理、一半是機會。</strong>
+合理的部分：全新與環宇的溢價是 AI 光通訊選擇權的定價（宏捷科非射頻僅 5-6%，拿不到），
+以及手機 + Wi-Fi 占 93-95% 的消費性週期折價。
+失真的部分：穩懋 TTM EPS 含 2025 上半年虧損季，其正常化盈餘遠高於 TTM，
+「穩懋 73x vs 宏捷科 28x」誇大了實際差距。
+因此同業比較法採 <strong>25x × 2026F EPS 5.47 ＝ NT$136.8</strong>，
+即給予相對同業中位數的大幅折價，但高於現價隱含的 22.6x。</blockquote>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 27</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P28 Football Field ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">Football Field 與採用結論</h1>
+
+<div class="chart-wrap"><div class="chart-title">四種方法的估值區間</div><div class="chart-sub">元 · 橫條為區間，標記為中心值 · 虛線為現價 123.5 與採用目標價 137</div><div class="chart-container" style="height:188px;width:100%;position:relative"><canvas id="cFootball" style="display:block;width:100%;height:188px"></canvas></div></div>
+
+<table>
+<thead><tr><th>方法</th><th class="num">下緣</th><th class="num">中心值</th><th class="num">上緣</th><th class="num">權重</th><th class="num">加權貢獻</th></tr></thead>
+<tbody>
+<tr><td>① 本益比法（27.0x × 2027F EPS 5.69）</td><td class="num">103</td><td class="num">153.6</td><td class="num">211</td><td class="num">45%</td><td class="num">69.1</td></tr>
+<tr><td>② DCF（WACC 10.5% / g 2.0%）</td><td class="num">89</td><td class="num">105.3</td><td class="num">132</td><td class="num">25%</td><td class="num">26.3</td></tr>
+<tr><td>③ 股價淨值比（3.0x × 2026F BVPS 45.69）</td><td class="num">110</td><td class="num">137.1</td><td class="num">165</td><td class="num">20%</td><td class="num">27.4</td></tr>
+<tr><td>④ 同業比較（25x × 2026F EPS 5.47）</td><td class="num">110</td><td class="num">136.8</td><td class="num">164</td><td class="num">10%</td><td class="num">13.7</td></tr>
+<tr><td colspan="5"><strong>加權目標價</strong></td><td class="num hi"><strong>136.6 → 137</strong></td></tr>
+<tr><td>（參考）四家券商目標價區間</td><td class="num">140</td><td class="num">158</td><td class="num">185</td><td class="num">—</td><td class="num">—</td></tr>
+</tbody></table>
+
+<blockquote style="margin:8px 0"><strong>採用：12 個月目標價 NT$137，對 8/6 收盤 123.5 元的上檔空間 +10.9%，
+落在估值方法論 §4.3 五級制的「增加持股（5%~15%）」區間。</strong></blockquote>
+
+<h2 class="ch">評等的白話版</h2>
+<div class="risk-matrix">
+  <div class="risk-card dn">
+    <h4>為什麼不是「買進」</h4>
+    <div class="risk-item">DCF 說了實話：2027-2028 年的擴產會把自由現金流壓到 2.93 億與 8.26 億元。</div>
+    <div class="risk-item">所有高毛利新應用（PD、濾波器放量、HAPS 太陽能）的現金流都落在 2028 年之後。<strong>本益比法看到的 154 元是對的，但它假設市場願意提前兩年付款。</strong></div>
+  </div>
+  <div class="risk-card up">
+    <h4>為什麼不是「中立」</h4>
+    <div class="risk-item">三件事已被證實而非承諾：1H26 EPS 2.93 元超越全部四家券商預估。</div>
+    <div class="risk-item">毛利率改善發生在稼動率下滑期間，是組合而非景氣；淨現金 24.7 億元（每股 12.6 元）與 21.8% 的負債比，讓公司不需現金增資就能完成 28 億元擴產。</div>
+  </div>
+</div>
+
+<h2 class="ch">與 GiS 近期覆蓋的對照</h2>
+<table>
+<thead><tr><th>標的</th><th>日期</th><th>評等</th><th>核心邏輯</th></tr></thead>
+<tbody>
+<tr><td>全新 2455</td><td>06/18</td><td class="neg">減碼 UW</td><td>一週 +34% 暴衝、2027F 共識離散 2.2 倍 —— 同族群但估值方向相反</td></tr>
+<tr><td>中美晶 5483</td><td>07/20</td><td class="pos">增持 OW</td><td>控股折價 34%、SOTP —— <strong>8086 的最大股東（28.46%）</strong></td></tr>
+<tr><td>環球晶 6488</td><td>08/05</td><td class="neg">減碼 UW</td><td>帳面 EPS 由 Siltronic MTM 主宰、本業經常性僅 3.41 元</td></tr>
+<tr><td>瑞昱 2379</td><td>08/05</td><td>中立 N</td><td>營費率結構性高原 —— 8086 的 8% 營費率是對照組的反例</td></tr>
+<tr><td><strong>宏捷科 8086</strong></td><td><strong>08/07</strong></td><td class="pos"><strong>增持 OW</strong></td><td><strong>組合驅動的毛利率改善 vs 2027-28 資本支出現金流壓力</strong></td></tr>
+</tbody></table>
+<span class="src">徐秀蘭執掌的三家公司中，GiS 給出中美晶 OW、環球晶 UW、宏捷科 OW。這不是對管理層的評價，而是三家公司在各自估值週期上的位置不同。</span>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 28</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ 章節 06 ══════════ -->
+<div class="sec-div pb page">
+  <div class="sec-num">06</div>
+  <div class="sec-eyebrow">Risks &amp; Catalysts</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">風險與催化劑</div>
+  <div class="sec-desc">十二項風險、四項上修條件、四項下修條件。<br><br>
+  以及一份可以逐項打勾的追蹤清單——
+  讓這份報告在三個月後仍然可以被檢驗。</div>
+</div>
+
+<!-- ══════════ P30 風險矩陣 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">風險矩陣（12 項）</h1>
+
+<table>
+<thead><tr><th>編號</th><th>風險</th><th class="num">機率</th><th class="num">衝擊</th><th>量化影響與緩衝</th></tr></thead>
+<tbody>
+<tr><td>R1</td><td><strong>手機需求的記憶體排擠效應</strong></td><td class="num">高</td><td class="num">中</td><td>中低階手機 BOM 成本 +10-20%；公司已預告 3Q26 手機出貨小幅衰退。緩衝：韓系品牌有自家記憶體供應，為宏捷科成長最快客群</td></tr>
+<tr><td>R2</td><td>矽基方案侵蝕低階 Wi-Fi</td><td class="num">高</td><td class="num">低</td><td>不可逆的材料替代；但宏捷科 Wi-Fi 成長來自 Wi-Fi 7 與無人機，非舊世代 Router</td></tr>
+<tr><td>R3</td><td><strong>美系 IDM 退出紅利的終點</strong></td><td class="num">確定</td><td class="num">中</td><td>約至 2028 年完全退出。2029 年後成長必須完全依靠非射頻。DCF 的 g=2.0% 已反映</td></tr>
+<tr><td>R4</td><td>鎵出口管制與原物料價格</td><td class="num">中</td><td class="num">中</td><td>黃金、砷化鎵基板、石油連動材料上漲。對沖：黃金滾動採購（庫存成本低於市價）＋ 鎵回收轉售每季貢獻 1-2pp</td></tr>
+<tr><td>R5</td><td><strong>價格轉嫁只成功一半</strong></td><td class="num">高</td><td class="num">中</td><td class="neg">若 2H26 毛利率自 30.5% 跌至 28%，2026F EPS 從 5.47 降至約 4.95 元</td></tr>
+<tr><td>R6</td><td><strong>28 億元工程的回收期</strong></td><td class="num">中</td><td class="num">高</td><td class="neg">DCF 上的代價約每股 23 元。緩解：分年執行、設備 CAPEX 未承諾、建物折舊年限長</td></tr>
+<tr><td>R7</td><td><strong>非射頻時程遞延</strong>（已發生）</td><td class="num">已發生</td><td class="num">中</td><td>HAPS 太陽能原訂 3Q26 量產已延至 4Q26 以後。PD 時間表：2Q26 送樣 → 2027H2 驗證 → 2028 初起量。任一環遞延半年，2028 年預估即需下修</td></tr>
+<tr><td>R8</td><td>客戶集中度仍偏高</td><td class="num">中</td><td class="num">中</td><td>中國大陸最大客戶仍占 20-25%，受中國政策與品牌份額波動影響</td></tr>
+<tr><td>R9</td><td>存貨天數墊高（已發生）</td><td class="num">已發生</td><td class="num">中</td><td>DOI 於 1Q26 回升至約 110 天。若終端需求放緩拉長，將壓抑 2H26 與 2027H1 拉貨</td></tr>
+<tr><td>R10</td><td>稼動率下行的營運槓桿</td><td class="num">中</td><td class="num">中</td><td>折舊 7-8 億元／年為固定成本；<strong>稼動率每降 5pp，毛利率承壓 1.5-2pp</strong></td></tr>
+<tr><td>R11</td><td><strong>相對估值折價可能是合理的</strong></td><td class="num">高</td><td class="num">高</td><td class="neg">若非射頻占比停在 5-6%，27.8x vs 同業 73-175x 的折價會持續存在</td></tr>
+<tr><td>R12</td><td>本益比法對循環高點盈餘敏感</td><td class="num">中</td><td class="num">高</td><td>1Q26 推估毛利率 35.4% 為近十年最高。本報告以 27x（低於區間中值 30x）與 DCF、P/B 交叉驗證處理</td></tr>
+</tbody></table>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 30</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P31 催化劑 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">目標價的失效條件與追蹤清單</h1>
+
+<div class="risk-matrix">
+  <div class="risk-card up">
+    <h4>上修至「買進」的條件（任兩項成立）</h4>
+    <div class="risk-item">☐ <strong>非射頻季度營收占比連續兩季站上 9% 以上</strong>（目前 5-6%）</div>
+    <div class="risk-item">☐ 2H26 毛利率守住 32% 以上（證明價格轉嫁成功超過半數客戶）</div>
+    <div class="risk-item">☐ PD 驗證提前至 2027 上半年完成（目前規劃 2027H2）</div>
+    <div class="risk-item">☐ 28 億元工程明確對應到已簽訂的長約產能</div>
+  </div>
+  <div class="risk-card dn">
+    <h4>下修至「中立／減碼」的條件（任一項成立）</h4>
+    <div class="risk-item">☐ 3Q26 毛利率跌破 29%（原物料轉嫁失敗）</div>
+    <div class="risk-item">☐ 非射頻占比 2026 全年低於 5%（目標連續第三年落空）</div>
+    <div class="risk-item">☐ 2027 年新產能開出後稼動率低於 55%</div>
+    <div class="risk-item">☐ 28 億元工程金額或時程上修，且未伴隨訂單能見度說明</div>
+  </div>
+</div>
+
+<h2 class="ch">催化劑日曆</h2>
+<table>
+<thead><tr><th>時點</th><th>事件</th><th>觀察重點</th><th class="num">重要性</th></tr></thead>
+<tbody>
+<tr><td>2026 年 8 月中</td><td><strong>2Q26 完整財報公告</strong></td><td>驗證本報告推導的 2Q26 毛利率 32.7% 與營益率 24.7%；營費率是否維持 8%</td><td class="num hi">高</td></tr>
+<tr><td>2026 年 8-9 月</td><td>2Q26 法說會／法人說明</td><td><strong>28 億元工程的廠址、分年支出節奏、對應訂單能見度</strong>；3Q26 毛利率指引；漲價協商進度</td><td class="num hi">最高</td></tr>
+<tr><td>2026 年 9 月 10 日前</td><td>8 月營收公告</td><td>3Q26 是否如指引「持平至小幅季減」</td><td class="num">中</td></tr>
+<tr><td>2026 年 4Q</td><td>HAPS 太陽能量產</td><td>原訂 3Q26 已遞延至 4Q26 以後，是否再度遞延</td><td class="num">中</td></tr>
+<tr><td>2026 年 11 月</td><td>3Q26 財報</td><td><strong>毛利率是否守住 29% 以上</strong>（下修門檻）；非射頻占比</td><td class="num hi">高</td></tr>
+<tr><td>2027 年 Q2-H2</td><td>新產能陸續開出</td><td>初期稼動率；廠務攤提對毛利率的實際侵蝕幅度</td><td class="num hi">高</td></tr>
+<tr><td>2027 年 H2</td><td>PD（1060nm）完成客戶驗證</td><td>時程是否符合規劃；起量時點是否落在 2027 年底至 2028 年初</td><td class="num hi">最高</td></tr>
+</tbody></table>
+
+<h2 class="ch">籌碼面現況（供追蹤，非評等依據）</h2>
+<table>
+<thead><tr><th>項目</th><th class="num">數值</th><th>解讀</th></tr></thead>
+<tbody>
+<tr><td>外資持股</td><td class="num">26.4-26.8%</td><td>近 30 個交易日累計賣超 6,416 張</td></tr>
+<tr><td>投信持股</td><td class="num">0.11%</td><td>本土法人幾乎無部位；潛在增量買盤存在，但目前缺少支撐</td></tr>
+<tr><td>董監持股</td><td class="num">31.88%</td><td>中美矽晶 28.46% 為主體</td></tr>
+<tr><td>融資餘額（8/6）</td><td class="num">8,706 張</td><td>融資使用率約兩成</td></tr>
+<tr><td>距 2026/5/26 高點</td><td class="num neg">−31.0%</td><td>股價自 179 元回檔至 123.5 元，前瞻本益比自 32.7x 壓縮至 22.6x</td></tr>
+<tr><td>處置股狀態</td><td class="num">無</td><td>資料庫查無處置紀錄</td></tr>
+</tbody></table>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 31</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P32 附錄 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">附錄 · 財務三表與資料來源</h1>
+
+<h2 class="ch">資產負債表（2022-2025，百萬元）</h2>
+<table>
+<thead><tr><th>項目</th><th class="num">2022</th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th></tr></thead>
+<tbody>
+<tr><td>資產總計</td><td class="num">7,904</td><td class="num">8,801</td><td class="num">9,564</td><td class="num">10,525</td></tr>
+<tr><td>　流動資產</td><td class="num">2,690</td><td class="num">3,573</td><td class="num">4,222</td><td class="num">5,569</td></tr>
+<tr><td>　現金及約當現金</td><td class="num">1,913</td><td class="num">1,979</td><td class="num">2,826</td><td class="num">3,450</td></tr>
+<tr><td>　應收帳款與票據</td><td class="num">177</td><td class="num">517</td><td class="num">553</td><td class="num">698</td></tr>
+<tr><td>　存貨</td><td class="num">381</td><td class="num">973</td><td class="num">811</td><td class="num">923</td></tr>
+<tr><td>　不動產、廠房及設備</td><td class="num">4,939</td><td class="num">4,975</td><td class="num">5,148</td><td class="num">4,793</td></tr>
+<tr><td>負債總計</td><td class="num">505</td><td class="num">1,319</td><td class="num">1,758</td><td class="num">2,293</td></tr>
+<tr><td>　流動負債</td><td class="num">408</td><td class="num">828</td><td class="num">775</td><td class="num">1,509</td></tr>
+<tr><td>　非流動負債</td><td class="num">97</td><td class="num">491</td><td class="num">983</td><td class="num">784</td></tr>
+<tr><td>權益總計</td><td class="num">7,398</td><td class="num">7,482</td><td class="num">7,807</td><td class="num">8,233</td></tr>
+<tr><td>　普通股股本</td><td class="num">1,965</td><td class="num">1,965</td><td class="num">1,965</td><td class="num">1,965</td></tr>
+<tr><td>　保留盈餘</td><td class="num">1,172</td><td class="num">1,254</td><td class="num">1,701</td><td class="num">2,127</td></tr>
+<tr><td>負債比</td><td class="num">6.4%</td><td class="num">15.0%</td><td class="num">18.4%</td><td class="num">21.8%</td></tr>
+</tbody></table>
+
+<h2 class="ch">現金流量表（2022-2025，百萬元）</h2>
+<table>
+<thead><tr><th>項目</th><th class="num">2022</th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th></tr></thead>
+<tbody>
+<tr><td>營業活動現金流</td><td class="num">508</td><td class="num">137</td><td class="num">1,249</td><td class="num">1,308</td></tr>
+<tr><td>　折舊及攤銷</td><td class="num">483</td><td class="num">594</td><td class="num">658</td><td class="num">697</td></tr>
+<tr><td>　營運資金變動</td><td class="num">169</td><td class="num neg">−701</td><td class="num">18</td><td class="num neg">−157</td></tr>
+<tr><td>投資活動現金流</td><td class="num neg">−1,089</td><td class="num neg">−498</td><td class="num neg">−821</td><td class="num neg">−708</td></tr>
+<tr><td>　資本支出淨額</td><td class="num neg">−1,081</td><td class="num neg">−638</td><td class="num neg">−863</td><td class="num neg">−225</td></tr>
+<tr><td>籌資活動現金流</td><td class="num neg">−556</td><td class="num">427</td><td class="num">419</td><td class="num">24</td></tr>
+<tr><td>　發放現金股利</td><td class="num neg">−550</td><td class="num">0</td><td class="num neg">−197</td><td class="num neg">−234</td></tr>
+<tr><td>期末現金</td><td class="num">1,913</td><td class="num">1,979</td><td class="num">2,826</td><td class="num">3,450</td></tr>
+<tr><td><strong>自由現金流（簡算）</strong></td><td class="num neg">−573</td><td class="num neg">−501</td><td class="num">386</td><td class="num pos">1,083</td></tr>
+</tbody></table>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 32</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ══════════ P33 資料來源 ══════════ -->
+<div class="full-page pb page body-page">
+<h1 class="ch">資料來源與免責聲明</h1>
+<h2 class="ch">資料來源（完整列名）</h2>
+<p style="font-size:11.5px;line-height:1.7">
+<strong>一手資料：</strong>公開資訊觀測站（MOPS）年度與季度財務報告；宏捷科技公司重大訊息公告
+（2026/8/6 上半年度財務報告、2026/8/6 新建 3F 無塵室及生產線整合相關附屬工程董事會決議、
+2026/3/6 董事長異動、2026/8/4 七月份合併營收、2026/5/28 股東常會盈餘分配）；
+公司月營收申報；台灣證券交易所與櫃買中心公開資料。<br><br>
+<strong>券商研究（本文匿名化，此處列名）：</strong>國票投顧（2026/3/17 公司拜訪，區間操作 TP 140）；
+中信投顧（2026/3/19 重新覆蓋，增加持股 TP 153）；統一投顧（2026/3/31 投資速報，買進 TP 155）；
+永豐投顧（2026/4/23 個股聚焦，買進 TP 185）；國泰證期研究部（2026/7/27 Call Memo）；
+以上報告取自 pCloud 券商報告庫。<br><br>
+<strong>市場資料：</strong>Yahoo Finance（股價與加權指數歷史序列，僅用於相對報酬與本益比區間計算，
+不用於財務數字）；tw-stock-scanner 內部資料庫（季度財報、月營收、法人買賣超、融資餘額、
+同業比較，資料健檢 2026/8/7 08:20 全項 PASS）；優分析 UAnalyze（產業與公司動態彙整）。<br><br>
+<strong>方法論：</strong>GiS 估值方法論模板 §3.1 公司類型適用方法、§4.2 三情境機率、§4.3 五級制評等門檻、
+§7.6 歷史 EPS 來源優先序、§8 DCF、§9 Comps、§10 敏感度、§11 NO SHORTCUTS、§12 品質檢查清單。
+</p>
+
+<blockquote style="margin-top:10px"><strong>免責聲明：</strong>本報告由 Genesis International Capital 研究部門獨立撰寫，
+所載資料來源經合理查證但不保證其完整性與準確性。所有預估值均為研究判斷，實際結果可能重大不同。
+本報告僅供研究參考，不構成任何證券之要約、招攬或投資建議。撰寫者及所屬機構可能持有本報告所提及之證券部位。</blockquote>
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>宏捷科 8086 首次覆蓋 · 33</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<script>
+const PAY = {"rel":{"l":["2021-07","2021-08","2021-09","2021-10","2021-11","2021-12","2022-01","2022-02","2022-03","2022-04","2022-05","2022-06","2022-07","2022-08","2022-09","2022-10","2022-11","2022-12","2023-01","2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12","2024-01","2024-02","2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"],"s":[0.0,-5.6,2.3,-20.2,-5.8,-14.3,-16.1,-32.7,-37.7,-42.2,-49.9,-44.2,-54.9,-57.7,-52.7,-65.0,-63.1,-55.9,-59.6,-54.4,-54.9,-48.0,-50.7,-50.8,-46.6,-45.9,-41.5,-36.0,-34.2,-19.6,-24.6,-27.2,-12.9,-14.6,-20.8,-26.6,-18.7,-35.1,-32.7,-38.0,-44.3,-39.5,-37.1,-47.9,-43.1,-49.6,-56.1,-56.7,-54.2,-39.8,-34.5,-33.9,-30.7,-39.5,-38.3,-39.5,-26.3,-28.1,-12.0,-2.9,-16.1,-32.5],"t":[0.0,-0.9,-1.1,-6.2,-3.4,-0.4,3.4,1.4,1.3,-0.2,-6.6,-5.6,-18.8,-15.2,-16.2,-24.7,-26.2,-15.0,-19.5,-12.7,-11.7,-10.5,-11.5,-6.5,-3.3,-2.5,-5.8,-6.3,-9.2,-1.3,1.1,1.7,7.2,14.5,14.5,21.9,30.6,28.2,25.9,26.8,29.0,28.7,29.3,28.5,28.8,20.5,17.7,18.9,27.7,32.4,36.3,47.1,60.4,54.8,66.2,79.1,98.7,87.8,130.5,156.7,166.2,145.7]},"peband":{"l":["2024-01-02","2024-01-08","2024-01-15","2024-01-22","2024-01-29","2024-02-05","2024-02-15","2024-02-19","2024-02-26","2024-03-04","2024-03-11","2024-03-18","2024-03-25","2024-04-01","2024-04-08","2024-04-15","2024-04-22","2024-04-29","2024-05-06","2024-05-13","2024-05-20","2024-05-27","2024-06-03","2024-06-11","2024-06-17","2024-06-24","2024-07-01","2024-07-08","2024-07-15","2024-07-22","2024-07-29","2024-08-05","2024-08-12","2024-08-19","2024-08-26","2024-09-02","2024-09-09","2024-09-16","2024-09-23","2024-09-30","2024-10-07","2024-10-14","2024-10-21","2024-10-28","2024-11-04","2024-11-11","2024-11-18","2024-11-25","2024-12-02","2024-12-09","2024-12-16","2024-12-23","2024-12-30","2025-01-06","2025-01-13","2025-01-20","2025-02-03","2025-02-10","2025-02-17","2025-02-24","2025-03-03","2025-03-10","2025-03-17","2025-03-24","2025-03-31","2025-04-07","2025-04-14","2025-04-21","2025-04-28","2025-05-05","2025-05-12","2025-05-19","2025-05-26","2025-06-02","2025-06-09","2025-06-16","2025-06-23","2025-06-30","2025-07-07","2025-07-14","2025-07-21","2025-07-28","2025-08-04","2025-08-11","2025-08-18","2025-08-25","2025-09-01","2025-09-08","2025-09-15","2025-09-22","2025-09-30","2025-10-07","2025-10-13","2025-10-20","2025-10-27","2025-11-03","2025-11-10","2025-11-17","2025-11-24","2025-12-01","2025-12-08","2025-12-15","2025-12-22","2025-12-29","2026-01-05","2026-01-12","2026-01-19","2026-01-26","2026-02-02","2026-02-09","2026-02-23","2026-03-02","2026-03-09","2026-03-16","2026-03-23","2026-03-30","2026-04-07","2026-04-13","2026-04-20","2026-04-27","2026-05-04","2026-05-11","2026-05-18","2026-05-25","2026-06-01","2026-06-08","2026-06-15","2026-06-22","2026-06-29","2026-07-06","2026-07-13","2026-07-20","2026-07-27","2026-08-03"],"v":[42.86,38.72,38.38,38.87,38.21,41.45,42.32,47.05,45.4,47.76,49.14,48.61,47.93,45.84,45.65,42.65,39.22,42.29,42.27,39.18,39.63,39.77,37.94,37.01,41.23,40.92,41.3,40.66,39.6,33.98,31.32,26.62,27.71,28.64,28.05,30.83,26.39,27.55,27.13,27.36,26.7,26.05,25.54,23.14,22.42,23.58,22.51,24.2,24.32,23.97,22.62,22.84,24.67,25.57,21.89,21.72,19.28,19.42,20.97,21.41,20.35,19.57,18.96,18.88,16.48,15.45,14.13,13.76,15.53,13.74,15.1,15.29,14.96,13.96,14.28,14.62,14.0,14.24,14.08,13.65,17.51,17.5,18.76,19.84,20.37,20.62,20.33,21.23,19.76,21.28,20.81,20.44,20.33,19.05,20.12,21.37,20.45,19.8,17.34,18.61,19.13,18.85,20.36,19.36,18.62,20.58,19.76,21.98,18.48,20.61,20.4,22.43,22.41,23.55,21.58,22.27,24.47,24.54,26.56,23.71,26.61,28.62,26.04,28.76,29.26,25.37,27.46,29.11,24.96,25.4,23.73,20.21,21.35,20.3],"mean":25.9,"sd":9.3,"p1":35.2,"p2":44.5,"m1":16.6,"m2":7.2,"cur":21.7},"px":{"l":["2023-08-01","2023-08-07","2023-08-14","2023-08-21","2023-08-28","2023-09-04","2023-09-11","2023-09-18","2023-09-25","2023-10-02","2023-10-11","2023-10-16","2023-10-23","2023-10-30","2023-11-06","2023-11-13","2023-11-20","2023-11-27","2023-12-04","2023-12-11","2023-12-18","2023-12-25","2024-01-02","2024-01-08","2024-01-15","2024-01-22","2024-01-29","2024-02-05","2024-02-15","2024-02-19","2024-02-26","2024-03-04","2024-03-11","2024-03-18","2024-03-25","2024-04-01","2024-04-08","2024-04-15","2024-04-22","2024-04-29","2024-05-06","2024-05-13","2024-05-20","2024-05-27","2024-06-03","2024-06-11","2024-06-17","2024-06-24","2024-07-01","2024-07-08","2024-07-15","2024-07-22","2024-07-29","2024-08-05","2024-08-12","2024-08-19","2024-08-26","2024-09-02","2024-09-09","2024-09-16","2024-09-23","2024-09-30","2024-10-07","2024-10-14","2024-10-21","2024-10-28","2024-11-04","2024-11-11","2024-11-18","2024-11-25","2024-12-02","2024-12-09","2024-12-16","2024-12-23","2024-12-30","2025-01-06","2025-01-13","2025-01-20","2025-02-03","2025-02-10","2025-02-17","2025-02-24","2025-03-03","2025-03-10","2025-03-17","2025-03-24","2025-03-31","2025-04-07","2025-04-14","2025-04-21","2025-04-28","2025-05-05","2025-05-12","2025-05-19","2025-05-26","2025-06-02","2025-06-09","2025-06-16","2025-06-23","2025-06-30","2025-07-07","2025-07-14","2025-07-21","2025-07-28","2025-08-04","2025-08-11","2025-08-18","2025-08-25","2025-09-01","2025-09-08","2025-09-15","2025-09-22","2025-09-30","2025-10-07","2025-10-13","2025-10-20","2025-10-27","2025-11-03","2025-11-10","2025-11-17","2025-11-24","2025-12-01","2025-12-08","2025-12-15","2025-12-22","2025-12-29","2026-01-05","2026-01-12","2026-01-19","2026-01-26","2026-02-02","2026-02-09","2026-02-23","2026-03-02","2026-03-09","2026-03-16","2026-03-23","2026-03-30","2026-04-07","2026-04-13","2026-04-20","2026-04-27","2026-05-04","2026-05-11","2026-05-18","2026-05-25","2026-06-01","2026-06-08","2026-06-15","2026-06-22","2026-06-29","2026-07-06","2026-07-13","2026-07-20","2026-07-27","2026-08-03"],"v":[92.5,100.0,89.5,87.5,90.5999984741211,110.0,117.5,119.0,111.0,109.5,104.5,107.5,98.80000305175781,102.5,116.5,131.0,123.0,125.5,139.5,140.5,129.5,129.5,129.0,117.0,116.5,118.5,117.0,127.5,131.0,146.0,141.5,149.5,154.5,153.5,152.0,146.0,146.0,137.0,126.5,137.0,137.5,128.0,130.0,131.0,125.5,123.0,137.5,137.0,139.0,138.5,136.5,118.5,110.5,95.0,100.0,104.5,103.5,115.0,99.5,105.0,104.5,106.5,105.0,103.5,102.5,93.80000305175781,91.80000305175781,97.5,94.0,102.0,103.5,103.0,98.0999984741211,100.0,109.0,114.0,98.5,98.5999984741211,89.0999984741211,90.5,98.5999984741211,101.5,97.30000305175781,94.4000015258789,92.19999694824219,92.5999984741211,81.5,77.0,71.0,69.69999694824219,79.30000305175781,70.69999694824219,78.30000305175781,79.9000015258789,78.80000305175781,74.0999984741211,76.4000015258789,78.80000305175781,76.0,77.9000015258789,77.0999984741211,74.80000305175781,96.0,96.0,103.0,109.0,112.0,113.5,112.0,117.0,109.0,117.5,115.0,113.0,112.5,105.5,111.5,118.5,113.5,110.0,96.4000015258789,103.5,106.5,105.0,113.5,108.0,104.0,115.0,110.5,123.0,103.5,115.5,114.5,126.0,126.0,132.5,121.5,125.5,138.0,138.5,150.0,134.0,150.5,162.0,147.5,163.0,166.0,144.0,156.0,165.5,142.0,144.5,135.0,115.0,121.5,115.5]}};
+const _g=id=>document.getElementById(id);
+const NAVY='#0d1b3e', TEAL='#00c896', GOLD='#d97706', RED='#c0392b', BLUE='#3b82f6', GREY='#94a3b8';
+Chart.defaults.font.size=9.5;
+Chart.defaults.font.family="'PingFang TC','Heiti TC',Arial,sans-serif";
+Chart.defaults.animation=false;
+const NL={plugins:{legend:{display:false}}};
+const LG={position:'top',labels:{boxWidth:9,font:{size:9}}};
+
+// ① 營收 vs EPS
+new Chart(_g('cRevEps'),{type:'bar',data:{
+ labels:['2022','2023','2024','2025','2026F','2027F','2028F'],
+ datasets:[{label:'營收（億元）',data:[21.6,27.2,44.6,41.2,50.6,56.2,63.5],backgroundColor:NAVY,order:2},
+ {label:'EPS（元）',data:[0.07,0.42,2.65,3.36,5.47,5.69,6.69],type:'line',borderColor:TEAL,backgroundColor:TEAL,borderWidth:2.5,yAxisID:'y1',order:1,tension:.25}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{y:{title:{display:true,text:'億元'}},y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'EPS 元'}}}}});
+
+// ② 稼動率 vs 毛利率（執行摘要）
+const UL=['4Q25','1Q26','2Q26','3Q26F','4Q26F'], UU=[77.5,67.5,62.5,58,60], UG=[30.4,35.4,32.7,30.5,30.5];
+new Chart(_g('cGmUtil'),{type:'bar',data:{labels:UL,
+ datasets:[{label:'稼動率 %',data:UU,backgroundColor:'#94a3b8',order:2},
+ {label:'毛利率 %',data:UG,type:'line',borderColor:RED,backgroundColor:RED,borderWidth:3,order:1,tension:.25,pointRadius:4}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{y:{min:20,max:85,title:{display:true,text:'%'}}}}});
+
+// ③ 前瞻 PE band
+const PB=PAY.peband;
+const band=v=>PB.l.map(()=>v);
+new Chart(_g('cFwdPE'),{type:'line',data:{labels:PB.l,datasets:[
+ {label:'前瞻 PE',data:PB.v,borderColor:NAVY,borderWidth:2,pointRadius:0,tension:.15},
+ {label:'+1σ '+PB.p1+'x',data:band(PB.p1),borderColor:RED,borderWidth:1,borderDash:[5,4],pointRadius:0},
+ {label:'均值 '+PB.mean+'x',data:band(PB.mean),borderColor:GOLD,borderWidth:1.5,borderDash:[7,3],pointRadius:0},
+ {label:'−1σ '+PB.m1+'x',data:band(PB.m1),borderColor:TEAL,borderWidth:1,borderDash:[5,4],pointRadius:0}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{x:{ticks:{maxTicksLimit:9,font:{size:8}}},y:{title:{display:true,text:'倍'},min:5,max:55}}}});
+
+// ④ 三率季度
+const QL2=['1Q25','2Q25','3Q25','4Q25','1Q26','2Q26','3Q26F','4Q26F'];
+new Chart(_g('cMarginQ'),{type:'line',data:{labels:QL2,datasets:[
+ {label:'毛利率',data:[20.9,23.8,28.2,30.4,35.4,32.7,30.5,30.5],borderColor:NAVY,borderWidth:2.5,tension:.25},
+ {label:'營益率',data:[10.2,16.3,19.9,22.2,27.4,24.7,22.5,22.5],borderColor:TEAL,borderWidth:2.5,tension:.25},
+ {label:'營費率',data:[10.7,7.6,8.3,8.2,8.0,8.0,8.0,8.0],borderColor:GREY,borderWidth:2,borderDash:[5,3],tension:.25}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{y:{title:{display:true,text:'%'},min:0,max:40}}}});
+
+// ⑤ 分產品毛利率
+new Chart(_g('cMixGM'),{type:'bar',data:{labels:['手機 PA','Router Wi-Fi','非射頻','1H26 整體'],
+ datasets:[{data:[22.5,25,45,33.9],backgroundColor:[GREY,BLUE,TEAL,NAVY]}]},
+ options:{maintainAspectRatio:false,plugins:NL.plugins,scales:{y:{title:{display:true,text:'%'},max:55}}}});
+
+// ⑥ 非射頻占比路徑
+new Chart(_g('cMixPath'),{type:'bar',data:{labels:['2024','2025','2026F','2027F','2028F'],
+ datasets:[{label:'金額（億元）',data:[1.3,1.9,2.8,4.8,8.3],backgroundColor:TEAL,order:2},
+ {label:'占營收比重 %',data:[3.0,4.5,5.5,8.5,13.0],type:'line',borderColor:NAVY,borderWidth:2.5,yAxisID:'y1',order:1,tension:.25,pointRadius:4}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{y:{title:{display:true,text:'億元'}},y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'%'},max:16}}}});
+
+// ⑦ CapEx vs FCF
+new Chart(_g('cCapexFcf'),{type:'bar',data:{labels:['2024','2025','2026F','2027F','2028F','2029F'],
+ datasets:[{label:'資本支出（億元）',data:[8.6,2.3,7.0,15.0,13.0,8.0],backgroundColor:RED,order:2},
+ {label:'自由現金流（億元）',data:[3.9,10.8,9.7,2.9,8.3,15.9],type:'line',borderColor:TEAL,borderWidth:3,order:1,tension:.2,pointRadius:4}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{y:{title:{display:true,text:'億元'}}}}});
+
+// ⑧ 5Y 相對大盤
+new Chart(_g('cRel'),{type:'line',data:{labels:PAY.rel.l,datasets:[
+ {label:'宏捷科 8086',data:PAY.rel.s,borderColor:NAVY,borderWidth:2.2,pointRadius:0,tension:.2},
+ {label:'加權指數',data:PAY.rel.t,borderColor:GOLD,borderWidth:2,pointRadius:0,tension:.2}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{x:{ticks:{maxTicksLimit:10,font:{size:8}}},y:{title:{display:true,text:'累積報酬 %'}}}}});
+
+// ⑨⑩ 兩個 donut
+new Chart(_g('cMixDonut'),{type:'doughnut',data:{labels:['Cellular PA 72.5%','Wi-Fi PA 22%','非射頻 5.5%'],
+ datasets:[{data:[72.5,22,5.5],backgroundColor:[NAVY,BLUE,TEAL]}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:9,font:{size:9}}}}}});
+new Chart(_g('cCustDonut'),{type:'doughnut',data:{labels:['陸系最大客戶 22.5%','美系 Fabless 17.5%','台系 Wi-Fi 15%','韓系手機 10%','無人機 Wi-Fi 7%','其他 28%'],
+ datasets:[{data:[22.5,17.5,15,10,7,28],backgroundColor:[NAVY,BLUE,TEAL,GOLD,'#8b5cf6',GREY]}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:9,font:{size:8}}}}}});
+
+// ⑪ 稼動率 vs 毛利率（產能頁）
+new Chart(_g('cCapUtil'),{type:'bar',data:{labels:UL,
+ datasets:[{label:'稼動率 %（公司揭露中值）',data:UU,backgroundColor:'#94a3b8',order:2},
+ {label:'毛利率 %',data:UG,type:'line',borderColor:RED,borderWidth:3,order:1,tension:.25,pointRadius:5}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{y:{min:20,max:85,title:{display:true,text:'%'}}}}});
+
+// ⑫ 供給結構
+new Chart(_g('cSupply'),{type:'bar',data:{labels:['穩懋 3105','宏捷科 8086','三安（中國）','環宇-KY 4991','其他小廠'],
+ datasets:[{data:[55,20,16,5,4],backgroundColor:[GREY,NAVY,'#8b5cf6',BLUE,'#cbd5e1']}]},
+ options:{indexAxis:'y',maintainAspectRatio:false,plugins:NL.plugins,scales:{x:{title:{display:true,text:'千片／月（六吋約當）'}}}}});
+
+// ⑬ 手機 TAM
+new Chart(_g('cPhoneTam'),{type:'bar',data:{labels:['2025','2026F'],
+ datasets:[{label:'全球智慧手機出貨（億支）',data:[12.6,12.5],backgroundColor:[NAVY,GREY]}]},
+ options:{maintainAspectRatio:false,plugins:NL.plugins,scales:{y:{min:11,max:13,title:{display:true,text:'億支'}}}}});
+
+// ⑭ PA 顆數
+new Chart(_g('cPaCount'),{type:'bar',data:{labels:['4G 手機','5G 手機','Wi-Fi 5','Wi-Fi 6','Wi-Fi 7','無人機 Wi-Fi'],
+ datasets:[{data:[2.5,4,2.5,3.5,9,6],backgroundColor:[GREY,NAVY,'#cbd5e1',GREY,TEAL,BLUE]}]},
+ options:{maintainAspectRatio:false,plugins:NL.plugins,scales:{y:{title:{display:true,text:'顆／台'}}}}});
+
+// ⑮ Wi-Fi 7 滲透率
+new Chart(_g('cWifiPen'),{type:'line',data:{labels:['2024','2025','2026F'],
+ datasets:[{label:'Wi-Fi 7 滲透率 %',data:[6,16,21],borderColor:TEAL,backgroundColor:'rgba(0,200,150,.15)',fill:true,borderWidth:3,tension:.3,pointRadius:5}]},
+ options:{maintainAspectRatio:false,plugins:NL.plugins,scales:{y:{title:{display:true,text:'%'},max:26}}}});
+
+// ⑯ 非射頻 TAM CAGR
+new Chart(_g('cTamNonRf'),{type:'bar',data:{labels:['VCSEL 光通訊','LiDAR','Wi-Fi 7','無人機物流'],
+ datasets:[{data:[15.5,18,16,20],backgroundColor:[TEAL,BLUE,NAVY,GOLD]}]},
+ options:{maintainAspectRatio:false,plugins:NL.plugins,scales:{y:{title:{display:true,text:'CAGR %'},max:24}}}});
+
+// ⑰ 年度營收 + 毛利率
+new Chart(_g('cRevHist'),{type:'bar',data:{labels:['2022','2023','2024','2025','2026F','2027F','2028F'],
+ datasets:[{label:'營收（億元）',data:[21.6,27.2,44.6,41.2,50.6,56.2,63.5],backgroundColor:NAVY,order:2},
+ {label:'毛利率 %',data:[15.9,15.2,19.9,26.5,32.2,31.2,32.0],type:'line',borderColor:RED,borderWidth:3,yAxisID:'y1',order:1,tension:.25,pointRadius:4}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{y:{title:{display:true,text:'億元'}},y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'%'},min:10,max:38}}}});
+
+// ⑱ 月營收
+const ML=['25/01','25/02','25/03','25/04','25/05','25/06','25/07','25/08','25/09','25/10','25/11','25/12','26/01','26/02','26/03','26/04','26/05','26/06','26/07'];
+new Chart(_g('cMRev'),{type:'bar',data:{labels:ML,
+ datasets:[{label:'月營收（億元）',data:[2.19,2.60,2.92,3.00,3.23,3.51,3.54,3.75,3.89,4.11,4.20,4.23,4.17,3.73,4.32,4.48,4.43,4.08,4.19],backgroundColor:NAVY,order:2},
+ {label:'YoY %',data:[-47.7,-38.8,-33.8,-32.8,-25.6,-17.6,-13.6,0.0,22.2,62.7,66.8,65.2,90.2,43.3,47.9,49.4,37.0,16.1,18.4],type:'line',borderColor:TEAL,borderWidth:2.5,yAxisID:'y1',order:1,tension:.2,pointRadius:2}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{x:{ticks:{font:{size:7.5},maxRotation:60}},y:{title:{display:true,text:'億元'}},y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'YoY %'}}}}});
+
+// ⑲ 季度營收 + EPS
+new Chart(_g('cQtr'),{type:'bar',data:{labels:QL2,
+ datasets:[{label:'營收（億元）',data:[7.72,9.74,11.17,12.53,12.22,12.98,12.59,12.85],backgroundColor:NAVY,order:2},
+ {label:'EPS（元）',data:[0.42,0.50,1.11,1.33,1.51,1.42,1.26,1.28],type:'line',borderColor:TEAL,borderWidth:3,yAxisID:'y1',order:1,tension:.2,pointRadius:4}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{y:{title:{display:true,text:'億元'}},y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'EPS 元'},max:2}}}});
+
+// ⑳ 營益率橋接
+new Chart(_g('cBridge'),{type:'bar',data:{labels:['2025A 營益率','毛利率貢獻','營費率貢獻','2026F 營益率'],
+ datasets:[{data:[17.9,5.7,0.6,24.2],backgroundColor:[NAVY,TEAL,TEAL,GOLD]}]},
+ options:{maintainAspectRatio:false,plugins:NL.plugins,scales:{y:{title:{display:true,text:'%／百分點'},max:28}}}});
+
+// ㉑ ROE
+new Chart(_g('cRoe'),{type:'line',data:{labels:['2023','2024','2025','2026F','2027F','2028F','2029F','2030F'],
+ datasets:[{label:'ROE %',data:[1.1,6.8,8.2,12.5,12.1,13.3,13.8,14.0],borderColor:NAVY,backgroundColor:'rgba(13,27,62,.1)',fill:true,borderWidth:2.5,tension:.25,pointRadius:4}]},
+ options:{maintainAspectRatio:false,plugins:NL.plugins,scales:{y:{title:{display:true,text:'%'},max:17}}}});
+
+// ㉒ 三情境
+new Chart(_g('cScenario'),{type:'bar',data:{labels:['保守（25%）','基礎（50%）','樂觀（25%）'],
+ datasets:[{label:'2027F EPS（元）',data:[4.70,5.69,6.60],backgroundColor:[GREY,NAVY,TEAL],order:2},
+ {label:'情境目標價（元）',data:[103,154,211],type:'line',borderColor:GOLD,borderWidth:3,yAxisID:'y1',order:1,pointRadius:7,pointStyle:'rectRot',showLine:false}]},
+ options:{maintainAspectRatio:false,plugins:{legend:LG},scales:{y:{title:{display:true,text:'EPS 元'},max:8},y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'目標價 元'},max:240}}}});
+
+// ㉓ 同業 PE
+new Chart(_g('cPeerPe'),{type:'bar',data:{labels:['宏捷科 8086','穩懋 3105','全新 2455','環宇 4991'],
+ datasets:[{data:[27.8,73.2,117.0,175.4],backgroundColor:[TEAL,GREY,GREY,GREY]}]},
+ options:{maintainAspectRatio:false,plugins:NL.plugins,scales:{y:{title:{display:true,text:'TTM PE 倍'}}}}});
+
+// ㉔ 散點
+new Chart(_g('cPeerScatter'),{type:'scatter',data:{datasets:[
+ {label:'宏捷科 8086',data:[{x:21.7,y:27.8}],backgroundColor:TEAL,pointRadius:9},
+ {label:'穩懋 3105',data:[{x:7.7,y:73.2}],backgroundColor:GREY,pointRadius:7},
+ {label:'全新 2455',data:[{x:20.2,y:117.0}],backgroundColor:BLUE,pointRadius:7},
+ {label:'環宇 4991',data:[{x:22.5,y:175.4}],backgroundColor:GOLD,pointRadius:7}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:8,font:{size:8}}}},
+ scales:{x:{title:{display:true,text:'TTM 營益率 %'},min:0,max:28},y:{title:{display:true,text:'TTM PE 倍'},min:0,max:200}}}});
+
+// ㉕ Football Field
+new Chart(_g('cFootball'),{type:'bar',data:{
+ labels:['① 本益比法','② DCF','③ 股價淨值比','④ 同業比較','（參考）券商區間'],
+ datasets:[
+ {label:'區間下緣起點',data:[103,89,110,110,140],backgroundColor:'rgba(0,0,0,0)',stack:'s'},
+ {label:'估值區間',data:[108,43,55,54,45],backgroundColor:['rgba(13,27,62,.75)','rgba(192,57,43,.7)','rgba(0,200,150,.7)','rgba(59,130,246,.7)','rgba(148,163,184,.55)'],stack:'s'},
+ {label:'中心值',data:[153.6,105.3,137.1,136.8,158],type:'scatter',backgroundColor:GOLD,pointRadius:7,pointStyle:'rectRot',showLine:false}]},
+ options:{indexAxis:'y',maintainAspectRatio:false,
+ plugins:{legend:{labels:{boxWidth:9,font:{size:8.5},filter:i=>i.text!=='區間下緣起點'}}},
+ scales:{x:{stacked:true,min:70,max:230,title:{display:true,text:'每股價值（元）· 現價 123.5 · 目標價 137'}},y:{stacked:true}}}});
+</script>
+</body>
+</html>

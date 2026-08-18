@@ -1,0 +1,970 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>矽晶圓與第三代半導體（HVDC 800V）產業概覽 | GiS 研究員觀點</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.full-page>*{flex-shrink:0}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:40px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:34px;font-weight:800;line-height:1.3;letter-spacing:1px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:14px;color:rgba(255,255,255,.65);margin-bottom:36px;letter-spacing:.5px;line-height:1.6}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:18px 20px;text-align:center}
+.cstat-num{font-size:20px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:44px;font-weight:800;line-height:1.25;margin-bottom:24px;max-width:640px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:560px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:38px 52px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:20px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:9px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 14px;page-break-after:avoid}
+h2.ch{font-size:16px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:6px;margin:20px 0 11px;page-break-after:avoid}
+h3.ch{font-size:14px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:15px 0 8px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:11px 0 16px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 11px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.3px}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:8px 11px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:16px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}.co-card-head.teal{background:#065f46}.co-card-head.blue{background:#1a3a6e}.co-card-head.slate{background:#2d3748}.co-card-head.wine{background:#5c1a1a}.co-card-head.indigo{background:#312e81}
+.co-name{font-size:17px;font-weight:800;color:#fff}
+.co-ticker{font-size:12px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}.badge.neutral{background:#f59e0b;color:#fff}.badge.sell{background:#e74c3c;color:#fff}.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.co-body{padding:14px 20px;font-size:13px;line-height:1.65}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:16px;margin:12px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13.5px;font-weight:700;color:#0d1b3e;margin-bottom:3px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:12px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:15px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11px;opacity:.7;letter-spacing:.3px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:16px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12.5px;font-weight:800;margin-bottom:7px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.85;line-height:1.5}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:15px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:13.5px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.pick-card{border-radius:8px;padding:15px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:5px}
+.pick-name{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:11.5px;color:#6b7a9a;margin-bottom:9px}
+.pick-why{font-size:12.5px;color:#2d3748;line-height:1.65;margin-bottom:9px}
+.pick-catalyst{font-size:12px;color:#065f46;background:#e8f5ee;padding:7px 9px;border-radius:5px}
+p{margin:6px 0 10px;line-height:1.7}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+li{margin:4px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:11px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:20px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:4px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:15px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 52px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Industry Overview · Semiconductor Materials · 2026 Q3</div>
+    <div class="cover-title">上游矽晶圓與第三代半導體<br><em>誰供電給 800V HVDC AI 機房？</em></div>
+    <div class="cover-subtitle">From Silicon Wafers to SiC / GaN — Upstream Materials in the 800V HVDC AI Power Chain<br>環球晶 6488 · 中美晶 5483 · 合晶 6182 · 漢磊 3707 · 嘉晶 3016</div>
+    <div class="cover-tags">
+      <span class="ctag hl">800V HVDC</span>
+      <span class="ctag hl">大功率 AC→DC / SST</span>
+      <span class="ctag hl">SiC 碳化矽</span>
+      <span class="ctag">GaN 氮化鎵</span>
+      <span class="ctag">功率磊晶</span>
+      <span class="ctag">矽晶圓 LTA 重定價</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>600</em>kW</div><div class="cstat-label">Rubin 單櫃功耗 (2027)</div></div>
+    <div class="cstat"><div class="cstat-num">−<em>45</em>%</div><div class="cstat-label">800V 銅用量降幅</div></div>
+    <div class="cstat"><div class="cstat-num">~<em>10</em>×</div><div class="cstat-label">SiC/GaN 崩潰電場 vs 矽</div></div>
+    <div class="cstat"><div class="cstat-num"><em>14</em> 檔</div><div class="cstat-label">台廠標的(上游+元件)</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年7月23日</span>
+    <span>身份：研究員 · 估值方法論驅動 · 中立</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要 — 一場由「電流」逼出來的材料革命</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">40→600<em> kW</em></div><div class="kpi-lbl">機櫃功耗 H100→Rubin</div></div>
+    <div class="kpi"><div class="kpi-val">20,833<em> A</em></div><div class="kpi-lbl">48V 供 1MW 電流</div></div>
+    <div class="kpi gold"><div class="kpi-val">17%</div><div class="kpi-lbl">環球晶全球矽晶圓市佔</div></div>
+    <div class="kpi green"><div class="kpi-val">+41%</div><div class="kpi-lbl">嘉晶 6月營收 YoY</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>800V HVDC 是物理必然，不是行銷口號。</strong>功率固定下 <em>P=V×I</em>，48V 餵一座 1MW 機櫃電流衝到約 2 萬安培，需截面積 100 cm²、直徑 11.3 cm 的實心銅或逾 200 kg 銅材，體積與散熱皆不可行。把電壓拉高到 800V，電流下降逾一個數量級、銅用量降 45%、端到端效率提升約 5%、並可省去多達 4 道轉換級。NVIDIA 於 2025 COMPUTEX 宣示新一代 AI 機房走 800V HVDC，2027 年 Kyber / Rubin Ultra 機櫃正式導入。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>直流降壓沒有「電磁感應」可用，必須靠功率半導體——這是第三代半導體的舞台。</strong>交流電靠變壓器（銅線圈＋鐵芯）就能降壓；直流無頻率，只能用電晶體開關硬轉。矽的崩潰電場低、高壓下易被擊穿；SiC / GaN 寬能隙、崩潰電場約為矽的 10 倍。<strong>SiC 耐壓耐熱放在最上游的「大功率 AC→DC 整流 / 固態變壓器」；GaN 高頻快切放在機櫃內逐級降壓給 GPU。</strong>800V 也催生了固態斷路器（SSCB）等以 SiC MOSFET 為核心的全新應用。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>台廠是「賣鏟子」的上游材料與代工方，受惠明確但屬第二層次、且有驗證時程風險。</strong>矽晶圓端（環球晶、中美晶）走 LTA 重定價循環；功率磊晶基板（合晶）與 SiC/GaN 磊晶＋代工（漢磊、嘉晶）則吃第三代半導體放量。營收動能已分歧：第三代磊晶雙位數加速（漢磊 +30%、嘉晶 +41%），矽晶圓仍在谷底盤整。我們偏好折價載體與純標的（中美晶、環球晶），對估值已透支的轉機股（合晶、嘉晶）保守。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">AI 機櫃功耗躍升：800V 的需求引擎</div>
+      <div class="chart-sub">來源：NVIDIA 規格、產業報告整理、GiS 彙編（單位：kW/櫃）</div>
+      <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="chart1"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">五檔月營收 YoY 已分歧（2026 年 6 月）</div>
+      <div class="chart-sub">來源：公開資訊觀測站月營收、GiS 彙編（單位：%）</div>
+      <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="chart2"></canvas></div>
+    </div>
+  </div>
+
+  <blockquote><strong>GiS 一句話定調：</strong>這不是炒股題材，是科學。AI 算力密度把「輸電」推到 48V 的物理極限，逼出 800V 高壓直流；而高壓直流降壓「只能用半導體」，把 SiC/GaN 從電動車舞台一路送進資料中心。台廠握的是最上游的晶圓、磊晶與代工——受惠真實，但要分清「材料循環重定價」與「轉機股估值透支」兩種本質不同的曝險。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節壹 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One · The Physics</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">為什麼一定要 800V？<br>大功率 AC→DC 的物理與分工</div>
+  <div class="sec-desc">從 P=V×I 出發，理解為何 AI 機房被迫走高壓直流；為何直流降壓「只能靠半導體」；以及 SiC 與 GaN 在整條供電鏈上各自的位置。</div>
+</div>
+
+<!-- ══════════════ 1. 800V 物理必然性 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹之一、48V 撞牆：電流才是真正的敵人</h1>
+  <p>供電這件事，關鍵在一條國中就學過的公式：<strong>功率 = 電壓 × 電流（P = V × I）</strong>。一座機櫃要用的功率是固定的，電壓壓得低，電流就得變得非常大。傳統機櫃用 48–54V 低壓餵一座百萬瓦（1MW）等級的機櫃，電流會衝到約 <strong>兩萬安培</strong>。</p>
+  <p>電機工程對銅導體會抓一個保守的電流密度安全值，約每平方公釐 2 安培。也就是說，兩萬安培大約需要截面積 <strong>100 cm²、直徑 11.3 cm 的實心銅線</strong>（或逾 200 kg 銅材）才能安全運輸。這麼粗的銅巨大、佔空間；更嚴重的是體積太大、相對表面積變小，核心熱量根本散不出去。就算真要跑兩萬安培，也得切成多條纜線、或把電流密度再往下修——施工困難、佔空間、加上嚴重發熱，這就是低電壓最容易撞上的牆。</p>
+
+  <h2 class="ch">把公式反過來：拉高電壓，電流與銅一起降下來</h2>
+  <p>功率固定，把電壓拉高，電流就會等比例降下來，線路上白白發熱的 I²R 損耗更是隨電流平方遞減。業界供電電壓於是一路演進：伺服器機櫃內部從 12V → 48/54V（近幾年主流）→ 如今喊出 <strong>800V HVDC</strong>。改用 800V 後，銅用量可降約 45%、端到端供電效率提升約 5%、並可省去多達 4 道電壓轉換級，整體 TCO 估可降約 30%。</p>
+
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">~2015</div><div class="tl-spec">12V</div><div class="tl-tech">板級供電<br>電流最大、損耗高</div></div>
+    <div class="tl-item"><div class="tl-year">2020–2025</div><div class="tl-spec">48 / 54V</div><div class="tl-tech">機櫃內主流<br>GB300 已達物理極限</div></div>
+    <div class="tl-item active"><div class="tl-year">2026–2027 ← 導入中</div><div class="tl-spec">800V HVDC</div><div class="tl-tech">Kyber/Rubin Ultra<br>±400V 高壓直流</div></div>
+    <div class="tl-item next"><div class="tl-year">2028+</div><div class="tl-spec">1500V?</div><div class="tl-tech">GW 級 AI 工廠<br>電壓再上一階的想像</div></div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">同樣供 1MW，電壓越高、電流越小（對數尺度）</div>
+    <div class="chart-sub">來源：I = P/V 計算、GiS 彙編（單位：安培 A，對數軸）</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chart3"></canvas></div>
+  </div>
+
+  <blockquote><strong>GiS 觀點：</strong>800V 是被「電流」逼出來的，不是被「散熱」逼出來的。要澄清一個常見誤解——並不是有了 800V 才能用高功率晶片，也不是液冷帶動 800V；800V（解決供電）與液冷（解決機櫃散熱）是<strong>平行地</strong>回應「同一機櫃塞滿高功率 GPU」這件事。方向幾乎確定，但落地可能先做半套：中間仍先經幾次變壓整流，才轉成 800V 送進機櫃。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹之一 · 800V 物理必然性</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 2. AC→DC 與 SiC/GaN 分工 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹之二、大功率 AC→DC：為什麼「直流」非要第三代半導體不可</h1>
+  <p>從電網送進機房的電，通常仍是 480V 三相<strong>交流</strong>電。傳統做法要經過 UPS（交流→直流→交流充放電）、PDU 壓降、再到伺服器 PSU（交流→直流），層層轉換、每一道都吃掉能量。<strong>800V DC 架構的精髓，是在機房源頭就用固態變壓器（SST）＋工業級整流器，把 480V AC 一次轉成 800V 高壓直流</strong>，被抽的「過路費」大幅減少。</p>
+  <p>那為什麼電網動輒數萬伏特、卻從沒用化合物半導體？因為電網走<strong>交流</strong>——降壓靠電磁感應（銅線圈＋鐵芯跟著交流波形自然變壓），不需複雜半導體。但直流<strong>沒有頻率</strong>、無法靠電磁感應傳遞能量；要降壓，唯一方法是用半導體電晶體開關把高壓直流硬生生轉成低壓。這正是 800V HVDC 把功率半導體推上主角的根本原因。</p>
+
+  <h2 class="ch">材料物理：矽為何讓位給 SiC / GaN</h2>
+  <p>矽便宜成熟，但崩潰電場低——高壓下電子被電場加速、撞出更多電子形成崩潰通路而燒毀晶片。第三代（寬能隙）半導體 SiC / GaN 能隙寬得多，<strong>崩潰電場約為矽的 10 倍</strong>：同樣耐壓下元件更薄、導通電阻更低、切換更快、發熱更少，是高壓直流降壓的物理最優解。</p>
+
+  <h2 class="ch">供電鏈五級 × 材料分工 × 台廠上游對應（本報告核心）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>級別</th><th>電壓轉換</th><th>功能</th><th>主導功率元件</th><th>台廠上游材料 / 代工對應</th></tr></thead>
+    <tbody>
+      <tr><td>① 電網接入</td><td class="num">13.8kV／480V AC</td><td>市電三相交流</td><td>傳統變壓器（銅＋鐵芯）</td><td style="color:#9aabb5">非本組範疇</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">② 大功率 AC→DC 整流 / SST</td><td class="num" style="font-weight:700">480V AC → 800V DC</td><td style="font-weight:700">機房源頭一次轉換<br>（本報告重點）</td><td class="hi" style="color:#7b2020;font-weight:800">SiC MOSFET 1200/1700V<br>「耐壓耐熱的強人」</td><td style="font-weight:700">環球晶／嘉晶 SiC 基板＋磊晶；漢磊 8" SiC 代工</td></tr>
+      <tr><td>③ 高壓直流配電</td><td class="num">800V HVDC 母線</td><td>送電進機櫃（銅 −45%）＋直流電弧保護</td><td>SiC MOSFET（固態斷路器 SSCB）</td><td>環球晶 SiC 基板；漢磊 SiC 代工</td></tr>
+      <tr><td>④ 中間匯流排 IBC</td><td class="num">800V → 48/50V DC</td><td>機櫃內第一階降壓</td><td>SiC ＋ GaN</td><td>漢磊 SiC/GaN 代工；嘉晶 GaN 磊晶</td></tr>
+      <tr style="background:#eef5ff!important"><td style="font-weight:700">⑤ 負載點 POL</td><td class="num" style="font-weight:700">48V → 12V → 0.8V</td><td style="font-weight:700">高頻精準降壓給 GPU</td><td style="color:#1a3a6e;font-weight:800">GaN HEMT（快切）＋ Si<br>「一階階降壓的快跑者」</td><td style="font-weight:700">合晶／嘉晶 GaN 磊晶；合晶低阻矽磊晶（Si MOSFET）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：NVIDIA 800V HVDC 架構說明、Navitas/Wolfspeed/意法等公開資料、GiS 彙編。台廠對應為 GiS 依產品線推估之曝險位置。</span>
+
+  <blockquote><strong>GiS 對大功率 AC→DC 的看法：</strong>整條鏈最高價值、最高門檻的插槽是<strong>第②級 AC→DC 整流／固態變壓器</strong>——電壓最高、可靠度要求最嚴，目前由國際 IDM（Wolfspeed、Infineon、onsemi、STM）以 8 吋 SiC 基板＋元件主導。台廠在此非「品牌元件商」，而是供 6/8 吋 SiC 基板、磊晶與代工產能的<strong>賣鏟子角色</strong>——受惠真實但屬第二層次，且需等 8 吋 SiC 良率與客戶驗證到位（見第參章）。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹之二 · AC→DC 與材料分工</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 3. EV 外溢 + SSCB ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹之三、為什麼能「說變就變」？——電動車替 AI 機房先付了學費</h1>
+  <p>這麼大的架構變革之所以能快速落地，關鍵在<strong>技術外溢</strong>。保時捷、現代、比亞迪等車廠為了超級快充，這幾年瘋狂把電動車推向 800V 高壓平台，從耐高壓的 SiC 晶片、高壓連接器、高壓線材，到整套絕緣與保護設計，全被磨得越來越成熟。而電動車是以數以百萬計的規模製造的——供應鏈早已經歷一波追求高良率、低成本的考驗，連伺服器最在乎的可靠度，都已被惡劣路況幫忙測完。把這批零件放進恆溫恆濕、無震動的資料中心，可靠度綽綽有餘。</p>
+  <div class="callout green">
+    <div class="callout-title">關鍵差異：AI 機房不是照抄電動車</div>
+    電動車是「電池 → 馬達」的封閉動力分配；AI 機房則要把龐大高壓電力一路拉進機櫃，再<strong>安全、精準地微縮降壓</strong>給幾萬顆脆弱的 GPU。真正沿用的是電動車養大的「那批高壓零件與供應鏈」，而不是整套架構。這也解釋了本組台廠的定位——它們賣的是可跨界（車用＋AI 電源）的<strong>晶圓與磊晶材料</strong>，需求不隨單一終端起伏。</div>
+
+  <h1 class="ch">壹之四、800V 催生的新零件：固態斷路器（SSCB）</h1>
+  <p>高壓直流帶來一個交流時代沒有的新挑戰——<strong>直流電弧</strong>。交流電每秒過零多次，電弧會在電流歸零瞬間自動熄滅（自帶煞車）；但 800V 直流一旦打出電弧，不會自己熄滅，最後可形成溫度逼近攝氏兩萬度、比太陽表面還熱的電弧，融毀設備、危及人身。傳統無熔絲開關靠物理隔絕反而可能拉出更長的電弧。</p>
+  <p>於是新零件被逼了出來：<strong>固態斷路器（Solid-State Circuit Breaker, SSCB）</strong>——不再靠機械，而是用最耐高溫高壓的 SiC MOSFET 當開關。正常時給閘極微小電壓、打開電子通道讓 800V 大電流順暢通過（像一條銅線）；異常時控制晶片瞬間把閘極降到 0V 甚至負壓，電子通道消失、轉為極高阻抗的空乏區，用半導體方法斷電。這是低壓時代幾乎用不上、隨高壓直流催生的新增市場，<strong>再度墊高 SiC 元件（與其上游基板／磊晶）的需求</strong>。</p>
+
+  <div class="callout">
+    <div class="callout-title">GiS 需求外推邏輯（避免「按 GPU 顆數線性外推」的陷阱）</div>
+    功率半導體與電容需求不隨 GPU 顆數線性成長，而是隨<strong>「輸電電壓等級 × 轉換級數 × 保護節點數」</strong>放大。800V 架構同時新增了整流/SST（②）、SSCB（③）、多級 DC-DC（④⑤）三類新插槽——這是「整張供電網路同步加密」，也是本輪功率元件與其上游材料需求的結構性來源。
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹之三/四 · EV 外溢與 SSCB</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節貳 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two · The Materials</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">上游材料版圖<br>矽晶圓的循環 × 第三代的放量</div>
+  <div class="sec-desc">兩條性質截然不同的主線：矽晶圓走供給紀律＋ LTA 重定價的景氣循環；第三代半導體走 SiC/GaN 從電動車擴散到 AI 電源的放量成長。</div>
+</div>
+
+<!-- ══════════════ 4. 矽晶圓供需 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳之一、矽晶圓：谷底盤整，LTA 重新定價循環</h1>
+  <p>矽晶圓是所有晶片（含 GPU、HBM、功率元件）的「地基」。全球高度集中：日本信越（Shin-Etsu）約 32%、日本 SUMCO 約 25%、環球晶約 17%，前三大合計逾七成，德國 Siltronic 與韓國 SK Siltron 居後。台廠除環球晶外，尚有台勝科（3532）、合晶（6182）等。</p>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">全球矽晶圓市佔（依營收）</div>
+      <div class="chart-sub">來源：產業報告整理、GiS 彙編（%）</div>
+      <div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chart5"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">產能利用率自谷底復甦（12" vs 8"）</div>
+      <div class="chart-sub">來源：外資研究部估計、GiS 彙編（%）</div>
+      <div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="chart4"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">重定價的觸發點：美光十年 LTA</h2>
+  <p>2026 年 7 月 9 日，美光（Micron）宣布向環球晶提供 5 億美元策略性投資並簽署 <strong>10 年長約（LTA）</strong>，支持其美國擴產。這在產業意義上是分水嶺：（1）記憶體廠向來循環性高、鮮少簽十年原料長約，此舉顯示客戶思維由「避免 commitment」轉向「提前鎖定供應」；（2）矽晶圓佔記憶體製造成本 &lt;8%，AI 需求帶動下客戶對適度漲價接受度提高；（3）供給端因建廠成本高、多數同業仍虧損（如 SUMCO 縮減佐賀新廠），擴產趨於保守。當需求加速，下輪循環面對的是「供給反應更慢帶動的漲價」。</p>
+
+  <table style="font-size:11.5px">
+    <thead><tr><th>供需與價格訊號</th><th>2024</th><th>2025</th><th>2026E</th><th>2027–28E</th><th>GiS 解讀</th></tr></thead>
+    <tbody>
+      <tr><td>12" 產能利用率</td><td class="num">79.1%</td><td class="num">81.7%</td><td class="num">82.2%</td><td class="num pos">87.7→93.6%</td><td>逐季回升，2027 起吃緊</td></tr>
+      <tr><td>8" 產能利用率</td><td class="num">71.9%</td><td class="num">68.6%</td><td class="num">78.7%</td><td class="num pos">86.7→93.7%</td><td>谷底已過，功率/類比拉動</td></tr>
+      <tr><td>價格 / 合約</td><td>現貨為主</td><td>LTA 意願低</td><td class="pos">H2 啟動漲價</td><td class="pos hi">十年 LTA 重現</td><td>評價提升可能早於獲利</td></tr>
+      <tr><td>CoPoS 方形晶圓</td><td>—</td><td>研發</td><td class="pos">環球晶 Q4 小量</td><td class="pos">合晶明年中量產</td><td>先進封裝新增規格</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：外資研究部（12"/8" 利用率估計）、矽晶圓製造產業報告、環球晶/美光公告、GiS 彙編。券商觀點採匿名處理。</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳之一 · 矽晶圓供需</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 5. 第三代半導體 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳之二、第三代半導體：從電動車擴散到 AI 電源的放量成長</h1>
+  <p>第三代半導體（SiC / GaN）產業鏈分三段：<strong>長晶／基板 → 磊晶 → 元件代工／IDM</strong>。國際上 Wolfspeed、Infineon、onsemi、ROHM、STM 掌握 8 吋 SiC 基板與元件；GaN 則有 Navitas、Innoscience、EPC、Power Integrations 等。台廠切入的是<strong>基板、磊晶與專業代工</strong>三個上游環節——正是本組五檔中三檔（合晶、漢磊、嘉晶）的位置。</p>
+
+  <h2 class="ch">台廠產業地圖（角色 × 上下游 × 產品 × 優勢）</h2>
+  <table style="font-size:11px">
+    <thead><tr><th>公司</th><th>產業角色</th><th>上下游位置</th><th>核心產品</th><th>競爭優勢 / 卡位</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:700">環球晶 6488</td><td>矽晶圓＋SiC 基板</td><td>最上游材料</td><td>拋光/磊晶/退火/SOI/FZ 矽晶圓 3–12"；12" 方形 SiC(CoPoS)</td><td>全球第 3 大矽晶圓廠；美國在地產能＋美光 LTA</td></tr>
+      <tr><td style="font-weight:700">中美晶 5483</td><td>控股＋太陽能＋半導體材料</td><td>環球晶母公司</td><td>持股環球晶約 37%；集團布局車用功率（茂矽等）</td><td>以折價載體持有環球晶；集團垂直整合</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">合晶 6182</td><td>矽磊晶基板</td><td>上游磊晶</td><td>低阻重摻矽磊晶、拋光片；布局 SOI／GaN 磊晶／矽光子</td><td class="hi" style="font-weight:700">全球第 6 大、低阻重摻前三；功率元件（MOSFET/IGBT/CoolMOS）基板</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">漢磊 3707</td><td>SiC/GaN 專業代工</td><td>中游元件代工</td><td>Si/SiC/GaN 磊晶＋功率半導體代工一站式；第 4 代 SiC MOSFET</td><td class="hi" style="font-weight:700">台灣少數同具三材料代工；與世界先進合作 8" SiC</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">嘉晶 3016</td><td>化合物磊晶</td><td>上游磊晶</td><td>Si／SiC／GaN 全材料磊晶專業廠；8" 新產能</td><td class="hi" style="font-weight:700">漢磊集團子公司；矽磊晶隱形冠軍</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：各公司公開資料、產業報導、GiS 彙編。註：環球晶/中美晶為 Sino-American Silicon 集團（徐秀蘭）；漢磊/嘉晶為漢民集團（徐建華），兩集團獨立，同受第三代半導體題材帶動。</span>
+
+  <h2 class="ch">關鍵催化：漢磊×世界先進 8 吋 SiC 代工</h2>
+  <p>法人看好漢磊集團與世界先進（VIS）合作的 8 吋 SiC 於 <strong>2026 上半年試產、Q4 完成驗證</strong>（漢磊負責高壓技術與客戶接洽、VIS 提供廠房營運）。8 吋較 6 吋單位成本更低、良率提升後可承接 AI 資料中心與車用委外代工。這是本組唯一「本土 8 吋 SiC 產能落地」的具體時程，也是漢磊/嘉晶營收 2026 重啟雙位數成長的動能來源。</p>
+
+  <blockquote><strong>GiS 核心判斷：</strong>營收動能已明確分歧（見執行摘要圖）——第三代磊晶（漢磊 +30%、嘉晶 +41%）雙位數加速，矽晶圓（環球晶 −1.6%）仍谷底盤整。這說明資金與訂單正輪動進第三代半導體復甦；但<strong>營收加速 ≠ 獲利兌現</strong>：漢磊仍虧損、嘉晶剛轉盈，估值須用 P/B 而非 PE，且 8" SiC 驗證（2026Q4）是題材能否落袋的關鍵閘門。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳之二 · 第三代半導體</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節參 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three · The Names</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">台廠定位、估值與 GiS 排序</div>
+  <div class="sec-desc">五檔性質橫跨「矽晶圓循環股」「控股折價載體」「功率磊晶轉機」「SiC/GaN 代工轉型」——多數 PE 失效，主用 P/B 與 SOTP 對照。</div>
+</div>
+
+<!-- ══════════════ 6. 公司卡片 A ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參之一、公司速覽（一）</h1>
+
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">環球晶 GlobalWafers</div><div class="co-ticker">6488 TT · 上櫃 · 半導體材料</div></div>
+      <div class="co-badge"><span class="badge ow">增持 OW</span><span style="color:rgba(255,255,255,.7);font-size:11px">TP 1,270（+13%）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">1,120</div><div class="co-metric-label">收盤價（元）</div></div>
+      <div class="co-metric"><div class="co-metric-val">5,355 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val">5.7×</div><div class="co-metric-label">P/B</div></div>
+      <div class="co-metric"><div class="co-metric-val up">17%</div><div class="co-metric-label">全球市佔</div></div>
+    </div>
+    <div class="co-body">全球第 3 大矽晶圓廠，9 國 18 廠。LTA 重定價的<strong>純標的</strong>：美光十年長約＋美國在地產能降低擴產風險，外資研究部估毛利率 2027 回升至約 35%、2028–29 續升。SiC 布局（12" 方形晶圓 Q4 小量、AI GPU 散熱潛在應用）為長線 option。<strong>已自低點 333 漲至 1,120（3.4×）</strong>，重定價多已反映，故給增持而非買進。以約 5.5× 2027 BVPSF 推 TP 1,270。</div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head teal">
+      <div><div class="co-name">中美晶 Sino-American Silicon</div><div class="co-ticker">5483 TT · 上櫃 · 半導體材料</div></div>
+      <div class="co-badge"><span class="badge buy">買進 Buy</span><span style="color:rgba(255,255,255,.7);font-size:11px">TP 255（+20%）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">212.5</div><div class="co-metric-label">收盤價（元）</div></div>
+      <div class="co-metric"><div class="co-metric-val">1,363 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val">2.6×</div><div class="co-metric-label">P/B</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+9,000</div><div class="co-metric-label">10日法人淨買(張)</div></div>
+    </div>
+    <div class="co-body">環球晶母公司（持股約 37%），本身另有太陽能與半導體材料。是<strong>折價買環球晶的載體</strong>：所持環球晶股權市值已顯著高於中美晶自身市值，形成控股折價。近 10 日投信＋外資合計淨買約 9,000 張（本組唯一顯著法人回補），Skew 正不對稱。延續 GiS 既有覆蓋（2026-07-20，OW，TP 255）；股價回檔後上檔擴至約 +20%，依 §4.3 門檻機械落格為<strong>買進</strong>。控股股須用 P/B / SOTB（分類加總）評價，不用 PE。</div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參之一 · 公司速覽（一）</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 7. 公司卡片 B ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參之二、公司速覽（二）</h1>
+
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div><div class="co-name">合晶 Wafer Works</div><div class="co-ticker">6182 TT · 上櫃 · 半導體材料</div></div>
+      <div class="co-badge"><span class="badge sell">減碼 UW</span><span style="color:rgba(255,255,255,.7);font-size:11px">TP 108（−15%）</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">126.5</div><div class="co-metric-label">收盤價（元）</div></div>
+      <div class="co-metric"><div class="co-metric-val">751 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val">4.8×</div><div class="co-metric-label">P/B</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">−18,084</div><div class="co-metric-label">10日法人淨買(張)</div></div>
+    </div>
+    <div class="co-body">全球第 6 大矽晶圓廠、低阻重摻前三；<strong>功率元件磊晶基板</strong>核心供應（MOSFET/IGBT/CoolMOS/Superjunction），布局 SOI/GaN 磊晶/矽光子，CoPoS 方形晶圓已送樣、明年中量產。故事對得上 800V 主軸，但基本面仍近損平（2025 EPS 約 0.09），P/B 4.8× 明顯偏高；股價自低點 22 暴衝至 194 後回落，近 10 日外資＋投信合計淨賣約 1.8 萬張（本組最重）。<strong>估值透支＋籌碼鬆動</strong>，以 4.0× P/B 推 TP 108。</div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">漢磊 Episil</div><div class="co-ticker">3707 TT · 上櫃 · 半導體</div></div>
+      <div class="co-badge"><span class="badge neutral">中立 N</span><span style="color:rgba(255,255,255,.7);font-size:11px">觀望 · 驗證前不給正式 TP</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">65.3</div><div class="co-metric-label">收盤價（元）</div></div>
+      <div class="co-metric"><div class="co-metric-val">259 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val">3.6×</div><div class="co-metric-label">P/B</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+30%</div><div class="co-metric-label">6月營收 YoY</div></div>
+    </div>
+    <div class="co-body">台灣少數同具 Si/SiC/GaN 磊晶＋功率代工一站式平台；與世界先進合作 8" SiC（2026Q4 驗證）是本組最具體的 SiC 放量 option。營收雙位數加速、虧損逐季收斂，但<strong>仍未轉盈</strong>（TTM EPS 約 −1.8），forward PE 逾 200× 無估值錨、屬事件驅動投機。8" SiC 驗證落地前給中立/觀望。</div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參之二 · 公司速覽（二）</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 8. 公司卡片 C + Comps ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參之三、公司速覽（三）＋ 產業 Comps</h1>
+
+  <div class="co-card">
+    <div class="co-card-head indigo">
+      <div><div class="co-name">嘉晶 Episil-Precision</div><div class="co-ticker">3016 TT · 上市 · 半導體</div></div>
+      <div class="co-badge"><span class="badge neutral">中立 N</span><span style="color:rgba(255,255,255,.7);font-size:11px">TP 100（−3%）· 等回檔</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">103.0</div><div class="co-metric-label">收盤價（元）</div></div>
+      <div class="co-metric"><div class="co-metric-val">297 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">6.1×</div><div class="co-metric-label">P/B（全組最高）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+41%</div><div class="co-metric-label">6月營收 YoY</div></div>
+    </div>
+    <div class="co-body">漢磊子公司、矽磊晶隱形冠軍，能同時供 Si/SiC/GaN 全材料磊晶，8" 新產能為轉機主軸。營收 YoY +41% 為本組最強，2026Q1 已轉盈（EPS 0.35）。但 <strong>P/B 6.1× 為全組最貴</strong>、外資近 10 日淨賣，題材真但估值已把復甦提前反映。中立，等回檔（參考 &lt;85）再評。</div>
+  </div>
+
+  <h2 class="ch">產業 Comps（統一 P/B 口徑；多數 PE 失效）</h2>
+  <table style="font-size:11px">
+    <thead><tr><th>公司</th><th style="text-align:right">收盤</th><th style="text-align:right">市值(億)</th><th style="text-align:right">P/B</th><th style="text-align:right">ROE</th><th style="text-align:right">2025 EPS</th><th style="text-align:right">6月營收YoY</th><th>評價基準</th></tr></thead>
+    <tbody>
+      <tr><td>環球晶 6488</td><td class="num">1,120</td><td class="num">5,355</td><td class="num">5.7</td><td class="num">8.4%</td><td class="num">15.29</td><td class="num neg">−1.6%</td><td>P/B × BVPSF</td></tr>
+      <tr><td>中美晶 5483</td><td class="num">212.5</td><td class="num">1,363</td><td class="num hi">2.6</td><td class="num">8.7%</td><td class="num">6.71</td><td class="num pos">+7.6%</td><td>SOTP / 折價</td></tr>
+      <tr><td>合晶 6182</td><td class="num">126.5</td><td class="num">751</td><td class="num">4.8</td><td class="num">1.6%</td><td class="num">0.09</td><td class="num pos">+14.1%</td><td>P/B（近損平）</td></tr>
+      <tr><td>漢磊 3707</td><td class="num">65.3</td><td class="num">259</td><td class="num">3.6</td><td class="num neg">−6.8%</td><td class="num neg">−1.97</td><td class="num pos">+29.9%</td><td>P/B（虧損）</td></tr>
+      <tr><td>嘉晶 3016</td><td class="num">103.0</td><td class="num">297</td><td class="num neg">6.1</td><td class="num">2.4%</td><td class="num">0.07</td><td class="num pos">+41.2%</td><td>P/B（剛轉盈）</td></tr>
+      <tr style="background:#eef2f8!important"><td style="font-weight:700">中位數</td><td class="num">—</td><td class="num">—</td><td class="num" style="font-weight:700">4.8</td><td class="num" style="font-weight:700">2.4%</td><td class="num">—</td><td class="num" style="font-weight:700">+14.1%</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：tw-stock-scanner DB（收盤/EPS/營收/法人）、yfinance（P/B、ROE），2026-07-23。EPS 為單季合計之全年值。全組多數獲利處低基期或虧損，PE 參考性低，統一以 P/B 為主、控股股另用 SOTP。</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參之三 · 速覽與 Comps</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 9. GiS 排序 + P/B 圖 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參之四、GiS 產業排序</h1>
+  <p>排序邏輯：在同一「800V／第三代半導體」主軸下，優先<strong>風險報酬對稱、催化明確、估值有錨</strong>者；對「故事真但估值透支、籌碼鬆動」者保守。矽晶圓兩檔屬循環重定價（品質較高），第三代三檔屬轉機（波動大、需驗證）。</p>
+
+  <table style="font-size:11.5px">
+    <thead><tr><th>序</th><th>股票</th><th>評等</th><th>12M 目標價</th><th>上檔</th><th>一句話論點</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">1</td><td style="font-weight:700">中美晶 5483</td><td class="pos" style="font-weight:700">買進</td><td class="num">255</td><td class="num pos">+20%</td><td>折價買環球晶＋投信強力回補，Skew 正不對稱</td></tr>
+      <tr><td class="hi">2</td><td style="font-weight:700">環球晶 6488</td><td style="color:#3b82f6;font-weight:700">增持 OW</td><td class="num">1,270</td><td class="num pos">+13%</td><td>LTA 重定價純標的，催化最明確但漲幅已大</td></tr>
+      <tr><td>3</td><td>嘉晶 3016</td><td>中立</td><td class="num">100</td><td class="num neg">−3%</td><td>第三代磊晶軍火商，營收 +41% 但 P/B 6× 透支</td></tr>
+      <tr><td>4</td><td>漢磊 3707</td><td>中立</td><td class="num">—</td><td class="num">n/a</td><td>SiC/GaN 代工轉機，VIS 8" SiC 2026Q4 驗證前保留</td></tr>
+      <tr><td>5</td><td>合晶 6182</td><td class="neg" style="font-weight:700">減碼 UW</td><td class="num">108</td><td class="num neg">−15%</td><td>功率磊晶故事真，但近損平 P/B 4.8×＋法人狂賣 1.8 萬張</td></tr>
+    </tbody>
+  </table>
+  <span class="src">評等依 GiS 估值方法論 §4.3 五級制門檻機械落格：買進 &gt;15%、增持 5–15%、中立 −5~+5%、減碼 &lt;−5%。本表為產業層級初判，個股完整模型見各自覆蓋報告。</span>
+
+  <div class="chart-wrap">
+    <div class="chart-title">五檔 P/B 比較：轉機股（嘉晶/合晶）估值最貴</div>
+    <div class="chart-sub">來源：yfinance 2026-07-23、GiS 彙編（倍）</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chart6"></canvas></div>
+  </div>
+
+  <blockquote><strong>組合觀點：</strong>若要「乾淨」表達 800V／矽晶圓循環，優先中美晶（折價）與環球晶（純標的）——品質高、有估值錨。第三代半導體（漢磊/嘉晶）題材最性感、營收動能最強，但屬高 beta 事件驅動，宜等 8" SiC 驗證（2026Q4）或估值回檔再介入。合晶為本輪漲多回落、籌碼最鬆的一檔，短線保守。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參之四 · GiS 排序</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節肆 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Section Four · The Devices</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">功率元件台廠<br>誰把 SiC/GaN 做成元件？</div>
+  <div class="sec-desc">上游賣鏟子的下一棒——把晶圓與磊晶做成 MOSFET、二極體、整流模組、IGBT 的元件廠。台廠功率元件多集中在中低壓分離式與後段 POL；真正切入 800V 高壓 SiC 元件的純度，僅少數幾家最高。這一層多數已獲利，可用 PE 評價。</div>
+</div>
+
+<!-- ══════════════ 功率元件 對照 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之一、功率元件台廠 × HVDC 供電鏈分帶</h1>
+  <p>第壹、貳章的五檔是最上游的晶圓／磊晶／代工（賣鏟子）；本章補上「把材料做成元件」的一棒——功率半導體元件廠。台廠這層概分五帶，越靠近 <strong>②大功率 AC→DC／③高壓配電</strong> 的高壓 SiC 元件，門檻與稀缺性越高，但台廠仍以車用／工業為主體、AI HVDC 屬 option；越往 <strong>⑤ POL</strong> 的低壓伺服器電源，則是直接吃 AI server 電源用量、但以矽 MOSFET 為主。</p>
+
+  <table style="font-size:11px">
+    <thead><tr><th>分帶</th><th>供電鏈對應級別</th><th>代表台廠</th><th>核心產品</th><th>AI-HVDC 純度</th></tr></thead>
+    <tbody>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">高壓 SiC 元件／模組</td><td class="num">②AC-DC/SST、③配電/SSCB</td><td style="font-weight:700">大中 6435、朋程 8255</td><td>SiC MOSFET/SBD 設計；SiC 整流模組</td><td class="hi" style="font-weight:700">高（車用為主體，AI 為 option）</td></tr>
+      <tr><td>中高壓 IGBT／功率</td><td class="num">②③車用外溢</td><td>茂矽 2342</td><td>IGBT、MOSFET、TVS</td><td>中（中美晶集團關聯）</td></tr>
+      <tr><td>分離式／二極體／保護</td><td class="num">全鏈整流與保護</td><td>強茂 2481、德微 3675、尼克森 3317</td><td>二極體、整流、MOSFET、TVS</td><td>中（泛用漲價受惠）</td></tr>
+      <tr style="background:#eef5ff!important"><td style="font-weight:700">後段 POL／伺服器 DC-DC</td><td class="num" style="font-weight:700">⑤ 48V→GPU</td><td style="font-weight:700">富鼎 8261、杰力 5299</td><td>低壓 MOSFET、PMIC（伺服器電源）</td><td style="color:#1a3a6e;font-weight:700">高（直接 AI server 電源，惟 Si 為主）</td></tr>
+      <tr><td>SiC 專業代工</td><td class="num">②③④</td><td>世界先進 5347</td><td>8" SiC foundry（與漢磊 JV）</td><td>中（SiC 佔大型成熟製程比重仍小）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：各公司公開資料、產業報導、GiS 彙編。純度＝該公司營收對「800V HVDC 高壓 SiC/GaN」主軸的直接曝險度（GiS 定性判斷）。</span>
+
+  <div class="chart-wrap">
+    <div class="chart-title">功率元件族群 6 月營收 YoY：漲價＋AI 電源共振</div>
+    <div class="chart-sub">來源：公開資訊觀測站月營收、GiS 彙編（%）</div>
+    <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="chart7"></canvas></div>
+  </div>
+
+  <blockquote><strong>GiS 觀點：</strong>台廠「純 800V 高壓 SiC 元件」的曝險其實稀薄——高壓 SiC 元件端以<strong>大中（fabless 設計）與朋程（整流模組）</strong>純度最高，但兩者主體仍是車用／工業；<strong>富鼎、杰力</strong>雖直接供伺服器電源、卻是低壓矽 MOSFET，非第三代半導體純標的。換言之，台廠在 HVDC 800V 的真正籌碼集中在<strong>上游材料（環球晶/嘉晶 SiC 基板磊晶）與代工（漢磊/世界先進 8" SiC）</strong>，而非元件品牌——這與第壹章「賣鏟子」的結論一致。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆之一 · 功率元件分帶</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 功率元件 Comps ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆之二、功率元件族群 Comps 與 GiS 定位</h1>
+  <p>與上游轉機股不同，功率元件台廠多數已穩定獲利，可用 PE。整體本益比中位數約 40×（ttm）／21×（forward），反映漲價循環＋AI 電源題材已部分反映；純 SiC 設計（大中）ROE 最高但估值最貴，車用整流（朋程）估值最親民。</p>
+
+  <table style="font-size:10.5px">
+    <thead><tr><th>公司</th><th style="text-align:right">收盤</th><th style="text-align:right">市值(億)</th><th style="text-align:right">TTM EPS</th><th style="text-align:right">PE(ttm)</th><th style="text-align:right">fwd PE</th><th style="text-align:right">P/B</th><th style="text-align:right">ROE</th><th style="text-align:right">6月YoY</th><th>定位</th></tr></thead>
+    <tbody>
+      <tr><td>世界先進 5347</td><td class="num">168.5</td><td class="num">3,167</td><td class="num">4.21</td><td class="num">40</td><td class="num">26</td><td class="num">4.6</td><td class="num">9.0%</td><td class="num pos">+33.6%</td><td>8"SiC 代工(JV漢磊)</td></tr>
+      <tr><td>強茂 2481</td><td class="num">144.5</td><td class="num">552</td><td class="num">3.15</td><td class="num">46</td><td class="num">21</td><td class="num">3.8</td><td class="num">8.9%</td><td class="num pos">+27.4%</td><td>分離式/二極體/SiC</td></tr>
+      <tr><td>富鼎 8261</td><td class="num">235.0</td><td class="num">279</td><td class="num">5.85</td><td class="num">40</td><td class="num">—</td><td class="num">n/a</td><td class="num">—</td><td class="num pos">+16.1%</td><td>POL 伺服器電源</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:700">大中 6435</td><td class="num">293.0</td><td class="num">110</td><td class="num" style="font-weight:700">10.82</td><td class="num">31</td><td class="num">—</td><td class="num">5.8</td><td class="num hi" style="font-weight:700">22.3%</td><td class="num pos">+21.6%</td><td style="font-weight:700">SiC MOSFET/SBD 設計</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:700">朋程 8255</td><td class="num">149.5</td><td class="num">152</td><td class="num">5.70</td><td class="num hi">27</td><td class="num hi">18</td><td class="num">2.0</td><td class="num">4.7%</td><td class="num">+5.8%</td><td style="font-weight:700">車用整流/SiC 模組</td></tr>
+      <tr><td>德微 3675</td><td class="num">263.5</td><td class="num">140</td><td class="num">2.83</td><td class="num neg">98</td><td class="num">18</td><td class="num">5.5</td><td class="num">5.6%</td><td class="num pos">+30.0%</td><td>二極體/MOSFET/TVS</td></tr>
+      <tr><td>尼克森 3317</td><td class="num">78.9</td><td class="num">71</td><td class="num">1.76</td><td class="num">48</td><td class="num">—</td><td class="num">2.2</td><td class="num">5.2%</td><td class="num pos">+16.1%</td><td>MOSFET</td></tr>
+      <tr><td>杰力 5299</td><td class="num">94.3</td><td class="num">48</td><td class="num">4.84</td><td class="num hi">20</td><td class="num">—</td><td class="num">1.5</td><td class="num">7.9%</td><td class="num neg">−4.2%</td><td>伺服器電源 MOSFET</td></tr>
+      <tr><td>茂矽 2342</td><td class="num">41.25</td><td class="num">65</td><td class="num neg">−0.78</td><td class="num">虧損</td><td class="num">—</td><td class="num">n/a</td><td class="num">—</td><td class="num">+4.6%</td><td>IGBT(中美晶集團)</td></tr>
+      <tr style="background:#eef2f8!important"><td style="font-weight:700">中位數</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num" style="font-weight:700">40</td><td class="num" style="font-weight:700">21</td><td class="num" style="font-weight:700">3.8</td><td class="num" style="font-weight:700">7.0%</td><td class="num" style="font-weight:700">+16.1%</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：tw-stock-scanner DB（收盤/EPS/營收）、yfinance（PE/PB/ROE），2026-07-23。富鼎/茂矽 yfinance 資料缺，PE 為 DB 反推。</span>
+
+  <blockquote><strong>GiS 元件層定位（不逐檔給正式評等，屬產業補充）：</strong>若要在元件端表達 800V／SiC 主軸——<strong>大中 6435</strong> 品質最佳（ROE 22%、純 SiC 設計）但估值最貴，<strong>朋程 8255</strong> 估值最親民（fwd PE 18×）且具 SiC 模組＋中美晶集團連結，二者純度最高；<strong>富鼎／杰力</strong> 是最直接的 AI 伺服器電源用量股，惟屬低壓矽 MOSFET；<strong>強茂／德微</strong> 受惠泛用功率漲價但 AI-HVDC 曝險偏題材。整體而言，元件層估值已不便宜，加上台廠純度有限，我們仍認為<strong>上游材料與代工</strong>是這波 800V 較乾淨的表達方式。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆之二 · 功率元件 Comps</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 肆之三 強茂深度(一) ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之三、深度個案 A｜強茂 2481 — AI 功率革命 × 轉單潮 × IDM 三軸</h1>
+
+  <div class="co-card">
+    <div class="co-card-head blue">
+      <div><div class="co-name">強茂 Panjit</div><div class="co-ticker">2481 TT · 上市 · 分離式功率元件 IDM</div></div>
+      <div class="co-badge"><span class="badge ow">增持 OW*</span><span style="color:rgba(255,255,255,.7);font-size:11px">*產業初判 · 正式 TP 待深度覆蓋</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">144.5</div><div class="co-metric-label">收盤價（元）</div></div>
+      <div class="co-metric"><div class="co-metric-val">552 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val">21–29×</div><div class="co-metric-label">forward PE</div></div>
+      <div class="co-metric"><div class="co-metric-val up">1.4–1.5</div><div class="co-metric-label">B/B Ratio</div></div>
+    </div>
+    <div class="co-body">2025 營收 130.9 億（+4.4%，低成長，靠產品組合拉毛利）；自 2025Q4 起 AI／車用＋轉單帶動，進入「量＋價」雙升。法人估 2026 營收 YoY <strong>+15~19%、2027 增幅高於 2026</strong>；毛利率 25.2%(23)→31.3%(25)→32.7%(26Q1)，法人上修 2026/27 至 <strong>34.4%/36%</strong>。訂單能見度已從 2026H2 延伸至<strong>至少 2027 年中</strong>，近八成產線接近滿載——功率元件已從補庫存進入結構性供不應求。</div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>AI 功率革命：佔比 7-8%→2027 上看 16-20%。</strong>現以低壓 MOSFET 供美系 CSP 主板/COMPUTE TRAY 電源；隨伺服器電源 12V→48V→400/800V HVDC，MOSFET 規格由 30V 拉到 100V+，<strong>中壓（60/80/100V Hot-Swap/BBU/水冷）2026H2 放量、Q3 驗證出爐</strong>，ASP 與含金量顯著跳升。AI 相關營收 2026 YoY 有望 &gt;100%。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>安世＋揚杰轉單：歐洲/非中客戶結構性轉向台系 IDM。</strong>安世（Nexperia）2025Q4 被接管、歐洲斷供風險，強茂與其料號重疊約 7 成，<strong>車用 AVL 導入率 80-85%→90-95%</strong>、驗證期縮短至兩季，急單自 2025Q4 起、2026 中轉穩定長單；揚杰 2026-04 遭歐盟制裁，Power Diode/Bridge/ESD 轉單能見度到 2027。這是最強護城河催化。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>IDM 擴產：自製比例提升、賣方市場定價權。</strong>3 晶圓廠（4/6/8"）＋5 封裝廠；8" 吃緊、6" 近滿載，8" Fab3 專攻車用/CSP MOSFET，越南封測投 14 億（併 Torex）。<strong>55 計畫</strong>：MOSFET 營收 1.5→5 億美元（2030）、全球市佔 5%、集團營收 10 億美元。</span></div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">結構升級＋毛利上行：AI／車用佔比與毛利率同步走高</div>
+    <div class="chart-sub">來源：公司/法人預估、GiS 彙編（%；2026-27 為預估）</div>
+    <div class="chart-container" style="height:200px;width:100%;position:relative"><canvas id="chart8"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆之三 · 強茂深度(一)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 肆之四 強茂深度(二) ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆之四、強茂(二) — 估值、一次性費用與觀察清單</h1>
+
+  <div class="callout">
+    <div class="callout-title">⚠ 別用單季 EPS 推趨勢：2026Q1 EPS 有一次性雜訊</div>
+    2026Q1 營收 YoY +11%、毛利率 32.7%（歷史高檔），但營業利益率僅 6.5%（季減 1.3pp），主因<strong>一次性轉投資呆帳與費用認列</strong>；剔除後營益率約 10%（2022Q3 以來高點）。法人預期 Q2 一次性影響解除、營益率季增，Q3 站上雙位數，全年營益率有望為近四年新高。<strong>看 Q1 reported EPS 會低估真實體質。</strong>
+  </div>
+
+  <h2 class="ch">GiS 估值與定位觀點</h2>
+  <p>強茂是元件層<strong>結構最完整、催化最具體</strong>的 AI-power＋轉單標的：毛利率在「產品升級＋漲價＋IDM 降成本」三重疊加下，中期朝 35%+ 邁進；forward PE 約 21-29×（視 2026 一次性費用還原程度），對一檔營收雙位數成長、毛利率擴張、且具轉單護城河的 IDM 並不昂貴。法人以 2015 年以來三輪功率上升週期對比，認為本輪起於 2025Q3、2026H1 仍屬早期，過去漲價可延續 8-10 季——ASP 與毛利率改善仍有時間與空間。故給<strong>增持 OW</strong>（產業層級初判）。</p>
+
+  <blockquote><strong>但短線有籌碼／監理逆風（非基本面）：</strong>股價自約 100 元飆至 196 元後，2026-06-26 起現貨列處置、期交所調高期貨保證金至 1.5 倍（至 7/9），去槓桿引發修正；近 10 日法人淨賣約 9,113 張（外資 −3,331／投信 −2,299）。業界普遍認為震盪來自金融槓桿調整而非基本面惡化。<strong>操作上建議待處置與籌碼消化、分批介入，不追高。</strong></blockquote>
+
+  <h2 class="ch">GiS 六大觀察清單（追蹤點）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>面向</th><th>觀察指標</th><th>轉折/確認訊號</th></tr></thead>
+    <tbody>
+      <tr><td>訂單動能</td><td>B/B Ratio（現 1.4-1.5）</td><td>若自 1.4-1.5 回落 → 賣方市力道趨緩、週期轉折</td></tr>
+      <tr><td>AI 放量</td><td>AI 佔營收比</td><td>是否如期上修至 14-15%+；2027 上看 16-20%</td></tr>
+      <tr><td>高 ASP 產品</td><td>100V 中壓 Hot-Swap MOSFET</td><td>2026H2 放量時點與 ASP 上升幅度（Q3 驗證）</td></tr>
+      <tr><td>毛利率</td><td>GM 站穩 33-34%+</td><td>原物料再漲仍守住 → 漲價/升級轉嫁成功</td></tr>
+      <tr><td>一次性費用</td><td>營業費用率</td><td>回落至 23-24% → 一次性效果消失、體質浮現</td></tr>
+      <tr><td>SiC 進度</td><td>SiC MOSFET Gen1（2026Q3 推出）</td><td>能否導入車用/高階電源大客戶，非僅通用小量</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司法說/年報、法人預估（匿名）、tw-stock-scanner DB（籌碼），日期以用戶提供之研究彙編為準（2026-03 至 2026-07）。</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆之四 · 強茂深度(二)</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 肆之五 尼克森深度 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之五、深度個案 B｜尼克森 3317 — PC 換機 × AI 電源 × 寬能隙轉型（早期）</h1>
+
+  <div class="co-card">
+    <div class="co-card-head slate">
+      <div><div class="co-name">尼克森 Niko-Sem</div><div class="co-ticker">3317 TT · 上櫃 · Power MOSFET Fabless</div></div>
+      <div class="co-badge"><span class="badge neutral">中立 N</span><span style="color:rgba(255,255,255,.7);font-size:11px">轉型 option 未入獲利</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">78.9</div><div class="co-metric-label">收盤價（元）</div></div>
+      <div class="co-metric"><div class="co-metric-val">71 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">48×</div><div class="co-metric-label">PE(ttm)</div></div>
+      <div class="co-metric"><div class="co-metric-val">2.2×</div><div class="co-metric-label">P/B</div></div>
+    </div>
+    <div class="co-body">2025 營收 27.06 億（+10%，達預算 107%），但<strong>稅後淨利降至 1.49 億、EPS 1.66（YoY −33%）</strong>，且 2025Q4 單季虧損（−0.31）。營收回成長軌道，但 EPS 逆勢下滑——產品結構、ASP 壓力與新技術投資期同時侵蝕獲利。Power MOSFET 佔營收 99%、<strong>PC 相關約 70%</strong>，客戶集中（前二大約 28.8%、微星綁定深）。轉型故事真，但仍在「研發→小量出貨→毛利拉升」的早期階段。</div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>PC 換機潮（雙面刃）：</strong>AI PC＋Win10 終止支援換機推升 2025 PC +4-5%（上修），是 2025 營收 +10% 主力。但 <strong>2026 PC 恐因 DRAM/NAND 被 AI 伺服器排擠、記憶體成本升，IDC 估衰退 5-9%</strong>；公司仍喊雙位數成長——此假設落差是最需檢驗處。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>AI 伺服器電源模組（剛起步）：</strong>以 PowerFET 封裝開發 AI 伺服器 PFC/LLC/二次側 DC-DC 大功率模組，「<strong>已開始出貨</strong>」；DrMOS 6 型號（Vcore/AI PC）少量出貨、毛利率仍與 MOSFET 接近。目標從元件供應商升級為電源方案供應商、突破國外 IDM 壟斷。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>SiC/GaN 寬能隙布局（無明確貢獻時點）：</strong>規劃多代 SiC MOSFET 650/1200/1700V＋第一代 GaN HEMT，鎖定 AI 伺服器/資料中心/儲能/車載充電；惟 SiC 模組「剛開始出貨」、GaN 尚無時間表，貢獻仍屬中長期 option。</span></div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">關鍵背離：營收回升，EPS 卻走弱（2023=100 指數）</div>
+    <div class="chart-sub">來源：公司財報、GiS 彙編（2026 為概估，指數化）</div>
+    <div class="chart-container" style="height:190px;width:100%;position:relative"><canvas id="chart9"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆之五 · 尼克森深度</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 肆之六 茂矽深度 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆之六、深度個案 C｜茂矽 2342 — 毛利 V 修復 × 8 吋外溢 × SiC（中美晶集團）</h1>
+
+  <div class="co-card">
+    <div class="co-card-head wine">
+      <div><div class="co-name">茂矽 Mosel</div><div class="co-ticker">2342 TT · 上櫃 · 6" 功率半導體（中美晶集團）</div></div>
+      <div class="co-badge"><span class="badge neutral">中立 N</span><span style="color:rgba(255,255,255,.7);font-size:11px">虧損轉機 · SiC 貢獻落 2027</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">41.25</div><div class="co-metric-label">收盤價（元）</div></div>
+      <div class="co-metric"><div class="co-metric-val">65 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val dn">−0.49</div><div class="co-metric-label">2025 EPS（虧）</div></div>
+      <div class="co-metric"><div class="co-metric-val up">近滿載</div><div class="co-metric-label">8" 稼動</div></div>
+    </div>
+    <div class="co-body">2025 營收 20.4 億（+7.6%）、出貨 54 萬片（+9.5%），但因電費/原物料/關稅/匯率使成本年增 15.4%，<strong>毛利率由 20.7% 跌至 14.9%、全年轉虧（EPS −0.49）</strong>；2025Q4 毛利率僅約 9%（谷底）。功率元件（MOSFET/IGBT/Diode）約佔營收 8 成，<strong>車用佔比約 47%</strong>（連 3 年成長）為稼動底盤。屬中美晶集團（朋程入主）——與本報告上游矽晶圓群同源。</div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>毛利率 V 型修復（仍在谷底區）：</strong>20.7%(24)→14.9%(25)→9%(25Q4 谷底)→<strong>15.9%(26Q1)</strong>；公司 2026 全年目標 15-20%、H2 挑戰 20%，SiC 放量後長期站回 20%+。但 2026 仍虧損（獲利「與 2025 相當」＝虧損不擴大），<strong>轉盈仍不確定</strong>。關稅＋美元匯率（32→29→31）報價折損是 2025 轉虧主因，能否轉嫁成本是關鍵。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>8 吋外溢帶動稼動近滿載：</strong>AI 資料中心＋DRAM 使 12 吋吃緊、部分產品回流 12 吋，反而造成 8 吋供給收縮，茂矽承接外溢代工。<strong>月產能約 4.7 萬片、接單已超過 5 萬片</strong>，產線以極限運轉、訂單遞延，能見度拉長。惟須辨明是 1-2 季循環，或能延續至 2027。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>SiC 從送樣走向最終驗證（放量落 2027）：</strong>650/1200V 平面 SiC MOSFET 已送樣，SiC MOSFET/JBS 平台<strong>已進入最終驗證，最快 2026Q4-2027 初量產</strong>，順利則未來額外貢獻約 1 成營收；SiC JFET 2027 貢獻；GaN 仍早期規劃。1200V FS-IGBT 2026 量產。</span></div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">毛利率 V 型修復：從 20.7% 摔到 9%，再往 20% 目標爬</div>
+    <div class="chart-sub">來源：公司財報/法說、GiS 彙編（%；26H2 為公司目標）</div>
+    <div class="chart-container" style="height:185px;width:100%;position:relative"><canvas id="chart10"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆之六 · 茂矽深度</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 肆之七 三檔對比與總結 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之七、元件層三檔對比與 GiS 總結</h1>
+
+  <blockquote><strong>GiS 個別定位：</strong>強茂 <strong>增持 OW</strong>（元件層首選，結構性贏家）；尼克森 <strong>中立 N</strong>（轉型方向對但獲利未到，trailing PE 48× 偏貴，2026 PC 下行為關鍵風險）；茂矽 <strong>中立 N</strong>（虧損轉機，毛利 V 修復＋8 吋外溢＋SiC 2027，波動大、外生變數多）。</blockquote>
+
+  <h2 class="ch">同掛「AI 功率」招牌，體質是一條光譜</h2>
+  <table style="font-size:10.5px">
+    <thead><tr><th>維度</th><th>強茂 2481（贏家）</th><th>尼克森 3317（早期轉型）</th><th>茂矽 2342（虧損轉機）</th></tr></thead>
+    <tbody>
+      <tr><td>獲利狀態</td><td class="pos">拐點向上，量＋價雙升</td><td class="neg">EPS 仍走弱(−33%)</td><td class="neg">仍虧損(EPS −0.49)</td></tr>
+      <tr><td>毛利率</td><td class="pos">31→36% 上行</td><td>26-27% 徘徊</td><td>14.9%→目標 20%</td></tr>
+      <tr><td>訂單能見度</td><td class="pos">B/B 1.4-1.5 至 2027 中</td><td>急單/短單</td><td>8" 近滿載、遞延</td></tr>
+      <tr><td>核心應用</td><td class="pos">車用&gt;40%＋AI 12-15%</td><td class="neg">PC ~70%</td><td>車用 ~47%</td></tr>
+      <tr><td>轉單受惠</td><td class="pos hi">安世重疊 7 成/AVL 90-95%</td><td>安世詢問階段</td><td>8" 代工外溢</td></tr>
+      <tr><td>SiC 進度</td><td>MOSFET Gen1 26Q3</td><td>模組剛出貨 ~1%</td><td>最終驗證，量產 26Q4-27</td></tr>
+      <tr><td>製造模式</td><td class="pos">IDM 擴產</td><td>Fabless</td><td>6" 自有（規模劣勢）</td></tr>
+      <tr><td>GiS 定位</td><td class="pos" style="font-weight:700">增持 OW</td><td style="font-weight:700">中立 N</td><td style="font-weight:700">中立 N</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><strong>GiS 一句話：</strong>三檔都掛「AI 功率」，但體質是一條<strong>光譜</strong>——強茂是<strong>已在兌現的結構性贏家</strong>（轉單護城河＋毛利拐點＋IDM 定價權），尼克森是<strong>方向對但獲利未到的早期轉型股</strong>，茂矽是<strong>最早期、仍虧損的轉機股</strong>（但具中美晶集團垂直整合連結）。元件層若要選一檔表達 800V／AI-power，強茂的純度與確定性最高；尼克森、茂矽屬「看實據再加碼」的觀察標的。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆之七 · 三檔對比與總結</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 10. 催化劑與風險 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍、產業催化劑與風險</h1>
+
+  <h2 class="ch">產業層級</h2>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>▲ 催化劑（推升整體估值）</h4>
+      <div class="risk-item"><strong>2027 800V 機櫃量產：</strong>Kyber/Rubin Ultra 導入 800V HVDC，整流/SST/SSCB/多級 DC-DC 全數放量。</div>
+      <div class="risk-item"><strong>矽晶圓 LTA 續簽：</strong>繼美光後，其他大客戶為 2028–29 供應加入長約談判，重定價擴散。</div>
+      <div class="risk-item"><strong>8" SiC 驗證通過（2026Q4）：</strong>漢磊×VIS 產能落地，本土 SiC 代工訂單放量。</div>
+      <div class="risk-item"><strong>功率半導體漲價潮：</strong>成本＋AI 電源需求共振，多輪階梯式調價，帶動上游材料稼動與 ASP。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>▼ 風險（壓抑整體估值）</h4>
+      <div class="risk-item"><strong>800V 落地時程遞延：</strong>可能「先做半套」，2027 前仍多層變壓整流，SiC 上量慢於預期。</div>
+      <div class="risk-item"><strong>台廠僅第二層次曝險：</strong>高價值 AC→DC/SST 插槽由國際 IDM 主導，台廠賺代工/材料財、彈性有限。</div>
+      <div class="risk-item"><strong>中國紅鏈與價格戰：</strong>SiC 基板（天岳等）、矽晶圓中低階陸廠擴產，壓縮 ASP。</div>
+      <div class="risk-item"><strong>轉機股估值透支：</strong>合晶/嘉晶近損平卻 P/B 5–6×，獲利兌現不如題材則回檔風險大。</div>
+    </div>
+  </div>
+
+  <h2 class="ch">個股層級 catalyst / risk（不重複產業共通項）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>股票</th><th>個別催化劑</th><th>個別風險</th></tr></thead>
+    <tbody>
+      <tr><td>環球晶 6488</td><td>其他大客戶跟進簽 LTA；美國廠稼動拉升；SiC 散熱應用 2028</td><td>既有大客戶合約至 2027、現階段無漲價空間；美國廠折舊壓力</td></tr>
+      <tr><td>中美晶 5483</td><td>環球晶重定價直接放大 NAV；集團車用功率整合</td><td>控股折價可能持續；太陽能業務拖累</td></tr>
+      <tr><td>合晶 6182</td><td>CoPoS 方形晶圓明年中量產；8" 漲價</td><td>本業獲利力弱；法人籌碼鬆動</td></tr>
+      <tr><td>漢磊 3707</td><td>8" SiC 2026Q4 驗證；GaN-on-Si 導入 AI 電源</td><td>持續虧損；代工客戶集中；驗證遞延</td></tr>
+      <tr><td>嘉晶 3016</td><td>8" 磊晶新產能；SiC/GaN 磊晶滲透率提升</td><td>剛轉盈、獲利基期低；估值全組最貴</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · 催化劑與風險</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 11. 附錄 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">附錄、資料來源與免責聲明</h1>
+
+  <h2 class="ch">資料來源</h2>
+  <ul>
+    <li><strong>價格 / 財務 / 籌碼：</strong>GiS tw-stock-scanner 資料庫（收盤價、季報 EPS、月營收、法人買賣超，截至 2026-07-23）；yfinance（P/B、BVPS、ROE、股利）。</li>
+    <li><strong>券商研究（本文匿名，此處具名）：</strong>UBS《GlobalWafers — Micron's LTA leading another strong upcycle》(2026-07-13, Buy, TP NT$2,000)；永豐投顧《環球晶 — 供應鏈安全，重新定價》(2026-07-13, 買進, 6M TP NT$1,600)；宏遠投顧《汽車/矽晶圓/IC通路/電子紙產業報告》(2026-07-15, 矽晶圓首選環球晶)；《矽晶圓製造》產業速覽 (2026-07-13)；國金證券《電容與功率半導體漲價潮》(2026-07-21)。</li>
+    <li><strong>產業 / 技術：</strong>NVIDIA 800V HVDC 架構說明（2025 COMPUTEX、GTC）；Navitas、Wolfspeed、STMicroelectronics、Infineon、onsemi 公開技術資料；DCD、Introl 等產業媒體。</li>
+    <li><strong>公司公告：</strong>環球晶／美光 2026-07-09 策略投資與十年 LTA 公告；漢磊×世界先進 8" SiC 合作進度。</li>
+  </ul>
+
+  <h2 class="ch">方法論說明</h2>
+  <p>本報告依 GiS 估值方法論撰寫，評等採 §4.3 五級制門檻（買進 &gt;15%、增持 5–15%、中立 −5~+5%、減碼 &lt;−5%），加權目標價算出後直接機械落格。本組公司多數獲利處低基期、虧損或屬控股結構，PE 參考性低，統一以 <strong>P/B（× 前瞻每股淨值）</strong> 為主要評價工具，控股股（中美晶）另以 <strong>SOTP / 分類加總</strong> 對照。產業層級 TP 為初判，個股完整財務模型與 DCF/情境分析見各自覆蓋報告。</p>
+
+  <h2 class="ch">身份與立場</h2>
+  <p>本報告以 <strong>GiS 研究員（Research Analyst）</strong>身份撰寫，估值方法論驅動、中立、12 個月目標價。不含 conviction / sizing / 部位建議等投資人（Buyside）視角內容。同一標的之投資人觀點（Investment Memo）另行產出，結論可能因視角不同而異，非衝突。</p>
+
+  <blockquote>本報告僅供研究參考，不構成任何投資要約或建議。所載資訊來自 GiS 認為可靠之來源，但不保證其完整性與準確性。投資人應自行判斷並承擔投資風險。© 2026 Genesis International Capital.</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>附錄 · 資料來源</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<script>
+  function getEl(id){return document.getElementById(id);}
+  var navy='#0d1b3e', green='#00a878', gold='#e67e22', blue='#1a3a6e', purple='#8e44ad', grey='#6b7a9a';
+
+  new Chart(getEl('chart1'), {
+    type:'bar',
+    data:{labels:['H100 櫃','GB300 NVL72','Rubin/Kyber (27)','AI工廠目標'],
+      datasets:[{label:'功耗 (kW/櫃)',data:[40,135,600,1000],
+        backgroundColor:[grey,blue,green,'#00c896'],borderRadius:5,barPercentage:0.62,categoryPercentage:0.7}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'kW'}}}}
+  });
+
+  new Chart(getEl('chart2'), {
+    type:'bar',
+    data:{labels:['環球晶','中美晶','合晶','漢磊','嘉晶'],
+      datasets:[{label:'6月營收 YoY (%)',data:[-1.6,7.6,14.1,29.9,41.2],
+        backgroundColor:['#c0392b',blue,'#1a7a5e',green,'#00c896'],borderRadius:5,barPercentage:0.6,categoryPercentage:0.7}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'}}}}
+  });
+
+  new Chart(getEl('chart3'), {
+    type:'bar',
+    data:{labels:['12V','48V','800V'],
+      datasets:[{label:'供 1MW 所需電流 (A)',data:[83333,20833,1250],
+        backgroundColor:['#c0392b',gold,green],borderRadius:5,barPercentage:0.5,categoryPercentage:0.7}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,indexAxis:'y',plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>ctx.raw.toLocaleString()+' A'}}},
+      scales:{x:{type:'logarithmic',grid:{color:'#eef2f8'},ticks:{callback:v=>v.toLocaleString()+'A'}},y:{grid:{display:false}}}}
+  });
+
+  new Chart(getEl('chart4'), {
+    type:'line',
+    data:{labels:['2024','2025','2026E','2027E','2028E'],
+      datasets:[
+        {label:'12" 利用率',data:[79.1,81.7,82.2,87.7,93.6],borderColor:navy,backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false},
+        {label:'8" 利用率',data:[71.9,68.6,78.7,86.7,93.7],borderColor:green,backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:12,padding:12,font:{size:11}}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},min:60,ticks:{callback:v=>v+'%'}}}}
+  });
+
+  new Chart(getEl('chart5'), {
+    type:'doughnut',
+    data:{labels:['信越 32%','SUMCO 25%','環球晶 17%','Siltronic ~10%','SK Siltron ~10%','其他 6%'],
+      datasets:[{data:[32,25,17,10,10,6],
+        backgroundColor:[grey,'#94a3b8',green,blue,'#5b8def','#cbd5e1'],borderWidth:1,borderColor:'#fff'}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'right',labels:{boxWidth:12,padding:8,font:{size:10.5}}}}}
+  });
+
+  new Chart(getEl('chart6'), {
+    type:'bar',
+    data:{labels:['中美晶','漢磊','合晶','環球晶','嘉晶'],
+      datasets:[{label:'P/B (倍)',data:[2.6,3.6,4.8,5.7,6.1],
+        backgroundColor:[green,'#1a7a5e',gold,blue,'#c0392b'],borderRadius:5,barPercentage:0.6,categoryPercentage:0.7}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'×'}}}}
+  });
+
+  new Chart(getEl('chart7'), {
+    type:'bar',
+    data:{labels:['世界先進','德微','強茂','大中','富鼎','尼克森','朋程','茂矽','杰力'],
+      datasets:[{label:'6月營收 YoY (%)',data:[33.6,30.0,27.4,21.6,16.1,16.1,5.8,4.6,-4.2],
+        backgroundColor:['#1a3a6e','#8e44ad','#1a7a5e',green,blue,'#5b8def','#0a4a30','#94a3b8','#c0392b'],borderRadius:4,barPercentage:0.7,categoryPercentage:0.75}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'}}}}
+  });
+
+  new Chart(getEl('chart8'), {
+    type:'line',
+    data:{labels:['2023','2025','2026E','2027E'],
+      datasets:[
+        {label:'車用佔比%',data:[23,35,41,42],borderColor:blue,backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false},
+        {label:'AI佔比%',data:[null,7.5,13.5,18],borderColor:'#00c896',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false},
+        {label:'毛利率%',data:[25.2,31.3,34.4,36],borderColor:gold,backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,borderDash:[5,3],fill:false}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:12,padding:10,font:{size:10.5}}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'}}}}
+  });
+
+  new Chart(getEl('chart9'), {
+    type:'line',
+    data:{labels:['2023','2024','2025','2026E'],
+      datasets:[
+        {label:'營收指數',data:[100,100.2,109.8,122],borderColor:navy,backgroundColor:'transparent',tension:.3,pointRadius:5,borderWidth:2.5,fill:false},
+        {label:'EPS指數',data:[100,96.1,64.1,72],borderColor:'#c0392b',backgroundColor:'transparent',tension:.3,pointRadius:5,borderWidth:2.5,fill:false}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'top',labels:{boxWidth:12,padding:10,font:{size:10.5}}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v}}}}
+  });
+
+  new Chart(getEl('chart10'), {
+    type:'line',
+    data:{labels:['2024','2025','25Q4','26Q1','26H2目標'],
+      datasets:[{label:'毛利率%',data:[20.7,14.9,9.0,15.9,20.0],borderColor:'#5c1a1a',backgroundColor:'rgba(92,26,26,.08)',tension:.3,pointRadius:5,borderWidth:2.5,fill:true}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#eef2f8'},min:0,ticks:{callback:v=>v+'%'}}}}
+  });
+</script>
+</body>
+</html>

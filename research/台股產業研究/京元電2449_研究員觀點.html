@@ -1,0 +1,923 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>京元電子 2449 首次覆蓋 — 買進 | GiS Research</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:520px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:38px 54px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:14px 0 16px}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:20px 0 11px}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:14px 0 8px}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:12.5px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 11px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.3px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 11px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:16px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.ow{background:#3b82f6;color:#fff}
+.badge.buy{background:#c0392b;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:16px 22px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:16px;margin:12px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:15px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi.red{background:linear-gradient(135deg,#7b1f1f,#c0392b)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.75;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:16px 13px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12.5px;font-weight:800;margin-bottom:7px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:10.5px;opacity:.85;line-height:1.45}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:15px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+p{margin:6px 0 10px;line-height:1.72}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+li{margin:4px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:11px 0;color:#1a3a6e;font-size:13px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:18px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:6px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout.gold{border-color:#d97706;background:#fffbeb}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:7px}
+.callout.green .callout-title{color:#065f46}
+.callout.gold .callout-title{color:#92400e}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:13px 54px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13.5px}
+.footer-logo em{color:#00c896;font-style:normal}
+.heat td{text-align:center;font-weight:700;color:#1a1a2e;border:1px solid #fff}
+</style>
+</head>
+<body>
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ═══ 封面 ═══ -->
+<div class="cover page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div><div class="cover-co-en">Genesis International Capital</div><div class="cover-co">研究部 · Equity Research</div></div>
+    </div>
+    <div class="cover-eyebrow">Initiating Coverage · 首次覆蓋深度報告</div>
+    <div class="cover-title">京元電子 2449<br><em>AI 晶片的最後一道測試關卡</em></div>
+    <div class="cover-subtitle">King Yuan Electronics — The World's Largest Pure-Play Semiconductor Test House</div>
+    <div class="cover-tags">
+      <span class="ctag hl">評等：買進 Buy</span>
+      <span class="ctag hl">12M 目標價 NT$350</span>
+      <span class="ctag">上檔 +20.3%</span>
+      <span class="ctag">純測試全球龍頭</span>
+      <span class="ctag">NVIDIA / Google CPU 測試</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">$<em>350</em></div><div class="cstat-label">12M 目標價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>Buy</em></div><div class="cstat-label">投資評等</div></div>
+    <div class="cstat"><div class="cstat-num"><em>39.7</em>%</div><div class="cstat-label">2026Q1 毛利率</div></div>
+    <div class="cstat"><div class="cstat-num"><em>+39</em>%</div><div class="cstat-label">1Q26 營收 YoY</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 6 月 9 日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ═══ P2 投資摘要 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資摘要 — 買進（Buy），12M 目標價 NT$350</h1>
+  <div class="kpi-row">
+    <div class="kpi red"><div class="kpi-val">350<em> 元</em></div><div class="kpi-lbl">12M 目標價（PE 法）</div></div>
+    <div class="kpi"><div class="kpi-val">291<em> 元</em></div><div class="kpi-lbl">現價（6/9 收盤）</div></div>
+    <div class="kpi green"><div class="kpi-val">+20.3%</div><div class="kpi-lbl">上檔空間 → Buy</div></div>
+    <div class="kpi green"><div class="kpi-val">24.1x</div><div class="kpi-lbl">2027E forward PE</div></div>
+  </div>
+
+  <div class="co-card">
+    <div class="co-card-head navy">
+      <div><div class="co-name">京元電子 King Yuan Electronics</div><div class="co-ticker">2449.TW · 半導體業 · 上市</div></div>
+      <div class="co-badge"><span class="badge buy">買進 Buy</span><span style="color:rgba(255,255,255,.7);font-size:11px">12M TP 350</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val">~3,558 億</div><div class="co-metric-label">市值</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+39%</div><div class="co-metric-label">1Q26 營收 YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">39.74%</div><div class="co-metric-label">1Q26 毛利率</div></div>
+      <div class="co-metric"><div class="co-metric-val">~2.0%</div><div class="co-metric-label">現金殖利率</div></div>
+    </div>
+    <div class="co-body">
+      <p style="margin:0">京元電是<strong>全球最大的「純測試（pure-play test）」委外代工廠</strong>。當每一顆 AI GPU、ASIC 與高階手機 SoC 出貨前都必須通過愈來愈長、愈來愈嚴苛的測試與預燒，京元電就是這道「最後關卡」上量最大的獨立玩家。2024 年公司出售中國子公司、退出大陸成為純台灣產線，剛好搭上 AI 測試需求的結構性爆發 — NVIDIA GPU、Google Arm CPU（透過創意 GUC）測試訂單，把營收從 2024 的 269 億推向 2026E 的 483 億、2027E 的 675 億。</p>
+    </div>
+  </div>
+
+  <h2 class="ch">核心結論：結構性 AI 測試成長股，近期回檔重建安全邊際</h2>
+  <p>京元電基本面正處量價齊揚的黃金擴張期：1Q26 營收 101.9 億（+39% YoY）、毛利率升抵 39.74%，AI 占比由 2024 約 10% 升向 2026E 的 35–40%。股價自 5 月高點 364 回落至 291（−20%），重新拉開上檔空間。GiS 以 <strong>2027E EPS 14.5 × 目標 PE 24x</strong> 推得基礎目標價 348，機率加權 12M 目標價 <strong>NT$350</strong>，上檔 <strong>+20.3%</strong>，落於估值方法論 §4.3 之「<strong>買進（Buy，&gt;15%）</strong>」格，與市場中位目標價 350、外資 OW 338／買進 388 一致。<strong>須留意：2025 報告 EPS 9.01 含一次性處分利益，trailing PE 失真，估值應以 forward 為準（詳見估值章）。</strong></p>
+
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>投資摘要 · 京元電 2449</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<!-- ═══ P3 摘要圖表 + Top5 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">五大要點（Top-5 Takeaways）</h1>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>結構性成長，AI 測試需求質變。</strong>AI 晶片測試時間估增 100–200%、ASP 增 50–100%，SLT（系統級測試）從備援變必要階段。京元電是這波「測試強度上升」的純測試最大受益者，營收 2026E +38%、2027E +40%。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>兩大新引擎：NVIDIA + Google CPU。</strong>最大客戶（NVIDIA）R 系列 XPU 3Q26 快速放量、B 系列維持動能；Google Arm CPU（透過創意 GUC）要求京元電產能 2026 年底前增 <strong>3 倍</strong>，2027 強貢獻。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>純台灣產線＝地緣溢價。</strong>2024 出售蘇州京隆全面退出大陸，符合美系 AI 客戶 China-free 產線要求，反而成為承接 NVIDIA/Google 訂單的結構性優勢。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>2025 報告 EPS 被一次性墊高，市場誤讀基期。</strong>2025 EPS 9.01 含蘇州京隆處分利益（1Q25），剔除後 recurring 約 7.0。故 2026E 報告 EPS 9.84「僅 +10%」是假象，<strong>recurring 實為 +40%</strong>，與營收動能一致。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">⑤</span><span><strong>資本密集是雙面刃。</strong>2026 capex 上修至 500 億（歷史新高）擴 AI 測試產能，是成長底氣；但折舊壓力與 FCF 轉負是與輕資產成長股的本質差異，須在估值中折價（DCF 偏保守）。</span></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">年度營收與 EPS 軌跡</div>
+      <div class="chart-sub">資料來源：MOPS／公告，2026–28F 為 GiS／賣方共識</div>
+      <div class="chart-container" style="height:230px"><canvas id="chSummary1"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">毛利率 / 營益率 / ROE 趨勢</div>
+      <div class="chart-sub">資料來源：公告，GiS 整理／預估</div>
+      <div class="chart-container" style="height:230px"><canvas id="chSummary2"></canvas></div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>投資摘要</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P4 投資論點 Bull/Bear ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資論點 — 多空對辯</h1>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>看多論點（Bull）</h4>
+      <div class="risk-item"><strong>1. AI 測試純度最高的台廠標的。</strong>不像綜合 OSAT 被低毛利封裝稀釋，京元電是純測試龍頭，營收與 AI 晶片測試強度直接連動，毛利率隨 AI 組合升至近 40%。</div>
+      <div class="risk-item"><strong>2. 雙引擎能見度延伸至 2027。</strong>NVIDIA R 系列 3Q26 放量、Google CPU 產能 2026 年底增 3 倍，營收 2027E +40%、recurring EPS CAGR ~39%。</div>
+      <div class="risk-item"><strong>3. 地緣護城河。</strong>退出大陸後的純台灣產線，是承接美系 AI China-free 訂單的稀缺資產。</div>
+      <div class="risk-item"><strong>4. 近期回檔重建邊際。</strong>股價自 364 回落至 291（−20%），市場中位 TP 350、外資買進 388，上檔重新打開。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>看空論點（Bear）</h4>
+      <div class="risk-item"><strong>1. 資本密集、FCF 轉負。</strong>2025–26 capex 370→500 億，折舊壓力大、自由現金流為負，ROE（~22%）遠低於輕資產成長股，DCF 偏保守。</div>
+      <div class="risk-item"><strong>2. 客戶集中。</strong>聯發科＋少數 AI 大客戶（NVIDIA/Google）占比高，單一客戶平台時程滑動或砍單衝擊大。</div>
+      <div class="risk-item"><strong>3. AI capex 週期風險。</strong>500 億擴產綁定 AI 需求，一旦 capex 放緩，新增產能稼動率與折舊吸收承壓。</div>
+      <div class="risk-item"><strong>4. 估值已部分反映＋波動高。</strong>forward PE 約 30x（2026E），題材股波動度高（52 週 92–364.5），trailing PE 受一次性失真易誤判。</div>
+    </div>
+  </div>
+  <h2 class="ch">GiS 綜合判斷</h2>
+  <blockquote><strong>GiS 觀點：</strong>看多論點集中在「AI 測試結構性需求＋地緣稀缺性」，看空論點集中在「資本密集度與週期性」。我們認為前者在 2026–2027 的能見度足以支撐評等，後者則應透過「目標 PE 採 PEG ~0.6 折價」與「DCF 保守交叉驗證」納入定價。在現價 291（自高點回落 20%），上檔重新拉開至 +20%，故給予<strong>買進（Buy）</strong>；但須認知這是高波動的 AI 題材股，進場宜分批、嚴設停利停損。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>投資論點</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P5 評等與目標價 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">評等與目標價 — 三情境</h1>
+  <p>GiS 以 <strong>PE-based 為主方法</strong>（捕捉高成長），DCF 為保守交叉驗證，Comps 為相對定位，12M 估值錨定 <strong>2027E EPS</strong>。recurring EPS CAGR ~39%，但測試業具週期性與資本密集特性，目標 PE 採 PEG ≈ 0.6 得基礎 24x，介於保守方 18x 與積極方 28x 之間。</p>
+  <table>
+    <thead><tr><th>情境</th><th>機率</th><th>2026E EPS</th><th>2027E EPS</th><th>目標 PE</th><th>目標價</th><th>vs 291</th></tr></thead>
+    <tbody>
+      <tr><td>保守</td><td class="num">25%</td><td class="num">9.0</td><td class="num">12.0</td><td class="num">18x</td><td class="num">216</td><td class="num neg">−25.8%</td></tr>
+      <tr><td>基礎</td><td class="num">50%</td><td class="num">9.84</td><td class="num">14.5</td><td class="num">24x</td><td class="num hi">348</td><td class="num pos">+19.6%</td></tr>
+      <tr><td>樂觀</td><td class="num">25%</td><td class="num">10.5</td><td class="num">17.5</td><td class="num">28x</td><td class="num">490</td><td class="num pos">+68.4%</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">機率加權</td><td class="num">100%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num hi" style="color:#c0392b;font-weight:800">350</td><td class="num pos" style="font-weight:800">+20.3%</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap">
+    <div class="chart-title">三情境 2027E EPS 與目標價</div>
+    <div class="chart-sub">GiS 預估</div>
+    <div class="chart-container" style="height:215px"><canvas id="chScenEPS"></canvas></div>
+  </div>
+  <div class="callout green"><div class="callout-title">採用結論（依方法論 §4.3 五級制）</div>機率加權目標價 = 0.25×216 + 0.50×348 + 0.25×490 = <strong>350.5 ≈ 350</strong>。上檔空間 <strong>+20.3%</strong>（自 6/9 收盤 291），&gt;15% → <strong>買進（Buy）</strong>。</div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>評等與目標價</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ 章節封面 壹 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div><div class="sec-eyebrow">Company &amp; Business Model</div><div class="sec-line"></div>
+  <div class="sec-title">公司與商業模式</div>
+  <div class="sec-desc">從 1987 年的新竹測試廠，到全球最大純測試代工龍頭——一家把「測試機時」做成生意的公司，它的護城河與獲利結構從何而來？</div>
+</div>
+
+<!-- ═══ P7 公司簡介 + 里程碑 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹之一、公司簡介</h1>
+  <p>京元電子（King Yuan Electronics，2449.TW）成立於 <strong>1987 年</strong>，總部位於新竹，<strong>2001 年</strong>上市。公司專注半導體後段的「<strong>測試（test）</strong>」環節——晶圓針測（wafer probe）、成品最終測試（final test）、預燒老化（burn-in）與系統級測試（SLT），是<strong>全球規模最大的獨立純測試（pure-play test）服務商</strong>。股本 122.27 億元（12.227 億股）。</p>
+  <p><strong>廠房分布（全在台灣）：</strong>新竹總部廠、竹南廠、銅鑼廠，並承租楊梅前華映廠房擴產。客戶涵蓋全球前 50 大半導體公司中近半數，約八成來自無廠 IC 設計大廠（NVIDIA、AMD、聯發科、Qualcomm、聯詠），約兩成來自 IDM／晶圓代工（旺宏、華邦、NXP、STM）。</p>
+  <h2 class="ch">關鍵里程碑</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">1987 / 2001</div><div class="tl-spec">創立 → 上市</div><div class="tl-tech">新竹起家，2001 掛牌，深耕專業測試代工</div></div>
+    <div class="tl-item"><div class="tl-year">2018–2023</div><div class="tl-spec">規模擴張</div><div class="tl-tech">合併東琳精密；測試龍頭地位確立，營收破 300 億</div></div>
+    <div class="tl-item active"><div class="tl-year">2024–2026 ← 現在</div><div class="tl-spec">退陸 + AI 加速</div><div class="tl-tech">出售蘇州京隆退出大陸；AI 測試爆發，capex 三度上修至 500 億</div></div>
+    <div class="tl-item next"><div class="tl-year">2027–2028</div><div class="tl-spec">產能跳增</div><div class="tl-tech">NVIDIA R 系列 / Google CPU 放量，產能大幅擴張</div></div>
+  </div>
+  <h2 class="ch">營收結構（AI/HPC 占比快速提升）</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">營收 by 應用別（NT$ 億元，堆疊）</div>
+    <div class="chart-sub">資料來源：公司法說、券商整理、GiS 彙編（2026–27F 為 GiS 預估）</div>
+    <div class="chart-container" style="height:215px"><canvas id="chRevMix"></canvas></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>壹 · 公司簡介</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P8 商業模式 收入/成本 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹之二、商業模式：收入與成本結構</h1>
+  <h2 class="ch">收入結構 — 機時 × ASP</h2>
+  <p>京元電的收入引擎是<strong>測試機時（tester-hour）× 測試單價（ASP）</strong>。公司購置測試機台（Advantest／Teradyne）與自製高功率預燒設備，向客戶收取測試代工費。AI 晶片（GPU/ASIC/HPC）電晶體數高、功耗大、失效成本高，<strong>測試時間估拉長 100–200%、ASP 估上升 50–100%</strong>，且需更長 burn-in 與系統級測試（SLT）——這是「同一片產能、更高產值」的結構性升級。</p>
+  <table>
+    <thead><tr><th>應用別（NT$ 億元）</th><th>2024</th><th>2025</th><th>2026F</th><th>2025 占比</th></tr></thead>
+    <tbody>
+      <tr><td>AI / HPC 測試</td><td class="num">27</td><td class="num">95</td><td class="num pos">180</td><td class="num hi">27%</td></tr>
+      <tr><td>通訊 / 手機 SoC</td><td class="num">120</td><td class="num">130</td><td class="num">140</td><td class="num">37%</td></tr>
+      <tr><td>消費 / 驅動 IC / 其他</td><td class="num">80</td><td class="num">85</td><td class="num">110</td><td class="num">25%</td></tr>
+      <tr><td>IDM / 利基</td><td class="num">42</td><td class="num">39</td><td class="num">53</td><td class="num">11%</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">合計</td><td class="num">269</td><td class="num">349</td><td class="num" style="font-weight:800">483</td><td class="num">100%</td></tr>
+    </tbody>
+  </table>
+  <p class="src">註：應用別拆分為 GiS 依公司法說口徑與券商整理之估計值，AI/HPC 採狹義純 AI 晶片口徑（含 HPC 之廣義口徑另有 50%+ 之說）。</p>
+  <h2 class="ch">成本結構 — 為何是「資本密集」生意</h2>
+  <ul>
+    <li><strong>折舊為最大成本項</strong>：測試機台與廠房折舊占成本大宗，與輕資產的設計/機構件廠本質不同。高稼動率時毛利槓桿大、低稼動率時折舊吸收差。</li>
+    <li><strong>AI 高 ASP 組合推升毛利率</strong>：毛利率自 2024 約 34% → 2025 全年 35.8% → 2026Q1 達 <strong>39.74%</strong>，外資估 2025–26 均值約 40.7%。</li>
+    <li><strong>自製高功率預燒設備</strong>：差異化降低設備採購成本與交期依賴。</li>
+    <li><strong>稼動率為關鍵變數</strong>：500 億 capex 擴產後，新增產能能否被 AI 訂單填滿，決定折舊能否被吸收。</li>
+  </ul>
+  <blockquote><strong>GiS 核心觀點：</strong>京元電的毛利提升來自「組合升級（AI 高 ASP）」而非單純降本，這使近 40% 毛利率具結構性。但須誠實認知：測試是<strong>重資產生意</strong>，獲利品質（ROE、FCF）天生不如輕資產成長股——這正是我們在估值上給予「PEG 折價＋DCF 保守」的原因。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>壹 · 商業模式</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P9 護城河 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹之三、競爭優勢（Moat）</h1>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>規模與產能廣度。</strong>全球最大純測試代工，測試機台組合最廣、彈性最高，能同時承接手機 SoC、AI GPU、ASIC、利基 IDM 多元測試需求，是 fabless 客戶「一站式測試」的首選。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>AI 客戶 design-in 與產能保留。</strong>與 NVIDIA、創意（GUC）等 AI 客戶建立產能保留協議（Google CPU 要求 2026 年底增 3 倍產能即為一例），早期介入新平台測試方案形成綁定。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>地緣稀缺性。</strong>退出大陸後的純台灣產線，符合美系 AI 客戶 China-free 要求；在地緣對立加深下，這是難以複製的結構性資產。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">④</span><span><strong>自製測試設備。</strong>自製高功率預燒/老化機台，降低對 Advantest／Teradyne 通用設備的交期依賴，在 AI 測試機台供不應求時具擴產彈性。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">⑤</span><span><strong>資本與技術門檻。</strong>500 億 capex 級距的擴產能力與多年累積的測試 know-how，使後進者難在短期內以同等規模切入 AI 高階測試。</span></div>
+  </div>
+  <h2 class="ch">護城河的可持續性檢驗</h2>
+  <p>GiS 認為京元電護城河的真正考驗有二：(1) <strong>客戶自建測試（in-house testing）</strong>——部分大客戶（如綜合 OSAT 或 IDM）可能將高階測試內製，侵蝕委外量；(2) <strong>同業在 AI 測試的追趕</strong>——欣銓、矽格等台廠及綜合 OSAT 測試部門均積極切入 AI。我們認為京元電的規模、地緣與設備自製優勢在 2026–2027 仍具領先，但長期市佔須持續觀察，已於保守情境中假設成長放緩與毛利回落。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>壹 · 競爭優勢</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P10 管理層治理 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹之四、管理層與公司治理</h1>
+  <table>
+    <thead><tr><th>職務</th><th>姓名</th><th>角色與觀察</th></tr></thead>
+    <tbody>
+      <tr><td>董事長</td><td>謝其俊</td><td>2026 年 6 月起接任董事長；2014 年加入京元電任副董事長，1999–2014 任監察人，長期參與公司治理。主導退陸後純台灣產線與 AI 測試擴產的長期策略。</td></tr>
+      <tr><td>總經理</td><td>張高薰</td><td>2023 年 9 月起任總經理（前執行副總），兼永續長；成功大學物理系、美國企管碩士，2000 年加入前有逾 11 年半導體經驗（曾任華邦電經理），主管策略規劃、市場開發與業務。</td></tr>
+      <tr><td>發言人</td><td>趙敬堯</td><td>對外 IR 窗口，負責法人說明與資訊揭露。</td></tr>
+      <tr><td>簽證會計師</td><td>安永聯合（EY）</td><td>四大會計師事務所。</td></tr>
+    </tbody>
+  </table>
+  <h2 class="ch">治理觀察（雙面刃）</h2>
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>正面</h4>
+      <div class="risk-item">果斷退出大陸（出售蘇州京隆），預先規避地緣風險、回收 166 億現金，並承諾 2025/2026 各加發 1.5 元特別股息回饋股東。</div>
+      <div class="risk-item">敢於大手筆 capex（500 億）卡位 AI 測試產能，策略前瞻。</div>
+      <div class="risk-item">配息政策穩定（2024 配 4.0 元、配發率約 63%），對股東友善。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>負面 / 折價因子</h4>
+      <div class="risk-item">資本密集模式下，激進 capex 若遇 AI 需求放緩，將同時面臨折舊與稼動率雙重壓力。</div>
+      <div class="risk-item">2026/6 董事長交接，新任領導對長期策略延續性仍待觀察。</div>
+      <div class="risk-item">對外財測揭露相對保守，AI 占比定義口徑（純 AI vs 廣義 HPC）易造成市場認知落差。</div>
+    </div>
+  </div>
+  <p class="src">資料來源：MOPS 公司基本資料、公司官網經營團隊、公司新聞稿與法說會揭露。高階經理人公開資訊有限，本節以公開可查資料整理；董事長交接時點以 MOPS 重訊為準。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>壹 · 管理層治理</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ 章節封面 貳 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div><div class="sec-eyebrow">Industry &amp; Competition</div><div class="sec-line"></div>
+  <div class="sec-title">產業與競爭格局</div>
+  <div class="sec-desc">AI 晶片讓「測試」從後段配角變成關鍵環節。測試強度上升的趨勢有多結構性？京元電的純測試龍頭地位能守多久？</div>
+</div>
+
+<!-- ═══ P12 產業洞察 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳之一、產業洞察 — AI 帶動測試強度質變</h1>
+  <p>測試需求 ≈ <strong>晶片出貨量 × 單顆測試強度（時間 × ASP）</strong>。AI 時代後者結構性放大：AI GPU/ASIC 電晶體數暴增、功耗與散熱條件嚴苛、失效成本極高，使單顆測試時間估增 100–200%、ASP 增 50–100%。先進封裝（多 die / 3D IC）又增加測試步驟數，hyperscaler 自研 ASIC 更拒收未經系統級熱驗證的晶片，使 <strong>SLT（系統級測試）從備援手段變為必要階段</strong>（Digitimes 估 SLT 晶片測試 2026 成長約 30%）。</p>
+  <div class="chart-wrap">
+    <div class="chart-title">AI 晶片 vs 傳統 SoC 測試強度對比（相對指數，傳統 SoC = 100）</div>
+    <div class="chart-sub">資料來源：SemiEngineering、TrendForce、產業訪談、GiS 彙編（示意數量級）</div>
+    <div class="chart-container" style="height:210px"><canvas id="chTestInt"></canvas></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>需求面向</th><th>方向</th><th>對京元電的含意</th></tr></thead>
+    <tbody>
+      <tr><td>AI 晶片測試時間</td><td class="pos">+100–200%</td><td>同一片產能產值倍增，機時需求結構性放大</td></tr>
+      <tr><td>SLT 滲透</td><td class="pos">+30%（2026）</td><td>新增測試階段，ASP 與設備需求再升</td></tr>
+      <tr><td>OSAT 整體市場</td><td>~USD 50B，CAGR ~8.5%</td><td>測試為毛利較高子集，AI 抬升其價值佔比</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">非 AI（手機/PC）</td><td style="font-weight:700">2H26 持平</td><td style="font-weight:700;color:#92400e">傳統需求溫和，成長動能全押 AI（雙刃）</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 核心觀點：</strong>測試業過去被視為「跟著晶片出貨量走」的週期性配角，AI 改變了這個敘事——測試強度（intensity）本身在結構性上升，使測試營收成長快於晶片出貨量。京元電作為純測試最大玩家，是這個「質變」最直接、最高純度的標的。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>貳 · 產業洞察</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P13 AI 引擎 roadmap ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳之二、AI 雙引擎與產能藍圖</h1>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2024–2025</div><div class="tl-spec">AI 起點</div><div class="tl-tech">NVIDIA Hopper/Blackwell 測試導入，AI 占比 10%→28%</div></div>
+    <div class="tl-item active"><div class="tl-year">2026 ← 現在</div><div class="tl-spec">雙引擎放量</div><div class="tl-tech">NVIDIA R/B 系列 + Google CPU；capex 500 億擴產 30–50%</div></div>
+    <div class="tl-item next"><div class="tl-year">3Q26</div><div class="tl-spec">R 系列衝刺</div><div class="tl-tech">最大客戶 R 系列 XPU 快速放量，強勁季增</div></div>
+    <div class="tl-item next"><div class="tl-year">2027</div><div class="tl-spec">CPU 3 倍產能</div><div class="tl-tech">Google CPU 產能增 3 倍貢獻全年；AI 占比 ~46%</div></div>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-title">AI 營收占比 與 資本支出（capex）</div>
+    <div class="chart-sub">資料來源：公司法說、中央社（capex 500 億）、GiS 彙編</div>
+    <div class="chart-container" style="height:220px"><canvas id="chAImix"></canvas></div>
+  </div>
+  <p>兩大引擎彼此互補：<strong>NVIDIA</strong>（最大客戶 XPU）R 系列 3Q26 快速放量、B 系列維持 1H26 動能；<strong>Google Arm CPU</strong>（透過創意 GUC）需求過去一季急遽成長，要求京元電產能於 2026 年底前增 3 倍，2027 強貢獻。為支撐此需求，公司 2026 capex 二度上修至 500 億（歷史新高），整體產能估擴 30–50%，2027 再大幅跳增。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>貳 · AI 引擎</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P14 競爭分析 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳之三、競爭分析</h1>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">京元電 2026F 營收結構（應用別）</div>
+      <div class="chart-sub">GiS 彙編</div>
+      <div class="chart-container" style="height:200px"><canvas id="chShare"></canvas></div>
+    </div>
+    <div class="callout green" style="align-self:center">
+      <div class="callout-title">市佔口徑要分清楚</div>
+      <ul style="margin:0">
+        <li>在「OSAT 整體」市佔僅約 2%（只做測試、盤子小）</li>
+        <li>在「<strong>獨立純測試代工</strong>」是<strong>全球第一</strong></li>
+        <li>綜合 OSAT（日月光）測試部門營收雖大，但非純測試獨立廠</li>
+        <li>AI 測試純度與地緣稀缺性＝京元電溢價來源</li>
+      </ul>
+    </div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>同業</th><th>代號</th><th>定位</th><th>對京元電威脅</th></tr></thead>
+    <tbody>
+      <tr><td>欣銓</td><td>3264</td><td>專業測試代工（次於京元）</td><td>中（最直接同業，積極切 AI）</td></tr>
+      <tr><td>矽格</td><td>6257</td><td>測試＋封裝（高頻/RF）</td><td>中（部分重疊）</td></tr>
+      <tr><td>力成</td><td>6239</td><td>記憶體封測為主</td><td class="pos">低（產品別不同）</td></tr>
+      <tr><td>穎崴 / 中華精測</td><td>6515 / 6510</td><td>測試介面 socket / 探針卡（耗材）</td><td class="pos">低（上游耗材，非競爭）</td></tr>
+      <tr><td>日月光投控</td><td>3711</td><td>綜合 OSAT 測試部門</td><td class="neg">中（規模大，但封裝為主）</td></tr>
+      <tr><td>Amkor</td><td>AMKR</td><td>全球第二大 OSAT</td><td class="pos">低（與京元有在台測試產能合作）</td></tr>
+    </tbody>
+  </table>
+  <p class="src">註：內文競爭比較以匿名／產業地圖具名為原則；同業公司名稱於產業地圖必要時具名，券商研究觀點於內文匿名。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>貳 · 競爭分析</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ 章節封面 參 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div><div class="sec-eyebrow">Financial Analysis</div><div class="sec-line"></div>
+  <div class="sec-title">財務分析與預估</div>
+  <div class="sec-desc">營收從 269 億躍向 675 億，毛利率自 34% 升抵近 40%。但 2025 報告 EPS 為何被一次性墊高？FCF 為何轉負？三情境又怎麼展開？</div>
+</div>
+
+<!-- ═══ P16 歷史財務 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參之一、歷史財務（公告，2023–2025）</h1>
+  <table>
+    <thead><tr><th>項目（NT$ 百萬）</th><th>2023</th><th>2024</th><th>2025</th></tr></thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">33,025</td><td class="num">26,856</td><td class="num">34,934</td></tr>
+      <tr><td>營收 YoY</td><td class="num">—</td><td class="num neg">−18.7%*</td><td class="num pos">+30.1%</td></tr>
+      <tr><td>毛利率</td><td class="num">~33%</td><td class="num">~34%</td><td class="num hi">35.84%</td></tr>
+      <tr><td>營業利益</td><td class="num">~7,360</td><td class="num">~6,170</td><td class="num">~8,800</td></tr>
+      <tr><td>營益率</td><td class="num">~22%</td><td class="num">~23%</td><td class="num">~25%</td></tr>
+      <tr><td>稅後淨利</td><td class="num">~6,016</td><td class="num">8,095</td><td class="num">11,058</td></tr>
+      <tr><td>EPS（公告）</td><td class="num">4.78</td><td class="num">6.36</td><td class="num hi">9.01</td></tr>
+      <tr><td>ROE（估）</td><td class="num">~14%</td><td class="num">~18%</td><td class="num">~22%</td></tr>
+      <tr><td>現金股利</td><td class="num">—</td><td class="num">4.00</td><td class="num">~5.5–6.0†</td></tr>
+    </tbody>
+  </table>
+  <p class="src">* 2024 營收下滑係蘇州京隆自 2024Q2 起不再併表（剝離效應），非本業衰退。† 2025 股利含承諾特別股息 1.5 元，最終以董事會宣告為準（估計值）。</p>
+  <div class="chart-wrap">
+    <div class="chart-title">季營收與毛利率（1Q25–4Q26F）</div>
+    <div class="chart-sub">資料來源：公告，2Q26F 起為 GiS 預估</div>
+    <div class="chart-container" style="height:215px"><canvas id="chQtr"></canvas></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>參 · 歷史財務</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P17 處分利益 + 月營收 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參之二、蘇州京隆出售與「基期失真」</h1>
+  <div class="callout gold"><div class="callout-title">⚠ 為什麼 2026 報告 EPS「只成長 10%」是假象</div>2024-04 公司出售京隆科技（蘇州）92.16% 股權，對價約新台幣 217 億、<strong>處分利益每股約 +3.13 元</strong>，主要反映於 <strong>2025Q1（單季 EPS 跳升至 3.51，其餘季約 1.8）</strong>，墊高 2025 全年報告 EPS 至 9.01。<strong>剔除一次性後 recurring 2025 EPS 約 7.0 元。</strong>故 2026E 報告 EPS 9.84 對 2025 報告 9.01 僅 +9%，<strong>但對 recurring 7.0 實為 +40%</strong>，與營收 +38% 一致。市場若用「報告 EPS」算成長率與 trailing PE，會同時低估成長、誤判估值。</div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>季</th><th>營收(億)</th><th>毛利率</th><th>EPS</th><th>備註</th></tr></thead>
+    <tbody>
+      <tr><td>1Q25</td><td class="num">73.2</td><td class="num">~34.5%</td><td class="num hi">3.51</td><td class="neg">含處分利益（一次性）</td></tr>
+      <tr><td>2Q25</td><td class="num">83.6</td><td class="num">~35.0%</td><td class="num">1.78</td><td>recurring 常態</td></tr>
+      <tr><td>3Q25</td><td class="num">92.9</td><td class="num">36.0%</td><td class="num">1.88</td><td>AI 放量</td></tr>
+      <tr><td>4Q25</td><td class="num">99.7</td><td class="num">37.66%</td><td class="num">1.84</td><td>毛利續升</td></tr>
+      <tr><td>1Q26</td><td class="num">101.9</td><td class="num hi">39.74%</td><td class="num">1.87</td><td class="pos">+39% YoY，毛利創高</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap">
+    <div class="chart-title">月營收與 YoY（2025-01 ~ 2026-04）</div>
+    <div class="chart-sub">資料來源：公司月營收公告</div>
+    <div class="chart-container" style="height:200px"><canvas id="chMonthly"></canvas></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>參 · 基期失真</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P18 財務預估 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參之三、財務預估（GiS 三情境）</h1>
+  <p>以 1Q26 實績（營收 101.9 億、毛利率 39.74%）與管理層 AI 雙引擎指引（NVIDIA R 系列 3Q26 放量、Google CPU 2026 年底增 3 倍）為基礎，GiS 建立三情境模型。基礎情境營收 2026F 483 億（+38%）、2027F 675 億（+40%），與外資賣方共識相當。</p>
+  <table style="font-size:12px">
+    <thead><tr><th>2026F（NT$ 百萬）</th><th>保守</th><th>基礎</th><th>樂觀</th></tr></thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">45,500</td><td class="num hi">48,325</td><td class="num">51,000</td></tr>
+      <tr><td>營收 YoY</td><td class="num pos">+30%</td><td class="num pos">+38%</td><td class="num pos">+46%</td></tr>
+      <tr><td>毛利率</td><td class="num">38.5%</td><td class="num">40.0%</td><td class="num">41.5%</td></tr>
+      <tr><td>EPS</td><td class="num">9.0</td><td class="num hi">9.84</td><td class="num">10.5</td></tr>
+    </tbody>
+  </table>
+  <table style="font-size:12px">
+    <thead><tr><th>2027F（NT$ 百萬）</th><th>保守</th><th>基礎</th><th>樂觀</th></tr></thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">59,000</td><td class="num hi">67,496</td><td class="num">76,000</td></tr>
+      <tr><td>EPS</td><td class="num">12.0</td><td class="num hi">14.5</td><td class="num">17.5</td></tr>
+    </tbody>
+  </table>
+  <div class="chart-wrap">
+    <div class="chart-title">三情境營收路徑（NT$ 億元）</div>
+    <div class="chart-sub">GiS 預估</div>
+    <div class="chart-container" style="height:190px"><canvas id="chScenRev"></canvas></div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>參 · 財務預估</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P19 現金流配息 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參之四、現金流與資本密集度</h1>
+  <p>京元電與輕資產成長股最大的差異在<strong>資本密集度</strong>。2025 capex 約 370 億、2026 上修至 500 億（歷史新高），均高於同期營運現金流，使 <strong>自由現金流（FCF）在 2025–2026 擴產高峰轉為負值</strong>，主要由出售京隆的 166 億現金與適度舉債支應。這是 AI 測試「先投產能、後收成」的必然，須在估值中誠實反映（DCF 偏保守）。</p>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">營運現金流 vs 自由現金流（NT$ 億元）</div>
+      <div class="chart-sub">公告／GiS 預估（capex 高峰使 FCF 轉負）</div>
+      <div class="chart-container" style="height:205px"><canvas id="chFCF"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">ROE 趨勢</div>
+      <div class="chart-sub">公告／GiS 預估</div>
+      <div class="chart-container" style="height:205px"><canvas id="chROE"></canvas></div>
+    </div>
+  </div>
+  <blockquote><strong>GiS 觀點：</strong>FCF 轉負不代表營運惡化，而是「主動擴產 AI 測試產能」的投資選擇——關鍵在 2027 起 capex 回落、新產能被 NVIDIA/Google 訂單填滿後，FCF 與 ROE 能否同步回升。我們的基礎情境假設 2027 ROE 回升至 ~25%、FCF 改善；若 AI 需求放緩使稼動率不足，則折舊將反噬獲利（保守情境）。<strong>這也是京元電 ROE（~22%）與輕資產成長股（40%+）的本質差異，理應在 PE 倍數上折價。</strong></blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>參 · 現金流</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ 章節封面 肆 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div><div class="sec-eyebrow">Valuation</div><div class="sec-line"></div>
+  <div class="sec-title">估值分析</div>
+  <div class="sec-desc">PE、DCF、Comps 三法交叉。為什麼 trailing PE 是假象、forward PE 才是真相？為什麼 GiS 在現價 291 給買進（Buy）？</div>
+</div>
+
+<!-- ═══ P21 PE 估值 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之一、PE 估值（主方法）</h1>
+  <div class="callout gold"><div class="callout-title">⚠ Trailing PE 受一次性處分利益失真</div>以 2025 報告 EPS 9.01 計，trailing PE 約 32x；但 9.01 含一次性處分利益，且未含 2026–27 的 AI 成長。應看 forward：291 ÷ 2026E EPS 9.84 ≈ <strong>29.6x</strong>；÷ 2027E EPS 14.5 ≈ <strong>20.1x</strong>。估值判斷以 <strong>forward</strong> 為準。</div>
+  <p>京元電過去（AI 前）被視為週期性測試代工，PE 約 10–18x；2024–2025 因 AI 重評至 30x+。GiS 目標本益比以 recurring EPS CAGR ~39% 為基礎、考量測試業週期性與資本密集，採 <strong>PEG ≈ 0.6 → 24x</strong>（保守於成長股 PEG 1.0），介於保守方 18x 與積極方 28x 之間。</p>
+  <table>
+    <thead><tr><th>情境</th><th>2027E EPS</th><th>目標 PE</th><th>目標價</th><th>vs 291</th></tr></thead>
+    <tbody>
+      <tr><td>保守</td><td class="num">12.0</td><td class="num">18x</td><td class="num">216</td><td class="num neg">−25.8%</td></tr>
+      <tr><td>基礎</td><td class="num">14.5</td><td class="num">24x</td><td class="num hi">348</td><td class="num pos">+19.6%</td></tr>
+      <tr><td>樂觀</td><td class="num">17.5</td><td class="num">28x</td><td class="num">490</td><td class="num pos">+68.4%</td></tr>
+    </tbody>
+  </table>
+  <h3 class="ch">PE 敏感度（2027E EPS × 目標 PE）→ 目標價</h3>
+  <table class="heat" style="font-size:11.5px">
+    <thead><tr><th>EPS ＼ PE</th><th>18x</th><th>21x</th><th>24x</th><th>26x</th><th>28x</th></tr></thead>
+    <tbody>
+      <tr><td style="background:#0d1b3e;color:#fff">12.0</td><td style="background:#fde8e6">216</td><td style="background:#fdf0e6">252</td><td style="background:#fff8e1">288</td><td style="background:#eef7f0">312</td><td style="background:#e3f3ea">336</td></tr>
+      <tr><td style="background:#0d1b3e;color:#fff">14.5</td><td style="background:#fdf0e6">261</td><td style="background:#fff8e1">305</td><td style="background:#d7eede;font-weight:800">348</td><td style="background:#cfeada">377</td><td style="background:#c3e6d2">406</td></tr>
+      <tr><td style="background:#0d1b3e;color:#fff">17.5</td><td style="background:#eef7f0">315</td><td style="background:#d7eede">368</td><td style="background:#cfeada">420</td><td style="background:#bce2cd">455</td><td style="background:#aedcc3">490</td></tr>
+    </tbody>
+  </table>
+  <p class="src">中心格（基礎情境 14.5×24x=348）以綠底粗體標示；綠愈深＝目標價愈高。現價 291。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>肆 · PE 估值</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P22 DCF ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆之二、DCF 估值（保守交叉驗證）</h1>
+  <table style="font-size:12px">
+    <thead><tr><th>DCF 假設</th><th>值</th><th>FCF schedule（NT$ 百萬）</th><th>值</th></tr></thead>
+    <tbody>
+      <tr><td>無風險利率 Rf</td><td class="num">1.5%</td><td>2026F</td><td class="num neg">−8,000</td></tr>
+      <tr><td>Beta β</td><td class="num">1.20</td><td>2027F</td><td class="num">4,000</td></tr>
+      <tr><td>風險溢酬 ERP</td><td class="num">6.5%</td><td>2028F</td><td class="num">18,000</td></tr>
+      <tr><td>權益成本 Ke / WACC</td><td class="num">~9.8%</td><td>2029F</td><td class="num">24,000</td></tr>
+      <tr><td>永續成長 g</td><td class="num">3.0%</td><td>2030F</td><td class="num">28,000</td></tr>
+      <tr><td>淨現金（含京隆款）</td><td class="num">+10,000</td><td>終值（折現後）</td><td class="num">~330,000</td></tr>
+    </tbody>
+  </table>
+  <p><strong>結果：</strong>明確期 FCF 現值（2026–30，含 2026 負 FCF）＋ 終值現值 ≈ 376,000 ＋ 淨現金 10,000 → 權益價值 ≈ 386,000；÷ 1,222.7M 股 → <strong>每股約 316</strong>。</p>
+  <h3 class="ch">DCF 敏感度（WACC × g）→ 每股價值</h3>
+  <table class="heat" style="font-size:11.5px">
+    <thead><tr><th>WACC ＼ g</th><th>2.0%</th><th>2.5%</th><th>3.0%</th><th>3.5%</th><th>4.0%</th></tr></thead>
+    <tbody>
+      <tr><td style="background:#0d1b3e;color:#fff">9.0%</td><td style="background:#d7eede">330</td><td style="background:#cfeada">348</td><td style="background:#c3e6d2">370</td><td style="background:#b5dec8">396</td><td style="background:#a6d8bd">427</td></tr>
+      <tr><td style="background:#0d1b3e;color:#fff">9.5%</td><td style="background:#eef7f0">305</td><td style="background:#e3f3ea">320</td><td style="background:#d7eede">338</td><td style="background:#cfeada">359</td><td style="background:#c3e6d2">384</td></tr>
+      <tr><td style="background:#0d1b3e;color:#fff">9.8%</td><td style="background:#fff8e1">292</td><td style="background:#f4f9ec">303</td><td style="background:#e3f3ea;font-weight:800">316</td><td style="background:#d7eede">334</td><td style="background:#cfeada">356</td></tr>
+      <tr><td style="background:#0d1b3e;color:#fff">10.5%</td><td style="background:#fde8e6">262</td><td style="background:#fdf0e6">271</td><td style="background:#fff3e0">282</td><td style="background:#fff8e1">295</td><td style="background:#f4f9ec">311</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 觀點：</strong>保守 DCF（316，中心格綠底）略高於現價 291、但低於 PE 法 348，誠實反映「資本密集＋近期 FCF 為負」對折現估值的拖累。DCF 對京元電是<strong>下檔風險錨點</strong>——其終值假設與 2027+ 產能回收主導性過強，可靠度低於 forward PE。我們以 PE 法為主、DCF 為交叉驗證；兩法皆指向現價偏低。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>肆 · DCF</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P23 Comps ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之三、Comps（相對定位）</h1>
+  <p>京元電在「純測試 AI 龍頭＋地緣稀缺」上幾無同質可比；以台灣測試/封測同業作相對成長—估值定位（同業具名於產業地圖，研究觀點匿名）。氣泡圖以毛利率（x）對 2027E PE（y）、氣泡大小表相對市值。</p>
+  <div class="chart-wrap">
+    <div class="chart-title">同業群：2027E PE vs 毛利率（氣泡＝相對市值）</div>
+    <div class="chart-sub">GiS 彙編；京元電以紅點標示</div>
+    <div class="chart-container" style="height:230px"><canvas id="chComps"></canvas></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>群組統計（2027E PE）</th><th>Max</th><th>75th</th><th>Median</th><th>25th</th><th>Min</th></tr></thead>
+    <tbody>
+      <tr><td>同業 PE 倍數</td><td class="num">26x</td><td class="num">22x</td><td class="num">19x</td><td class="num">17x</td><td class="num">15x</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">京元電 2449</td><td class="num hi" colspan="5" style="text-align:left;font-weight:700;color:#00875a">2027E forward PE ~20x（落 Median–75th）；目標 24x（≈75th–Max）反映純測試 AI 龍頭與地緣稀缺溢價，但須認知 ROE/FCF 不如輕資產同業</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 觀點：</strong>京元電不該與低毛利封裝廠同倍數比較，其 AI 測試純度應享溢價；但也不該與輕資產高 ROE 機構件廠齊平，因其資本密集、FCF 在擴產期為負。給予 75th–Max 之間的目標倍數（24x）反映「AI 純度溢價」與「資本密集折價」的折衷。Comps 同時提醒：若 AI 題材整體 de-rating，京元電的高 beta 將使其跌幅放大。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>肆 · Comps</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P24 Football Field + 結論 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆之四、Football Field 與採用結論</h1>
+  <div class="chart-wrap">
+    <div class="chart-title">綜合估值區間（NT$）</div>
+    <div class="chart-sub">各法下緣—上緣；藍線＝現價 291，紅線＝GiS 目標價 350</div>
+    <div class="chart-container" style="height:240px"><canvas id="chFootball"></canvas></div>
+  </div>
+  <table style="font-size:11.5px">
+    <thead><tr><th>方法</th><th>下緣</th><th>中心</th><th>上緣</th><th>權重/角色</th></tr></thead>
+    <tbody>
+      <tr><td>PE（主）</td><td class="num">216</td><td class="num hi">348</td><td class="num">490</td><td>主方法</td></tr>
+      <tr><td>DCF（保守）</td><td class="num">262</td><td class="num">316</td><td class="num">427</td><td>下檔錨點</td></tr>
+      <tr><td>Comps</td><td class="num">300</td><td class="num">340</td><td class="num">390</td><td>相對定位</td></tr>
+      <tr><td>賣方 TP 光譜</td><td class="num">268</td><td class="num">350</td><td class="num">400</td><td>外部參照（外資 OW 338 / 買進 388）</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">GiS 12M 目標價</td><td class="num" colspan="3" style="text-align:center;font-weight:800;color:#c0392b">350（機率加權）</td><td style="font-weight:700">買進 Buy</td></tr>
+    </tbody>
+  </table>
+  <div class="callout green"><div class="callout-title">採用結論（依方法論 §4.3 五級制）</div>機率加權目標價 = 0.25×216 + 0.50×348 + 0.25×490 = <strong>350.5 ≈ 350</strong>。上檔空間 <strong>+20.3%</strong>（自 6/9 收盤 291），&gt;15% → <strong>買進（Buy）</strong>。四法區間中心（316–350）一致指向現價偏低。</div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>肆 · 結論</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P25 價格三圖（注入）═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆之五、股價、估值區間與三情境路徑</h1>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">5 年股價 vs 加權指數（標準化＝100）</div>
+      <div class="chart-sub">當前股價 291 · 5Y 相對 alpha = <span id="alphaSpan"></span></div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartRel"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">12M 三情境 Fan Chart</div>
+      <div class="chart-sub">保守 216 / 基礎 348 / 樂觀 490</div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartFan"></canvas></div>
+    </div>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-title">PE Band 河流圖（5 年 TTM EPS × 歷史 PE 帶）</div>
+    <div class="chart-sub">5Y PE 平均約 18x · ±1σ 約 9–28x</div>
+    <div style="position:relative;width:100%;height:235px"><canvas id="chartPE"></canvas></div>
+  </div>
+  <div class="callout gold"><div class="callout-title">⚠ PE Band 讀圖更正（避免誤判）</div>圖中股價線於近期升至歷史 PE 帶 +1σ 之上，看似極貴——這是<strong>假象</strong>：分母 trailing TTM EPS（約 7.37，一次性處分利益已滾出、AI 成長尚未入帳）偏低，使 trailing PE 看似約 40x。以 forward 2026E EPS 9.84 計 PE 僅約 30x、2027E 約 20x，落於歷史平均上緣而非極端高檔。本圖僅供觀察歷史重評軌跡，估值判斷以 forward PE 為準。</div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>肆 · 股價與估值</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ 章節封面 伍 ═══ -->
+<div class="sec-div page">
+  <div class="sec-num">伍</div><div class="sec-eyebrow">Risks &amp; Appendix</div><div class="sec-line"></div>
+  <div class="sec-title">風險與附錄</div>
+  <div class="sec-desc">12 項風險矩陣、催化劑日曆、財報明細與資料來源。</div>
+</div>
+
+<!-- ═══ P27 風險矩陣 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍之一、風險矩陣（12 項）</h1>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>產業風險</h4>
+      <div class="risk-item"><strong>AI Capex 放緩／週期反轉</strong>（最大系統性風險）：500 億擴產綁定 AI 需求，capex 放緩將使新增產能稼動率不足、折舊吸收惡化。</div>
+      <div class="risk-item"><strong>非 AI 需求疲弱</strong>：手機/PC/消費 IC 溫和，2H26 聯發科持平，成長動能過度集中 AI。</div>
+      <div class="risk-item"><strong>測試機台供給</strong>：Advantest/Teradyne 高階 ATE 交期受 AI 需求排擠，可能限制擴產速度。</div>
+      <div class="risk-item"><strong>地緣／關稅</strong>：在地化要求與貿易政策變動牽動客戶委外策略。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>公司風險</h4>
+      <div class="risk-item"><strong>客戶集中</strong>：聯發科＋NVIDIA／Google 占比高，單一平台時程滑動或砍單衝擊大。</div>
+      <div class="risk-item"><strong>客戶自建測試（in-house）</strong>：大客戶/IDM 將高階測試內製，侵蝕委外量。</div>
+      <div class="risk-item"><strong>擴產執行風險</strong>：500 億 capex 的廠房與機台到位、認證、爬坡時點若滑動，影響營收實現。</div>
+      <div class="risk-item"><strong>董事長交接</strong>：2026/6 新任領導對長期策略延續性待觀察。</div>
+    </div>
+  </div>
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>財務風險</h4>
+      <div class="risk-item"><strong>FCF 轉負＋折舊壓力</strong>：擴產高峰 FCF 為負，若稼動率不足，折舊將反噬獲利與 ROE。</div>
+      <div class="risk-item"><strong>台幣升值</strong>：測試外銷比重高，台幣升值侵蝕外銷毛利（須做匯率敏感度）。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>估值風險</h4>
+      <div class="risk-item"><strong>Trailing PE 失真</strong>：2025 一次性處分利益使 trailing PE 易被誤判，市場認知落差大。</div>
+      <div class="risk-item"><strong>高 beta／高波動</strong>：52 週區間 92–364.5，AI 題材 de-rating 時跌幅放大；賣方 TP 離散（268–400）。</div>
+    </div>
+  </div>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>伍 · 風險矩陣</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P28 催化劑 + 敏感度 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">伍之二、催化劑日曆與評等敏感度</h1>
+  <div class="timeline">
+    <div class="tl-item active"><div class="tl-year">2026 Q2–Q3</div><div class="tl-spec">月營收 + 法說</div><div class="tl-tech">6–8 月營收動能；2Q26 法說 AI 占比/稼動率更新</div></div>
+    <div class="tl-item next"><div class="tl-year">2026 Q3</div><div class="tl-spec">NVIDIA R 系列</div><div class="tl-tech">最大客戶 R 系列 XPU 快速放量，強勁季增</div></div>
+    <div class="tl-item next"><div class="tl-year">2026 Q4–2027</div><div class="tl-spec">Google CPU 3x</div><div class="tl-tech">CPU 產能增 3 倍貢獻全年，2027 成長確認</div></div>
+    <div class="tl-item"><div class="tl-year">2027</div><div class="tl-spec">capex 回落 + FCF 回正</div><div class="tl-tech">產能填滿、折舊吸收，ROE/FCF 回升驗證</div></div>
+  </div>
+  <h2 class="ch">評等敏感度（對價格）</h2>
+  <table>
+    <thead><tr><th>股價情境</th><th>上檔空間（vs TP 350）</th><th>對應評等</th></tr></thead>
+    <tbody>
+      <tr style="background:#eefaf4!important"><td style="font-weight:700">291（現價）</td><td class="num hi">+20.3%</td><td style="font-weight:700;color:#c0392b">買進 Buy</td></tr>
+      <tr><td>304</td><td class="num pos">+15.1%</td><td class="pos">Buy/OW 邊界</td></tr>
+      <tr><td>305–333</td><td class="num">+5~15%</td><td>增加持股 OW</td></tr>
+      <tr><td>≥ 333</td><td class="num neg">&lt; +5%</td><td class="neg">中立 N</td></tr>
+    </tbody>
+  </table>
+  <blockquote><strong>GiS 觀點：</strong>現價 291 落於買進區（上檔 +20%）。京元電是高波動 AI 題材股，催化劑（月營收、法說、R 系列放量）密集，建議分批進場、嚴設紀律；若股價回升逾 333 則上檔壓縮、應降評至中立，若 AI 需求或稼動率不如預期觸發保守情境（TP 216）則須重估。</blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>伍 · 催化劑</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P29 財報明細附錄 ═══ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍之三、財報明細附錄</h1>
+  <table style="font-size:11.5px">
+    <thead><tr><th>年度（NT$ 百萬）</th><th>2023</th><th>2024</th><th>2025</th><th>2026F</th><th>2027F</th><th>2028F</th></tr></thead>
+    <tbody>
+      <tr><td>營收</td><td class="num">33,025</td><td class="num">26,856</td><td class="num">34,934</td><td class="num">48,325</td><td class="num">67,496</td><td class="num">87,196</td></tr>
+      <tr><td>營收 YoY</td><td class="num">—</td><td class="num neg">−18.7%*</td><td class="num pos">+30.1%</td><td class="num pos">+38.3%</td><td class="num pos">+39.7%</td><td class="num pos">+29.2%</td></tr>
+      <tr><td>毛利率</td><td class="num">~33%</td><td class="num">~34%</td><td class="num">35.8%</td><td class="num">40.0%</td><td class="num">41.0%</td><td class="num">41.0%</td></tr>
+      <tr><td>營業利益</td><td class="num">~7,360</td><td class="num">~6,170</td><td class="num">~8,800</td><td class="num">13,500</td><td class="num">20,200</td><td class="num">26,200</td></tr>
+      <tr><td>稅後淨利</td><td class="num">~6,016</td><td class="num">8,095</td><td class="num">11,058</td><td class="num">12,032</td><td class="num">17,668</td><td class="num">22,950</td></tr>
+      <tr><td>EPS（元）</td><td class="num">4.78</td><td class="num">6.36</td><td class="num">9.01</td><td class="num">9.84</td><td class="num">14.45</td><td class="num">18.77</td></tr>
+      <tr><td>EPS（recurring）</td><td class="num">4.78</td><td class="num">6.36</td><td class="num">~7.0</td><td class="num">9.84</td><td class="num">14.45</td><td class="num">18.77</td></tr>
+      <tr><td>ROE（估）</td><td class="num">~14%</td><td class="num">~18%</td><td class="num">~22%</td><td class="num">~21%</td><td class="num">~25%</td><td class="num">~27%</td></tr>
+      <tr><td>現金股利（元，估）</td><td class="num">—</td><td class="num">4.00</td><td class="num">~5.5</td><td class="num">~6.0</td><td class="num">~8.5</td><td class="num">~11.0</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px">股本 122.27 億元（12.227 億股）；現價 291，市值約 3,558 億。* 2024 營收下滑係蘇州京隆自 2024Q2 不再併表之剝離效應，非本業衰退。2025 報告 EPS 9.01 含一次性處分利益（每股約 +3.13 元主反映於 1Q25），recurring 約 7.0；2026–28F 為 GiS 預估（以外資賣方共識為錨）。毛利率、營益率、ROE、股利除公告值外均為估計，標示 ~。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>伍 · 財報明細</span><span>© 2026 GiS</span></div>
+</div>
+
+<!-- ═══ P30 資料來源 + 免責 ═══ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">資料來源與免責聲明</h1>
+  <h2 class="ch">資料來源（具名）</h2>
+  <p style="font-size:12.5px">公開資訊觀測站（MOPS）合併損益表與公司基本資料；公司月營收／季報公告、新聞稿（2024/04/26 出售京隆科技）、法說會與企業日揭露、Asia AI Summit 2026 管理層說明；公司投資人關係（IR）與官網經營團隊；TrendForce、Digitimes、SemiEngineering 等產業研究。券商研究觀點（含 Morgan Stanley、Goldman Sachs、及本土券商等）作為共識交叉驗證之用；本報告內文比較時採匿名化處理（保守方／積極方／外資／本土），此段為來源完整列名。tw-stock-scanner 資料庫提供日線收盤價、法人買賣超、月營收與季報 EPS 等公告級數據（健檢 2026-06-09 全 PASS，含源頭抽樣比對一致）。</p>
+  <h2 class="ch">方法論聲明</h2>
+  <p style="font-size:12.5px">本報告依 GiS 估值方法論模板撰寫：評等採五級制（§4.3：買進 &gt;15% / 增加持股 5–15% / 中立 ±5% / 減碼 &lt;−5%）；歷史 EPS 以 MOPS／公告為準（§7.6）；估值以 PE 為主、DCF 與 Comps 交叉驗證；三情境含機率加權與 5×5 敏感度。本報告為<strong>研究員（Research Analyst）</strong>觀點，估值方法論驅動、中立、12 個月目標價導向。</p>
+  <h2 class="ch">關鍵不確定項</h2>
+  <p style="font-size:12px">(1) 處分利益認列年度切分（2025Q1 為主，尾款時點以年報附註為準）；(2) Google CPU 透過創意（GUC）合作為市場/賣方口徑，公司未逐項證實；(3) ROE/BVPS/股利/應用別拆分為 GiS 估算（資本密集、折舊重，ROE 約 18–25%）；(4) 2026–28F 預估含重大不確定性。</p>
+  <h2 class="ch">免責聲明</h2>
+  <p style="font-size:12px;color:#5a6a7a">本報告由 Genesis International Capital 研究部製作，僅供內部研究與專業投資人參考，不構成任何證券之買賣要約或投資建議。報告內容基於本公司認為可靠之來源，但不保證其完整性與準確性。預估數字含重大不確定性，實際結果可能顯著不同。投資人應自行評估風險並承擔投資決策之全部後果。本公司及關係人可能持有報告所述證券之部位。© 2026 Genesis International Capital. 版權所有。</p>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Research</span><span>資料來源與免責</span><span>© 2026 GiS</span></div>
+</div>
+
+<script>
+window.addEventListener('load', function(){
+  const gridX={grid:{display:false},ticks:{font:{size:10}}};
+  const gridY={grid:{color:'#eef2f8'},ticks:{font:{size:10}}};
+  const baseOpt={responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{labels:{boxWidth:12,font:{size:10},padding:10}}}};
+  const C={navy:'#0d1b3e',blue:'#1a3a6e',teal:'#00a878',green:'#00c896',gold:'#d97706',red:'#c0392b',slate:'#6b7a9a',wine:'#5e0d2e'};
+
+  new Chart(chSummary1,{data:{labels:['2023','2024','2025','2026F','2027F','2028F'],
+    datasets:[
+      {type:'bar',label:'營收(億)',data:[330.3,268.6,349.3,483.3,675.0,872.0],backgroundColor:C.blue,yAxisID:'y',borderRadius:4,order:2},
+      {type:'line',label:'EPS(元)',data:[4.78,6.36,9.01,9.84,14.45,18.77],borderColor:C.gold,backgroundColor:C.gold,borderWidth:2.4,yAxisID:'y1',tension:.2,order:1}
+    ]},
+    options:{...baseOpt,scales:{x:gridX,y:{...gridY,position:'left',title:{display:true,text:'營收(億)',font:{size:9}}},y1:{...gridY,position:'right',grid:{display:false},title:{display:true,text:'EPS',font:{size:9}}}}}});
+
+  new Chart(chSummary2,{type:'line',data:{labels:['2023','2024','2025','2026F','2027F','2028F'],
+    datasets:[
+      {label:'毛利率%',data:[33,34,35.8,40,41,41],borderColor:C.teal,borderWidth:2.2,tension:.2},
+      {label:'營益率%',data:[22,23,25,28,30,30],borderColor:C.blue,borderWidth:2.2,tension:.2},
+      {label:'ROE%',data:[14,18,22,21,25,27],borderColor:C.gold,borderWidth:2,borderDash:[4,3],tension:.2}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,ticks:{callback:v=>v+'%',font:{size:10}}}}}});
+
+  new Chart(chRevMix,{type:'bar',data:{labels:['2024','2025','2026F','2027F'],
+    datasets:[
+      {label:'AI/HPC',data:[27,95,180,310],backgroundColor:C.green,borderRadius:4},
+      {label:'通訊/手機 SoC',data:[120,130,140,150],backgroundColor:C.blue,borderRadius:4},
+      {label:'消費/驅動/其他',data:[80,85,110,150],backgroundColor:C.slate,borderRadius:4},
+      {label:'IDM/利基',data:[42,39,53,65],backgroundColor:'#c8d4e6',borderRadius:4}
+    ]},options:{...baseOpt,scales:{x:{...gridX,stacked:true},y:{...gridY,stacked:true,ticks:{callback:v=>v+'億',font:{size:10}}}}}});
+
+  new Chart(chTestInt,{type:'bar',data:{labels:['測試時間','測試 ASP','燒機需求','SLT 需求'],
+    datasets:[
+      {label:'傳統 SoC',data:[100,100,100,100],backgroundColor:C.slate,borderRadius:4},
+      {label:'AI GPU/ASIC',data:[250,180,300,400],backgroundColor:C.green,borderRadius:4}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,ticks:{font:{size:10}}}}}});
+
+  new Chart(chAImix,{data:{labels:['2024','2025','2026F','2027F'],
+    datasets:[
+      {type:'bar',label:'capex(億)',data:[123,370,500,400],backgroundColor:C.blue,yAxisID:'y',borderRadius:4,order:2},
+      {type:'line',label:'AI 營收占比%',data:[10,28,37,46],borderColor:C.green,backgroundColor:C.green,borderWidth:2.6,yAxisID:'y1',tension:.2,order:1}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,position:'left',title:{display:true,text:'capex(億)',font:{size:9}}},y1:{position:'right',grid:{display:false},min:0,max:60,ticks:{callback:v=>v+'%',font:{size:9}}}}}});
+
+  new Chart(chShare,{type:'doughnut',data:{labels:['AI/HPC','通訊/手機 SoC','消費/驅動/其他','IDM/利基'],datasets:[{data:[37,29,23,11],backgroundColor:[C.green,C.blue,C.slate,'#c8d4e6'],borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{font:{size:10}}},tooltip:{callbacks:{label:c=>c.label+': '+c.raw+'%'}}}}});
+
+  new Chart(chQtr,{data:{labels:['1Q25','2Q25','3Q25','4Q25','1Q26','2Q26F','3Q26F','4Q26F'],
+    datasets:[
+      {type:'bar',label:'營收(億)',data:[73.2,83.6,92.9,99.7,101.9,112,128,141],backgroundColor:C.blue,yAxisID:'y',borderRadius:4,order:2},
+      {type:'line',label:'毛利率%',data:[34.5,35.0,36.0,37.7,39.7,40.0,40.5,41.0],borderColor:C.gold,borderWidth:2.4,yAxisID:'y1',tension:.2,order:1}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,position:'left'},y1:{position:'right',grid:{display:false},min:25,max:45,ticks:{callback:v=>v+'%',font:{size:9}}}}}});
+
+  new Chart(chMonthly,{data:{labels:['25/01','25/04','25/07','25/10','26/01','26/02','26/03','26/04'],
+    datasets:[
+      {type:'bar',label:'月營收(億)',data:[23.8,27.8,29.2,34.2,33.7,32.2,36.0,37.4],backgroundColor:C.teal,yAxisID:'y',borderRadius:4,order:2},
+      {type:'line',label:'YoY%',data:[-15,33.8,24.5,41.8,41.3,41.0,36.1,34.6],borderColor:C.red,borderWidth:2.2,yAxisID:'y1',tension:.2,order:1}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,position:'left',ticks:{callback:v=>v+'億',font:{size:9}}},y1:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%',font:{size:9}}}}}});
+
+  new Chart(chScenEPS,{type:'bar',data:{labels:['保守','基礎','樂觀'],
+    datasets:[
+      {label:'2027E EPS',data:[12.0,14.5,17.5],backgroundColor:[C.slate,C.green,C.gold],borderRadius:4,yAxisID:'y'},
+      {label:'目標價',data:[216,348,490],type:'line',borderColor:C.wine,borderWidth:2.4,yAxisID:'y1',tension:.1}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,position:'left',title:{display:true,text:'EPS',font:{size:9}}},y1:{position:'right',grid:{display:false},title:{display:true,text:'TP',font:{size:9}}}}}});
+
+  new Chart(chScenRev,{type:'bar',data:{labels:['2025','2026F','2027F'],
+    datasets:[
+      {label:'保守',data:[349,455,590],backgroundColor:C.slate,borderRadius:3},
+      {label:'基礎',data:[349,483,675],backgroundColor:C.green,borderRadius:3},
+      {label:'樂觀',data:[349,510,760],backgroundColor:C.gold,borderRadius:3}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,ticks:{callback:v=>v+'億',font:{size:10}}}}}});
+
+  new Chart(chFCF,{type:'bar',data:{labels:['2024','2025','2026F','2027F'],
+    datasets:[
+      {label:'營運現金流',data:[130,165,220,300],backgroundColor:C.blue,borderRadius:4},
+      {label:'自由現金流',data:[8,-205,-280,-100],backgroundColor:C.red,borderRadius:4}
+    ]},options:{...baseOpt,scales:{x:gridX,y:{...gridY,ticks:{callback:v=>v+'億',font:{size:10}}}}}});
+
+  new Chart(chROE,{type:'line',data:{labels:['2023','2024','2025','2026F','2027F'],
+    datasets:[{label:'ROE%',data:[14,18,22,21,25],borderColor:C.gold,backgroundColor:'rgba(217,119,6,.1)',borderWidth:2.4,fill:true,tension:.2}]},
+    options:{...baseOpt,plugins:{legend:{display:false}},scales:{x:gridX,y:{...gridY,ticks:{callback:v=>v+'%',font:{size:10}}}}}});
+
+  new Chart(chComps,{type:'bubble',data:{datasets:[
+      {label:'京元電 2449',data:[{x:40,y:20,r:20}],backgroundColor:'rgba(192,57,43,.7)'},
+      {label:'欣銓 3264',data:[{x:38,y:16,r:9}],backgroundColor:'rgba(0,168,120,.6)'},
+      {label:'矽格 6257',data:[{x:28,y:22,r:8}],backgroundColor:'rgba(26,58,110,.6)'},
+      {label:'穎崴 6515',data:[{x:55,y:26,r:8}],backgroundColor:'rgba(217,119,6,.6)'},
+      {label:'力成 6239',data:[{x:17,y:18,r:11}],backgroundColor:'rgba(107,122,154,.6)'},
+      {label:'日月光 3711',data:[{x:17,y:15,r:18}],backgroundColor:'rgba(94,13,46,.55)'}
+    ]},options:{...baseOpt,scales:{x:{...gridY,title:{display:true,text:'毛利率%',font:{size:10}},ticks:{callback:v=>v+'%',font:{size:9}}},y:{...gridY,title:{display:true,text:'2027E PE',font:{size:10}},ticks:{callback:v=>v+'x',font:{size:9}}}}}});
+
+  new Chart(chFootball,{type:'bar',data:{labels:['PE 法(主)','DCF(保守)','Comps','賣方 TP'],
+    datasets:[{label:'估值區間',data:[[216,490],[262,427],[300,390],[268,400]],backgroundColor:['rgba(0,200,150,.6)','rgba(107,122,154,.55)','rgba(26,58,110,.55)','rgba(217,119,6,.5)'],borderRadius:4,barPercentage:.6}]},
+    options:{...baseOpt,indexAxis:'y',plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>'區間 '+c.raw[0]+' – '+c.raw[1]}}},
+      scales:{x:{...gridY,min:180,max:520,ticks:{font:{size:9}}},y:gridX}}});
+});
+</script>
+<script>
+(function(){
+const PRC_DATES = ["2021-05","2021-08","2021-11","2022-02","2022-05","2022-08","2022-11","2023-02","2023-05","2023-08","2023-11","2024-02","2024-05","2024-08","2024-11","2025-02","2025-05","2025-08","2025-11","2026-02","2026-05"];
+const PRC_NORM = [100,106,101,101,106,86,82,97,125,178,192,206,204,280,293,249,225,361,530,757,760];
+const TWII_NORM = [100,101,103,104,95,84,83,90,90,91,98,100,103,108,118,128,131,141,160,183,238];
+const FAN_DATES = ["26/06","26/08","26/10","26/12","27/02","27/04","27/06"];
+const FAN_LO = [291,278,266,253,241,228,216];
+const FAN_MID = [291,301,310,320,329,339,348];
+const FAN_HI = [291,324,357,390,424,457,490];
+const PE_DATES=["2022-01","2022-07","2023-01","2023-07","2024-01","2024-07","2025-01","2025-07","2026-01","2026-05"];
+const PE_ACTUAL=[44.8,39.25,38.3,63,84,105,113.5,118,296,328.5];
+const PE_M1=[38,43,50,45,43,47,57,81,81,66];
+const PE_MEAN=[76,86,101,90,86,94,114,162,162,133];
+const PE_P1=[118,134,157,140,134,146,178,252,252,206];
+const noAnim={animation:false,plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:8}}},responsive:true,maintainAspectRatio:false};
+window.addEventListener('load',function(){
+  new Chart(document.getElementById('chartRel'),{type:'line',data:{labels:PRC_DATES,datasets:[
+    {label:'京元電 2449',data:PRC_NORM,borderColor:'#5e0d2e',backgroundColor:'rgba(94,13,46,.06)',borderWidth:1.6,pointRadius:0,fill:true,tension:.2},
+    {label:'加權指數',data:TWII_NORM,borderColor:'#7b8190',borderWidth:1.2,pointRadius:0,borderDash:[3,3],fill:false,tension:.2}]},
+    options:{...noAnim,scales:{x:{ticks:{maxTicksLimit:6,font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}}}});
+  var a=document.getElementById('alphaSpan');if(a){var d=(PRC_NORM[PRC_NORM.length-1]-TWII_NORM[TWII_NORM.length-1]).toFixed(0);a.textContent='+'+d+' pp';a.style.color='#00875a';a.style.fontWeight='700';}
+  new Chart(document.getElementById('chartFan'),{type:'line',data:{labels:FAN_DATES,datasets:[
+    {label:'樂觀 490',data:FAN_HI,borderColor:'#00a878',backgroundColor:'rgba(0,168,120,.10)',borderWidth:1.6,pointRadius:0,fill:'+1',tension:0},
+    {label:'基礎 348',data:FAN_MID,borderColor:'#daa520',backgroundColor:'rgba(218,165,32,.18)',borderWidth:2.2,pointRadius:0,fill:'+1',tension:0},
+    {label:'保守 216',data:FAN_LO,borderColor:'#c0392b',borderWidth:1.6,pointRadius:0,fill:false,tension:0,borderDash:[4,3]}]},
+    options:{...noAnim,scales:{x:{ticks:{maxTicksLimit:7,font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}}}});
+  new Chart(document.getElementById('chartPE'),{type:'line',data:{labels:PE_DATES,datasets:[
+    {label:'+1σ (28x)',data:PE_P1,borderColor:'rgba(192,57,43,.55)',backgroundColor:'rgba(218,165,32,.10)',borderWidth:.9,pointRadius:0,fill:'+1',borderDash:[4,3]},
+    {label:'mean (18x)',data:PE_MEAN,borderColor:'rgba(94,13,46,.85)',backgroundColor:'rgba(94,13,46,.06)',borderWidth:1.2,pointRadius:0,fill:'+1'},
+    {label:'-1σ (9x)',data:PE_M1,borderColor:'rgba(0,135,90,.6)',borderWidth:.9,pointRadius:0,fill:false,borderDash:[4,3]},
+    {label:'股價',data:PE_ACTUAL,borderColor:'#1a0a2e',borderWidth:2,pointRadius:0,fill:false}]},
+    options:{...noAnim,scales:{x:{ticks:{maxTicksLimit:8,font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}}}});
+});
+})();
+</script>
+</body>
+</html>

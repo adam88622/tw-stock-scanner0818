@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!--
+  GiS Genesis International Capital — 研究報告樣板
+  使用方式：直接複製修改文字與圖表數據，轉 PDF 指令：
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --disable-gpu --no-sandbox \
+    --print-to-pdf="輸出檔名.pdf" --print-to-pdf-no-header --no-pdf-header-footer \
+    --virtual-time-budget=12000 "file:///完整路徑/檔案.html"
+-->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>瑞昱 2379 首次覆蓋 | GiS 研究員觀點</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+
+/*
+  ⚠ 排版重要提醒（避免空白頁 & 內容截斷問題）：
+  1. 每個 .page div 使用 height:297mm（非 min-height），搭配 overflow:hidden
+  2. 不要在 .page 上使用 page-break-after:always，讓固定高度自然分頁
+  3. 每頁內容需控制在 297mm 以內，超出會被裁切（overflow:hidden）
+  4. 若使用 position:absolute 的 footer，確保不會導致額外分頁
+  5. @page{size:A4;margin:0} 已設定，Chrome headless 會自動按 297mm 分頁
+
+  ⚠ 頁高控制實務指引：
+  6. 每頁可用內容高度 ≈ 297mm - padding(40px×2) - footer(~50px) ≈ 225mm（約 850px）
+  7. 一頁最多容納：1 個 h1 + 1 個 h2 + 1 張大表格(8行) + 1 個圖表(240px) + 少量文字
+     或：1 個 h1 + 2 個 h2 + 2 張中型表格(5行) + 少量文字
+  8. 若一頁放了「示意圖/卡片 + 表格 + 圖表」三大元素，幾乎必定溢出，需拆頁
+  9. 寧可多拆一頁留白，也不要讓底部內容被裁切（overflow:hidden 會無聲截斷）
+  10. 轉 PDF 後務必逐頁檢查頁尾 footer 是否完整可見，若看不到 footer 代表內容溢出
+*/
+
+/* ── 浮水印 ── */
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+
+/* ── 換頁 ── */
+/* ── 頁面容器（固定 A4 高度，避免空白頁） ── */
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+/* 注意：不再使用 .pb / page-break-after:always，靠固定 height:297mm 自然分頁 */
+
+/* ── Canvas 強制填滿容器（Chart.js 用） ── */
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+
+/* ── PNG 圖表（matplotlib 生成、首次覆蓋報告用）── */
+/* ⚠ 關鍵：必須用 explicit height + object-fit:contain，避免 X 軸標籤被切 */
+/* ❌ 禁用 height:auto + max-height（contain 對 height:auto 無效，會切到圖表底部）*/
+.chart-img{width:100%;height:210px;display:block;border-radius:4px;object-fit:contain}
+.chart-img.tall{height:260px}    /* 適合 heatmap、roadmap 等密集圖 */
+.chart-img.short{height:160px}   /* 適合 simple bar / pie */
+.chart-grid .chart-img{height:180px}  /* 雙欄並排時更小 */
+
+/* ── 封面 ── */
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+
+/* ── 章節封面 ── */
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+
+/* ── 正文頁 ── */
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+
+/* ── 標題 ── */
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:32px 0 18px;page-break-after:avoid}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:26px 0 13px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:18px 0 9px;page-break-after:avoid}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:11px 12px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px;white-space:nowrap}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:9px 12px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.55}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+
+/* ── 公司卡片 ── */
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:24px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.slate{background:#2d3748}
+.co-card-head.wine{background:#5c1a1a}
+.co-card-head.indigo{background:#312e81}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:14px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:18px 22px}
+
+/* ── 圖表 ── */
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:20px;margin:16px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:14px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* ── KPI 列 ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:16px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+
+/* ── 論點摘要框 ── */
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:24px;margin:20px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14.5px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+
+/* ── 時間軸 ── */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:16px 0}
+.tl-item{background:#f0f4fa;padding:18px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:16px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.8;line-height:1.5}
+
+/* ── 風險矩陣 ── */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.6}
+.risk-item:last-child{border:none}
+
+/* ── 首選股卡 ── */
+.picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pick-card{border-radius:8px;padding:18px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12.5px;font-weight:700;color:#00a878;letter-spacing:1px;margin-bottom:6px}
+.pick-name{font-size:18px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:13px;color:#2d3748;line-height:1.7;margin-bottom:10px}
+.pick-catalyst{font-size:12.5px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+
+/* ── 雙欄表格 ── */
+.mini-table{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.mini-t{background:#fff;border:1px solid #dce8f8;border-radius:7px;overflow:hidden}
+.mini-t table{margin:0;box-shadow:none;border-radius:0}
+
+/* ── 文字 ── */
+p{margin:7px 0 11px;line-height:1.75}
+ul,ol{padding-left:20px;margin:7px 0 11px}
+li{margin:4px 0;line-height:1.7}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:24px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+
+/* ── 對比框（callout）── */
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:16px;margin:14px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+
+/* ── 頁腳 ── */
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:14px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:32px}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+
+<style>
+/* ── GiS 研究員首覆標準緊縮 override（page_check SOP 模板 A）── */
+.full-page > *, .body-page > * { flex-shrink: 0 !important; }
+.body-page { padding: 26px 42px !important; }
+.co-card { margin: 11px 0 !important; }
+.co-metric { padding: 9px 11px !important; }
+.kpi-row { margin: 9px 0 !important; gap: 8px !important; }
+.kpi { padding: 10px 12px !important; }
+.kpi-val { font-size: 16px !important; }
+.exec-sum { padding: 13px 16px !important; margin: 9px 0 !important; }
+.exec-thesis { margin: 7px 0 !important; font-size: 11.5px !important; line-height: 1.5 !important; }
+.chart-grid { margin: 9px 0 !important; gap: 11px !important; }
+.chart-wrap { padding: 11px !important; margin: 7px 0 !important; }
+.chart-title { font-size: 11.5px !important; }
+.chart-sub { font-size: 9.5px !important; margin-bottom: 4px !important; }
+h1.ch { margin: 10px 0 9px !important; font-size: 17px !important; }
+h2.ch { margin: 11px 0 7px !important; font-size: 14.5px !important; }
+table { margin: 7px 0 9px !important; font-size: 11px !important; }
+th { padding: 5px 8px !important; font-size: 10.5px !important; }
+td { padding: 5px 8px !important; font-size: 11px !important; line-height: 1.4 !important; }
+li { font-size: 11.5px !important; line-height: 1.45 !important; }
+p { font-size: 12px !important; line-height: 1.55 !important; margin: 7px 0 !important; }
+blockquote { font-size: 11.5px !important; line-height: 1.5 !important; padding: 10px 14px !important; margin: 9px 0 !important; }
+.src { font-size: 9.5px !important; }
+.risk-matrix { gap: 11px !important; margin: 9px 0 !important; }
+.risk-card { padding: 11px 13px !important; }
+.risk-item { font-size: 11px !important; line-height: 1.4 !important; margin: 5px 0 !important; }
+.timeline { margin: 10px 0 !important; }
+.tl-item { padding: 9px 10px !important; }
+.tl-tech { font-size: 10px !important; line-height: 1.35 !important; }
+.page-footer { padding: 8px 22px !important; font-size: 10px !important; margin-top: 14px !important; }
+</style>
+</head>
+<body>
+<div class="wm">
+<div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+<div class="wm-name">Genesis International Capital</div>
+</div>
+<div class="cover pb page">
+  <div class="cover-deco"></div><div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div><div class="cover-co-en">Genesis International Capital</div>
+      <div class="cover-co">AI量化交易與相關應用產品開發</div></div>
+    </div>
+    <div class="cover-eyebrow">Initiating Coverage · Taiwan IC Design · August 2026</div>
+    <div class="cover-title">營收創高，獲利未創高<br><em>被費用吃掉的規格升級紅利</em></div>
+    <div class="cover-subtitle">Realtek Semiconductor (2379.TW) — Initiating Coverage with a Neutral Rating</div>
+    <div class="cover-tags">
+      <span class="ctag hl">瑞昱 2379</span><span class="ctag hl">中立 (N)</span>
+      <span class="ctag">TP NT$694</span><span class="ctag">網通 IC</span>
+      <span class="ctag">車用乙太網</span><span class="ctag">Wi-Fi 7／8</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num">NT$<em>694</em></div><div class="cstat-label">12M 目標價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>−4.1</em>%</div><div class="cstat-label">上檔空間（對 8/4 收盤 723）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>35.1</em></div><div class="cstat-label">2027F EPS（元）</div></div>
+    <div class="cstat"><div class="cstat-num"><em>19.5</em>x</div><div class="cstat-label">目標本益比</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年8月5日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">執行摘要 — 瑞昱 2379 首次覆蓋</h1>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-val">中立<em> (N)</em></div><div class="kpi-lbl">GiS 評等</div></div>
+  <div class="kpi gold"><div class="kpi-val">694<em> 元</em></div><div class="kpi-lbl">12 個月目標價</div></div>
+  <div class="kpi green"><div class="kpi-val">−4.1<em>%</em></div><div class="kpi-lbl">上檔空間（參考價 723）</div></div>
+  <div class="kpi"><div class="kpi-val">26.1<em>x</em></div><div class="kpi-lbl">現行 trailing PE</div></div>
+</div>
+
+<div class="exec-sum">
+  <div class="exec-thesis"><span class="thesis-num">①</span><span>
+  <strong>成長是真的，獲利轉換率才是問題。</strong>2026 年營收預估 1,464.7 億元，較 2021 年循環高峰的
+  1,055.0 億元成長 <strong>38.8%</strong>；但 EPS 預估 29.83 元，仍低於 2021 年的 33.00 元，
+  <strong>倒退 9.6%</strong>。五年來瑞昱把營收做大了近四成，每股盈餘卻還沒回到起點。</span></div>
+
+  <div class="exec-thesis"><span class="thesis-num">②</span><span>
+  <strong>壓制獲利的主角是營業費用率，不是毛利率。</strong>營業利益率自 2021 年的 16.4% 降至 2026F 的
+  10.3%，下滑 6.1 個百分點。拆解後：毛利率貢獻 −2.4pp（占 38%）、
+  <strong>營業費用率擴張貢獻 −3.8pp（占 62%）</strong>。市場與賣方研究的討論幾乎全集中在毛利率與漲價轉嫁，
+  但真正的地板在費用端——而管理層已在 2Q26 法說會明示「短期營業費用率預期維持約 37%」。</span></div>
+
+  <div class="exec-thesis"><span class="thesis-num">③</span><span>
+  <strong>AI 外溢的選擇權真實存在，但現金流落在 2028 年之後，估值已先付款。</strong>100G Optical PHY 仍在客戶驗證、
+  SmartNIC 與 SSD 控制器處早期階段、Layer 3 交換器貢獻落在 2027-2028、Wi-Fi 8 商用導入 2028。
+  現價 723 元對應 trailing PE <strong>26.1x</strong>，高於自身 2 年均值 18.9x、同業中位數 17.5x 達 49%，
+  隱含 2027 年 EPS 需達 37-38.6 元——高於 GiS 預估（35.14）與兩家法說後更新的賣方預估。</span></div>
+</div>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">營收 vs EPS：成長與獲利的脫鉤（2019-2028F）</div><div class="chart-sub">營收（億元，柱）／EPS（元，線）· 資料：MOPS、GiS 預估</div><div class="chart-container" style="height:235px;width:100%;position:relative"><canvas id="cRevEps" style="display:block;width:100%;height:235px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">三率季度趨勢：毛利率、營費率、營益率</div><div class="chart-sub">％ · 2019Q1-2026Q2 實績 · 資料：MOPS</div><div class="chart-container" style="height:235px;width:100%;position:relative"><canvas id="cMarginQ" style="display:block;width:100%;height:235px"></canvas></div></div>
+</div>
+
+<blockquote><strong>GiS 首次覆蓋結論：</strong>給予 <strong>中立 (N)</strong> 評等、12 個月目標價
+<strong>NT$694</strong>。瑞昱是台灣 IC 設計產業中護城河最寬、客戶最分散的公司之一，
+但它的商業模式（規模 × 成本、量大單價低）決定了它天生是中毛利、高週轉的角色，
+而非能享有 AI 重估溢價的規格定義者。在 3Q26 財報實質證明毛利率回升之前，風險報酬不對稱向下。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>執行摘要</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">評等、目標價與賣方共識對照</h1>
+
+<div class="co-card">
+  <div class="co-card-head navy">
+    <div><div class="co-name">瑞昱半導體 Realtek Semiconductor</div>
+    <div class="co-ticker">2379 · 台灣證券交易所 · 全球出貨顆數最大的網通與 PC 週邊 IC 設計公司</div></div>
+    <div class="co-badge"><span class="badge neutral">◉ 中立 (N)</span>
+    <span style="color:rgba(255,255,255,.7);font-size:10px">GiS 目標價 NT$694 ｜ 參考價 NT$723</span></div>
+  </div>
+  <div class="co-metrics">
+    <div class="co-metric"><div class="co-metric-label">2026F EPS</div><div class="co-metric-val">29.83 元</div></div>
+    <div class="co-metric"><div class="co-metric-label">2027F EPS</div><div class="co-metric-val up">35.14 元</div></div>
+    <div class="co-metric"><div class="co-metric-label">目標本益比</div><div class="co-metric-val">19.5x（2027F）</div></div>
+    <div class="co-metric"><div class="co-metric-label">市值 ／ 淨現金</div><div class="co-metric-val">3,708 億 ／ 535 億</div></div>
+  </div>
+  <div class="co-body">
+  <p>目標價 NT$694 由三種方法加權：<strong>PE 三情境加權 690 元（權重 50%）、DCF 751 元（30%）、
+  同業比較 616 元（20%）</strong>。對 2026 年 8 月 4 日收盤價 723 元，上檔空間 −4.1%，
+  依 GiS 估值方法論 §4.3 五級門檻落於 <strong>中立 (N)</strong>（區間 −5% ～ +5%）。</p>
+  </div>
+</div>
+
+<h2 class="ch">賣方共識對照（2Q26 法說會前後）</h2>
+<table class=""><thead><tr><th>研究單位</th><th>報告日</th><th>評等</th><th>目標價</th><th>2026F EPS</th><th>2027F EPS</th><th>評價基礎</th></tr></thead><tbody><tr><td>進取方（本土）</td><td>7/31</td><td>買進</td><td>780（前 620）</td><td>30.71</td><td>35.42</td><td>22x × 2027F</td></tr><tr><td>保守方（本土）</td><td>7/30</td><td>持有</td><td>645（前 610）</td><td>30.15</td><td>35.72</td><td>18x × 2027F</td></tr><tr><td>本土研究部（法說前）</td><td>7/01</td><td>中立</td><td>750</td><td>32.84</td><td>37.50</td><td>20x × 2027F</td></tr><tr><td>外資 A（法說前）</td><td>5/01</td><td>中立</td><td>560</td><td>32.29</td><td>—</td><td>—</td></tr><tr><td>外資 B（法說前）</td><td>5/29</td><td>中立</td><td>570</td><td>—</td><td>—</td><td>—</td></tr><tr><td>外資 C（法說前）</td><td>4/30</td><td>買進</td><td>630（前 650）</td><td>—</td><td>—</td><td>—</td></tr><tr><td>外資 D（法說前）</td><td>4/30</td><td>持有</td><td>570（前 490）</td><td>—</td><td>—</td><td>16x × 2H26-1H27</td></tr><tr><td>外資 E（法說前）</td><td>4/30</td><td>買進</td><td>575</td><td>—</td><td>—</td><td>—</td></tr><tr><td>市場共識（Bloomberg）</td><td>—</td><td>—</td><td>640</td><td>33.09</td><td>37.84</td><td>—</td></tr><tr><td><strong>GiS</strong></td><td><strong>8/05</strong></td><td><strong>中立 (N)</strong></td><td><strong>694</strong></td><td><strong>29.83</strong></td><td><strong>35.14</strong></td><td><strong>19.5x × 2027F（PE/DCF/Comps 加權）</strong></td></tr></tbody></table><span class="src">資料來源：pCloud 券商報告流（2026-04-30 至 2026-07-31）。依 GiS 規範，內文不點名同業，完整名單見末頁資料來源。</span>
+
+<blockquote><strong>GiS 與共識的差異在哪裡：</strong>成長假設幾乎無分歧——GiS 2027 年營收成長 +8.2%，
+賣方為 +7.1% 至 +8.8%。<strong>分歧全在利潤率</strong>：GiS 假設 2027 年毛利率 48.5%，
+保守方 49.2%、市場共識 49.3%。GiS 認為記憶體成本於 2027 年仍處超級循環，且「內嵌記憶體產品占比提高」
+是平台化產品策略的必然結果，屬結構性而非循環性的組合惡化。此外，市場共識 2026F EPS 33.09 元
+與 2Q26 實績存在矛盾——上半年實際僅 15.86 元，隱含下半年需達 17.23 元，
+與管理層「下半年承壓」的口徑不符，<strong>共識向下修正的風險大於向上</strong>。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>評等與共識</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div pb page">
+<div class="sec-num">壹</div>
+<div class="sec-eyebrow">Section One</div>
+<div class="sec-line"></div>
+<div class="sec-title">公司與商業模式</div>
+<div class="sec-desc">瑞昱從乙太網路控制器起家，三十九年來擴張為橫跨七大應用、上千種料號的綜合型 IC 設計公司。本章拆解其收入結構、成本結構與護城河的真實形狀。</div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">壹、公司簡介與發展沿革</h1>
+
+<p>瑞昱半導體 1987 年 10 月創立於新竹科學園區，由交通大學電子背景的工程師團隊共同創辦，
+1998 年於台灣證券交易所掛牌。公司以乙太網路控制晶片起家，靠著「規格夠用、成本極致、量大取勝」
+的策略，在 1990 年代末期把國際大廠逐出低階網卡市場，奠定在網通 IC 的統治地位。</p>
+
+<p>三十九年來，公司從單一產品線擴張為橫跨 <strong>網路通訊、PC 週邊、多媒體音訊、消費性電子、車用電子</strong>
+的綜合型 IC 設計公司。截至 2026 年第 2 季，產品線超過 1,000 種料號，年出貨量以十億顆計，
+是全球出貨顆數最多的 IC 設計公司之一。作為 Fabless 業者，晶圓代工主要委由台積電、聯電，
+封裝測試委由日月光投控、京元電等。</p>
+
+<div class="timeline">
+  <div class="tl-item"><div class="tl-year">1987-1999</div><div class="tl-spec">創業與上市</div>
+  <div class="tl-tech">新竹科學園區創立；1998 年 TWSE 掛牌；乙太網路控制器切入市場</div></div>
+  <div class="tl-item"><div class="tl-year">2000-2015</div><div class="tl-spec">雙引擎成形</div>
+  <div class="tl-tech">RTL8139／8169 成為全球 PC 網卡標準；ALC 音效 codec 稱霸主機板，市占逾七成</div></div>
+  <div class="tl-item active"><div class="tl-year">2016-2026 ← 現在</div><div class="tl-spec">多角化與規格升級</div>
+  <div class="tl-tech">交換器、PON、Wi-Fi 6／7、電視 SoC、車用乙太網；2021 營收破千億、EPS 33.00 元創高</div></div>
+  <div class="tl-item next"><div class="tl-year">2027-2029</div><div class="tl-spec">平台化與資料中心</div>
+  <div class="tl-tech">Layer 3 管理型交換器、Wi-Fi 8、100G Optical PHY、SmartNIC、伺服器周邊</div></div>
+</div>
+
+<h2 class="ch">關鍵營運數據</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+<table class=""><thead><tr><th>項目</th><th>數值</th></tr></thead><tbody><tr><td>上市時間</td><td>1998 年（TWSE 2379）</td></tr><tr><td>股本 ／ 流通股數</td><td>NT$51.6 億 ／ 5.13 億股</td></tr><tr><td>市值（@723 元）</td><td>約 NT$3,708 億</td></tr><tr><td>2025 年營收</td><td>NT$1,227.1 億</td></tr><tr><td>2026 上半年營收</td><td class="num">NT$739.7 億（YoY +10.5%）</td></tr><tr><td>員工人數</td><td>約 6,000 人（研發占逾 75%）</td></tr></tbody></table>
+<table class=""><thead><tr><th>股東結構</th><th>持股比例</th></tr></thead><tbody><tr><td>外資</td><td class="num hi">45.5%</td></tr><tr><td>本土投信 A</td><td>6.7%</td></tr><tr><td>本土投信 B</td><td>4.7%</td></tr><tr><td>董監事及經理人</td><td class="num neg">3.2%</td></tr><tr><td>自由流通比例</td><td>約 87.8%</td></tr><tr><td>淨現金 ／ 每股</td><td class="num">535 億 ／ 104.3 元</td></tr></tbody></table>
+</div>
+<span class="src">資料來源：公開資訊觀測站、公司年報、2026Q1 合併資產負債表。</span>
+
+<blockquote><strong>治理特徵：</strong>董監持股僅 3.2%，遠低於台灣科技業平均。正面看是決策不受家族牽制、
+專業經理人主導；負面看是管理層與股東利益綁定較弱，且帳上 535 億元淨現金使公司成為潛在的股權爭奪標的。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>公司簡介</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">壹、商業模式（一）：收入結構</h1>
+
+<p>瑞昱在公開揭露中採「PC ／ Non-PC」二分法，2026 年第 2 季為
+<strong>PC 33% ／ Non-PC 67%</strong>（第 1 季曾因客戶提前拉貨升至 PC 36%）。
+依終端應用進一步拆解，GiS 綜合法說會揭露、賣方研究與月營收結構推估 2026 年比重如下。</p>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">2026F 分應用別營收結構</div><div class="chart-sub">億元 · GiS 依法說會揭露與賣方研究推估</div><div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="cSeg" style="display:block;width:100%;height:230px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">2027F 分應用別成長率</div><div class="chart-sub">％ · GiS 預估</div><div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="cSegGrow" style="display:block;width:100%;height:230px"></canvas></div></div>
+</div>
+
+<table class=""><thead><tr><th>應用領域</th><th>2026F 營收（億）</th><th>占比</th><th>2027F 成長</th><th>主要產品</th><th>特性</th></tr></thead><tbody><tr><td>網路通訊</td><td class="num">600.5</td><td class="num hi">41.0%</td><td class="num pos">+9.0%</td><td>交換器晶片、PON、Wi-Fi 6／7、路由器 SoC</td><td>成長最穩健、能見度最高</td></tr><tr><td>PC 相關</td><td class="num">483.4</td><td class="num">33.0%</td><td class="num neg">−2.0%</td><td>乙太網路 PHY、Wi-Fi 模組、音訊 codec、USB、攝影機</td><td>量大但受 PC 出貨循環支配</td></tr><tr><td>消費性電子</td><td class="num">190.4</td><td class="num">13.0%</td><td class="num">+1.0%</td><td>電視 SoC、遊戲機、家電控制</td><td>波動最大，2H26 轉弱</td></tr><tr><td>車用</td><td class="num">161.1</td><td class="num">11.0%</td><td class="num pos">+28.0%</td><td>車用乙太網路 PHY／Switch</td><td>成長最快，但基期小</td></tr><tr><td>新事業</td><td class="num">29.3</td><td class="num">2.0%</td><td class="num pos">+100.0%</td><td>100G Optical PHY、SSD 控制器、伺服器周邊</td><td>2027-2028 才是貢獻期</td></tr><tr><td><strong>合計</strong></td><td class="num"><strong>1,464.7</strong></td><td class="num"><strong>100%</strong></td><td class="num pos"><strong>+8.2%</strong></td><td>—</td><td>—</td></tr></tbody></table><span class="src">資料來源：公司 2Q26 法說會、GiS 推估。</span>
+
+<h2 class="ch">客戶與地理分布</h2>
+<p><strong>客戶分散是瑞昱最被低估的資產。</strong>前十大客戶合計占比低於 40%，無單一客戶超過 10%——
+這與譜瑞-KY、祥碩等單一客戶依賴度高的同業形成鮮明對比，也是瑞昱在 2022-2023 年產業下行週期中
+仍能維持正獲利的結構性原因。主要客戶涵蓋全球前五大 PC ODM、主機板三雄、電視品牌廠、
+網通設備商與 Tier 1 電信商供應鏈。</p>
+<p>以出貨地計，中國（含香港）約 55-60%、台灣約 15%、其他亞洲約 15%、歐美約 10%。
+須注意此為出貨地而非終端消費地——瑞昱客戶多為中國與台灣的 ODM／模組廠，終端市場實際遍及全球。
+但這個出貨地結構也意味著 <strong>中國本土 IC 設計廠的國產替代，是瑞昱長期最實質、也最慢性的份額風險</strong>。</p>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>商業模式：收入</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">壹、商業模式（二）：成本結構與 2026 年的三重擠壓</h1>
+
+<p>作為 Fabless 業者，瑞昱的成本結構可拆為銷貨成本與營業費用兩塊。2026 年的關鍵事件是
+<strong>上游三項成本同時上升</strong>，管理層已在 2Q26 法說會明確點名。</p>
+
+<table class=""><thead><tr><th>項目</th><th>2026F 占營收比</th><th>組成</th><th>2026 趨勢</th></tr></thead><tbody><tr><td>銷貨成本</td><td class="num">52.0%</td><td>晶圓代工 55-60%、封裝測試約 20%、記憶體 10-15%、光罩攤提</td><td class="num neg">三項同時上漲</td></tr><tr><td>　·　晶圓代工</td><td>—</td><td>成熟製程 28nm／22nm／16nm</td><td class="num neg">產能吃緊，代工廠調漲報價</td></tr><tr><td>　·　記憶體</td><td>—</td><td>內嵌 DRAM／Flash</td><td class="num neg">DDR／NAND 進入超級循環</td></tr><tr><td>　·　封裝測試</td><td>—</td><td>打線、覆晶</td><td class="num neg">先進封裝排擠成熟封裝產能</td></tr><tr><td>營業費用</td><td class="num hi">37.8%</td><td>研發約 30%（人事為大宗）、行銷業務約 5%、管理約 3%</td><td class="num neg">管理層指引維持約 37%</td></tr><tr><td><strong>營業利益率</strong></td><td class="num hi"><strong>10.3%</strong></td><td>—</td><td>—</td></tr></tbody></table><span class="src">資料來源：公司 2Q26 法說會、GiS 模型。</span>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">毛利率的循環與 2Q26 失守</div><div class="chart-sub">％ · 季度 · 資料：MOPS</div><div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="cGM" style="display:block;width:100%;height:225px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">營業費用率的結構性上升</div><div class="chart-sub">％ · 季度 · 資料：MOPS</div><div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="cOpex" style="display:block;width:100%;height:225px"></canvas></div></div>
+</div>
+
+<blockquote><strong>兩張圖的對比就是本報告的核心：</strong>左圖的毛利率是<strong>循環性</strong>的——
+它在 41% 到 53% 之間來回，2Q26 的 47.0% 只是又一次下行，漲價可以修復它。
+右圖的營業費用率則是<strong>結構性</strong>的——它從 2019-2021 年的 30-34% 一路墊高到 2024-2026 年的
+37-40%，而且沒有回頭跡象。管理層在 2Q26 法說會的用詞是：
+「短期營業費用率預期維持約 37%，先進製程、高速網路、車用與伺服器研發投入將使絕對費用維持高檔。」
+<strong>漲價修得了毛利率，修不了營費率。</strong></blockquote>
+
+<p>另一個常被忽略的結構性因素：管理層明確指出「<strong>內嵌記憶體產品占比提高</strong>」是 2Q26 毛利率
+下滑的原因之一。這不是循環性逆風——平台化產品策略（整合網路、音訊、影像、儲存與周邊控制）
+本質上就需要更多內嵌記憶體，代表 <strong>產品組合往低毛利方向移動，是策略選擇的必然結果</strong>。</p>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>商業模式：成本</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">壹、商業模式（三）：護城河的真實形狀</h1>
+
+<table class=""><thead><tr><th>護城河</th><th>具體內容</th><th>強度</th></tr></thead><tbody><tr><td>規模與成本</td><td>年出貨十億顆級，光罩與 IP 成本可攤到極薄；成熟製程具議價力</td><td class="num hi">★★★★★</td></tr><tr><td>產品廣度與交叉銷售</td><td>逾 1,000 種料號，可對單一 ODM 同時供應網路、音訊、USB、攝影機晶片，形成一站式黏著</td><td>★★★★☆</td></tr><tr><td>客戶分散</td><td>無單一客戶逾 10%，抗砍單能力遠優於同業</td><td>★★★★☆</td></tr><tr><td>軟體與驅動生態</td><td>Windows／Linux 原生內建 Realtek 驅動，新進者難以複製</td><td>★★★★☆</td></tr><tr><td>價格戰執行力</td><td>歷史上多次以成本優勢逼退國際大廠</td><td>★★★★☆</td></tr><tr><td>標準制定參與</td><td>IEEE 802.3／802.11 工作組成員，Wi-Fi 8 列為 2027 研發重點</td><td>★★★☆☆</td></tr></tbody></table><span class="src">資料來源：GiS 分析。</span>
+
+<h2 class="ch">護城河的反面：中毛利模式的天花板</h2>
+<p>瑞昱的競爭優勢建立在「規模 × 成本」，這決定了它天生是 <strong>中毛利、高週轉</strong> 的商業模式，
+而非高毛利的規格定義者。當上游成本上升時，瑞昱的轉嫁能力反而受限於它自身賴以生存的價格競爭力——
+漲價太多，就失去對抗中國本土廠與國際大廠的武器。</p>
+
+<p>這個結構性限制，是理解 2Q26 毛利率失守的完整解釋，也是評估其 AI 題材時最需要冷靜看待的一點。
+瑞昱可以參與 AI 帶動的規格升級（Wi-Fi 6 → Wi-Fi 7、1GbE → 2.5GbE／10GbE），
+享受「單機內容價值提升」的量價紅利；但它很難把這個紅利轉化為毛利率的結構性提升，
+因為它的客戶（PC ODM）同樣面臨成本壓力，而它的競爭者同樣會跟進規格。</p>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">營業利益率的殘酷對比</div><div class="chart-sub">％ · 2025 年度 · 資料：各公司財報、GiS 整理</div><div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="cPeerMargin" style="display:block;width:100%;height:225px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">毛利率反而不輸同業</div><div class="chart-sub">％ · 2025 年度 · 資料：各公司財報</div><div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="cPeerGM" style="display:block;width:100%;height:225px"></canvas></div></div>
+</div>
+
+<blockquote><strong>讀圖要點：</strong>瑞昱 2025 年毛利率 50.0%，其實<strong>高於</strong>聯發科（約 48%），
+與國際同業差距不如想像中大。但營業利益率只有 11.7%，不到聯發科（約 20%）的六成、
+不到 Broadcom（約 45%）的四分之一。<strong>差距全部出在營業費用率</strong>：瑞昱 38.3%、
+聯發科約 28%、Broadcom 約 31%。原因是瑞昱要以相對小的營收規模（Broadcom 的十四分之一）
+維持橫跨七大應用、上千種料號的研發陣容。<strong>產品廣度是護城河，也是營業費用率的地板。</strong></blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>護城河分析</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">壹、管理層與經營風格</h1>
+
+<h2 class="ch">邱順建 — 董事長</h2>
+<p>交通大學電子工程背景，1987 年瑞昱共同創辦人之一，長期擔任總經理，2019 年起接任董事長。
+任內主導公司從 PC 週邊 IC 轉向網通與多媒體的多角化布局，並在 2016 年前後拍板投入車用乙太網路研發——
+這項在當時看似遙遠的投資，成為 2025-2027 年成長最快的產品線（2027F 成長 +28%）。</p>
+<p>經營風格以保守穩健著稱：公司長期維持高現金部位、低財務槓桿、不做大型併購，與同業以併購擴張的
+路線形成明顯對比。2Q26 法說會上對下半年展望使用「審慎穩健」而非樂觀措辭，延續其一貫口徑。
+<strong>對投資人的意義：瑞昱的管理層不會給出過度樂觀的指引，這使得「管理層說承壓」這句話的
+訊號價值高於一般公司。</strong></p>
+
+<h2 class="ch">黃依瑋 — 總經理</h2>
+<p>瑞昱資深主管，長期負責網通事業群，2019 年前後升任總經理。主導交換器晶片與 PON 產品線的擴張，
+是公司網通業務從「消費級路由器」升級到「企業級管理型交換器」的關鍵推手。2Q26 法說會揭示的策略
+轉向——「由單一 IC 逐步轉向平台化方案，整合網路、音訊、影像、儲存及周邊控制晶片，
+提高客戶黏著度及產品內容價值」——即為其主導的長期路線。</p>
+
+<h2 class="ch">財務結構：負債比 68.4% 的正確讀法</h2>
+<p>瑞昱帳上負債比率達 68.4%（總負債 978.7 億／總資產 1,430.8 億），數字看似偏高，
+但拆解後主因是 <strong>其他應付款 513.0 億元</strong>（絕大部分為應付員工薪酬與獎金）
+與應付帳款 155.5 億元，而非有息借款（短期借款僅 97.7 億元）。</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+<table class=""><thead><tr><th>類現金資產（2026Q1）</th><th>金額（億）</th></tr></thead><tbody><tr><td>現金及約當現金</td><td class="num">109.9</td></tr><tr><td>透過損益按公允價值衡量之金融資產</td><td class="num">57.6</td></tr><tr><td>按攤銷後成本衡量之金融資產（流動）</td><td class="num">479.7</td></tr><tr><td><strong>小計</strong></td><td class="num hi"><strong>647.2</strong></td></tr></tbody></table>
+<table class=""><thead><tr><th>有息負債與淨現金</th><th>金額（億）</th></tr></thead><tbody><tr><td>短期借款</td><td class="num neg">97.7</td></tr><tr><td>租賃負債（估）</td><td class="num neg">15.0</td></tr><tr><td><strong>淨現金</strong></td><td class="num hi"><strong>535.0</strong></td></tr><tr><td><strong>每股淨現金</strong></td><td class="num hi"><strong>104.3 元</strong></td></tr></tbody></table>
+</div>
+<span class="src">資料來源：2026Q1 合併資產負債表（FinMind／公開資訊觀測站）。</span>
+
+<blockquote><strong>兩個常見的誤讀都要避免：</strong>只看「現金及約當現金 109.9 億」會嚴重低估瑞昱的
+財務實力；只看「帳上資金充沛」而忽略 97.7 億短期借款又會高估。GiS 採完整口徑，
+淨現金 535.0 億元＝每股 104.3 元，占市值 14.4%。這筆現金是 DCF 估值的重要組成，
+也意味著即使本業遭遇逆風，瑞昱仍有充分的研發投入與配息能力。<br><br>
+另一個附帶意義：其他應付款 513 億元中的員工獎酬屬變動成本，
+<strong>當獲利下滑時會自動下修，形成天然的成本緩衝</strong>——這是 IC 設計業獨特的抗跌機制。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>管理層與財務結構</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div pb page">
+<div class="sec-num">貳</div>
+<div class="sec-eyebrow">Section Two</div>
+<div class="sec-line"></div>
+<div class="sec-title">產業地位與競爭格局</div>
+<div class="sec-desc">在既有陣地是難以撼動的龍頭，在新戰場是後進者。本章拆解瑞昱的市占版圖、與國際龍頭的真實差距，以及那些不會出現在單季財報上的慢性威脅。</div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">貳、全球市占版圖</h1>
+
+<table class=""><thead><tr><th>產品線</th><th>全球市占（估）</th><th>排名</th><th>主要對手</th><th>評估</th></tr></thead><tbody><tr><td>PC 乙太網路 PHY／控制器</td><td class="num hi">70-80%</td><td class="num hi">第 1</td><td>Intel、Broadcom</td><td>絕對統治，但市場成熟</td></tr><tr><td>PC 音訊 Codec</td><td class="num hi">70%+</td><td class="num hi">第 1</td><td>Cirrus Logic、Conexant</td><td>絕對統治，單價低</td></tr><tr><td>消費級乙太網路交換器晶片</td><td class="num hi">40-50%</td><td class="num hi">第 1</td><td>Broadcom、Marvell（高階）</td><td>龍頭，往企業級升級中</td></tr><tr><td>PON（xPON OLT／ONU）</td><td class="num">20-30%</td><td>前 3</td><td>中國廠商、Broadcom</td><td>10G PON 主流化受惠</td></tr><tr><td>Wi-Fi（路由器／AP SoC）</td><td class="num">15-20%</td><td>前 5</td><td>Broadcom、Qualcomm、聯發科</td><td>中低階為主</td></tr><tr><td>電視 SoC</td><td class="num">15-20%</td><td>前 3</td><td>聯發科、Amlogic</td><td>需求已於世界盃後轉弱</td></tr><tr><td>車用乙太網路 PHY</td><td class="num">10-15%</td><td>前 5</td><td>Marvell、NXP、Broadcom、TI</td><td class="num pos">成長最快的戰場</td></tr></tbody></table><span class="src">資料來源：GiS 依產業訪談、公司揭露與賣方研究綜合推估。</span>
+
+<h2 class="ch">滲透率的意涵：既有陣地已無空間</h2>
+<p>瑞昱 2026F 營收 1,464.7 億元（約 46 億美元），占其可服務市場（SAM，約 96 億美元）約
+<strong>48%</strong>。在既有 SAM 中滲透率已接近五成，意味著 <strong>靠既有產品線搶份額的成長空間有限</strong>。</p>
+
+<p>未來成長只剩兩條路：</p>
+<ul>
+<li><strong>(a) 內容價值提升</strong>——同一台 PC 從 Wi-Fi 6 升級到 Wi-Fi 7、從 1GbE 升級到
+2.5GbE／10GbE，單機價值提高。這條路確定性高，但幅度受限於終端出貨量（IDC 預估 2026 年
+全球 PC 出貨衰退約 11%）。</li>
+<li><strong>(b) 進入新 SAM</strong>——車用、企業級交換器、資料中心。這條路空間大，
+但要面對 Broadcom（毛利率 76%）與 Marvell（毛利率 62%）這種資源與技術層級高一階的對手，
+且管理層自述 Layer 3 新專案「軟硬體開發週期約 10 至 12 個月，較明顯貢獻可能落在 2027 至 2028 年」。</li>
+</ul>
+
+<p>管理層的策略完全對應這兩條路，方向正確。<strong>問題在於路徑 (a) 的價值提升會被上游成本吃掉多少，
+以及路徑 (b) 需要多長的研發投入期——這正是估值爭議的核心，也是營業費用率居高不下的直接原因。</strong></p>
+
+<div class="chart-wrap"><div class="chart-title">瑞昱主要產品線全球市占</div><div class="chart-sub">％ · GiS 推估</div><div class="chart-container" style="height:215px;width:100%;position:relative"><canvas id="cShare" style="display:block;width:100%;height:215px"></canvas></div></div>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>全球市占</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">貳、與國際龍頭的真實差距</h1>
+
+<table class=""><thead><tr><th>公司</th><th>2025 營收</th><th>毛利率</th><th>營業費用率</th><th>營業利益率</th><th>定位</th></tr></thead><tbody><tr><td>Broadcom（AVGO.US）</td><td>約 US$540 億</td><td class="num hi">約 76%</td><td>約 31%</td><td class="num hi">約 45%</td><td>高階交換器／客製 AI ASIC，規格定義者</td></tr><tr><td>Marvell（MRVL.US）</td><td>約 US$60 億</td><td class="num">約 62%</td><td>約 37%</td><td class="num">約 25%</td><td>資料中心互連、車用乙太網</td></tr><tr><td>聯發科（2454.TW）</td><td>NT$5,300 億+</td><td class="num">約 48%</td><td>約 28%</td><td class="num">約 20%</td><td>手機 SoC ＋ AI ASIC</td></tr><tr><td><strong>瑞昱（2379.TW）</strong></td><td><strong>NT$1,227 億</strong></td><td class="num hi"><strong>50.0%</strong></td><td class="num neg"><strong>38.3%</strong></td><td class="num neg"><strong>11.7%</strong></td><td><strong>量大、廣度大、單價低</strong></td></tr></tbody></table><span class="src">資料來源：各公司財報、GiS 整理。國際同業為概算。</span>
+
+<blockquote><strong>這是理解瑞昱最重要的一張表。</strong>瑞昱的毛利率 50.0% 其實不輸聯發科（約 48%），
+甚至相當接近。但營業利益率只有 11.7%——差距<strong>全部</strong>出在營業費用率：
+瑞昱 38.3%、聯發科約 28%、Broadcom 約 31%。<br><br>
+原因是規模不對稱：瑞昱要以 Broadcom 十四分之一的營收規模，維持橫跨七大應用、
+上千種料號的研發陣容。每一條產品線都需要獨立的設計團隊、驗證資源與客戶支援，
+而營收基數不足以攤薄這些固定成本。</blockquote>
+
+<h2 class="ch">價值鏈位置：雙向擠壓</h2>
+<p>瑞昱位於半導體價值鏈的「無廠 IC 設計」環節，上游為晶圓代工與封測，下游為 ODM／模組廠。
+它的議價地位是<strong>雙向不對稱</strong>的：</p>
+<ul>
+<li><strong>對上游</strong>：瑞昱是台積電成熟製程的重要客戶，但非最大客戶。2026 年面對代工漲價幾無抵抗力，
+且成熟製程產能吃緊使其議價空間進一步壓縮。</li>
+<li><strong>對下游</strong>：瑞昱雖為市占龍頭，但 PC ODM 客戶集中度高、採購專業，
+漲價需「逐案協商」且有 1-2 季時間差。管理層表示自 2026 年 6 月起與客戶逐案協商，
+新價格 3Q26 起<strong>陸續</strong>生效——「陸續」兩字說明了轉嫁的不完整性。</li>
+</ul>
+<p><strong>這個上下游雙向擠壓，就是 2Q26 毛利率自 49.7% 失守至 47.0% 的完整解釋。</strong></p>
+
+<div class="chart-wrap"><div class="chart-title">2Q26 毛利率下滑歸因（−2.7pp）</div><div class="chart-sub">百分點 · 資料：公司法說會、GiS 拆解</div><div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="cValueChain" style="display:block;width:100%;height:210px"></canvas></div></div>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>國際對比</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">貳、競爭分析（一）：高階市場的天花板</h1>
+
+<h2 class="ch">Broadcom — 高階網通的絕對霸主</h2>
+<p>年營收約 540 億美元，毛利率 76%。在企業級與資料中心交換器晶片（Tomahawk、Trident 系列）
+近乎壟斷，並主導客製化 AI ASIC 業務。與瑞昱幾乎不在同一價格帶競爭——Broadcom 一顆資料中心
+交換器晶片售價可達數千美元，瑞昱一顆消費級交換器晶片可能不到一美元。</p>
+<p><strong>對瑞昱的意涵：</strong>瑞昱要往上走（Layer 3 管理型交換器、100G Optical PHY、SmartNIC）
+就必然撞上 Broadcom。這是一場硬仗，且不會快——管理層自己承認 Layer 3 新專案的明顯貢獻
+落在 2027 至 2028 年。</p>
+
+<h2 class="ch">Marvell — 車用與資料中心互連的既有領導者</h2>
+<p>年營收約 60 億美元，毛利率 62%。是車用乙太網路 PHY 的領導者，也在資料中心光電互連
+（含 Optical DSP）具強勢地位。是瑞昱車用業務與 100G Optical PHY 的直接對手。</p>
+<p><strong>對瑞昱的意涵：</strong>Marvell 在車用擁有更完整的 Tier 1 認證與更長的量產歷史。
+瑞昱的機會在中低階車用乙太網路 PHY 與中國／歐洲的成本敏感客戶——這與它在 PC 網卡市場的
+成功路徑一致，是可行的策略，但也意味著車用業務的毛利率不會顯著優於公司平均。</p>
+
+<h2 class="ch">聯發科 — 台灣同鄉的降維打擊風險</h2>
+<p>年營收 5,300 億元以上，是瑞昱的四倍以上。在 Wi-Fi 路由器 SoC、電視 SoC 與瑞昱正面交鋒。
+聯發科近年重心轉向手機 SoC 與 AI ASIC，對消費性網通的資源投入相對降低，
+這是瑞昱在 Wi-Fi 與電視 SoC 得以維持份額的空間。</p>
+<p><strong>風險：</strong>若聯發科決定回頭認真經營消費性網通，瑞昱的價格戰優勢將受嚴重壓縮。
+這是一個低機率、高衝擊的尾部風險。</p>
+
+<h2 class="ch">Qualcomm — 高階 Wi-Fi 與 Wi-Fi 8 的分水嶺</h2>
+<p>在高階 Wi-Fi 7 路由器與企業級 AP 具技術領先。瑞昱以性價比在中低階市場競爭。
+Wi-Fi 8（IEEE 802.11bn）將是下一個分水嶺——管理層表示 Wi-Fi 8 是 2027 年重要研發及客戶合作重點，
+初期商用導入由 PC、路由器及寬頻設備展開，<strong>歐美 Tier 1 電信商可能自 2028 年開始導入</strong>。</p>
+<p>值得注意的是，Wi-Fi 7 本身的滲透仍在進行中：管理層估計 2026 年整體滲透率約 30%，
+但 router／broadband 端受記憶體漲價影響，滲透率將<strong>低於 20%</strong>——這代表
+規格升級的紅利正在被上游成本延後兌現。</p>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>競爭分析（一）</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">貳、競爭分析（二）：慢性威脅與台灣同業</h1>
+
+<h2 class="ch">中國本土 IC 設計廠 — 最被低估的長期威脅</h2>
+<p>以裕太微（Motorcomm）等為代表的中國本土乙太網路 PHY 廠商，在「國產替代」政策推動下，
+正快速侵蝕瑞昱在中國市場的份額。瑞昱有 <strong>55-60% 出貨流向中國</strong>，這是中長期最實質的
+份額風險。</p>
+<p><strong>這個風險的特性是「慢性」——它不會出現在任何一季的財報上，但會持續壓抑長期成長率
+與 DCF 的終值假設。</strong>GiS 在 DCF 中採用 2.5% 的永續成長率（而非更高），部分即反映此因素；
+敏感度分析顯示，若永續成長率降至 2.0%，DCF 每股價值由 751 元降至 714 元。</p>
+
+<h2 class="ch">NXP／TI — 車用電子的既有勢力</h2>
+<p>在車規認證、功能安全（ISO 26262）與 Tier 1 關係上有數十年積累。瑞昱切入車用乙太網路的路徑是
+「從網路這個相對新的車內子系統切入」，避開傳統 MCU／類比的紅海。這個策略選擇是聰明的，
+因為車用乙太網路的滲透正隨著<strong>車輛架構由網域式（Domain）轉向區域式（Zonal）</strong>而加速，
+主要應用於 ADAS 及智慧座艙，支援雷達、LiDAR、攝影機及多顆 AI SoC 的即時資料傳輸。</p>
+
+<h2 class="ch">台灣同業對照</h2>
+<table class=""><thead><tr><th>公司</th><th>業務</th><th>與瑞昱的關係</th><th>2025 營益率</th><th>TTM PE</th></tr></thead><tbody><tr><td>聯詠 3034</td><td>驅動 IC ＋ SoC</td><td>規模與成熟度最接近的對照組</td><td>約 18%</td><td class="num">21.5x</td></tr><tr><td>譜瑞-KY 4966</td><td>高速介面 IC</td><td>AI 伺服器曝險高於瑞昱，是「IC 設計如何被 AI 重估」的對照組</td><td>約 20%</td><td class="num">17.8x</td></tr><tr><td>祥碩 5269</td><td>USB／PCIe 控制 IC</td><td>PC 週邊部分重疊，但深度綁定單一平台客戶</td><td>約 25%</td><td class="num">16.8x</td></tr><tr><td>群聯 8299</td><td>NAND 控制 IC</td><td>記憶體循環曝險，與瑞昱的成本壓力來源相同（但方向相反）</td><td>約 12%</td><td class="num">17.3x</td></tr><tr><td>原相 3227</td><td>感測 IC</td><td>消費性為主，成長性較低</td><td>約 20%</td><td class="num">18.2x</td></tr><tr><td>智原 3035 ／ 創意 3443</td><td>ASIC 設計服務</td><td>商業模式不同，但估值（88x／127x）是理解市場為 AI 故事付多少溢價的參照點</td><td>—</td><td class="num neg">88x ／ 127x</td></tr><tr><td><strong>瑞昱 2379</strong></td><td><strong>網通＋PC 週邊 IC</strong></td><td><strong>客戶最分散、產品最廣</strong></td><td class="num neg"><strong>11.7%</strong></td><td class="num hi"><strong>26.1x</strong></td></tr></tbody></table><span class="src">資料來源：各公司財報、tw-stock-scanner 資料庫（TTM PE @2026-08-04 收盤）。</span>
+
+<blockquote><strong>這張表揭示了一個不對稱：</strong>瑞昱的營業利益率（11.7%）是表中成熟型同業最低的，
+但 trailing PE（26.1x）卻是最高的。溢價的理由可能是車用與新事業的成長選擇權、
+客戶分散度最高的抗風險能力、以及市占龍頭地位——GiS 認為前兩項成立且值得溢價，
+但相對同業中位數 17.5x 的 <strong>49% 溢價幅度過大</strong>。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>競爭分析（二）</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">貳、TAM 估算與成長天花板</h1>
+
+<table class=""><thead><tr><th>應用</th><th>2026 全球 TAM</th><th>2029F TAM</th><th>CAGR</th><th>瑞昱 SAM</th></tr></thead><tbody><tr><td>PC 連接性晶片</td><td>US$45 億</td><td>US$52 億</td><td class="num">5.0%</td><td>US$32 億</td></tr><tr><td>消費級／企業級交換器晶片</td><td>US$38 億</td><td>US$52 億</td><td class="num pos">11.0%</td><td>US$18 億</td></tr><tr><td>PON（寬頻接取）</td><td>US$22 億</td><td>US$28 億</td><td class="num">8.4%</td><td>US$8 億</td></tr><tr><td>Wi-Fi SoC（路由器／AP）</td><td>US$60 億</td><td>US$78 億</td><td class="num pos">9.1%</td><td>US$15 億</td></tr><tr><td>電視／消費性 SoC</td><td>US$35 億</td><td>US$36 億</td><td class="num neg">1.0%</td><td>US$8 億</td></tr><tr><td>車用乙太網路</td><td>US$18 億</td><td>US$38 億</td><td class="num hi">28.3%</td><td>US$10 億</td></tr><tr><td>資料中心光電 PHY／周邊</td><td>US$95 億</td><td>US$210 億</td><td class="num hi">30.3%</td><td>US$5 億</td></tr><tr><td><strong>合計</strong></td><td><strong>US$313 億</strong></td><td><strong>US$494 億</strong></td><td class="num pos"><strong>16.4%</strong></td><td><strong>US$96 億</strong></td></tr></tbody></table><span class="src">資料來源：GiS 依 IDC、產業研究與公司揭露綜合推估。</span>
+
+<div class="chart-wrap"><div class="chart-title">TAM 成長：高成長的兩塊，瑞昱的份額都最小</div><div class="chart-sub">US$ 億 · 2026 vs 2029F</div><div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="cTam" style="display:block;width:100%;height:225px"></canvas></div></div>
+
+<h2 class="ch">規模檢驗：新引擎撐得起估值重估嗎？</h2>
+<p><strong>車用：</strong>TAM 從 18 億美元成長到 38 億美元（2029），若瑞昱市占從 12% 提升到 18%，
+營收將從 2.2 億美元增至 6.8 億美元（約 210 億元），對 2029 年營收貢獻約 10%。
+<strong>成長性真實，但撐不起整體估值重估。</strong></p>
+<p><strong>資料中心：</strong>TAM 巨大（2029 年 210 億美元）但瑞昱是後進者。管理層自述
+100G Optical PHY「持續進行客戶驗證及量產準備」、SSD 控制器「實際貢獻仍處早期階段」、
+伺服器切入點為 10GbE／I3C Hub／USB Hub／Ethernet Switch 等周邊，後續才擴展 SmartNIC 與 Optical PHY。
+GiS 假設 2028 年前貢獻不超過營收的 5%（2028F 新事業 108.3 億元，占 6.2%）。
+<strong>這是選擇權，不是現金流。</strong></p>
+
+<blockquote><strong>兩個 TAM 成長最快的領域（車用 28.3%、資料中心 30.3%），
+恰好是瑞昱 SAM 占比最小的兩塊（10 億與 5 億美元）。</strong>這句話同時說明了成長故事的真實性
+與它的規模限制——它們會讓瑞昱的成長率高於產業平均，但不足以讓一家 2026 年營益率 10.3% 的公司，
+重估到 AI 概念股的評價級距。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>TAM 分析</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div pb page">
+<div class="sec-num">參</div>
+<div class="sec-eyebrow">Section Three</div>
+<div class="sec-line"></div>
+<div class="sec-title">財務分析</div>
+<div class="sec-desc">把五年的季度損益攤開來看，瑞昱最重要的一件事不是毛利率下滑，而是營業費用率再也沒有回到 2021 年的水準。</div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">參、五年財務回顧</h1>
+
+<table class=""><thead><tr><th>年度</th><th>營收（億）</th><th>YoY</th><th>毛利率</th><th>營費率</th><th>營益率</th><th>EPS（元）</th><th>EPS YoY</th></tr></thead><tbody><tr><td>2021A</td><td class="num">1,055.0</td><td>—</td><td class="num">50.4%</td><td class="num pos">34.0%</td><td class="num hi">16.4%</td><td class="num hi">33.00</td><td>—</td></tr><tr><td>2022A</td><td class="num">1,117.9</td><td class="num pos">+6.0%</td><td class="num">48.9%</td><td class="num">34.8%</td><td class="num">14.1%</td><td class="num">31.62</td><td class="num neg">−4.2%</td></tr><tr><td>2023A</td><td class="num">951.8</td><td class="num neg">−14.9%</td><td class="num neg">42.8%</td><td class="num">35.8%</td><td class="num neg">7.0%</td><td class="num neg">17.85</td><td class="num neg">−43.6%</td></tr><tr><td>2024A</td><td class="num">1,133.9</td><td class="num pos">+19.1%</td><td class="num">50.4%</td><td class="num neg">38.5%</td><td class="num">11.9%</td><td class="num">29.81</td><td class="num pos">+67.0%</td></tr><tr><td>2025A</td><td class="num">1,227.1</td><td class="num pos">+8.2%</td><td class="num">50.0%</td><td class="num neg">38.3%</td><td class="num">11.7%</td><td class="num">28.77</td><td class="num neg">−3.5%</td></tr><tr><td><strong>2026F</strong></td><td class="num"><strong>1,464.7</strong></td><td class="num pos"><strong>+19.4%</strong></td><td class="num neg"><strong>48.0%</strong></td><td class="num neg"><strong>37.8%</strong></td><td class="num neg"><strong>10.3%</strong></td><td class="num"><strong>29.83</strong></td><td class="num pos"><strong>+3.7%</strong></td></tr><tr><td>2027F</td><td class="num">1,585.4</td><td class="num pos">+8.2%</td><td class="num">48.5%</td><td class="num">37.0%</td><td class="num">11.5%</td><td class="num pos">35.14</td><td class="num pos">+17.8%</td></tr><tr><td>2028F</td><td class="num">1,741.8</td><td class="num pos">+9.9%</td><td class="num">49.0%</td><td class="num">36.5%</td><td class="num">12.5%</td><td class="num pos">41.33</td><td class="num pos">+17.6%</td></tr></tbody></table><span class="src">資料來源：公開資訊觀測站、FinMind 財報資料庫（單季認列）、GiS 預估。依方法論 §7.6，歷史 EPS 不採用 yfinance（該來源漏計 2025Q4，會使 TTM 虛高至 32.03 元，實際為 27.73 元）。</span>
+
+<div class="chart-wrap"><div class="chart-title">營收持續創高，EPS 卻回不到 2021</div><div class="chart-sub">營收（億元，柱）／EPS（元，線）· 2021-2028F</div><div class="chart-container" style="height:245px;width:100%;position:relative"><canvas id="cRevEpsBig" style="display:block;width:100%;height:245px"></canvas></div></div>
+
+<blockquote><strong>把 2021 年與 2026F 放在一起看：</strong>營收從 1,055.0 億成長到 1,464.7 億，
+<strong>+38.8%</strong>；EPS 從 33.00 元退到 29.83 元，<strong>−9.6%</strong>。
+瑞昱花了五年把生意做大近四成，股東每股拿到的錢卻更少了。<br><br>
+還有一個常被忽略的因素：<strong>有效稅率</strong>。2024 年瑞昱有效稅率僅 6.2-6.6%（租稅優惠期），
+2025 年跳升至 15.1-15.5%，2026Q1 為 13.0%。這是永久性的每股盈餘下修因素，
+<strong>2024 年的獲利水準已不可直接類比</strong>。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>五年財務回顧</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">參、核心分析：營業利益率去了哪裡</h1>
+
+<p>2021 年至 2026 年，瑞昱的營業利益率從 16.4% 降至 10.3%，下滑 <strong>6.1 個百分點</strong>。
+這 6.1 個百分點的去向，是本報告最重要的一張拆解。</p>
+
+<table class=""><thead><tr><th>項目</th><th>2021A</th><th>2026F</th><th>變動</th><th>對營益率的貢獻</th><th>占比</th></tr></thead><tbody><tr><td>營收</td><td class="num">1,055.0 億</td><td class="num">1,464.7 億</td><td class="num pos">+38.8%</td><td>—</td><td>—</td></tr><tr><td>毛利率</td><td class="num">50.4%</td><td class="num">48.0%</td><td class="num neg">−2.4pp</td><td class="num neg">−2.4pp</td><td class="num">38%</td></tr><tr><td><strong>營業費用率</strong></td><td class="num"><strong>34.0%</strong></td><td class="num"><strong>37.8%</strong></td><td class="num neg"><strong>+3.8pp</strong></td><td class="num neg"><strong>−3.8pp</strong></td><td class="num hi"><strong>62%</strong></td></tr><tr><td><strong>營業利益率</strong></td><td class="num hi"><strong>16.4%</strong></td><td class="num neg"><strong>10.3%</strong></td><td class="num neg"><strong>−6.1pp</strong></td><td>—</td><td>100%</td></tr><tr><td>EPS</td><td class="num hi">33.00 元</td><td class="num">29.83 元</td><td class="num neg">−9.6%</td><td>—</td><td>—</td></tr></tbody></table><span class="src">資料來源：MOPS、GiS 模型。</span>
+
+<div class="chart-wrap"><div class="chart-title">營益率橋接：2021A → 2026F</div><div class="chart-sub">百分點 · 瀑布圖</div><div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="cBridge" style="display:block;width:100%;height:240px"></canvas></div></div>
+
+<blockquote><strong>結論很清楚：營業費用率的擴張貢獻了營益率下滑的 62%，毛利率只占 38%。</strong><br><br>
+這件事之所以重要，是因為兩者的<strong>可逆性完全不同</strong>：
+<ul style="margin:8px 0 0 0">
+<li><strong>毛利率是循環性的</strong>——它在 41% 到 53% 之間來回，受晶圓代工、記憶體、封測成本
+與產品組合驅動。漲價可以修復它，管理層已自 2026 年 6 月起與客戶逐案協商，新價格 3Q26 起陸續生效。</li>
+<li><strong>營業費用率是結構性的</strong>——它是為了買進 AI、車用、伺服器、光通訊的研發門票而付的
+永久性代價。管理層在 2Q26 法說會的原話：「短期營業費用率預期維持約 37%，先進製程、高速網路、
+車用與伺服器研發投入將使絕對費用維持高檔。」</li>
+</ul><br>
+<strong>這意味著即使毛利率完全修復回到 49%，營業利益率的天花板也只有約 12%——
+遠低於 2021 年的 16.4%。</strong>要回到 2021 年的獲利力，瑞昱需要營收再成長四成以上，
+靠營運槓桿稀釋營費率；但公司自己說絕對費用會維持高檔。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>★ 營益率橋接</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">參、2Q26 財報解析（2026-07-30 法說會）</h1>
+
+<table class=""><thead><tr><th>項目</th><th>2Q25A</th><th>1Q26A</th><th>2Q26A</th><th>QoQ</th><th>YoY</th><th>市場預期</th><th>差異</th></tr></thead><tbody><tr><td>營業收入（百萬）</td><td class="num">31,914</td><td class="num">36,423</td><td class="num">37,553</td><td class="num pos">+3.1%</td><td class="num pos">+17.7%</td><td class="num">37,163</td><td class="num pos">+1.0%</td></tr><tr><td>營業毛利（百萬）</td><td class="num">16,029</td><td class="num">18,087</td><td class="num">17,651</td><td class="num neg">−2.4%</td><td class="num pos">+10.1%</td><td class="num">18,301</td><td class="num neg">−3.6%</td></tr><tr><td>營業利益（百萬）</td><td class="num">4,008</td><td class="num">4,332</td><td class="num">3,725</td><td class="num neg">−14.0%</td><td class="num neg">−7.1%</td><td class="num">4,470</td><td class="num neg">−16.7%</td></tr><tr><td>稅後淨利（百萬）</td><td class="num">3,909</td><td class="num">4,330</td><td class="num">3,806</td><td class="num neg">−12.1%</td><td class="num neg">−2.6%</td><td class="num">4,431</td><td class="num neg">−14.1%</td></tr><tr><td><strong>EPS（元）</strong></td><td class="num"><strong>7.62</strong></td><td class="num"><strong>8.44</strong></td><td class="num neg"><strong>7.42</strong></td><td class="num neg"><strong>−12.1%</strong></td><td class="num neg"><strong>−2.6%</strong></td><td class="num"><strong>8.62</strong></td><td class="num neg"><strong>−14.0%</strong></td></tr><tr><td>毛利率</td><td class="num">50.2%</td><td class="num">49.7%</td><td class="num neg">47.0%</td><td class="num neg">−2.7pp</td><td class="num neg">−3.2pp</td><td class="num">49.2%</td><td class="num neg">−2.2pp</td></tr><tr><td>營業利益率</td><td class="num">12.6%</td><td class="num">11.9%</td><td class="num neg">9.9%</td><td class="num neg">−2.0pp</td><td class="num neg">−2.6pp</td><td class="num">12.0%</td><td class="num neg">−2.1pp</td></tr></tbody></table><span class="src">資料來源：公司 2Q26 法說會、Bloomberg 市場共識。</span>
+
+<h2 class="ch">關鍵解讀</h2>
+<p><strong>營收創高但獲利大幅低於預期，這個組合本身就是論點。</strong>2Q26 營收 375.5 億元刷新單季歷史紀錄、
+且略優於市場預期 1.0%；但 EPS 7.42 元低於市場預期達 14.0%、低於進取方預估 18.2%。
+<strong>差異全部發生在毛利率與費用線之間</strong>——營收 +1.0% beat，營業利益卻 −16.7% miss。</p>
+
+<p>管理層對毛利率下滑的歸因有三：(1) 晶圓代工、記憶體及其他零組件成本上升；
+(2) <strong>內嵌記憶體產品占比提高</strong>；(3) 產品組合變化。第 (2) 項尤其值得注意——
+這是平台化策略的必然結果，屬結構性而非循環性。</p>
+
+<p>營收面的品質同樣需要警惕：管理層明確表示成長來自「<strong>部分客戶因供應與價格不確定性提前備貨</strong>」。
+換言之，2Q26 的營收新高有一部分是向下半年借來的。這與 PC 相關營收占比的變化互相印證——
+1Q26 曾因客戶提前拉貨升至 36%，2Q26 回落至 33%。</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+<table class=""><thead><tr><th>庫存與週轉</th><th>2Q26</th></tr></thead><tbody><tr><td>存貨金額</td><td class="num">243.1 億元</td></tr><tr><td>存貨週轉天數（DOI）</td><td class="num">107 天</td></tr><tr><td>前季 DOI</td><td class="num">105 天</td></tr><tr><td>管理層評語</td><td>「約 100 天仍屬正常水準」</td></tr></tbody></table>
+<table class=""><thead><tr><th>費用與結構</th><th>2Q26</th></tr></thead><tbody><tr><td>營業費用</td><td class="num">139.3 億元</td></tr><tr><td>營業費用率</td><td class="num">37.1%（前季 37.8%）</td></tr><tr><td>PC ／ Non-PC 占比</td><td class="num">33% ／ 67%</td></tr><tr><td>前季 PC 占比</td><td class="num">36%</td></tr></tbody></table>
+</div>
+<span class="src">資料來源：公司 2Q26 法說會。</span>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>2Q26 財報解析</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">參、月營收與季度動能</h1>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">月營收與 YoY：上半年加速，下半年是關鍵</div><div class="chart-sub">億元（柱）／YoY %（線）· 2025-01 至 2026-06</div><div class="chart-container" style="height:235px;width:100%;position:relative"><canvas id="cMRev" style="display:block;width:100%;height:235px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">季度營收與 EPS：兩者的背離</div><div class="chart-sub">億元（柱）／EPS 元（線）· 2024Q1-2026Q2</div><div class="chart-container" style="height:235px;width:100%;position:relative"><canvas id="cQtr" style="display:block;width:100%;height:235px"></canvas></div></div>
+</div>
+
+<table class=""><thead><tr><th>月份</th><th>營收（億）</th><th>YoY</th><th>MoM</th><th>觀察</th></tr></thead><tbody><tr><td>2026-01</td><td class="num">135.8</td><td class="num pos">+14.4%</td><td class="num pos">+62.9%</td><td>客戶提前拉貨啟動</td></tr><tr><td>2026-02</td><td class="num">104.8</td><td class="num neg">−7.4%</td><td class="num neg">−22.8%</td><td>農曆年工作天數影響</td></tr><tr><td>2026-03</td><td class="num">123.6</td><td class="num pos">+4.5%</td><td class="num pos">+17.9%</td><td>1Q26 營收 364.2 億創高</td></tr><tr><td>2026-04</td><td class="num">127.2</td><td class="num pos">+11.3%</td><td class="num pos">+2.9%</td><td>備貨動能延續</td></tr><tr><td>2026-05</td><td class="num">125.2</td><td class="num pos">+21.9%</td><td class="num neg">−1.5%</td><td>YoY 加速</td></tr><tr><td>2026-06</td><td class="num">123.1</td><td class="num pos">+20.6%</td><td class="num neg">−1.7%</td><td>2Q26 營收 375.5 億再創高</td></tr><tr><td><strong>1H26 合計</strong></td><td class="num"><strong>739.7</strong></td><td class="num pos"><strong>+10.5%</strong></td><td>—</td><td><strong>下半年的反噬幅度是核心變數</strong></td></tr></tbody></table><span class="src">資料來源：公開資訊觀測站月營收公告。</span>
+
+<blockquote><strong>月營收數據透露的訊號：</strong>2026 年 4-6 月 YoY 分別為 +11.3%、+21.9%、+20.6%，
+動能明顯優於 1-3 月（+14.4%、−7.4%、+4.5%）。但這個加速的成因，管理層已明說是
+「客戶因應下半年產能受限及漲價之預期心理而積極備貨」。<br><br>
+<strong>換言之，這是拉貨而非真實終端需求的加速。</strong>GiS 因此在模型中假設 4Q26 營收
+季減 9.2% 至 345.0 億元，並將 3Q26 營收設在 380.0 億元（QoQ +1.2%），
+略低於兩家賣方的 381.6 億與 382.1 億。<strong>7 月與 8 月的月營收，是驗證這個假設的第一個檢查點。</strong></blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>月營收與季度動能</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">參、資產負債表與現金流品質</h1>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+<table class=""><thead><tr><th>資產（2026Q1，億元）</th><th>金額</th></tr></thead><tbody><tr><td>現金及約當現金</td><td class="num">109.9</td></tr><tr><td>按攤銷後成本衡量之金融資產（流動）</td><td class="num">479.7</td></tr><tr><td>透過損益按公允價值衡量之金融資產</td><td class="num">57.6</td></tr><tr><td>應收帳款（含關係人）</td><td class="num">211.2</td></tr><tr><td>存貨</td><td class="num">216.9</td></tr><tr><td>不動產廠房及設備</td><td class="num">110.9</td></tr><tr><td><strong>資產總計</strong></td><td class="num hi"><strong>1,430.8</strong></td></tr></tbody></table>
+<table class=""><thead><tr><th>負債與權益（2026Q1，億元）</th><th>金額</th></tr></thead><tbody><tr><td>短期借款</td><td class="num neg">97.7</td></tr><tr><td>應付帳款（含關係人）</td><td class="num">159.2</td></tr><tr><td>其他應付款（主要為員工薪酬獎金）</td><td class="num hi">513.0</td></tr><tr><td>本期所得稅負債</td><td class="num">40.5</td></tr><tr><td>負債總計</td><td class="num">978.7</td></tr><tr><td>權益總計</td><td class="num">452.1</td></tr><tr><td><strong>負債比率</strong></td><td class="num neg"><strong>68.4%</strong></td></tr></tbody></table>
+</div>
+<span class="src">資料來源：2026Q1 合併資產負債表（FinMind／公開資訊觀測站）。</span>
+
+<h2 class="ch">自由現金流預估</h2>
+<table class=""><thead><tr><th>項目（億元）</th><th>2026F</th><th>2027F</th><th>2028F</th><th>2029F</th><th>2030F</th><th>2031F</th></tr></thead><tbody><tr><td>營業利益</td><td class="num">150.4</td><td class="num">182.3</td><td class="num">217.7</td><td class="num">239.7</td><td class="num">256.0</td><td class="num">270.9</td></tr><tr><td>NOPAT（稅率 13.5%）</td><td class="num">130.1</td><td class="num">157.7</td><td class="num">188.3</td><td class="num">207.3</td><td class="num">221.4</td><td class="num">234.3</td></tr><tr><td>＋折舊攤銷</td><td class="num">45.4</td><td class="num">49.1</td><td class="num">54.0</td><td class="num">58.0</td><td class="num">61.5</td><td class="num">64.6</td></tr><tr><td>−資本支出</td><td class="num neg">26.4</td><td class="num neg">28.5</td><td class="num neg">31.4</td><td class="num neg">33.7</td><td class="num neg">35.7</td><td class="num neg">37.5</td></tr><tr><td>−營運資金變動</td><td class="num neg">52.3</td><td class="num neg">26.6</td><td class="num neg">34.4</td><td class="num neg">28.7</td><td class="num neg">24.7</td><td class="num neg">21.8</td></tr><tr><td><strong>未槓桿自由現金流</strong></td><td class="num"><strong>96.8</strong></td><td class="num"><strong>151.8</strong></td><td class="num"><strong>176.6</strong></td><td class="num"><strong>202.9</strong></td><td class="num"><strong>222.6</strong></td><td class="num"><strong>239.6</strong></td></tr></tbody></table><span class="src">假設：折舊攤銷率 3.1%、資本支出率 1.8%（Fabless 業者 CapEx 主要為研發設備、EDA 工具與光罩）、營運資金隨營收增額的 22%。資料來源：GiS 模型。</span>
+
+<blockquote><strong>現金流品質評估：</strong>瑞昱的自由現金流轉換率高（CapEx 僅營收的 1.8%），
+是典型的輕資產 IC 設計模式。2026 年 FCF 較低（96.8 億元）主要因營收大幅成長帶來的營運資金占用
+（+52.3 億元）；2027 年起隨成長趨緩，FCF 顯著改善至 151.8 億元。<br><br>
+配息政策穩定：2025 年度配發現金股利 25.00 元，配息率約 87%。以 8/4 收盤 723 元計，
+2026 年度預估現金殖利率約 <strong>3.5%</strong>——這是中立評等下的一個支撐因素，
+但不足以扭轉估值判斷。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>資產負債與現金流</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div pb page">
+<div class="sec-num">肆</div>
+<div class="sec-eyebrow">Section Four</div>
+<div class="sec-line"></div>
+<div class="sec-title">財務預估</div>
+<div class="sec-desc">成長假設幾乎與市場一致，分歧全在利潤率。本章逐項攤開 GiS 的 2026-2028 年預估與三情境的驅動因子。</div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">肆、營收模型（分應用別）</h1>
+
+<table class=""><thead><tr><th>應用領域</th><th>2026F</th><th>2027F 成長</th><th>2027F</th><th>2028F 成長</th><th>2028F</th><th>假設依據</th></tr></thead><tbody><tr><td>網路通訊</td><td class="num">600.5</td><td class="num pos">+9.0%</td><td class="num">654.6</td><td class="num pos">+8.0%</td><td class="num">707.0</td><td>10G PON／XGS-PON 成主流、Tier 1 測試 25G PON、企業交換器汰換週期、管理型市占提升</td></tr><tr><td>PC 相關</td><td class="num">483.4</td><td class="num neg">−2.0%</td><td class="num">473.7</td><td class="num">+1.0%</td><td class="num">478.5</td><td>IDC 預估 PC 出貨續弱，內容價值提升（Wi-Fi 7、2.5GbE）僅能部分抵銷量的下滑</td></tr><tr><td>消費性電子</td><td class="num">190.4</td><td class="num">+1.0%</td><td class="num">192.3</td><td class="num">0.0%</td><td class="num">192.3</td><td>電視世界盃後轉弱、遊戲機受記憶體與儲存成本壓抑、家電受高溫與節能標準支撐</td></tr><tr><td>車用</td><td class="num">161.1</td><td class="num hi">+28.0%</td><td class="num">206.2</td><td class="num pos">+24.0%</td><td class="num">255.7</td><td>區域式架構滲透加速、歐洲 EV 成長、ADAS 與智慧座艙多顆 AI SoC 資料傳輸</td></tr><tr><td>新事業</td><td class="num">29.3</td><td class="num hi">+100.0%</td><td class="num">58.6</td><td class="num pos">+85.0%</td><td class="num">108.3</td><td>100G Optical PHY 完成客戶驗證進入初期量產、伺服器周邊（10GbE／I3C Hub／USB Hub）出貨</td></tr><tr><td><strong>合計</strong></td><td class="num"><strong>1,464.7</strong></td><td class="num pos"><strong>+8.2%</strong></td><td class="num"><strong>1,585.4</strong></td><td class="num pos"><strong>+9.9%</strong></td><td class="num"><strong>1,741.8</strong></td><td>—</td></tr></tbody></table><span class="src">資料來源：GiS 模型。</span>
+
+<div class="chart-wrap"><div class="chart-title">分應用別營收演進（2026F-2028F）</div><div class="chart-sub">億元 · 堆疊柱狀 · GiS 預估</div><div class="chart-container" style="height:235px;width:100%;position:relative"><canvas id="cSegStack" style="display:block;width:100%;height:235px"></canvas></div></div>
+
+<blockquote><strong>與賣方共識對照：</strong>2027 年營收成長，GiS +8.2%、保守方 +8.1%、進取方 +7.1%、
+另一本土研究部 +8.8%。<strong>GiS 落在共識區間內，成長假設並非爭議點。</strong>
+所有的分歧都在利潤率——見下一頁。<br><br>
+結構上值得注意的是：即使車用（+28%）與新事業（+100%）的成長率最高，兩者 2027 年合計占比
+僅 16.7%；占營收 71.2% 的網通與 PC 相關，加權成長率僅約 +4.5%。
+<strong>成長故事的敘事重心與營收重心，是錯位的。</strong></blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>營收模型</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">肆、損益預估與逐季路徑</h1>
+
+<h2 class="ch">2026 年逐季</h2>
+<table class=""><thead><tr><th>季別</th><th>營收（億）</th><th>毛利率</th><th>營費率</th><th>營業利益</th><th>營益率</th><th>EPS（元）</th></tr></thead><tbody><tr><td>1Q26A</td><td class="num">364.2</td><td class="num">49.7%</td><td class="num">37.8%</td><td class="num">43.3</td><td class="num">11.9%</td><td class="num">8.44</td></tr><tr><td>2Q26A</td><td class="num">375.5</td><td class="num neg">47.0%</td><td class="num">37.1%</td><td class="num">37.3</td><td class="num neg">9.9%</td><td class="num neg">7.42</td></tr><tr><td>3Q26F</td><td class="num">380.0</td><td class="num">47.5%</td><td class="num">37.3%</td><td class="num">38.8</td><td class="num">10.2%</td><td class="num">7.63</td></tr><tr><td>4Q26F</td><td class="num neg">345.0</td><td class="num">48.0%</td><td class="num neg">39.0%</td><td class="num neg">31.0</td><td class="num neg">9.0%</td><td class="num neg">6.33</td></tr><tr><td><strong>2026F</strong></td><td class="num"><strong>1,464.7</strong></td><td class="num"><strong>48.0%</strong></td><td class="num"><strong>37.8%</strong></td><td class="num"><strong>150.4</strong></td><td class="num"><strong>10.3%</strong></td><td class="num"><strong>29.83</strong></td></tr></tbody></table><span class="src">資料來源：GiS 模型。</span>
+
+<p><strong>3Q26 假設：</strong>營收 380.0 億元（QoQ +1.2%），略低於保守方 381.6 億與進取方 382.1 億，
+理由是 PC 於上半年提前拉貨的反噬已於 7 月開始顯現。毛利率 47.5%（QoQ +0.5pp），
+反映 6 月起逐案協商的新價格自 3Q26 <strong>陸續</strong>生效——轉嫁有時間差，無法一次到位。</p>
+<p><strong>4Q26 假設：</strong>營收 345.0 億元（QoQ −9.2%），季節性淡季疊加上半年提前拉貨的反噬。
+毛利率升至 48.0%（漲價全季生效），但營費率因營收下滑而反向擴張至 39.0%（<strong>營運槓桿反轉</strong>），
+營益率反而降至 9.0%。這是模型中最容易被忽略的一環：<strong>營收下滑時，固定的研發費用會讓
+營益率跌得比毛利率更多。</strong></p>
+
+<h2 class="ch">年度損益預估</h2>
+<table class=""><thead><tr><th>項目（億元）</th><th>2025A</th><th>2026F</th><th>2027F</th><th>2028F</th></tr></thead><tbody><tr><td>營業收入</td><td class="num">1,227.1</td><td class="num">1,464.7</td><td class="num">1,585.4</td><td class="num">1,741.8</td></tr><tr><td>營業毛利</td><td class="num">613.8</td><td class="num">703.1</td><td class="num">768.9</td><td class="num">853.5</td></tr><tr><td>毛利率</td><td class="num">50.0%</td><td class="num neg">48.0%</td><td class="num">48.5%</td><td class="num">49.0%</td></tr><tr><td>營業費用</td><td class="num">470.2</td><td class="num">552.7</td><td class="num">586.6</td><td class="num">635.8</td></tr><tr><td>營費率</td><td class="num">38.3%</td><td class="num">37.8%</td><td class="num">37.0%</td><td class="num">36.5%</td></tr><tr><td>營業利益</td><td class="num">143.6</td><td class="num">150.4</td><td class="num">182.3</td><td class="num">217.7</td></tr><tr><td>營益率</td><td class="num">11.7%</td><td class="num neg">10.3%</td><td class="num">11.5%</td><td class="num pos">12.5%</td></tr><tr><td>業外損益</td><td class="num">29.0</td><td class="num">26.0</td><td class="num">26.0</td><td class="num">27.3</td></tr><tr><td>稅前淨利</td><td class="num">172.6</td><td class="num">176.4</td><td class="num">208.3</td><td class="num">245.0</td></tr><tr><td>有效稅率</td><td class="num">14.5%</td><td class="num">13.5%</td><td class="num">13.5%</td><td class="num">13.5%</td></tr><tr><td>稅後淨利</td><td class="num">147.5</td><td class="num">153.0</td><td class="num">180.2</td><td class="num">212.0</td></tr><tr><td><strong>EPS（元）</strong></td><td class="num"><strong>28.77</strong></td><td class="num"><strong>29.83</strong></td><td class="num pos"><strong>35.14</strong></td><td class="num pos"><strong>41.33</strong></td></tr></tbody></table><span class="src">資料來源：GiS 模型。</span>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>損益預估</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">肆、三情境設定與驅動因子</h1>
+
+<table class=""><thead><tr><th>項目</th><th>保守情境（25%）</th><th>基礎情境（55%）</th><th>樂觀情境（20%）</th></tr></thead><tbody><tr><td><strong>核心差異</strong></td><td>漲價轉嫁僅覆蓋六成成本</td><td>漲價全額轉嫁但有一季時間差</td><td>新事業提前放量＋營運槓桿重現</td></tr><tr><td>2027 營收成長</td><td class="num">+5.0%</td><td class="num">+8.2%</td><td class="num pos">+12.0%</td></tr><tr><td>2027 毛利率</td><td class="num neg">47.5%</td><td class="num">48.5%</td><td class="num pos">49.5%</td></tr><tr><td>2027 營業費用率</td><td class="num neg">37.8%</td><td class="num">37.0%</td><td class="num pos">36.2%</td></tr><tr><td>2027 營業利益率</td><td class="num neg">9.7%</td><td class="num">11.5%</td><td class="num pos">13.3%</td></tr><tr><td><strong>2027F EPS</strong></td><td class="num neg"><strong>31.50</strong></td><td class="num"><strong>35.14</strong></td><td class="num pos"><strong>39.00</strong></td></tr><tr><td>網通</td><td>寬頻升級遞延，+5%</td><td>10G PON 主流化，+9%</td><td>25G PON 提前商用，+13%</td></tr><tr><td>PC</td><td>2H27 續弱，−5%</td><td>−2%</td><td>企業換機潮延續，+2%</td></tr><tr><td>車用</td><td>歐洲 EV 補貼退場，+18%</td><td>+28%</td><td>區域式架構加速，+38%</td></tr><tr><td>新事業</td><td>100G Optical PHY 驗證延宕，+50%</td><td>+100%</td><td>客戶認證提前完成，+180%</td></tr><tr><td>記憶體成本</td><td>2027 續漲，內嵌 IC 組合持續惡化</td><td>4Q26 觸頂後持平</td><td>2027 年中回落</td></tr><tr><td><strong>Target PE</strong></td><td><strong>17.0x</strong></td><td><strong>19.5x</strong></td><td><strong>23.0x</strong></td></tr><tr><td><strong>目標價</strong></td><td class="num neg"><strong>536</strong></td><td class="num"><strong>685</strong></td><td class="num pos"><strong>897</strong></td></tr></tbody></table><span class="src">資料來源：GiS 模型。</span>
+
+<div class="chart-wrap"><div class="chart-title">三情境 2027F EPS 與目標價</div><div class="chart-sub">元 · GiS 預估</div><div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="cScenario" style="display:block;width:100%;height:220px"></canvas></div></div>
+
+<blockquote><strong>情境設計原則（方法論 §4.2）：</strong>三情境的差異不是 EPS 數字的機械式 ±10%，
+而是由 <strong>漲價轉嫁率、新事業放量時點、記憶體成本走向</strong> 三個可驗證的驅動因子推導。
+三者皆有明確的追蹤指標：<br>
+① 漲價轉嫁率 → 3Q26 財報毛利率是否達 47.5-48%；<br>
+② 新事業放量 → 100G Optical PHY 是否於 4Q26 進入量產準備；<br>
+③ 記憶體成本 → DDR／NAND 現貨價是否於 4Q26 觸頂。<br><br>
+<strong>這三個指標會在未來六個月內全部揭曉，屆時三情境的機率分布應重新校準。</strong></blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>三情境設定</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div pb page">
+<div class="sec-num">伍</div>
+<div class="sec-eyebrow">Section Five</div>
+<div class="sec-line"></div>
+<div class="sec-title">估值分析</div>
+<div class="sec-desc">Forward PE 為主、DCF 與同業比較交叉驗證。結論是：現價已在要求 2027 年 EPS 達 37-38.6 元，高於 GiS 與兩家法說後更新的賣方預估。</div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">伍、估值方法選擇與 PE 估值</h1>
+
+<table class=""><thead><tr><th>方法</th><th>適用性</th><th>權重</th><th>理由</th></tr></thead><tbody><tr><td><strong>Forward PE</strong></td><td class="num hi">★★★★★</td><td class="num hi"><strong>50%</strong></td><td>獲利穩定為正、無虧損年度、同業可比、賣方共識充分，為主要方法</td></tr><tr><td>DCF</td><td>★★★★☆</td><td class="num">30%</td><td>現金流可預測、資本支出低、淨現金部位大，適合交叉驗證；但終值占比 76% 須留意</td></tr><tr><td>Comps</td><td>★★★☆☆</td><td class="num">20%</td><td>台灣成熟型 IC 設計同業樣本充足，但各家終端曝險差異大，僅作區間錨定</td></tr><tr><td>P/B</td><td>✗</td><td class="num">0%</td><td>獲利穩定為正，P/B 不適用（僅虧損或控股公司採用）</td></tr><tr><td>SOTP</td><td>✗</td><td class="num">0%</td><td>各應用共用研發平台與客戶，無法有意義拆分</td></tr></tbody></table><span class="src">依 GiS 估值方法論 §3.1 公司類型適用方法。</span>
+
+<h2 class="ch">目標本益比的推導</h2>
+<table class=""><thead><tr><th>錨點</th><th>數值</th><th>說明</th></tr></thead><tbody><tr><td>自身 5 年 trailing PE 平均</td><td class="num">18.26x</td><td>2021-07 至 2026-08，σ 6.14（含循環高峰與 2022 股災，離散度大）</td></tr><tr><td>自身 3 年 trailing PE 平均</td><td class="num">21.08x</td><td>2023-08 起，獲利正常化後</td></tr><tr><td><strong>自身 2 年 trailing PE 平均</strong></td><td class="num hi"><strong>18.92x</strong></td><td><strong>2024-08 起，σ 3.16，離散度最小、最具代表性</strong>（+1σ ＝ 22.08x）</td></tr><tr><td>同業 TTM PE 中位數（排除聯發科）</td><td class="num">17.5x</td><td>見下頁 Comps</td></tr><tr><td>賣方目標本益比（法說後，2027F 基準）</td><td class="num">18x ／ 22x</td><td>保守方 18x、進取方 22x</td></tr><tr><td>賣方目標本益比（法說前，2027F 基準）</td><td class="num">16x ／ 20x</td><td>外資方 16x、另一本土方 20x</td></tr><tr><td><strong>GiS 基礎情境採用</strong></td><td class="num hi"><strong>19.5x</strong></td><td>高於自身 2 年均值與同業中位數（反映車用與新事業選擇權），低於進取方 22x（營費率高原壓抑營益率天花板於 12%）</td></tr></tbody></table><span class="src">資料來源：GiS 依單季 EPS 與台股財報公告日重建 PE 序列；賣方目標本益比取自 pCloud 券商報告流。</span>
+
+<h2 class="ch">PE 5×5 敏感度（Target PE × 2027F EPS → 目標價）</h2>
+<table class=""><thead><tr><th>PE ＼ EPS</th><th>31.50</th><th>33.30</th><th><strong>35.14</strong></th><th>37.00</th><th>39.00</th></tr></thead><tbody><tr><td>16.0x</td><td class="num">504</td><td class="num">533</td><td class="num">562</td><td class="num">592</td><td class="num">624</td></tr><tr><td>18.0x</td><td class="num">567</td><td class="num">599</td><td class="num">633</td><td class="num">666</td><td class="num">702</td></tr><tr><td><strong>19.5x</strong></td><td class="num">614</td><td class="num">649</td><td class="num hi"><strong>685</strong></td><td class="num">722</td><td class="num">760</td></tr><tr><td>21.0x</td><td class="num">662</td><td class="num">699</td><td class="num">738</td><td class="num">777</td><td class="num">819</td></tr><tr><td>23.0x</td><td class="num">724</td><td class="num">766</td><td class="num">808</td><td class="num">851</td><td class="num">897</td></tr></tbody></table><span class="src">中心格（19.5x × 35.14）＝ 基礎情境目標價 685 元。資料來源：GiS 模型。</span>
+
+<blockquote><strong>讀表重點：</strong>即使採用市場共識最樂觀的 2027F EPS 37.84 元，
+要讓目標價達到 8 月 4 日收盤價 723 元，也需要目標本益比 <strong>19.1x</strong>；
+若要支撐 8 月 5 日盤中價 752 元，需 <strong>19.9x</strong>。
+換言之，<strong>現價已經在對 2027 年給出接近 20 倍的評價，而這需要漲價完全轉嫁與新事業如期放量
+同時成立。</strong></blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>PE 估值</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">伍、DCF 估值（交叉驗證）</h1>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+<table class=""><thead><tr><th>WACC 參數</th><th>數值</th></tr></thead><tbody><tr><td>無風險利率 Rf（台灣 10 年期公債）</td><td class="num">1.60%</td></tr><tr><td>市場風險溢酬 ERP</td><td class="num">6.50%</td></tr><tr><td>Beta（5 年，對加權指數）</td><td class="num">1.15</td></tr><tr><td>權益成本 Ke ＝ Rf + β×ERP</td><td class="num">9.07%</td></tr><tr><td>負債成本 Kd</td><td>淨現金公司</td></tr><tr><td><strong>WACC</strong></td><td class="num hi"><strong>9.07%</strong></td></tr></tbody></table>
+<table class=""><thead><tr><th>其他輸入</th><th>數值</th></tr></thead><tbody><tr><td>永續成長率 g</td><td class="num">2.50%</td></tr><tr><td>明確預測期</td><td>2027-2031（5 年）</td></tr><tr><td>折現慣例</td><td>Mid-year convention</td></tr><tr><td>有效稅率</td><td class="num">13.5%</td></tr><tr><td>淨現金</td><td class="num hi">535.0 億</td></tr><tr><td>流通股數</td><td class="num">5.1286 億股</td></tr></tbody></table>
+</div>
+<span class="src">永續成長率 2.5% 略高於台灣長期通膨，反映網通內容價值升級的長期趨勢，'
+'但已因中國國產替代的長期份額侵蝕而未給更高。</span>
+
+<h2 class="ch">未槓桿自由現金流折現</h2>
+<table class=""><thead><tr><th>年度</th><th>營收（億）</th><th>營業利益（億）</th><th>營益率</th><th>UFCF（億）</th><th>折現因子</th><th>現值（億）</th></tr></thead><tbody><tr><td>2027F</td><td class="num">1,585.4</td><td class="num">182.3</td><td class="num">11.5%</td><td class="num">151.8</td><td class="num">0.957</td><td class="num">145.3</td></tr><tr><td>2028F</td><td class="num">1,741.8</td><td class="num">217.7</td><td class="num">12.5%</td><td class="num">176.6</td><td class="num">0.878</td><td class="num">155.0</td></tr><tr><td>2029F</td><td class="num">1,872.4</td><td class="num">239.7</td><td class="num">12.8%</td><td class="num">202.9</td><td class="num">0.805</td><td class="num">163.3</td></tr><tr><td>2030F</td><td class="num">1,984.8</td><td class="num">256.0</td><td class="num">12.9%</td><td class="num">222.6</td><td class="num">0.738</td><td class="num">164.2</td></tr><tr><td>2031F</td><td class="num">2,084.0</td><td class="num">270.9</td><td class="num">13.0%</td><td class="num">239.6</td><td class="num">0.676</td><td class="num">162.1</td></tr><tr><td><strong>明確期現值合計</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="num hi"><strong>789.9</strong></td></tr></tbody></table><span class="src">資料來源：GiS 模型。</span>
+
+<h2 class="ch">股權價值橋接</h2>
+<table class=""><thead><tr><th>項目</th><th>金額（億元）</th></tr></thead><tbody><tr><td>明確期現值合計</td><td class="num">789.9</td></tr><tr><td>終值 TV ＝ UFCF₂₀₃₁ ×(1+g)／(WACC−g)</td><td class="num">3,735.3</td></tr><tr><td>終值現值（占 EV 76%）</td><td class="num">2,526.8</td></tr><tr><td>企業價值 EV</td><td class="num">3,316.7</td></tr><tr><td>＋淨現金</td><td class="num">535.0</td></tr><tr><td><strong>股權價值</strong></td><td class="num hi"><strong>3,851.7</strong></td></tr><tr><td><strong>DCF 每股價值</strong></td><td class="num hi"><strong>NT$ 751</strong></td></tr></tbody></table><span class="src">資料來源：GiS 模型。</span>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>DCF 估值</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">伍、DCF 敏感度與終值風險</h1>
+
+<h2 class="ch">DCF 5×5 敏感度（WACC × 永續成長率 g）→ 每股價值</h2>
+<table class=""><thead><tr><th>WACC ＼ g</th><th>1.5%</th><th>2.0%</th><th><strong>2.5%</strong></th><th>3.0%</th><th>3.5%</th></tr></thead><tbody><tr><td>8.07%</td><td class="num">771</td><td class="num">815</td><td class="num">868</td><td class="num">931</td><td class="num">1,007</td></tr><tr><td>8.57%</td><td class="num">723</td><td class="num">761</td><td class="num">805</td><td class="num">856</td><td class="num">918</td></tr><tr><td><strong>9.07%</strong></td><td class="num">682</td><td class="num">714</td><td class="num hi"><strong>751</strong></td><td class="num">794</td><td class="num">845</td></tr><tr><td>9.57%</td><td class="num">646</td><td class="num">673</td><td class="num">705</td><td class="num">742</td><td class="num">784</td></tr><tr><td>10.07%</td><td class="num">614</td><td class="num">638</td><td class="num">665</td><td class="num">696</td><td class="num">732</td></tr></tbody></table><span class="src">中心格（WACC 9.07% × g 2.5%）＝ 採用值 751 元。資料來源：GiS 模型。</span>
+
+<div class="chart-wrap"><div class="chart-title">DCF 敏感度分布</div><div class="chart-sub">每股價值（元）· WACC × g</div><div class="chart-container" style="height:220px;width:100%;position:relative"><canvas id="cDcfSens" style="display:block;width:100%;height:220px"></canvas></div></div>
+
+<blockquote><strong>終值占比 76% 的意涵——這個 DCF 必須謹慎使用。</strong><br><br>
+明確期（2027-2031）五年的現值合計僅 789.9 億元，而終值現值高達 2,526.8 億元，
+占企業價值的 <strong>76%</strong>。這代表 DCF 的結果對「2031 年之後瑞昱長什麼樣子」
+的假設高度敏感，而那正是最不可知的部分。<br><br>
+兩個下修情境值得注意：
+<ul style="margin:8px 0 0 0">
+<li>若永續成長率由 2.5% 降至 2.0%（反映<strong>中國國產替代</strong>對長期份額的侵蝕），
+每股價值降至 <strong>714 元</strong>。</li>
+<li>若 WACC 由 9.07% 升至 9.57%（反映<strong>獲利波動度上升</strong>——2Q26 的 EPS miss
+本身就是波動度的證據），降至 <strong>705 元</strong>。</li>
+<li>兩者同時發生，降至 <strong>673 元</strong>。</li>
+</ul><br>
+<strong>GiS 因此將 DCF 的權重限制在 30%，並將其 751 元的結果視為「若一切按計畫進行」的上緣參考，
+而非中心預期。</strong>這也是加權目標價（694 元）低於 DCF 單一結果的原因。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>DCF 敏感度</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">伍、同業比較（Comps）</h1>
+
+<p><strong>Peer 選擇邏輯：</strong>選取台灣上市櫃、以自有產品為主（排除設計服務型如智原、創意）、
+獲利穩定為正、市值 500 億元以上的 IC 設計公司。<strong>聯發科列出但排除於統計之外</strong>——
+其 AI ASIC 與手機 SoC 業務使評價落在完全不同的級距（TTM PE 61.4x），納入會嚴重扭曲中位數。</p>
+
+<table class=""><thead><tr><th>代號</th><th>公司</th><th>股價</th><th>TTM EPS</th><th>TTM PE</th><th>業務定位與可比性</th></tr></thead><tbody><tr><td>2454</td><td>聯發科</td><td class="num">3,865.0</td><td class="num">62.90</td><td class="num neg">61.4x</td><td>AI ASIC／手機 SoC —— <strong>排除於統計</strong>，評價級距不同</td></tr><tr><td>3034</td><td>聯詠</td><td class="num">524.0</td><td class="num">24.41</td><td class="num">21.5x</td><td>驅動 IC ＋ SoC，規模與成熟度最接近瑞昱</td></tr><tr><td>3227</td><td>原相</td><td class="num">205.5</td><td class="num">11.29</td><td class="num">18.2x</td><td>感測 IC，消費性為主</td></tr><tr><td>4966</td><td>譜瑞-KY</td><td class="num">584.0</td><td class="num">32.90</td><td class="num">17.8x</td><td>高速介面 IC，AI 伺服器曝險高於瑞昱</td></tr><tr><td>8299</td><td>群聯</td><td class="num">1,820.0</td><td class="num">105.25</td><td class="num">17.3x</td><td>NAND 控制 IC，記憶體循環曝險</td></tr><tr><td>5269</td><td>祥碩</td><td class="num">1,360.0</td><td class="num">81.16</td><td class="num">16.8x</td><td>USB／PCIe 控制 IC，與瑞昱 PC 週邊高度重疊</td></tr><tr><td>3592</td><td>瑞鼎</td><td class="num">241.0</td><td class="num">16.01</td><td class="num">15.1x</td><td>驅動 IC，成熟低成長</td></tr><tr><td><strong>2379</strong></td><td><strong>瑞昱</strong></td><td class="num"><strong>723.0</strong></td><td class="num"><strong>27.73</strong></td><td class="num hi"><strong>26.1x</strong></td><td><strong>網通＋PC 週邊 IC，客戶最分散</strong></td></tr></tbody></table><span class="src">資料來源：tw-stock-scanner 資料庫，TTM PE 以 2026-08-04 收盤價計算，口徑一致。</span>
+
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>同業比較（一）</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">伍、同業比較（Comps）：統計與相對位置</h1>
+
+<div class="chart-grid">
+  <div class="chart-wrap"><div class="chart-title">同業 TTM PE 分布</div><div class="chart-sub">倍 · @2026-08-04</div><div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="cComps" style="display:block;width:100%;height:225px"></canvas></div></div>
+  <div class="chart-wrap"><div class="chart-title">營益率 vs 本益比：瑞昱的位置</div><div class="chart-sub">X 軸＝2025 營益率 %，Y 軸＝TTM PE</div><div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="cCompsScatter" style="display:block;width:100%;height:225px"></canvas></div></div>
+</div>
+
+<table class=""><thead><tr><th>統計（排除聯發科）</th><th>數值</th></tr></thead><tbody><tr><td>Max</td><td class="num">21.5x</td></tr><tr><td>75th percentile</td><td class="num">18.2x</td></tr><tr><td><strong>Median</strong></td><td class="num hi"><strong>17.5x</strong></td></tr><tr><td>25th percentile</td><td class="num">16.8x</td></tr><tr><td>Min</td><td class="num">15.1x</td></tr><tr><td><strong>瑞昱 @723</strong></td><td class="num neg"><strong>26.1x（溢價 49%）</strong></td></tr><tr><td>瑞昱 @752（8/5 盤中）</td><td class="num neg">27.1x（溢價 55%）</td></tr><tr><td><strong>Comps 隱含目標價</strong></td><td class="num hi"><strong>17.5x × 35.14 ＝ NT$ 616</strong></td></tr></tbody></table><span class="src">資料來源：GiS 計算。</span>
+
+<blockquote><strong>右圖是本頁的重點：</strong>把 2025 年營業利益率放在 X 軸、TTM 本益比放在 Y 軸，
+瑞昱落在<strong>左上角</strong>——同業中營益率最低（11.7%），本益比卻最高（26.1x）。
+其餘同業大致沿著「營益率越高、本益比越高」的直覺分布，唯獨瑞昱偏離。<br><br>
+這個偏離需要理由。可能的理由是車用與新事業的成長選擇權、客戶分散度最高的抗風險能力、
+以及市占龍頭地位。GiS 認為前兩項成立、值得溢價，
+<strong>但 49% 的溢價幅度已超出這些理由所能支撐的範圍。</strong></blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>同業比較</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">伍、Football Field 與目標價</h1>
+
+<table class=""><thead><tr><th>估值方法</th><th>區間下緣</th><th>區間上緣</th><th>中心值</th><th>權重</th><th>說明</th></tr></thead><tbody><tr><td>PE 三情境加權（2027F EPS）</td><td class="num">536</td><td class="num">897</td><td class="num hi"><strong>690</strong></td><td class="num">50%</td><td>保守 17.0x×31.50、基礎 19.5x×35.14、樂觀 23.0x×39.00</td></tr><tr><td>DCF（WACC 9.07%／g 2.5%）</td><td class="num">646</td><td class="num">845</td><td class="num hi"><strong>751</strong></td><td class="num">30%</td><td>終值占 EV 76%，權重限縮</td></tr><tr><td>Comps（同業 Median PE）</td><td class="num">530</td><td class="num">756</td><td class="num hi"><strong>616</strong></td><td class="num">20%</td><td>同業 TTM PE 中位數 17.5x × 2027F EPS</td></tr><tr><td><strong>★ GiS 12 個月目標價</strong></td><td>—</td><td>—</td><td class="num hi"><strong>NT$ 694</strong></td><td class="num">100%</td><td>—</td></tr></tbody></table><span class="src">資料來源：GiS 模型。</span>
+
+<div class="chart-wrap"><div class="chart-title">Football Field：三種方法的估值區間</div><div class="chart-sub">元 · 橫條為區間，菱形為中心值</div><div class="chart-container" style="height:235px;width:100%;position:relative"><canvas id="cFootball" style="display:block;width:100%;height:235px"></canvas></div></div>
+
+<h2 class="ch">評等落格（GiS 估值方法論 §4.3 五級制）</h2>
+<table class=""><thead><tr><th>對照價格</th><th>上檔空間</th><th>§4.3 落格</th></tr></thead><tbody><tr><td><strong>參考價 NT$723（2026-08-04 收盤）</strong></td><td class="num neg"><strong>−4.1%</strong></td><td><strong>中立 (N)</strong>（區間 −5% ～ +5%）</td></tr><tr><td>盤中價 NT$752（2026-08-05 11:22）</td><td class="num neg">−7.8%</td><td>減碼 (UW)（區間 &lt; −5%）</td></tr></tbody></table><span class="src">本報告於盤中撰寫，依 GiS 紀律不引用當日收盤價，評等以 8 月 4 日收盤價 723 元為基準。</span>
+
+<blockquote><strong>必須明確揭露的一點：</strong>本評等落在中立區間的<strong>下緣</strong>，
+距離減碼 (UW) 門檻僅 0.9 個百分點。以 2026 年 8 月 5 日盤中價 752 元計算，
+上檔空間為 −7.8%，已落入減碼區間。<br><br>
+GiS 依照盤中不引用當日收盤價的紀律，以 8 月 4 日收盤價 723 元為評等基準；
+但投資人應清楚認知，<strong>此評等對股價的微小變動極度敏感——股價每上漲 1%，就更靠近減碼一步。</strong>
+若 3Q26 財報未能證實毛利率回升，或股價在無基本面改善下續漲，GiS 將檢討下修評等。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>Football Field 與目標價</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="page">
+<div class="body-page">
+  <div class="page-header"><div><div class="page-eyebrow">伍 · 價格與估值層</div><div class="page-title">股價、估值區間、三情境路徑</div></div><div class="page-num">32</div></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
+    <!-- 圖 A：股價 vs 加權（標準化）-->
+    <div class="chart-wrap">
+      <div class="chart-title">5 年股價 vs 加權指數（標準化 = 100）</div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartRel"></canvas></div>
+      <div style="font-size:10px;color:#6b7a9a;margin-top:4px;line-height:1.4">
+        當前股價：<strong>723.0</strong> · 5Y 個股相對 alpha = <span id="alphaSpan"><strong>−104.7pp</strong>（瑞昱 +38.2% vs 加權 +142.9%）</span>
+      </div>
+    </div>
+
+    <!-- 圖 B：Fan Chart -->
+    <div class="chart-wrap">
+      <div class="chart-title">12M 三情境 Fan Chart（自 2026-08-04）</div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartFan"></canvas></div>
+      <div style="font-size:10px;color:#6b7a9a;margin-top:4px;line-height:1.4">
+        保守 <strong>536</strong>（-25.9%）｜
+        <span style="color:#daa520">基礎 <strong>685</strong>（−5.3%）</span>｜
+        樂觀 <strong>897</strong>（+24.1%）
+      </div>
+    </div>
+  </div>
+
+  <!-- 圖 C：PE Band（河流圖）-->
+  <div class="chart-wrap">
+    <div class="chart-title">PE Band 河流圖（5 年 TTM EPS × 歷史 PE 帶）</div>
+    <div style="position:relative;width:100%;height:240px"><canvas id="chartPE"></canvas></div>
+    <div style="font-size:10px;color:#6b7a9a;margin-top:4px;line-height:1.4">
+      5 年 PE 平均 <strong>18.26x</strong> · ±1σ <strong>12.12-24.41x</strong> ·
+      當前 PE <strong style="color:#5e0d2e">26.1x</strong>（位於歷史區間 89% 分位）·
+      TTM EPS 27.73（2025Q3~2026Q2）
+    </div>
+  </div>
+
+  <blockquote style="margin-top:6px;font-size:11.5px">
+    <strong>讀圖要點：</strong>① <strong>PE 位階 26.1x（TTM EPS 27.73 元）位於 5 年區間 89% 分位、已站上 +1σ（24.4x）之上</strong>；以離散度最小的 2 年區間衡量（平均 18.9x、+1σ 22.1x）偏離更明顯。估值並未折價，而是預支了「漲價全額轉嫁」與「新事業如期放量」兩項尚未驗證的前提。② Fan Chart 上檔（樂觀 897 − 現價 723）＝ +174 元、下檔（現價 723 − 保守 536）＝ −187 元，<strong>R/R ≈ 0.93 : 1，風險報酬略偏向下</strong>。③ 五年累積相對報酬 <strong>−104.7pp</strong>（瑞昱 +38.2% vs 加權指數 +142.9%）── 長期市場並未將瑞昱定價為 AI 受惠股；2026 年 4 月底至 7 月初的 +56% 是一次評價重估嘗試，已被 2Q26 財報（EPS 低於市場預期 14%）部分否定。
+  </blockquote>
+  <div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>價格、估值區間與三情境路徑</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+</div>
+
+<div class="full-page pb page body-page alt">
+<h1 class="ch">伍、三個檢驗：現價在要求什麼？</h1>
+
+<h2 class="ch">檢驗一：反推現價隱含的假設</h2>
+<table class=""><thead><tr><th>檢驗</th><th>8/4 收盤 723</th><th>8/5 盤中 752</th></tr></thead><tbody><tr><td>以 GiS 2027F EPS 35.14 反推隱含 PE</td><td class="num hi">20.6x</td><td class="num hi">21.4x</td></tr><tr><td>以市場共識 2027F EPS 37.84 反推隱含 PE</td><td class="num">19.1x</td><td class="num">19.9x</td></tr><tr><td>以 GiS 目標 PE 19.5x 反推所需 EPS</td><td class="num neg">37.08 元</td><td class="num neg">38.56 元</td></tr></tbody></table><span class="src">資料來源：GiS 計算。</span>
+<p><strong>現價已在要求 2027 年 EPS 達 37.08 至 38.56 元。</strong>這高於 GiS 基礎情境（35.14）、
+高於兩家法說後更新的賣方預估（35.42／35.72），僅低於市場共識（37.84）——
+而市場共識的 2026F EPS 33.09 元本身已與 2Q26 實績矛盾：上半年實際僅 15.86 元，
+隱含下半年需達 17.23 元，與管理層「下半年承壓」的口徑不符。
+<strong>共識向下修正的風險大於向上。</strong></p>
+
+<h2 class="ch">檢驗二：歷史本益比位置</h2>
+<table class=""><thead><tr><th>基準</th><th>平均</th><th>+1σ</th><th>現價位置（26.1x @723）</th><th>盤中位置（27.1x @752）</th></tr></thead><tbody><tr><td>5 年（2021-07 起）</td><td class="num">18.26x</td><td class="num">24.41x</td><td class="num neg">高於 +1σ</td><td class="num neg">高於 +1σ</td></tr><tr><td>3 年（2023-08 起）</td><td class="num">21.08x</td><td class="num">25.83x</td><td class="num neg">略高於 +1σ</td><td class="num neg">高於 +1σ</td></tr><tr><td><strong>2 年（2024-08 起，σ 最小）</strong></td><td class="num"><strong>18.92x</strong></td><td class="num"><strong>22.08x</strong></td><td class="num neg"><strong>遠高於 +1σ</strong></td><td class="num neg"><strong>遠高於 +1σ</strong></td></tr></tbody></table><span class="src">PE 序列由 GiS 依單季 EPS 與台股財報公告日重建。</span>
+
+<h2 class="ch">檢驗三：相對報酬的長期訊息</h2>
+<p>過去 12 個月瑞昱絕對報酬 <strong>+20.8%</strong>，相對加權指數報酬 <strong>−49.4%</strong>；
+拉長到五年，瑞昱累積 +38.2%，加權指數 +142.9%，<strong>相對報酬 −104.7 個百分點</strong>。</p>
+<p>這個反差很重要：在大盤與 AI 供應鏈狂飆的五年裡，瑞昱大幅落後。
+<strong>市場長期並不把瑞昱視為 AI 直接受惠標的。</strong>2026 年 4 月底至 7 月初的 +56% 上漲
+（537 → 840 元）是一次「AI 外溢重估」的嘗試，但 7 月 13 日單日跌停 −10.00%、
+以及 2Q26 財報 EPS 低於市場預期 14% 之後，股價回落至 683 元（7/31）。
+目前 723-752 元是這波修正後的反彈。</p>
+
+<blockquote><strong>GiS 判讀：</strong>評價重估的嘗試已被基本面部分否定。
+要讓 20 倍以上的評價站穩，需要看到<strong>毛利率實質回升的證據</strong>（3Q26 財報），
+而非只有漲價的宣告。在證據出現之前，現價不提供風險補償。</blockquote>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>現價隱含檢驗</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="sec-div pb page">
+<div class="sec-num">陸</div>
+<div class="sec-eyebrow">Section Six</div>
+<div class="sec-line"></div>
+<div class="sec-title">催化劑、風險與投資建議</div>
+<div class="sec-desc">三個驅動因子將在未來六個月內全部揭曉。本章列出追蹤清單、十二項風險，以及 GiS 的投資結論。</div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">陸、催化劑與追蹤指標</h1>
+
+<table class=""><thead><tr><th>時點</th><th>事件</th><th>追蹤重點</th><th>影響程度</th></tr></thead><tbody><tr><td>2026 年 8-9 月</td><td>7／8 月月營收</td><td>是否維持 120 億以上、YoY 是否守住 +15%</td><td class="pos">高</td></tr><tr><td><strong>2026 年 10 月底</strong></td><td><strong>3Q26 法說會</strong></td><td><strong>毛利率是否達 47.5-48%</strong></td><td class="pos"><strong>最高</strong></td></tr><tr><td>2026 年 10 月底</td><td>3Q26 營業費用率</td><td>是否守住 37%（管理層承諾的費用紀律）</td><td class="pos">高</td></tr><tr><td>2026 年 4Q</td><td>100G Optical PHY 客戶驗證進度</td><td>是否進入量產準備 —— 樂觀情境的關鍵前提</td><td class="pos">中高</td></tr><tr><td>2027 年 1 月</td><td>4Q26 法說會與 2027 年展望</td><td>4Q26 營收季減幅度、2027 毛利率 guidance</td><td class="pos">高</td></tr><tr><td>2027 年上半</td><td>Layer 3 管理型交換器專案落地</td><td>開發週期 10-12 個月後的實質出貨</td><td>中</td></tr><tr><td>2027 全年</td><td>Wi-Fi 8 研發與客戶合作</td><td>互通性測試進度（2028 年成長的前置指標）</td><td>中</td></tr><tr><td>持續</td><td>記憶體（DDR／NAND）現貨價</td><td>是否觸頂回落 —— 毛利率修復的最大外生變數</td><td class="pos">高</td></tr><tr><td>持續</td><td>中國本土乙太網路 PHY 廠商市占</td><td>國產替代速度（影響長期份額與終值假設）</td><td>中（長期）</td></tr></tbody></table><span class="src">資料來源：GiS 整理。</span>
+
+<div class="risk-matrix">
+  <div class="risk-card up">
+    <h4>上行催化劑（目標價上修條件）</h4>
+    <div class="risk-item"><strong>3Q26 毛利率超過 48%</strong> → 證明漲價轉嫁優於預期，
+    2027 毛利率假設可上修至 49%，2027F EPS 升至 36.8 元，目標價升至 <strong>~730 元</strong></div>
+    <div class="risk-item"><strong>記憶體成本 4Q26 觸頂回落</strong> → 內嵌記憶體產品的組合拖累消失，
+    毛利率修復幅度加大</div>
+    <div class="risk-item"><strong>100G Optical PHY 提前完成客戶認證</strong> →
+    新事業 2027 成長由 +100% 上修至 +180%，且帶動產品組合往高毛利移動</div>
+    <div class="risk-item"><strong>營業費用率跌破 36%</strong> → 若營收成長帶來的營運槓桿超過
+    研發投入增速，營益率天花板打開，可支持目標本益比上修至 21-23x</div>
+  </div>
+  <div class="risk-card dn">
+    <h4>下行風險（目標價下修條件）</h4>
+    <div class="risk-item"><strong>3Q26 毛利率低於 47%</strong> → 漲價轉嫁失敗，
+    2027 毛利率降至 47.5%，2027F EPS 降至 31.5 元，目標價降至 <strong>~536 元</strong></div>
+    <div class="risk-item"><strong>4Q26 營收季減超過 12%</strong> → 上半年提前拉貨的反噬深於預期，
+    且營運槓桿反轉使營益率跌破 9%</div>
+    <div class="risk-item"><strong>營業費用率突破 39% 且未回落</strong> →
+    費用高原確立，營益率天花板下修，目標本益比應降至 17x 以下</div>
+    <div class="risk-item"><strong>存貨跌價損失擴大</strong> → 2Q26 DOI 已升至 107 天，
+    若下半年需求不如預期，跌價損失將直接侵蝕毛利</div>
+  </div>
+</div>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>催化劑與風險矩陣</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">陸、風險評估（十二項）</h1>
+
+<h2 class="ch">產業風險</h2>
+<table class=""><thead><tr><th>編號</th><th>風險</th><th>機率</th><th>衝擊</th><th>說明</th></tr></thead><tbody><tr><td>R1</td><td>上游成本的結構性上升</td><td class="neg">高</td><td class="neg">高</td><td>晶圓代工、記憶體、封測三重漲價已在 2Q26 兌現（毛利率 −2.7pp）。若轉嫁率僅六成，2027F EPS 將由 35 元降至 31.5 元</td></tr><tr><td>R2</td><td>PC 市場結構性疲弱</td><td class="neg">高</td><td>中</td><td>IDC 預估 2026 年全球 PC 出貨衰退約 11%。PC 相關占營收 33%，規格升級無法完全抵銷量的下滑</td></tr><tr><td>R3</td><td>中國國產替代</td><td class="neg">中</td><td class="neg">高（長期）</td><td>55-60% 出貨流向中國。慢性且不可逆的份額侵蝕，壓抑長期成長率與 DCF 終值假設</td></tr><tr><td>R4</td><td>消費性電子需求分化</td><td class="neg">高</td><td>中</td><td>電視世界盃後轉弱、遊戲機受成本壓抑；占營收約 13%</td></tr></tbody></table>
+
+<h2 class="ch">公司風險</h2>
+<table class=""><thead><tr><th>編號</th><th>風險</th><th>機率</th><th>衝擊</th><th>說明</th></tr></thead><tbody><tr><td><strong>R5</strong></td><td><strong>營業費用率的結構性高原</strong></td><td class="neg"><strong>高</strong></td><td class="neg"><strong>高</strong></td><td><strong>GiS 認定的首要風險。</strong>營費率自 2021 年 34.0% 升至 2026F 37.8%，管理層明示維持約 37%。即使毛利率回到 49%，營益率天花板也只有 12%（2021 年為 16.4%）</td></tr><tr><td>R6</td><td>新事業的投入產出時間差</td><td class="neg">高</td><td>中</td><td>Layer 3 貢獻落 2027-2028、Wi-Fi 8 導入 2028、100G Optical PHY 仍在驗證。研發費用現在付，收入等兩到三年</td></tr><tr><td>R7</td><td>董監持股偏低的治理風險</td><td>低</td><td>中</td><td>董監持股僅 3.2%，管理層與股東利益綁定弱；帳上 535 億淨現金使公司成為潛在股權爭奪標的</td></tr><tr><td>R8</td><td>產品廣度帶來的資源分散</td><td>中</td><td>中</td><td>逾 1,000 種料號橫跨七大應用，每個新戰場的投入強度都不足以打敗專注型對手</td></tr></tbody></table>
+
+<h2 class="ch">財務與估值風險</h2>
+<table class=""><thead><tr><th>編號</th><th>風險</th><th>機率</th><th>衝擊</th><th>說明</th></tr></thead><tbody><tr><td>R9</td><td>存貨水位與跌價風險</td><td>中</td><td>中</td><td>2Q26 存貨 243.1 億、DOI 107 天。外資研究指出 1Q26 的存貨沖銷「因公司備貨行為與會計政策，預期未來各季持續發生」</td></tr><tr><td>R10</td><td>有效稅率跳升</td><td class="neg">已發生</td><td>中</td><td>自 2024 年 6.2-6.6%（租稅優惠期）跳升至 2025 年 15.1-15.5%、2026Q1 13.0%。永久性的 EPS 下修因素，2024 年獲利不可直接類比</td></tr><tr><td><strong>R11</strong></td><td><strong>本益比已站上歷史區間上緣</strong></td><td class="neg"><strong>已發生</strong></td><td class="neg"><strong>高</strong></td><td>trailing PE 26.1x @723（27.1x @752）。vs 自身 2 年均值 18.9x（+1σ 22.1x）、同業中位數 17.5x，溢價 49%</td></tr><tr><td>R12</td><td>AI 敘事與獲利兌現的落差</td><td>中</td><td class="neg">高</td><td>12 個月相對報酬 −49.4%、5 年 −104.7pp。市場長期未將瑞昱定價為 AI 受惠股；4-7 月的 +56% 重估嘗試已被 2Q26 財報部分否定</td></tr></tbody></table><span class="src">資料來源：GiS 分析。</span>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>風險評估</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">陸、投資建議</h1>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-val">中立<em> (N)</em></div><div class="kpi-lbl">GiS 評等</div></div>
+  <div class="kpi gold"><div class="kpi-val">694<em> 元</em></div><div class="kpi-lbl">12 個月目標價</div></div>
+  <div class="kpi green"><div class="kpi-val">−4.1<em>%</em></div><div class="kpi-lbl">上檔空間（vs 723）</div></div>
+  <div class="kpi"><div class="kpi-val">19.5<em>x</em></div><div class="kpi-lbl">目標本益比（2027F）</div></div>
+</div>
+
+<h2 class="ch">結論</h2>
+<p>GiS 以 <strong>中立 (N)</strong> 評等、12 個月目標價 <strong>NT$694</strong> 首次覆蓋瑞昱 2379。</p>
+
+<p>瑞昱是台灣 IC 設計產業中<strong>護城河最寬、客戶最分散</strong>的公司之一。它在 PC 乙太網路
+（市占 70-80%）與音訊 codec（70%+）擁有近乎統治的地位，年出貨十億顆級的規模讓它在成熟製程
+握有實質議價力，而無單一客戶超過 10% 的結構使它在 2022-2023 年產業下行週期中仍維持正獲利。
+這些都是真實且難以複製的優勢。</p>
+
+<p>AI 帶動的規格升級也是真實的成長動能：Wi-Fi 6 升級到 Wi-Fi 7、1GbE 升級到 2.5GbE／10GbE、
+10G PON 成為寬頻主流規格、車輛架構由網域式轉向區域式——每一項都會提高瑞昱的單機內容價值。
+2026 年營收預估成長 19.4% 至 1,464.7 億元，連續兩季刷新單季歷史高，都不是虛的。</p>
+
+<p><strong>問題在於這些成長沒有轉化為股東的每股盈餘。</strong>2026 年營收將較 2021 年高峰成長 38.8%，
+EPS 卻仍低 9.6%。營業利益率從 16.4% 降到 10.3%，下滑的 6.1 個百分點中，
+<strong>營業費用率的擴張占了 62%，毛利率只占 38%</strong>。而營業費用率是策略選擇——
+它是瑞昱為了買進 AI、車用、伺服器、光通訊研發門票所付的永久性代價，管理層已明示維持約 37%。
+<strong>漲價修得了毛利率，修不了營費率。</strong></p>
+
+<p>估值上，現價 723 元對應 trailing PE 26.1x，高於自身 2 年均值 18.9x、同業中位數 17.5x 達 49%，
+隱含 2027 年 EPS 需達 37.08 元——高於 GiS 預估（35.14）與兩家法說後更新的賣方預估
+（35.42／35.72）。<strong>市場已為「漲價全額轉嫁」與「新事業如期放量」兩項尚未驗證的前提付款。</strong></p>
+
+<blockquote><strong>什麼會讓 GiS 改變看法：</strong><br>
+<strong>上修至增加持股 (OW)</strong> —— 3Q26 財報毛利率達 48% 以上<strong>且</strong>營業費用率守住 37% 以下，
+證明漲價轉嫁與費用紀律同時成立；或 100G Optical PHY 提前完成客戶認證進入量產。<br><br>
+<strong>下修至減碼 (UW)</strong> —— 3Q26 毛利率低於 47%；或 4Q26 營收季減超過 12%；
+或股價在無基本面改善下續漲至 760 元以上（屆時上檔空間將擴大至 −8.7%）。<br><br>
+<strong>時間點明確：2026 年 10 月底的 3Q26 法說會，是驗證整個論點的單一最關鍵事件。</strong></blockquote>
+
+<h2 class="ch">投資評等定義（GiS 估值方法論 §4.3）</h2>
+<table class=""><thead><tr><th>評等</th><th>12 個月上檔空間</th></tr></thead><tbody><tr><td>買進 (Buy)</td><td>&gt; +15%</td></tr><tr><td>增加持股 (OW)</td><td>+5% ～ +15%</td></tr><tr><td><strong>中立 (N)</strong></td><td><strong>−5% ～ +5%</strong></td></tr><tr><td>減碼 (UW)</td><td>&lt; −5%</td></tr></tbody></table>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>投資建議</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page">
+<h1 class="ch">附錄：季度財務明細（2019Q1-2026Q2）</h1>
+
+<table class=""><thead><tr><th>季別</th><th>營收（億）</th><th>毛利率</th><th>營費率</th><th>營益率</th><th>EPS（元）</th><th>季別</th><th>營收（億）</th><th>毛利率</th><th>營費率</th><th>營益率</th><th>EPS（元）</th></tr></thead><tbody><tr><td>2019Q1</td><td>128.3</td><td>44.0%</td><td>34.7%</td><td>9.3%</td><td>2.71</td><td>2022Q4</td><td>217.6</td><td>43.7%</td><td>35.5%</td><td>8.1%</td><td>4.15</td></tr><tr><td>2019Q2</td><td>151.8</td><td>44.3%</td><td>33.3%</td><td>11.0%</td><td>3.63</td><td>2023Q1</td><td>196.2</td><td>43.1%</td><td>35.9%</td><td>7.2%</td><td>3.50</td></tr><tr><td>2019Q3</td><td>160.4</td><td>42.9%</td><td>32.5%</td><td>10.4%</td><td>3.78</td><td>2023Q2</td><td>262.9</td><td>41.7%</td><td>33.8%</td><td>8.0%</td><td>5.08</td></tr><tr><td>2019Q4</td><td>166.8</td><td>43.9%</td><td>33.2%</td><td>10.7%</td><td>3.23</td><td>2023Q3</td><td>266.8</td><td>42.0%</td><td>34.6%</td><td>7.5%</td><td>5.01</td></tr><tr><td>2020Q1</td><td>159.3</td><td>42.2%</td><td>33.1%</td><td>9.1%</td><td>3.21</td><td>2023Q4</td><td>225.9</td><td>44.7%</td><td>39.6%</td><td>5.1%</td><td>4.26</td></tr><tr><td>2020Q2</td><td>173.4</td><td>44.8%</td><td>33.4%</td><td>11.4%</td><td>3.97</td><td>2024Q1</td><td>256.2</td><td>50.8%</td><td>40.1%</td><td>10.7%</td><td>6.10</td></tr><tr><td>2020Q3</td><td>224.1</td><td>41.4%</td><td>29.9%</td><td>11.5%</td><td>4.91</td><td>2024Q2</td><td>306.7</td><td>50.9%</td><td>37.9%</td><td>13.0%</td><td>8.55</td></tr><tr><td>2020Q4</td><td>220.8</td><td>43.0%</td><td>31.0%</td><td>12.0%</td><td>5.14</td><td>2024Q3</td><td>307.5</td><td>51.4%</td><td>38.7%</td><td>12.7%</td><td>8.53</td></tr><tr><td>2021Q1</td><td>233.4</td><td>44.8%</td><td>32.0%</td><td>12.8%</td><td>5.98</td><td>2024Q4</td><td>263.4</td><td>48.3%</td><td>37.4%</td><td>10.9%</td><td>6.63</td></tr><tr><td>2021Q2</td><td>258.4</td><td>50.4%</td><td>33.8%</td><td>16.6%</td><td>8.43</td><td>2025Q1</td><td>350.2</td><td>51.6%</td><td>37.6%</td><td>14.0%</td><td>9.28</td></tr><tr><td>2021Q3</td><td>289.5</td><td>52.6%</td><td>34.1%</td><td>18.5%</td><td>9.57</td><td>2025Q2</td><td>319.1</td><td>50.2%</td><td>37.7%</td><td>12.6%</td><td>7.62</td></tr><tr><td>2021Q4</td><td>273.7</td><td>52.9%</td><td>35.8%</td><td>17.1%</td><td>9.02</td><td>2025Q3</td><td>294.9</td><td>49.7%</td><td>39.1%</td><td>10.6%</td><td>6.69</td></tr><tr><td>2022Q1</td><td>297.6</td><td>52.2%</td><td>34.4%</td><td>17.8%</td><td>10.15</td><td>2025Q4</td><td>262.8</td><td>48.1%</td><td>39.2%</td><td>8.9%</td><td>5.18</td></tr><tr><td>2022Q2</td><td>305.0</td><td>50.2%</td><td>35.0%</td><td>15.1%</td><td>9.12</td><td>2026Q1</td><td>364.2</td><td>49.7%</td><td>37.8%</td><td>11.9%</td><td>8.44</td></tr><tr><td>2022Q3</td><td>297.7</td><td>48.0%</td><td>34.5%</td><td>13.6%</td><td>8.20</td><td>2026Q2</td><td>375.5</td><td>47.0%</td><td>37.1%</td><td>9.9%</td><td>7.42</td></tr></tbody></table><span class="src">資料來源：公開資訊觀測站、FinMind 財報資料庫（單季認列，元）。</span>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>附錄：季度明細</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+<div class="full-page pb page body-page alt">
+<h1 class="ch">資料來源與免責聲明</h1>
+
+<h2 class="ch">資料來源</h2>
+<p><strong>公司揭露：</strong>瑞昱半導體 2Q26 法人說明會簡報與 Q&amp;A（2026 年 7 月 30 日）、
+1Q26 法人說明會（2026 年 4 月 30 日）、4Q25 法人說明會（2026 年 1 月 28 日）、
+歷年年報與月營收公告。</p>
+
+<p><strong>公開資料庫：</strong>公開資訊觀測站（MOPS）合併損益表與合併資產負債表、
+FinMind 財報資料庫（TaiwanStockFinancialStatements／TaiwanStockBalanceSheet）、
+臺灣證券交易所每日交易資訊、GiS tw-stock-scanner 量化資料庫。</p>
+
+<p><strong>券商研究（依 GiS 規範，內文匿名化處理，此處完整列名）：</strong>
+元大投顧、凱基投顧、國泰證期研究部、統一投顧、兆豐證券、群益證券、宏遠投顧、康和投顧、
+中國信託證券、玉山證券、永豐金證券、國票證券、Goldman Sachs、Morgan Stanley、Citi、
+CLSA、Daiwa Capital Markets。報告期間 2026 年 1 月 13 日至 7 月 31 日，共 68 份。</p>
+
+<p><strong>產業資料：</strong>IDC 全球 PC 出貨預估、GiS 依產業訪談與公司揭露推估之 TAM 與市占。</p>
+
+<h2 class="ch">方法論聲明</h2>
+<ul>
+<li>本報告依 <strong>GiS 估值方法論模板</strong> 撰寫，評等門檻採 §4.3 五級制
+（買進 &gt;+15%／增加持股 +5%~+15%／中立 −5%~+5%／減碼 &lt;−5%）。</li>
+<li>歷史 EPS、營收、毛利率依 §7.6 規範，一律採用公開資訊觀測站與公司財報之單季認列數字。
+<strong>本報告未採用 yfinance 之 EPS 數據</strong>——該來源漏計 2025Q4，會使 TTM EPS 虛高至 32.03 元
+（實際為 27.73 元），連帶使本益比低估約 13%。本報告之 PE 序列由 GiS 依單季 EPS
+與台股財報公告日（Q1 於 5/15、Q2 於 8/14、Q3 於 11/14、Q4 於次年 3/31）完整重建。</li>
+<li>估值採三方法加權（PE 50%／DCF 30%／Comps 20%），三情境機率與 5×5 敏感度分析
+依 §4.2 與 §10 執行。</li>
+<li>本報告撰寫於 2026 年 8 月 5 日盤中（11:22），依 GiS 紀律不引用當日收盤價；
+所有評等與估值計算以 2026 年 8 月 4 日收盤價 NT$723 為基準，
+盤中價 NT$752 之影響已於報告中明確揭露。</li>
+</ul>
+
+<h2 class="ch">免責聲明</h2>
+<p style="font-size:12px;color:#5a6580">本報告由 Genesis International Capital（GiS）研究部編製，
+僅供研究參考之用，不構成任何證券之買賣要約或投資建議。報告中之預估、意見與目標價係基於
+本報告發布日所取得之資訊與 GiS 之判斷，未來可能因市場環境、公司營運或其他因素變動而調整，
+GiS 不承擔更新之義務。投資人應自行評估投資風險並為自己的投資決策負責。
+本報告內容未經 GiS 書面同意，不得複製、轉載或散布。</p>
+
+<p style="font-size:12px;color:#5a6580">本報告涉及之財務預估屬前瞻性陳述，實際結果可能與預估存在重大差異。
+本報告所引用之第三方資料，GiS 已盡合理查證之責，但不保證其完整性與正確性。</p>
+
+<div class="page-footer"><span class="footer-logo">Gi<em>S</em> Genesis International Capital</span><span>資料來源與免責</span><span>© 2026 GiS · 僅供研究參考</span></div>
+</div>
+
+<script>
+Chart.defaults.font.family="'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif";
+Chart.defaults.font.size=10; Chart.defaults.color='#4a5568';
+Chart.defaults.plugins.legend.labels.boxWidth=9;
+Chart.defaults.plugins.legend.labels.font={size:9};
+Chart.defaults.animation=false;
+const _g=(id)=>document.getElementById(id);
+const AX=(t)=>({grid:{color:'rgba(0,0,0,.05)'},title:{display:!!t,text:t,font:{size:9}}});
+
+// ① 執行摘要：營收 vs EPS
+new Chart(_g('cRevEps'),{type:'bar',data:{
+ labels:['2019','2020','2021','2022','2023','2024','2025','2026F','2027F','2028F'],
+ datasets:[
+  {label:'營收（億元）',data:[607.3,777.6,1055.0,1117.9,951.8,1133.9,1227.1,1464.7,1585.4,1741.8],
+   backgroundColor:'rgba(13,27,62,.78)',yAxisID:'y',order:2},
+  {label:'EPS（元）',data:[13.35,17.23,33.00,31.62,17.85,29.81,28.77,29.83,35.14,41.33],
+   type:'line',borderColor:'#b8912f',backgroundColor:'#b8912f',borderWidth:2.2,pointRadius:2.6,yAxisID:'y1',order:1}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{position:'top'}},
+  scales:{y:AX('營收（億元）'),y1:{position:'right',grid:{display:false},title:{display:true,text:'EPS（元）',font:{size:9}}}}}});
+
+// ② 執行摘要：三率季度
+const QL=['19Q1','19Q3','20Q1','20Q3','21Q1','21Q3','22Q1','22Q3','23Q1','23Q3','24Q1','24Q3','25Q1','25Q3','26Q1','26Q2'];
+const GM=[44.0,42.9,42.2,41.4,44.8,52.6,52.2,48.0,43.1,42.0,50.8,51.4,51.6,49.7,49.7,47.0];
+const OX=[34.7,32.5,33.1,29.9,32.0,34.1,34.4,34.5,35.9,34.6,40.1,38.7,37.6,39.1,37.8,37.1];
+const OM=[9.3,10.4,9.1,11.5,12.8,18.5,17.8,13.6,7.2,7.5,10.7,12.7,14.0,10.6,11.9,9.9];
+new Chart(_g('cMarginQ'),{type:'line',data:{labels:QL,datasets:[
+ {label:'毛利率',data:GM,borderColor:'#0d1b3e',borderWidth:2,pointRadius:1.6,tension:.25},
+ {label:'營業費用率',data:OX,borderColor:'#5e0d2e',borderWidth:2,borderDash:[4,3],pointRadius:1.6,tension:.25},
+ {label:'營業利益率',data:OM,borderColor:'#127a7a',borderWidth:2,pointRadius:1.6,tension:.25}]},
+ options:{maintainAspectRatio:false,scales:{y:AX('%')}}});
+
+// ③ 分應用別營收結構
+new Chart(_g('cSeg'),{type:'doughnut',data:{
+ labels:['網路通訊 41%','PC 相關 33%','消費性電子 13%','車用 11%','新事業 2%'],
+ datasets:[{data:[600.5,483.4,190.4,161.1,29.3],
+  backgroundColor:['#0d1b3e','#127a7a','#6b7a9a','#b8912f','#5e0d2e']}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{position:'right'}}}});
+
+// ④ 分應用別成長
+new Chart(_g('cSegGrow'),{type:'bar',data:{
+ labels:['網路通訊','PC 相關','消費性電子','車用','新事業'],
+ datasets:[{label:'2027F YoY（%）',data:[9,-2,1,28,100],
+  backgroundColor:['#127a7a','#5e0d2e','#6b7a9a','#b8912f','#0d1b3e']}]},
+ options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:AX('%')}}});
+
+// ⑤ 毛利率
+new Chart(_g('cGM'),{type:'line',data:{labels:QL,datasets:[
+ {label:'毛利率（%）',data:GM,borderColor:'#0d1b3e',backgroundColor:'rgba(13,27,62,.08)',fill:true,borderWidth:2,pointRadius:1.6,tension:.25}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...AX('%'),min:38,max:56}}}});
+
+// ⑥ 營費率
+new Chart(_g('cOpex'),{type:'line',data:{labels:QL,datasets:[
+ {label:'營業費用率（%）',data:OX,borderColor:'#5e0d2e',backgroundColor:'rgba(94,13,46,.10)',fill:true,borderWidth:2,pointRadius:1.6,tension:.25}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...AX('%'),min:28,max:42}}}});
+
+// ⑦ 同業營益率
+new Chart(_g('cPeerMargin'),{type:'bar',data:{
+ labels:['Broadcom','Marvell','聯發科','祥碩','原相','聯詠','群聯','瑞昱'],
+ datasets:[{label:'2025 營業利益率（%）',data:[45,25,20,25,20,18,12,11.7],
+  backgroundColor:(c)=>c.dataIndex===7?'#5e0d2e':'rgba(13,27,62,.72)'}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:AX('%')}}});
+
+// ⑧ 同業毛利率
+new Chart(_g('cPeerGM'),{type:'bar',data:{
+ labels:['Broadcom','Marvell','瑞昱','聯發科'],
+ datasets:[{label:'2025 毛利率（%）',data:[76,62,50.0,48],
+  backgroundColor:(c)=>c.dataIndex===2?'#127a7a':'rgba(107,122,154,.72)'}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:AX('%')}}});
+
+// ⑨ 市占
+new Chart(_g('cShare'),{type:'bar',data:{
+ labels:['PC 乙太網路 PHY','PC 音訊 Codec','消費級交換器','PON','Wi-Fi SoC','電視 SoC','車用乙太網'],
+ datasets:[{label:'全球市占中值（%）',data:[75,70,45,25,17.5,17.5,12.5],
+  backgroundColor:['#0d1b3e','#0d1b3e','#127a7a','#127a7a','#6b7a9a','#6b7a9a','#b8912f']}]},
+ options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:AX('%')}}});
+
+// ⑩ 2Q26 毛利率歸因
+new Chart(_g('cValueChain'),{type:'bar',data:{
+ labels:['1Q26 GM 49.7%','晶圓代工漲價','記憶體漲價','封測漲價','內嵌記憶體占比↑','2Q26 GM 47.0%'],
+ datasets:[{label:'百分點',data:[49.7,-0.8,-0.9,-0.4,-0.6,47.0],
+  backgroundColor:['#0d1b3e','#5e0d2e','#5e0d2e','#5e0d2e','#5e0d2e','#127a7a']}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:AX('% / 百分點')}}});
+
+// ⑪ TAM
+new Chart(_g('cTam'),{type:'bar',data:{
+ labels:['PC 連接性','交換器','PON','Wi-Fi SoC','電視/消費','車用乙太網','資料中心光電'],
+ datasets:[
+  {label:'2026 TAM（US$億）',data:[45,38,22,60,35,18,95],backgroundColor:'rgba(107,122,154,.75)'},
+  {label:'2029F TAM（US$億）',data:[52,52,28,78,36,38,210],backgroundColor:'rgba(13,27,62,.85)'},
+  {label:'瑞昱 SAM（US$億）',data:[32,18,8,15,8,10,5],backgroundColor:'rgba(184,145,47,.9)'}]},
+ options:{maintainAspectRatio:false,scales:{y:AX('US$ 億')}}});
+
+// ⑫ 營收 vs EPS（大圖）
+new Chart(_g('cRevEpsBig'),{type:'bar',data:{
+ labels:['2021A','2022A','2023A','2024A','2025A','2026F','2027F','2028F'],
+ datasets:[
+  {label:'營收（億元）',data:[1055.0,1117.9,951.8,1133.9,1227.1,1464.7,1585.4,1741.8],
+   backgroundColor:'rgba(13,27,62,.78)',yAxisID:'y',order:2},
+  {label:'EPS（元）',data:[33.00,31.62,17.85,29.81,28.77,29.83,35.14,41.33],
+   type:'line',borderColor:'#b8912f',backgroundColor:'#b8912f',borderWidth:2.4,pointRadius:3,yAxisID:'y1',order:1},
+  {label:'2021 年 EPS 水準（33.00）',data:[33,33,33,33,33,33,33,33],
+   type:'line',borderColor:'rgba(94,13,46,.55)',borderWidth:1.2,borderDash:[5,4],pointRadius:0,yAxisID:'y1',order:0}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{position:'top'}},
+  scales:{y:AX('營收（億元）'),y1:{position:'right',grid:{display:false},min:0,max:45,title:{display:true,text:'EPS（元）',font:{size:9}}}}}});
+
+// ⑬ 營益率橋接
+new Chart(_g('cBridge'),{type:'bar',data:{
+ labels:['2021A 營益率 16.4%','毛利率 −2.4pp','營業費用率 −3.8pp','2026F 營益率 10.3%'],
+ datasets:[{label:'營業利益率（%）',data:[[0,16.4],[14.0,16.4],[10.3,14.0],[0,10.3]],
+  backgroundColor:['#0d1b3e','#b8912f','#5e0d2e','#127a7a'],borderWidth:0}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{display:false},
+  tooltip:{callbacks:{label:(c)=>c.raw[0]+'% → '+c.raw[1]+'%'}}},scales:{y:{...AX('營業利益率（%）'),min:0,max:18}}}});
+
+// ⑭ 月營收
+new Chart(_g('cMRev'),{type:'bar',data:{
+ labels:['25/01','25/02','25/03','25/04','25/05','25/06','25/07','25/08','25/09','25/10','25/11','25/12','26/01','26/02','26/03','26/04','26/05','26/06'],
+ datasets:[
+  {label:'月營收（億元）',data:[118.7,113.2,118.3,114.3,102.8,102.1,97.3,97.3,100.3,90.6,88.8,83.3,135.8,104.8,123.6,127.2,125.2,123.1],
+   backgroundColor:'rgba(13,27,62,.75)',yAxisID:'y',order:2},
+  {label:'YoY（%）',data:[35.5,44.7,30.9,13.5,-1.0,-0.1,-9.2,-4.8,2.1,1.3,1.8,-4.0,14.4,-7.4,4.5,11.3,21.9,20.6],
+   type:'line',borderColor:'#b8912f',borderWidth:2,pointRadius:1.8,yAxisID:'y1',order:1}]},
+ options:{maintainAspectRatio:false,scales:{y:AX('億元'),y1:{position:'right',grid:{display:false},title:{display:true,text:'YoY %',font:{size:9}}}}}});
+
+// ⑮ 季度營收與 EPS
+new Chart(_g('cQtr'),{type:'bar',data:{
+ labels:['24Q1','24Q2','24Q3','24Q4','25Q1','25Q2','25Q3','25Q4','26Q1','26Q2'],
+ datasets:[
+  {label:'營收（億元）',data:[256.2,306.7,307.5,263.4,350.2,319.1,294.9,262.8,364.2,375.5],
+   backgroundColor:'rgba(18,122,122,.75)',yAxisID:'y',order:2},
+  {label:'EPS（元）',data:[6.10,8.55,8.53,6.63,9.28,7.62,6.69,5.18,8.44,7.42],
+   type:'line',borderColor:'#5e0d2e',borderWidth:2.2,pointRadius:2.6,yAxisID:'y1',order:1}]},
+ options:{maintainAspectRatio:false,scales:{y:AX('億元'),y1:{position:'right',grid:{display:false},min:0,max:12,title:{display:true,text:'EPS（元）',font:{size:9}}}}}});
+
+// ⑯ 分應用別堆疊
+new Chart(_g('cSegStack'),{type:'bar',data:{
+ labels:['2026F','2027F','2028F'],
+ datasets:[
+  {label:'網路通訊',data:[600.5,654.6,707.0],backgroundColor:'#0d1b3e',stack:'s'},
+  {label:'PC 相關',data:[483.4,473.7,478.5],backgroundColor:'#127a7a',stack:'s'},
+  {label:'消費性電子',data:[190.4,192.3,192.3],backgroundColor:'#6b7a9a',stack:'s'},
+  {label:'車用',data:[161.1,206.2,255.7],backgroundColor:'#b8912f',stack:'s'},
+  {label:'新事業',data:[29.3,58.6,108.3],backgroundColor:'#5e0d2e',stack:'s'}]},
+ options:{maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,...AX('億元')}}}});
+
+// ⑰ 三情境
+new Chart(_g('cScenario'),{type:'bar',data:{
+ labels:['保守（25%）','基礎（55%）','樂觀（20%）'],
+ datasets:[
+  {label:'2027F EPS（元）',data:[31.50,35.14,39.00],backgroundColor:'rgba(18,122,122,.8)',yAxisID:'y'},
+  {label:'目標價（元）',data:[536,685,897],type:'line',borderColor:'#b8912f',borderWidth:2.2,pointRadius:4,yAxisID:'y1'}]},
+ options:{maintainAspectRatio:false,scales:{y:AX('EPS（元）'),y1:{position:'right',grid:{display:false},title:{display:true,text:'目標價（元）',font:{size:9}}}}}});
+
+// ⑱ DCF 敏感度
+new Chart(_g('cDcfSens'),{type:'line',data:{
+ labels:['g 1.5%','g 2.0%','g 2.5%','g 3.0%','g 3.5%'],
+ datasets:[
+  {label:'WACC 8.07%',data:[771,815,868,931,1007],borderColor:'rgba(18,122,122,.55)',borderWidth:1.4,pointRadius:1.8},
+  {label:'WACC 8.57%',data:[723,761,805,856,918],borderColor:'rgba(18,122,122,.8)',borderWidth:1.4,pointRadius:1.8},
+  {label:'WACC 9.07%（採用）',data:[682,714,751,794,845],borderColor:'#0d1b3e',borderWidth:2.6,pointRadius:3},
+  {label:'WACC 9.57%',data:[646,673,705,742,784],borderColor:'rgba(94,13,46,.7)',borderWidth:1.4,pointRadius:1.8},
+  {label:'WACC 10.07%',data:[614,638,665,696,732],borderColor:'rgba(94,13,46,.95)',borderWidth:1.4,pointRadius:1.8},
+  {label:'8/4 收盤 723',data:[723,723,723,723,723],borderColor:'rgba(184,145,47,.85)',borderWidth:1.4,borderDash:[5,4],pointRadius:0}]},
+ options:{maintainAspectRatio:false,scales:{y:AX('每股價值（元）')}}});
+
+// ⑲ Comps PE
+new Chart(_g('cComps'),{type:'bar',data:{
+ labels:['聯詠','原相','譜瑞-KY','群聯','祥碩','瑞鼎','瑞昱'],
+ datasets:[{label:'TTM PE（倍）',data:[21.5,18.2,17.8,17.3,16.8,15.1,26.1],
+  backgroundColor:(c)=>c.dataIndex===6?'#5e0d2e':'rgba(13,27,62,.72)'}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:AX('倍')}}});
+
+// ⑳ Comps 散點
+new Chart(_g('cCompsScatter'),{type:'scatter',data:{datasets:[
+ {label:'同業',data:[{x:18,y:21.5},{x:20,y:18.2},{x:20,y:17.8},{x:12,y:17.3},{x:25,y:16.8},{x:16,y:15.1}],
+  backgroundColor:'rgba(13,27,62,.7)',pointRadius:5},
+ {label:'瑞昱 2379',data:[{x:11.7,y:26.1}],backgroundColor:'#5e0d2e',pointRadius:8,pointStyle:'rectRot'}]},
+ options:{maintainAspectRatio:false,scales:{
+  x:{...AX('2025 營業利益率（%）'),min:8,max:28},
+  y:{...AX('TTM PE（倍）'),min:12,max:29}}}});
+
+// ㉑ Football Field
+new Chart(_g('cFootball'),{type:'bar',data:{
+ labels:['PE 三情境（50%）','DCF（30%）','Comps（20%）'],
+ datasets:[
+  {label:'區間下緣至上緣',data:[[536,897],[646,845],[530,756]],
+   backgroundColor:['rgba(13,27,62,.55)','rgba(18,122,122,.55)','rgba(107,122,154,.55)'],borderWidth:0,barPercentage:.55},
+  {label:'中心值',data:[690,751,616],type:'scatter',
+   backgroundColor:'#b8912f',pointRadius:7,pointStyle:'rectRot'}]},
+ options:{indexAxis:'y',maintainAspectRatio:false,
+  scales:{x:{...AX('目標價（元）'),min:480,max:950}},
+  plugins:{legend:{position:'top'},annotation:false}}});
+</script>
+<script>
+(function(){
+const PRC_DATES = ["2021-07-07", "2021-07-15", "2021-07-23", "2021-08-02", "2021-08-10", "2021-08-18", "2021-08-26", "2021-09-03", "2021-09-13", "2021-09-23", "2021-10-01", "2021-10-12", "2021-10-20", "2021-10-28", "2021-11-05", "2021-11-15", "2021-11-23", "2021-12-01", "2021-12-09", "2021-12-17", "2021-12-27", "2022-01-05", "2022-01-13", "2022-01-21", "2022-02-09", "2022-02-17", "2022-02-25", "2022-03-08", "2022-03-16", "2022-03-24", "2022-04-01", "2022-04-13", "2022-04-21", "2022-04-29", "2022-05-10", "2022-05-18", "2022-05-26", "2022-06-06", "2022-06-14", "2022-06-22", "2022-06-30", "2022-07-08", "2022-07-18", "2022-07-26", "2022-08-03", "2022-08-11", "2022-08-19", "2022-08-29", "2022-09-06", "2022-09-15", "2022-09-23", "2022-10-03", "2022-10-12", "2022-10-20", "2022-10-28", "2022-11-07", "2022-11-15", "2022-11-23", "2022-12-01", "2022-12-09", "2022-12-19", "2022-12-27", "2023-01-05", "2023-01-13", "2023-02-02", "2023-02-10", "2023-02-20", "2023-03-02", "2023-03-10", "2023-03-20", "2023-03-28", "2023-04-10", "2023-04-18", "2023-04-26", "2023-05-05", "2023-05-15", "2023-05-23", "2023-05-31", "2023-06-08", "2023-06-16", "2023-06-28", "2023-07-06", "2023-07-14", "2023-07-24", "2023-08-01", "2023-08-10", "2023-08-18", "2023-08-28", "2023-09-05", "2023-09-13", "2023-09-21", "2023-10-02", "2023-10-12", "2023-10-20", "2023-10-30", "2023-11-07", "2023-11-15", "2023-11-23", "2023-12-01", "2023-12-11", "2023-12-19", "2023-12-27", "2024-01-05", "2024-01-15", "2024-01-23", "2024-01-31", "2024-02-19", "2024-02-27", "2024-03-07", "2024-03-15", "2024-03-25", "2024-04-02", "2024-04-12", "2024-04-22", "2024-04-30", "2024-05-09", "2024-05-17", "2024-05-27", "2024-06-04", "2024-06-13", "2024-06-21", "2024-07-01", "2024-07-09", "2024-07-17", "2024-07-29", "2024-08-06", "2024-08-14", "2024-08-22", "2024-08-30", "2024-09-09", "2024-09-18", "2024-09-26", "2024-10-08", "2024-10-17", "2024-10-25", "2024-11-05", "2024-11-13", "2024-11-21", "2024-11-29", "2024-12-09", "2024-12-17", "2024-12-25", "2025-01-03", "2025-01-13", "2025-01-21", "2025-02-07", "2025-02-17", "2025-02-25", "2025-03-06", "2025-03-14", "2025-03-24", "2025-04-01", "2025-04-11", "2025-04-21", "2025-04-29", "2025-05-08", "2025-05-16", "2025-05-26", "2025-06-04", "2025-06-12", "2025-06-20", "2025-06-30", "2025-07-08", "2025-07-16", "2025-07-24", "2025-08-04", "2025-08-12", "2025-08-20", "2025-08-28", "2025-09-05", "2025-09-15", "2025-09-23", "2025-10-02", "2025-10-14", "2025-10-22", "2025-10-31", "2025-11-10", "2025-11-18", "2025-11-26", "2025-12-04", "2025-12-12", "2025-12-22", "2025-12-31", "2026-01-09", "2026-01-19", "2026-01-27", "2026-02-04", "2026-02-23", "2026-03-04", "2026-03-12", "2026-03-20", "2026-03-30", "2026-04-09", "2026-04-17", "2026-04-27", "2026-05-06", "2026-05-14", "2026-05-22", "2026-06-01", "2026-06-09", "2026-06-17", "2026-06-26", "2026-07-06", "2026-07-14", "2026-07-22", "2026-07-30", "2026-08-04"];
+const PRC_NORM = [100.0, 102.87, 107.07, 112.81, 111.28, 105.35, 103.63, 108.03, 102.1, 97.32, 91.11, 88.72, 90.82, 95.6, 95.51, 103.63, 104.02, 104.97, 106.69, 108.41, 110.13, 107.65, 103.25, 104.02, 97.71, 93.5, 87.19, 85.66, 85.09, 86.52, 79.73, 79.06, 77.63, 77.92, 79.25, 82.6, 79.83, 85.76, 81.93, 75.53, 69.41, 64.05, 66.16, 67.4, 65.58, 64.34, 69.69, 65.39, 63.1, 60.33, 58.03, 51.43, 46.27, 48.37, 48.85, 52.39, 60.23, 62.52, 63.67, 57.27, 56.21, 56.02, 55.26, 60.71, 66.35, 68.26, 70.36, 72.66, 72.56, 74.86, 72.66, 72.37, 75.05, 65.97, 69.98, 70.36, 71.32, 73.04, 75.53, 76.67, 74.0, 73.61, 78.01, 77.72, 82.7, 76.2, 79.83, 81.64, 85.85, 75.53, 74.57, 76.2, 80.21, 80.88, 77.44, 77.63, 79.83, 82.89, 85.85, 86.23, 90.63, 89.48, 86.14, 87.0, 85.47, 89.77, 89.87, 108.41, 114.91, 113.58, 111.66, 108.6, 108.8, 96.37, 99.04, 101.72, 101.34, 101.72, 102.1, 109.56, 107.07, 101.53, 109.56, 106.12, 95.98, 88.62, 101.15, 104.21, 102.29, 94.65, 88.91, 93.88, 90.63, 89.29, 93.59, 91.68, 94.65, 95.6, 91.01, 99.24, 104.21, 102.29, 102.68, 98.47, 103.25, 105.74, 105.16, 107.07, 106.5, 102.87, 106.31, 100.38, 97.71, 96.94, 99.24, 97.32, 99.04, 101.34, 103.44, 106.12, 105.16, 108.41, 107.46, 111.09, 109.37, 104.21, 101.53, 99.81, 104.21, 103.06, 100.57, 103.25, 100.76, 103.44, 103.25, 98.47, 95.98, 94.36, 99.62, 101.91, 100.96, 94.07, 93.5, 97.51, 98.47, 101.34, 91.01, 91.01, 85.09, 90.44, 91.68, 93.31, 97.9, 101.53, 106.12, 104.02, 109.75, 110.52, 116.44, 124.47, 142.45, 141.49, 147.04, 144.17, 142.07, 133.27, 138.24];
+const TWII_NORM = [100.0, 101.03, 98.44, 98.05, 97.05, 94.26, 95.61, 98.13, 97.73, 95.67, 92.83, 92.23, 94.61, 95.47, 96.9, 98.79, 98.97, 98.52, 100.36, 99.79, 101.11, 103.64, 103.28, 100.27, 101.69, 102.34, 98.89, 94.26, 94.9, 99.15, 98.74, 96.92, 95.95, 92.95, 89.98, 91.3, 89.46, 93.03, 89.9, 85.98, 83.05, 81.03, 82.46, 82.95, 82.78, 85.14, 86.32, 83.62, 82.22, 82.18, 79.09, 74.51, 73.28, 72.52, 71.64, 74.08, 81.49, 81.84, 84.1, 82.38, 80.86, 80.27, 80.11, 83.05, 87.36, 87.32, 87.12, 87.38, 86.98, 86.38, 87.96, 88.94, 88.9, 86.13, 87.54, 86.69, 90.69, 92.88, 93.74, 96.85, 94.87, 93.9, 96.82, 95.42, 96.43, 93.19, 91.77, 92.49, 94.07, 92.89, 91.41, 92.75, 94.26, 92.1, 90.47, 93.47, 95.96, 96.88, 97.69, 97.58, 98.46, 100.23, 98.14, 98.3, 100.13, 100.22, 104.4, 105.62, 110.32, 110.26, 113.12, 114.65, 116.17, 108.74, 114.26, 115.18, 119.09, 122.15, 119.64, 124.99, 130.27, 129.17, 133.89, 133.16, 124.17, 114.85, 123.4, 124.08, 124.75, 118.45, 121.45, 128.06, 126.67, 129.15, 130.8, 129.44, 128.06, 126.36, 124.72, 130.38, 128.95, 130.08, 128.33, 125.98, 130.53, 131.53, 131.68, 130.45, 127.25, 123.07, 123.84, 119.21, 109.4, 107.03, 113.34, 115.08, 122.37, 120.65, 121.11, 124.86, 123.5, 124.68, 125.27, 129.09, 130.94, 131.28, 135.21, 136.43, 137.36, 135.46, 142.71, 144.98, 145.56, 150.83, 155.47, 158.47, 154.9, 153.76, 150.76, 155.7, 157.0, 155.16, 160.82, 170.08, 175.95, 179.63, 180.36, 188.26, 192.28, 191.11, 188.73, 185.5, 194.73, 208.01, 218.1, 228.39, 231.78, 231.75, 250.6, 243.7, 256.62, 259.12, 262.07, 250.62, 251.12, 223.71, 242.91];
+const PE_DATES = ["2021-07-07", "2021-07-15", "2021-07-23", "2021-08-02", "2021-08-10", "2021-08-18", "2021-08-26", "2021-09-03", "2021-09-13", "2021-09-23", "2021-10-01", "2021-10-12", "2021-10-20", "2021-10-28", "2021-11-05", "2021-11-15", "2021-11-23", "2021-12-01", "2021-12-09", "2021-12-17", "2021-12-27", "2022-01-05", "2022-01-13", "2022-01-21", "2022-02-09", "2022-02-17", "2022-02-25", "2022-03-08", "2022-03-16", "2022-03-24", "2022-04-01", "2022-04-13", "2022-04-21", "2022-04-29", "2022-05-10", "2022-05-18", "2022-05-26", "2022-06-06", "2022-06-14", "2022-06-22", "2022-06-30", "2022-07-08", "2022-07-18", "2022-07-26", "2022-08-03", "2022-08-11", "2022-08-19", "2022-08-29", "2022-09-06", "2022-09-15", "2022-09-23", "2022-10-03", "2022-10-12", "2022-10-20", "2022-10-28", "2022-11-07", "2022-11-15", "2022-11-23", "2022-12-01", "2022-12-09", "2022-12-19", "2022-12-27", "2023-01-05", "2023-01-13", "2023-02-02", "2023-02-10", "2023-02-20", "2023-03-02", "2023-03-10", "2023-03-20", "2023-03-28", "2023-04-10", "2023-04-18", "2023-04-26", "2023-05-05", "2023-05-15", "2023-05-23", "2023-05-31", "2023-06-08", "2023-06-16", "2023-06-28", "2023-07-06", "2023-07-14", "2023-07-24", "2023-08-01", "2023-08-10", "2023-08-18", "2023-08-28", "2023-09-05", "2023-09-13", "2023-09-21", "2023-10-02", "2023-10-12", "2023-10-20", "2023-10-30", "2023-11-07", "2023-11-15", "2023-11-23", "2023-12-01", "2023-12-11", "2023-12-19", "2023-12-27", "2024-01-05", "2024-01-15", "2024-01-23", "2024-01-31", "2024-02-19", "2024-02-27", "2024-03-07", "2024-03-15", "2024-03-25", "2024-04-02", "2024-04-12", "2024-04-22", "2024-04-30", "2024-05-09", "2024-05-17", "2024-05-27", "2024-06-04", "2024-06-13", "2024-06-21", "2024-07-01", "2024-07-09", "2024-07-17", "2024-07-29", "2024-08-06", "2024-08-14", "2024-08-22", "2024-08-30", "2024-09-09", "2024-09-18", "2024-09-26", "2024-10-08", "2024-10-17", "2024-10-25", "2024-11-05", "2024-11-13", "2024-11-21", "2024-11-29", "2024-12-09", "2024-12-17", "2024-12-25", "2025-01-03", "2025-01-13", "2025-01-21", "2025-02-07", "2025-02-17", "2025-02-25", "2025-03-06", "2025-03-14", "2025-03-24", "2025-04-01", "2025-04-11", "2025-04-21", "2025-04-29", "2025-05-08", "2025-05-16", "2025-05-26", "2025-06-04", "2025-06-12", "2025-06-20", "2025-06-30", "2025-07-08", "2025-07-16", "2025-07-24", "2025-08-04", "2025-08-12", "2025-08-20", "2025-08-28", "2025-09-05", "2025-09-15", "2025-09-23", "2025-10-02", "2025-10-14", "2025-10-22", "2025-10-31", "2025-11-10", "2025-11-18", "2025-11-26", "2025-12-04", "2025-12-12", "2025-12-22", "2025-12-31", "2026-01-09", "2026-01-19", "2026-01-27", "2026-02-04", "2026-02-23", "2026-03-04", "2026-03-12", "2026-03-20", "2026-03-30", "2026-04-09", "2026-04-17", "2026-04-27", "2026-05-06", "2026-05-14", "2026-05-22", "2026-06-01", "2026-06-09", "2026-06-17", "2026-06-26", "2026-07-06", "2026-07-14", "2026-07-22", "2026-07-30", "2026-08-04"];
+const PE_ACTUAL = [523.0, 538.0, 560.0, 590.0, 582.0, 551.0, 542.0, 565.0, 534.0, 509.0, 476.5, 464.0, 475.0, 500.0, 499.5, 542.0, 544.0, 549.0, 558.0, 567.0, 576.0, 563.0, 540.0, 544.0, 511.0, 489.0, 456.0, 448.0, 445.0, 452.5, 417.0, 413.5, 406.0, 407.5, 414.5, 432.0, 417.5, 448.5, 428.5, 395.0, 363.0, 335.0, 346.0, 352.5, 343.0, 336.5, 364.5, 342.0, 330.0, 315.5, 303.5, 269.0, 242.0, 253.0, 255.5, 274.0, 315.0, 327.0, 333.0, 299.5, 294.0, 293.0, 289.0, 317.5, 347.0, 357.0, 368.0, 380.0, 379.5, 391.5, 380.0, 378.5, 392.5, 345.0, 366.0, 368.0, 373.0, 382.0, 395.0, 401.0, 387.0, 385.0, 408.0, 406.5, 432.5, 398.5, 417.5, 427.0, 449.0, 395.0, 390.0, 398.5, 419.5, 423.0, 405.0, 406.0, 417.5, 433.5, 449.0, 451.0, 474.0, 468.0, 450.5, 455.0, 447.0, 469.5, 470.0, 567.0, 601.0, 594.0, 584.0, 568.0, 569.0, 504.0, 518.0, 532.0, 530.0, 532.0, 534.0, 573.0, 560.0, 531.0, 573.0, 555.0, 502.0, 463.5, 529.0, 545.0, 535.0, 495.0, 465.0, 491.0, 474.0, 467.0, 489.5, 479.5, 495.0, 500.0, 476.0, 519.0, 545.0, 535.0, 537.0, 515.0, 540.0, 553.0, 550.0, 560.0, 557.0, 538.0, 556.0, 525.0, 511.0, 507.0, 519.0, 509.0, 518.0, 530.0, 541.0, 555.0, 550.0, 567.0, 562.0, 581.0, 572.0, 545.0, 531.0, 522.0, 545.0, 539.0, 526.0, 540.0, 527.0, 541.0, 540.0, 515.0, 502.0, 493.5, 521.0, 533.0, 528.0, 492.0, 489.0, 510.0, 515.0, 530.0, 476.0, 476.0, 445.0, 473.0, 479.5, 488.0, 512.0, 531.0, 555.0, 544.0, 574.0, 578.0, 609.0, 651.0, 745.0, 740.0, 769.0, 754.0, 743.0, 697.0, 723.0];
+const PE_M2 = [119.4, 119.4, 119.4, 119.4, 119.4, 146.0, 146.0, 146.0, 146.0, 146.0, 146.0, 146.0, 146.0, 146.0, 146.0, 173.8, 173.8, 173.8, 173.8, 173.8, 173.8, 173.8, 173.8, 173.8, 173.8, 173.8, 173.8, 173.8, 173.8, 173.8, 197.0, 197.0, 197.0, 197.0, 197.0, 221.9, 221.9, 221.9, 221.9, 221.9, 221.9, 221.9, 221.9, 221.9, 221.9, 221.9, 226.0, 226.0, 226.0, 226.0, 226.0, 226.0, 226.0, 226.0, 226.0, 226.0, 217.8, 217.8, 217.8, 217.8, 217.8, 217.8, 217.8, 217.8, 217.8, 217.8, 217.8, 217.8, 217.8, 217.8, 217.8, 188.8, 188.8, 188.8, 188.8, 149.1, 149.1, 149.1, 149.1, 149.1, 149.1, 149.1, 149.1, 149.1, 149.1, 149.1, 125.0, 125.0, 125.0, 125.0, 125.0, 125.0, 125.0, 125.0, 125.0, 125.0, 105.9, 105.9, 105.9, 105.9, 105.9, 105.9, 105.9, 105.9, 105.9, 105.9, 105.9, 105.9, 105.9, 105.9, 105.9, 106.6, 106.6, 106.6, 106.6, 106.6, 122.1, 122.1, 122.1, 122.1, 122.1, 122.1, 122.1, 122.1, 122.1, 122.1, 122.1, 142.8, 142.8, 142.8, 142.8, 142.8, 142.8, 142.8, 142.8, 142.8, 142.8, 163.8, 163.8, 163.8, 163.8, 163.8, 163.8, 163.8, 163.8, 163.8, 163.8, 163.8, 163.8, 163.8, 163.8, 178.0, 178.0, 178.0, 178.0, 178.0, 197.0, 197.0, 197.0, 197.0, 197.0, 197.0, 197.0, 197.0, 197.0, 197.0, 197.0, 191.4, 191.4, 191.4, 191.4, 191.4, 191.4, 191.4, 191.4, 191.4, 191.4, 180.4, 180.4, 180.4, 180.4, 180.4, 180.4, 180.4, 180.4, 180.4, 180.4, 180.4, 180.4, 180.4, 180.4, 180.4, 171.8, 171.8, 171.8, 171.8, 171.8, 166.7, 166.7, 166.7, 166.7, 166.7, 166.7, 166.7, 166.7, 166.7, 166.7];
+const PE_M1 = [242.4, 242.4, 242.4, 242.4, 242.4, 296.5, 296.5, 296.5, 296.5, 296.5, 296.5, 296.5, 296.5, 296.5, 296.5, 352.9, 352.9, 352.9, 352.9, 352.9, 352.9, 352.9, 352.9, 352.9, 352.9, 352.9, 352.9, 352.9, 352.9, 352.9, 400.0, 400.0, 400.0, 400.0, 400.0, 450.5, 450.5, 450.5, 450.5, 450.5, 450.5, 450.5, 450.5, 450.5, 450.5, 450.5, 458.9, 458.9, 458.9, 458.9, 458.9, 458.9, 458.9, 458.9, 458.9, 458.9, 442.3, 442.3, 442.3, 442.3, 442.3, 442.3, 442.3, 442.3, 442.3, 442.3, 442.3, 442.3, 442.3, 442.3, 442.3, 383.2, 383.2, 383.2, 383.2, 302.6, 302.6, 302.6, 302.6, 302.6, 302.6, 302.6, 302.6, 302.6, 302.6, 302.6, 253.7, 253.7, 253.7, 253.7, 253.7, 253.7, 253.7, 253.7, 253.7, 253.7, 215.0, 215.0, 215.0, 215.0, 215.0, 215.0, 215.0, 215.0, 215.0, 215.0, 215.0, 215.0, 215.0, 215.0, 215.0, 216.3, 216.3, 216.3, 216.3, 216.3, 247.9, 247.9, 247.9, 247.9, 247.9, 247.9, 247.9, 247.9, 247.9, 247.9, 247.9, 289.9, 289.9, 289.9, 289.9, 289.9, 289.9, 289.9, 289.9, 289.9, 289.9, 332.6, 332.6, 332.6, 332.6, 332.6, 332.6, 332.6, 332.6, 332.6, 332.6, 332.6, 332.6, 332.6, 332.6, 361.3, 361.3, 361.3, 361.3, 361.3, 399.8, 399.8, 399.8, 399.8, 399.8, 399.8, 399.8, 399.8, 399.8, 399.8, 399.8, 388.6, 388.6, 388.6, 388.6, 388.6, 388.6, 388.6, 388.6, 388.6, 388.6, 366.3, 366.3, 366.3, 366.3, 366.3, 366.3, 366.3, 366.3, 366.3, 366.3, 366.3, 366.3, 366.3, 366.3, 366.3, 348.7, 348.7, 348.7, 348.7, 348.7, 338.5, 338.5, 338.5, 338.5, 338.5, 338.5, 338.5, 338.5, 338.5, 338.5];
+const PE_MEAN = [365.2, 365.2, 365.2, 365.2, 365.2, 446.6, 446.6, 446.6, 446.6, 446.6, 446.6, 446.6, 446.6, 446.6, 446.6, 531.7, 531.7, 531.7, 531.7, 531.7, 531.7, 531.7, 531.7, 531.7, 531.7, 531.7, 531.7, 531.7, 531.7, 531.7, 602.6, 602.6, 602.6, 602.6, 602.6, 678.7, 678.7, 678.7, 678.7, 678.7, 678.7, 678.7, 678.7, 678.7, 678.7, 678.7, 691.3, 691.3, 691.3, 691.3, 691.3, 691.3, 691.3, 691.3, 691.3, 691.3, 666.3, 666.3, 666.3, 666.3, 666.3, 666.3, 666.3, 666.3, 666.3, 666.3, 666.3, 666.3, 666.3, 666.3, 666.3, 577.4, 577.4, 577.4, 577.4, 456.0, 456.0, 456.0, 456.0, 456.0, 456.0, 456.0, 456.0, 456.0, 456.0, 456.0, 382.2, 382.2, 382.2, 382.2, 382.2, 382.2, 382.2, 382.2, 382.2, 382.2, 323.9, 323.9, 323.9, 323.9, 323.9, 323.9, 323.9, 323.9, 323.9, 323.9, 323.9, 323.9, 323.9, 323.9, 323.9, 325.9, 325.9, 325.9, 325.9, 325.9, 373.4, 373.4, 373.4, 373.4, 373.4, 373.4, 373.4, 373.4, 373.4, 373.4, 373.4, 436.8, 436.8, 436.8, 436.8, 436.8, 436.8, 436.8, 436.8, 436.8, 436.8, 501.1, 501.1, 501.1, 501.1, 501.1, 501.1, 501.1, 501.1, 501.1, 501.1, 501.1, 501.1, 501.1, 501.1, 544.3, 544.3, 544.3, 544.3, 544.3, 602.4, 602.4, 602.4, 602.4, 602.4, 602.4, 602.4, 602.4, 602.4, 602.4, 602.4, 585.4, 585.4, 585.4, 585.4, 585.4, 585.4, 585.4, 585.4, 585.4, 585.4, 551.8, 551.8, 551.8, 551.8, 551.8, 551.8, 551.8, 551.8, 551.8, 551.8, 551.8, 551.8, 551.8, 551.8, 551.8, 525.3, 525.3, 525.3, 525.3, 525.3, 510.0, 510.0, 510.0, 510.0, 510.0, 510.0, 510.0, 510.0, 510.0, 510.0];
+const PE_P1 = [488.2, 488.2, 488.2, 488.2, 488.2, 597.1, 597.1, 597.1, 597.1, 597.1, 597.1, 597.1, 597.1, 597.1, 597.1, 710.8, 710.8, 710.8, 710.8, 710.8, 710.8, 710.8, 710.8, 710.8, 710.8, 710.8, 710.8, 710.8, 710.8, 710.8, 805.5, 805.5, 805.5, 805.5, 805.5, 907.3, 907.3, 907.3, 907.3, 907.3, 907.3, 907.3, 907.3, 907.3, 907.3, 907.3, 924.2, 924.2, 924.2, 924.2, 924.2, 924.2, 924.2, 924.2, 924.2, 924.2, 890.7, 890.7, 890.7, 890.7, 890.7, 890.7, 890.7, 890.7, 890.7, 890.7, 890.7, 890.7, 890.7, 890.7, 890.7, 771.8, 771.8, 771.8, 771.8, 609.5, 609.5, 609.5, 609.5, 609.5, 609.5, 609.5, 609.5, 609.5, 609.5, 609.5, 510.9, 510.9, 510.9, 510.9, 510.9, 510.9, 510.9, 510.9, 510.9, 510.9, 433.0, 433.0, 433.0, 433.0, 433.0, 433.0, 433.0, 433.0, 433.0, 433.0, 433.0, 433.0, 433.0, 433.0, 433.0, 435.7, 435.7, 435.7, 435.7, 435.7, 499.2, 499.2, 499.2, 499.2, 499.2, 499.2, 499.2, 499.2, 499.2, 499.2, 499.2, 583.9, 583.9, 583.9, 583.9, 583.9, 583.9, 583.9, 583.9, 583.9, 583.9, 669.8, 669.8, 669.8, 669.8, 669.8, 669.8, 669.8, 669.8, 669.8, 669.8, 669.8, 669.8, 669.8, 669.8, 727.7, 727.7, 727.7, 727.7, 727.7, 805.3, 805.3, 805.3, 805.3, 805.3, 805.3, 805.3, 805.3, 805.3, 805.3, 805.3, 782.6, 782.6, 782.6, 782.6, 782.6, 782.6, 782.6, 782.6, 782.6, 782.6, 737.7, 737.7, 737.7, 737.7, 737.7, 737.7, 737.7, 737.7, 737.7, 737.7, 737.7, 737.7, 737.7, 737.7, 737.7, 702.3, 702.3, 702.3, 702.3, 702.3, 681.8, 681.8, 681.8, 681.8, 681.8, 681.8, 681.8, 681.8, 681.8, 681.8];
+const PE_P2 = [611.0, 611.0, 611.0, 611.0, 611.0, 747.3, 747.3, 747.3, 747.3, 747.3, 747.3, 747.3, 747.3, 747.3, 747.3, 889.6, 889.6, 889.6, 889.6, 889.6, 889.6, 889.6, 889.6, 889.6, 889.6, 889.6, 889.6, 889.6, 889.6, 889.6, 1008.1, 1008.1, 1008.1, 1008.1, 1008.1, 1135.5, 1135.5, 1135.5, 1135.5, 1135.5, 1135.5, 1135.5, 1135.5, 1135.5, 1135.5, 1135.5, 1156.6, 1156.6, 1156.6, 1156.6, 1156.6, 1156.6, 1156.6, 1156.6, 1156.6, 1156.6, 1114.8, 1114.8, 1114.8, 1114.8, 1114.8, 1114.8, 1114.8, 1114.8, 1114.8, 1114.8, 1114.8, 1114.8, 1114.8, 1114.8, 1114.8, 966.0, 966.0, 966.0, 966.0, 762.8, 762.8, 762.8, 762.8, 762.8, 762.8, 762.8, 762.8, 762.8, 762.8, 762.8, 639.4, 639.4, 639.4, 639.4, 639.4, 639.4, 639.4, 639.4, 639.4, 639.4, 542.0, 542.0, 542.0, 542.0, 542.0, 542.0, 542.0, 542.0, 542.0, 542.0, 542.0, 542.0, 542.0, 542.0, 542.0, 545.3, 545.3, 545.3, 545.3, 545.3, 624.7, 624.7, 624.7, 624.7, 624.7, 624.7, 624.7, 624.7, 624.7, 624.7, 624.7, 730.8, 730.8, 730.8, 730.8, 730.8, 730.8, 730.8, 730.8, 730.8, 730.8, 838.3, 838.3, 838.3, 838.3, 838.3, 838.3, 838.3, 838.3, 838.3, 838.3, 838.3, 838.3, 838.3, 838.3, 910.7, 910.7, 910.7, 910.7, 910.7, 1007.8, 1007.8, 1007.8, 1007.8, 1007.8, 1007.8, 1007.8, 1007.8, 1007.8, 1007.8, 1007.8, 979.4, 979.4, 979.4, 979.4, 979.4, 979.4, 979.4, 979.4, 979.4, 979.4, 923.2, 923.2, 923.2, 923.2, 923.2, 923.2, 923.2, 923.2, 923.2, 923.2, 923.2, 923.2, 923.2, 923.2, 923.2, 878.9, 878.9, 878.9, 878.9, 878.9, 853.3, 853.3, 853.3, 853.3, 853.3, 853.3, 853.3, 853.3, 853.3, 853.3];
+const FAN_DATES = ["2026-08", "2026-09", "2026-10", "2026-11", "2026-12", "2027-01", "2027-01", "2027-03", "2027-04", "2027-05", "2027-05", "2027-06", "2027-07"];
+const FAN_LO = [723.0, 707.4, 691.8, 676.2, 660.7, 645.1, 629.5, 613.9, 598.3, 582.8, 567.2, 551.6, 536.0];
+const FAN_MID = [723.0, 719.8, 716.7, 713.5, 710.3, 707.2, 704.0, 700.8, 697.7, 694.5, 691.3, 688.2, 685.0];
+const FAN_HI = [723.0, 737.5, 752.0, 766.5, 781.0, 795.5, 810.0, 824.5, 839.0, 853.5, 868.0, 882.5, 897.0];
+const CURRENT_PRICE = 723.0;
+const TP_R = 694.0;
+
+// 共通 options
+const noAnim = {animation:false, plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:8}}}, responsive:true, maintainAspectRatio:false};
+
+// ── 圖 A：相對走勢
+const ctxRel = document.getElementById('chartRel').getContext('2d');
+new Chart(ctxRel, {
+  type:'line',
+  data:{
+    labels:PRC_DATES,
+    datasets:[
+      {label:'瑞昱 2379', data:PRC_NORM, borderColor:'#5e0d2e', backgroundColor:'rgba(94,13,46,.06)', borderWidth:1.6, pointRadius:0, fill:true, tension:.1},
+      {label:'加權指數', data:TWII_NORM, borderColor:'#7b8190', borderWidth:1.2, pointRadius:0, borderDash:[3,3], fill:false, tension:.1}
+    ]
+  },
+  options:{
+    ...noAnim,
+    scales:{
+      x:{ticks:{maxTicksLimit:6,font:{size:9}},grid:{display:false}},
+      y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}
+    }
+  }
+});
+const lastPrc = PRC_NORM[PRC_NORM.length-1];
+const lastTwii = TWII_NORM[TWII_NORM.length-1];
+const alpha = (lastPrc - lastTwii).toFixed(1);
+const alphaEl = document.getElementById('alphaSpan');
+alphaEl.textContent = (alpha >= 0 ? '+' : '') + alpha + ' pp';
+alphaEl.style.color = alpha >= 0 ? '#00875a' : '#c0392b';
+alphaEl.style.fontWeight = '700';
+
+// ── 圖 B：Fan Chart
+const ctxFan = document.getElementById('chartFan').getContext('2d');
+new Chart(ctxFan, {
+  type:'line',
+  data:{
+    labels:FAN_DATES,
+    datasets:[
+      {label:'樂觀 897', data:FAN_HI, borderColor:'#00a878', backgroundColor:'rgba(0,168,120,.10)', borderWidth:1.6, pointRadius:0, fill:'+1', tension:0},
+      {label:'基礎 685', data:FAN_MID, borderColor:'#daa520', backgroundColor:'rgba(218,165,32,.18)', borderWidth:2.2, pointRadius:0, fill:'+1', tension:0},
+      {label:'保守 536', data:FAN_LO, borderColor:'#c0392b', borderWidth:1.6, pointRadius:0, fill:false, tension:0, borderDash:[4,3]}
+    ]
+  },
+  options:{
+    ...noAnim,
+    scales:{
+      x:{ticks:{maxTicksLimit:7,font:{size:9}},grid:{display:false}},
+      y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}}
+    }
+  }
+});
+
+// ── 圖 C：PE Band（只取 ±1σ + mean，避免 Y 軸被壓扁）
+const ctxPE = document.getElementById('chartPE').getContext('2d');
+// 計算合理 Y 軸範圍：以實際股價 max + 20% 為上限
+const yMax = Math.max(...PE_ACTUAL.filter(v=>v!=null), ...PE_P1.filter(v=>v!=null)) * 1.05;
+const yMin = Math.min(...PE_ACTUAL.filter(v=>v!=null), ...PE_M1.filter(v=>v!=null)) * 0.92;
+new Chart(ctxPE, {
+  type:'line',
+  data:{
+    labels:PE_DATES,
+    datasets:[
+      {label:'+1σ (24.4x)', data:PE_P1, borderColor:'rgba(192,57,43,.55)', backgroundColor:'rgba(218,165,32,.10)', borderWidth:.9, pointRadius:0, fill:'+1', borderDash:[4,3]},
+      {label:'mean (18.3x)', data:PE_MEAN, borderColor:'rgba(94,13,46,.85)', backgroundColor:'rgba(94,13,46,.06)', borderWidth:1.2, pointRadius:0, fill:'+1'},
+      {label:'-1σ (12.1x)', data:PE_M1, borderColor:'rgba(0,135,90,.6)', borderWidth:.9, pointRadius:0, fill:false, borderDash:[4,3]},
+      {label:'股價', data:PE_ACTUAL, borderColor:'#1a0a2e', borderWidth:2, pointRadius:0, fill:false}
+    ]
+  },
+  options:{
+    ...noAnim,
+    plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:8}}},
+    scales:{
+      x:{ticks:{maxTicksLimit:8,font:{size:9}},grid:{display:false}},
+      y:{ticks:{font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}, suggestedMin:yMin, suggestedMax:yMax}
+    }
+  }
+});
+})();
+</script>
+
+</body>
+</html>

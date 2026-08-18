@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+{% block title %}期現價差排行{% endblock %}
+
+{% block content %}
+<div class="content-area">
+<style>
+    .fb-head { display:flex; flex-wrap:wrap; gap:12px; margin:16px 0; }
+    .fb-stat { flex:1 1 160px; background:#0f172a; border:1.5px solid #1e293b; border-radius:10px;
+               padding:16px; text-align:center; }
+    .fb-stat .lbl { font-size:13px; color:#94a3b8; margin-bottom:6px; }
+    .fb-stat .num { font-size:34px; font-weight:800; line-height:1; }
+    .fb-stat.contango .num { color:#22c55e; }      /* 正價差 綠 */
+    .fb-stat.contango { border-color:rgba(34,197,94,.4); }
+    .fb-stat.back .num { color:#ef4444; }          /* 逆價差 紅 */
+    .fb-stat.back { border-color:rgba(239,68,68,.4); }
+    .fb-stat.flat .num { color:#f59e0b; }
+    .fb-stat.nospot .num { color:#64748b; }
+    .fb-stat.disp .num { color:#ef4444; }
+    .fb-stat.disp { border-color:rgba(239,68,68,.55); }
+
+    .fb-meta { color:#94a3b8; font-size:13px; margin:4px 0 12px; display:flex; flex-wrap:wrap;
+               gap:8px 18px; align-items:center; }
+    .fb-meta .dot { width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:5px; }
+    .fb-meta .dot.on { background:#22c55e; } .fb-meta .dot.off { background:#ef4444; }
+
+    .fb-controls { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+    .fb-btn { padding:6px 14px; border-radius:6px; border:1px solid #334155; background:#1e293b;
+              color:#cbd5e1; cursor:pointer; font-size:13px; }
+    .fb-btn.active { background:#6366f1; border-color:#6366f1; color:#fff; }
+
+    .fb-table { width:100%; border-collapse:collapse; font-size:14px; }
+    .fb-table th, .fb-table td { padding:8px 10px; border-bottom:1px solid #1e293b; white-space:nowrap;
+                                 text-align:right; }
+    .fb-table th { color:#94a3b8; cursor:pointer; user-select:none; position:sticky; top:0;
+                   background:#0b1220; }
+    .fb-table th:first-child, .fb-table td:first-child,
+    .fb-table th:nth-child(2), .fb-table td:nth-child(2) { text-align:left; }
+    .fb-table tbody tr:hover { background:rgba(99,102,241,.08); }
+    .fb-table td.pos { color:#22c55e; }   /* 正價差 綠 */
+    .fb-table td.neg { color:#ef4444; }   /* 逆價差 紅 */
+    .fb-table td.muted { color:#64748b; }
+    .fb-badge { padding:2px 8px; border-radius:10px; font-size:12px; font-weight:600; }
+    .fb-badge.contango { background:rgba(34,197,94,.15); color:#22c55e; }
+    .fb-badge.backwardation { background:rgba(239,68,68,.15); color:#ef4444; }
+    .fb-badge.flat { background:rgba(245,158,11,.15); color:#f59e0b; }
+    .fb-badge.no_spot { background:rgba(100,116,139,.18); color:#94a3b8; }
+    .fb-disp-tag { display:inline-block; padding:1px 7px; border-radius:6px; font-size:11px;
+                   font-weight:700; background:#ef4444; color:#fff; margin-left:6px;
+                   vertical-align:middle; }
+    .fb-error { background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.4); color:#fca5a5;
+                padding:14px 16px; border-radius:8px; margin:16px 0; }
+    /* 現股非即時警示：紅底=完全沒有即時現價（基差整體不可用）、
+       琥珀=部分列非即時。刻意做得顯眼，不讓壞資料看起來像好資料。 */
+    .fb-warn { background:rgba(239,68,68,.14); border:1px solid rgba(239,68,68,.5);
+               color:#fca5a5; padding:12px 16px; border-radius:8px; margin:12px 0;
+               font-size:13px; line-height:1.7; }
+    .fb-warn.soft { background:rgba(245,158,11,.12); border-color:rgba(245,158,11,.45);
+                    color:#fcd34d; }
+    .fb-stale-tag { display:inline-block; padding:1px 6px; border-radius:5px; font-size:11px;
+                    font-weight:700; background:rgba(245,158,11,.2); color:#f59e0b;
+                    margin-left:6px; vertical-align:middle; }
+    .fb-table tbody tr.fb-stale-row { opacity:.62; }
+    .fb-table tbody tr.fb-stale-row:hover { opacity:1; }
+    .fb-wrap { max-height:70vh; overflow:auto; border:1px solid #1e293b; border-radius:8px; }
+    h4.fb-title { margin:8px 0 0; }
+</style>
+
+<h4 class="fb-title">期現價差（正/逆價差）排行</h4>
+<div class="fb-meta" id="fb-meta">載入中...</div>
+
+<div id="fb-error-box"></div>
+
+<div class="fb-head" id="fb-head">
+    <div class="fb-stat contango"><div class="lbl">正價差 Contango</div><div class="num" id="st-contango">--</div></div>
+    <div class="fb-stat back"><div class="lbl">逆價差 Backwardation</div><div class="num" id="st-back">--</div></div>
+    <div class="fb-stat flat"><div class="lbl">平水 Flat</div><div class="num" id="st-flat">--</div></div>
+    <div class="fb-stat nospot"><div class="lbl">無現價</div><div class="num" id="st-nospot">--</div></div>
+    <div class="fb-stat disp"><div class="lbl">處置股</div><div class="num" id="st-disp">--</div></div>
+</div>
+
+<div class="fb-controls">
+    <button class="fb-btn active" data-sort="basis_pct" data-dir="desc" id="btn-contango">最正價差（基差% 大→小）</button>
+    <button class="fb-btn" data-sort="basis_pct" data-dir="asc" id="btn-back">最逆價差（基差% 小→大）</button>
+    <button class="fb-btn active" id="btn-hide-stale"
+            title="舊價列的基差是用落後的現股價算出來的，會虛胖並霸佔排行榜前段，預設排除">排除舊價列</button>
+    <button class="fb-btn" id="btn-disp-only" style="margin-left:auto;">只看處置股</button>
+</div>
+
+<div id="fb-hidden-note" style="color:#f59e0b;font-size:12px;margin:0 0 6px;"></div>
+
+<div class="fb-wrap">
+<table class="fb-table">
+    <thead>
+        <tr>
+            <th data-key="product" style="text-align:left;">商品</th>
+            <th data-key="name" style="text-align:left;">標的</th>
+            <th data-key="fut_price">期貨價</th>
+            <th data-key="spot_price">現股價</th>
+            <th data-key="basis">基差</th>
+            <th data-key="basis_pct">基差%</th>
+            <th data-key="volume">成交量</th>
+            <th data-key="status" style="text-align:center;">狀態</th>
+        </tr>
+    </thead>
+    <tbody id="fb-body">
+        <tr><td colspan="8" style="text-align:center;color:#64748b;padding:24px;">載入中...</td></tr>
+    </tbody>
+</table>
+</div>
+
+<script>
+(function() {
+    var rows = [];
+    var sortKey = 'basis_pct';
+    var sortDir = 'desc';
+    var dispOnly = false;
+    var hideStale = true;   // 預設排除舊價列，見 render() 內說明
+
+    function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+    }
+
+    function dispTooltip(info) {
+        if (!info) return '處置中';
+        var parts = [];
+        if (info.match_label) parts.push(info.match_label);
+        else if (info.action) parts.push(info.action);
+        if (info.condition) parts.push(info.condition);
+        if (info.period_start || info.period_end) {
+            parts.push((info.period_start || '?') + ' ~ ' + (info.period_end || '?'));
+        }
+        return parts.length ? parts.join('｜') : '處置中';
+    }
+
+    function dispBadgeText(info) {
+        // 徽章直接寫出撮合間隔：處置·5分 / 20分 / 60分
+        var iv = info && info.match_interval;
+        return iv ? ('處置·' + iv + '分') : '處置';
+    }
+
+    function fmt(v, d) {
+        if (v === null || v === undefined) return '--';
+        return Number(v).toLocaleString(undefined, {minimumFractionDigits: d, maximumFractionDigits: d});
+    }
+
+    function statusLabel(s) {
+        return {contango:'正價差', backwardation:'逆價差', flat:'平水', no_spot:'無現價'}[s] || s;
+    }
+
+    function render() {
+        var base = dispOnly ? rows.filter(function(r) { return r.is_disposition; }) : rows;
+
+        // 排除舊價列（預設開）。舊價列的基差 = 即時期貨 − 落後現股，
+        // 會被那段時間的行情位移灌水，實測常整批霸佔「最正價差」榜首
+        // （例：27 檔舊價卻佔前 6 名的 4 名）。留在榜上比不顯示更危險。
+        // 例外：若全部都是舊價，排除後會整張空白，此時照列並靠紅色橫幅示警。
+        var hiddenStale = 0;
+        if (hideStale) {
+            var fresh = base.filter(function(r) { return !r.spot_stale; });
+            if (fresh.length) {
+                hiddenStale = base.length - fresh.length;
+                base = fresh;
+            }
+        }
+        var note = document.getElementById('fb-hidden-note');
+        note.textContent = hiddenStale
+            ? '（已排除 ' + hiddenStale + ' 檔現價非即時的標的，點「排除舊價列」可顯示）'
+            : '';
+        var sorted = base.slice().sort(function(a, b) {
+            var av = a[sortKey], bv = b[sortKey];
+            // null 一律墊底
+            var aNull = (av === null || av === undefined);
+            var bNull = (bv === null || bv === undefined);
+            if (aNull && bNull) return 0;
+            if (aNull) return 1;
+            if (bNull) return -1;
+            if (typeof av === 'string') {
+                return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+            }
+            return sortDir === 'asc' ? av - bv : bv - av;
+        });
+
+        var tb = document.getElementById('fb-body');
+        if (!sorted.length) {
+            var msg = dispOnly ? '目前無處置中的個股期標的' : '無資料';
+            tb.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#64748b;padding:24px;">' + msg + '</td></tr>';
+            return;
+        }
+        var html = '';
+        sorted.forEach(function(r) {
+            var pctCls = r.basis_pct === null ? 'muted' : (r.basis_pct < 0 ? 'neg' : (r.basis_pct > 0 ? 'pos' : ''));
+            var basisCls = r.basis === null ? 'muted' : (r.basis < 0 ? 'neg' : (r.basis > 0 ? 'pos' : ''));
+            var dispTag = r.is_disposition
+                ? '<span class="fb-disp-tag" title="' + escapeHtml(dispTooltip(r.disposition_info)) + '">'
+                    + escapeHtml(dispBadgeText(r.disposition_info)) + '</span>'
+                : '';
+            // 現價非即時的列：整列淡化 + 基差灰掉 + 掛「舊價」標。
+            // 不能讓它用一個由舊現價算出的漂亮基差混在排行榜前段搶眼球。
+            var staleTag = r.spot_stale
+                ? '<span class="fb-stale-tag" title="現價取自資料庫收盤價，非即時，'
+                    + '此列基差不可靠">舊價</span>'
+                : '';
+            if (r.spot_stale) { basisCls = 'muted'; pctCls = 'muted'; }
+            html += '<tr class="' + (r.spot_stale ? 'fb-stale-row' : '') + '">'
+                + '<td>' + r.product + '</td>'
+                + '<td>' + (r.underlying ? '<a href="/stock?id=' + r.underlying + '" style="color:#818cf8;">' + r.underlying + '</a> ' : '') + (r.name || '') + dispTag + '</td>'
+                + '<td>' + fmt(r.fut_price, 2) + '</td>'
+                + '<td>' + fmt(r.spot_price, 2) + staleTag + '</td>'
+                + '<td class="' + basisCls + '">' + fmt(r.basis, 2) + '</td>'
+                + '<td class="' + pctCls + '">' + (r.basis_pct === null ? '--' : fmt(r.basis_pct, 2) + '%') + '</td>'
+                + '<td>' + fmt(r.volume, 0) + '</td>'
+                + '<td style="text-align:center;"><span class="fb-badge ' + r.status + '">' + statusLabel(r.status) + '</span></td>'
+                + '</tr>';
+        });
+        tb.innerHTML = html;
+    }
+
+    function ageText(sec) {
+        if (sec === null || sec === undefined) return '未知';
+        if (sec < 60) return Math.round(sec) + ' 秒前';
+        return Math.floor(sec / 60) + ' 分' + Math.round(sec % 60) + ' 秒前';
+    }
+
+    // 現股資料新鮮度警示。基差 = 期貨 − 現股，兩腳時間必須對齊才有意義；
+    // 現股腿一旦落後（MIS 被封鎖 → fallback DB 收盤），基差會混入這段時間的
+    // 行情位移，實測過 2330 因此讓 −8 逆價差變成應為 +2 正價差（符號翻轉）。
+    // 所以這裡寧可把話講死，也不讓頁面看起來一切正常。
+    function spotBanner(ss, stats) {
+        var total = (stats.total || 0);
+        var rt = ss.realtime || 0;
+        var stale = ss.stale || 0;
+        if (!total) return '';
+        var circuit = ss.circuit || {};
+        if (rt === 0 && stale > 0) {
+            var why = circuit.open
+                ? 'MIS 報價已熔斷靜默（連續失敗 ' + (circuit.consecutive_fail || 0)
+                    + ' 批，冷卻剩 ' + (circuit.cooldown_remain_sec || 0) + ' 秒）'
+                : 'MIS 即時報價全部取不到';
+            return '<div class="fb-warn"><b>⚠ 現股價非即時，基差僅供參考</b><br>'
+                + why + '，' + stale + ' 檔現價已改用資料庫收盤價（'
+                + (ss.db_fallback_date || '?') + '），最後成功取得即時價：'
+                + (ss.fetched_at || '無') + '。<br>'
+                + '期貨腿仍為即時，兩腳時間不對齊時基差可能連正負號都相反，'
+                + '請勿據此下單。</div>';
+        }
+        if (stale > 0) {
+            return '<div class="fb-warn soft">⚠ ' + stale + ' / ' + total
+                + ' 檔現價非即時（已用資料庫收盤價 ' + (ss.db_fallback_date || '?')
+                + ' 代替，表格內以 <span class="fb-stale-tag">舊價</span> 標示，'
+                + '該列基差不可靠）。</div>';
+        }
+        if (ss.partial) {
+            return '<div class="fb-warn soft">⚠ 現股報價本輪涵蓋不全（'
+                + '來源 ' + (ss.source || '?') + '），部分基差可能偏舊。</div>';
+        }
+        return '';
+    }
+
+    function updateStats(stats, qs, ss) {
+        document.getElementById('st-contango').textContent = stats.contango != null ? stats.contango : '--';
+        document.getElementById('st-back').textContent = stats.backwardation != null ? stats.backwardation : '--';
+        document.getElementById('st-flat').textContent = stats.flat != null ? stats.flat : '--';
+        document.getElementById('st-nospot').textContent = stats.no_spot != null ? stats.no_spot : '--';
+        document.getElementById('st-disp').textContent = stats.disposition != null ? stats.disposition : '--';
+
+        var meta = document.getElementById('fb-meta');
+        var sweep = qs.last_sweep ? qs.last_sweep.replace('T', ' ').slice(0, 19) : '--';
+        var connDot = qs.connected ? '<span class="dot on"></span>已連線' : '<span class="dot off"></span>未連線';
+
+        // 現股腿的時間戳：一律用後端回報的實際抓取時間。
+        // 這裡刻意不再用 new Date()——瀏覽器時鐘永遠是「剛剛」，
+        // 會把落後數十分鐘的現價顯示成秒級新鮮，是先前誤導的根源。
+        var rt = ss.realtime || 0;
+        var stale = ss.stale || 0;
+        var spotOk = rt > 0 && stale === 0;
+        var spotColor = spotOk ? '#22c55e' : (rt === 0 ? '#ef4444' : '#f59e0b');
+        var spotTs = ss.fetched_at
+            ? ss.fetched_at.slice(11) + '（' + ageText(ss.age_sec) + '）'
+            : '無';
+
+        meta.innerHTML = connDot
+            + '<span>期貨報價：<b style="color:#22c55e;">' + sweep.slice(11) + '</b>'
+            + '　' + (qs.priced != null ? qs.priced : '?') + '/'
+            + (qs.total != null ? qs.total : '325') + ' 檔'
+            + (qs.uncovered != null ? '，未涵蓋 ' + qs.uncovered + ' 檔' : '') + '</span>'
+            + '<span>現股報價：<b style="color:' + spotColor + ';">' + spotTs + '</b>'
+            + '　即時 ' + rt + ' / 舊價 ' + stale + ' 檔</span>'
+            + '<span style="color:#64748b;">每 20 秒自動更新</span>';
+    }
+
+    function load() {
+        fetch('/api/futures-basis')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var errBox = document.getElementById('fb-error-box');
+                if (!data.ok) {
+                    errBox.innerHTML = '<div class="fb-error">' + (data.error || '群益報價服務暫時無法連線，請稍後再試。') + '</div>';
+                    document.getElementById('fb-meta').innerHTML = '<span class="dot off"></span>未連線';
+                    return;
+                }
+                var ss = data.spot_status || {};
+                errBox.innerHTML = spotBanner(ss, data.stats || {});
+                rows = data.rows || [];
+                updateStats(data.stats || {}, data.quote_status || {}, ss);
+                render();
+            })
+            .catch(function(e) {
+                document.getElementById('fb-error-box').innerHTML =
+                    '<div class="fb-error">載入失敗：' + e + '</div>';
+            });
+    }
+
+    // 排序切換按鈕（只含有 data-sort 的，不含「只看處置股」過濾鈕）
+    document.querySelectorAll('.fb-btn[data-sort]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.fb-btn[data-sort]').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            sortKey = btn.getAttribute('data-sort');
+            sortDir = btn.getAttribute('data-dir');
+            render();
+        });
+    });
+
+    // 排除舊價列 過濾鈕（獨立 toggle，預設開）
+    document.getElementById('btn-hide-stale').addEventListener('click', function() {
+        hideStale = !hideStale;
+        this.classList.toggle('active', hideStale);
+        render();
+    });
+
+    // 只看處置股 過濾鈕（獨立 toggle）
+    document.getElementById('btn-disp-only').addEventListener('click', function() {
+        dispOnly = !dispOnly;
+        this.classList.toggle('active', dispOnly);
+        render();
+    });
+
+    // 表頭點擊排序
+    document.querySelectorAll('.fb-table th').forEach(function(th) {
+        th.addEventListener('click', function() {
+            var key = th.getAttribute('data-key');
+            if (!key) return;
+            if (sortKey === key) {
+                sortDir = (sortDir === 'desc') ? 'asc' : 'desc';
+            } else {
+                sortKey = key;
+                sortDir = 'desc';
+            }
+            document.querySelectorAll('.fb-btn[data-sort]').forEach(function(b) { b.classList.remove('active'); });
+            render();
+        });
+    });
+
+    load();
+    setInterval(load, 20000);
+})();
+</script>
+</div>
+{% endblock %}

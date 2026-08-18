@@ -1,17 +1,33 @@
 @echo off
-:: 檢查是否已在運行
+setlocal
+
+set "LOG=D:\claude\tw-stock-scanner\autostart.log"
+set "PYW=C:\Users\User\AppData\Local\Programs\Python\Python312\pythonw.exe"
+set "PRJ=D:\claude\tw-stock-scanner"
+
+echo [%date% %time%] === autostart triggered ===>>"%LOG%"
+
 netstat -ano | findstr ":5000 " | findstr "LISTENING" >nul 2>&1
 if not errorlevel 1 (
+    echo [%date% %time%] port 5000 already listening, skip>>"%LOG%"
     exit /b 0
 )
 
-cd /d D:\claude\tw-stock-scanner
+if not exist "%PYW%" (
+    echo [%date% %time%] ERROR pythonw not found at %PYW%>>"%LOG%"
+    exit /b 1
+)
 
-:: 背景啟動 watchdog（pythonw 無視窗，start /b 不等待）
-start "" "C:\Users\User\AppData\Local\Programs\Python\Python312\pythonw.exe" watchdog.py
+cd /d "%PRJ%"
+if errorlevel 1 (
+    echo [%date% %time%] ERROR cannot cd to %PRJ%>>"%LOG%"
+    exit /b 1
+)
 
-:: 背景補抓缺少的資料
-start "" "C:\Users\User\AppData\Local\Programs\Python\Python312\pythonw.exe" auto_update.py
+start "" "%PYW%" watchdog.py
+echo [%date% %time%] watchdog.py launched>>"%LOG%"
 
-:: 等 Flask 起來後開瀏覽器
-start /b cmd /c "for /L %%i in (1,1,20) do (timeout /t 3 /nobreak >nul & netstat -ano | findstr \":5000 \" | findstr \"LISTENING\" >nul 2>&1 && (start http://127.0.0.1:5000/breakout & exit /b 0))"
+start "" "%PYW%" auto_update.py
+echo [%date% %time%] auto_update.py launched>>"%LOG%"
+
+exit /b 0

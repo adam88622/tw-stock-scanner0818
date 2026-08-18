@@ -19,8 +19,10 @@
 
     <!-- 篩選列 -->
     <div class="filter-bar">
-        <form method="GET" action="/institutional" class="d-flex align-items-center gap-3 flex-wrap">
+        <form method="GET" action="/institutional" id="inst-filter-form" class="d-flex align-items-center gap-3 flex-wrap">
             <input type="hidden" name="type" value="{{ inst_type }}">
+            <!-- days 由按鈕點擊時動態寫入 -->
+            <input type="hidden" name="days" id="inst-days-input" value="{{ days }}">
 
             <!-- 日期 -->
             <div class="filter-group">
@@ -37,10 +39,11 @@
                 <label>累積天數</label>
                 <div class="btn-group" role="group">
                     {% for n in [1, 5, 10, 30] %}
-                    <a href="/institutional?type={{ inst_type }}&days={{ n }}&market={{ market }}&date={{ date }}"
-                       class="btn btn-sm {{ 'btn-primary' if days == n else 'btn-outline-primary' }}">
+                    <button type="button"
+                            class="btn btn-sm {{ 'btn-primary' if days == n else 'btn-outline-primary' }} inst-days-btn"
+                            data-days="{{ n }}">
                         {{ n }}日
-                    </a>
+                    </button>
                     {% endfor %}
                 </div>
             </div>
@@ -56,6 +59,20 @@
             </div>
         </form>
     </div>
+
+    <script>
+    (function () {
+        var form = document.getElementById('inst-filter-form');
+        var hidden = document.getElementById('inst-days-input');
+        if (!form || !hidden) return;
+        document.querySelectorAll('.inst-days-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                hidden.value = btn.getAttribute('data-days');
+                form.submit();
+            });
+        });
+    })();
+    </script>
 
     <!-- Export -->
     <div style="text-align:right; margin-bottom:8px;">
@@ -76,7 +93,7 @@
                     <table class="table table-hover table-sm data-table mb-0">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th data-no-sort>#</th>
                                 <th>代號</th>
                                 <th>名稱</th>
                                 <th class="text-end">買超(張)</th>
@@ -113,7 +130,7 @@
                     <table class="table table-hover table-sm data-table mb-0">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th data-no-sort>#</th>
                                 <th>代號</th>
                                 <th>名稱</th>
                                 <th class="text-end">賣超(張)</th>

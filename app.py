@@ -15,13 +15,39 @@ logger = logging.getLogger(__name__)
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from flask import Flask, render_template, request, jsonify
+# ===== 載入 .env (若存在),不依賴外部套件 =====
+def _load_dotenv():
+    env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
+    if not os.path.isfile(env_path):
+        return
+    try:
+        with open(env_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#') or '=' not in line:
+                    continue
+                k, _, v = line.partition('=')
+                k = k.strip()
+                v = v.strip().strip('"').strip("'")
+                if k and k not in os.environ:
+                    os.environ[k] = v
+    except Exception as e:
+        logger.warning(f".env 載入失敗: {e}")
+
+_load_dotenv()
+
+from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
+from flask_httpauth import HTTPBasicAuth
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from werkzeug.security import check_password_hash, generate_password_hash
 from models.database import (init_db, get_conn, get_latest_date, get_breakouts_by_date,
                              get_trading_dates, get_broker_trades,
                              get_regime_history, get_latest_regime,
                              add_to_watchlist, remove_from_watchlist,
                              get_watchlist, is_in_watchlist)
 from scanners.institutional import get_ranking
+from scanners.futures_large_trader import get_stock_large_trader
 try:
     from scanners.regime import get_market_temperature, rolling_retrain, get_model_info
 except ImportError:
@@ -31,6 +57,51 @@ except ImportError:
 from scrapers.market import fetch_futures_oi, fetch_retail_ratio, fetch_put_call_ratio, _finmind_get
 
 app = Flask(__name__)
+
+# ===== Basic Auth =====
+auth = HTTPBasicAuth()
+
+_SCANNER_USER = os.environ.get('SCANNER_USER', '')
+_SCANNER_PASS = os.environ.get('SCANNER_PASS', '')
+
+
+@auth.verify_password
+def _verify_password(username, password):
+    # 未設定帳密時視為未啟用,直接放行(避免本機開發誤鎖死)
+    if not _SCANNER_USER or not _SCANNER_PASS:
+        return 'guest'
+    if username == _SCANNER_USER and password == _SCANNER_PASS:
+        return username
+    return None
+
+
+# ===== Rate Limiter =====
+limiter = Limiter(
+    key_func=get_remote_address,
+    app=app,
+    default_limits=["120 per minute"],
+)
+
+
+# ===== 全站 Basic Auth: 排除 /static/* 與 /api/health =====
+_AUTH_EXEMPT_PREFIXES = ('/static/',)
+_AUTH_EXEMPT_PATHS = {'/api/health'}
+
+
+@app.before_request
+def _global_auth_guard():
+    # 未設定帳密時不啟用 (本機開發友善)
+    if not _SCANNER_USER or not _SCANNER_PASS:
+        return None
+    path = request.path or ''
+    if path in _AUTH_EXEMPT_PATHS:
+        return None
+    for prefix in _AUTH_EXEMPT_PREFIXES:
+        if path.startswith(prefix):
+            return None
+    # 利用 flask_httpauth 的 login_required 機制驗證 (回傳 None 表示通過)
+    return auth.login_required(lambda: None)()
+
 
 # 啟動時初始化 DB
 init_db()
@@ -229,28 +300,77 @@ def research_list():
             pass
         return None
 
+    def _valid_ymd(y, mo, d):
+        """檢查 (年,月,日) 是否為合理日期；過濾掉如 2026/27/28 這種年度簡寫"""
+        return 1 <= int(mo) <= 12 and 1 <= int(d) <= 31
+
     def _extract_date(fpath):
         """報告日期：優先檔名 YYYYMMDD / YYYY-MM-DD，其次 HTML 內容"""
         fname = os.path.basename(fpath)
-        m = _re.search(r'(\d{4})(\d{2})(\d{2})', fname)
-        if m:
-            return f'{m.group(1)}-{m.group(2)}-{m.group(3)}'
-        m = _re.search(r'(\d{4})-(\d{2})-(\d{2})', fname)
-        if m:
-            return f'{m.group(1)}-{m.group(2)}-{m.group(3)}'
+        for m in _re.finditer(r'(\d{4})(\d{2})(\d{2})', fname):
+            if _valid_ymd(*m.groups()):
+                return f'{m.group(1)}-{m.group(2)}-{m.group(3)}'
+        for m in _re.finditer(r'(\d{4})-(\d{2})-(\d{2})', fname):
+            if _valid_ymd(*m.groups()):
+                return f'{m.group(1)}-{m.group(2)}-{m.group(3)}'
         try:
             with open(fpath, 'r', encoding='utf-8', errors='ignore') as fh:
                 content = fh.read(15000)
             text = _re.sub(r'<[^>]+>', ' ', content)
-            m = _re.search(r'(\d{4})年(\d{1,2})月(\d{1,2})日', text)
-            if m:
-                return f'{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}'
-            m = _re.search(r'(\d{4})[-/](\d{1,2})[-/](\d{1,2})', text)
-            if m:
-                return f'{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}'
+            for m in _re.finditer(r'(\d{4})年(\d{1,2})月(\d{1,2})日', text):
+                if _valid_ymd(*m.groups()):
+                    return f'{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}'
+            for m in _re.finditer(r'(\d{4})[-/](\d{1,2})[-/](\d{1,2})', text):
+                if _valid_ymd(*m.groups()):
+                    return f'{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}'
         except Exception:
             pass
         return None
+
+    _RATING_WORDS = ('買進', '增持', '中立', '減碼', '偏多', '賣出', '增加持股')
+    def _normalize_rating(raw):
+        """把內文評等字樣正規化成標題用語"""
+        raw = raw.strip()
+        if raw.startswith(('增加持股', '增持')) or 'OW' in raw or 'Overweight' in raw.title():
+            return '增持'
+        if raw.startswith('買進') or 'Buy' in raw.title():
+            return '買進'
+        if raw.startswith('中立') or 'Neutral' in raw.title():
+            return '中立'
+        if raw.startswith(('減碼', '減持')) or 'Underweight' in raw.title():
+            return '減碼'
+        if raw.startswith('偏多'):
+            return '偏多'
+        if raw.startswith(('賣出',)) or 'Sell' in raw.title():
+            return '賣出'
+        return None
+
+    def _apply_rating(fpath, title):
+        """標題若尚未含評等，從內文自動抓出並接上（僅影響顯示，不改檔案）
+
+        依序嘗試：①「評等：…」字樣 ②評等徽章 <span class="badge …">…</span>
+        （研究員觀點報告的評等多以徽章呈現，且位置在 2 萬位元組附近，故讀取量放大）
+        """
+        if any(w in title for w in _RATING_WORDS):
+            return title
+        try:
+            with open(fpath, 'r', encoding='utf-8', errors='ignore') as fh:
+                content = fh.read(40000)
+            rating = None
+            m = _re.search(r'評等[：:]\s*([^<\n]{1,16})', content)
+            if m:
+                rating = _normalize_rating(m.group(1))
+            if not rating:
+                # 徽章：去除前導符號（▼◆▲ 等）後正規化
+                b = _re.search(r'class="badge[^"]*"[^>]*>\s*([^<]{1,24})', content)
+                if b:
+                    raw = _re.sub(r'^[\s▼◆▲△▽●○\-—]+', '', b.group(1))
+                    rating = _normalize_rating(raw)
+            if rating:
+                return f'{title} — {rating}'
+        except Exception:
+            pass
+        return title
 
     def _extract_summary(fpath, max_len=80):
         """從 HTML 抓第一段有意義的文字當摘要"""
@@ -286,6 +406,7 @@ def research_list():
                     mtime = os.path.getmtime(fpath)
                     date_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d')
                 title = _extract_title(fpath) or f.replace('.html', '').replace('-', ' ').replace('_', ' ')
+                title = _apply_rating(fpath, title)
                 summary = _extract_summary(fpath)
                 rel_path = (path_prefix + '/' + f) if path_prefix else f
                 reports.append({'filename': rel_path, 'title': title, 'category': category_name, 'date': date_str, 'summary': summary})
@@ -310,6 +431,7 @@ def research_list():
                     mtime = os.path.getmtime(fpath)
                     date_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d')
                 title = _extract_title(fpath) or item.replace('.html', '').replace('-', ' ').replace('_', ' ')
+                title = _apply_rating(fpath, title)
                 summary = _extract_summary(fpath)
                 categories.setdefault('其他', []).append({'filename': item, 'title': title, 'category': '', 'date': date_str, 'summary': summary})
 
@@ -338,10 +460,219 @@ def api_research(filepath):
     if re.search(r'\.\.', filepath) or not re.match(r'^[\w\-\./\u4e00-\u9fff]+\.html$', filepath):
         return 'Invalid', 400
     full_path = os.path.join(RESEARCH_DIR, filepath)
-    if not os.path.isfile(full_path):
+    # \u8def\u5f91\u904d\u6b77\u9632\u8b77: realpath \u5f8c\u5fc5\u9808\u4f4d\u65bc RESEARCH_DIR \u4e4b\u5167
+    resolved = os.path.realpath(full_path)
+    research_root = os.path.realpath(RESEARCH_DIR)
+    if not resolved.startswith(research_root + os.sep):
+        return 'Forbidden', 403
+    if not os.path.isfile(resolved):
         return 'Not found', 404
-    with open(full_path, 'r', encoding='utf-8') as f:
+    with open(resolved, 'r', encoding='utf-8') as f:
         return f.read()
+
+
+# ===== 每日券商報告 =====
+BROKER_REPORTS_DIR = r'P:\2026年報告'
+BROKER_RATING_CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'broker_ratings.json')
+MAX_EXTRACT_PER_REQ = 80
+
+
+def _broker_normalize_rating(raw):
+    """把一段文字正規化成標準評等字串，抓不到回 None。先比對到先回傳。"""
+    if not raw:
+        return None
+    t = raw.strip()
+    tl = t.lower()
+    # 買進
+    if '買進' in t or 'buy' in tl or 'outperform' in tl or '優於大盤' in t:
+        return '買進'
+    # 增持
+    if '增持' in t or '增加持股' in t or '加碼' in t or 'overweight' in tl or 'accumulate' in tl:
+        return '增持'
+    # 偏多
+    if '偏多' in t:
+        return '偏多'
+    # 中立
+    if '中立' in t or 'neutral' in tl or 'hold' in tl or '持有' in t or '同大盤' in t:
+        return '中立'
+    # 區間操作
+    if '區間' in t:
+        return '區間操作'
+    # 減碼
+    if '減碼' in t or '減持' in t or 'underweight' in tl or 'reduce' in tl or '劣於大盤' in t:
+        return '減碼'
+    # 賣出
+    if '賣出' in t or 'sell' in tl:
+        return '賣出'
+    return None
+
+
+def _extract_pdf_rating(fpath):
+    """從 PDF 第 1 頁抽取投資評等，回傳標準評等字串或 ''。"""
+    import re as _re
+    try:
+        import fitz
+    except Exception:
+        return ''
+    try:
+        doc = fitz.open(fpath)
+    except Exception:
+        return ''
+    try:
+        if doc.page_count < 1:
+            return ''
+        try:
+            text = doc.load_page(0).get_text() or ''
+        except Exception:
+            return ''
+    finally:
+        try:
+            doc.close()
+        except Exception:
+            pass
+    text = text[:6000]
+    # ① 先找有標籤的評等：標籤後方 0–14 字內的評等字樣（最可靠）
+    m = _re.search(r'(投資評等|投資建議|評等|Rating|Recommendation)[\s：:．.\-]{0,4}(.{0,14})', text, _re.IGNORECASE)
+    if m:
+        rating = _broker_normalize_rating(m.group(2))
+        if rating:
+            return rating
+    # ② 退而找內文前 1500 字是否直接出現評等字樣
+    rating = _broker_normalize_rating(text[:1500])
+    if rating:
+        return rating
+    return ''
+
+
+@app.route('/broker-reports')
+def broker_reports():
+    """每日券商報告：一次只讀選定那一天的 PDF 清單"""
+    import re as _re
+    # pCloud 未掛載
+    if not os.path.isdir(BROKER_REPORTS_DIR):
+        return render_template('broker_reports.html', dates=[], reports=[],
+                               selected_date=None,
+                               message='pCloud 磁碟 (P:) 未掛載，無法讀取券商報告')
+
+    # 掃描符合 ^\d{4}$ 的日期資料夾，計算各自 PDF 數
+    dates = []
+    for item in os.listdir(BROKER_REPORTS_DIR):
+        item_path = os.path.join(BROKER_REPORTS_DIR, item)
+        if _re.match(r'^\d{4}$', item) and os.path.isdir(item_path):
+            count = 0
+            for f in os.listdir(item_path):
+                if f.lower().endswith('.pdf'):
+                    count += 1
+            dates.append({
+                'code': item,
+                'label': f'{item[:2]}/{item[2:]}',
+                'count': count,
+            })
+    # 依 code 由大到小排序（最新在前）
+    dates.sort(key=lambda d: d['code'], reverse=True)
+
+    # 選定日期
+    date_codes = [d['code'] for d in dates]
+    selected = request.args.get('date')
+    if selected not in date_codes:
+        selected = dates[0]['code'] if dates else None
+
+    # 讀取評等快取（不存在或壞掉 → 空 dict）
+    rating_cache = {}
+    try:
+        with open(BROKER_RATING_CACHE, 'r', encoding='utf-8') as _cf:
+            rating_cache = json.load(_cf)
+        if not isinstance(rating_cache, dict):
+            rating_cache = {}
+    except Exception:
+        rating_cache = {}
+    cache_dirty = False
+    extracted_this_req = 0
+    deferred_count = 0
+
+    reports = []
+    count_all = count_stock = count_industry = 0
+    if selected:
+        day_dir = os.path.join(BROKER_REPORTS_DIR, selected)
+        for f in os.listdir(day_dir):
+            if not f.lower().endswith('.pdf'):
+                continue
+            base = f[:-4]  # 去掉 .pdf
+            code = ''
+            m = _re.match(r'^reports_(stock|industry)_reports_\d{4}_\d{4}_(.+)$', base)
+            if m:
+                kind, rest = m.group(1), m.group(2)
+                if kind == 'stock':
+                    rtype = '個股'
+                    sm = _re.match(r'^(\d{2,6})(.+)$', rest)
+                    if sm:
+                        code, name = sm.group(1), sm.group(2)
+                        title = f'{code} {name}'
+                    else:
+                        title = rest
+                else:
+                    rtype = '產業'
+                    title = rest
+            else:
+                rtype = '其他'
+                title = base
+
+            # 評等：先查快取；未快取則抽取（每請求上限 MAX_EXTRACT_PER_REQ）
+            cache_key = f'{selected}/{f}'
+            if cache_key in rating_cache:
+                rating = rating_cache[cache_key]
+            elif extracted_this_req < MAX_EXTRACT_PER_REQ:
+                rating = _extract_pdf_rating(os.path.join(day_dir, f))
+                rating_cache[cache_key] = rating
+                cache_dirty = True
+                extracted_this_req += 1
+            else:
+                # 超過本請求抽取上限：先給空、不寫入快取，下次載入再補抽
+                rating = ''
+                deferred_count += 1
+
+            reports.append({'filename': f, 'title': title, 'rtype': rtype, 'code': code, 'rating': rating})
+
+        if deferred_count:
+            logger.info(f"broker rating: {selected} 有 {deferred_count} 篇評等延後抽取")
+
+        # 若本次有新增評等 → 寫回快取檔（寫失敗只 log 不讓頁面掛掉）
+        if cache_dirty:
+            try:
+                with open(BROKER_RATING_CACHE, 'w', encoding='utf-8') as _cf:
+                    json.dump(rating_cache, _cf, ensure_ascii=False)
+            except Exception as _e:
+                logger.warning(f"broker rating: 寫入快取失敗 {_e}")
+
+        count_all = len(reports)
+        count_stock = sum(1 for r in reports if r['rtype'] == '個股')
+        count_industry = sum(1 for r in reports if r['rtype'] == '產業')
+        # 產業在前、個股在後，同類型再依標題排序
+        _order = {'產業': 0, '個股': 1, '其他': 2}
+        reports.sort(key=lambda r: (_order.get(r['rtype'], 3), r['title']))
+
+    return render_template('broker_reports.html', dates=dates, reports=reports,
+                           selected_date=selected, count_all=count_all,
+                           count_stock=count_stock, count_industry=count_industry,
+                           message=None)
+
+
+@app.route('/api/broker-report/<path:filepath>')
+def api_broker_report(filepath):
+    """動態載入券商報告 PDF（inline 內嵌預覽）"""
+    # 安全檢查：拒絕 .. ；必須以 .pdf 結尾（不分大小寫）；
+    # 字元不再限制，真正防護交給下方 realpath 包含檢查
+    if '..' in filepath or not filepath.lower().endswith('.pdf'):
+        return 'Invalid', 400
+    full_path = os.path.join(BROKER_REPORTS_DIR, filepath)
+    # 路徑遍歷防護：realpath 後必須位於 BROKER_REPORTS_DIR 之內
+    resolved = os.path.realpath(full_path)
+    broker_root = os.path.realpath(BROKER_REPORTS_DIR)
+    if not resolved.startswith(broker_root + os.sep):
+        return 'Forbidden', 403
+    if not os.path.isfile(resolved):
+        return 'Not found', 404
+    return send_file(resolved, mimetype='application/pdf')
 
 
 @app.route('/breakout')
@@ -620,25 +951,116 @@ def api_breadth():
         conn.close()
 
 
+# ===== 期現價差（正/逆價差）掃描 =====
+
+@app.route('/futures-basis')
+def futures_basis():
+    return render_template('futures_basis.html')
+
+
+@app.route('/api/futures-basis')
+def api_futures_basis():
+    from scanners.futures_basis import compute_futures_basis
+    try:
+        result = compute_futures_basis()
+        return jsonify(result)
+    except Exception as e:
+        logger.error(f"futures-basis error: {e}")
+        return jsonify({'ok': False, 'error': str(e), 'rows': [],
+                        'stats': {}, 'quote_status': {}}), 500
+
+
+# ===== 電金強弱（電子/金融期相對強弱）=====
+
+@app.route('/te-tf-strength')
+def te_tf_strength_page():
+    return render_template('te_tf_strength.html')
+
+
+@app.route('/api/te-tf-strength')
+def api_te_tf_strength():
+    from scanners.te_tf_strength import build_response
+    try:
+        smooth = request.args.get('smooth', default=0, type=int)
+        return jsonify(build_response(smooth=smooth))
+    except Exception as e:
+        logger.error(f"te-tf-strength error: {e}")
+        return jsonify({'ok': False, 'error': str(e), 'now': None, 'series': [], 'quote_status': {}}), 500
+
+
+# ===== 選擇權支撐壓力表（TXO OI/Max Pain）=====
+
+@app.route('/option-sr')
+def option_sr():
+    return render_template('option_sr.html')
+
+
+@app.route('/api/option-sr')
+def api_option_sr():
+    from scanners.option_sr import compute_option_sr
+    try:
+        date = request.args.get('date')
+        contract = request.args.get('contract')
+        result = compute_option_sr(date, contract)
+        return jsonify(result)
+    except Exception as e:
+        logger.error(f"option-sr error: {e}")
+        return jsonify({'ok': False, 'error': str(e), 'rows': [],
+                        'available_dates': [], 'available_contracts': []}), 500
+
+
 # ===== 信用利差紅綠燈 =====
 
 CREDIT_SPREAD_THRESHOLD = 0.3
 CREDIT_SPREAD_YELLOW_LOW = 0.28
 CREDIT_SPREAD_YELLOW_HIGH = 0.32
 
+
+def _live_credit_signal(v):
+    if v is None:
+        return ''
+    if v < CREDIT_SPREAD_YELLOW_LOW:
+        return 'GREEN'
+    if v >= CREDIT_SPREAD_YELLOW_HIGH:
+        return 'RED'
+    return 'YELLOW'
+
+
 @app.route('/credit-spread')
 def credit_spread():
     from models.database import get_credit_spread_history
     conn = get_conn()
     try:
-        rows = get_credit_spread_history(conn, limit=500)
+        raw_rows = get_credit_spread_history(conn, limit=500)
+        rows = [
+            {
+                'date': r['date'],
+                'hyg_shy_ratio': r['hyg_shy_ratio'],
+                'indicator_value': r['indicator_value'],
+                'signal': _live_credit_signal(r['indicator_value']),
+                'spy_close': r['spy_close'],
+                'trend5d': r['trend5d'],
+            }
+            for r in raw_rows
+        ]
 
         if not rows:
             # DB empty - try live compute and seed
             try:
                 from scanners.credit_spread import update_credit_spread_db
                 update_credit_spread_db(conn)
-                rows = get_credit_spread_history(conn, limit=500)
+                raw_rows = get_credit_spread_history(conn, limit=500)
+                rows = [
+                    {
+                        'date': r['date'],
+                        'hyg_shy_ratio': r['hyg_shy_ratio'],
+                        'indicator_value': r['indicator_value'],
+                        'signal': _live_credit_signal(r['indicator_value']),
+                        'spy_close': r['spy_close'],
+                        'trend5d': r['trend5d'],
+                    }
+                    for r in raw_rows
+                ]
             except Exception as e:
                 logger.warning(f"Credit spread live seed failed: {e}")
                 return render_template('credit_spread.html',
@@ -842,7 +1264,7 @@ def api_credit_spread():
             return jsonify({'error': 'No data. Run daily_check.py first.'}), 404
         latest = rows[0]
         return jsonify({
-            'signal': latest['signal'],
+            'signal': _live_credit_signal(latest['indicator_value']),
             'indicator_value': latest['indicator_value'],
             'percentile': latest['indicator_value'],
             'hyg_shy_ratio': latest['hyg_shy_ratio'],
@@ -975,8 +1397,43 @@ def consecutive():
         conn.close()
 
 
+@app.route('/deleveraging')
+def deleveraging():
+    """台股去槓桿壓力儀表板 — 優先用即時管線,失敗則回退 2026-07-14 靜態快照"""
+    ind = None
+    # Phase B: 即時管線 (scanners/deleveraging.py),尚未建置時自動回退快照
+    try:
+        from scanners.deleveraging import build_indicators
+        ind = build_indicators()
+    except Exception as e:
+        logger.warning(f'deleveraging 即時管線失敗,回退快照: {e}')
+    if not ind:
+        snap = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            'data', 'deleveraging_snapshot.json')
+        try:
+            with open(snap, encoding='utf-8') as f:
+                ind = json.load(f)
+        except Exception as e:
+            logger.error(f'deleveraging 快照載入失敗: {e}')
+            ind = None
+    return render_template('deleveraging.html',
+                           ind_json=json.dumps(ind, ensure_ascii=False) if ind else 'null')
+
+
+@app.route('/margin-warning')
+def margin_warning():
+    """融資預警訊號白話報告 — 靜態教育型內容"""
+    return render_template('margin_warning.html')
+
+
 @app.route('/margin-alert')
 def margin_alert():
+    # 已由「融資維持率查詢」取代；保留舊 URL 可用，直接導向新頁。
+    return redirect(url_for('margin_maintenance'))
+
+
+def _margin_alert_legacy():
+    """（保留備用）舊融資使用率警示頁邏輯，現已不由 route 直接呈現。"""
     conn = get_conn()
     try:
         date = get_latest_date(conn)
@@ -999,6 +1456,45 @@ def margin_alert():
                                sort_by=sort_by, message=None)
     finally:
         conn.close()
+
+
+@app.route('/margin-maintenance')
+def margin_maintenance():
+    return render_template('margin_maintenance.html')
+
+
+@app.route('/api/margin-maintenance')
+def api_margin_maintenance():
+    from scanners.margin_maintenance import (get_stock_maintenance, CodeError,
+                                             MarketNotFoundError, DEFAULT_N)
+    code = request.args.get('code', '').strip()
+    try:
+        n = int(request.args.get('n', DEFAULT_N))
+    except (TypeError, ValueError):
+        n = DEFAULT_N
+    try:
+        return jsonify(get_stock_maintenance(code, n))
+    except CodeError as e:
+        return jsonify({'error': 'invalid_code', 'message': str(e)}), 422
+    except MarketNotFoundError as e:
+        return jsonify({'error': 'not_found', 'message': str(e)}), 422
+    except Exception as e:
+        logger.error(f"margin-maintenance error: {e}")
+        return jsonify({'error': 'internal', 'message': str(e)}), 500
+
+
+@app.route('/api/margin-maintenance/scan')
+def api_margin_maintenance_scan():
+    from scanners.margin_maintenance import scan_market, DEFAULT_N
+    try:
+        n = int(request.args.get('n', DEFAULT_N))
+    except (TypeError, ValueError):
+        n = DEFAULT_N
+    try:
+        return jsonify(scan_market(n))
+    except Exception as e:
+        logger.error(f"margin-maintenance scan error: {e}")
+        return jsonify({'error': 'internal', 'message': str(e), 'rows': []}), 500
 
 
 def _fetch_margin_stocks(date_str):
@@ -1479,6 +1975,7 @@ def heatmap():
 
 
 @app.route('/api/heatmap')
+@limiter.limit("10 per minute")
 def api_heatmap():
     """Proxy finviz S&P 500 heatmap data"""
     try:
@@ -1900,6 +2397,13 @@ def stock_detail():
         # 自選股狀態
         in_watchlist = is_in_watchlist(conn, stock_id)
 
+        # 期貨大戶淨部位 / 籌碼集中度（近20日；無股期則 has_futures=False）
+        try:
+            large_trader = get_stock_large_trader(conn, stock_id, days=20)
+        except Exception as e:
+            logger.warning(f"期貨大戶資料讀取失敗 {stock_id}: {e}")
+            large_trader = {'has_futures': False, 'products': [], 'series': [], 'latest': None}
+
         return render_template('stock.html', data=data, message=None,
                                kline_json=json.dumps(data['kline']),
                                ma5_json=json.dumps(data['ma5']),
@@ -1908,7 +2412,9 @@ def stock_detail():
                                rsi_json=json.dumps(data['rsi']),
                                margin_json=json.dumps(margin_data),
                                inst_cost=inst_cost,
-                               in_watchlist=in_watchlist)
+                               in_watchlist=in_watchlist,
+                               large_trader=large_trader,
+                               large_trader_json=json.dumps(large_trader['series']))
     finally:
         conn.close()
 
@@ -1959,15 +2465,19 @@ def api_health():
             status['checks']['db'] = 'ok'
 
             # 各表最新日期與筆數
+            # 注意: SQLite 不支援 table/column 名以參數綁定,只能透過白名單 + 嚴格 assert
             HEALTH_CHECK_TABLES = {
                 'daily_prices': 'date',
                 'breakouts': 'date',
                 'institutional': 'date',
                 'broker_trades': 'date',
             }
+            _ALLOWED_TABLES = set(HEALTH_CHECK_TABLES.keys())
+            _ALLOWED_DATE_COLS = {'date'}
             for table, date_col in HEALTH_CHECK_TABLES.items():
-                if table not in HEALTH_CHECK_TABLES or date_col != 'date':
-                    continue  # whitelist guard
+                # 白名單嚴格 assert,確保表名/欄名來源可信
+                assert table in _ALLOWED_TABLES, f"unsafe table: {table}"
+                assert date_col in _ALLOWED_DATE_COLS, f"unsafe column: {date_col}"
                 row = conn.execute(f"SELECT MAX({date_col}) as latest, COUNT(*) as cnt FROM {table}").fetchone()
                 status['checks'][table] = {
                     'latest_date': row['latest'],
@@ -2179,14 +2689,36 @@ def _build_data_health():
             ('daily_prices.zero_volume',
              "SELECT COUNT(*) FROM daily_prices WHERE volume = 0 OR volume IS NULL", '停牌或缺資料'),
             ('daily_prices.extreme_change_pct',
-             "SELECT COUNT(*) FROM daily_prices dp WHERE ABS(dp.change_pct) > 11 "
+             "SELECT COUNT(*) FROM daily_prices dp "
+             "WHERE ABS(dp.change_pct) > 11 "
+             "AND LENGTH(dp.stock_id) = 4 AND dp.stock_id GLOB '[1-9]*' "
              "AND (SELECT COUNT(*) FROM daily_prices WHERE stock_id=dp.stock_id AND date<=dp.date) > 5",
-             '上市第 6 日後仍漲跌超過 ±11%（已豁免 IPO 前 5 日無漲跌限）'),
+             '真股票上市第 6 日後仍漲跌超過 ±11%（豁免 ETF/權證/IPO 前 5 日）'),
+            ('daily_prices.unadjusted_split_dividend',
+             "WITH paired AS ( "
+             "  SELECT d1.stock_id, d1.date, d1.adj_close AS c, d1.change_pct, "
+             "    (SELECT adj_close FROM daily_prices d2 WHERE d2.stock_id=d1.stock_id "
+             "     AND d2.date<d1.date ORDER BY d2.date DESC LIMIT 1) AS pc "
+             "  FROM daily_prices d1 "
+             "  WHERE LENGTH(d1.stock_id)=4 AND d1.stock_id GLOB '[1-9]*' "
+             "    AND d1.adj_close IS NOT NULL "
+             ") "
+             "SELECT COUNT(*) FROM paired "
+             "WHERE pc > 0 AND c > 0 "
+             "AND ABS((c/pc - 1)*100 - change_pct) > 5",
+             '已用 adj_close 比對；非 0 = 還原失敗或 raw close 仍含未還原跳空'),
+            ('daily_prices.adj_close_missing',
+             "SELECT COUNT(*) FROM daily_prices WHERE adj_close IS NULL",
+             'adj_close 未計算（請執行 backfill_adj_prices.py）'),
             ('daily_prices.high_lt_low',
              "SELECT COUNT(*) FROM daily_prices WHERE high_price < low_price", 'OK 應為 0'),
             ('institutional.zero_total',
              "SELECT COUNT(*) FROM institutional WHERE total_buy = 0 AND foreign_buy = 0 AND sitc_buy = 0 AND dealer_buy = 0",
-             '全為 0 的列'),
+             '冷門股當日無法人交易（已驗證為真實資料,非異常）'),
+            ('daily_prices.zero_volume_real_stock',
+             "SELECT COUNT(*) FROM daily_prices WHERE (volume = 0 OR volume IS NULL) "
+             "AND LENGTH(stock_id)=4 AND stock_id GLOB '[1-9]*'",
+             '真股票零成交量（停牌或缺資料,豁免 ETF/權證）'),
             ('stocks.duplicates',
              "SELECT COUNT(*) - COUNT(DISTINCT stock_id) FROM stocks", 'OK 應為 0'),
             ('orphan.daily_prices_not_in_stocks',
@@ -2212,6 +2744,9 @@ def _build_data_health():
                 if name in ('daily_prices.zero_volume', 'daily_prices.extreme_change_pct',
                             'institutional.zero_total'):
                     severity = 'ok' if cnt == 0 else ('info' if cnt < 1000 else 'warn')
+                # zero_volume 全是 ETF/權證、zero_total 已驗證為冷門股 → 直接降 info
+                if name in ('daily_prices.zero_volume', 'institutional.zero_total'):
+                    severity = 'info' if cnt > 0 else 'ok'
                 # 歷史下市股的 orphan 永遠標 info（保留是正常的）
                 if name == 'orphan.institutional_historical_delisted':
                     severity = 'info' if cnt > 0 else 'ok'
@@ -2329,6 +2864,31 @@ def api_stock():
         conn.close()
 
 
+@app.route('/api/stock-large-trader')
+def api_stock_large_trader():
+    """
+    個股期「期貨大戶淨部位 + 籌碼集中度」。
+    參數：id=股票代號（必填）、days=取幾個交易日（預設 20，上限 250）。
+    無股期標的 → has_futures=false、series=[]（不視為錯誤）。
+    """
+    stock_id = request.args.get('id', '').strip()
+    if not stock_id:
+        return jsonify({'error': '需提供 id 參數'}), 400
+    try:
+        days = max(1, min(250, int(request.args.get('days', 20))))
+    except (TypeError, ValueError):
+        days = 20
+
+    conn = get_conn()
+    try:
+        return jsonify(get_stock_large_trader(conn, stock_id, days=days))
+    except Exception as e:
+        logger.error(f"api_stock_large_trader({stock_id}) 失敗: {e}", exc_info=True)
+        return jsonify({'error': '期貨大戶資料讀取失敗'}), 500
+    finally:
+        conn.close()
+
+
 @app.route('/watchlist')
 def watchlist():
     conn = get_conn()
@@ -2364,6 +2924,7 @@ def api_watchlist_remove():
 
 
 @app.route('/api/stock-realtime')
+@limiter.limit("10 per minute")
 def api_stock_realtime():
     """盤中即時報價（單一個股），用 mis.twse.com.tw"""
     stock_id = request.args.get('id', '').strip()
@@ -3259,81 +3820,120 @@ def api_weekly_report(filepath):
             return 'Invalid', 400
         gis_dir = os.path.join(os.path.dirname(__file__), '..')
         full_path = os.path.join(gis_dir, fname)
+        allowed_root = gis_dir
     # fin-lab 週報
     elif filepath.startswith('fin/'):
         fname = filepath[4:]
         if not re.match(r'^weekly-briefing-\d{4}-\d{2}-\d{2}\.html$', fname):
             return 'Invalid', 400
         full_path = os.path.join(base_src, 'fin-lab', 'output', fname)
+        allowed_root = os.path.join(base_src, 'fin-lab', 'output')
     # 金融科技分類報告
     elif filepath.startswith('cat/'):
         fname = filepath[4:]
         if not re.match(r'^[\w\-\.]+\.html$', fname):
             return 'Invalid', 400
         full_path = os.path.join(base_src, 'fin-lab', 'output', 'category-reports', fname)
+        allowed_root = os.path.join(base_src, 'fin-lab', 'output', 'category-reports')
     # 科技研究報告
     elif filepath.startswith('tech/'):
         relpath = filepath[5:]
         if not re.match(r'^research-\d{4}-\d{2}-\d{2}/[\w\-\.]+\.html$', relpath):
             return 'Invalid', 400
         full_path = os.path.join(base_src, 'tech-research', relpath)
+        allowed_root = os.path.join(base_src, 'tech-research')
     else:
         return 'Invalid', 400
 
-    if not os.path.isfile(full_path):
+    # 路徑遍歷防護: realpath 後必須位於白名單根目錄之下
+    resolved = os.path.realpath(full_path)
+    root_resolved = os.path.realpath(allowed_root)
+    if not resolved.startswith(root_resolved + os.sep):
+        return 'Forbidden', 403
+
+    if not os.path.isfile(resolved):
         return 'Not found', 404
-    with open(full_path, 'r', encoding='utf-8') as f:
+    with open(resolved, 'r', encoding='utf-8') as f:
         return f.read()
 
 
-# ===== 盤中即時報價背景更新 =====
-_realtime_thread_started = False
-
-def _realtime_background_loop():
-    """背景每 5 分鐘抓全部股票即時報價（僅盤中 9:00~13:35）"""
-    import time as _t
-    from scrapers.realtime import fetch_realtime_prices, is_trading_hours
-    from scanners.breakout import scan_breakouts
-
-    logger.info("[即時報價] 背景執行緒啟動")
-    while True:
-        try:
-            if is_trading_hours():
-                conn = get_conn()
-                try:
-                    count = fetch_realtime_prices(conn)
-                    if count > 0:
-                        today = datetime.now().strftime('%Y-%m-%d')
-                        scan_breakouts(conn, today)
-                        conn.commit()
-                        logger.info(f"[即時報價] 更新 {count} 筆，已重算突破")
-                except Exception as e:
-                    logger.error(f"[即時報價] 錯誤: {e}")
-                finally:
-                    conn.close()
-        except Exception as e:
-            logger.error(f"[即時報價] 外層錯誤: {e}")
-
-        _t.sleep(300)  # 5 分鐘
+# ===== 盤中即時報價 =====
+# 已改為由 watchdog 獨立啟動 realtime_worker.py 執行 (避免雙寫 DB 衝突)。
+# 原本內嵌的 _realtime_background_loop / start_realtime_thread 已移除。
 
 
-def start_realtime_thread():
-    global _realtime_thread_started
-    if _realtime_thread_started:
-        return
-    _realtime_thread_started = True
-    t = threading.Thread(target=_realtime_background_loop, daemon=True)
-    t.start()
-    logger.info("[即時報價] 背景執行緒已啟動（每 5 分鐘更新）")
+# ===== 盤中爆量預估 =====
+
+def _load_volume_alert_cache():
+    """讀 volume_anomaly_cache 單 row，回傳 (payload_dict, updated_at) 或 (None, None)"""
+    conn = get_conn()
+    try:
+        row = conn.execute(
+            "SELECT payload, updated_at FROM volume_anomaly_cache WHERE id = 1"
+        ).fetchone()
+        if not row:
+            return None, None
+        return json.loads(row['payload']), row['updated_at']
+    except Exception as e:
+        logger.error(f"volume_anomaly_cache 讀取失敗: {e}")
+        return None, None
+    finally:
+        conn.close()
 
 
-# Flask 啟動時自動開始（避免 debug reloader 重複啟動）
-if os.environ.get('WERKZEUG_RUN_MAIN') == 'true' or not app.debug:
-    start_realtime_thread()
+@app.route('/volume-alert')
+def volume_alert():
+    payload, updated_at = _load_volume_alert_cache()
+    return render_template(
+        'volume_alert.html',
+        data=payload,
+        updated_at=updated_at,
+    )
+
+
+@app.route('/api/volume-alert')
+def api_volume_alert():
+    payload, updated_at = _load_volume_alert_cache()
+    if payload is None:
+        return jsonify({'error': 'no cache yet', 'data': None, 'updated_at': None}), 200
+    return jsonify({'data': payload, 'updated_at': updated_at})
+
+
+@app.route('/api/volume-alert/trend')
+def api_volume_alert_trend():
+    """回傳今日 taiex_trend 全部 rows（依時間排序）"""
+    from datetime import datetime as _dt
+    today_str = _dt.now().strftime('%Y-%m-%d')
+    conn = get_conn()
+    try:
+        rows = conn.execute("""
+            SELECT snapshot_ts, minute_idx, rvol_forecast, forecast_eod_value,
+                   level, ci_low, ci_high
+            FROM taiex_trend
+            WHERE snapshot_ts >= ?
+            ORDER BY snapshot_ts ASC
+        """, (today_str + ' 00:00:00',)).fetchall()
+        data = [{
+            'minute_idx': r['minute_idx'],
+            'rvol': r['rvol_forecast'],
+            'level': r['level'],
+            'eod': r['forecast_eod_value'],
+            'ci_low': r['ci_low'],
+            'ci_high': r['ci_high'],
+        } for r in rows]
+        return jsonify({'data': data})
+    except Exception as e:
+        logger.error(f"taiex_trend 讀取失敗: {e}")
+        return jsonify({'data': [], 'error': str(e)}), 200
+    finally:
+        conn.close()
 
 
 if __name__ == '__main__':
-    if os.environ.get('WATCHDOG_MANAGED'):
-        app.run(debug=False, host='127.0.0.1', port=5000)
-    else:
-        app.run(debug=True, host='127.0.0.1', port=5000)
+    debug_mode = os.environ.get('FLASK_DEBUG') == '1'
+    # 綁定 0.0.0.0 = 監聽所有網路介面，
+    # 可同時由 localhost / 內網 IP / Tailscale IP 存取。
+    # 可用環境變數 HOST / PORT 覆寫。
+    host = os.environ.get('HOST', '0.0.0.0')
+    port = int(os.environ.get('PORT', '5000'))
+    app.run(debug=debug_mode, host=host, port=port)

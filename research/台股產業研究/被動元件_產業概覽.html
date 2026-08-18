@@ -1,0 +1,801 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>被動元件 產業概覽 | GiS 研究員觀點</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:520px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:24px 0 16px;page-break-after:avoid}
+h1.ch:first-child{margin-top:6px}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:22px 0 12px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:16px 0 8px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:12px 0 16px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 11px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:8px 11px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:15px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:16px 22px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:18px;margin:14px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:12px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:15px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:22px;margin:18px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:16px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.85;line-height:1.5}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+.picks-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}
+.pick-card{border-radius:8px;padding:16px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12px;font-weight:700;color:#00a878;letter-spacing:.5px;margin-bottom:6px}
+.pick-name{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:12px;color:#2d3748;line-height:1.65;margin-bottom:10px}
+.pick-catalyst{font-size:12px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+p{margin:7px 0 10px;line-height:1.7}
+ul,ol{padding-left:20px;margin:7px 0 10px}
+li{margin:4px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:22px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:16px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+.callout ul{margin:0;padding-left:18px}
+.callout li{font-size:12.5px}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:13px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Industry Cheat Sheet · Passive Components · 2026 H2</div>
+    <div class="cover-title">被動元件<br><em>AI 驅動的結構性漲價循環</em></div>
+    <div class="cover-subtitle">Passive Components — The Structural Up-cycle Behind the AI Power Wall</div>
+    <div class="cover-tags">
+      <span class="ctag hl">國巨 2327</span>
+      <span class="ctag hl">華新科 2492</span>
+      <span class="ctag hl">禾伸堂 3026</span>
+      <span class="ctag">MLCC</span>
+      <span class="ctag">鉭質電容</span>
+      <span class="ctag">晶片電阻</span>
+      <span class="ctag">供需缺口</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>60</em>萬顆</div><div class="cstat-label">Rubin 單櫃 MLCC 用量</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>182</em>%</div><div class="cstat-label">單櫃 MLCC 產值增幅</div></div>
+    <div class="cstat"><div class="cstat-num"><em>64</em>%</div><div class="cstat-label">AI伺服器MLCC用量CAGR</div></div>
+    <div class="cstat"><div class="cstat-num"><em>3</em>檔</div><div class="cstat-label">GiS 覆蓋台廠</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026年7月23日</span>
+    <span>研究員觀點 · 資料截至 7/22 收盤</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要 — 一頁看懂被動元件循環</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">B/B &gt; 1<em> 全數</em></div><div class="kpi-lbl">日韓+國巨接單出貨比</div></div>
+    <div class="kpi"><div class="kpi-val">90–95<em>%</em></div><div class="kpi-lbl">龍頭產能稼動率</div></div>
+    <div class="kpi gold"><div class="kpi-val">+20<em>% / 2年</em></div><div class="kpi-lbl">村田擴產 vs 需求+80%/年</div></div>
+    <div class="kpi green"><div class="kpi-val">7–15<em>%</em></div><div class="kpi-lbl">台廠2027–28供需缺口</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>這是「新增需求」型循環，不是 2018 的「產能重分配」。</strong>AI 伺服器單機功耗為傳統伺服器的 5–10 倍，單櫃 MLCC 用量達 45–60 萬顆（一般伺服器的 10–15 倍）。高階 AI MLCC 產線建置需 18–24 個月，2023–25 產業低谷普遍未擴產 — 需求爆發時產能已跟不上，缺口料延續至 2027 年以後。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>漲價由高階外溢至中低階，且更具延續性。</strong>AI 高階料號吃掉的有效產能是標準品的 5 倍以上，排擠消費性供給。被動元件占終端 BOM 成本比重極低，客戶接受漲價意願高。龍頭台廠 MLCC / 鉭質電容 2026–28 年均漲幅估落在中高雙位數。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>台廠的機會在「量大、值小」的價值重估。</strong>台廠 MLCC 產能市占近 15%，但產值市占僅個位數 — 長期集中於商規/中低容料號。本輪 AI 電源系統（高耐壓、高可靠度利基）給了台廠向上補位的窗口。GiS 首選 <strong>國巨（買進）</strong>，次選 <strong>華新科、禾伸堂（增加持股）</strong>。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">北美四大 CSP 資本支出（美元十億）</div>
+      <div class="chart-sub">來源：TrendForce；2026 為上修後預估值</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartCapex" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">龍頭台廠 ASP 年漲幅（%）</div>
+      <div class="chart-sub">來源：券商產業預估、GiS 彙編；以國巨為例</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartASP" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要 · 研究員觀點</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 壹 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One · Industry Map</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業定義與<br>台廠價值鏈地圖</div>
+  <div class="sec-desc">被動元件由電阻（R）、電容（C）、電感（L）三大類構成，其中電容規模最大、AI 關聯度最高。本章界定產業範疇，並定位台廠在上游材料、中游製造與通路代理的分工。</div>
+</div>
+
+<!-- ══════════════ 壹 正文 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、產業定義 — 被動元件三大類</h1>
+  <p>被動元件不需外部電源即可運作，核心是「導電線路 + 材料（陶瓷、金屬、磁性材料）」，依客戶對高溫、高壓、潮溼等環境需求選材。三大類中以<strong>電容規模最大</strong>，電容又以陶瓷電容（MLCC）為主流，其次為鋁質電容、鉭質電容與固態電容。</p>
+
+  <table style="font-size:12.5px">
+    <thead><tr><th>類別</th><th>核心功能</th><th>主要材質</th><th>AI 伺服器單櫃用量</th><th>AI 關聯度</th></tr></thead>
+    <tbody>
+      <tr><td><strong>電容 (C)</strong></td><td>儲能、濾波、去耦，穩定電壓</td><td>陶瓷介質、鋁、鉭</td><td class="num hi">30–60 萬顆</td><td class="pos">極高（用量最大）</td></tr>
+      <tr><td><strong>電阻 (R)</strong></td><td>限流、分壓、偏壓、訊號量測</td><td>厚膜、薄膜、金屬膜、合金</td><td class="num">數萬–10 萬顆</td><td class="pos">高</td></tr>
+      <tr><td><strong>電感 (L)</strong></td><td>穩流、儲能、EMI 濾波、扼流</td><td>鐵氧體、金屬合金、磁性芯</td><td class="num">5 千–1 萬顆</td><td>中（一相位一顆）</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司法說會、公開資料，GiS 整理</span>
+
+  <h2 class="ch">為什麼市場聚焦 MLCC？</h2>
+  <p>GPU 晶片上有成千上萬個供電接點（power balls），每個接點運算時都產生瞬間電流變化，需要就近的去耦電容補電、壓住電壓抖動 — 有幾千個電流出入點，就要鋪幾千顆電容。MLCC 具備最低的 ESR（等效串聯電阻）與 ESL（等效串聯電感）、體積小、單價低，是 AI 伺服器去耦的首選。相對地，電阻只放在需要量測的關鍵節點（數十至數萬顆），電感只放在整條供電相位上（用量最少）。</p>
+
+  <blockquote>
+    <strong>GiS 核心觀點：</strong>被動元件是 AI 機櫃「數量最大、單價最低、卻不可省略」的元件族群。正因單顆便宜、占 BOM 成本極低，客戶對漲價的抵抗最弱 — 這是本輪台廠定價權的結構基礎，而 MLCC 是三大類中 AI 槓桿最直接的品項。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 產業定義</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 壹 續 台廠價值鏈 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹（續）、台廠價值鏈地圖</h1>
+  <p>台灣被動元件產業鏈完整，從上游材料、中游元件製造到通路代理均有代表廠商。GiS 覆蓋聚焦「中游製造 + 上游關鍵材料」，其中國巨、華新科產品線最全面，禾伸堂專攻高階 MLCC。</p>
+
+  <table style="font-size:12px">
+    <thead><tr><th>價值鏈位置</th><th>代表台廠</th><th>主要產品</th><th>GiS 定位</th></tr></thead>
+    <tbody>
+      <tr><td><strong>上游材料</strong></td><td>信昌電 6173、立敦、勤凱</td><td>介電陶瓷粉末、鋁箔/電解液、導電漿料</td><td>受惠漲價但規模小</td></tr>
+      <tr><td rowspan="3" style="vertical-align:middle"><strong>中游·電容</strong></td><td><strong>國巨集團 · 2327</strong></td><td>MLCC、鉭質電容、固態電容（全線）</td><td class="pos">首選</td></tr>
+      <tr><td><strong>禾伸堂 3026</strong></td><td>高階/高容值 MLCC</td><td class="pos">高階純度最高</td></tr>
+      <tr><td>立隆電、金山電、鈺邦、凱美 2375</td><td>鋁電解電容、固態電容</td><td>AI 關聯度較低</td></tr>
+      <tr><td><strong>中游·電阻</strong></td><td><strong>國巨 2327</strong>、大毅 2478、光頡、天二科技</td><td>晶片電阻</td><td class="pos">國巨全球第一</td></tr>
+      <tr><td><strong>中游·電感</strong></td><td>華新科 2492（磁性元件）、臺慶科、千如、三集瑞</td><td>晶片電感、功率電感、一體成型電感</td><td>中</td></tr>
+      <tr><td><strong>通路代理</strong></td><td>日電貿、蜜望實、堡達</td><td>代理日韓/Panasonic 大廠產品</td><td>間接受惠</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：公司公開資料、財報狗，GiS 整理。註：國巨產品線橫跨電容與電阻兩大類。</span>
+
+  <h2 class="ch">台廠在全球的位置</h2>
+  <p>台廠以「工業與電力電子的深厚底蘊」，精準插旗 AI 伺服器電力系統的<strong>高耐壓、耐高溫、高可靠度</strong>特規市場；而日韓一線大廠（村田、三星電機、太陽誘電）憑高階材料優勢，寡占 GPU/HBM 旁「小型化、超高容值」的算力核心周邊。兩者在 AI 機櫃內各有戰場 — 台廠在「電源（Power）」端相對有較多機會，日韓在「運算（Computing）」端主導。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 台廠價值鏈</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 貳 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two · Demand & Supply</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">AI 需求質變<br>與供需缺口</div>
+  <div class="sec-desc">AI 伺服器對被動元件的需求是「量」與「值」雙重放大。本章拆解單櫃用量與產值躍升、供給端的產能限制，並比較本輪循環與 2017–18 泡沫的結構差異。</div>
+</div>
+
+<!-- ══════════════ 貳 正文 需求質變 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳、AI 需求質變 — 量與值雙放大</h1>
+  <p>AI 伺服器單機功耗由 2020 年約 10kW（Ampere）飆升至 2027 年 Rubin Ultra 的 1,000kW+，電源架構轉向 800V 高壓直流（HVDC）與 LLC 諧振。這使低損耗、高壓（1kV–2kV）、高容值 MLCC 成為 AI Server Power 的核心元件。單櫃用量從 GB300 約 45 萬顆，升至 Rubin NVL72 逾 60 萬顆。</p>
+
+  <div class="chart-wrap">
+    <div class="chart-title">單櫃各零組件產值增幅：GB300 → VR200（%）</div>
+    <div class="chart-sub">來源：外資報告媒體轉述、utmel.com，GiS 彙編。MLCC 單櫃產值由約 1,530 美元升至 4,320 美元</div>
+    <div class="chart-container" style="height:250px;width:100%;position:relative"><canvas id="chartRackValue" style="display:block;width:100%;height:250px"></canvas></div>
+  </div>
+
+  <table style="font-size:11.5px">
+    <thead><tr><th>平台</th><th style="text-align:right">單櫃 MLCC 用量</th><th style="text-align:right">單櫃 MLCC 產值</th><th>用量倍數 vs 一般伺服器</th><th>GiS 觀點</th></tr></thead>
+    <tbody>
+      <tr><td>一般伺服器</td><td class="num">約 3–4 萬顆</td><td class="num">基準</td><td>1×</td><td>成熟、低成長</td></tr>
+      <tr><td>GB300 機櫃</td><td class="num">約 45 萬顆</td><td class="num">約 US$1,530</td><td class="pos">10–12×</td><td>現行主力</td></tr>
+      <tr style="background:#eefaf4!important"><td style="font-weight:800">Rubin NVL72</td><td class="num hi" style="font-weight:800">逾 60 萬顆</td><td class="num hi" style="font-weight:800">約 US$4,320</td><td class="pos" style="font-weight:800">15×+</td><td style="font-size:11px;color:#00875a;font-weight:700">產值 +182%！</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：Morgan Stanley 報告媒體轉述、三星電機、華新科/禾伸堂法說會簡報，GiS 彙編</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · AI 需求質變</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 貳 續 供需缺口 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳（續）、供給緊縮與供需缺口</h1>
+  <p>高容 AI MLCC 要堆數百至逾千層、介電層更薄、單顆製程複雜，每一顆吃掉的有效產能遠超其單位數量（估達標準品 5 倍以上）。加上高階產線建置需 18–24 個月、車用產能無法挪用、陶瓷粉/離型膜/鎳粉高度由日商掌握 — 供給端反應緩慢。龍頭村田砸 2,500 億日元擴產，未來兩年產能僅增略超 20%，遠追不上 AI 需求約 80% 的年增速。</p>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">供需缺口預估（%）</div>
+      <div class="chart-sub">來源：券商產業預估，GiS 彙編</div>
+      <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="chartGap" style="display:block;width:100%;height:210px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">接單出貨比（B/B Ratio）2026/6</div>
+      <div class="chart-sub">來源：各廠公開資料，GiS 彙編。&gt;1 代表供不應求</div>
+      <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="chartBB" style="display:block;width:100%;height:210px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">產業近況訊號</h2>
+  <ul>
+    <li>截至 2026/6 底，三大日韓廠與台廠國巨的 B/B 比<strong>全數突破 1</strong>；龍頭 2026 Q1 B/B 達 1.27，超越 2018 年史上最嚴重缺貨時的 1.25 高點。</li>
+    <li>日系二線廠 5 月率先對中低容消費級與部分車用 MLCC 漲價 6–13%，漲價由高階外溢至中低階的訊號明確。</li>
+    <li>國巨蘇州廠（消費性元件重鎮）再現「2018 超級循環後未曾出現」的罕見滿載盛況。</li>
+    <li>電容交期全面拉長、供不應求趨勢明確；電阻、電感供應相對穩定但特定品項價格走揚。</li>
+  </ul>
+
+  <blockquote>
+    <strong>GiS 供需判斷：</strong>供給彈性是本輪循環的核心變數。即使各廠此刻決定擴產，18–24 個月的建置週期意味著 2026–27 年缺口幾乎「鎖定」。缺口深度（台廠 2027/28 年 7%/15%）足以支撐漲價延續，但也提醒：<strong>只要 AI 資本支出成長趨緩，缺口將快速收斂</strong> — 這是所有多頭論點的共同前提，須以 CSP capex 指引為錨定監測。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 供需缺口</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 貳 續 2018 vs 2026 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳（續）、本輪循環 vs 2017–18：關鍵差異</h1>
+  <p>市場最常見的疑慮是「這會不會又是一次 2018 式的漲價泡沫，一年後庫存崩、股價腰斬」。GiS 認為兩輪的<strong>需求根源與供給行為本質不同</strong>，本輪缺口更深、更長、更健康。</p>
+
+  <div class="chart-grid">
+    <div class="callout">
+      <div class="callout-title">2018 循環（泡沫型 · 產能重分配）</div>
+      <ul>
+        <li>日廠棄消費性、轉進車用 → <strong>暫時性錯配</strong></li>
+        <li>恐慌性採購明顯，通路重複下單堆庫存</li>
+        <li>客戶對話對立、對漲價敏感</li>
+        <li>各廠急於擴產 → 事後產能過剩</li>
+        <li>結果：通路花近 2 年去化庫存，股價大幅回落</li>
+      </ul>
+    </div>
+    <div class="callout green">
+      <div class="callout-title">2026 循環（結構型 · 新增需求）</div>
+      <ul>
+        <li><strong>AI 伺服器帶來的是全新需求，非產能挪移</strong></li>
+        <li>管理層表示未見普遍恐慌性採購，備貨屬理性</li>
+        <li>客戶「非常具合作性」，以漲價換穩定供應</li>
+        <li>擴產更審慎（建置週期 18–24 月，降低泡沫化）</li>
+        <li>通路庫存月數較一年前下降，<strong>庫存健康</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <table style="font-size:11.5px">
+    <thead><tr><th>比較構面</th><th>2018 被動元件</th><th>2026 AI 循環</th><th>差異</th></tr></thead>
+    <tbody>
+      <tr><td>需求根源</td><td>日廠轉單、手機拉貨</td><td>AI 伺服器對高階 MLCC/鉭電容新需求</td><td class="pos">相異：新需求</td></tr>
+      <tr><td>缺口性質</td><td>短週期、暫時性錯配</td><td>高可靠產線被鎖數年，延續至 2027+</td><td class="pos">相異：更深更長</td></tr>
+      <tr><td>採購行為</td><td>恐慌性重複下單</td><td>理性備貨，未見恐慌</td><td class="pos">相異：更健康</td></tr>
+      <tr><td>漲價驅動</td><td>短期供需缺口為主</td><td>原料成本轉嫁＋長期缺口雙驅動</td><td class="pos">相異：更具延續性</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：Morgan Stanley/JPM 報告、公司法說會、公開新聞，GiS 彙編</span>
+
+  <blockquote>
+    <strong>GiS 判斷：</strong>本輪與 2018 最大的不同，是「供給端這次沒有失控擴產」。這既降低了泡沫化風險，也意味著漲價的持續性取決於需求端（AI capex）而非供給端行為 — 對投資人而言，這是一個「盯 capex、不盯庫存」的循環。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 循環對比</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 參 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three · Competitive Landscape</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">競爭格局<br>與台廠定位</div>
+  <div class="sec-desc">全球 MLCC 是高度集中、且愈往高階愈集中的日韓寡頭市場。本章拆解市占結構，並點出台廠「產能市占大、產值市占小」的價值重估空間，以及國巨在鉭質電容與晶片電阻的全球領導地位。</div>
+</div>
+
+<!-- ══════════════ 參 正文 競爭格局 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、競爭格局 — 日韓寡頭下的台廠位置</h1>
+  <p>全球 MLCC 前二大（村田＋三星電機）囊括約 63% 出貨量，前五大合計約 87%，是典型的日韓寡頭結構。關鍵洞察在於<strong>「產能市占」與「產值市占」的落差</strong>：台廠 MLCC 產能市占近 15%（國巨居全球第三），但因長期集中於商規/中低容料號，產值市占僅個位數。</p>
+
+  <div class="chart-wrap">
+    <div class="chart-title">全球 MLCC 市占：產能 vs 產值（%）</div>
+    <div class="chart-sub">來源：Morgan Stanley（出貨量）、JPM（產值）預估，GiS 彙編。國巨產能占比逾 15% 但產值占比僅約 3%</div>
+    <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartShare" style="display:block;width:100%;height:240px"></canvas></div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 核心觀點：</strong>台廠「量大值小」的落差，正是本輪最值得量化的機會。AI 電源系統的高耐壓/高可靠度特規門檻，讓台廠首度有機會把產品組合往上搬 — 若國巨、華新科能把產值市占從 3%/2% 向產能市占（15%/8%）靠攏，即使不擴產，單靠 mix 與 ASP 提升就能帶來獲利的非線性成長。這是「價值重估」，不只是「量增」。
+  </blockquote>
+
+  <h2 class="ch">兩大戰場的分工</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>AI 應用</th><th>運算 (Computing)</th><th>電源 (Power)</th></tr></thead>
+    <tbody>
+      <tr><td>位置/用途</td><td>GPU、HBM 旁的去耦與訊號處理</td><td>PSU、BBU、電池模組</td></tr>
+      <tr><td>技術訴求</td><td>小型化、超高容值</td><td>耐高溫、高壓、低損耗</td></tr>
+      <tr><td>用量特性</td><td>板面空間極省，拚材料科學</td><td>數量大，拚耐受度與供應穩定</td></tr>
+      <tr><td>相對優勢方</td><td class="neg">日韓大廠</td><td class="pos">台廠相對有較多機會</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：Morgan Stanley/JPM 報告、華新科/禾伸堂法說會簡報，GiS 彙編</span>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 競爭格局</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 參 續 鉭電容與電阻 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參（續）、鉭質電容與晶片電阻 — 國巨的第二引擎</h1>
+  <p>MLCC 之外，AI 伺服器功耗提升同步推升對高容值、低 ESR 電容的需求，產品組合往<strong>高分子聚合物鉭質電容（Polymer Tantalum）</strong>移動，規格與單機用量均提升。受限於 PCB 空間，短期難以全面改用 MLCC 取代鉭電容。</p>
+
+  <h2 class="ch">鉭質電容：供給比 MLCC 更緊</h2>
+  <ul>
+    <li>主要原料<strong>鉭粉</strong>上游以非洲（如盧安達）為主；中國出口的電子級鉭粉今年以來漲幅已逾 50%，支撐鉭電容價格上行。</li>
+    <li>即使決定擴產，<strong>設備交期長達約 1.5 年</strong>，短期難見大量新增產能。</li>
+    <li>國巨旗下<strong>基美（Kemet）於全球鉭電容市占約 40%，為產業領導者</strong>，具備較強議價能力，且擴產力道相對積極。</li>
+  </ul>
+
+  <h2 class="ch">晶片電阻：國巨全球第一</h2>
+  <p>國巨為全球第一大晶片電阻供應商（產能占比逾 30%），已自 2026/2/1 調漲晶片電阻 15–20%。加上 MLCC、鉭質電容、磁性元件全產品線同步走強，形成「多品項、多引擎」的漲價共振。</p>
+
+  <table style="font-size:12px">
+    <thead><tr><th>產品線</th><th>國巨全球地位</th><th>2026 漲價動態</th><th>AI 驅動力</th></tr></thead>
+    <tbody>
+      <tr><td><strong>晶片電阻</strong></td><td class="pos">全球第一（&gt;30%）</td><td class="pos">2/1 起漲 15–20%</td><td>高</td></tr>
+      <tr><td><strong>鉭質電容 (Kemet)</strong></td><td class="pos">全球第一（約 40%）</td><td class="pos">估 2026–28 漲 24/23/17%</td><td class="pos">極高（Low ESR）</td></tr>
+      <tr><td><strong>MLCC</strong></td><td>全球第三（產能 &gt;15%）</td><td class="pos">估 2026–28 漲 23/29/16%</td><td class="pos">極高</td></tr>
+      <tr><td>磁性元件/電感</td><td>整合奇力新後強化</td><td>特定品項走揚</td><td>中</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：券商產業預估、國巨法說會，GiS 彙編。漲幅為市場預估區間，非 GiS 定案假設。</span>
+
+  <blockquote>
+    <strong>GiS 觀點：</strong>國巨的獨特性在於它不是單一品項的漲價受惠者，而是「電阻＋鉭電容＋MLCC」三箭齊發，且在前兩者是全球龍頭。鉭電容供給比 MLCC 更緊（設備交期 1.5 年、原料受地緣限制），基美 40% 市占給了國巨在 AI 電源端最硬的議價籌碼 — 這是其他純 MLCC 台廠不具備的護城河。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 鉭電容與電阻</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 肆 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Section Four · Valuation & Ranking</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">估值比較<br>與 GiS 排序</div>
+  <div class="sec-desc">本章以 forward PE 為錨（分割與獲利加速使 trailing 估值失真，須看前瞻），比較覆蓋台廠的營運動能與估值水位，並依 GiS 估值方法論 §4.3 五級評等門檻給出排序。</div>
+</div>
+
+<!-- ══════════════ 肆 Comps ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆、產業 Comps — 覆蓋台廠對比</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-4px 0 8px">現價為 2026/7/22 收盤。EPS 中 26Q1 為實績，26F/27F 為 GiS 彙編預估（directional，非三情境定案）。⚠ 國巨 2025/8 面額分割 1 拆 4，歷史 EPS 已還原至分割後基礎（FY25 11.48，無一次性虧損）；trailing PE 因獲利加速而失真，估值一律以 forward 為準。</p>
+
+  <table style="font-size:11px">
+    <thead><tr>
+      <th>公司</th><th>主力產品</th><th style="text-align:right">市值(億)</th><th style="text-align:right">現價</th>
+      <th style="text-align:right">6月營收YoY</th><th style="text-align:right">26Q1 EPS</th>
+      <th style="text-align:right">26F EPS</th><th style="text-align:right">27F EPS</th>
+      <th style="text-align:right">27F PE</th><th style="text-align:right">GiS TP</th><th style="text-align:right">上檔</th>
+    </tr></thead>
+    <tbody>
+      <tr style="background:#eefaf4!important"><td><strong>國巨</strong> 2327</td><td>電阻/鉭電容/MLCC 全線</td><td class="num">14,329</td><td class="num">696</td><td class="num pos">+38.9%</td><td class="num">3.90</td><td class="num">19.5</td><td class="num hi">31.0</td><td class="num">22.5x</td><td class="num hi">820</td><td class="num pos" style="font-weight:700">+18%</td></tr>
+      <tr><td><strong>華新科</strong> 2492</td><td>MLCC、電阻、磁性元件</td><td class="num">1,456</td><td class="num">300</td><td class="num pos">+25.8%</td><td class="num">1.69</td><td class="num">7.5</td><td class="num">11.0</td><td class="num">27.3x</td><td class="num">340</td><td class="num pos">+13%</td></tr>
+      <tr><td><strong>禾伸堂</strong> 3026</td><td>高階/高容值 MLCC</td><td class="num">1,156</td><td class="num">697</td><td class="num pos">+33.9%</td><td class="num">2.86</td><td class="num">13.0</td><td class="num">21.5</td><td class="num">32.4x</td><td class="num">790</td><td class="num pos">+13%</td></tr>
+      <tr><td>信昌電 6173</td><td>MLCC、介電陶瓷粉末（上游）</td><td class="num">313</td><td class="num">183</td><td class="num pos">+29.1%</td><td class="num">1.19</td><td class="num">5.0</td><td class="num">6.5</td><td class="num">28.2x</td><td class="num">觀察</td><td class="num">—</td></tr>
+      <tr><td>大毅 2478</td><td>晶片電阻（二線）</td><td class="num">200</td><td class="num">138</td><td class="num pos">+35.8%</td><td class="num">1.14</td><td class="num">4.3</td><td class="num">5.2</td><td class="num">26.5x</td><td class="num">觀察</td><td class="num">—</td></tr>
+      <tr><td>凱美 2375</td><td>鋁電解電容（AI 關聯低）</td><td class="num">155</td><td class="num">142.5</td><td class="num">+18.4%</td><td class="num">0.78</td><td class="num">4.0</td><td class="num">4.3</td><td class="num">33.1x</td><td class="num neg">不推</td><td class="num">—</td></tr>
+      <tr style="background:#f0f4fc!important"><td style="font-weight:700">中位數</td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num" style="font-weight:700">+31.5%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num" style="font-weight:700">28.2x</td><td class="num">—</td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：tw-stock-scanner DB（現價/市值/營收/26Q1 EPS）、GiS 彙編（26F/27F EPS 預估）。27F PE = 現價 ÷ 27F EPS。</span>
+
+  <blockquote>
+    <strong>GiS 估值判斷：</strong>整體族群 forward PE 中位數約 28x，反映市場已計入相當程度的漲價預期。族群內部估值分歧明確：<strong>國巨在 2027F 約 22x（GiS）/20x（共識）</strong> 為最便宜（相對日系同業 34x+ 顯著折價），禾伸堂 32x 最貴（純高階 AI 槓桿的稀缺性溢價）。GiS 偏好「便宜 + 龍頭護城河」的國巨，對估值已高的禾伸堂維持增持但明列估值為關鍵風險。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 產業 Comps</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 肆 續 EPS + 排序 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆（續）、GiS 排序與評等</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">三大台廠 EPS 軌跡（元）</div>
+    <div class="chart-sub">來源：公司季報（2024–25 實績）、GiS 預估（26F/27F）。國巨已還原至分割後基礎（1 拆 4）</div>
+    <div class="chart-container" style="height:210px;width:100%;position:relative"><canvas id="chartEPS" style="display:block;width:100%;height:210px"></canvas></div>
+  </div>
+
+  <table style="font-size:12px">
+    <thead><tr><th>排序</th><th>公司</th><th>評等</th><th>GiS 12M TP</th><th>上檔</th><th>一句話論點</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1</strong></td><td><strong>國巨 2327</strong></td><td class="pos hi">買進 Buy</td><td class="num hi">NT$820</td><td class="num pos">+18%</td><td>三箭齊發龍頭（鉭電容/電阻全球第一），2027F ~22x 最便宜（見專屬首覆）</td></tr>
+      <tr><td><strong>2</strong></td><td><strong>華新科 2492</strong></td><td class="pos">增加持股 OW</td><td class="num">NT$340</td><td class="num pos">+13%</td><td>全球前五 MLCC，估值相對合理，高壓/工業利基受惠</td></tr>
+      <tr><td><strong>3</strong></td><td><strong>禾伸堂 3026</strong></td><td class="pos">增加持股 OW</td><td class="num">NT$790</td><td class="num pos">+13%</td><td>高階 MLCC 純度最高、AI 槓桿最大，但估值已高為關鍵風險</td></tr>
+      <tr><td>觀察</td><td>信昌電 6173</td><td>—</td><td class="num">—</td><td class="num">—</td><td>上游介電粉末＋MLCC，受惠漲價但規模小、彈性有限</td></tr>
+      <tr><td>觀察</td><td>大毅 2478</td><td>—</td><td class="num">—</td><td class="num">—</td><td>晶片電阻二線，跟隨國巨漲價但無定價權</td></tr>
+      <tr><td>不推</td><td>凱美 2375</td><td class="neg">—</td><td class="num">—</td><td class="num">—</td><td>鋁電解電容，AI 直接關聯度低，成長動能弱</td></tr>
+    </tbody>
+  </table>
+  <span class="src">評等依 GiS 估值方法論 §4.3：買進 &gt;15%、增加持股 5–15%、中立 ±5%、減碼 &lt;-5%。TP 以 forward PE 錨定（國巨 26x×27F、華新科 30x×27F、禾伸堂 37x×27F），為產業層級 directional 評等；完整三情境與 5×5 敏感度見個股報告。</span>
+
+  <blockquote>
+    <strong>GiS 排序邏輯：</strong>三檔皆處同一上行循環，差異在「護城河 × 估值」。國巨以多品項龍頭地位＋最低前瞻本益比列首選；華新科與禾伸堂上檔相近（約 +13%）但風險屬性不同 — 華新科是「估值合理的補漲」，禾伸堂是「純度最高但估值透支」。GiS 對國巨的 TP 820（+18%）明顯保守於部分本土券商（TP 1,230–1,550、+77% 以上），差異來自 GiS 採較保守的 2027F EPS（31 vs 共識 33）與本益比（26x vs 35–40x），及股價 6–7 月才自 1,140 拋物線回落的紀律考量。（完整三情境/DCF/敏感度見國巨專屬首次覆蓋報告。）
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · GiS 排序</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 伍 催化劑與風險 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍、產業催化劑與風險</h1>
+
+  <h2 class="ch">產業層級催化劑</h2>
+  <table style="font-size:12px">
+    <thead><tr><th>催化劑</th><th>時間點</th><th>影響</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><strong>7/1 起新一輪漲價落地</strong></td><td>2026 H2</td><td class="pos">高</td><td>電容全面漲價消息，MLCC/鉭電容/電阻同步走強</td></tr>
+      <tr><td><strong>Rubin 平台放量</strong></td><td>2026 H2–2027</td><td class="pos">高</td><td>單櫃 MLCC 用量與產值再跳升（60 萬顆、+182%）</td></tr>
+      <tr><td>CSP capex 再上修</td><td>持續</td><td class="pos">中高</td><td>四大 CSP 2026 capex 年增 50–130%，直接拉動需求</td></tr>
+      <tr><td>台廠產值市占向產能靠攏</td><td>2026–28</td><td class="pos">中高</td><td>mix 上移驅動獲利非線性成長（價值重估）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>上行催化劑（族群估值上修條件）</h4>
+      <div class="risk-item"><strong>AI capex 持續超預期</strong> → 缺口延長、漲價延續至 2028+</div>
+      <div class="risk-item"><strong>鉭粉/原料續漲</strong> → 成本轉嫁支撐 ASP，龍頭受惠最大</div>
+      <div class="risk-item"><strong>台廠打入高階 AI 電源料號</strong> → 產值市占提升、PE re-rating</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>下行風險（族群估值下修條件）</h4>
+      <div class="risk-item"><strong>AI capex 成長趨緩</strong> → 缺口快速收斂，這是最大系統性風險</div>
+      <div class="risk-item"><strong>日韓龍頭激進擴產</strong> → 重演 2018 產能過剩（目前機率低）</div>
+      <div class="risk-item"><strong>中國紅鏈/白牌現貨</strong> → 華強北現貨殺價影響情緒（對原廠實質衝擊有限）</div>
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>GiS 風險評估：</strong>本輪多頭論點高度集中於單一前提 — <strong>AI 資本支出成長不中斷</strong>。供給端因建置週期已「鎖定」2026–27 缺口，故短期風險不在供給而在需求。近期股價因中國華強北現貨殺價而回落，但該現貨多為新興品牌/白牌，大型 ODM 基於品質、認證與供應穩定性仍須回原廠採購，故對國巨等原廠實質影響有限。建議以「季度 CSP capex 指引 + 龍頭 B/B 比 + 鉭粉現貨價」三項作為循環轉折的領先監測指標。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · 催化劑與風險</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 陸 首選卡 + 附錄 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">陸、GiS 首選標的</h1>
+
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #1 · 買進</div>
+      <div class="pick-name">國巨</div>
+      <div class="pick-ticker">2327 · TWSE · TP NT$820（+18%）</div>
+      <div class="pick-why">電阻＋鉭電容全球第一、MLCC 全球第三的多品項龍頭。基美鉭電容 40% 市占是 AI 電源端最硬的護城河。2027F 僅 19x，族群內最便宜。</div>
+      <div class="pick-catalyst">催化劑：7/1 漲價、Rubin 放量、蘇州廠滿載</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">#2 · 增加持股</div>
+      <div class="pick-name">華新科</div>
+      <div class="pick-ticker">2492 · TWSE · TP NT$340（+13%）</div>
+      <div class="pick-why">全球前五大 MLCC，產品線全面、以消費電子為基礎積極切入車規。估值相對合理的「補漲」標的，高壓/工業利基受惠。月營收 6 月 YoY +25.8%。</div>
+      <div class="pick-catalyst">催化劑：ASP 調漲、產值市占回升</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">#3 · 增加持股</div>
+      <div class="pick-name">禾伸堂</div>
+      <div class="pick-ticker">3026 · TWSE · TP NT$790（+13%）</div>
+      <div class="pick-why">高階/高容值 MLCC 純度最高，每櫃 AI 用量槓桿最大。26Q1 EPS 2.86 大幅跳增。惟 27F 32x 估值已高，為關鍵風險。</div>
+      <div class="pick-catalyst">催化劑：高容值 AI 料號放量</div>
+    </div>
+  </div>
+
+  <h2 class="ch">GiS 與市場的不同之處</h2>
+  <p style="font-size:13px">市場對被動元件族群普遍偏多，GiS 認同上行循環的結構性，但在三處採取更審慎的視角：<strong>（1）評等錨定前瞻而非追價</strong> — 我們對國巨的 TP 較部分本土券商保守約四成，反映 26x 而非 35–40x 的 2027F 本益比；<strong>（2）強調單一前提風險</strong> — 全族群多頭論點都建立在「AI capex 不中斷」上，供給缺口已鎖定，轉折訊號將來自需求端；<strong>（3）區分「量增」與「值升」</strong> — 台廠真正的 alpha 在產值市占向產能市占靠攏（mix 上移），而非單純跟漲。</p>
+
+  <hr>
+  <h3 class="ch">附錄：資料來源</h3>
+  <p style="font-size:12px;line-height:1.7">本報告產業數據綜合引用：Morgan Stanley、JPM 報告（媒體轉述及公開摘要）、TrendForce（CSP capex）、村田/三星電機/太陽誘電/國巨/華新科/禾伸堂公司法說會與年報、Digitimes、utmel.com、Future Electronics（2026.6.15 供需報告）。台廠量化數據（現價、市值、月營收、季報 EPS）取自 GiS tw-stock-scanner 資料庫（截至 2026/7/22 收盤，全系統健檢 21 項 PASS）。券商評等/目標價比較以匿名方式呈現（保守方/進取方），完整券商名單：本土券商含華南投顧、宏遠投顧、統一投顧、群益、國泰證期研究部等近 14 日發布之被動元件產業與國巨個股報告。</p>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:10px">資料截止：2026 年 7 月 23 日。GiS 26F/27F EPS 為 directional 彙編預估，非三情境定案；個股完整估值請見對應個股報告。本報告僅供研究參考，不構成投資建議。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>陸 · 首選標的與附錄</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+  function getEl(id){return document.getElementById(id);}
+
+  Chart.register({
+    id:'labelPlugin',
+    afterDatasetsDraw(chart){
+      const ctx=chart.ctx;
+      const isStacked=chart.options.scales?.y?.stacked===true;
+      const isH=chart.options.indexAxis==='y';
+      chart.data.datasets.forEach((ds,i)=>{
+        const meta=chart.getDatasetMeta(i);
+        if(meta.hidden)return;
+        meta.data.forEach((bar,idx)=>{
+          const v=ds.data[idx];
+          if(!v&&v!==0)return;
+          ctx.save();
+          ctx.font='bold 11px PingFang TC, Arial';
+          ctx.textAlign='center';
+          if(isH){
+            ctx.fillStyle='#1a2a4a';ctx.textBaseline='middle';
+            ctx.fillText((ds.suffix||'')+v+(ds.unit||''),bar.x+6,bar.y);
+          }else if(isStacked){
+            const bh=Math.abs(bar.base-bar.y);
+            if(bh<14){ctx.restore();return;}
+            ctx.fillStyle=bh>22?'#fff':'#1a2a4a';ctx.textBaseline='middle';
+            ctx.fillText(v+'%',bar.x,bar.y+bh/2);
+          }else{
+            ctx.fillStyle='#1a2a4a';ctx.textBaseline='bottom';
+            ctx.fillText(String(v),bar.x,bar.y-3);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+  // 執行摘要 · CSP capex
+  new Chart(getEl('chartCapex'),{
+    type:'bar',
+    data:{labels:['Microsoft','Google','Meta','AWS'],
+      datasets:[
+        {label:'2025',data:[83,90,73,150],backgroundColor:'#6b7a9a',borderRadius:5,barPercentage:0.7,categoryPercentage:0.72},
+        {label:'2026F',data:[190,185,135,230],backgroundColor:'#00a878',borderRadius:5,barPercentage:0.7,categoryPercentage:0.72}
+      ]},
+    options:{responsive:false,animation:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:14,padding:14}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v}}}}
+  });
+
+  // 執行摘要 · 國巨 ASP
+  new Chart(getEl('chartASP'),{
+    type:'bar',
+    data:{labels:['2026F','2027F','2028F'],
+      datasets:[
+        {label:'MLCC',data:[23,29,16],backgroundColor:'#1a3a6e',borderRadius:5,barPercentage:0.7,categoryPercentage:0.7,unit:'%'},
+        {label:'鉭質電容',data:[24,23,17],backgroundColor:'#00c896',borderRadius:5,barPercentage:0.7,categoryPercentage:0.7,unit:'%'}
+      ]},
+    options:{responsive:false,animation:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:14,padding:14}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'}}}}
+  });
+
+  // 單櫃產值增幅（橫條）
+  new Chart(getEl('chartRackValue'),{
+    type:'bar',
+    data:{labels:['記憶體','PCB','MLCC','NVLink Switch','ABF 載板','GPU','電源供應','散熱'],
+      datasets:[{label:'GB300→VR200 產值增幅',data:[435,233,182,122,82,57,32,12],
+        backgroundColor:['#6b7a9a','#1a3a6e','#00c896','#3b82f6','#5b7fb0','#8e44ad','#c99a3a','#94a3b8'],
+        borderRadius:4,barPercentage:0.62,unit:'%'}]},
+    options:{responsive:false,animation:false,indexAxis:'y',
+      layout:{padding:{right:44}},
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:'#eef2f8'},max:480,ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}
+  });
+
+  // 供需缺口
+  new Chart(getEl('chartGap'),{
+    type:'line',
+    data:{labels:['2026F','2027F','2028F'],
+      datasets:[
+        {label:'日廠缺口',data:[6,9,12],borderColor:'#1a3a6e',backgroundColor:'transparent',tension:0.3,pointRadius:5,borderWidth:2.5},
+        {label:'台廠缺口',data:[null,7,15],borderColor:'#00c896',backgroundColor:'transparent',tension:0.3,pointRadius:5,borderWidth:2.5}
+      ]},
+    options:{responsive:false,animation:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:14,padding:12}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'}}}}
+  });
+
+  // B/B ratio
+  new Chart(getEl('chartBB'),{
+    type:'bar',
+    data:{labels:['村田','太陽誘電','國巨','華新科'],
+      datasets:[{label:'B/B Ratio',data:[1.30,1.25,1.15,1.10],
+        backgroundColor:['#1a3a6e','#3b82f6','#00c896','#00a878'],borderRadius:4,barPercentage:0.6}]},
+    options:{responsive:false,animation:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},min:0.9,suggestedMax:1.4}}}
+  });
+
+  // 全球市占 產能 vs 產值
+  new Chart(getEl('chartShare'),{
+    type:'bar',
+    data:{labels:['村田','三星電機','太陽誘電','TDK','國巨','華新科'],
+      datasets:[
+        {label:'產能市占',data:[40,20,11,8,15,8],backgroundColor:'#1a3a6e',borderRadius:5,barPercentage:0.72,categoryPercentage:0.7,unit:'%'},
+        {label:'產值市占',data:[47,25,13,13,3,2],backgroundColor:'#00c896',borderRadius:5,barPercentage:0.72,categoryPercentage:0.7,unit:'%'}
+      ]},
+    options:{responsive:false,animation:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:14,padding:14}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'}}}}
+  });
+
+  // 三大台廠 EPS
+  new Chart(getEl('chartEPS'),{
+    type:'line',
+    data:{labels:['2024','2025','2026F','2027F'],
+      datasets:[
+        {label:'國巨(還原)',data:[9.41,11.48,19.5,31.0],borderColor:'#0d1b3e',backgroundColor:'transparent',tension:0.3,pointRadius:5,borderWidth:2.5},
+        {label:'禾伸堂',data:[5.9,6.6,13.0,21.5],borderColor:'#00c896',backgroundColor:'transparent',tension:0.3,pointRadius:5,borderWidth:2.5},
+        {label:'華新科',data:[6.2,4.7,7.5,11.0],borderColor:'#e67e22',backgroundColor:'transparent',tension:0.3,pointRadius:5,borderWidth:2.5}
+      ]},
+    options:{responsive:false,animation:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:14,padding:14}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'元'}}}}
+  });
+
+});
+</script>
+</body>
+</html>

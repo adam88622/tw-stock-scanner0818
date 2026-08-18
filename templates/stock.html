@@ -20,6 +20,12 @@
         <span class="badge {{ 'bg-primary' if data.stock_market == 'twse' else 'bg-success' }}">
             {{ '上市' if data.stock_market == 'twse' else '上櫃' }}
         </span>
+        {% if large_trader and large_trader.has_futures %}
+        <span class="badge bg-warning text-dark" title="本檔為台灣期交所股票期貨標的{% if large_trader.main_code %}（大型 {{ large_trader.main_code }}{% if large_trader.mini_code %}、小型 {{ large_trader.mini_code }}{% endif %}）{% endif %}">有股期</span>
+        {% if large_trader.mini_code %}
+        <span class="badge bg-secondary" title="本檔另有小型股票期貨（{{ large_trader.mini_code }}）">有小型股期</span>
+        {% endif %}
+        {% endif %}
         <button class="btn-watchlist {{ 'active' if in_watchlist else '' }}" id="stock-watchlist-btn"
                 data-id="{{ data.stock_id }}">
             {{ '已加入自選' if in_watchlist else '加入自選' }}
@@ -28,19 +34,89 @@
 
     <!-- Section 1: K-Line Chart -->
     <div class="card mb-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <strong>K 線圖（全歷史，預設顯示近 1 年；可拖曳 / 滾輪縮放）</strong>
-            <span class="text-muted" style="font-size:12px;">
-                <span style="color:#eab308;">━ MA5</span>
-                <span style="color:#38bdf8;">━ MA20</span>
-                <span style="color:#a78bfa;">━ MA60</span>
-            </span>
-        </div>
+        <div class="card-header"><strong>K 線圖 (60日)</strong></div>
         <div class="card-body p-2">
-            <div id="kline-chart" style="width:100%;height:360px;"></div>
-            <div id="rsi-chart" style="width:100%;height:120px;margin-top:6px;"></div>
+            <div id="kline-chart"></div>
         </div>
     </div>
+
+    {% if large_trader and large_trader.has_futures %}
+    <!-- Section 1.5: 期貨大戶（近20日淨部位） -->
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>期貨大戶（近20日淨部位）</strong>
+            <span style="font-size:.8rem;color:#64748b;">
+                十大交易人扣除特定法人｜所有月份合計
+                {%- if large_trader.main_code %}｜契約 {{ large_trader.main_code }}{% if large_trader.mini_code %} + {{ large_trader.mini_code }}(小){% endif %}{% endif %}
+            </span>
+        </div>
+        <div class="card-body">
+            {% if large_trader.latest %}
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <div class="d-flex justify-content-between align-items-center p-2 border rounded">
+                        <span style="white-space:nowrap;">當日淨部位</span>
+                        <span class="fw-bold text-end {{ 'text-danger' if large_trader.latest.net_lots > 0 else 'text-success' if large_trader.latest.net_lots < 0 else '' }}">
+                            {{ "{:,.0f}".format(large_trader.latest.net_lots) }} 張
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex justify-content-between align-items-center p-2 border rounded">
+                        <span style="white-space:nowrap;">口數明細</span>
+                        <span class="text-end" style="color:#94a3b8;white-space:nowrap;">
+                            大型 {{ "{:,}".format(large_trader.latest.main_contracts) }} 口
+                            ＋ 小型 {{ "{:,}".format(large_trader.latest.mini_contracts) }} 口
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="d-flex justify-content-between align-items-center p-2 border rounded">
+                        <span style="white-space:nowrap;" title="前十大交易人（含造市者）淨部位 ÷ 全市場未沖銷部位">籌碼集中度</span>
+                        <span class="fw-bold text-end {{ 'text-danger' if large_trader.latest.conc_net_pct and large_trader.latest.conc_net_pct > 0 else 'text-success' if large_trader.latest.conc_net_pct and large_trader.latest.conc_net_pct < 0 else '' }}">
+                            {{ "%+.2f"|format(large_trader.latest.conc_net_pct) ~ '%' if large_trader.latest.conc_net_pct is not none else '—' }}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="d-flex justify-content-between align-items-center p-2 border rounded">
+                        <span style="white-space:nowrap;">資料日期</span>
+                        <span class="text-end" style="color:#94a3b8;white-space:nowrap;">{{ large_trader.latest.date }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="margin-chart-container" id="lt-chart"></div>
+
+            <div class="table-responsive mt-2">
+                <table class="table table-hover table-sm data-table margin-table mb-0" id="lt-table">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th class="text-end">淨部位(張)</th>
+                            <th class="text-end">大型(口)</th>
+                            <th class="text-end">小型(口)</th>
+                            <th class="text-end" title="前十大交易人買方部位 ÷ 全市場未沖銷部位（含造市者）">十大買方集中度</th>
+                            <th class="text-end" title="前十大交易人賣方部位 ÷ 全市場未沖銷部位（含造市者）">十大賣方集中度</th>
+                            <th class="text-end" title="(前十大買 − 前十大賣) ÷ 全市場未沖銷部位（含造市者）">淨集中度</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="mt-2" style="font-size:.78rem;line-height:1.6;color:#64748b;">
+                大戶淨部位 =（含造市者前十大買 − 特定法人前十大買）−（含造市者前十大賣 − 特定法人前十大賣），
+                取期交所大額交易人未沖銷部位表「到期月份 999999（所有月份合計）」層級，避免換月部位搬家造成假性跳動。
+                口數換算張數：股票期貨 2 張/口、小型股票期貨 0.1 張/口、ETF 期貨 10 張/口、小型 ETF 期貨 1 張/口。
+                集中度為市場慣用定義，用「含造市者」原始欄位計算，未扣除特定法人。
+            </div>
+            {% else %}
+            <div style="color:#94a3b8;">本檔為股票期貨標的，但尚無大額交易人資料（期交所每交易日約 15:00 後公布）。</div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Section 2: Institutional Flow -->
     <div class="card mb-3">
@@ -286,7 +362,6 @@
 
 {% block scripts %}
 {% if data %}
-<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <script>
 (function() {
     // Watchlist toggle
@@ -318,113 +393,244 @@
     const ma60Data = {{ ma60_json|safe }};
     const rsiData = {{ rsi_json|safe }};
 
-    function makeKLine(priceEl, rsiEl, data, ma5, ma20, ma60, rsi) {
-        if (!data || data.length === 0 || typeof LightweightCharts === 'undefined') return null;
+    function makeKLine(container, fullData, fullMa5, fullMa20, fullMa60, fullRsi, viewStart, viewEnd) {
+        if (!fullData || fullData.length === 0) return;
 
-        priceEl.innerHTML = '';
-        rsiEl.innerHTML = '';
-
-        const baseTheme = {
-            layout: { background: { color: 'transparent' }, textColor: '#94a3b8' },
-            grid: {
-                vertLines: { color: 'rgba(148,163,184,0.08)' },
-                horzLines: { color: 'rgba(148,163,184,0.08)' },
-            },
-            rightPriceScale: { borderColor: 'rgba(148,163,184,0.2)' },
-            timeScale: { borderColor: 'rgba(148,163,184,0.2)', rightOffset: 5 },
-            crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
-        };
-
-        const priceChart = LightweightCharts.createChart(priceEl, {
-            ...baseTheme,
-            width: priceEl.clientWidth,
-            height: priceEl.clientHeight,
-            timeScale: { ...baseTheme.timeScale, visible: false },
-        });
-        const rsiChart = LightweightCharts.createChart(rsiEl, {
-            ...baseTheme,
-            width: rsiEl.clientWidth,
-            height: rsiEl.clientHeight,
-            rightPriceScale: { ...baseTheme.rightPriceScale, scaleMargins: { top: 0.1, bottom: 0.1 } },
-        });
-
-        // 蠟燭：紅漲綠跌（台股慣例）
-        const candleSeries = priceChart.addCandlestickSeries({
-            upColor: '#ef4444', downColor: '#22c55e',
-            wickUpColor: '#ef4444', wickDownColor: '#22c55e',
-            borderUpColor: '#ef4444', borderDownColor: '#22c55e',
-        });
-        candleSeries.setData(data.map(d => ({
-            time: d.date, open: d.open, high: d.high, low: d.low, close: d.close,
-        })));
-
-        function maToSeries(arr) {
-            const out = [];
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i] !== null && arr[i] !== undefined) {
-                    out.push({ time: data[i].date, value: arr[i] });
-                }
-            }
-            return out;
+        // 只取 [viewStart, viewEnd] 區間
+        if (viewStart === undefined || viewEnd === undefined) {
+            // 預設顯示最近 250 根 (或全部)
+            viewEnd = fullData.length - 1;
+            viewStart = Math.max(0, viewEnd - 249);
         }
-        const ma5Series = priceChart.addLineSeries({ color: '#eab308', lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
-        const ma20Series = priceChart.addLineSeries({ color: '#38bdf8', lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
-        const ma60Series = priceChart.addLineSeries({ color: '#a78bfa', lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
-        ma5Series.setData(maToSeries(ma5));
-        ma20Series.setData(maToSeries(ma20));
-        ma60Series.setData(maToSeries(ma60));
+        viewStart = Math.max(0, Math.min(fullData.length - 1, viewStart));
+        viewEnd   = Math.max(viewStart, Math.min(fullData.length - 1, viewEnd));
 
-        // RSI 子圖
-        const rsiSeries = rsiChart.addLineSeries({ color: '#f59e0b', lineWidth: 1.5, priceLineVisible: false });
-        rsiSeries.setData(maToSeries(rsi));
-        // 30 / 50 / 70 參考線
-        [30, 50, 70].forEach(v => {
-            rsiSeries.createPriceLine({
-                price: v, color: 'rgba(148,163,184,0.4)',
-                lineStyle: LightweightCharts.LineStyle.Dashed,
-                lineWidth: 1, axisLabelVisible: true, title: String(v),
+        const data = fullData.slice(viewStart, viewEnd + 1);
+        const ma5  = fullMa5.slice(viewStart, viewEnd + 1);
+        const ma20 = fullMa20.slice(viewStart, viewEnd + 1);
+        const ma60 = fullMa60.slice(viewStart, viewEnd + 1);
+        const rsi  = fullRsi.slice(viewStart, viewEnd + 1);
+
+        const W = container.clientWidth || 900;
+        const kH = 320;       // K-line area height
+        const rsiH = 100;     // RSI area height
+        const gap = 30;       // gap between K and RSI
+        const padTop = 20;
+        const padBot = 30;
+        const padLeft = 60;
+        const padRight = 20;
+        const totalH = kH + gap + rsiH + padTop + padBot;
+
+        const n = data.length;
+        const barW = Math.max(2, Math.floor((W - padLeft - padRight) / n * 0.7));
+        const stepW = (W - padLeft - padRight) / n;
+
+        // Price range — 只看視窗內的高低點 (縮放後 Y 軸自動 fit)
+        let pMin = Infinity, pMax = -Infinity;
+        data.forEach(d => {
+            if (d.low < pMin) pMin = d.low;
+            if (d.high > pMax) pMax = d.high;
+        });
+        const pRange = pMax - pMin || 1;
+        const pPad = pRange * 0.05;
+        pMin -= pPad;
+        pMax += pPad;
+
+        function priceY(p) {
+            return padTop + kH - (p - pMin) / (pMax - pMin) * kH;
+        }
+
+        function rsiY(v) {
+            if (v === null) return null;
+            return padTop + kH + gap + rsiH - (v / 100) * rsiH;
+        }
+
+        let svg = `<svg width="${W}" height="${totalH}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;">`;
+
+        // Grid lines (K area)
+        const gridColor = '#1e293b';
+        const textColor = '#64748b';
+        const gridCount = 5;
+        for (let i = 0; i <= gridCount; i++) {
+            const y = padTop + (kH / gridCount) * i;
+            const price = pMax - (pMax - pMin) * (i / gridCount);
+            svg += `<line x1="${padLeft}" y1="${y}" x2="${W - padRight}" y2="${y}" stroke="${gridColor}" stroke-width="0.5"/>`;
+            svg += `<text x="${padLeft - 5}" y="${y + 4}" text-anchor="end" fill="${textColor}" font-size="11">${price.toFixed(1)}</text>`;
+        }
+
+        // K-bars
+        data.forEach((d, i) => {
+            const x = padLeft + stepW * i + stepW / 2;
+            const isUp = d.close >= d.open;
+            const color = isUp ? '#ef4444' : '#22c55e';
+            const oY = priceY(d.open);
+            const cY = priceY(d.close);
+            const hY = priceY(d.high);
+            const lY = priceY(d.low);
+            const bodyTop = Math.min(oY, cY);
+            const bodyH = Math.max(Math.abs(oY - cY), 1);
+
+            // Wick
+            svg += `<line x1="${x}" y1="${hY}" x2="${x}" y2="${lY}" stroke="${color}" stroke-width="1"/>`;
+            // Body
+            if (isUp) {
+                svg += `<rect x="${x - barW/2}" y="${bodyTop}" width="${barW}" height="${bodyH}" fill="${color}" stroke="${color}" stroke-width="0.5"/>`;
+            } else {
+                svg += `<rect x="${x - barW/2}" y="${bodyTop}" width="${barW}" height="${bodyH}" fill="${color}" stroke="${color}" stroke-width="0.5"/>`;
+            }
+        });
+
+        // MA lines
+        function drawMA(maData, color) {
+            let path = '';
+            maData.forEach((v, i) => {
+                if (v === null) return;
+                const x = padLeft + stepW * i + stepW / 2;
+                const y = priceY(v);
+                path += (path === '' ? `M${x},${y}` : ` L${x},${y}`);
             });
+            if (path) {
+                svg += `<path d="${path}" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.8"/>`;
+            }
+        }
+        drawMA(ma5, '#eab308');   // yellow
+        drawMA(ma20, '#38bdf8');  // cyan
+        drawMA(ma60, '#a78bfa');  // purple
+
+        // Latest price dashed line
+        const lastClose = data[data.length - 1].close;
+        const lastY = priceY(lastClose);
+        svg += `<line x1="${padLeft}" y1="${lastY}" x2="${W - padRight}" y2="${lastY}" stroke="#f97316" stroke-width="1" stroke-dasharray="4,3" opacity="0.7"/>`;
+        svg += `<text x="${W - padRight + 2}" y="${lastY + 4}" fill="#f97316" font-size="11">${lastClose.toFixed(1)}</text>`;
+
+        // MA legend
+        svg += `<text x="${padLeft + 5}" y="${padTop - 5}" fill="#eab308" font-size="11">MA5</text>`;
+        svg += `<text x="${padLeft + 45}" y="${padTop - 5}" fill="#38bdf8" font-size="11">MA20</text>`;
+        svg += `<text x="${padLeft + 95}" y="${padTop - 5}" fill="#a78bfa" font-size="11">MA60</text>`;
+
+        // Date labels on X axis
+        const dateStep = Math.max(1, Math.floor(n / 6));
+        data.forEach((d, i) => {
+            if (i % dateStep === 0 || i === n - 1) {
+                const x = padLeft + stepW * i + stepW / 2;
+                const label = d.date.slice(5); // MM-DD
+                svg += `<text x="${x}" y="${padTop + kH + 15}" text-anchor="middle" fill="${textColor}" font-size="10">${label}</text>`;
+            }
         });
 
-        // 兩個 chart 的時間軸同步（拖曳/縮放任一個都會帶動另一個）
-        let syncing = false;
-        priceChart.timeScale().subscribeVisibleLogicalRangeChange(range => {
-            if (syncing || !range) return;
-            syncing = true;
-            rsiChart.timeScale().setVisibleLogicalRange(range);
-            syncing = false;
-        });
-        rsiChart.timeScale().subscribeVisibleLogicalRangeChange(range => {
-            if (syncing || !range) return;
-            syncing = true;
-            priceChart.timeScale().setVisibleLogicalRange(range);
-            syncing = false;
+        // RSI sub-chart
+        const rsiTop = padTop + kH + gap;
+
+        // RSI background lines (30, 50, 70)
+        const rsiLineColor = '#334155';
+        [30, 50, 70].forEach(v => {
+            const y = rsiY(v);
+            svg += `<line x1="${padLeft}" y1="${y}" x2="${W - padRight}" y2="${y}" stroke="${rsiLineColor}" stroke-width="0.5" stroke-dasharray="3,3"/>`;
+            svg += `<text x="${padLeft - 5}" y="${y + 4}" text-anchor="end" fill="${textColor}" font-size="10">${v}</text>`;
         });
 
-        // 預設縮到最近 250 根（約一年），拖曳可看完整歷史
-        const tail = Math.min(250, data.length);
-        priceChart.timeScale().setVisibleLogicalRange({ from: data.length - tail, to: data.length - 1 });
+        // RSI border
+        svg += `<rect x="${padLeft}" y="${rsiTop}" width="${W - padLeft - padRight}" height="${rsiH}" fill="none" stroke="${gridColor}" stroke-width="0.5"/>`;
 
-        return { priceChart, rsiChart };
+        // RSI line
+        let rsiPath = '';
+        rsi.forEach((v, i) => {
+            if (v === null) return;
+            const x = padLeft + stepW * i + stepW / 2;
+            const y = rsiY(v);
+            rsiPath += (rsiPath === '' ? `M${x},${y}` : ` L${x},${y}`);
+        });
+        if (rsiPath) {
+            svg += `<path d="${rsiPath}" fill="none" stroke="#f59e0b" stroke-width="1.5"/>`;
+        }
+
+        // RSI label
+        svg += `<text x="${padLeft + 5}" y="${rsiTop - 5}" fill="#f59e0b" font-size="11">RSI(14)</text>`;
+
+        // RSI current value
+        const lastRSI = rsi.filter(v => v !== null).pop();
+        if (lastRSI !== undefined) {
+            svg += `<text x="${W - padRight - 5}" y="${rsiTop - 5}" text-anchor="end" fill="#f59e0b" font-size="11">${lastRSI.toFixed(1)}</text>`;
+        }
+
+        svg += '</svg>';
+        container.innerHTML = svg;
     }
 
-    const priceEl = document.getElementById('kline-chart');
-    const rsiEl = document.getElementById('rsi-chart');
-    let charts = null;
-    if (priceEl && rsiEl) {
-        charts = makeKLine(priceEl, rsiEl, klineData, ma5Data, ma20Data, ma60Data, rsiData);
-        // Re-render on resize
+    const container = document.getElementById('kline-chart');
+    if (container) {
+        // 視窗狀態
+        const N = klineData.length;
+        let viewEnd = N - 1;
+        let viewStart = Math.max(0, viewEnd - 249);  // 預設最近 250 根
+
+        function render() {
+            makeKLine(container, klineData, ma5Data, ma20Data, ma60Data, rsiData, viewStart, viewEnd);
+        }
+        render();
+
+        // 滑鼠滾輪 → 縮放(以游標位置為錨點)
+        container.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            const range = viewEnd - viewStart;
+            const factor = e.deltaY > 0 ? 1.2 : 1 / 1.2;
+            const newRange = Math.max(10, Math.min(N - 1, Math.round(range * factor)));
+
+            // 以游標 X 比例為錨,讓對應日期維持
+            const rect = container.getBoundingClientRect();
+            const xRatio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            const anchorIdx = viewStart + xRatio * range;
+
+            let ns = Math.round(anchorIdx - xRatio * newRange);
+            let ne = ns + newRange;
+            if (ns < 0) { ns = 0; ne = Math.min(N - 1, newRange); }
+            if (ne > N - 1) { ne = N - 1; ns = Math.max(0, ne - newRange); }
+            viewStart = ns; viewEnd = ne;
+            render();
+        }, { passive: false });
+
+        // 拖曳 → 平移
+        let dragStartX = null;
+        let dragStartView = null;
+        container.style.cursor = 'grab';
+        container.addEventListener('mousedown', function(e) {
+            dragStartX = e.clientX;
+            dragStartView = { s: viewStart, e: viewEnd };
+            container.style.cursor = 'grabbing';
+        });
+        window.addEventListener('mousemove', function(e) {
+            if (dragStartX === null) return;
+            const W = container.clientWidth || 900;
+            const range = dragStartView.e - dragStartView.s;
+            const dx = e.clientX - dragStartX;
+            const shift = Math.round(-dx / W * range);
+            let ns = dragStartView.s + shift;
+            let ne = dragStartView.e + shift;
+            if (ns < 0) { ns = 0; ne = range; }
+            if (ne > N - 1) { ne = N - 1; ns = ne - range; }
+            if (ns !== viewStart || ne !== viewEnd) {
+                viewStart = ns; viewEnd = ne;
+                render();
+            }
+        });
+        window.addEventListener('mouseup', function() {
+            dragStartX = null;
+            dragStartView = null;
+            container.style.cursor = 'grab';
+        });
+
+        // 雙擊 → 重設為預設視窗
+        container.addEventListener('dblclick', function() {
+            viewEnd = N - 1;
+            viewStart = Math.max(0, viewEnd - 249);
+            render();
+        });
+
+        // 視窗變更時 re-render
         let resizeTimer;
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(function() {
-                if (charts) {
-                    charts.priceChart.applyOptions({ width: priceEl.clientWidth });
-                    charts.rsiChart.applyOptions({ width: rsiEl.clientWidth });
-                } else {
-                    charts = makeKLine(priceEl, rsiEl, klineData, ma5Data, ma20Data, ma60Data, rsiData);
-                }
-            }, 200);
+            resizeTimer = setTimeout(render, 200);
         });
     }
 
@@ -549,6 +755,95 @@
         }
     }
 
+    // ===== 期貨大戶淨部位（近20日） =====
+    const ltData = {{ large_trader_json|safe }};
+    const ltChartEl = document.getElementById('lt-chart');
+
+    // 紅漲綠跌（台股慣例）：正淨部位=偏多=紅，負=偏空=綠
+    const LT_UP = '#ef4444', LT_DN = '#22c55e';
+
+    function makeBarSVG(containerEl, data, valueKey) {
+        if (!containerEl) return;
+        if (!data || data.length === 0) {
+            containerEl.innerHTML = '<div style="color:#64748b;padding:20px;">暫無期貨大戶資料</div>';
+            return;
+        }
+        const W = containerEl.clientWidth || 800;
+        const H = 200;
+        const padTop = 20, padBot = 30, padLeft = 70, padRight = 20;
+        const chartW = W - padLeft - padRight;
+        const chartH = H - padTop - padBot;
+        const n = data.length;
+
+        // 以 0 為中心的對稱刻度，讓多空方向一眼可辨
+        const values = data.map(d => d[valueKey] || 0);
+        const absMax = Math.max(1, ...values.map(v => Math.abs(v)));
+        const vMax = absMax * 1.1, vMin = -vMax;
+
+        const gridColor = '#1e293b';
+        const textColor = '#64748b';
+        const stepW = chartW / n;
+        const barW = Math.max(2, stepW * 0.62);
+        const yZero = padTop + chartH * (vMax / (vMax - vMin));
+        const yPos = v => padTop + chartH - ((v - vMin) / (vMax - vMin)) * chartH;
+
+        let svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;">`;
+
+        // 上/中/下三條刻度（+max / 0 / -max）
+        [vMax, 0, vMin].forEach(val => {
+            const y = yPos(val);
+            svg += `<line x1="${padLeft}" y1="${y}" x2="${W - padRight}" y2="${y}" stroke="${gridColor}" stroke-width="${val === 0 ? 1 : 0.5}"/>`;
+            svg += `<text x="${padLeft - 5}" y="${y + 4}" text-anchor="end" fill="${textColor}" font-size="10">${Math.round(val).toLocaleString()}</text>`;
+        });
+        svg += `<text x="${padLeft + 4}" y="${padTop + 10}" fill="${textColor}" font-size="10">淨部位(張)</text>`;
+
+        data.forEach((d, i) => {
+            const v = d[valueKey] || 0;
+            const x = padLeft + stepW * i + (stepW - barW) / 2;
+            const y = v >= 0 ? yPos(v) : yZero;
+            const h = Math.max(1, Math.abs(yPos(v) - yZero));
+            const color = v >= 0 ? LT_UP : LT_DN;
+            svg += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${color}" opacity="0.85">`
+                 + `<title>${d.date}　${Math.round(v).toLocaleString()} 張</title></rect>`;
+        });
+
+        // 日期標籤
+        const dateStep = Math.max(1, Math.floor(n / 6));
+        data.forEach((d, i) => {
+            if (i % dateStep === 0 || i === n - 1) {
+                const x = padLeft + stepW * i + stepW / 2;
+                svg += `<text x="${x}" y="${H - 5}" text-anchor="middle" fill="${textColor}" font-size="10">${d.date.slice(5)}</text>`;
+            }
+        });
+
+        svg += '</svg>';
+        containerEl.innerHTML = svg;
+    }
+
+    if (ltChartEl) {
+        makeBarSVG(ltChartEl, ltData, 'net_lots');
+
+        const ltBody = document.querySelector('#lt-table tbody');
+        if (ltBody && ltData.length) {
+            const pct = v => (v === null || v === undefined) ? '—' : v.toFixed(2) + '%';
+            const signCls = v => v > 0 ? 'text-danger' : v < 0 ? 'text-success' : '';
+            let rows = '';
+            for (let i = ltData.length - 1; i >= 0; i--) {   // 新到舊
+                const d = ltData[i];
+                rows += `<tr>
+                    <td>${d.date}</td>
+                    <td class="text-end fw-bold ${signCls(d.net_lots)}">${Math.round(d.net_lots).toLocaleString()}</td>
+                    <td class="text-end ${signCls(d.main_contracts)}">${d.main_contracts.toLocaleString()}</td>
+                    <td class="text-end ${signCls(d.mini_contracts)}">${d.mini_contracts.toLocaleString()}</td>
+                    <td class="text-end">${pct(d.top10_buy_pct)}</td>
+                    <td class="text-end">${pct(d.top10_sell_pct)}</td>
+                    <td class="text-end ${signCls(d.conc_net_pct)}">${pct(d.conc_net_pct)}</td>
+                </tr>`;
+            }
+            ltBody.innerHTML = rows;
+        }
+    }
+
     // Re-render margin charts on resize
     let marginResizeTimer;
     window.addEventListener('resize', function() {
@@ -556,6 +851,7 @@
         marginResizeTimer = setTimeout(function() {
             if (marginChartEl) makeSVG(marginChartEl, marginData, 'balance', '#38bdf8', v => Math.round(v).toLocaleString());
             if (shortChartEl) makeSVG(shortChartEl, marginData, 'short_bal', '#a78bfa', v => Math.round(v).toLocaleString());
+            if (ltChartEl) makeBarSVG(ltChartEl, ltData, 'net_lots');
         }, 200);
     });
 })();

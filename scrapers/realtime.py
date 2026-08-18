@@ -61,7 +61,10 @@ def is_trading_day():
 
 
 def is_trading_hours():
-    """檢查是否在交易時段（交易日 09:00~13:30）"""
+    """檢查是否在交易時段（交易日 09:00~13:30）。
+    註：VOLUME_ALERT_FORCE_INTRADAY 只影響 scanner 邏輯（讓 cache 顯示盤中介面），
+    不影響此處 — 避免在真實非盤中時段對 TWSE MIS 打無效請求。
+    """
     if not is_trading_day():
         return False
     now = datetime.now()
@@ -69,18 +72,22 @@ def is_trading_hours():
     return 855 <= hour_min <= 1335  # 08:55 ~ 13:35 (含盤前盤後緩衝)
 
 
-def fetch_realtime_prices(conn):
+def fetch_realtime_prices(conn, record_snapshot=False):
     """
     抓取所有股票的即時報價，更新 daily_prices。
+    record_snapshot: 同時寫入 intraday_snapshot（保留歷史，供爆量預估）
     回傳: 更新筆數
     """
     from models.database import upsert_daily_price
+    if record_snapshot:
+        from models.database import upsert_intraday_snapshot
 
     if not is_trading_hours():
         logger.info("非交易時段，跳過即時報價抓取")
         return 0
 
     today = datetime.now().strftime('%Y-%m-%d')
+    snapshot_ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S') if record_snapshot else None
 
     # 從 DB 取所有股票
     rows = conn.execute("SELECT stock_id, market FROM stocks ORDER BY stock_id").fetchall()
@@ -91,23 +98,58 @@ def fetch_realtime_prices(conn):
     stock_list = [(r['stock_id'], r['market']) for r in rows]
     total_updated = 0
 
+    # 熔斷器（與 futures_basis 共用同一份檔案狀態，跨行程生效）。
+    # MIS 對本機 IP 的封鎖是慢性狀態，被擋時連單檔請求都會被秒拒；
+    # 開路期間直接跳過整輪，一個請求都不發，讓對端封鎖有機會冷卻。
+    from scrapers.spot_quote import (
+        circuit_open, circuit_state, report_failure, report_success,
+    )
+    if circuit_open():
+        st = circuit_state()
+        logger.warning(
+            f"MIS 熔斷開路中（連續失敗 {st['consecutive_fail']} 批，"
+            f"剩餘冷卻 {st['cooldown_remain_sec']}s），本輪跳過抓取"
+        )
+        return 0
+
+    # 用 Session 重用 TCP 連線（降低 TWSE 對短連線爆量的觀感）
+    session = requests.Session()
+    session.headers.update(REQUEST_HEADERS)
+    # 先打 MIS 首頁建立 session（拿 cookie + 觀感更像真實瀏覽器）
+    try:
+        session.get('https://mis.twse.com.tw/stock/index.jsp', timeout=10)
+    except Exception:
+        pass
+
+    consecutive_fail = 0
+
     # 分批查詢
     for i in range(0, len(stock_list), BATCH_SIZE):
         batch = stock_list[i:i + BATCH_SIZE]
         query = _build_query(batch)
 
         try:
-            resp = requests.get(
+            resp = session.get(
                 MIS_URL,
-                params={'ex_ch': query},
-                headers=REQUEST_HEADERS,
-                timeout=REQUEST_TIMEOUT
+                params={'ex_ch': query, 'json': 1, 'delay': 0},
+                timeout=REQUEST_TIMEOUT,
             )
             resp.raise_for_status()
             data = resp.json()
+            consecutive_fail = 0
+            report_success()
         except Exception as e:
-            logger.warning(f"即時報價批次 {i // BATCH_SIZE + 1} 失敗: {e}")
-            time.sleep(1)
+            consecutive_fail += 1
+            logger.warning(
+                f"即時報價批次 {i // BATCH_SIZE + 1} 失敗（連續 {consecutive_fail}）: {e}"
+            )
+            # 舊行為是 backoff 後 continue 走完全部 30 批（被封鎖時單輪 15 分鐘
+            # 純敲門），反而讓封鎖一直續期。改為交熔斷器判定：達門檻立即中止整輪。
+            if report_failure(e):
+                logger.warning("MIS 熔斷開路，中止本輪剩餘批次")
+                break
+            backoff = min(30, 2 ** min(consecutive_fail, 5))
+            time.sleep(backoff)
             continue
 
         msg_array = data.get('msgArray', [])
@@ -146,6 +188,11 @@ def fetch_realtime_prices(conn):
                 upsert_daily_price(conn, stock_id, today,
                                    open_price, high_price, low_price,
                                    close_price, volume, trade_value, change_pct)
+                if record_snapshot and snapshot_ts:
+                    try:
+                        upsert_intraday_snapshot(conn, stock_id, snapshot_ts, volume, close_price)
+                    except Exception as e:
+                        logger.error(f"intraday_snapshot 寫入錯誤 {stock_id}: {e}")
                 total_updated += 1
             except Exception as e:
                 logger.error(f"即時報價解析錯誤 {item.get('c', '?')}: {e}")

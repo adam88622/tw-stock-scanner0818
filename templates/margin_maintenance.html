@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+{% block title %}融資維持率查詢{% endblock %}
+
+{% block content %}
+<div class="content-area">
+<style>
+    .mm-controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:16px 0 8px; }
+    .mm-input { padding:7px 12px; border-radius:6px; border:1px solid #334155; background:#1e293b;
+                color:#e2e8f0; font-size:14px; }
+    .mm-input.code { width:130px; font-weight:700; letter-spacing:1px; }
+    .mm-input.n { width:88px; }
+    .mm-label { color:#94a3b8; font-size:13px; }
+    .mm-btn { padding:7px 18px; border-radius:6px; border:1px solid #6366f1; background:#6366f1;
+              color:#fff; cursor:pointer; font-size:14px; font-weight:600; }
+    .mm-btn:hover { background:#4f46e5; }
+    .mm-hint { color:#64748b; font-size:12px; margin:2px 0 12px; }
+
+    .mm-error { background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.4); color:#fca5a5;
+                padding:14px 16px; border-radius:8px; margin:16px 0; }
+    .mm-loading { text-align:center; color:#64748b; padding:28px; }
+
+    .mm-card { background:#0f172a; border:1.5px solid #1e293b; border-radius:12px; padding:20px 22px;
+               margin:14px 0; }
+    .mm-title { display:flex; flex-wrap:wrap; align-items:baseline; gap:10px; margin-bottom:4px; }
+    .mm-title .nm { font-size:24px; font-weight:800; color:#e2e8f0; }
+    .mm-title .cd { font-size:16px; color:#94a3b8; font-weight:600; }
+    .mm-badge { display:inline-block; padding:2px 10px; border-radius:20px; font-size:12px; font-weight:700; }
+    .mm-badge.mkt { background:rgba(99,102,241,.18); color:#a5b4fc; }
+    .mm-badge.ses { background:rgba(148,163,184,.15); color:#cbd5e1; }
+    .mm-badge.ses.live { background:rgba(34,197,94,.18); color:#4ade80; }
+
+    /* 維持率大字 */
+    .mm-ratio-box { text-align:center; padding:20px 10px 8px; border-radius:12px; margin:6px 0 14px;
+                    border:1.5px solid #1e293b; }
+    .mm-ratio-box .lbl { font-size:13px; color:#94a3b8; margin-bottom:4px; }
+    .mm-ratio-box .val { font-size:56px; font-weight:900; line-height:1; }
+    .mm-ratio-box .warn-txt { font-size:14px; font-weight:700; margin-top:8px; }
+    .mm-ratio-box.danger { border-color:rgba(239,68,68,.5); background:rgba(239,68,68,.08); }
+    .mm-ratio-box.danger .val, .mm-ratio-box.danger .warn-txt { color:#ef4444; }
+    .mm-ratio-box.warn   { border-color:rgba(245,158,11,.5); background:rgba(245,158,11,.08); }
+    .mm-ratio-box.warn .val, .mm-ratio-box.warn .warn-txt { color:#f59e0b; }
+    .mm-ratio-box.safe   { border-color:rgba(34,197,94,.5); background:rgba(34,197,94,.08); }
+    .mm-ratio-box.safe .val, .mm-ratio-box.safe .warn-txt { color:#22c55e; }
+    .mm-ratio-box.na     { border-color:#334155; background:rgba(148,163,184,.06); }
+    .mm-ratio-box.na .val, .mm-ratio-box.na .warn-txt { color:#94a3b8; }
+
+    .mm-thresholds { display:flex; flex-wrap:wrap; gap:6px 14px; justify-content:center; font-size:12px;
+                     color:#64748b; margin-top:6px; }
+    .mm-thresholds .th-danger { color:#ef4444; }
+    .mm-thresholds .th-warn { color:#f59e0b; }
+    .mm-thresholds .th-safe { color:#22c55e; }
+
+    .mm-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:8px 0; }
+    .mm-cell { background:#0b1220; border:1px solid #1e293b; border-radius:10px; padding:14px; }
+    .mm-cell .lbl { font-size:12px; color:#94a3b8; margin-bottom:6px; }
+    .mm-cell .num { font-size:24px; font-weight:800; color:#e2e8f0; line-height:1.1; }
+    .mm-cell .sub { font-size:11px; color:#64748b; margin-top:5px; }
+    .mm-cell .flag { color:#f59e0b; font-size:11px; margin-top:4px; }
+
+    .mm-formula { font-family:ui-monospace,Menlo,Consolas,monospace; font-size:13px; color:#cbd5e1;
+                  background:#0b1220; border:1px solid #1e293b; border-radius:8px; padding:10px 12px;
+                  margin:8px 0; overflow-x:auto; }
+    .mm-disc { font-size:12px; color:#64748b; margin-top:12px; border-top:1px solid #1e293b; padding-top:10px; }
+    h4.mm-h { margin:8px 0 0; }
+
+    /* ===== 全市場掃描 ===== */
+    .ms-sec { margin-top:28px; border-top:2px solid #1e293b; padding-top:16px; }
+    .ms-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:10px 14px; }
+    .ms-head h4 { margin:0; }
+    .ms-desc { color:#64748b; font-size:12px; margin:4px 0 10px; }
+    .ms-bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:10px 0; }
+    .ms-filter { padding:6px 12px; border-radius:6px; border:1px solid #334155; background:#1e293b;
+                 color:#cbd5e1; cursor:pointer; font-size:13px; }
+    .ms-filter.active { background:#6366f1; border-color:#6366f1; color:#fff; }
+    .ms-refresh { margin-left:auto; padding:6px 14px; border-radius:6px; border:1px solid #334155;
+                  background:#1e293b; color:#cbd5e1; cursor:pointer; font-size:13px; }
+    .ms-refresh:hover { background:#334155; }
+    .ms-meta { color:#94a3b8; font-size:12px; margin:2px 0 8px; }
+
+    .ms-loading { text-align:center; color:#64748b; padding:36px; }
+    .ms-spinner { display:inline-block; width:26px; height:26px; border:3px solid #334155;
+                  border-top-color:#6366f1; border-radius:50%; animation:ms-spin .8s linear infinite;
+                  vertical-align:middle; margin-right:10px; }
+    @keyframes ms-spin { to { transform:rotate(360deg); } }
+    .ms-err { background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.4); color:#fca5a5;
+              padding:14px 16px; border-radius:8px; margin:12px 0; }
+
+    .ms-wrap { max-height:70vh; overflow:auto; border:1px solid #1e293b; border-radius:8px; }
+    .ms-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .ms-table th { color:#94a3b8; padding:9px 10px; position:sticky; top:0; background:#0b1220;
+                   border-bottom:1px solid #1e293b; text-align:right; white-space:nowrap; }
+    .ms-table th.l, .ms-table td.l { text-align:left; }
+    .ms-table td { padding:6px 10px; border-bottom:1px solid #131c2e; text-align:right; white-space:nowrap; }
+    .ms-table tbody tr:hover { background:rgba(99,102,241,.08); }
+    .ms-table .nm { color:#e2e8f0; }
+    .ms-table .cd { color:#94a3b8; font-weight:700; }
+    .ms-cost-src { font-size:11px; color:#64748b; }
+    .ms-ratio { font-weight:800; }
+    .ms-ratio.danger { color:#ef4444; }
+    .ms-ratio.warn { color:#f59e0b; }
+    .ms-ratio.safe { color:#22c55e; }
+    .ms-ratio.na { color:#94a3b8; }
+    .ms-empty { text-align:center; color:#64748b; padding:28px; }
+</style>
+
+<h4 class="mm-h">單檔融資維持率查詢</h4>
+<div class="mm-controls">
+    <span class="mm-label">股票代號</span>
+    <input class="mm-input code" id="mm-code" placeholder="2330" maxlength="4" inputmode="numeric">
+    <span class="mm-label">N 日均價</span>
+    <input class="mm-input n" id="mm-n" type="number" min="1" max="250" value="20">
+    <button class="mm-btn" id="mm-go">查詢</button>
+</div>
+<div class="mm-hint">融資維持率 = 現價 ÷ (融資成本 × 0.6) × 100%。融資成本以加權平均成本法推估。</div>
+
+<div id="mm-out"></div>
+
+<!-- ===== 全市場融資維持率警示 ===== -->
+<div class="ms-sec">
+    <div class="ms-head">
+        <h4 class="mm-h">全市場融資維持率警示</h4>
+    </div>
+    <div class="ms-desc">掃描全市場有融資餘額的股票，依維持率由低到高排序，找出快跌破整戶追繳線（130%）的標的。融資成本採加權平均成本法推估，與上方單檔查詢一致。</div>
+    <div class="ms-bar">
+        <button class="ms-filter" data-lt="130">&lt;130 追繳</button>
+        <button class="ms-filter" data-lt="150">&lt;150</button>
+        <button class="ms-filter active" data-lt="200">&lt;200</button>
+        <button class="ms-filter" data-lt="">全部</button>
+        <button class="ms-refresh" id="ms-refresh">重新掃描</button>
+    </div>
+    <div class="ms-meta" id="ms-meta"></div>
+    <div id="ms-body">
+        <div class="ms-loading"><span class="ms-spinner"></span>全市場掃描中，首次可能需數十秒...</div>
+    </div>
+</div>
+
+<script>
+(function() {
+    var codeEl = document.getElementById('mm-code');
+    var nEl = document.getElementById('mm-n');
+    var out = document.getElementById('mm-out');
+
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+    }
+    function fmt(v, d) {
+        if (v === null || v === undefined || v === '') return '--';
+        return Number(v).toLocaleString(undefined, {minimumFractionDigits: d, maximumFractionDigits: d});
+    }
+
+    var WARN_LABEL = {
+        danger: '維持率偏低 — 已達整戶追繳線',
+        warn: '虧損中，尚未追繳',
+        safe: '維持率安全（回本基準以上）',
+        na: '無法計算'
+    };
+
+    function renderError(msg) {
+        out.innerHTML = '<div class="mm-error">' + esc(msg) + '</div>';
+    }
+
+    function render(d) {
+        var r = d.ratio || {};
+        var warn = r.warning || 'na';
+        var price = d.price || {}, avg = d.average || {}, cost = d.cost || {}, mg = d.margin || {};
+
+        var html = '<div class="mm-card">';
+
+        // 標題列
+        html += '<div class="mm-title">'
+              + '<span class="nm">' + esc(d.name || '--') + '</span>'
+              + '<span class="cd">' + esc(d.code || '') + '</span>'
+              + '<span class="mm-badge mkt">' + esc(d.market || '') + '</span>'
+              + '<span class="mm-badge ses ' + (d.session === '即時' ? 'live' : '') + '">'
+              + esc(d.session || '') + '</span>'
+              + '</div>';
+
+        // 維持率大字
+        html += '<div class="mm-ratio-box ' + warn + '">'
+              + '<div class="lbl">融資維持率</div>'
+              + '<div class="val">' + (r.value != null ? fmt(r.value, 2) + '%' : '--') + '</div>'
+              + '<div class="warn-txt">' + esc(WARN_LABEL[warn] || '') + '</div>'
+              + '<div class="mm-thresholds">'
+              + '<span class="th-danger">&lt;130% 追繳</span>'
+              + '<span class="th-warn">130%~166.67% 虧損未追繳</span>'
+              + '<span class="th-safe">≥166.67% 安全</span>'
+              + '</div>'
+              + '</div>';
+
+        // 明細格
+        html += '<div class="mm-grid">';
+
+        // 現價
+        html += '<div class="mm-cell"><div class="lbl">現價</div>'
+              + '<div class="num">' + (price.value != null ? fmt(price.value, 2) : '--') + '</div>'
+              + '<div class="sub">' + esc(price.source || '') + (price.date ? ' · ' + esc(price.date) : '')
+              + '</div></div>';
+
+        // N 日均價
+        html += '<div class="mm-cell"><div class="lbl">N 日均價（N=' + (avg.n != null ? avg.n : '-') + '）</div>'
+              + '<div class="num">' + (avg.value != null ? fmt(avg.value, 2) : '--') + '</div>';
+        if (avg.trimmed) html += '<div class="flag">＊已排除除權前資料</div>';
+        html += '</div>';
+
+        // 推估融資成本
+        html += '<div class="mm-cell"><div class="lbl">推估融資成本</div>'
+              + '<div class="num">' + (cost.value != null ? fmt(cost.value, 2) : '--') + '</div>'
+              + '<div class="sub">來源：' + esc(cost.source || '') ;
+        if (cost.as_of) html += ' · 截至 ' + esc(cost.as_of);
+        if (cost.roll_days != null) html += ' · 滾動 ' + cost.roll_days + ' 日';
+        html += '</div></div>';
+
+        // 融資餘額
+        html += '<div class="mm-cell"><div class="lbl">融資餘額（張）</div>'
+              + '<div class="num">' + (mg.balance_lots != null ? fmt(mg.balance_lots, 0) : '--') + '</div>'
+              + '<div class="sub">' + (mg.date ? esc(mg.date) : (mg.status === 'no_data' ? '暫無資料' : '')) + '</div>'
+              + '</div>';
+
+        html += '</div>'; // grid
+
+        // 公式
+        var f = r.formula || {};
+        if (f.expression && f.price != null && f.cost != null) {
+            html += '<div class="mm-formula">維持率 = ' + fmt(f.price, 2) + ' ÷ ('
+                  + fmt(f.cost, 2) + ' × ' + f.margin_rate + ') × 100 = '
+                  + fmt(r.value, 2) + '%</div>';
+        }
+
+        html += '<div class="mm-disc">' + esc(d.disclaimer || '') + '</div>';
+        html += '</div>'; // card
+        out.innerHTML = html;
+    }
+
+    function load(code) {
+        code = (code != null ? code : codeEl.value).trim();
+        if (!code) { renderError('請輸入股票代號（例：2330）'); return; }
+        var n = parseInt(nEl.value, 10);
+        if (isNaN(n)) n = 20;
+        out.innerHTML = '<div class="mm-loading">查詢中...</div>';
+        fetch('/api/margin-maintenance?code=' + encodeURIComponent(code) + '&n=' + n)
+            .then(function(resp) {
+                return resp.json().then(function(j) { return {status: resp.status, body: j}; });
+            })
+            .then(function(res) {
+                if (res.status === 200) { render(res.body); return; }
+                var err = (res.body && res.body.error) || '';
+                if (err === 'invalid_code') {
+                    renderError('代號格式錯誤：需 4 碼數字，且不支援 91 開頭（權證/牛熊證）。');
+                } else if (err === 'not_found') {
+                    renderError('查無此代號：' + esc(code) + '。');
+                } else {
+                    renderError('查詢失敗：' + esc((res.body && res.body.message) || '伺服器錯誤') + '。');
+                }
+            })
+            .catch(function(e) {
+                renderError('查詢失敗：' + esc(String(e)));
+            });
+    }
+
+    document.getElementById('mm-go').addEventListener('click', function() { load(); });
+    codeEl.addEventListener('keydown', function(e) { if (e.key === 'Enter') load(); });
+    nEl.addEventListener('keydown', function(e) { if (e.key === 'Enter') load(); });
+
+    // ?code=2330 帶入自動查
+    var params = new URLSearchParams(window.location.search);
+    var qc = params.get('code');
+    var qn = params.get('n');
+    if (qn) nEl.value = qn;
+    if (qc) { codeEl.value = qc; load(qc); }
+})();
+
+// ===== 全市場掃描（獨立 IIFE，不阻塞上方單檔查詢）=====
+(function() {
+    var meta = document.getElementById('ms-meta');
+    var body = document.getElementById('ms-body');
+    var allRows = [];
+    var filterLt = 200;   // 預設 <200 聚焦風險
+
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+    }
+    function fmt(v, d) {
+        if (v === null || v === undefined || v === '') return '--';
+        return Number(v).toLocaleString(undefined, {minimumFractionDigits: d, maximumFractionDigits: d});
+    }
+
+    function renderTable() {
+        var rows = allRows;
+        if (filterLt) rows = rows.filter(function(r) { return r.ratio < filterLt; });
+        if (!rows.length) {
+            body.innerHTML = '<div class="ms-empty">此篩選條件下無標的</div>';
+            return;
+        }
+        var html = '<div class="ms-wrap"><table class="ms-table"><thead><tr>'
+                 + '<th class="l">代號</th><th class="l">名稱</th><th>市場</th>'
+                 + '<th>現價</th><th>推估成本</th><th>維持率</th><th>融資餘額(張)</th>'
+                 + '</tr></thead><tbody>';
+        rows.forEach(function(r) {
+            html += '<tr>'
+                 + '<td class="l cd">' + esc(r.code) + '</td>'
+                 + '<td class="l nm">' + esc(r.name) + '</td>'
+                 + '<td>' + esc(r.market) + '</td>'
+                 + '<td>' + fmt(r.price, 2) + '</td>'
+                 + '<td>' + fmt(r.cost, 2) + ' <span class="ms-cost-src">' + esc(r.cost_source) + '</span></td>'
+                 + '<td class="ms-ratio ' + (r.warning || 'na') + '">' + fmt(r.ratio, 2) + '%</td>'
+                 + '<td>' + (r.balance_lots != null ? fmt(r.balance_lots, 0) : '--') + '</td>'
+                 + '</tr>';
+        });
+        html += '</tbody></table></div>';
+        body.innerHTML = html;
+    }
+
+    function updateMeta(d) {
+        var shown = filterLt ? allRows.filter(function(r) { return r.ratio < filterLt; }).length : allRows.length;
+        meta.innerHTML = '價格日：' + esc(d.as_of_price || '--')
+                       + ' · 融資日：' + esc(d.as_of_margin || '--')
+                       + ' · 全市場 ' + (d.count != null ? d.count : allRows.length) + ' 檔'
+                       + '（目前顯示 ' + shown + ' 檔）';
+    }
+
+    function load() {
+        body.innerHTML = '<div class="ms-loading"><span class="ms-spinner"></span>全市場掃描中，首次可能需數十秒...</div>';
+        meta.innerHTML = '';
+        fetch('/api/margin-maintenance/scan?n=20')
+            .then(function(resp) {
+                return resp.json().then(function(j) { return {status: resp.status, body: j}; });
+            })
+            .then(function(res) {
+                if (res.status !== 200 || !res.body || !Array.isArray(res.body.rows)) {
+                    body.innerHTML = '<div class="ms-err">掃描失敗，稍後重試。</div>';
+                    return;
+                }
+                allRows = res.body.rows;
+                updateMeta(res.body);
+                renderTable();
+            })
+            .catch(function() {
+                body.innerHTML = '<div class="ms-err">掃描失敗，稍後重試。</div>';
+            });
+    }
+
+    document.querySelectorAll('.ms-filter').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.ms-filter').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            var lt = btn.getAttribute('data-lt');
+            filterLt = lt ? Number(lt) : 0;
+            renderTable();
+            // 重算 meta 的「目前顯示」
+            meta.innerHTML = meta.innerHTML.replace(/（目前顯示 \d+ 檔）/,
+                '（目前顯示 ' + (filterLt ? allRows.filter(function(r){return r.ratio<filterLt;}).length : allRows.length) + ' 檔）');
+        });
+    });
+    document.getElementById('ms-refresh').addEventListener('click', load);
+
+    load();
+})();
+</script>
+</div>
+{% endblock %}

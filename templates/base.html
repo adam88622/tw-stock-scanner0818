@@ -78,8 +78,6 @@
         <div class="loading-spinner"></div>
         <div class="loading-text">載入中...</div>
     </div>
-    <!-- Hamburger menu button (mobile only) -->
-    <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">&#9776;</button>
     <!-- Sidebar overlay (mobile only) -->
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
@@ -88,6 +86,12 @@
         <nav id="sidebar" class="sidebar">
             <div class="sidebar-header">
                 <h5>台股掃描器</h5>
+            </div>
+            <!-- 個股查詢（代號 / 名稱，Enter 直接進個股頁）-->
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-stock-search" placeholder="查詢個股　代號 / 名稱"
+                       autocomplete="off" spellcheck="false" aria-label="查詢個股">
+                <div class="search-results" id="sidebar-search-results" style="display:none;"></div>
             </div>
             <ul class="nav flex-column">
                 <li class="nav-section">熱力圖</li>
@@ -117,6 +121,30 @@
                         期貨籌碼總覽
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'volume_alert' %}active{% endif %}"
+                       href="/volume-alert">
+                        盤中爆量預估
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'futures_basis' %}active{% endif %}"
+                       href="/futures-basis">
+                        期現價差排行
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'te_tf_strength_page' %}active{% endif %}"
+                       href="/te-tf-strength">
+                        電金強弱
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'option_sr' %}active{% endif %}"
+                       href="/option-sr">
+                        選擇權支撐壓力
+                    </a>
+                </li>
 
 
 
@@ -131,6 +159,12 @@
                     <a class="nav-link {% if request.endpoint == 'weekly' %}active{% endif %}"
                        href="/weekly">
                         研究週報
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'broker_reports' %}active{% endif %}"
+                       href="/broker-reports">
+                        每日券商報告
                     </a>
                 </li>
 
@@ -201,11 +235,25 @@
                     </a>
                 </li>
 
+                <li class="nav-section">去槓桿 / 風險</li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'deleveraging' %}active{% endif %}"
+                       href="/deleveraging">
+                        去槓桿壓力儀表板
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'margin_warning' %}active{% endif %}"
+                       href="/margin-warning">
+                        融資預警訊號報告
+                    </a>
+                </li>
+
                 <li class="nav-section">融資融券</li>
                 <li class="nav-item">
-                    <a class="nav-link {% if request.endpoint == 'margin_alert' %}active{% endif %}"
-                       href="/margin-alert">
-                        融資使用率警示
+                    <a class="nav-link {% if request.endpoint == 'margin_maintenance' %}active{% endif %}"
+                       href="/margin-maintenance">
+                        融資維持率查詢
                     </a>
                 </li>
 
@@ -265,7 +313,10 @@
             </div>
 
             <div class="top-bar">
-                <button id="theme-toggle" class="btn btn-sm theme-toggle-btn" title="切換主題">☀️</button>
+                <button id="theme-toggle" class="btn btn-sm theme-toggle-btn" title="切換主題" aria-label="切換主題">
+                    <!-- Icon swapped by JS based on current theme -->
+                    <span id="theme-toggle-icon" aria-hidden="true"></span>
+                </button>
                 <span class="today-display">
                     今天：{{ today }}
                 </span>
@@ -289,19 +340,29 @@
     <!-- Mobile Bottom Tab Bar (hidden on desktop) -->
     <nav class="mobile-tabbar">
         <a href="/breakout" class="tab-item" data-tab="scan">
-            <span class="tab-icon">📊</span><span class="tab-label">掃描</span>
+            <span class="tab-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+            </span><span class="tab-label">掃描</span>
         </a>
         <a href="/institutional" class="tab-item" data-tab="rank">
-            <span class="tab-icon">🏛️</span><span class="tab-label">排行</span>
+            <span class="tab-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="4" height="9"/><rect x="10" y="6" width="4" height="14"/><rect x="17" y="14" width="4" height="6"/></svg>
+            </span><span class="tab-label">排行</span>
         </a>
         <a href="/watchlist" class="tab-item" data-tab="watchlist">
-            <span class="tab-icon">⭐</span><span class="tab-label">自選</span>
+            <span class="tab-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </span><span class="tab-label">自選</span>
         </a>
         <a href="/report" class="tab-item" data-tab="report">
-            <span class="tab-icon">📋</span><span class="tab-label">盤前</span>
+            <span class="tab-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="10" y2="9"/></svg>
+            </span><span class="tab-label">盤前</span>
         </a>
         <a href="#" class="tab-item" data-tab="more" id="more-tab">
-            <span class="tab-icon">☰</span><span class="tab-label">更多</span>
+            <span class="tab-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </span><span class="tab-label">更多</span>
         </a>
     </nav>
 
@@ -326,34 +387,36 @@
                 setTimeout(function() { overlay.remove(); }, 300);
             }
 
-            // Mobile sidebar toggle
-            var toggleBtn = document.getElementById('mobile-toggle');
+            // Mobile sidebar overlay (opened by bottom-tab "more")
             var sidebar = document.getElementById('sidebar');
             var sidebarOverlay = document.getElementById('sidebar-overlay');
 
-            if (toggleBtn && sidebar && sidebarOverlay) {
-                toggleBtn.addEventListener('click', function() {
-                    sidebar.classList.toggle('open');
-                    sidebarOverlay.classList.toggle('active');
-                });
+            if (sidebar && sidebarOverlay) {
                 sidebarOverlay.addEventListener('click', function() {
                     sidebar.classList.remove('open');
                     sidebarOverlay.classList.remove('active');
                 });
             }
 
-            // ===== Theme Toggle =====
+            // ===== Theme Toggle (SVG icons) =====
             (function() {
                 var toggle = document.getElementById('theme-toggle');
-                if (!toggle) return;
+                var iconHost = document.getElementById('theme-toggle-icon');
+                if (!toggle || !iconHost) return;
+                // Sun = currently dark (click to go light); Moon = currently light (click to go dark)
+                var SUN_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></svg>';
+                var MOON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+                function applyIcon(theme) {
+                    iconHost.innerHTML = (theme === 'dark') ? SUN_SVG : MOON_SVG;
+                }
                 var saved = document.documentElement.getAttribute('data-theme') || 'dark';
-                toggle.textContent = saved === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+                applyIcon(saved);
                 toggle.addEventListener('click', function() {
                     var current = document.documentElement.getAttribute('data-theme');
                     var next = current === 'dark' ? 'light' : 'dark';
                     document.documentElement.setAttribute('data-theme', next);
                     localStorage.setItem('theme', next);
-                    toggle.textContent = next === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+                    applyIcon(next);
                 });
             })();
 
@@ -424,6 +487,84 @@
                     if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
                         searchResults.style.display = 'none';
                     }
+                });
+            })();
+
+            // ===== 側欄個股查詢（↑↓ 選取、Enter 進入個股頁）=====
+            (function() {
+                var input = document.getElementById('sidebar-stock-search');
+                var box = document.getElementById('sidebar-search-results');
+                if (!input || !box) return;
+
+                var items = [];      // 目前下拉的股票清單
+                var cursor = -1;     // 反白位置，-1 = 未選
+                var timer;
+
+                function hide() {
+                    box.style.display = 'none';
+                    items = [];
+                    cursor = -1;
+                }
+
+                function paint() {
+                    var nodes = box.querySelectorAll('.search-result-item');
+                    for (var i = 0; i < nodes.length; i++) {
+                        nodes[i].classList.toggle('active', i === cursor);
+                    }
+                }
+
+                function render(data) {
+                    items = data;
+                    cursor = -1;
+                    if (!data.length) { hide(); return; }
+                    var html = '';
+                    data.forEach(function(item) {
+                        var marketLabel = item.market === 'twse' ? '上市' : '上櫃';
+                        html += '<a class="search-result-item" href="/stock?id=' + item.id + '">'
+                            + '<span>' + item.id + ' ' + item.name + '</span>'
+                            + '<span style="color:#64748b;font-size:12px;">' + marketLabel + '</span>'
+                            + '</a>';
+                    });
+                    box.innerHTML = html;
+                    box.style.display = 'block';
+                }
+
+                input.addEventListener('input', function() {
+                    var q = input.value.trim();
+                    clearTimeout(timer);
+                    if (q.length < 1) { hide(); return; }
+                    timer = setTimeout(function() {
+                        fetch('/api/search?q=' + encodeURIComponent(q))
+                            .then(function(r) { return r.json(); })
+                            .then(render)
+                            .catch(hide);
+                    }, 200);
+                });
+
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                        if (!items.length) return;
+                        e.preventDefault();
+                        cursor += (e.key === 'ArrowDown' ? 1 : -1);
+                        if (cursor < 0) cursor = items.length - 1;
+                        if (cursor >= items.length) cursor = 0;
+                        paint();
+                    } else if (e.key === 'Enter') {
+                        var q = input.value.trim();
+                        // 有反白就走反白，其次走第一筆；純數字代號則直接進頁（搜不到也讓後端回訊息）
+                        var target = cursor >= 0 ? items[cursor] : (items.length ? items[0] : null);
+                        if (target) {
+                            window.location.href = '/stock?id=' + target.id;
+                        } else if (/^\d{4,6}[A-Z]?$/i.test(q)) {
+                            window.location.href = '/stock?id=' + encodeURIComponent(q);
+                        }
+                    } else if (e.key === 'Escape') {
+                        hide();
+                    }
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!input.contains(e.target) && !box.contains(e.target)) hide();
                 });
             })();
 

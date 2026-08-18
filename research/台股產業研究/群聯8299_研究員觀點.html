@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>群聯 (8299 TT) 首次覆蓋 — 買進 | GiS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8)}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto;position:relative;z-index:1}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5)}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45);position:relative;z-index:1}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:500px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:36px 50px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:20px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:9px 14px;background:linear-gradient(90deg,#eef5f0,transparent);margin:18px 0 14px}
+h2.ch{font-size:16px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:6px;margin:20px 0 11px}
+h3.ch{font-size:14px;font-weight:700;color:#0a4a30;padding-left:9px;border-left:3px solid #00c896;margin:14px 0 8px}
+table{width:100%;border-collapse:collapse;margin:10px 0 14px;font-size:12.5px;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:9px 11px;text-align:left;font-weight:600;font-size:12px}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:7px 11px;border-bottom:1px solid #e5edf8;font-size:12.5px;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-card-head.wine{background:#5c1a1a}
+.co-name{font-size:17px;font-weight:800;color:#fff}
+.co-ticker{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:3px 12px;border-radius:20px;font-size:10.5px;font-weight:700}
+.badge.buy{background:#00c896;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 14px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:16px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11px;color:#6b7a9a}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:16px;margin:12px 0;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:13.5px;font-weight:700;color:#0d1b3e;margin-bottom:3px}
+.chart-sub{font-size:11.5px;color:#6b7a9a;margin-bottom:10px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:14px 16px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:19px;font-weight:800;margin-bottom:4px}
+.kpi-lbl{font-size:11px;opacity:.7}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:20px;margin:16px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:13.5px;font-weight:700;color:#0d1b3e;padding:9px 0;border-bottom:1px solid #dce8f8;display:flex;gap:11px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:19px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:15px 12px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:12px;font-weight:800;margin-bottom:6px}
+.tl-spec{font-size:14px;font-weight:900;color:#00c896;margin-bottom:3px}
+.tl-tech{font-size:10.5px;opacity:.8;line-height:1.4}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.risk-card{border-radius:8px;padding:14px}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card h4{font-size:13px;font-weight:700;margin-bottom:6px}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+p{margin:6px 0 10px;line-height:1.7}
+ul,ol{padding-left:18px;margin:6px 0 10px}
+li{margin:3px 0;line-height:1.65;font-size:13px}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:8px 12px;margin:11px 0;color:#1a3a6e;font-size:12.5px;border-radius:0 5px 5px 0}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:20px 0}
+.src{font-size:11px;color:#9aabb5;display:block;margin-top:5px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:14px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13px;font-weight:700;color:#1a3a6e;margin-bottom:6px}
+.callout.green .callout-title{color:#065f46}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:12px 50px;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:13px}
+.footer-logo em{color:#00c896;font-style:normal}
+.bull-bear{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.bb-card{border-radius:8px;padding:16px}
+.bb-card.bull{background:#e8f5ee;border:1.5px solid #00a878}
+.bb-card.bear{background:#fff4e6;border:1.5px solid #f59e0b}
+.bb-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.bb-card.bull h4{color:#065f46}
+.bb-card.bear h4{color:#7b3a08}
+.bb-card li{font-size:12px;margin-bottom:5px;line-height:1.55}
+
+/* ── 緊縮 override（修溢出）── */
+.full-page > *, .body-page > * { flex-shrink: 0 !important; }
+.body-page { padding: 26px 42px !important; }
+.co-card { margin: 11px 0 !important; }
+.co-card-head { padding: 11px 16px !important; }
+.co-name { font-size: 16px !important; }
+.co-metric { padding: 9px 11px !important; }
+.co-metric-val { font-size: 15px !important; }
+.kpi-row { margin: 9px 0 !important; gap: 8px !important; }
+.kpi { padding: 10px 12px !important; }
+.kpi-val { font-size: 16px !important; }
+.exec-sum { padding: 13px 16px !important; margin: 9px 0 !important; }
+.exec-thesis { padding: 6px 0 !important; font-size: 12px !important; line-height:1.5 !important; }
+.chart-grid { margin: 9px 0 !important; gap: 11px !important; }
+.chart-wrap { padding: 11px !important; margin: 7px 0 !important; }
+.chart-wrap .chart-container { height: 200px !important; }
+h1.ch { margin: 10px 0 9px !important; padding: 6px 11px !important; font-size: 17px !important; }
+h2.ch { margin: 11px 0 7px !important; padding-bottom: 5px !important; font-size: 14.5px !important; }
+h3.ch { margin: 9px 0 6px !important; font-size: 13px !important; }
+table { margin: 7px 0 9px !important; font-size: 11px !important; }
+th { padding: 6px 8px !important; font-size: 10.5px !important; }
+td { padding: 5px 8px !important; font-size: 11px !important; line-height: 1.4 !important; }
+ul, ol { margin: 5px 0 7px !important; }
+li { margin: 2px 0 !important; line-height: 1.4 !important; font-size: 11.5px !important; }
+p { margin: 5px 0 8px !important; line-height: 1.55 !important; font-size: 12px !important; }
+blockquote { margin: 8px 0 !important; padding: 7px 11px !important; font-size: 11px !important; }
+.callout { padding: 10px !important; margin: 7px 0 !important; }
+.timeline { margin: 9px 0 !important; }
+.tl-item { padding: 10px 9px !important; }
+.tl-spec { font-size: 12px !important; }
+.tl-tech { font-size: 9.5px !important; }
+.risk-matrix { gap: 9px !important; margin: 10px 0 !important; }
+.risk-card { padding: 10px !important; }
+.risk-card h4 { font-size: 12.5px !important; }
+.risk-item { font-size: 11px !important; padding: 3px 0 !important; line-height:1.45 !important; }
+.bull-bear { gap: 11px !important; margin: 10px 0 !important; }
+.bb-card { padding: 11px !important; }
+.bb-card h4 { font-size: 13px !important; }
+.bb-card li { font-size: 10.5px !important; margin-bottom: 4px !important; line-height: 1.4 !important; }
+.page-footer { padding: 8px 22px !important; font-size: 10px !important; }
+.footer-logo { font-size: 11.5px !important; }
+</style>
+</head>
+<body>
+
+<div class="wm"><div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div><div class="wm-name">Genesis International Capital</div></div>
+
+<!-- ━━━━━━ 封面 ━━━━━━ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI 量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Initiating Coverage · Q2 2026</div>
+    <div class="cover-title">群聯 (8299 TT)<br><em>Phison 3.0 — AI 儲存擺脫景氣循環</em></div>
+    <div class="cover-subtitle">Phison Electronics — NAND Flash 控制 IC + eSSD + aiDAPTIV+ 邊緣 AI</div>
+    <div class="cover-tags">
+      <span class="ctag hl">買進 BUY</span>
+      <span class="ctag hl">TP NT$3,300</span>
+      <span class="ctag">上檔 +24.5%</span>
+      <span class="ctag">AI eSSD</span>
+      <span class="ctag">aiDAPTIV+</span>
+      <span class="ctag">NAND 漲價週期</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>3,300</em></div><div class="cstat-label">12M 目標價 (NT$)</div></div>
+    <div class="cstat"><div class="cstat-num"><em>+24.5</em>%</div><div class="cstat-label">上檔空間</div></div>
+    <div class="cstat"><div class="cstat-num"><em>10</em>x</div><div class="cstat-label">目標 PE (2026E)</div></div>
+    <div class="cstat"><div class="cstat-num"><em>345</em></div><div class="cstat-label">2026E EPS (元)</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>報告日期：2026 年 5 月 15 日</span>
+    <span>本報告僅供研究參考，不構成投資建議</span>
+    <span>© 2026 Genesis International Capital</span>
+  </div>
+</div>
+
+<!-- P2 投資摘要 -->
+<div class="full-page page body-page">
+  <h1 class="ch">投資摘要 — Initiating Coverage</h1>
+
+  <div class="co-card">
+    <div class="co-card-head">
+      <div><div class="co-name">群聯 (8299 TT) Phison</div><div class="co-ticker">8299.TWO · 半導體業 · TPEx 上櫃</div></div>
+      <div class="co-badge"><span class="badge buy">買進 BUY</span><span style="font-size:11px;color:rgba(255,255,255,.7)">12M TP NT$3,300</span></div>
+    </div>
+    <div class="co-metrics">
+      <div class="co-metric"><div class="co-metric-val up">+24.5%</div><div class="co-metric-label">上檔空間</div></div>
+      <div class="co-metric"><div class="co-metric-val">NT$2,650</div><div class="co-metric-label">5/15 收盤</div></div>
+      <div class="co-metric"><div class="co-metric-val up">+722%</div><div class="co-metric-label">2026E EPS YoY</div></div>
+      <div class="co-metric"><div class="co-metric-val">21.78 億</div><div class="co-metric-label">股本</div></div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">NT$345</div><div class="kpi-lbl">2026E EPS</div></div>
+    <div class="kpi"><div class="kpi-val">NT$68.8</div><div class="kpi-lbl">1Q26 EPS（單季新高）</div></div>
+    <div class="kpi gold"><div class="kpi-val">+196%</div><div class="kpi-lbl">1Q26 營收 YoY</div></div>
+    <div class="kpi green"><div class="kpi-val">61.3%</div><div class="kpi-lbl">1Q26 毛利率</div></div>
+  </div>
+
+  <h2 class="ch">三大投資論點</h2>
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>Phison 3.0 轉型 — AI 系統模組占 38%、目標 50%+，擺脫景氣循環股既定印象。</strong>首次拆分 AI 系統模組占比，1Q26 即達 38%（含 eSSD、aiDAPTIV+、AI PC、AI Server、Boot Drive），結構性高於消費端產品毛利率。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>NAND 漲價週期 2025-2027 延續，1Q26 GM 飆升 61.3% 證明高價值結構。</strong>2Q26 NAND 漲幅縮窄至 70%（前季 80-90%）、單季 EPS 預估挑戰 100 元；管理層稱「NAND 短缺至 2027 年」。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>721 億庫存策略性布局 3Q-4Q26 短缺期。</strong>1Q26 庫存 QoQ +102.8%、週轉天數 315 天（歷史新高）；公司預判 3Q-4Q26 NAND wafer 不足，提前備料。低價庫存能在漲價環境中保護毛利率。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 1 — 股價走勢（過去 6 個月）</div>
+      <div class="chart-sub">資料來源：TPEx / GiS</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartPriceHist" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 2 — EPS 軌跡（季 EPS V 型反轉）</div>
+      <div class="chart-sub">資料來源：MOPS / 凱基 / GiS</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartEpsQ" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>投資摘要 · P2</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P3 Bull/Bear + 共識 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">Bull / Bear 投資論點 + 券商共識</h1>
+
+  <div class="bull-bear">
+    <div class="bb-card bull">
+      <h4>🐂 Bull Thesis — 為何看好</h4>
+      <ul>
+        <li><strong>AI 系統模組占 38% → 50%+：</strong>結構性轉型，高毛利率產品占比拉升</li>
+        <li><strong>1Q26 GM 61.3% 創歷史新高：</strong>遠優於共識 48-52%</li>
+        <li><strong>NAND 漲價週期延續至 2027：</strong>集邦預期 1Q26 NAND 合約價 QoQ +33-38%</li>
+        <li><strong>721 億庫存策略：</strong>布局 3Q-4Q26 NAND 短缺期，鎖低價</li>
+        <li><strong>單季 EPS 挑戰 100 元：</strong>富邦預估 2Q26 EPS 114.65 元</li>
+        <li><strong>策略合作夥伴關係：</strong>與 NAND 原廠升級為夥伴、取得穩定供應</li>
+      </ul>
+    </div>
+    <div class="bb-card bear">
+      <h4>🐻 Bear Thesis — 主要風險</h4>
+      <ul>
+        <li><strong>NAND 漲價週期反轉：</strong>3Q26 若見頂、2027 EPS 將大幅下修</li>
+        <li><strong>721 億庫存跌價損失：</strong>歷史新高水位，反轉時直接吃 EPS</li>
+        <li><strong>2027 EPS 共識分歧大：</strong>從 133（凱基）到 398（鄭高輯）</li>
+        <li><strong>強週期股估值天花板：</strong>市場給 NAND 公司 PE 上限 8-15x</li>
+        <li><strong>5/8 法說後 +52%（4/30→5/14）：</strong>已大幅 priced-in 利多</li>
+        <li><strong>CSP capex 動向：</strong>單一 hyperscaler 砍量風險</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="ch">券商共識（5/8-5/11 法說後 8 家券商）</h2>
+  <table>
+    <thead><tr><th>觀點分類</th><th>數量</th><th class="num">TP 區間（NT$）</th><th class="num">TP 中位數</th><th class="num">2026E EPS 中位</th></tr></thead>
+    <tbody>
+      <tr><td>本土券商 Buy / OW</td><td>8 家</td><td class="num">2,750-4,000</td><td class="num">3,145</td><td class="num">~345</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>共識中位</strong></td><td class="hi"><strong>8/8 Buy</strong></td><td class="num">2,750-4,000</td><td class="num hi">3,145</td><td class="num hi">~345</td></tr>
+      <tr><td><strong>GiS TP（本報告）</strong></td><td>—</td><td>—</td><td class="num hi">3,300</td><td class="num">~345</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">GiS 與共識差異</h2>
+  <blockquote>
+    GiS TP 3,300 介於共識中位 3,145（保守方）與 4,000（兆豐最樂觀方）之間，反映：(1) 認同 2026 EPS ~345 為 base case、(2) 採用 10x PE 屬於 NAND 週期股中庸值（vs 兆豐 11x、凱基 22x 2027 EPS）、(3) <strong>2027 EPS 預估分歧過大為主要不確定性來源</strong>。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>Bull/Bear · P3</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 章節壹 -->
+<div class="sec-div page">
+  <div class="sec-num">壹</div>
+  <div class="sec-eyebrow">Section One · Company Fundamentals</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">Phison 3.0 — AI 儲存解決方案商</div>
+  <div class="sec-desc">群聯為 NAND Flash 控制 IC 全球龍頭，2025 年起轉型「Phison 3.0」AI 儲存基礎設施 + 邊緣 AI 運算平台，從硬體製造商升級為 IP / ASIC / Firmware / 軟硬整合方案提供商。</div>
+</div>
+
+<!-- P5 公司基本面 -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹、公司基本面與「Phison 3.0」轉型</h1>
+
+  <p>群聯電子（Phison Electronics，8299.TWO）為<strong>全球 NAND Flash 控制晶片與儲存解決方案龍頭</strong>，由潘健成（K.S. Pua）於 2000 年共同創辦，2004 年上櫃。現股本 NT$21.78 億、發行 217.8M 股，外資持股 39.79%、董監事 14.08%。</p>
+
+  <h2 class="ch">業務範圍</h2>
+  <ul>
+    <li>NAND Flash 控制 IC 設計（USB / SD / SSD / eMMC / UFS）</li>
+    <li>SSD 模組（消費級、企業級 eSSD、Pascari 品牌）</li>
+    <li>嵌入式儲存解決方案（Embedded ODM）</li>
+    <li>AI 儲存應用（aiDAPTIV+ 邊緣 AI 推論平台）</li>
+  </ul>
+
+  <h2 class="ch">「Phison 3.0」轉型時間軸</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2000-2015</div><div class="tl-spec">1.0</div><div class="tl-tech">USB / SD 控制器</div></div>
+    <div class="tl-item"><div class="tl-year">2015-2024</div><div class="tl-spec">2.0</div><div class="tl-tech">SSD 控制 + 模組</div></div>
+    <div class="tl-item active"><div class="tl-year">2025-2026 ← 現在</div><div class="tl-spec">3.0</div><div class="tl-tech">AI 儲存基礎設施</div></div>
+    <div class="tl-item next"><div class="tl-year">2027+</div><div class="tl-spec">3.0+</div><div class="tl-tech">IP / ASIC 全方位</div></div>
+  </div>
+
+  <h2 class="ch">1Q26 應用結構（首次拆分 AI System Module）</h2>
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 3 — 1Q26 營收應用結構</div>
+      <div class="chart-sub">資料來源：1Q26 法說會</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartRevMix" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 4 — AI 系統模組占比演化</div>
+      <div class="chart-sub">資料來源：管理層揭露 + GiS 預估</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartAIMix" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>應用</th><th class="num">1Q26 占比</th><th class="num">毛利率（估）</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr style="background:#eefaf4!important"><td><strong>AI System Module</strong></td><td class="num hi">38%</td><td class="num pos">60%+</td><td>含 eSSD、aiDAPTIV+、AI PC、AI Server、Boot Drive</td></tr>
+      <tr><td>Embedded ODM Module</td><td class="num">25%</td><td class="num">50%</td><td>嵌入式客製化方案</td></tr>
+      <tr><td>Industrial 模組</td><td class="num">15%</td><td class="num">45%</td><td>工業客戶</td></tr>
+      <tr><td>消費零售模組</td><td class="num">15%</td><td class="num">30%</td><td>持續下降中</td></tr>
+      <tr><td>Controller IC</td><td class="num">10%</td><td class="num">35%</td><td>外賣控制器</td></tr>
+      <tr><td>Others</td><td class="num">4%</td><td class="num">—</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 公司基本面 · P5</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 章節貳 -->
+<div class="sec-div page">
+  <div class="sec-num">貳</div>
+  <div class="sec-eyebrow">Section Two · Industry</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">NAND 漲價週期 + AI eSSD</div>
+  <div class="sec-desc">NAND Flash 全球 3+1 巨頭格局（Samsung / SK / Kioxia / Micron / WD）。2025-2027 漲價週期由 CSP AI 基建驅動。群聯在控制 IC + eSSD 應用領先慧榮、Marvell。</div>
+</div>
+
+<!-- P7 產業與競爭 -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳、NAND 產業結構與漲價週期</h1>
+
+  <h2 class="ch">NAND Flash 漲價週期 2025-2027</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 5 — NAND 合約價 QoQ 漲幅預估</div>
+    <div class="chart-sub">資料來源：集邦科技 / GiS 整理</div>
+    <div class="chart-container" style="height:260px;width:100%;position:relative"><canvas id="chartNAND" style="display:block;width:100%;height:260px"></canvas></div>
+  </div>
+
+  <table>
+    <thead><tr><th>季度</th><th class="num">NAND QoQ 漲幅</th><th>主要驅動</th></tr></thead>
+    <tbody>
+      <tr><td>4Q25</td><td class="num pos">+33-38%</td><td>CSP AI 基建啟動</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>1Q26</strong></td><td class="num pos hi">+80-90%</td><td>群聯接單 3-4 個月前，1Q26 發酵</td></tr>
+      <tr><td>2Q26</td><td class="num pos">+70%</td><td>NAND 短缺加劇</td></tr>
+      <tr><td>3Q26</td><td class="num">+40%</td><td>漲幅趨緩、群聯庫存策略生效</td></tr>
+      <tr><td>4Q26</td><td class="num">+20%</td><td>逼近高點</td></tr>
+      <tr><td>2027</td><td class="num">持平 - +10%</td><td>供需逐步平衡</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">主要競爭對手</h2>
+  <table>
+    <thead><tr><th>公司</th><th>重點業務</th><th class="num">2024 營收 (USD M)</th><th>與群聯重疊</th></tr></thead>
+    <tbody>
+      <tr style="background:#fdf0ef!important"><td><strong>Silicon Motion (SIMO US)</strong></td><td>NAND 控制 IC 設計</td><td class="num">~800</td><td class="neg"><strong>極高 — 直接對手</strong></td></tr>
+      <tr><td>Marvell (MRVL)</td><td>企業 SSD 控制器</td><td class="num">~5,800</td><td>中高（eSSD）</td></tr>
+      <tr><td>Western Digital</td><td>NAND + 自有 Controller</td><td class="num">~13,000</td><td>客戶 / 部分對手</td></tr>
+      <tr><td>三星 / 鎧俠 / 美光</td><td>NAND 原廠 + 自有 Controller</td><td class="num">合計 ~75,000</td><td>策略合作夥伴</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>群聯 (8299 TT)</strong></td><td>NAND Controller + eSSD + AI 模組</td><td class="num hi">~2,400</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>GiS 觀察：</strong>群聯規模約為慧榮 3 倍、且具備完整模組整合能力。「Phison 3.0」轉型脫離單純 Controller 銷售、進入解決方案層級，定價權與議價力顯著提升。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 產業競爭 · P7</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 章節參 -->
+<div class="sec-div page">
+  <div class="sec-num">參</div>
+  <div class="sec-eyebrow">Section Three · Financial</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">財務 V 型反轉 2025-2026</div>
+  <div class="sec-desc">2022-2024 EPS 從 50.31 跌至 19.55（-61%）、2024 反彈 38.81。2025 復甦 41.98，2026 預估暴翻至 345 元（YoY +722%）— 為 NAND 漲價週期 + Phison 3.0 雙引擎合力。</div>
+</div>
+
+<!-- P9 財務歷史 + 預估 -->
+<div class="full-page page body-page">
+  <h1 class="ch">參、5 年歷史與 2026-2028 預估</h1>
+
+  <h2 class="ch">歷史財務（2021-2025）</h2>
+  <table>
+    <thead><tr><th>項目</th><th class="num">2021A</th><th class="num">2022A</th><th class="num">2023A</th><th class="num">2024A</th><th class="num">2025A</th></tr></thead>
+    <tbody>
+      <tr><td>營收（NT$ M）</td><td class="num">~75,000</td><td class="num">~64,000</td><td class="num">~52,000</td><td class="num">58,936</td><td class="num">72,664</td></tr>
+      <tr><td>YoY%</td><td class="num pos">+66%</td><td class="num neg">-15%</td><td class="num neg">-19%</td><td class="num pos">+13%</td><td class="num pos">+23%</td></tr>
+      <tr><td>毛利率</td><td class="num">30%</td><td class="num">28%</td><td class="num">25%</td><td class="num">30%</td><td class="num">35%</td></tr>
+      <tr><td>稅後淨利</td><td class="num">15,920</td><td class="num">10,948</td><td class="num">4,257</td><td class="num">7,953</td><td class="num">8,739</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>EPS（元）</strong></td><td class="num hi">73.13</td><td class="num hi">50.31</td><td class="num hi neg">19.55</td><td class="num hi">38.81</td><td class="num hi">41.98</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">2026-2028 預估（券商共識中位）</h2>
+  <table>
+    <thead><tr><th>項目</th><th class="num">2025A</th><th class="num">2026E</th><th class="num">2027E</th><th class="num">2028E</th></tr></thead>
+    <tbody>
+      <tr><td>營收（NT$ M）</td><td class="num">72,664</td><td class="num pos">245,000</td><td class="num">260,000</td><td class="num neg">215,000</td></tr>
+      <tr><td>YoY%</td><td class="num pos">+23%</td><td class="num pos hi">+237%</td><td class="num pos">+6%</td><td class="num neg">-17%</td></tr>
+      <tr><td>毛利率</td><td class="num">35%</td><td class="num pos">52%</td><td class="num">42%</td><td class="num">38%</td></tr>
+      <tr><td>稅後淨利</td><td class="num">8,739</td><td class="num pos">75,000</td><td class="num">50,000</td><td class="num">32,000</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>EPS（元）</strong></td><td class="num hi">41.98</td><td class="num hi pos">345</td><td class="num hi">230</td><td class="num hi neg">147</td></tr>
+      <tr><td>YoY%</td><td class="num pos">+8%</td><td class="num pos hi">+722%</td><td class="num neg">-33%</td><td class="num neg">-36%</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">季 EPS 軌跡圖</h2>
+  <div class="chart-wrap">
+    <div class="chart-title">圖 6 — 季 EPS V 型反轉（2023Q2 谷底 → 2026Q1 高峰）</div>
+    <div class="chart-sub">資料來源：MOPS / 凱基 / 富邦</div>
+    <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartQEps" style="display:block;width:100%;height:240px"></canvas></div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 財務 · P9</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P10 三情境 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆、三情境預估</h1>
+
+  <table>
+    <thead><tr><th>情境</th><th class="num">機率</th><th class="num">2026E EPS</th><th class="num">2027E EPS</th><th class="num">2028E EPS</th><th>觸發條件</th></tr></thead>
+    <tbody>
+      <tr style="background:#e8f5ee!important"><td><strong>Bull</strong></td><td class="num">25%</td><td class="num pos">415</td><td class="num pos">398</td><td class="num">250</td><td>NAND 漲到 2027 + AI 占 50%+</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>Base</strong></td><td class="num hi">50%</td><td class="num hi">345</td><td class="num hi">230</td><td class="num hi">150</td><td>NAND 2H26 趨緩、2027 持平</td></tr>
+      <tr style="background:#fdf0ef!important"><td><strong>Bear</strong></td><td class="num">25%</td><td class="num neg">280</td><td class="num neg">130</td><td class="num neg">100</td><td>NAND 3Q26 反轉 + 庫存跌損</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">圖 7 — 三情境 EPS 預估</div>
+      <div class="chart-sub">2025A-2028E</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartScenario" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">圖 8 — 庫存水位演化</div>
+      <div class="chart-sub">資料來源：公司 IR</div>
+      <div class="chart-container" style="height:240px;width:100%;position:relative"><canvas id="chartInventory" style="display:block;width:100%;height:240px"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="ch">三情境驅動因子</h2>
+  <ul>
+    <li><strong>Bull（25%）：</strong>NAND 漲價持續到 2027 中 + AI eSSD 占比 50%+ + 庫存全消化 + Pascari 品牌打入 Tier-1 完成</li>
+    <li><strong>Base（50%）：</strong>NAND 漲價 2H26 趨緩、2027 持平、AI 模組占比達 45%、721 億庫存 75% 高價售出</li>
+    <li><strong>Bear（25%）：</strong>NAND 報價 3Q26 反轉、庫存跌價損失 30 億 + CSP 砍量 15%</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 三情境 · P10</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 章節肆 估值 -->
+<div class="sec-div page">
+  <div class="sec-num">肆</div>
+  <div class="sec-eyebrow">Section Four · Valuation</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">PE 10x × 2026 EPS 345 = NT$3,300</div>
+  <div class="sec-desc">採 2026 EPS 為錨點（高峰年）、目標 PE 10x（NAND 週期股中庸值）。Comps 對照 SIMO 14x 但打 7 折反映「群聯多承擔模組庫存風險」。GiS TP 3,300 略高於共識中位 3,145。</div>
+</div>
+
+<!-- P12 估值 -->
+<div class="full-page page body-page">
+  <h1 class="ch">伍、估值分析</h1>
+
+  <h2 class="ch">PE-based 三情境 TP</h2>
+  <table>
+    <thead><tr><th>情境</th><th class="num">2026E EPS</th><th class="num">目標 PE</th><th class="num">目標價</th><th class="num">機率</th></tr></thead>
+    <tbody>
+      <tr style="background:#e8f5ee!important"><td>Bull</td><td class="num">415</td><td class="num">11x</td><td class="num pos hi">4,565</td><td class="num">25%</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>Base</strong></td><td class="num">345</td><td class="num">10x</td><td class="num hi">3,450</td><td class="num">50%</td></tr>
+      <tr style="background:#fdf0ef!important"><td>Bear</td><td class="num">280</td><td class="num">8x</td><td class="num neg hi">2,240</td><td class="num">25%</td></tr>
+      <tr><td><strong>加權平均</strong></td><td colspan="2">—</td><td class="num hi pos">3,426</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">三方法加權</h2>
+  <table>
+    <thead><tr><th>方法</th><th class="num">加權 TP</th><th class="num">權重</th></tr></thead>
+    <tbody>
+      <tr style="background:#eefaf4!important"><td><strong>PE-based（主軸）</strong></td><td class="num pos hi">3,426</td><td class="num">60%</td></tr>
+      <tr><td>DCF（強週期股簡化）</td><td class="num">3,000</td><td class="num">15%</td></tr>
+      <tr><td>Comps（向 SIMO 14x × 0.7 = 10x）</td><td class="num">3,450</td><td class="num">25%</td></tr>
+      <tr style="background:#fff8e1!important"><td><strong>加權平均</strong></td><td class="num hi pos">3,318</td><td>100%</td></tr>
+      <tr><td><strong>GiS TP（取整）</strong></td><td class="num hi pos">3,300</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">PE × EPS 敏感度（中心 = 3,450）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>PE \ EPS</th><th class="num">EPS=280</th><th class="num">EPS=345</th><th class="num">EPS=415</th></tr></thead>
+    <tbody>
+      <tr><td>PE=8x</td><td class="num">2,240</td><td class="num">2,760</td><td class="num">3,320</td></tr>
+      <tr><td>PE=10x</td><td class="num">2,800</td><td class="num hi pos">3,450</td><td class="num">4,150</td></tr>
+      <tr><td>PE=12x</td><td class="num">3,360</td><td class="num">4,140</td><td class="num">4,980</td></tr>
+      <tr><td>PE=14x</td><td class="num">3,920</td><td class="num">4,830</td><td class="num">5,810</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">最終結論</h2>
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">NT$3,300</div><div class="kpi-lbl">12M 目標價</div></div>
+    <div class="kpi"><div class="kpi-val">NT$2,650</div><div class="kpi-lbl">5/15 收盤</div></div>
+    <div class="kpi gold"><div class="kpi-val">+24.5%</div><div class="kpi-lbl">上檔空間</div></div>
+    <div class="kpi green"><div class="kpi-val">BUY</div><div class="kpi-lbl">GiS 評等</div></div>
+  </div>
+
+  <div class="callout green">
+    <div class="callout-title">最終結論</div>
+    <p style="margin:0">GiS 給予<strong>群聯（8299 TT）「買進」評等</strong>，12 個月目標價 <strong>NT$3,300</strong>，較 5/15 收盤 NT$2,650 上檔空間 <strong>+24.5%</strong>。本估值基於 2026E EPS 345 × 目標 PE 10x（NAND 週期股中庸值）。<strong>共識評等一致 Buy</strong>（8/8 家券商），TP 略高於共識中位 3,145。</p>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 估值結論 · P12</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- 章節伍 風險 -->
+<div class="sec-div page">
+  <div class="sec-num">伍</div>
+  <div class="sec-eyebrow">Section Five · Risks</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">強週期 + 庫存集中 = 雙刃</div>
+  <div class="sec-desc">主要風險：NAND 漲價週期反轉（高機率/高影響）、721 億庫存跌價損失、2027 EPS 共識分歧大（133-398 區間）。</div>
+</div>
+
+<!-- P14 風險 + 監控 -->
+<div class="full-page page body-page">
+  <h1 class="ch">陸、風險矩陣與監控指標</h1>
+
+  <div class="risk-matrix">
+    <div class="risk-card dn">
+      <h4>⚠️⚠️⚠️ R1：NAND 漲價週期反轉</h4>
+      <div class="risk-item">3Q26 若見頂，2027 EPS 將大幅下修（230 → 130）</div>
+      <div class="risk-item">觀察：集邦每月 NAND 報價、CSP capex 動向</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>⚠️⚠️⚠️ R2：721 億庫存跌價損失</h4>
+      <div class="risk-item">QoQ +102.8%、週轉天數 315 天（歷史新高）</div>
+      <div class="risk-item">若 NAND 反轉、跌價損失直接吃 EPS</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>⚠️⚠️ R3：CSP 客戶集中度</h4>
+      <div class="risk-item">AWS / Microsoft / Google / Meta capex 變動</div>
+      <div class="risk-item">觀察：MAG7 法說 capex guidance</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>⚠️⚠️ R4：競爭對手切入</h4>
+      <div class="risk-item">慧榮、Marvell 在 eSSD 控制器追趕</div>
+      <div class="risk-item">觀察：SIMO 季報、Marvell custom compute 營收</div>
+    </div>
+  </div>
+
+  <h2 class="ch">六大持續監控指標</h2>
+  <table>
+    <thead><tr><th>指標</th><th>頻率</th><th>關鍵觀察</th></tr></thead>
+    <tbody>
+      <tr><td>群聯月營收公告</td><td>每月 10 日前</td><td>5/6/7 月 MoM 跳升</td></tr>
+      <tr><td>NAND 合約價</td><td>月</td><td>集邦科技 NAND Flash 報價（漲幅 vs 持平 vs 跌）</td></tr>
+      <tr><td>群聯季法說會</td><td>季</td><td>8 月初 2Q26 法說 / 11 月初 3Q26 法說</td></tr>
+      <tr><td>群聯庫存</td><td>季</td><td>721 億是否消化、週轉天數變化</td></tr>
+      <tr><td>慧榮 SIMO 季報</td><td>季</td><td>同業 NAND 控制器訂單能見度</td></tr>
+      <tr><td>CSP 法說</td><td>季</td><td>AWS / Microsoft / Google capex guidance</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · 風險 · P14</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- P15 附錄 -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">附錄、資料來源</h1>
+
+  <h2 class="ch">券商研究報告（5/8-5/15）</h2>
+  <table style="font-size:11.5px">
+    <thead><tr><th>券商</th><th>評等</th><th class="num">TP</th><th class="num">2026E EPS</th><th>日期</th></tr></thead>
+    <tbody>
+      <tr><td>凱基投顧</td><td>增加持股</td><td class="num">2,750</td><td class="num">324.5</td><td>5/8</td></tr>
+      <tr><td>群聯法說 memo（鄭高輯）</td><td>買進</td><td class="num">3,200</td><td class="num">415.66</td><td>5/10</td></tr>
+      <tr><td>富邦投顧</td><td>買進</td><td class="num">3,145</td><td class="num">369.95</td><td>5/11</td></tr>
+      <tr><td>兆豐證券</td><td>買進</td><td class="num">4,000</td><td class="num">~340-360</td><td>5/11</td></tr>
+      <tr><td>群益證券</td><td>Buy</td><td class="num">3,080</td><td class="num">332.0</td><td>5/11</td></tr>
+      <tr><td>CTBC（中信）</td><td>增加持股</td><td class="num">2,070（早期）</td><td class="num">—</td><td>1/13</td></tr>
+      <tr><td>元大投顧</td><td>買進</td><td class="num">2,400（早期）</td><td class="num">213.5</td><td>3/9</td></tr>
+      <tr><td>福邦證券</td><td>強力買進</td><td class="num">—</td><td class="num">—</td><td>3/11</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="ch">公司 / 產業</h2>
+  <ul>
+    <li>MOPS 公開資訊觀測站 — 合併損益表 5 年、月營收公告</li>
+    <li>Phison 投資人專區（www.phison.com）— 年報、法說會簡報</li>
+    <li>1Q26 法說會（2026-05-08）</li>
+    <li>集邦科技（TrendForce）— NAND Flash 月度報價追蹤</li>
+    <li>同業：Silicon Motion (SIMO)、Marvell (MRVL)、Western Digital、SanDisk 公開財報</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>附錄 · P15</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script>
+Chart.defaults.font.family = "'PingFang TC','Heiti TC','Microsoft JhengHei',sans-serif";
+Chart.defaults.font.size = 11;
+const colors = {navy:'#0d1b3e',teal:'#00c896',blue:'#1a3a6e',green:'#00875a',red:'#c0392b',gold:'#f59e0b',gray:'#6b7a9a'};
+
+new Chart(document.getElementById('chartPriceHist'), {
+  type:'line',
+  data:{labels:['2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05/8','2026-05/15'],
+    datasets:[{label:'群聯',data:[850,950,1100,1450,1700,1800,2430,2650],borderColor:colors.teal,backgroundColor:'rgba(0,200,150,.1)',tension:.3,fill:true}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'NT$'}}}}
+});
+
+new Chart(document.getElementById('chartEpsQ'), {
+  type:'bar',
+  data:{labels:['23Q2','23Q4','24Q2','24Q4','25Q2','25Q4','26Q1','26Q2E','26Q3E','26Q4E'],
+    datasets:[{label:'EPS',data:[2.28,10.57,11.97,11.64,3.6,22.23,68.8,114,87,69],
+      backgroundColor:(ctx)=>ctx.dataIndex>=6?colors.teal:colors.navy,borderRadius:3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'元'}}}}
+});
+
+new Chart(document.getElementById('chartRevMix'), {
+  type:'doughnut',
+  data:{labels:['AI System Module','Embedded ODM','Industrial','消費零售','Controller IC','Others'],
+    datasets:[{data:[38,25,15,15,10,4],backgroundColor:[colors.teal,colors.navy,colors.blue,colors.gold,colors.gray,'#e0e8f4']}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10}}}}}
+});
+
+new Chart(document.getElementById('chartAIMix'), {
+  type:'bar',
+  data:{labels:['2024','2025','2026Q1','2026E','2027E'],
+    datasets:[
+      {label:'AI System Module',data:[5,15,38,45,55],backgroundColor:colors.teal,stack:'a'},
+      {label:'其他應用',data:[95,85,62,55,45],backgroundColor:colors.gray,stack:'a'}
+    ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:{stacked:true},y:{stacked:true,max:100,title:{display:true,text:'%'}}}}
+});
+
+new Chart(document.getElementById('chartNAND'), {
+  type:'bar',
+  data:{labels:['4Q25','1Q26','2Q26','3Q26','4Q26','1Q27','2Q27'],
+    datasets:[{label:'NAND QoQ 漲幅',data:[35,85,70,40,20,10,5],
+      backgroundColor:(ctx)=>{const v=ctx.raw;return v>50?colors.red:v>20?colors.gold:colors.gray;},borderRadius:3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'QoQ %'}}}}
+});
+
+new Chart(document.getElementById('chartQEps'), {
+  type:'line',
+  data:{labels:['23Q2','23Q3','23Q4','24Q1','24Q2','24Q3','24Q4','25Q1','25Q2','25Q3','25Q4','26Q1','26Q2E','26Q3E','26Q4E','27Q1E'],
+    datasets:[{label:'EPS',data:[2.28,4.32,10.57,12.02,11.97,3.37,11.64,5.53,3.6,10.75,22.23,68.8,114,87,69,42],
+      borderColor:colors.teal,backgroundColor:'rgba(0,200,150,.15)',tension:.3,fill:true,pointRadius:3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'元'}}}}
+});
+
+new Chart(document.getElementById('chartScenario'), {
+  type:'line',
+  data:{labels:['2025A','2026E','2027E','2028E'],
+    datasets:[
+      {label:'Bull (25%)',data:[41.98,415,398,250],borderColor:colors.teal,pointRadius:4},
+      {label:'Base (50%)',data:[41.98,345,230,150],borderColor:colors.navy,pointRadius:5,borderWidth:3},
+      {label:'Bear (25%)',data:[41.98,280,130,100],borderColor:colors.red,pointRadius:4}
+    ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{title:{display:true,text:'EPS (元)'}}}}
+});
+
+new Chart(document.getElementById('chartInventory'), {
+  type:'bar',
+  data:{labels:['3Q25','4Q25','1Q26','2Q26E','3Q26E','4Q26E'],
+    datasets:[
+      {label:'庫存（NT$ 億）',data:[315,356,722,800,720,580],backgroundColor:colors.gold,yAxisID:'y'},
+      {label:'週轉天數',data:[110,180,315,280,200,150],borderColor:colors.red,type:'line',pointRadius:3,yAxisID:'y2'}
+    ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},
+    scales:{y:{title:{display:true,text:'庫存 NT$ 億'},position:'left'},y2:{title:{display:true,text:'週轉天數'},position:'right',grid:{display:false}}}}
+});
+</script>
+
+</body>
+</html>

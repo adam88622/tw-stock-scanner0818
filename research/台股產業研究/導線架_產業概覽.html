@@ -1,0 +1,745 @@
+<!-- 身份：研究員 (Research Analyst) — 估值方法論驅動 / 中立 / 12M 目標價 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>導線架 產業概覽 | GiS 研究員觀點</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:0}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',Arial,sans-serif;font-size:14.5px;color:#1a1a2e;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);opacity:.04;z-index:0;pointer-events:none;text-align:center}
+.wm-box{width:160px;height:160px;background:#0d1b3e;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.wm-gis{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px}
+.wm-gis em{color:#00c896;font-style:normal}
+.wm-name{font-size:22px;font-weight:800;color:#0d1b3e;white-space:nowrap}
+.page{position:relative;z-index:1;height:297mm;overflow:hidden}
+.full-page{display:flex;flex-direction:column;height:297mm;overflow:hidden}
+.chart-container{position:relative}
+.chart-container canvas{display:block!important;box-sizing:border-box}
+.cover{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 40%,#0a3d2e 100%);color:#fff;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cover-deco{position:absolute;top:0;right:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,.12) 0%,transparent 70%)}
+.cover-deco2{position:absolute;bottom:80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,58,110,.5) 0%,transparent 70%)}
+.cover-lines{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.06}
+.cover-top{padding:48px 60px 0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.cover-logo-sq{width:50px;height:50px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.cover-logo-sq em{color:#00c896;font-style:normal}
+.cover-co{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:1.5px}
+.cover-co-en{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.cover-eyebrow{font-size:11px;letter-spacing:3px;color:#00c896;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-size:38px;font-weight:800;line-height:1.25;letter-spacing:2px;margin-bottom:16px}
+.cover-title em{color:#00c896;font-style:normal}
+.cover-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:40px;letter-spacing:1px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.ctag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:10.5px;color:rgba(255,255,255,.8);letter-spacing:.5px}
+.ctag.hl{border-color:rgba(0,200,150,.4);color:#00c896}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);margin-top:auto}
+.cstat{background:rgba(255,255,255,.05);padding:20px 24px;text-align:center}
+.cstat-num{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.cstat-num em{color:#00c896;font-style:normal}
+.cstat-label{font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.cover-bottom{background:rgba(0,0,0,.3);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
+.sec-div{width:100%;height:297mm;background:linear-gradient(145deg,#040d1f 0%,#0d1b3e 60%,#082b1f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.sec-num{font-size:160px;font-weight:900;color:rgba(255,255,255,.05);position:absolute;right:60px;top:50%;transform:translateY(-50%);line-height:1;letter-spacing:-8px}
+.sec-eyebrow{font-size:11px;letter-spacing:4px;color:#00c896;text-transform:uppercase;margin-bottom:20px}
+.sec-title{font-size:48px;font-weight:800;line-height:1.2;margin-bottom:24px;max-width:600px}
+.sec-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;max-width:520px}
+.sec-line{width:60px;height:3px;background:#00c896;margin-bottom:28px}
+.body-page{padding:40px 56px;position:relative;z-index:1}
+.body-page.alt{background:#fafbfd}
+h1.ch{font-size:21px;font-weight:800;color:#0d1b3e;border-left:4px solid #00c896;padding:10px 16px;background:linear-gradient(90deg,#eef5f0,transparent);margin:24px 0 16px;page-break-after:avoid}
+h1.ch:first-child{margin-top:6px}
+h2.ch{font-size:17px;font-weight:700;color:#1a3a6e;border-bottom:2px solid #c8d8f0;padding-bottom:7px;margin:22px 0 12px;page-break-after:avoid}
+h3.ch{font-size:15px;font-weight:700;color:#0a4a30;padding-left:10px;border-left:3px solid #00c896;margin:16px 0 8px;page-break-after:avoid}
+table{width:100%;border-collapse:collapse;margin:12px 0 16px;font-size:13px;page-break-inside:avoid;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+thead tr{background:#0d1b3e;color:#fff}
+th{padding:10px 11px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.4px}
+tbody tr:nth-child(odd){background:#f7f9fd}
+tbody tr:nth-child(even){background:#fff}
+td{padding:8px 11px;border-bottom:1px solid #e5edf8;vertical-align:top;line-height:1.5}
+td:first-child{font-weight:500;color:#1a3a6e}
+td.num{text-align:right;font-size:13px}
+td.pos{color:#00875a;font-weight:600}
+td.neg{color:#c0392b;font-weight:600}
+td.hi{background:#fff8e1!important;font-weight:700}
+.co-card{border:1.5px solid #d0ddf0;border-radius:10px;margin:18px 0;overflow:hidden;page-break-inside:avoid;box-shadow:0 2px 12px rgba(13,27,62,.08)}
+.co-card-head{padding:15px 22px;display:flex;align-items:center;justify-content:space-between}
+.co-card-head.navy{background:#0d1b3e}
+.co-card-head.teal{background:#065f46}
+.co-card-head.blue{background:#1a3a6e}
+.co-name{font-size:18px;font-weight:800;color:#fff}
+.co-ticker{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px;letter-spacing:1px}
+.co-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.5px}
+.badge.buy{background:#00c896;color:#fff}
+.badge.neutral{background:#f59e0b;color:#fff}
+.badge.sell{background:#e74c3c;color:#fff}
+.badge.ow{background:#3b82f6;color:#fff}
+.co-metrics{display:grid;grid-template-columns:repeat(4,1fr);background:#f0f4fc}
+.co-metric{padding:12px 16px;border-right:1px solid #e0e8f4;text-align:center}
+.co-metric:last-child{border-right:none}
+.co-metric-val{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:3px}
+.co-metric-val.up{color:#00875a}
+.co-metric-val.dn{color:#c0392b}
+.co-metric-label{font-size:11.5px;color:#6b7a9a}
+.co-body{padding:16px 22px}
+.chart-wrap{background:#fff;border:1px solid #e0e8f4;border-radius:8px;padding:18px;margin:14px 0;page-break-inside:avoid;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-title{font-size:14px;font-weight:700;color:#0d1b3e;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7a9a;margin-bottom:12px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.kpi{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);color:#fff;border-radius:8px;padding:15px 18px;text-align:center}
+.kpi.green{background:linear-gradient(135deg,#065f46,#00a878)}
+.kpi.gold{background:linear-gradient(135deg,#78350f,#d97706)}
+.kpi-val{font-size:20px;font-weight:800;margin-bottom:5px}
+.kpi-val em{font-size:12px;font-style:normal;opacity:.8}
+.kpi-lbl{font-size:11.5px;opacity:.7;letter-spacing:.5px}
+.exec-sum{background:linear-gradient(135deg,#f7f9ff,#eef5f0);border-radius:10px;padding:22px;margin:18px 0;border:1px solid #c8d8f0}
+.exec-thesis{font-size:14px;font-weight:700;color:#0d1b3e;padding:10px 0;border-bottom:1px solid #dce8f8;display:flex;gap:12px;align-items:flex-start;line-height:1.6}
+.exec-thesis:last-child{border:none}
+.thesis-num{font-size:20px;font-weight:900;color:#00c896;line-height:1;flex-shrink:0}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);border-radius:8px;overflow:hidden;margin:14px 0}
+.tl-item{background:#f0f4fa;padding:16px 14px;border-right:1px solid #dce8f8;text-align:center}
+.tl-item:last-child{border:none}
+.tl-item.active{background:#0d1b3e;color:#fff}
+.tl-item.next{background:#065f46;color:#fff}
+.tl-year{font-size:13px;font-weight:800;margin-bottom:8px}
+.tl-spec{font-size:15px;font-weight:900;color:#00c896;margin-bottom:4px}
+.tl-tech{font-size:11px;opacity:.85;line-height:1.5}
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.risk-card{border-radius:8px;padding:16px;page-break-inside:avoid}
+.risk-card.up{background:#e8f5ee;border:1.5px solid #00a878}
+.risk-card.dn{background:#fdf0ef;border:1.5px solid #e74c3c}
+.risk-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.risk-card.up h4{color:#065f46}
+.risk-card.dn h4{color:#7b2020}
+.risk-item{font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.55}
+.risk-item:last-child{border:none}
+.picks-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}
+.pick-card{border-radius:8px;padding:16px;border:1.5px solid #c8d8f0;page-break-inside:avoid;background:#fff}
+.pick-rank{font-size:12px;font-weight:700;color:#00a878;letter-spacing:.5px;margin-bottom:6px}
+.pick-name{font-size:17px;font-weight:800;color:#0d1b3e;margin-bottom:2px}
+.pick-ticker{font-size:12px;color:#6b7a9a;margin-bottom:10px}
+.pick-why{font-size:12px;color:#2d3748;line-height:1.65;margin-bottom:10px}
+.pick-catalyst{font-size:12px;color:#065f46;background:#e8f5ee;padding:8px 10px;border-radius:5px}
+p{margin:7px 0 10px;line-height:1.7}
+ul,ol{padding-left:20px;margin:7px 0 10px}
+li{margin:4px 0;line-height:1.65}
+strong{color:#0d1b3e}
+blockquote{border-left:3px solid #00c896;background:#eefaf4;padding:9px 14px;margin:12px 0;color:#1a3a6e;font-size:13.5px;border-radius:0 5px 5px 0;line-height:1.65}
+hr{border:none;border-top:1.5px solid #dce8f8;margin:22px 0}
+.src{font-size:11.5px;color:#9aabb5;display:block;margin-top:6px}
+.callout{background:#f0f4fc;border:1.5px solid #c8d8f0;border-radius:8px;padding:16px;margin:12px 0}
+.callout.green{border-color:#00a878;background:#e8f5ee}
+.callout-title{font-size:13.5px;font-weight:700;color:#1a3a6e;margin-bottom:8px}
+.callout.green .callout-title{color:#065f46}
+.callout ul{margin:0;padding-left:18px}
+.callout li{font-size:12.5px}
+.page-footer{background:#0d1b3e;color:rgba(255,255,255,.55);padding:13px 56px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.footer-logo{color:#fff;font-weight:700;font-size:14px}
+.footer-logo em{color:#00c896;font-style:normal}
+.seg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.seg-card{border-radius:8px;padding:15px 16px;border:1.5px solid #c8d8f0;background:#fff;page-break-inside:avoid}
+.seg-card h4{font-size:13.5px;font-weight:800;color:#0d1b3e;margin-bottom:6px}
+.seg-card .seg-co{font-size:12px;color:#00875a;font-weight:700;margin-bottom:8px}
+.seg-card p{font-size:11.5px;line-height:1.55;margin:0;color:#2d3748}
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-box"><div class="wm-gis">Gi<em>S</em></div></div>
+  <div class="wm-name">Genesis International Capital</div>
+</div>
+
+<!-- ══════════════ 封面 ══════════════ -->
+<div class="cover page">
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+  <svg class="cover-lines" viewBox="0 0 595 842" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="595" y2="350" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="400" x2="595" y2="500" stroke="white" stroke-width=".3"/>
+    <circle cx="480" cy="160" r="80" fill="none" stroke="white" stroke-width=".5"/>
+    <circle cx="480" cy="160" r="120" fill="none" stroke="white" stroke-width=".3"/>
+    <line x1="420" y1="0" x2="420" y2="842" stroke="white" stroke-width=".2"/>
+  </svg>
+  <div class="cover-top">
+    <div class="cover-logo-row">
+      <div class="cover-logo-sq">Gi<em>S</em></div>
+      <div>
+        <div class="cover-co-en">Genesis International Capital</div>
+        <div class="cover-co">AI量化交易與相關應用產品開發</div>
+      </div>
+    </div>
+    <div class="cover-eyebrow">Industry Cheat Sheet · Leadframe · 2026 H2</div>
+    <div class="cover-title">導線架<br><em>從週期性標準品到 AI 電源＋散熱高值化</em></div>
+    <div class="cover-subtitle">Leadframe — The Quiet Backbone Repriced by the AI Power &amp; Thermal Wall</div>
+    <div class="cover-tags">
+      <span class="ctag hl">順德 2351</span>
+      <span class="ctag hl">界霖 5285</span>
+      <span class="ctag hl">一詮 2486</span>
+      <span class="ctag hl">長科 6548</span>
+      <span class="ctag hl">長華 8070</span>
+      <span class="ctag">800V HVDC</span>
+      <span class="ctag">Clip 雙面散熱</span>
+      <span class="ctag">均熱片 / Lid</span>
+      <span class="ctag">先進封裝 Molding</span>
+    </div>
+  </div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="cstat-num"><em>5</em> 檔</div><div class="cstat-label">GiS 覆蓋台廠</div></div>
+    <div class="cstat"><div class="cstat-num">~<em>17</em>%</div><div class="cstat-label">長科全球市佔（前 5）</div></div>
+    <div class="cstat"><div class="cstat-num">+<em>30–50</em>%</div><div class="cstat-label">HVDC 導線架 ASP 溢價</div></div>
+    <div class="cstat"><div class="cstat-num"><em>10–30</em>%</div><div class="cstat-label">2026 全產品線漲幅</div></div>
+  </div>
+  <div class="cover-bottom">
+    <span>研究員觀點 · Research Analyst View</span>
+    <span>資料截至 2026/07/23 收盤 · 全系統健檢 21 PASS</span>
+  </div>
+</div>
+
+<!-- ══════════════ 執行摘要 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">執行摘要 — 一頁看懂導線架的 AI 高值化循環</h1>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">+14–52<em>% YoY</em></div><div class="kpi-lbl">五檔 6 月營收（全線高增）</div></div>
+    <div class="kpi"><div class="kpi-val">13→19–23<em>%</em></div><div class="kpi-lbl">龍頭毛利率結構跳升</div></div>
+    <div class="kpi gold"><div class="kpi-val">10–30<em>%</em></div><div class="kpi-lbl">2026 全產品線漲幅（疫情以來最大）</div></div>
+    <div class="kpi"><div class="kpi-val">19–140<em>x</em></div><div class="kpi-lbl">族群 forward PE 分歧極大</div></div>
+  </div>
+
+  <div class="exec-sum">
+    <div class="exec-thesis"><span class="thesis-num">①</span><span><strong>導線架正從「週期性標準品」重估為「AI 電源＋散熱的高值化零組件」。</strong>資料中心電源由 54V 走向 <strong>800V HVDC</strong>、AI GPU 功耗自 700W 邁向 2,000W，帶動高功率導線架（Clip 雙面散熱、TOLT）、均熱片/Lid、以及先進封裝 Molding 設備需求同時爆發。特殊表面處理的高壓電源導線架 ASP 較一般產品高 <strong>30–50%</strong>，銅合金導線架在高電流、高散熱路徑中「難以被 BT/ABF 載板取代」，形成結構性護城河。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">②</span><span><strong>漲價循環有三層，且比 2021–22 更具延續性。</strong>第一層反映銅/銀/金貴金屬（2025Q4 起銀價 QoQ +100%、金價 +70%）；第二層調整加工費（雙位數）；第三層是高階料號的定價權。台廠已從「成本追隨者」轉為「部分定價者」，供需吃緊下三廠滿產滿銷、交期拉長至約 21 週。</span></div>
+    <div class="exec-thesis"><span class="thesis-num">③</span><span><strong>五檔分屬三個子賽道，估值分歧極大——選股重點是「催化劑 × 估值」而非「有沒有 AI 題材」。</strong>GiS 首選 <strong>界霖（買進）</strong>：族群最便宜（forward 19x）＋漲價 10–30% 與 Clip/SiC 放量三催化。次選 <strong>長華（增持）</strong>：YAMADA 先進封裝設備近獨佔＋隱形金庫＋5.6% 殖利率；<strong>順德（增持）</strong>：三引擎最全但已漲多。<strong>長科（中立）</strong>估值已充分反映；<strong>一詮（減碼）</strong>散熱故事最性感但估值極端透支。</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">五檔 6 月營收年增率（%）</div>
+      <div class="chart-sub">來源：公開資訊觀測站月營收、tw-stock-scanner DB（2026/6）</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartRevYoY" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">毛利率結構跳升：2025 → 2026F（%）</div>
+      <div class="chart-sub">來源：公司季報、優分析／券商彙編（2026F 為 directional 估）</div>
+      <div class="chart-container" style="height:230px;width:100%;position:relative"><canvas id="chartMargin" style="display:block;width:100%;height:230px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>執行摘要 · 研究員觀點</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 壹 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">01</div>
+  <div class="sec-eyebrow">Section I · Industry Definition</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業定義<br>導線架的三個子賽道</div>
+  <div class="sec-desc">導線架（Leadframe）是 IC 封裝中承載晶片、連接電路、兼具導電與散熱功能的金屬基座。在 AI 時代，它一分為三：高階 IC/QFN、功率元件導線架、以及由導線架延伸出的先進封裝散熱件。三者技術門檻、客戶與估值邏輯全然不同。</div>
+</div>
+
+<!-- ══════════════ 壹 正文 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">壹、產業定義 — 導線架是什麼、為何重估</h1>
+
+  <p>導線架是 IC 封裝的金屬骨架，以銅合金為基底，透過蝕刻或沖壓成形，承載晶片並提供對外導電引腳。相較 BT/ABF 有機載板，導線架在<strong>高電流承載、散熱與成本</strong>上具物理優勢，過去被視為成熟、週期性的標準品。AI 時代讓它重新被定價——高功率電源管理與封裝散熱正好是導線架的物理強項。</p>
+
+  <div class="seg-grid">
+    <div class="seg-card">
+      <h4>① 高階 IC / QFN 導線架</h4>
+      <div class="seg-co">長科 6548 ｜ 長華 8070（母）</div>
+      <p>蝕刻製程、高 I/O，對標日本 Mitsui、韓國 HDS。應用於電源管理 IC、Wi-Fi 7、GaN 模組。全球市佔 ~17%、前五大。</p>
+    </div>
+    <div class="seg-card">
+      <h4>② 功率元件導線架</h4>
+      <div class="seg-co">順德 2351 ｜ 界霖 5285</div>
+      <p>TO/功率模組/Clip 雙面散熱。應用於車用逆變器、SiC/GaN、800V HVDC AI 伺服器電源。ASP 較一般產品高 30–50%。</p>
+    </div>
+    <div class="seg-card">
+      <h4>③ 導線架 → 封裝散熱件</h4>
+      <div class="seg-co">一詮 2486</div>
+      <p>由導線架/均熱片延伸至 Lid、Stiffener、MCL 微流道。切入 NVIDIA/Broadcom/Google 先進封裝散熱，對標健策。</p>
+    </div>
+  </div>
+
+  <h2 class="ch">為什麼市場現在聚焦導線架？</h2>
+  <p>三條需求線同時轉強：<strong>(1) AI 電源高壓化</strong>——48V→800V HVDC 架構要求厚銅、特殊表面處理的高功率導線架；<strong>(2) 封裝散熱瓶頸</strong>——2,000W 級 AI 晶片使均熱片、Lid、Stiffener 從機構件升級為可靠度關鍵件；<strong>(3) 先進封裝擴產</strong>——CoWoS/SoIC 帶動 Molding 設備與封膠樹脂需求。三者疊加，讓導線架族群 2026 年營收與毛利率同步結構性上移。</p>
+
+  <blockquote><strong>GiS 觀點：</strong>導線架不是「被淘汰的舊技術」，而是「被 AI 電源與散熱重新賦能的關鍵材料」。真正的 alpha 在於哪些台廠能把產品組合從標準品拉向高階（mix 上移），而非單純跟漲。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 產業定義</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 壹 續 台廠價值鏈 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">壹（續）、台廠價值鏈地圖</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-4px 0 8px">現價為 2026/7/23 收盤。市值＝收盤價 × 流通股數（tw-stock-scanner DB）。</p>
+
+  <table style="font-size:11.5px">
+    <thead><tr>
+      <th>公司</th><th>子賽道</th><th>核心產品</th><th>主力客戶</th><th style="text-align:right">車用占比</th><th>競爭優勢</th>
+    </tr></thead>
+    <tbody>
+      <tr><td><strong>順德</strong> 2351</td><td>功率導線架</td><td>AI LF/車用/電源管理、均熱片</td><td>英飛凌、STM、Tesla（間接）</td><td class="num">~47%</td><td>800V HVDC 導線架獨家供應之一</td></tr>
+      <tr><td><strong>界霖</strong> 5285</td><td>功率導線架</td><td>TO/功率模組、Clip 雙面散熱、SiC 逆變器</td><td>Infineon、onsemi、STM、Renesas、ROHM</td><td class="num">~49%</td><td>專注功率導線架、Clip 技術＋日本米澤高階車用</td></tr>
+      <tr><td><strong>一詮</strong> 2486</td><td>散熱轉型</td><td>均熱片/Lid、Stiffener、MCL 微流道</td><td>NVIDIA、Google、AWS、Broadcom、Microsoft</td><td class="num">~20%*</td><td>少數能供高階先封散熱片、鍍金/大噸位沖壓</td></tr>
+      <tr><td><strong>長科</strong> 6548</td><td>高階 IC/QFN</td><td>IC 導線架、QFN、Discrete、EMC-LED</td><td>歐美 IDM、日月光、美光（HBM 週邊）</td><td class="num">~24%</td><td>全球前 5（~17%）、對標日韓、QFN 快速崛起</td></tr>
+      <tr><td><strong>長華</strong> 8070</td><td>材料＋設備＋控股</td><td>住友封膠樹脂、YAMADA 設備、Mini LED、持長科</td><td>台積電（先封 Molding）、美光 HBM</td><td class="num">—</td><td>YAMADA 台積電先封市佔近 100%＋200 億金庫</td></tr>
+    </tbody>
+  </table>
+  <span class="src">* 一詮車用/消費約 20%，其餘 ASIC+CSP 散熱約 50%、其他導線架約 30%。資料來源：各公司法說會、優分析、tw-stock-scanner DB。</span>
+
+  <h2 class="ch">台廠在全球供應鏈的位置</h2>
+  <ul>
+    <li><strong>高階 IC/QFN：</strong>長科全球市佔約 17%、前五大，與日本 Mitsui High-Tec、韓國 HDS 並列主要玩家；設備壽命長（約 30 年）、折舊壓力低，長期單位成本具下滑空間。</li>
+    <li><strong>功率導線架：</strong>界霖全球市佔約 5%（第七），專注功率利基；順德在 800V HVDC 導線架為獨家供應之一，兩者受惠車用電動化＋AI 電源雙引擎，客戶為 Infineon/onsemi/STM 等國際功率 IDM。</li>
+    <li><strong>散熱新賽道：</strong>一詮由導線架跨入封裝層級散熱（Lid/Stiffener/MCL），是少數能供應高階先進封裝散熱片的台廠，直接對接 NVIDIA/Google/Broadcom 生態系。</li>
+    <li><strong>材料＋設備：</strong>長華代理日本住友電木封膠樹脂（台灣市佔 65–70%）、YAMADA 晶圓級膜壓設備（台積電先封市佔近 100%），是純度最高的「先進封裝擴產」曝險。</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>壹 · 台廠價值鏈</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 貳 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">02</div>
+  <div class="sec-eyebrow">Section II · Demand Inflection</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">需求質變<br>AI 電源、散熱與漲價三力交會</div>
+  <div class="sec-desc">半導體 2026 年直逼 1 兆美元、台灣 IC 產值 +18%。AI 資料中心電源高壓化、封裝散熱瓶頸、以及貴金屬與加工費漲價，把導線架族群從「跟隨景氣」推向「結構性重估」。</div>
+</div>
+
+<!-- ══════════════ 貳 正文 需求質變 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">貳、AI 需求質變 — 電源高壓化與散熱瓶頸</h1>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-val">+26.2<em>%</em></div><div class="kpi-lbl">2025 全球半導體營收（WSTS）</div></div>
+    <div class="kpi green"><div class="kpi-val">700→2000<em>W</em></div><div class="kpi-lbl">AI GPU 功耗（Rubin Ultra 推估）</div></div>
+    <div class="kpi gold"><div class="kpi-val">10→120<em>kW</em></div><div class="kpi-lbl">單機架功率（未來上看 300kW+）</div></div>
+    <div class="kpi green"><div class="kpi-val">3.75<em>x</em></div><div class="kpi-lbl">EV 單車半導體價值放大</div></div>
+  </div>
+
+  <h2 class="ch">兩大結構性需求引擎</h2>
+  <p><strong>引擎一 · AI 電源高壓化（800V HVDC）：</strong>AI GPU 能耗約為傳統 CPU 的 3 倍，資料中心電源架構由 48V 走向 800V 高壓直流，雲端業者自 2026 年下半年加速導入。高壓、大電流架構要求厚銅、特殊表面處理的高功率導線架與 Clip 雙面散熱結構，順德、界霖、長科同步受惠，相關 ASP 較一般產品高 30–50%。</p>
+  <p><strong>引擎二 · 封裝散熱瓶頸：</strong>2,000W 級 AI 晶片使系統散熱成為瓶頸，散熱由風冷走向液冷、微流道；封裝也從單一 Lid 走向 Lid＋Stiffener、甚至 MCL（微流道整合於均熱片）。半導體散熱市場 2025–2033 CAGR 約 8.43%，資料中心液冷 2026–2036 CAGR 約 13%，一詮與順德（均熱片）切入這一波。</p>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">AI 高值化占比躍升路徑（%）</div>
+      <div class="chart-sub">順德 AI 導線架占比 vs 一詮散熱元件占比｜來源：公司法說、優分析</div>
+      <div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="chartMix" style="display:block;width:100%;height:225px"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">車用單車半導體價值（美元）</div>
+      <div class="chart-sub">來源：順德法說引用產業數據（燃油車 vs EV 各世代）</div>
+      <div class="chart-container" style="height:225px;width:100%;position:relative"><canvas id="chartCarVal" style="display:block;width:100%;height:225px"></canvas></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · AI 需求質變</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 貳 續 漲價與供需 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">貳（續）、漲價三層結構與供需吃緊</h1>
+
+  <p>本輪漲價與 2021–22 純反映原物料不同，這次包含高階加工價值，對毛利率提升的持續性更強。導線架產業自 2025 年底啟動，先反映銅價，再談加工費，供需吃緊使議價能力上升。</p>
+
+  <table style="font-size:12px">
+    <thead><tr><th>漲價層次</th><th>時點</th><th>幅度 / 範圍</th><th>代表公司動作</th></tr></thead>
+    <tbody>
+      <tr><td><strong>第一層</strong>：反映貴金屬</td><td>2025Q4 起</td><td>銀價 QoQ +100%、金價 +70%</td><td>順德獨家品 +15%、長科 LED +15–25%</td></tr>
+      <tr><td><strong>第二層</strong>：加工費調升</td><td>2026Q2 起</td><td>雙位數 %</td><td>順德第二/三波、長科 IC 導線架擴大、長華封膠樹脂雙位數</td></tr>
+      <tr style="background:#eefaf4!important"><td><strong>第三層</strong>：高階定價權</td><td>2026/6–10</td><td class="hi">10–30%（疫情以來最大）</td><td>界霖全產品線、長科全系列加工費、部分歐美 IDM 10 月合約反映</td></tr>
+    </tbody>
+  </table>
+  <span class="src">來源：各公司法說會、優分析獨家內容彙編（2026/4–7）。</span>
+
+  <h2 class="ch">供需吃緊訊號</h2>
+  <ul>
+    <li><strong>長科：</strong>成都、蘇州、馬來西亞、高雄四廠「滿產滿銷」，交期拉長至約 21 週，訂單能見度看到 2026 年底以後。</li>
+    <li><strong>界霖：</strong>2026Q2 稼動率 70–80% 高檔，AI 新開發案由每年 ~50 件暴增至 100+ 件（幾乎全與 AI 伺服器相關），部分訂單看到 2027 年。</li>
+    <li><strong>順德：</strong>台灣（65%）與江蘇（35%）產能高檔至滿載，江蘇廠 2Q26 營收獲利創新高；Tesla inverter 庫存被快速拉光、緊急趕工。</li>
+    <li><strong>一詮：</strong>稼動率 65–70%，2026 年散熱產能較 2025 倍增、2027 再倍增；設備交期 6–9 個月，產能階段式釋放。</li>
+  </ul>
+
+  <blockquote><strong>關鍵風險提醒：</strong>2026 上半年毛利率高點中，順德約有 4ppt 來自銅價與低價庫存紅利，Q2 已見回落。未來毛利率若要再上，必須靠 AI/均熱片/高階產品組合，而非原物料價差——這是本循環最需盯的變數。</blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>貳 · 漲價與供需</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 參 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">03</div>
+  <div class="sec-eyebrow">Section III · Competitive Landscape</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">競爭格局<br>日韓寡頭、功率利基與散熱新賽道</div>
+  <div class="sec-desc">高階 IC 導線架是日韓台三強寡頭；功率導線架是國際 IDM 認證門檻高的利基戰場；封裝散熱則是技術＋認證雙高的新興寡占賽道。台廠在三個戰場的位置與對手全然不同。</div>
+</div>
+
+<!-- ══════════════ 參 正文 競爭格局 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">參、競爭格局 — 三個戰場、三種對手</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">全球導線架市佔（%，概估）</div>
+    <div class="chart-sub">來源：富士經濟（日韓龍頭）、公司法說（長科 ~17%、界霖 ~5%）；GiS 彙編</div>
+    <div class="chart-container" style="height:235px;width:100%;position:relative"><canvas id="chartShare" style="display:block;width:100%;height:235px"></canvas></div>
+  </div>
+
+  <h2 class="ch">三個戰場的分工</h2>
+  <ul>
+    <li><strong>戰場一 · 高階 IC/QFN（vs 日韓）：</strong>長科對標 Mitsui High-Tec、HDS。護城河在蝕刻製程、材料配方與長期客戶認證；QFN 為 GaN 電源模組關鍵封裝形式，長科 2019 年才切入即成領導廠商，2026 年將導入台灣 Photo 製程升級高階 QFN。</li>
+    <li><strong>戰場二 · 功率導線架（vs 中系＋日系）：</strong>順德、界霖客戶為 Infineon/onsemi/STM/Renesas 等功率 IDM，車規認證週期長、黏著度高。核心武器是 Clip 雙面散熱與 TOLT，加工難度高、用銅量反而較少，單價與毛利優於傳統打線產品。</li>
+    <li><strong>戰場三 · 封裝散熱（vs 健策）：</strong>一詮切入 Lid/Stiffener/MCL，競爭主軸由價格轉向「技術規格＋客戶認證」；封裝層級散熱門檻高（複雜流道加工、高階鍍金防蝕、長期可靠度），供應商數量有限，產業集中度將走高。</li>
+  </ul>
+
+  <div class="callout">
+    <div class="callout-title">結構性趨勢：China+1 與去台去中</div>
+    <p style="font-size:12px;margin:0">終端 IDM 要求「非中國、非台灣」據點以降低地緣與關稅風險。界霖馬來西亞廠受惠特斯拉等要求、長科馬來西亞新廠（2027Q3 完工、產值翻倍）＋威海新廠（產值 2.5–3 倍）、順德彰化新廠（2028）同步擴產，多據點布局成為承接國際訂單的必要條件。</p>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 競爭格局</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 參 續 長華結構 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">參（續）、長華 8070 — 被低估的「先進封裝軍火商＋隱形金庫」</h1>
+
+  <p>長華電材（8070）與長科（6548）常被混淆，實則角色不同。長華是<strong>集團母公司</strong>，透過持股與集團關係合併長科（導線架），並在合併報表外另有三塊自有高值業務與龐大金融資產。這使長華的估值邏輯與純製造的長科截然不同。</p>
+
+  <div class="kpi-row">
+    <div class="kpi green"><div class="kpi-val">近 100<em>%</em></div><div class="kpi-lbl">YAMADA 台積電先封 Molding 市佔</div></div>
+    <div class="kpi gold"><div class="kpi-val">~200<em>億</em></div><div class="kpi-lbl">金融資產未實現獲利</div></div>
+    <div class="kpi"><div class="kpi-val">65–70<em>%</em></div><div class="kpi-lbl">住友封膠樹脂台灣市佔</div></div>
+    <div class="kpi green"><div class="kpi-val">5.6<em>%</em></div><div class="kpi-lbl">現金股利殖利率（2.71 元）</div></div>
+  </div>
+
+  <h2 class="ch">三塊自有高值業務</h2>
+  <ul>
+    <li><strong>YAMADA 先進封裝設備代理（第二引擎）：</strong>晶圓級膜壓設備，打進台積電 InFO/SoIC/CoWoS/WMCM，市佔近 100%；CoWoS 機台 ASP 高 30–40%、SoIC 高 40–50%、CoPoS 高 2–4 倍；亦供美光 HBM。只收佣金、不裝機的輕資本模式。法人估設備佣金獲利最快 2026、最慢 2027 超越封膠樹脂。</li>
+    <li><strong>住友封膠樹脂（材料）：</strong>台灣市佔 65–70%、寡占，2026/3 起雙位數漲價。</li>
+    <li><strong>Mini LED 導線架：</strong>營收占比 7–9%、毛利率 &gt;50%（集團最高），車用為主，TV（TCL/海信）2026Q3 量產。</li>
+  </ul>
+
+  <div class="callout green">
+    <div class="callout-title">GiS 折價論點：本業＋金庫近乎免費</div>
+    <p style="font-size:12px;margin:0">長華市值約 <strong>350 億</strong>，而其持長科約 48% 的股權市值即約 <strong>326 億</strong>（長科市值 680 億）——等於用長科股權價值就幾乎買下整個長華，材料/YAMADA 設備/Mini LED 本業＋約 200 億未實現金融資產（頎邦、台虹、環球晶等）近乎「免費奉送」。類比中美晶↔環球晶：這是一檔隱含控股折價的載體。惟須留意：易華電 COF 減損（2025Q4 拖累 EPS 約 0.93 元）與 266% 配發率背後的業外依賴，是折價存在的原因。</p>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>參 · 長華結構</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 章節封面 肆 ══════════════ -->
+<div class="sec-div page">
+  <div class="sec-num">04</div>
+  <div class="sec-eyebrow">Section IV · Comps &amp; Ranking</div>
+  <div class="sec-line"></div>
+  <div class="sec-title">產業 Comps<br>與 GiS 排序評等</div>
+  <div class="sec-desc">五檔營運同處上行循環，差異在「子賽道 × 催化劑 × 估值」。trailing PE 因 2025 為獲利谷底而普遍失真，估值一律以 forward 為準。</div>
+</div>
+
+<!-- ══════════════ 肆 Comps ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">肆、產業 Comps — 覆蓋台廠對比</h1>
+  <p style="font-size:12px;color:#6b7a9a;margin:-4px 0 8px">現價為 2026/7/23 收盤。EPS 中 26Q1 為實績，26F/27F 為 GiS 彙編預估（directional，非三情境定案）。⚠ 2025 為獲利谷底（原物料/匯率壓縮＋一詮/長華一次性因素），trailing PE 失真，一律以 forward 為準。長華 EPS 為歸母（含少數股權壓抑），估值另以殖利率/折價為輔。</p>
+
+  <table style="font-size:11px">
+    <thead><tr>
+      <th>公司</th><th>子賽道</th><th style="text-align:right">市值(億)</th><th style="text-align:right">現價</th>
+      <th style="text-align:right">6月營收YoY</th><th style="text-align:right">26Q1 EPS</th>
+      <th style="text-align:right">26F EPS</th><th style="text-align:right">27F EPS</th>
+      <th style="text-align:right">27F PE</th><th style="text-align:right">GiS TP</th><th style="text-align:right">上檔</th>
+    </tr></thead>
+    <tbody>
+      <tr style="background:#eefaf4!important"><td><strong>界霖</strong> 5285</td><td>功率</td><td class="num">82</td><td class="num">80.1</td><td class="num pos">+14.1%</td><td class="num">1.00</td><td class="num">4.2</td><td class="num hi">4.6</td><td class="num">17.4x</td><td class="num hi">94</td><td class="num pos" style="font-weight:700">+17.4%</td></tr>
+      <tr><td><strong>長華</strong> 8070</td><td>材料/設備/控股</td><td class="num">350</td><td class="num">48.3</td><td class="num pos">+32.8%</td><td class="num">0.51</td><td class="num">2.7</td><td class="num">3.2</td><td class="num">15.1x</td><td class="num">55</td><td class="num pos">+13.9%</td></tr>
+      <tr><td><strong>順德</strong> 2351</td><td>功率</td><td class="num">299</td><td class="num">164</td><td class="num pos">+51.7%</td><td class="num">1.22</td><td class="num">5.7</td><td class="num">7.1</td><td class="num">23.1x</td><td class="num">180</td><td class="num pos">+9.8%</td></tr>
+      <tr><td><strong>長科</strong> 6548</td><td>高階 IC/QFN</td><td class="num">680</td><td class="num">71.5</td><td class="num pos">+37.6%</td><td class="num">0.51</td><td class="num">2.2</td><td class="num">2.7</td><td class="num">26.5x</td><td class="num">74</td><td class="num pos">+3.5%</td></tr>
+      <tr><td><strong>一詮</strong> 2486</td><td>散熱轉型</td><td class="num">559</td><td class="num">239</td><td class="num pos">+35.0%</td><td class="num">0.29</td><td class="num">1.7</td><td class="num">3.1</td><td class="num neg">77.1x</td><td class="num">205</td><td class="num neg" style="font-weight:700">-14.2%</td></tr>
+      <tr style="background:#f0f4fc!important"><td style="font-weight:700">中位數</td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num" style="font-weight:700">+35.0%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num" style="font-weight:700">23.1x</td><td class="num">—</td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+  <span class="src">資料來源：tw-stock-scanner DB（現價/市值/營收/26Q1 EPS，截至 2026/7/23）、優分析與券商彙編（26F/27F EPS）。27F PE ＝ 現價 ÷ 27F EPS。</span>
+
+  <blockquote>
+    <strong>GiS 估值判斷：</strong>族群 forward PE 分歧極大（15–77x），反映三子賽道的成長確定性與估值基期差異。<strong>界霖（17.4x）與長華（15.1x）最便宜</strong>——界霖是功率利基＋近期漲價槓桿最直接，長華是先進封裝設備＋折價載體；<strong>順德（23.1x）合理偏上</strong>但三引擎最完整；<strong>長科（26.5x）</strong>品質好但估值已充分反映；<strong>一詮（77.1x）</strong>散熱故事最性感、2027 才是獲利拐點，估值已大幅預支。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · 產業 Comps</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 肆 續 EPS + 排序 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">肆（續）、GiS 排序與評等</h1>
+
+  <div class="chart-wrap">
+    <div class="chart-title">五檔 EPS 軌跡（元）</div>
+    <div class="chart-sub">來源：公司季報（2024–25 實績）、優分析／GiS 預估（26F/27F）。一詮 2024/25 基期極低是估值失真主因</div>
+    <div class="chart-container" style="height:205px;width:100%;position:relative"><canvas id="chartEPS" style="display:block;width:100%;height:205px"></canvas></div>
+  </div>
+
+  <table style="font-size:12px">
+    <thead><tr><th>排序</th><th>公司</th><th>評等</th><th>GiS 12M TP</th><th>上檔</th><th>一句話論點</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1</strong></td><td><strong>界霖 5285</strong></td><td class="pos hi">買進 Buy</td><td class="num hi">NT$94</td><td class="num pos">+17.4%</td><td>族群最便宜（17x）＋漲價 10–30%／Clip／SiC 逆變器三催化齊發</td></tr>
+      <tr><td><strong>2</strong></td><td><strong>長華 8070</strong></td><td class="pos">增加持股 OW</td><td class="num">NT$55</td><td class="num pos">+13.9%</td><td>YAMADA 先封設備近獨佔＋隱形金庫＋5.6% 殖利率，折價載體</td></tr>
+      <tr><td><strong>3</strong></td><td><strong>順德 2351</strong></td><td class="pos">增加持股 OW</td><td class="num">NT$180</td><td class="num pos">+9.8%</td><td>AI LF＋均熱片＋車用三引擎最全，惟已漲多、銅價紅利消退</td></tr>
+      <tr><td><strong>4</strong></td><td><strong>長科 6548</strong></td><td>中立 N</td><td class="num">NT$74</td><td class="num">+3.5%</td><td>高階 IC/QFN 龍頭、對標日韓，forward 26x 已充分反映</td></tr>
+      <tr><td><strong>5</strong></td><td><strong>一詮 2486</strong></td><td class="neg">減碼 UW</td><td class="num">NT$205</td><td class="num neg">-14.2%</td><td>散熱故事最性感但 2027F 仍 77x，估值極端透支＋可轉債稀釋</td></tr>
+    </tbody>
+  </table>
+  <span class="src">評等依 GiS 估值方法論 §4.3：買進 &gt;15%、增加持股 5–15%、中立 ±5%、減碼 &lt;-5%。TP 以 forward PE 錨定（界霖 20x×27F、順德 25x×27F、長科 27x×27F、一詮 66x×27F），長華另佐殖利率＋SOTP 折價；為產業層級 directional 評等，完整三情境／5×5 敏感度見個股報告。</span>
+
+  <blockquote>
+    <strong>GiS 排序邏輯：</strong>五檔皆處同一上行循環，勝負在「催化劑時點 × 估值基期」。界霖以最低前瞻本益比＋最直接的漲價槓桿列首選；長華與順德上檔相近（+14% vs +10%）但屬性不同——長華是「折價＋隱形資產」、順德是「品質溢價但已漲多」。長科品質最穩但估值反映充分列中立；一詮技術與客戶最亮眼，但獲利拐點在 2027、當前估值已把三年後的成功折現，紀律上列減碼。
+  </blockquote>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>肆 · GiS 排序</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 伍 催化劑與風險 ══════════════ -->
+<div class="full-page page body-page alt">
+  <h1 class="ch">伍、產業催化劑與風險</h1>
+
+  <div class="risk-matrix">
+    <div class="risk-card up">
+      <h4>▲ 產業層級催化劑</h4>
+      <div class="risk-item"><strong>800V HVDC 導入：</strong>雲端業者 2026H2 加速導入，高功率導線架 ASP +30–50%，需求持續上升。</div>
+      <div class="risk-item"><strong>漲價效益遞延放大：</strong>10–30% 全產品線漲價自 2026H2 逐季反映，部分歐美 IDM 10 月合約才跟進，效益延伸至 2027。</div>
+      <div class="risk-item"><strong>先進封裝擴產：</strong>CoWoS/SoIC/CoPoS 帶動 Molding 設備與封膠樹脂需求，長華設備佣金 2026–27 爆發。</div>
+      <div class="risk-item"><strong>均熱片/散熱元年：</strong>2026 貢獻元年、2027 放量；MCL 微流道隨 NVIDIA Feynman 導入為 2027+ 觸發點。</div>
+    </div>
+    <div class="risk-card dn">
+      <h4>▼ 產業層級風險</h4>
+      <div class="risk-item"><strong>銅價紅利消退：</strong>2026H1 毛利率高點含約 4ppt 一次性庫存/銅價紅利，Q2 已回落；後續須靠高階組合而非價差。</div>
+      <div class="risk-item"><strong>AI capex 循環反轉：</strong>多頭論點建立在「AI 投資不中斷」，若過熱修正，已提前擴產者獲利波動放大。</div>
+      <div class="risk-item"><strong>中系紅鏈價格戰：</strong>中國與東協在地導線架廠補貼擴產，壓抑中低階價格與台廠市佔。</div>
+      <div class="risk-item"><strong>地緣與關稅：</strong>產能集中台灣/中國，關稅升級衝擊接單配置與成本；貴金屬與匯率波動壓縮毛利。</div>
+    </div>
+  </div>
+
+  <h2 class="ch">個股層級 catalyst / risk（不重複產業共通項）</h2>
+  <ul>
+    <li><strong>界霖：</strong>catalyst＝SiC 逆變器 5→9 月放量 5–8 倍、Clip 放量拉升毛利；risk＝AI 占比僅 7%、客戶認證延宕。</li>
+    <li><strong>長華：</strong>catalyst＝YAMADA 設備佣金超車材料、Mini LED TV 量產；risk＝易華電再減損、金融資產市值波動、頎邦訴訟。</li>
+    <li><strong>順德：</strong>catalyst＝AI LF Q4 占比衝 10%、均熱片 2027 進「數億元」級距；risk＝車用循環反轉、文具關稅。</li>
+    <li><strong>長科：</strong>catalyst＝威海/馬來西亞新產能 2027 開出、台灣 Photo 高階 QFN；risk＝擴產後若景氣反轉的稼動率/折舊壓力。</li>
+    <li><strong>一詮：</strong>catalyst＝散熱占比衝破 50%、MCL 導入 Feynman；risk＝估值透支、可轉債（轉換價 256）稀釋、外資賣超。</li>
+  </ul>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>伍 · 催化劑與風險</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 陸 首選卡 + 附錄 ══════════════ -->
+<div class="full-page page body-page">
+  <h1 class="ch">陸、GiS 首選標的</h1>
+
+  <div class="picks-grid">
+    <div class="pick-card">
+      <div class="pick-rank">TOP PICK #1 · 買進</div>
+      <div class="pick-name">界霖</div>
+      <div class="pick-ticker">5285 · TWSE · TP NT$94（+17.4%）</div>
+      <div class="pick-why">專注功率導線架、客戶為 Infineon/onsemi/STM 等國際 IDM。族群最便宜（27F 17x），三率三升，Clip 雙面散熱與日本米澤 SiC 逆變器放量，AI 新案由 50→100+ 件。</div>
+      <div class="pick-catalyst">催化劑：6 月起 10–30% 漲價、SiC 9 月放量、Clip 拉升毛利</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">#2 · 增加持股</div>
+      <div class="pick-name">長華</div>
+      <div class="pick-ticker">8070 · TWSE · TP NT$55（+13.9%）</div>
+      <div class="pick-why">YAMADA 先進封裝設備台積電市佔近 100%、住友封膠樹脂 65–70%，加上約 200 億隱形金庫。市值 ≈ 持長科股權，本業＋金庫近乎免費，5.6% 殖利率提供下檔保護。</div>
+      <div class="pick-catalyst">催化劑：設備佣金超車材料、Mini LED TV Q3 量產</div>
+    </div>
+    <div class="pick-card">
+      <div class="pick-rank">#3 · 增加持股</div>
+      <div class="pick-name">順德</div>
+      <div class="pick-ticker">2351 · TWSE · TP NT$180（+9.8%）</div>
+      <div class="pick-why">功率導線架龍頭，800V HVDC 獨家供應之一。AI LF＋均熱片＋車用三引擎最完整，6 月營收 YoY +52%。惟已漲多、銅價紅利消退，上檔相對受限。</div>
+      <div class="pick-catalyst">催化劑：AI LF Q4 占比衝 10%、均熱片 2027 放量</div>
+    </div>
+  </div>
+
+  <h2 class="ch">GiS 與市場的不同之處</h2>
+  <p style="font-size:13px">市場對導線架族群普遍偏多，GiS 認同 AI 電源＋散熱高值化的結構性，但在三處採取更審慎的視角：<strong>（1）評等錨定前瞻本益比而非追價</strong>——對已漲多的順德與估值透支的一詮，以 forward EPS 與合理倍數落格，不因題材熱度升評；<strong>（2）區分「量增」與「值升」</strong>——台廠真正的 alpha 在產品組合上移（Clip/HVDC/QFN/散熱），而非單純跟漲原物料；<strong>（3）看穿控股結構</strong>——長華的價值不在單季 EPS（受少數股權與一次性減損壓抑），而在先進封裝設備曝險＋隱形金庫的折價，這是市場容易忽略的 mispricing。</p>
+
+  <hr>
+  <h3 class="ch">附錄：資料來源</h3>
+  <p style="font-size:12px;line-height:1.7">本報告產業數據綜合引用：WSTS（全球半導體）、工研院產科國際所（台灣 IC 產值）、富士經濟（全球導線架市佔）、順德/界霖/一詮/長科/長華公司法說會與年報、優分析（UAnalyze）獨家研究內容、以及本土與外資券商個股報告（媒體轉述及公開摘要）。台廠量化數據（現價、市值、月營收、季報 EPS、法人買賣超）取自 GiS tw-stock-scanner 資料庫（截至 2026/7/23 收盤，全系統健檢 21 項 PASS）。券商評等/目標價比較以匿名方式呈現（保守方/進取方、外資/本土）；近月引用之個股報告來源含永豐投顧、宏遠投顧、國泰證期研究部、統一投顧、大和（Daiwa）、CTBC、兆豐等發布之導線架相關個股與產業報告。</p>
+  <p style="font-size:11.5px;color:#9aabb5;margin-top:10px">資料截止：2026 年 7 月 23 日。GiS 26F/27F EPS 為 directional 彙編預估，非三情境定案；個股完整估值（三情境／DCF／5×5 敏感度）請見對應個股報告。本報告僅供研究參考，不構成投資建議。</p>
+
+  <div class="page-footer">
+    <span class="footer-logo">Gi<em>S</em> Genesis International Capital</span>
+    <span>陸 · 首選標的與附錄</span>
+    <span>© 2026 GiS · 僅供研究參考</span>
+  </div>
+</div>
+
+<!-- ══════════════ 圖表 JS ══════════════ -->
+<script>
+window.addEventListener('load', function() {
+  Chart.defaults.font.family = "'PingFang TC','Heiti TC',Arial,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#4a5568';
+  function getEl(id){return document.getElementById(id);}
+
+  Chart.register({
+    id:'labelPlugin',
+    afterDatasetsDraw(chart){
+      const ctx=chart.ctx;
+      const isStacked=chart.options.scales?.y?.stacked===true;
+      const isH=chart.options.indexAxis==='y';
+      chart.data.datasets.forEach((ds,i)=>{
+        const meta=chart.getDatasetMeta(i);
+        if(meta.hidden)return;
+        meta.data.forEach((bar,idx)=>{
+          const v=ds.data[idx];
+          if(!v&&v!==0)return;
+          ctx.save();
+          ctx.font='bold 11px PingFang TC, Arial';
+          ctx.textAlign='center';
+          if(isH){
+            ctx.fillStyle='#1a2a4a';ctx.textBaseline='middle';
+            ctx.fillText((ds.prefix||'')+v+(ds.unit||''),bar.x+6,bar.y);
+          }else if(isStacked){
+            const bh=Math.abs(bar.base-bar.y);
+            if(bh<14){ctx.restore();return;}
+            ctx.fillStyle=bh>22?'#fff':'#1a2a4a';ctx.textBaseline='middle';
+            ctx.fillText(v+'%',bar.x,bar.y+bh/2);
+          }else{
+            ctx.fillStyle='#1a2a4a';ctx.textBaseline='bottom';
+            ctx.fillText(String(v)+(ds.unit||''),bar.x,bar.y-3);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  });
+
+  // 執摘 · 6月營收YoY（橫條）
+  new Chart(getEl('chartRevYoY'),{
+    type:'bar',
+    data:{labels:['順德 2351','長科 6548','一詮 2486','長華 8070','界霖 5285'],
+      datasets:[{label:'6月營收YoY',data:[51.7,37.6,35.0,32.8,14.1],
+        backgroundColor:['#0d1b3e','#1a3a6e','#00a878','#3b82f6','#00c896'],
+        borderRadius:4,barPercentage:0.66,unit:'%'}]},
+    options:{responsive:false,animation:false,indexAxis:'y',
+      layout:{padding:{right:44}},
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:'#eef2f8'},max:60,ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}
+  });
+
+  // 執摘 · 毛利率跳升
+  new Chart(getEl('chartMargin'),{
+    type:'bar',
+    data:{labels:['順德','界霖','一詮','長科'],
+      datasets:[
+        {label:'2025',data:[13.3,15.0,14.0,21.0],backgroundColor:'#6b7a9a',borderRadius:5,barPercentage:0.72,categoryPercentage:0.7,unit:'%'},
+        {label:'2026F',data:[18.9,18.0,22.0,23.5],backgroundColor:'#00a878',borderRadius:5,barPercentage:0.72,categoryPercentage:0.7,unit:'%'}
+      ]},
+    options:{responsive:false,animation:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:14,padding:14}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},max:28,ticks:{callback:v=>v+'%'}}}}
+  });
+
+  // 貳 · AI占比躍升
+  new Chart(getEl('chartMix'),{
+    type:'line',
+    data:{labels:['2025','2026 H1','2026 Q4F'],
+      datasets:[
+        {label:'順德 AI 導線架占比',data:[1,6,10],borderColor:'#0d1b3e',backgroundColor:'transparent',tension:0.3,pointRadius:5,borderWidth:2.5},
+        {label:'一詮 散熱元件占比',data:[29,44,50],borderColor:'#00c896',backgroundColor:'transparent',tension:0.3,pointRadius:5,borderWidth:2.5}
+      ]},
+    options:{responsive:false,animation:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:14,padding:12}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'%'}}}}
+  });
+
+  // 貳 · 車用單車半導體價值
+  new Chart(getEl('chartCarVal'),{
+    type:'bar',
+    data:{labels:['燃油車','EV 2025','EV 2030F','高階車款'],
+      datasets:[{label:'單車半導體價值',data:[750,1400,1600,2500],
+        backgroundColor:['#6b7a9a','#3b82f6','#1a3a6e','#00c896'],
+        borderRadius:5,barPercentage:0.62,categoryPercentage:0.7,prefix:'$'}]},
+    options:{responsive:false,animation:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},max:2900,ticks:{callback:v=>'$'+v}}}}
+  });
+
+  // 參 · 全球導線架市佔
+  new Chart(getEl('chartShare'),{
+    type:'bar',
+    data:{labels:['Mitsui(日)','長科 6548(台)','HDS(韓)','SDI/Shinko(日)','順德+界霖(台功率)','其他'],
+      datasets:[{label:'全球市佔',data:[22,17,15,10,8,28],
+        backgroundColor:['#6b7a9a','#00c896','#5b7fb0','#94a3b8','#00a878','#cbd5e1'],
+        borderRadius:5,barPercentage:0.66,categoryPercentage:0.7,unit:'%'}]},
+    options:{responsive:false,animation:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},max:35,ticks:{callback:v=>v+'%'}}}}
+  });
+
+  // 肆 · 五檔 EPS 軌跡
+  new Chart(getEl('chartEPS'),{
+    type:'line',
+    data:{labels:['2024','2025','2026F','2027F'],
+      datasets:[
+        {label:'順德',data:[3.71,1.66,5.7,7.1],borderColor:'#0d1b3e',backgroundColor:'transparent',tension:0.3,pointRadius:4,borderWidth:2.5},
+        {label:'界霖',data:[2.52,1.53,4.2,4.6],borderColor:'#00c896',backgroundColor:'transparent',tension:0.3,pointRadius:4,borderWidth:2.5},
+        {label:'長科',data:[2.02,1.63,2.2,2.7],borderColor:'#e67e22',backgroundColor:'transparent',tension:0.3,pointRadius:4,borderWidth:2.5},
+        {label:'長華',data:[2.33,1.02,2.7,3.2],borderColor:'#3b82f6',backgroundColor:'transparent',tension:0.3,pointRadius:4,borderWidth:2.5},
+        {label:'一詮',data:[0.08,0.22,1.7,3.1],borderColor:'#c0392b',backgroundColor:'transparent',tension:0.3,pointRadius:4,borderWidth:2.5,borderDash:[5,3]}
+      ]},
+    options:{responsive:false,animation:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:14,padding:10}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f8'},ticks:{callback:v=>v+'元'}}}}
+  });
+
+});
+</script>
+</body>
+</html>

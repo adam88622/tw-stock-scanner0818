@@ -1,0 +1,674 @@
+{% extends "base.html" %}
+{% block title %}盤中爆量預估{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <!-- 資料延遲 banner -->
+    <div id="va-delay-banner" class="va-delay-banner" style="display:none;"></div>
+    <div id="va-fresh-tag" class="va-fresh-tag" style="display:none;">即時 ✓</div>
+
+    <!-- 標頭：小字 meta -->
+    <div class="va-header">
+        <span class="va-title-sm">盤中爆量預估</span>
+        <span class="va-meta-sep">|</span>
+        <span><strong id="va-asof">{{ data.as_of if data else '—' }}</strong></span>
+        <span class="va-meta-sep">|</span>
+        <span>盤中第 <strong id="va-min">{{ data.minute_idx if data else '—' }}</strong> 分鐘</span>
+        <span class="va-meta-sep">|</span>
+        <span>完成度 <strong id="va-pct">{{ "%.1f%%"|format((data.pct_done or 0) * 100) if data else '—' }}</strong></span>
+        <span id="va-note" class="va-note">{{ data.note if (data and data.note) else '' }}</span>
+        <span class="va-refresh">每 30 秒自動更新</span>
+    </div>
+
+    <!-- 加權指數主秀區塊 -->
+    <div id="va-taiex" class="va-taiex-hero lvl-NONE">
+        <div class="va-rvol-row">
+            <span class="va-light" id="va-taiex-light">🟢</span>
+            <span class="va-level-tag" id="va-taiex-level">NONE</span>
+            <span class="va-rvol-label">rvol =</span>
+            <span class="va-rvol-num" id="va-taiex-rvol">—</span>
+        </div>
+        <div class="va-subtitle">加權指數預估今日量能</div>
+        <div class="va-stats">
+            <div class="va-stat-row">
+                <span class="va-stat-label">預估收盤量：</span>
+                <span class="va-stat-val" id="va-taiex-eod">—</span>
+            </div>
+            <div class="va-ci-row" id="va-taiex-ci">90% CI: —</div>
+            <div class="va-stat-row">
+                <span class="va-stat-label">過去 20 日均：</span>
+                <span class="va-stat-val" id="va-taiex-adv">—</span>
+            </div>
+            <div class="va-stat-row">
+                <span class="va-stat-label">比平均：</span>
+                <span class="va-stat-diff" id="va-taiex-diff">—</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 大盤 rvol 盤中趨勢圖 -->
+    <div class="va-trend-wrap">
+        <div class="va-trend-title">加權指數 rvol 盤中趨勢（9:00 → 13:30）</div>
+        <div id="va-trend-chart-wrap" style="position:relative;width:100%;height:220px;">
+            <svg id="va-trend-chart" width="100%" height="220" preserveAspectRatio="none"
+                 viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div id="va-trend-empty" class="va-trend-empty" style="display:none;">尚無盤中資料</div>
+        </div>
+    </div>
+
+    <!-- 個股榜（折疊） -->
+    <details id="va-stocks-details" class="va-stocks-details">
+        <summary class="va-stocks-summary">
+            <span class="va-summary-icon">▶</span>
+            <span>個股爆量榜</span>
+            <span class="va-summary-counts" id="va-summary-counts">（紅 0 / 黃 0 / 觀察 0）</span>
+        </summary>
+
+        <!-- 紅榜 -->
+        <h5 class="va-list-title va-c-danger">紅榜（rvol ≥ 1.8 — DANGER）</h5>
+        <div class="table-responsive">
+            <table class="table table-sm data-table">
+                <thead>
+                    <tr>
+                        <th>#</th><th>代號</th><th>名稱</th><th>市場</th>
+                        <th class="text-end">現價</th>
+                        <th class="text-end">累計量(張)</th>
+                        <th class="text-end">預估EOD</th>
+                        <th class="text-end">ADV20</th>
+                        <th class="text-end">rvol_forecast</th>
+                    </tr>
+                </thead>
+                <tbody id="va-tbody-danger"></tbody>
+            </table>
+        </div>
+
+        <!-- 黃榜 -->
+        <h5 class="va-list-title va-c-warn">黃榜（1.5 ≤ rvol &lt; 1.8 — WARN）</h5>
+        <div class="table-responsive">
+            <table class="table table-sm data-table">
+                <thead>
+                    <tr>
+                        <th>#</th><th>代號</th><th>名稱</th><th>市場</th>
+                        <th class="text-end">現價</th>
+                        <th class="text-end">累計量(張)</th>
+                        <th class="text-end">預估EOD</th>
+                        <th class="text-end">ADV20</th>
+                        <th class="text-end">rvol_forecast</th>
+                    </tr>
+                </thead>
+                <tbody id="va-tbody-warn"></tbody>
+            </table>
+        </div>
+
+        <!-- 觀察榜 -->
+        <h5 class="va-list-title va-c-observe">觀察榜（1.2 ≤ rvol &lt; 1.5 — OBSERVE）</h5>
+        <div class="table-responsive">
+            <table class="table table-sm data-table">
+                <thead>
+                    <tr>
+                        <th>#</th><th>代號</th><th>名稱</th><th>市場</th>
+                        <th class="text-end">現價</th>
+                        <th class="text-end">累計量(張)</th>
+                        <th class="text-end">預估EOD</th>
+                        <th class="text-end">ADV20</th>
+                        <th class="text-end">rvol_forecast</th>
+                    </tr>
+                </thead>
+                <tbody id="va-tbody-observe"></tbody>
+            </table>
+        </div>
+    </details>
+</div>
+
+<style>
+    /* 標頭 meta */
+    .va-header {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        padding: 8px 12px;
+        font-size: 12px;
+        color: #94a3b8;
+        border-bottom: 1px solid rgba(148,163,184,0.15);
+        margin-bottom: 16px;
+    }
+    .va-title-sm {
+        font-size: 13px;
+        font-weight: 600;
+        color: #cbd5e1;
+    }
+    .va-meta-sep { color: #475569; }
+    .va-header strong { color: #e2e8f0; font-weight: 600; }
+    .va-note { color: #94a3b8; }
+    .va-refresh { margin-left: auto; color: #64748b; font-size: 11px; }
+
+    /* 加權指數主秀 */
+    .va-taiex-hero {
+        margin: 24px auto;
+        padding: 36px 28px 32px;
+        max-width: 720px;
+        border-radius: 14px;
+        text-align: center;
+        background: var(--bg, #1e293b);
+        border: 2px solid rgba(148,163,184,0.2);
+        transition: all 0.3s ease;
+    }
+    .va-taiex-hero.lvl-DANGER {
+        background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+        border-color: #ef4444;
+        box-shadow: 0 0 30px rgba(239,68,68,0.3);
+    }
+    .va-taiex-hero.lvl-WARN {
+        background: linear-gradient(135deg, #854d0e 0%, #422006 100%);
+        border-color: #eab308;
+        box-shadow: 0 0 24px rgba(234,179,8,0.25);
+    }
+    .va-taiex-hero.lvl-OBSERVE {
+        background: linear-gradient(135deg, #475569 0%, #1e293b 100%);
+        border-color: #94a3b8;
+    }
+    .va-taiex-hero.lvl-NONE {
+        background: linear-gradient(135deg, #14532d 0%, #052e16 100%);
+        border-color: #22c55e;
+    }
+
+    .va-rvol-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+    }
+    .va-light { font-size: 56px; line-height: 1; }
+    .va-level-tag {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        color: #f8fafc;
+        padding: 2px 10px;
+        background: rgba(0,0,0,0.25);
+        border-radius: 6px;
+    }
+    .va-rvol-label {
+        font-size: 22px;
+        color: #e2e8f0;
+        margin-left: 12px;
+        font-weight: 500;
+    }
+    .va-rvol-num {
+        font-size: 68px;
+        font-weight: 900;
+        line-height: 1;
+        color: #f8fafc;
+        letter-spacing: -0.02em;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+
+    .va-subtitle {
+        font-size: 14px;
+        color: #cbd5e1;
+        margin-bottom: 14px;
+        opacity: 0.85;
+    }
+
+    .va-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 360px;
+        margin: 0 auto;
+        text-align: left;
+    }
+    .va-stat-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-size: 16px;
+    }
+    .va-stat-label {
+        color: #cbd5e1;
+        font-size: 14px;
+    }
+    .va-stat-val {
+        font-size: 24px;
+        font-weight: 700;
+        color: #f8fafc;
+    }
+    .va-stat-diff {
+        font-size: 24px;
+        font-weight: 700;
+    }
+    .va-stat-diff.va-pos { color: #f87171; }
+    .va-stat-diff.va-neg { color: #4ade80; }
+    .va-stat-diff.va-neutral { color: #cbd5e1; }
+
+    /* 個股折疊區塊 */
+    .va-stocks-details {
+        margin-top: 24px;
+        background: rgba(30,41,59,0.4);
+        border: 1px solid rgba(148,163,184,0.15);
+        border-radius: 8px;
+        padding: 0;
+    }
+    .va-stocks-summary {
+        padding: 14px 18px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        color: #e2e8f0;
+        user-select: none;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    .va-stocks-summary::-webkit-details-marker { display: none; }
+    .va-summary-icon {
+        display: inline-block;
+        transition: transform 0.2s;
+        font-size: 12px;
+        color: #94a3b8;
+    }
+    .va-stocks-details[open] .va-summary-icon { transform: rotate(90deg); }
+    .va-summary-counts {
+        color: #94a3b8;
+        font-weight: 500;
+        font-size: 14px;
+    }
+    .va-stocks-details > *:not(summary) {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+    .va-stocks-details > *:last-child { padding-bottom: 18px; }
+
+    .va-list-title { margin-top: 1.2rem; font-size: 14px; }
+    .va-c-danger { color: #ef4444; }
+    .va-c-warn { color: #eab308; }
+    .va-c-observe { color: #94a3b8; }
+
+    tr.va-row-DANGER { background: rgba(239,68,68,0.18); }
+    tr.va-row-WARN { background: rgba(234,179,8,0.18); }
+    tr.va-row-OBSERVE { background: rgba(148,163,184,0.10); }
+
+    @media (max-width: 640px) {
+        .va-light { font-size: 40px; }
+        .va-rvol-num { font-size: 48px; }
+        .va-level-tag, .va-rvol-label { font-size: 16px; }
+        .va-stat-val, .va-stat-diff { font-size: 18px; }
+    }
+
+    /* CI 顯示 */
+    .va-ci-row {
+        font-size: 12px;
+        color: #94a3b8;
+        text-align: right;
+        margin-top: -2px;
+        margin-bottom: 4px;
+    }
+
+    /* 資料延遲 banner */
+    .va-delay-banner {
+        padding: 10px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+    .va-delay-banner.va-delay-red {
+        background: rgba(239,68,68,0.18);
+        color: #fecaca;
+        border: 1px solid #ef4444;
+    }
+    .va-delay-banner.va-delay-yellow {
+        background: rgba(234,179,8,0.15);
+        color: #fde68a;
+        border: 1px solid #eab308;
+    }
+    .va-fresh-tag {
+        position: fixed;
+        right: 12px;
+        bottom: 10px;
+        font-size: 11px;
+        color: #4ade80;
+        opacity: 0.6;
+        z-index: 100;
+        pointer-events: none;
+    }
+
+    /* 趨勢圖 */
+    .va-trend-wrap {
+        margin: 16px auto 24px;
+        max-width: 1100px;
+        padding: 12px 16px;
+        background: rgba(30,41,59,0.4);
+        border: 1px solid rgba(148,163,184,0.15);
+        border-radius: 8px;
+    }
+    .va-trend-title {
+        font-size: 13px;
+        color: #cbd5e1;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+    .va-trend-empty {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #64748b;
+        font-size: 13px;
+    }
+    #va-trend-chart text { font-family: inherit; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    // 燈號圖示
+    var LIGHT_MAP = { DANGER: '🔴', WARN: '🟠', OBSERVE: '🟡', NONE: '🟢' };
+    var LEVEL_TEXT = { DANGER: 'DANGER', WARN: 'WARN', OBSERVE: 'OBSERVE', NONE: 'NONE' };
+
+    function fmtInt(n) {
+        if (n === null || n === undefined) return '—';
+        return Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 });
+    }
+    function fmtPrice(n) {
+        if (n === null || n === undefined) return '—';
+        return Number(n).toFixed(2);
+    }
+    // 大數字自動換算：>= 1e12 用兆，>= 1e8 用億，否則用萬
+    function formatBigValue(v) {
+        if (v === null || v === undefined || isNaN(v)) return '—';
+        var n = Number(v);
+        if (n >= 1e12) return (n / 1e12).toFixed(2) + ' 兆';
+        if (n >= 1e8) return (n / 1e8).toFixed(2) + ' 億';
+        if (n >= 1e4) return (n / 1e4).toFixed(2) + ' 萬';
+        return n.toFixed(0);
+    }
+    function marketBadge(m) {
+        if (m === 'twse') return '<span class="badge bg-primary">上市</span>';
+        if (m === 'tpex') return '<span class="badge bg-success">上櫃</span>';
+        return '';
+    }
+    function rowHtml(s, idx) {
+        return '<tr class="va-row-' + s.level + '">'
+             + '<td>' + idx + '</td>'
+             + '<td class="stock-id"><a href="/stock?id=' + s.stock_id + '">' + s.stock_id + '</a></td>'
+             + '<td>' + (s.name || '') + '</td>'
+             + '<td>' + marketBadge(s.market) + '</td>'
+             + '<td class="text-end">' + fmtPrice(s.last_price) + '</td>'
+             + '<td class="text-end">' + fmtInt(s.cum_vol) + '</td>'
+             + '<td class="text-end">' + fmtInt(s.forecast_eod_vol) + '</td>'
+             + '<td class="text-end">' + fmtInt(s.adv20) + '</td>'
+             + '<td class="text-end fw-bold">' + (s.rvol_forecast != null ? s.rvol_forecast.toFixed(2) : '—') + '</td>'
+             + '</tr>';
+    }
+    function render(payload) {
+        if (!payload) return;
+        document.getElementById('va-asof').textContent = payload.as_of || '—';
+        document.getElementById('va-min').textContent = payload.minute_idx;
+        document.getElementById('va-pct').textContent = ((payload.pct_done || 0) * 100).toFixed(1) + '%';
+        document.getElementById('va-note').textContent = payload.note || '';
+
+        renderDelayBanner(payload.as_of);
+
+        var t = payload.taiex || {};
+        var lvl = t.level || 'NONE';
+        var box = document.getElementById('va-taiex');
+        box.className = 'va-taiex-hero lvl-' + lvl;
+        document.getElementById('va-taiex-light').textContent = LIGHT_MAP[lvl] || '🟢';
+        document.getElementById('va-taiex-level').textContent = LEVEL_TEXT[lvl] || 'NONE';
+        document.getElementById('va-taiex-rvol').textContent = (t.rvol_forecast != null && t.rvol_forecast > 0)
+            ? Number(t.rvol_forecast).toFixed(2)
+            : '—';
+
+        // 預估量、ADV20、差異
+        var eod = Number(t.forecast_eod_value || 0);
+        var adv = Number(t.adv20_value || 0);
+        document.getElementById('va-taiex-eod').textContent = eod > 0 ? formatBigValue(eod) : '—';
+        document.getElementById('va-taiex-adv').textContent = adv > 0 ? formatBigValue(adv) : '—';
+
+        // 90% CI
+        var ciEl = document.getElementById('va-taiex-ci');
+        var ciLow = Number(t.ci_low || 0);
+        var ciHigh = Number(t.ci_high || 0);
+        if (eod > 0 && ciHigh > 0) {
+            ciEl.textContent = '90% CI: ' + formatBigValue(ciLow) + ' ~ ' + formatBigValue(ciHigh);
+        } else {
+            ciEl.textContent = '90% CI: —';
+        }
+
+        var diffEl = document.getElementById('va-taiex-diff');
+        if (eod > 0 && adv > 0) {
+            var diffPct = (eod / adv - 1) * 100;
+            var sign = diffPct >= 0 ? '+' : '';
+            diffEl.textContent = sign + diffPct.toFixed(1) + '%';
+            diffEl.className = 'va-stat-diff ' + (diffPct > 0 ? 'va-pos' : (diffPct < 0 ? 'va-neg' : 'va-neutral'));
+        } else {
+            diffEl.textContent = '—';
+            diffEl.className = 'va-stat-diff va-neutral';
+        }
+
+        // 個股榜
+        var dList = [], wList = [], oList = [];
+        (payload.stocks || []).forEach(function(s) {
+            if (s.level === 'DANGER') dList.push(s);
+            else if (s.level === 'WARN') wList.push(s);
+            else if (s.level === 'OBSERVE') oList.push(s);
+        });
+        function fill(id, list) {
+            var html = '';
+            list.forEach(function(s, i) { html += rowHtml(s, i + 1); });
+            if (!html) html = '<tr><td colspan="9" style="text-align:center;color:#64748b;">無</td></tr>';
+            document.getElementById(id).innerHTML = html;
+        }
+        fill('va-tbody-danger', dList);
+        fill('va-tbody-warn', wList);
+        fill('va-tbody-observe', oList);
+        document.getElementById('va-summary-counts').textContent =
+            '（紅 ' + dList.length + ' / 黃 ' + wList.length + ' / 觀察 ' + oList.length + '）';
+    }
+
+    // ====== 資料延遲 banner ======
+    function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+    function renderDelayBanner(asOf) {
+        var banner = document.getElementById('va-delay-banner');
+        var fresh = document.getElementById('va-fresh-tag');
+        if (!asOf) {
+            banner.style.display = 'none';
+            fresh.style.display = 'none';
+            return;
+        }
+        // as_of 是 server local (Asia/Taipei), 沒帶時區 → 補 +08:00
+        var asOfDate = new Date(String(asOf).replace(' ', 'T') + '+08:00');
+        if (isNaN(asOfDate.getTime())) {
+            banner.style.display = 'none';
+            fresh.style.display = 'none';
+            return;
+        }
+        var delaySec = (Date.now() - asOfDate.getTime()) / 1000;
+        var hh = pad2(asOfDate.getHours());
+        var mm = pad2(asOfDate.getMinutes());
+        var ss = pad2(asOfDate.getSeconds());
+        // worker 全市場 fetch 約 70s，正常 cycle ~130s，門檻設寬避免誤觸
+        if (delaySec > 360) {
+            var mins = Math.floor(delaySec / 60);
+            var secs = Math.floor(delaySec % 60);
+            banner.className = 'va-delay-banner va-delay-red';
+            banner.textContent = '⚠️ 資料延遲 ' + mins + ' 分 ' + secs + ' 秒（上次更新：' + hh + ':' + mm + ':' + ss + '）';
+            banner.style.display = 'block';
+            fresh.style.display = 'none';
+        } else if (delaySec > 180) {
+            var mins2 = Math.floor(delaySec / 60);
+            banner.className = 'va-delay-banner va-delay-yellow';
+            banner.textContent = '資料 ' + mins2 + ' 分前更新';
+            banner.style.display = 'block';
+            fresh.style.display = 'none';
+        } else {
+            banner.style.display = 'none';
+            fresh.style.display = 'block';
+        }
+    }
+
+    // ====== 趨勢圖 ======
+    var TREND_W = 1000, TREND_H = 220;
+    var PAD_L = 44, PAD_R = 16, PAD_T = 12, PAD_B = 26;
+    var X_MIN = 0, X_MAX = 270;           // minute_idx
+    var Y_MIN = 0, Y_MAX = 3.0;            // rvol
+    function xScale(mi) {
+        var w = TREND_W - PAD_L - PAD_R;
+        return PAD_L + (mi - X_MIN) / (X_MAX - X_MIN) * w;
+    }
+    function yScale(v) {
+        var h = TREND_H - PAD_T - PAD_B;
+        var clamped = Math.max(Y_MIN, Math.min(Y_MAX, v));
+        return PAD_T + (1 - (clamped - Y_MIN) / (Y_MAX - Y_MIN)) * h;
+    }
+    function renderTrend(rows) {
+        var svg = document.getElementById('va-trend-chart');
+        var empty = document.getElementById('va-trend-empty');
+        if (!svg) return;
+        // 即使無資料也畫背景/軸格線（gracefully empty）
+        var hasData = rows && rows.length > 0;
+        empty.style.display = hasData ? 'none' : 'flex';
+
+        var parts = [];
+        // ----- 背景色帶 -----
+        var bands = [
+            { lo: 0,   hi: 1.2, color: 'rgba(34,197,94,0.06)' },
+            { lo: 1.2, hi: 1.5, color: 'rgba(234,179,8,0.08)' },
+            { lo: 1.5, hi: 1.8, color: 'rgba(249,115,22,0.10)' },
+            { lo: 1.8, hi: 3.0, color: 'rgba(239,68,68,0.12)' },
+        ];
+        bands.forEach(function(b) {
+            var yTop = yScale(b.hi);
+            var yBot = yScale(b.lo);
+            parts.push('<rect x="' + PAD_L + '" y="' + yTop +
+                '" width="' + (TREND_W - PAD_L - PAD_R) + '" height="' + (yBot - yTop) +
+                '" fill="' + b.color + '"/>');
+        });
+
+        // ----- 軸線 -----
+        parts.push('<line x1="' + PAD_L + '" y1="' + PAD_T + '" x2="' + PAD_L +
+            '" y2="' + (TREND_H - PAD_B) + '" stroke="#475569" stroke-width="1"/>');
+        parts.push('<line x1="' + PAD_L + '" y1="' + (TREND_H - PAD_B) +
+            '" x2="' + (TREND_W - PAD_R) + '" y2="' + (TREND_H - PAD_B) +
+            '" stroke="#475569" stroke-width="1"/>');
+
+        // ----- Y 軸刻度 -----
+        var yTicks = [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0];
+        yTicks.forEach(function(yt) {
+            var y = yScale(yt);
+            parts.push('<line x1="' + PAD_L + '" y1="' + y +
+                '" x2="' + (TREND_W - PAD_R) + '" y2="' + y +
+                '" stroke="rgba(148,163,184,0.12)" stroke-width="1"/>');
+            parts.push('<text x="' + (PAD_L - 6) + '" y="' + (y + 4) +
+                '" fill="#94a3b8" font-size="11" text-anchor="end">' + yt.toFixed(1) + '</text>');
+        });
+
+        // ----- X 軸刻度（9:00 / 10:00 / 11:00 / 12:00 / 13:00 / 13:30） -----
+        var xTicks = [
+            { mi: 0,   label: '9:00' },
+            { mi: 60,  label: '10:00' },
+            { mi: 120, label: '11:00' },
+            { mi: 180, label: '12:00' },
+            { mi: 240, label: '13:00' },
+            { mi: 270, label: '13:30' },
+        ];
+        xTicks.forEach(function(xt) {
+            var x = xScale(xt.mi);
+            parts.push('<line x1="' + x + '" y1="' + PAD_T + '" x2="' + x +
+                '" y2="' + (TREND_H - PAD_B) +
+                '" stroke="rgba(148,163,184,0.10)" stroke-width="1"/>');
+            parts.push('<text x="' + x + '" y="' + (TREND_H - PAD_B + 14) +
+                '" fill="#94a3b8" font-size="11" text-anchor="middle">' + xt.label + '</text>');
+        });
+
+        if (hasData) {
+            // 排除無 rvol 的 row
+            var pts = rows.filter(function(r) {
+                return r.rvol != null && !isNaN(r.rvol) && r.minute_idx != null;
+            });
+            if (pts.length > 0) {
+                // ----- CI 帶 -----
+                // adv 從第一筆推算（forecast_eod_value / rvol_forecast，避免再請求）
+                // 改用直接畫 CI rvol（ci_low/adv ~ ci_high/adv）
+                // 為避免依賴 adv，直接從 eod 與 ci 換算比值。
+                var ciPath = '';
+                var upper = [];
+                var lower = [];
+                pts.forEach(function(r) {
+                    if (r.eod && r.eod > 0 && r.ci_low != null && r.ci_high != null && r.rvol > 0) {
+                        var ratio = r.rvol / r.eod; // = 1 / adv
+                        upper.push({ mi: r.minute_idx, v: r.ci_high * ratio });
+                        lower.push({ mi: r.minute_idx, v: r.ci_low * ratio });
+                    }
+                });
+                if (upper.length > 1) {
+                    var top = upper.map(function(p) { return xScale(p.mi) + ',' + yScale(p.v); }).join(' L');
+                    var bot = lower.slice().reverse().map(function(p) { return xScale(p.mi) + ',' + yScale(p.v); }).join(' L');
+                    ciPath = 'M' + top + ' L' + bot + ' Z';
+                    parts.push('<path d="' + ciPath + '" fill="rgba(148,163,184,0.2)" stroke="none"/>');
+                }
+
+                // ----- 折線 -----
+                var d = 'M' + pts.map(function(r) {
+                    return xScale(r.minute_idx) + ',' + yScale(r.rvol);
+                }).join(' L');
+                parts.push('<path d="' + d + '" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>');
+
+                // ----- 當下游標 -----
+                var last = pts[pts.length - 1];
+                var lx = xScale(last.minute_idx);
+                var ly = yScale(last.rvol);
+                parts.push('<circle cx="' + lx + '" cy="' + ly + '" r="6" fill="#ffffff" stroke="#0f172a" stroke-width="1"/>');
+                // 數字標籤靠右或靠左
+                var labelX = lx + 10;
+                var anchor = 'start';
+                if (last.minute_idx > 220) { labelX = lx - 10; anchor = 'end'; }
+                parts.push('<text x="' + labelX + '" y="' + (ly - 8) +
+                    '" fill="#f8fafc" font-size="13" font-weight="700" text-anchor="' + anchor +
+                    '">' + Number(last.rvol).toFixed(2) + '</text>');
+            }
+        }
+
+        svg.innerHTML = parts.join('');
+    }
+
+    function fetchTrend() {
+        fetch('/api/volume-alert/trend', { cache: 'no-store' })
+            .then(function(r) { return r.json(); })
+            .then(function(j) { renderTrend((j && j.data) || []); })
+            .catch(function(e) {
+                console.warn('trend fetch failed', e);
+                renderTrend([]);
+            });
+    }
+
+    function fetchAndRender() {
+        fetch('/api/volume-alert', { cache: 'no-store' })
+            .then(function(r) { return r.json(); })
+            .then(function(j) { if (j && j.data) render(j.data); })
+            .catch(function(e) { console.warn('volume-alert fetch failed', e); });
+        fetchTrend();
+    }
+
+    // 初始 render（從 server-rendered data）
+    {% if data %}
+    render({{ data | tojson }});
+    {% endif %}
+    // 初始也畫一次空的趨勢圖（背景 + 軸格）
+    renderTrend([]);
+    // 啟動時拉一次 trend
+    fetchTrend();
+
+    // 30 秒輪詢
+    setInterval(fetchAndRender, 30000);
+})();
+</script>
+{% endblock %}
