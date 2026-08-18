@@ -15,26 +15,9 @@ logger = logging.getLogger(__name__)
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# ===== 載入 .env (若存在),不依賴外部套件 =====
-def _load_dotenv():
-    env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
-    if not os.path.isfile(env_path):
-        return
-    try:
-        with open(env_path, 'r', encoding='utf-8') as f:
-            for line in f:
-                line = line.strip()
-                if not line or line.startswith('#') or '=' not in line:
-                    continue
-                k, _, v = line.partition('=')
-                k = k.strip()
-                v = v.strip().strip('"').strip("'")
-                if k and k not in os.environ:
-                    os.environ[k] = v
-    except Exception as e:
-        logger.warning(f".env 載入失敗: {e}")
-
-_load_dotenv()
+# ===== 載入 .env（統一放在 config，讓所有進入點共用）=====
+from config import load_dotenv
+load_dotenv()
 
 from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
 from flask_httpauth import HTTPBasicAuth

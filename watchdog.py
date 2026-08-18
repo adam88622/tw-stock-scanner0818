@@ -25,9 +25,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, PROJECT_DIR)
+from config import load_dotenv  # noqa: E402
+load_dotenv()
+
 PYTHON = sys.executable
 NGROK = os.environ.get("NGROK_EXE", "ngrok")  # 未設定時從 PATH 尋找
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 NGROK_DOMAIN = os.environ.get("NGROK_DOMAIN", "")  # 空值 = ngrok 隨機網址
 NGROK_ENABLED = shutil.which(NGROK) is not None
 
