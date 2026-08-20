@@ -23,8 +23,9 @@ import logging
 import sqlite3
 from datetime import datetime, timedelta
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 
 from models.database import init_db, get_conn
 from scrapers.twse import fetch_twse_institutional
@@ -212,7 +213,9 @@ def main():
     try:
         import subprocess
         result = subprocess.run(
-            [sys.executable, 'export_institutional.py', '--no-csv'],
+            [sys.executable,
+             os.path.join(os.path.dirname(os.path.abspath(__file__)), 'export_institutional.py'),
+             '--no-csv'],
             capture_output=True, text=True, encoding='utf-8'
         )
         if result.returncode == 0:

@@ -1,9 +1,9 @@
 @echo off
 setlocal
 
-set "LOG=%~dp0autostart.log"
-set "PYW=%~dp0.venv\Scripts\pythonw.exe"
-set "PRJ=%~dp0"
+set "LOG=%~dp0..\autostart.log"
+set "PYW=%~dp0..\.venv\Scripts\pythonw.exe"
+set "PRJ=%~dp0.."
 
 echo [%date% %time%] === autostart triggered ===>>"%LOG%"
 
@@ -21,10 +21,10 @@ if errorlevel 1 (
     exit /b 1
 )
 
-start "" "%PYW%" watchdog.py
-echo [%date% %time%] watchdog.py launched>>"%LOG%"
+start "" "%PYW%" workers\watchdog.py
+echo [%date% %time%] workers\watchdog.py launched>>"%LOG%"
 
-start "" "%PYW%" auto_update.py
-echo [%date% %time%] auto_update.py launched>>"%LOG%"
+start "" "%PYW%" workers\auto_update.py
+echo [%date% %time%] workers\auto_update.py launched>>"%LOG%"
 
 exit /b 0

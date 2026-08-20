@@ -1,6 +1,12 @@
 """一次性回補：把 macro_indicators 五大指標 (T10Y3M / CP_SPREAD / DOLLAR / COR3M / MOVE)
 往前拉到 FRED / Yahoo 能給的最早日期。執行完不影響每日排程。
 """
+import os
+import sys
+
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 import logging
 import sys
 from datetime import datetime

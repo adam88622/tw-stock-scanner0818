@@ -14,8 +14,9 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 
 OUT_DIR = 'data'
 

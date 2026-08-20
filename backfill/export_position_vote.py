@@ -3,6 +3,12 @@
 輸出位置: d:/claude/tw-stock-scanner/data/position_vote_export/
 壓縮檔  : d:/claude/tw-stock-scanner/data/position_vote_indicators_{YYYYMMDD}.7z
 """
+import os
+import sys
+
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 import csv
 import os
 import shutil

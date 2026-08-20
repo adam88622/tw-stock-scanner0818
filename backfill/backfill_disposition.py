@@ -8,6 +8,12 @@ Backfill 注意/處置股公告
 
 TWSE 對日期區間沒上限,但建議分段(每段 ≤ 90 天)以免單次 response 太大。
 """
+import os
+import sys
+
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 import argparse
 import logging
 import time

@@ -34,10 +34,10 @@ python -m venv .venv
 copy .env.example .env      &:: 編輯 .env 設定帳密
 .venv\Scripts\python -c "from models.database import init_db; init_db()"
 .venv\Scripts\python run_daily.py 20260801 20260818   &:: 回補近期行情（示例）
-start.bat                   &:: 啟動網站並開瀏覽器
+bin\start.bat               &:: 啟動網站並開瀏覽器
 ```
 
-全歷史回補（可中斷續跑）：`backfill_daily.py`（行情，2004 起）、`backfill_institutional.py`（法人，約 6 小時）、其餘見 `backfill_*.py` 檔頭說明。
+全歷史回補（可中斷續跑）：`backfill\backfill_daily.py`（行情，2004 起）、`backfill\backfill_institutional.py`（法人，約 6 小時）、其餘見 `backfill\` 各檔頭說明。
 
 ## 環境變數
 
@@ -45,16 +45,32 @@ start.bat                   &:: 啟動網站並開瀏覽器
 
 ## 每日排程（Windows 工作排程器）
 
+一鍵註冊全部排程：以 PowerShell 執行 `bin\install_schedule.ps1`（移除用 `bin\uninstall_schedule.ps1`）。時間表如下：
+
 | 時間 | 指令 |
 |---|---|
-| 08:00 | `python daily_check.py`（資料完整性健檢＋補抓） |
+| 08:00 | `python workers\daily_check.py`（資料完整性健檢＋補抓） |
 | 08:55 / 09:00 / 13:30 | volume-alert 盤前健檢 → 啟動 worker → 安全網收尾 |
 | 14:00 | `python run_daily.py`（收盤行情＋突破） |
 | 15:30 / 15:40 | `run_daily.py option` / `largetrader`、`deleveraging` |
 | 17:00 / 18:00 | `run_daily.py market` / `institutional` |
 | 20:00 | `run_daily.py broker` |
 
-常駐與開機自啟：`launch.bat`（detached 啟動 watchdog）、`autostart.bat`（登入時自啟）。
+常駐與開機自啟：`bin\launch.bat`（detached 啟動 watchdog）、`bin\autostart.bat`（登入時自啟）。
+
+## 目錄結構
+
+```
+app.py / run_server.py / run_daily.py / config.py / utils.py   ← 入口與共用設定
+scanners/   計算層（突破、燈號、投票、壓力指數）
+scrapers/   抓取層（TWSE/TPEx/期交所/集保/FinMind…）
+models/     SQLite schema 與資料存取
+workers/    常駐與排程腳本（watchdog、盤中 worker、每日健檢）
+backfill/   歷史回補與資料匯出腳本
+bin/        啟動 .bat 與排程安裝 .ps1
+templates/ static/   前端
+tests/ docs/ data/ db/
+```
 
 ## 資料來源
 

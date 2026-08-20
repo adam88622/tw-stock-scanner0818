@@ -7,7 +7,9 @@ import os
 import logging
 from datetime import datetime, timedelta
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 
 from utils import acquire_lock, release_lock
 from models.database import init_db, get_conn, get_latest_date

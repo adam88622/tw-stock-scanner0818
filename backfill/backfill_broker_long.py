@@ -10,7 +10,7 @@
 import os, sys, logging, time, sqlite3
 from datetime import datetime, timedelta
 
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_DIR)
 os.chdir(PROJECT_DIR)
 

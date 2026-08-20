@@ -15,6 +15,12 @@
   python clean_kline_anomalies.py            # dry-run (預設,只列印,不動 DB)
   python clean_kline_anomalies.py --apply    # 實際刪除
 """
+import os
+import sys
+
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 import argparse
 import logging
 import sys

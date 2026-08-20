@@ -25,7 +25,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_DIR)
 from config import load_dotenv  # noqa: E402
 load_dotenv()
@@ -118,7 +118,7 @@ def start_ngrok():
 def start_realtime_worker():
     logger.info("啟動即時報價 worker...")
     subprocess.Popen(
-        [PYTHON, "realtime_worker.py"],
+        [PYTHON, os.path.join("workers", "realtime_worker.py")],
         cwd=PROJECT_DIR,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
@@ -130,7 +130,7 @@ def start_realtime_worker():
 def start_volume_alert_worker():
     logger.info("啟動爆量預估 worker...")
     subprocess.Popen(
-        [PYTHON, "volume_alert_worker.py"],
+        [PYTHON, os.path.join("workers", "volume_alert_worker.py")],
         cwd=PROJECT_DIR,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,

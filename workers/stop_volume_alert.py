@@ -2,6 +2,12 @@
 13:30 由工作排程觸發：若 volume_alert_worker 還活著則強制結束。
 worker 本身已內建 13:30 自動退出邏輯，此腳本為安全網（防 worker hung 在某次 run_once）。
 """
+import os
+import sys
+
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 import subprocess
 import logging
 import os

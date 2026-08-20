@@ -16,6 +16,12 @@
 用法:
   python backfill_adj_prices.py
 """
+import os
+import sys
+
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 import logging
 import time
 from models.database import get_conn

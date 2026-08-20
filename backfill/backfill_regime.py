@@ -11,6 +11,12 @@
 - 不可拿來嚴格回測（會有 look-ahead bias）
 - 但對相關性分析、特徵跨期比較是合理的
 """
+import os
+import sys
+
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 import logging
 import sys
 

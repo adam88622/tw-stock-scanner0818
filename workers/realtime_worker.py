@@ -7,7 +7,9 @@ import os
 import time
 import logging
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 
 from models.database import init_db, get_conn
 from scrapers.realtime import fetch_realtime_prices, is_trading_hours

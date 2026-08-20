@@ -1,6 +1,6 @@
 """Backfill broker_trades for missing dates (last 30 trading days)"""
 import sys, os, logging, sqlite3
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_DIR)
 os.chdir(PROJECT_DIR)
 

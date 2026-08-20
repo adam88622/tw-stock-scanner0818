@@ -13,6 +13,12 @@ Backfill TDCC 集保戶股權分散表
 - 全市場 (~2000 股) × 1 週 ≈ 8 分鐘 (4 workers)
 - 每股一次 form_state 重用 token,避免每次重新 GET
 """
+import os
+import sys
+
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_ROOT)
+os.chdir(_PROJECT_ROOT)
 import argparse
 import logging
 import sys
