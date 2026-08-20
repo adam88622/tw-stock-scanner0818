@@ -262,7 +262,7 @@ def index():
 
 
 # ===== 產業研究 =====
-RESEARCH_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'research')
+RESEARCH_DIR = os.environ.get('RESEARCH_DIR') or os.path.join(os.path.dirname(os.path.abspath(__file__)), 'research')
 
 @app.route('/research')
 def research_list():
