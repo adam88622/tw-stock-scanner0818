@@ -8,7 +8,7 @@ import threading
 import requests as http_requests
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from config import load_dotenv
+from config import load_dotenv, BASE_DIR
 from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
 from flask_httpauth import HTTPBasicAuth
 from flask_limiter import Limiter
@@ -28,7 +28,7 @@ import logging
 logger = logging.getLogger(__name__)
 from webapp.core import app, auth, limiter
 
-RESEARCH_DIR = os.environ.get('RESEARCH_DIR') or os.path.join(os.path.dirname(os.path.abspath(__file__)), 'research')
+RESEARCH_DIR = os.environ.get('RESEARCH_DIR') or os.path.join(BASE_DIR, 'research')
 
 
 @app.route('/research')

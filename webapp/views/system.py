@@ -8,7 +8,7 @@ import threading
 import requests as http_requests
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from config import load_dotenv
+from config import load_dotenv, BASE_DIR
 from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
 from flask_httpauth import HTTPBasicAuth
 from flask_limiter import Limiter
@@ -104,7 +104,7 @@ def _build_data_health():
     import pandas as pd
 
     today_str = datetime.now().strftime('%Y-%m-%d')
-    project_dir = os.path.dirname(os.path.abspath(__file__))
+    project_dir = BASE_DIR
 
     # 交易日曆（檔案可能落後實際資料，僅用於缺漏比對）
     cal_path = os.path.join(project_dir, 'data', 'trading_calendar.parquet')

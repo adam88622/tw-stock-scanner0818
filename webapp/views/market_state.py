@@ -8,7 +8,7 @@ import threading
 import requests as http_requests
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from config import load_dotenv
+from config import load_dotenv, BASE_DIR
 from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
 from flask_httpauth import HTTPBasicAuth
 from flask_limiter import Limiter
@@ -544,7 +544,7 @@ def deleveraging():
     except Exception as e:
         logger.warning(f'deleveraging 即時管線失敗,回退快照: {e}')
     if not ind:
-        snap = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+        snap = os.path.join(BASE_DIR,
                             'data', 'deleveraging_snapshot.json')
         try:
             with open(snap, encoding='utf-8') as f:
